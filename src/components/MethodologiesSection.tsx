@@ -32,13 +32,13 @@ export const MethodologiesSection = () => {
     {
       icon: Heart,
       title: "Yoga Integral",
-      description: "Práctica holística que integra cuerpo, mente y respiración",
-      benefits: "Beneficios en 20'",
+      description: "Flujo consciente que une posturas, respiración y mindfulness para alinear cuerpo-mente y devolverte ligereza física y claridad mental en una sola sesión",
+      benefits: "Qué notarás en los primeros 20 min",
       benefitsList: [
-        "Mejora flexibilidad",
-        "Reduce tensión",
-        "Equilibra emociones",
-        "Fortalece core"
+        "Mejora flexibilidad y equilibrio corporal en pocas semanas",
+        "Disminuye estrés y tensión al reducir los niveles de cortisol",
+        "Equilibra emociones al aumentar el tono vagal y la autorregulación",
+        "Fortalece el core y la estabilidad postural mediante asanas específicas"
       ],
       ctaText: "Unirse a Clase"
     },
