@@ -1,0 +1,23 @@
+name: Build and deploy to Hostinger
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with: node-version: '18'
+      - run: npm install
+      - run: npm run build
+      - name: Push build output
+        uses: s0/git-publish-subdir-action@develop
+        with:
+          REPO: self
+          BRANCH: build
+          FOLDER: dist
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MESSAGE: "Build and deploy: {sha}"
