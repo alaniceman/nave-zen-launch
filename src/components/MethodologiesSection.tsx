@@ -129,7 +129,9 @@ export const MethodologiesSection = () => {
           <p className="font-inter text-lg text-neutral-mid">
             ¿Listo para transformar tu bienestar? {" "}
             <a 
-              href="#contacto" 
+              href="https://wa.link/wh4f79" 
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-primary font-medium hover:text-primary/80 transition-colors duration-200 underline underline-offset-4"
             >
               Agenda tu llamada de descubrimiento gratuita
