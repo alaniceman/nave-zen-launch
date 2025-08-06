@@ -32,7 +32,7 @@ export const HeroSection = () => {
           
           {/* Micro line */}
           <p className="font-inter text-base md:text-lg text-white/80 max-w-2xl mx-auto">
-            Creado por <span className="font-medium text-accent">Alan Iceman</span> — Instructor Wim Hof, +114 k seguidores en Instagram
+            Creado por <span className="font-medium text-accent">Alan Iceman</span> — Instructor Wim Hof, +115k seguidores en Instagram
           </p>
           
           {/* CTA Section */}
