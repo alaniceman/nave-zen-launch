@@ -45,13 +45,13 @@ export const MethodologiesSection = () => {
     {
       icon: Zap,
       title: "Biohacking Session",
-      description: "Sesiones personalizadas de optimización fisiológica y mental",
-      benefits: "Beneficios en 45'",
+      description: "HIIT · Breathwork · Ice Bath\nProtocolo triple que alterna sprints metabólicos, 3 rondas de respiración Wim Hof y un plunge a 3 °C. El combo dispara tu dopamina y noradrenalina, estimula la biogénesis mitocondrial y deja tu cuerpo en \"modo super-recuperación\".",
+      benefits: "Qué sucede en 45 min",
       benefitsList: [
-        "Optimiza rendimiento",
-        "Mejora sueño",
-        "Aumenta vitalidad",
-        "Acelera recuperación"
+        "+10 % VO₂ max y capacidad cardiovascular en 4 semanas",
+        "Triplica dopamina/noradrenalina → foco y motivación instantáneos",
+        "Activa genes de mitocondrias y quema grasa incluso en reposo",
+        "Acelera recuperación muscular y reduce inflamación post-entreno"
       ],
       ctaText: "Agendar Sesión"
     }
