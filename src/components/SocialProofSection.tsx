@@ -4,6 +4,7 @@ import drNeiraImage from "@/assets/dr-neira.jpg";
 import nicoImage from "@/assets/nico-jarry.jpg";
 const wimHofLogo = "/lovable-uploads/4237a4a8-4b67-4133-9d1e-5a134df22d8c.png";
 import yogaAllianceLogo from "@/assets/yogaalliance-logo.png";
+
 export const SocialProofSection = () => {
   const testimonials = [{
     name: "Kika Silva",
@@ -26,6 +27,7 @@ export const SocialProofSection = () => {
     quote: "El frío acelera mi recuperación entre torneos.",
     image: nicoImage
   }];
+
   const certifications = [{
     name: "Wim Hof Instructor",
     logo: wimHofLogo
@@ -39,6 +41,7 @@ export const SocialProofSection = () => {
     name: "Animal Flow",
     logo: null
   }];
+
   return <section className="py-16 md:py-24 bg-neutral-light">
       <div className="container mx-auto px-6">
         {/* Hook métrico */}
@@ -70,17 +73,17 @@ export const SocialProofSection = () => {
 
         {/* Certificaciones */}
         <div className="text-center mb-16">
-          <div className="flex flex-wrap justify-center items-center gap-8 opacity-80">
+          <div className="flex flex-wrap justify-center items-center gap-12 md:gap-16 opacity-80">
             {certifications.map((cert, index) => (
-              <div key={index} className="flex items-center justify-center h-28">
+              <div key={index} className="flex items-center justify-center h-32">
                 {cert.logo ? (
                   <img 
                     src={cert.logo} 
                     alt={cert.name} 
-                    className="h-20 w-auto object-contain"
+                    className="h-28 w-auto object-contain"
                   />
                 ) : (
-                  <span className="font-inter text-sm text-neutral-mid font-medium">
+                  <span className="font-inter text-lg text-neutral-mid font-medium">
                     {cert.name}
                   </span>
                 )}
