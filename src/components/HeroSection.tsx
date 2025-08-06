@@ -21,10 +21,14 @@ export const HeroSection = () => {
           </h1>
           
           {/* Subheading */}
-          <h2 className="font-inter font-medium text-xl md:text-2xl lg:text-3xl text-white/90 leading-relaxed">
-            Para sentirte sano, fuerte y feliz. <br />
-            Ice Bath · Breathwork · Yoga · Biohacking
-          </h2>
+          <div className="space-y-4">
+            <h2 className="font-inter font-medium text-xl md:text-2xl lg:text-3xl text-white/90 leading-relaxed">
+              Para sentirte sano, fuerte y feliz.
+            </h2>
+            <div className="font-inter font-medium text-lg md:text-xl text-white/80 tracking-wide">
+              Ice Bath · Breathwork · Yoga · Biohacking
+            </div>
+          </div>
           
           {/* Micro line */}
           <p className="font-inter text-base md:text-lg text-white/80 max-w-2xl mx-auto">
