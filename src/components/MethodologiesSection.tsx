@@ -7,7 +7,7 @@ export const MethodologiesSection = () => {
       icon: Waves,
       title: "Ice Bath",
       description: "Inmersión guiada a 3 °C que despierta los 100.000 km de tu sistema vascular, libera endorfinas naturales y reinicia tu sistema nervioso.",
-      benefits: "Beneficios en 3'",
+      benefits: "Beneficios primeros 180 seg",
       benefitsList: [
         "Potente efecto anti-inflamatorio",
         "Recuperación muscular acelerada gracias al aumento del flujo sanguíneo",
