@@ -51,25 +51,25 @@ export const SocialProofSection = () => {
         {/* Grid de testimonios */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
           {testimonials.map((testimonial, index) => (
-            <div key={index} className="text-center space-y-4">
-              <div className="mx-auto w-24 h-24 rounded-full overflow-hidden shadow-light">
+            <div key={index} className="bg-background rounded-[var(--radius)] p-8 shadow-light text-center space-y-6">
+              <div className="mx-auto w-32 h-32 rounded-full overflow-hidden shadow-medium">
                 <img 
                   src={testimonial.image} 
                   alt={`${testimonial.name} - ${testimonial.role}`}
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div>
-                <h3 className="font-inter font-medium text-lg text-neutral-dark">
+              <div className="space-y-2">
+                <h3 className="font-space-grotesk font-bold text-xl text-neutral-dark">
                   {testimonial.name}
                 </h3>
-                <p className="font-inter text-sm text-neutral-mid mb-3">
+                <p className="font-inter text-base text-neutral-mid">
                   {testimonial.role}
                 </p>
-                <blockquote className="font-inter text-sm text-neutral-dark italic">
-                  "{testimonial.quote}"
-                </blockquote>
               </div>
+              <blockquote className="font-inter text-base text-neutral-dark italic leading-relaxed">
+                "{testimonial.quote}"
+              </blockquote>
             </div>
           ))}
         </div>
