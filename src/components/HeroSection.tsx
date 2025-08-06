@@ -22,7 +22,8 @@ export const HeroSection = () => {
           
           {/* Subheading */}
           <h2 className="font-inter font-medium text-xl md:text-2xl lg:text-3xl text-white/90 leading-relaxed">
-            Para sentirte sano, fuerte y feliz. Ice Bath · Breathwork · Yoga · Biohacking
+            Para sentirte sano, fuerte y feliz. <br />
+            Ice Bath · Breathwork · Yoga · Biohacking
           </h2>
           
           {/* Micro line */}
