@@ -3,7 +3,7 @@ import heroImage from "@/assets/nave-studio-hero.jpg"
 
 export const HeroSection = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pb-16 md:pb-20 lg:pb-24">
       {/* Background Image with Overlay */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
