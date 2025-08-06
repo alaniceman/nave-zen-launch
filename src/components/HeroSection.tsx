@@ -6,7 +6,7 @@ export const HeroSection = () => {
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pb-16 md:pb-20 lg:pb-24">
       {/* Background Image with Overlay */}
       <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        className="absolute top-0 left-0 right-0 bottom-16 md:bottom-20 lg:bottom-24 bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage: `var(--hero-overlay), url(${heroImage})`,
         }}
