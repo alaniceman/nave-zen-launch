@@ -22,6 +22,9 @@ export default {
 				'space-grotesk': ['Space Grotesk', 'sans-serif'],
 				'inter': ['Inter', 'sans-serif'],
 			},
+			height: {
+				'22': '5.5rem', // 88px for header
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',

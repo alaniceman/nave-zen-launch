@@ -1,9 +1,12 @@
+import { Header } from "@/components/Header"
 import { HeroSection } from "@/components/HeroSection"
 import { SocialProofSection } from "@/components/SocialProofSection"
 
 const Index = () => {
   return (
-    <main className="overflow-x-hidden">
+    <>
+      <Header />
+      <main className="overflow-x-hidden" id="home">
       <HeroSection />
       <SocialProofSection />
       
@@ -17,7 +20,8 @@ const Index = () => {
           />
         </div>
       </section>
-    </main>
+      </main>
+    </>
   );
 };
 

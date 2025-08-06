@@ -121,3 +121,8 @@ All colors MUST be HSL.
     @apply bg-background text-foreground;
   }
 }
+
+/* Custom height utilities for header */
+.h-22 {
+  height: 5.5rem; /* 88px */
+}
