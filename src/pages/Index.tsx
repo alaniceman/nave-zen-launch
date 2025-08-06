@@ -1,6 +1,7 @@
 import { Header } from "@/components/Header"
 import { HeroSection } from "@/components/HeroSection"
 import { SocialProofSection } from "@/components/SocialProofSection"
+import { MethodologiesSection } from "@/components/MethodologiesSection"
 
 const Index = () => {
   return (
@@ -9,6 +10,7 @@ const Index = () => {
       <main className="overflow-x-hidden" id="home">
       <HeroSection />
       <SocialProofSection />
+      <MethodologiesSection />
       
       {/* Wim Hof Certification Logo */}
       <section className="py-12 bg-background">
