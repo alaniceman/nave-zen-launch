@@ -77,7 +77,7 @@ export const SocialProofSection = () => {
                   <img 
                     src={cert.logo} 
                     alt={cert.name} 
-                    className="h-12 w-auto object-contain filter brightness-0 contrast-100 opacity-60"
+                    className="h-12 w-auto object-contain"
                   />
                 ) : (
                   <span className="font-inter text-sm text-neutral-mid font-medium">
