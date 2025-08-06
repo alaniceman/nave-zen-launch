@@ -19,8 +19,11 @@ export default {
 		},
 		extend: {
 			fontFamily: {
-				'space-grotesk': ['Space Grotesk', 'sans-serif'],
-				'inter': ['Inter', 'sans-serif'],
+				'space': ['Space Grotesk', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+				'inter': ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+			},
+			letterSpacing: {
+				'heading': '-0.01em',
 			},
 			height: {
 				'22': '5.5rem', // 88px for header

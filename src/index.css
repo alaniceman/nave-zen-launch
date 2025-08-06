@@ -118,7 +118,33 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-inter;
+  }
+}
+
+/* Typography System for Nave Studio */
+@layer components {
+  .font-heading {
+    @apply font-bold font-space tracking-heading;
+  }
+  
+  .font-body {
+    @apply font-inter;
+  }
+}
+
+@layer base {
+  /* Global Typography Rules */
+  h1, h2, h3, h4 {
+    @apply font-heading;
+  }
+  
+  body, p, li, a, button, small {
+    @apply font-body;
+  }
+  
+  p {
+    @apply leading-[1.6];
   }
 }
 
