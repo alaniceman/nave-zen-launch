@@ -71,7 +71,21 @@ export const SocialProofSection = () => {
         {/* Certificaciones */}
         <div className="text-center mb-16">
           <div className="flex flex-wrap justify-center items-center gap-8 opacity-80">
-            {certifications.map((cert, index) => {})}
+            {certifications.map((cert, index) => (
+              <div key={index} className="flex items-center justify-center h-16">
+                {cert.logo ? (
+                  <img 
+                    src={cert.logo} 
+                    alt={cert.name} 
+                    className="h-12 w-auto object-contain filter brightness-0 contrast-100 opacity-60"
+                  />
+                ) : (
+                  <span className="font-inter text-sm text-neutral-mid font-medium">
+                    {cert.name}
+                  </span>
+                )}
+              </div>
+            ))}
           </div>
         </div>
 
