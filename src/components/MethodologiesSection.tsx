@@ -78,45 +78,47 @@ export const MethodologiesSection = () => {
             return (
               <div 
                 key={index} 
-                className="bg-neutral-light rounded-[var(--radius)] p-8 text-center space-y-6 animate-fade-in transition-all duration-300 shadow-light hover:shadow-medium hover:scale-105 flex-shrink-0 w-80 md:w-auto scroll-snap-start"
+                className="bg-neutral-light rounded-[var(--radius)] p-8 text-center animate-fade-in transition-all duration-300 shadow-light hover:shadow-medium hover:scale-105 flex-shrink-0 w-80 md:w-auto scroll-snap-start flex flex-col min-h-[500px]"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
                 {/* Icon */}
-                <div className="mx-auto w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center">
-                  <IconComponent className="w-7 h-7 text-primary" />
+                <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6">
+                  <IconComponent className="w-8 h-8 text-primary" />
                 </div>
 
                 {/* Title */}
-                <h3 className="font-space-grotesk font-semibold text-lg text-primary">
+                <h3 className="font-space-grotesk font-semibold text-xl text-primary mb-6">
                   {method.title}
                 </h3>
 
                 {/* Description */}
-                <p className="font-inter text-sm text-neutral-mid leading-relaxed">
+                <p className="font-inter text-sm text-neutral-mid leading-relaxed mb-8 whitespace-pre-line">
                   {method.description}
                 </p>
 
                 {/* Benefits */}
-                <div className="space-y-3">
+                <div className="space-y-4 mb-8 flex-grow">
                   <h4 className="font-inter font-medium text-warm text-sm">
                     {method.benefits}
                   </h4>
-                  <ul className="text-left space-y-1">
+                  <ul className="text-left space-y-3">
                     {method.benefitsList.map((benefit, idx) => (
-                      <li key={idx} className="font-inter text-xs text-neutral-dark flex items-center">
-                        <span className="w-1.5 h-1.5 bg-primary rounded-full mr-3 flex-shrink-0"></span>
-                        {benefit}
+                      <li key={idx} className="font-inter text-xs text-neutral-dark flex items-start">
+                        <span className="w-1.5 h-1.5 bg-primary rounded-full mr-3 flex-shrink-0 mt-2"></span>
+                        <span className="leading-relaxed">{benefit}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
 
                 {/* CTA Button */}
-                <Button 
-                  className="w-full bg-neutral-dark hover:bg-primary text-white font-inter font-medium transition-all duration-300 hover:scale-105 rounded-[10px]"
-                >
-                  {method.ctaText}
-                </Button>
+                <div className="mt-auto">
+                  <Button 
+                    className="w-full bg-neutral-dark hover:bg-primary text-white font-inter font-medium transition-all duration-300 hover:scale-105 rounded-[10px]"
+                  >
+                    {method.ctaText}
+                  </Button>
+                </div>
               </div>
             );
           })}
