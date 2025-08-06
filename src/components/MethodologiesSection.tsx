@@ -6,13 +6,13 @@ export const MethodologiesSection = () => {
     {
       icon: Waves,
       title: "Ice Bath",
-      description: "Inmersión en agua fría controlada para activar el sistema nervioso parasimpático",
+      description: "Inmersión guiada a 3 °C que despierta los 100.000 km de tu sistema vascular, libera endorfinas naturales y reinicia tu sistema nervioso.",
       benefits: "Beneficios en 3'",
       benefitsList: [
-        "Reduce inflamación",
-        "Mejora recuperación",
-        "Aumenta energía",
-        "Fortalece sistema inmune"
+        "Potente efecto anti-inflamatorio",
+        "Recuperación muscular acelerada gracias al aumento del flujo sanguíneo",
+        "Aumento de energía y enfoque al activar opioides y cannabinoides endógenos",
+        "Refuerzo del sistema inmune y equilibrio simpático-parasimpático"
       ],
       ctaText: "Reservar Ice Bath"
     },
