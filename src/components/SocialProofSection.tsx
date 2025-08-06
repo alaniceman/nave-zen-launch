@@ -72,12 +72,12 @@ export const SocialProofSection = () => {
         <div className="text-center mb-16">
           <div className="flex flex-wrap justify-center items-center gap-8 opacity-80">
             {certifications.map((cert, index) => (
-              <div key={index} className="flex items-center justify-center h-16">
+              <div key={index} className="flex items-center justify-center h-28">
                 {cert.logo ? (
                   <img 
                     src={cert.logo} 
                     alt={cert.name} 
-                    className="h-12 w-auto object-contain"
+                    className="h-20 w-auto object-contain"
                   />
                 ) : (
                   <span className="font-inter text-sm text-neutral-mid font-medium">
