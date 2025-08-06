@@ -2,6 +2,7 @@ import kikaImage from "@/assets/kika-silva.jpg"
 import panchoImage from "@/assets/pancho-saavedra.jpg"
 import drNeiraImage from "@/assets/dr-neira.jpg"
 import nicoImage from "@/assets/nico-jarry.jpg"
+import wimHofLogo from "@/assets/wim-hof-logo.png"
 
 export const SocialProofSection = () => {
   const testimonials = [
@@ -32,10 +33,10 @@ export const SocialProofSection = () => {
   ]
 
   const certifications = [
-    "Wim Hof Instructor",
-    "YogaAlliance",
-    "IceYoga",
-    "Animal Flow"
+    { name: "Wim Hof Instructor", logo: wimHofLogo },
+    { name: "YogaAlliance", logo: null },
+    { name: "IceYoga", logo: null },
+    { name: "Animal Flow", logo: null }
   ]
 
   return (
@@ -78,10 +79,18 @@ export const SocialProofSection = () => {
         <div className="text-center mb-16">
           <div className="flex flex-wrap justify-center items-center gap-8 opacity-80">
             {certifications.map((cert, index) => (
-              <div key={index} className="px-4 py-2">
-                <span className="font-inter font-medium text-neutral-mid text-sm">
-                  {cert}
-                </span>
+              <div key={index} className="px-4 py-2 flex items-center">
+                {cert.logo ? (
+                  <img 
+                    src={cert.logo} 
+                    alt={cert.name}
+                    className="h-12 object-contain"
+                  />
+                ) : (
+                  <span className="font-inter font-medium text-neutral-mid text-sm">
+                    {cert.name}
+                  </span>
+                )}
               </div>
             ))}
           </div>
