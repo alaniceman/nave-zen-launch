@@ -80,12 +80,12 @@ export const SocialProofSection = () => {
         <div className="text-center mb-16">
           <div className="flex flex-wrap justify-center items-center gap-8 opacity-80">
             {certifications.map((cert, index) => (
-              <div key={index} className="px-4 py-2 flex items-center">
+              <div key={index} className="px-4 py-2 flex items-center min-h-[60px]">
                 {cert.logo ? (
                   <img 
                     src={cert.logo} 
                     alt={cert.name}
-                    className="h-12 object-contain"
+                    className="h-12 max-w-[120px] object-contain filter brightness-0 contrast-100 opacity-70 hover:opacity-100 transition-opacity"
                   />
                 ) : (
                   <span className="font-inter font-medium text-neutral-mid text-sm">
