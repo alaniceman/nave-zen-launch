@@ -3,6 +3,7 @@ import panchoImage from "@/assets/pancho-saavedra.jpg"
 import drNeiraImage from "@/assets/dr-neira.jpg"
 import nicoImage from "@/assets/nico-jarry.jpg"
 import wimHofLogo from "@/assets/wim-hof-logo.png"
+import yogaAllianceLogo from "@/assets/yogaalliance-logo.png"
 
 export const SocialProofSection = () => {
   const testimonials = [
@@ -34,7 +35,7 @@ export const SocialProofSection = () => {
 
   const certifications = [
     { name: "Wim Hof Instructor", logo: wimHofLogo },
-    { name: "YogaAlliance", logo: null },
+    { name: "YogaAlliance", logo: yogaAllianceLogo },
     { name: "IceYoga", logo: null },
     { name: "Animal Flow", logo: null }
   ]
