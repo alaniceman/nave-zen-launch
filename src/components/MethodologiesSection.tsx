@@ -45,7 +45,7 @@ export const MethodologiesSection = () => {
     {
       icon: Zap,
       title: "Biohacking Session",
-      description: "HIIT · Breathwork · Ice Bath\nProtocolo triple que alterna sprints metabólicos, 3 rondas de respiración Wim Hof y un plunge a 3 °C. El combo dispara tu dopamina y noradrenalina, estimula la biogénesis mitocondrial y deja tu cuerpo en \"modo super-recuperación\".",
+      description: "Breathwork · HIIT · Ice Bath en ese orden\nProtocolo triple que alterna sprints metabólicos, 3 rondas de respiración Wim Hof y un plunge a 3 °C. El combo dispara tu dopamina y noradrenalina, estimula la biogénesis mitocondrial y deja tu cuerpo en \"modo super-recuperación\".",
       benefits: "Qué sucede en 45 min",
       benefitsList: [
         "+10 % VO₂ max y capacidad cardiovascular en 4 semanas",
