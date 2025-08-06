@@ -2,7 +2,7 @@ import kikaImage from "@/assets/kika-silva.jpg";
 import panchoImage from "@/assets/pancho-saavedra.jpg";
 import drNeiraImage from "@/assets/dr-neira.jpg";
 import nicoImage from "@/assets/nico-jarry.jpg";
-import wimHofLogo from "@/assets/wim-hof-logo.png";
+const wimHofLogo = "/lovable-uploads/4237a4a8-4b67-4133-9d1e-5a134df22d8c.png";
 import yogaAllianceLogo from "@/assets/yogaalliance-logo.png";
 export const SocialProofSection = () => {
   const testimonials = [{
