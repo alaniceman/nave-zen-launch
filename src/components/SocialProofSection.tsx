@@ -7,19 +7,19 @@ export const SocialProofSection = () => {
   const testimonials = [
     {
       name: "Kika Silva",
-      role: "Influencer",
+      role: "Influencer de Wellness",
       quote: "Nave me recordó lo importante que es escuchar a mi cuerpo.",
       image: kikaImage
     },
     {
       name: "Pancho Saavedra",
-      role: "TV Host",
+      role: "Conductor de TV",
       quote: "Creí que el hielo sería imposible; ahora lo recomiendo.",
       image: panchoImage
     },
     {
       name: "Dr. Rodolfo Neira",
-      role: "Médico",
+      role: "Médico Metabólico - Cancer",
       quote: "Creo que todos deberían vivir esta experiencia.",
       image: drNeiraImage
     },
