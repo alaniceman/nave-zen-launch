@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Footer } from "@/components/Footer"
 
 const Planes = () => {
   return (
@@ -292,6 +293,8 @@ const Planes = () => {
           </div>
         </div>
       </section>
+
+      <Footer />
     </main>
   )
 }
