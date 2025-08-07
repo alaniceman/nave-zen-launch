@@ -43,7 +43,7 @@ const Coaches = () => {
       title: "Fundador – Crioguía de Inmersiones y Breathwork",
       credentials: "Instructor Cert. Método Wim Hof · Coach Ontológico · Ing. Civil PUC",
       description: "Ayudo a las personas a vivir con la certeza de que pueden lograr lo que se propongan, sin sacrificar su bienestar.",
-      image: "/lovable-uploads/2d68d2b6-677d-403e-ae7f-60367ea2147c.png",
+      image: "/lovable-uploads/d4e6319c-db70-4990-9f8d-ef7f76f87b6d.png",
       badge: "Fundador",
       tags: ["Mindset", "Movimiento"]
     },
@@ -53,7 +53,7 @@ const Coaches = () => {
       title: "Instructora de Yoga y Movimiento Consciente – Kinesióloga en formación",
       credentials: "Crioguía de Inmersiones, Power Yoga e Yoga Integral",
       description: "Guío prácticas que cultivan fuerza y flexibilidad sin perder el equilibrio interno.",
-      image: "/lovable-uploads/6dafbe55-50e1-4124-9e81-2e1c5ccfdc02.png",
+      image: "/lovable-uploads/16afe771-f09d-472a-bc9d-ae33af798cc9.png",
       tags: ["Movimiento", "Terapia"]
     },
     {
@@ -62,7 +62,7 @@ const Coaches = () => {
       title: "Coach de Hábitos Saludables y Movimiento Consciente",
       credentials: "Crioguía de Biohacking, HIIT y Movimiento Funcional · Entrenador Funcional Cert.",
       description: "Te ayudo a diseñar hábitos sostenibles que potencian tu rendimiento sin descuidar tu bienestar.",
-      image: "/lovable-uploads/8e3c9f77-5221-40ea-91f2-0a59bd9fbbd0.png",
+      image: "/lovable-uploads/6dafbe55-50e1-4124-9e81-2e1c5ccfdc02.png",
       tags: ["Movimiento", "Mindset"]
     },
     {
@@ -71,7 +71,7 @@ const Coaches = () => {
       title: "Instructora de Ice Yoga · Reikista · Terapeuta Holística",
       credentials: "Reiki Master",
       description: "Te acompaño a encontrar calma y fortaleza a través del frío, la respiración y la energía.",
-      image: "/lovable-uploads/a3fa415f-0bc3-425d-b80a-6be9b04df24c.png",
+      image: "/lovable-uploads/f65792e3-e19c-49b3-a7fc-ce59b6a20ed3.png",
       tags: ["Energía", "Terapia"]
     },
     {
@@ -80,7 +80,7 @@ const Coaches = () => {
       title: "Instructora de Vinyasa Yoga y Danza · Educadora Somática",
       credentials: "Educadora Somática Certificada",
       description: "Guío secuencias fluidas que despiertan tu creatividad y presencia corporal.",
-      image: "/lovable-uploads/923c01f2-ceec-42a1-8418-1da57f72fb81.png",
+      image: "/lovable-uploads/8e3c9f77-5221-40ea-91f2-0a59bd9fbbd0.png",
       tags: ["Movimiento", "Energía"]
     },
     {
@@ -89,7 +89,7 @@ const Coaches = () => {
       title: "Instructora de Yin Yoga · Facilitadora de Meditación y Mindfulness",
       credentials: "Certificada en Mindfulness y Meditación",
       description: "Te invito a habitar tu cuerpo con suavidad y consciencia profunda.",
-      image: "/lovable-uploads/a9f285ca-df5e-48db-b7ea-21b7c8d8f73c.png",
+      image: "/lovable-uploads/56138f79-7a92-46b6-8fdf-8bff1ef72d26.png",
       tags: ["Mindset", "Terapia"]
     },
     {
@@ -98,7 +98,7 @@ const Coaches = () => {
       title: "Instructora de Yoga · Doula · Reikista",
       credentials: "Doula Certificada · Reiki Master",
       description: "Te acompaño a transitar etapas de cambio con serenidad, cuerpo y corazón alineados.",
-      image: "/lovable-uploads/f65792e3-e19c-49b3-a7fc-ce59b6a20ed3.png",
+      image: "/lovable-uploads/1f80e046-a0e6-4b38-a2b1-73c27384f85a.png",
       tags: ["Energía", "Terapia"]
     }
   ]
@@ -107,20 +107,17 @@ const Coaches = () => {
     {
       id: 1,
       text: "Alan me ayudó a transformar mi relación con el miedo. Ahora siento que puedo con todo.",
-      author: "Carolina M.",
-      image: "/lovable-uploads/cdad4a3b-fb0e-4d9c-8089-e085dbc1c718.png"
+      author: "Carolina M."
     },
     {
       id: 2,
       text: "Las clases de Maral combinan fuerza física con equilibrio emocional de manera perfecta.",
-      author: "Diego R.",
-      image: "/lovable-uploads/d4e6319c-db70-4990-9f8d-ef7f76f87b6d.png"
+      author: "Diego R."
     },
     {
       id: 3,
       text: "Sol tiene una energía increíble. Sus sesiones de yoga con hielo son transformadoras.",
-      author: "Fernanda L.",
-      image: "/lovable-uploads/b0ce44f8-4dbd-4c17-87ad-1026f3a0b43d.png"
+      author: "Fernanda L."
     }
   ]
 
@@ -286,12 +283,7 @@ const Coaches = () => {
               <p className="text-lg text-neutral-dark mb-6 italic leading-relaxed">
                 {testimonials[currentTestimonial].text}
               </p>
-              <div className="flex items-center justify-center gap-4">
-                <img
-                  src={testimonials[currentTestimonial].image}
-                  alt={testimonials[currentTestimonial].author}
-                  className="w-12 h-12 rounded-full object-cover"
-                />
+              <div className="flex flex-col items-center justify-center">
                 <div>
                   <p className="font-medium text-primary">
                     {testimonials[currentTestimonial].author}
