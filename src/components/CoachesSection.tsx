@@ -50,7 +50,7 @@ const coaches: Coach[] = [
     role: "Instructora de Vinyasa Yoga y Danza",
     credentials: "Especialista en Conexión Movimiento–Respiración · Bailarina Profesional y Educadora Somática",
     purpose: "Guío secuencias fluidas que despiertan tu creatividad y presencia corporal.",
-    image: "/lovable-uploads/bd41d348-08a8-468a-b986-090216e63e46.png"
+    image: "/lovable-uploads/6edd1ef3-fa06-4183-9732-e4628f258ce5.png"
   },
   {
     id: "val",
