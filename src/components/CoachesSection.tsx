@@ -18,7 +18,7 @@ const coaches: Coach[] = [
     credentials: "Instructor Certificado Método Wim Hof · Coach Ontológico · Ingeniero Civil PUC",
     purpose: "Ayudo a las personas a vivir con la certeza de que pueden lograr lo que se propongan, sin sacrificar su bienestar.",
     isFounder: true,
-    image: "/lovable-uploads/a9f285ca-df5e-48db-b7ea-21b7c8d8f73c.png"
+    image: "/lovable-uploads/d4e6319c-db70-4990-9f8d-ef7f76f87b6d.png"
   },
   {
     id: "maral",
@@ -26,7 +26,7 @@ const coaches: Coach[] = [
     role: "Instructora de Yoga y Movimiento Consciente – Kinesióloga en formación",
     credentials: "Crioguía de Inmersiones, Power Yoga e Yoga Integral · Biomecánica & prevención de lesiones",
     purpose: "Guío prácticas que cultivan fuerza y flexibilidad sin perder el equilibrio interno.",
-    image: "/lovable-uploads/2c005154-6b4f-43b7-b3cb-d3f15869f7ef.png"
+    image: "/lovable-uploads/1f80e046-a0e6-4b38-a2b1-73c27384f85a.png"
   },
   {
     id: "gaston",
@@ -34,7 +34,7 @@ const coaches: Coach[] = [
     role: "Coach de Hábitos Saludables y Movimiento Consciente",
     credentials: "Crioguía de Biohacking, HIIT y Movimiento Funcional · Entrenador Funcional Certificado",
     purpose: "Te ayudo a diseñar hábitos sostenibles que potencian tu rendimiento sin descuidar tu bienestar.",
-    image: "/lovable-uploads/5c461ccf-2208-4880-9a88-ca5863df238a.png"
+    image: "/lovable-uploads/6dafbe55-50e1-4124-9e81-2e1c5ccfdc02.png"
   },
   {
     id: "sol",
@@ -42,7 +42,7 @@ const coaches: Coach[] = [
     role: "Instructora de Ice Yoga · Reikista",
     credentials: "Crioguía de Inmersiones y Breathwork · Terapeuta Holística – Reiki Master",
     purpose: "Te acompaño a encontrar calma y fortaleza a través del frío, la respiración y la energía.",
-    image: "/lovable-uploads/a4c17f71-be9d-4b53-b308-b388e8536e45.png"
+    image: "/lovable-uploads/16afe771-f09d-472a-bc9d-ae33af798cc9.png"
   },
   {
     id: "mar",
@@ -50,7 +50,7 @@ const coaches: Coach[] = [
     role: "Instructora de Vinyasa Yoga y Danza",
     credentials: "Especialista en Conexión Movimiento–Respiración · Bailarina Profesional y Educadora Somática",
     purpose: "Guío secuencias fluidas que despiertan tu creatividad y presencia corporal.",
-    image: "/lovable-uploads/bd41d348-08a8-468a-b986-090216e63e46.png"
+    image: "/lovable-uploads/8e3c9f77-5221-40ea-91f2-0a59bd9fbbd0.png"
   },
   {
     id: "val",
@@ -58,7 +58,7 @@ const coaches: Coach[] = [
     role: "Instructora de Yin Yoga · Actriz",
     credentials: "Facilitadora de Meditación y Mindfulness · Exploradora del movimiento lento y la introspección",
     purpose: "Te invito a habitar tu cuerpo con suavidad y consciencia profunda.",
-    image: "/lovable-uploads/a3fa415f-0bc3-425d-b80a-6be9b04df24c.png"
+    image: "/lovable-uploads/f65792e3-e19c-49b3-a7fc-ce59b6a20ed3.png"
   },
   {
     id: "amber",
@@ -66,7 +66,7 @@ const coaches: Coach[] = [
     role: "Instructora de Yoga · Doula · Reikista",
     credentials: "Crioguía de Inmersiones y Yoga Integral · Facilitadora de Círculos Femeninos y Ceremonias de Cacao",
     purpose: "Te acompaño a transitar etapas de cambio con serenidad, cuerpo y corazón alineados.",
-    image: "/lovable-uploads/1a752499-748b-4a6e-b8e9-d096aa5e3086.png"
+    image: "/lovable-uploads/56138f79-7a92-46b6-8fdf-8bff1ef72d26.png"
   }
 ];
 
@@ -137,7 +137,7 @@ const CoachCard = ({ coach, isMobile = false }: { coach: Coach; isMobile?: boole
       
       {/* Profile Image */}
       <div className="text-center mb-6">
-        <div className={`${isMobile ? 'w-24 h-24' : 'w-30 h-30'} mx-auto mb-4 rounded-full overflow-hidden shadow-md`}>
+        <div className={`${isMobile ? 'w-24 h-24' : 'w-20 h-20'} mx-auto mb-4 rounded-full overflow-hidden shadow-md`}>
           <img
             src={coach.image}
             alt={`${coach.name} — ${coach.role.split(' –')[0]}`}
