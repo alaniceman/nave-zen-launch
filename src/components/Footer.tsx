@@ -30,7 +30,7 @@ const Footer = () => {
               Planes & Precios
             </a>
             <a 
-              href="#coaches" 
+              href="/coaches" 
               className="text-accent hover:text-warm transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
             >
               Coaches

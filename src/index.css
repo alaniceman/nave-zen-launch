@@ -168,3 +168,8 @@ All colors MUST be HSL.
 .animate-fade-in {
   animation: fade-in 0.6s ease-out forwards;
 }
+
+/* Hover scale utilities */
+.hover\:scale-103:hover {
+  transform: scale(1.03);
+}

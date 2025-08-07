@@ -31,7 +31,7 @@ export const Header = () => {
   const navigationLinks = [
     { label: "Experiencias", href: "/experiencias", isExternal: true },
     { label: "Planes & Precios", href: "/planes", isExternal: true },
-    { label: "Coaches", href: "#coaches" },
+    { label: "Coaches", href: "/coaches", isExternal: true },
     { label: "Contacto", href: "#contacto" }
   ]
 
