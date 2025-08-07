@@ -114,6 +114,8 @@ export const CoachesSection = () => {
             ¿No sabes con quién empezar?{" "}
             <a 
               href="https://wa.link/wh4f79" 
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-secondary underline hover:text-primary font-medium transition-colors duration-300"
             >
               Agenda una llamada de descubrimiento gratuita →
