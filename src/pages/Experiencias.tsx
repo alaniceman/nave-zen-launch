@@ -82,7 +82,7 @@ const Experiencias = () => {
 
   const stats = [
     { number: "9.9/10", caption: "satisfacción" },
-    { number: "97%", caption: "menos estrés" },
+    { number: "97%", caption: "reportaron menos estrés" },
     { number: "+2,000", caption: "participantes guiados" }
   ]
 
