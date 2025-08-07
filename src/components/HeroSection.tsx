@@ -8,9 +8,12 @@ export const HeroSection = () => {
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `var(--hero-overlay), url(${heroImage})`,
+          backgroundImage: `url(/lovable-uploads/923c01f2-ceec-42a1-8418-1da57f72fb81.png)`,
         }}
       />
+      
+      {/* Green Overlay */}
+      <div className="absolute inset-0 bg-primary opacity-55" />
       
       {/* Content */}
       <div className="relative z-10 container mx-auto px-6 text-center text-white">
