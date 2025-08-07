@@ -174,8 +174,9 @@ const PricingSection = () => {
               </CardHeader>
               <CardContent className="text-center space-y-4">
                 <p className="text-muted-foreground font-inter text-sm">
-                  1 h Breathwork Wim Hof + Ice Bath guiado y sostenido<br />
-                  Ideal para primerizos que quieren vivir su primer baño de agua fría con acompañamiento experto.
+                  Duración 1 h<br />
+                  Breathwork Wim Hof + Ice Bath guiado y sostenido<br />
+                  Ideal para quienes quieren vivir un baño de hielo con acompañamiento experto.
                 </p>
                 <div className="text-2xl font-bold text-foreground">$30.000</div>
                 <Button variant="secondary" className="w-full font-inter font-medium">
@@ -190,7 +191,8 @@ const PricingSection = () => {
               </CardHeader>
               <CardContent className="text-center space-y-4">
                 <p className="text-muted-foreground font-inter text-sm">
-                  1 h Breathwork Wim Hof + Ice Bath individual<br />
+                  Duración 1 h<br />
+                  Breathwork Wim Hof + Ice Bath individual<br />
                   Respiración en pareja (máx 2) y entrada al hielo por separado, guiada según tus objetivos.
                 </p>
                 <div className="text-2xl font-bold text-foreground">$40.000</div>
