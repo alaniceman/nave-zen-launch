@@ -101,7 +101,7 @@ const Experiencias = () => {
       <section 
         className="relative h-[70vh] flex flex-col items-center justify-center text-center px-6 bg-cover bg-center"
         style={{
-          backgroundImage: `var(--hero-overlay), url('/lovable-uploads/51817e71-ea71-4488-955a-3a4d82d001f6.png')`,
+          backgroundImage: `var(--hero-overlay), url('/lovable-uploads/195023f2-6c17-433e-9e1d-e453eaede57a.png')`,
         }}
       >
         <h1 className="text-4xl md:text-5xl font-heading text-white mb-4 animate-fade-in">
