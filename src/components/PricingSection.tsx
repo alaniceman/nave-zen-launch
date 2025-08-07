@@ -214,10 +214,7 @@ const PricingSection = () => {
                 <p className="text-muted-foreground font-inter text-sm">
                   27 sesiones en 90 días · 2/sem · plan trimestral con ahorro — ¡la mejor oferta!
                 </p>
-                <div className="flex items-center justify-between">
-                  <span className="text-2xl font-bold text-foreground">$219.000</span>
-                  <Badge className="bg-warm text-white">Paga en 3 cuotas sin interés</Badge>
-                </div>
+                <div className="text-2xl font-bold text-foreground">$219.000</div>
                 <Button className="w-full bg-primary hover:bg-primary/90 text-white font-inter font-medium">
                   Comenzar misión
                 </Button>
