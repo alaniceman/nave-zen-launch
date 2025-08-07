@@ -39,7 +39,11 @@ const PricingSection = () => {
                     <span className="text-accent">✔</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-muted-foreground">Breathwork & Biohacking</span>
+                    <span className="text-sm text-muted-foreground">Breathwork & Meditación</span>
+                    <span className="text-accent">✔</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-muted-foreground">Biohacking (Breathwork + Hiit + Ice Bath)</span>
                     <span className="text-accent">✔</span>
                   </div>
                   <div className="flex justify-between items-center">
@@ -78,7 +82,11 @@ const PricingSection = () => {
                     <span className="text-accent">✔</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-muted-foreground">Breathwork & Biohacking</span>
+                    <span className="text-sm text-muted-foreground">Breathwork & Meditación</span>
+                    <span className="text-accent">✔</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-muted-foreground">Biohacking (Breathwork + Hiit + Ice Bath)</span>
                     <span className="text-accent">✔</span>
                   </div>
                   <div className="flex justify-between items-center">
@@ -121,7 +129,11 @@ const PricingSection = () => {
                     <span className="text-accent">✔</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-muted-foreground">Breathwork & Biohacking</span>
+                    <span className="text-sm text-muted-foreground">Breathwork & Meditación</span>
+                    <span className="text-accent">✔</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-muted-foreground">Biohacking (Breathwork + Hiit + Ice Bath)</span>
                     <span className="text-accent">✔</span>
                   </div>
                   <div className="flex justify-between items-center">
