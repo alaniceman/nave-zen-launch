@@ -118,7 +118,7 @@ const Contacto = () => {
                   <Clock className="w-5 h-5 text-secondary flex-shrink-0" />
                   <p className="text-neutral-dark">
                     <span className="font-medium">Horarios: </span>
-                    Lun–Sáb · 07:00 – 20:00 h
+                    Lun–Dom · 07:00 – 20:00 h
                   </p>
                 </div>
               </div>
