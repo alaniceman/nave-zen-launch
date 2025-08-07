@@ -171,10 +171,10 @@ const PricingSection = () => {
             <Card className="border hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[10px]">
               <CardHeader className="text-center">
                 <CardTitle className="text-lg font-bold text-primary font-space-grotesk">Grupal (máx 6)</CardTitle>
+                <Badge className="bg-warm text-white mx-auto">Duración 1 h</Badge>
               </CardHeader>
               <CardContent className="text-center space-y-4">
                 <p className="text-muted-foreground font-inter text-sm">
-                  Duración 1 h<br />
                   Breathwork Wim Hof + Ice Bath guiado y sostenido<br />
                   Ideal para quienes quieren vivir un baño de hielo con acompañamiento experto.
                 </p>
@@ -188,10 +188,10 @@ const PricingSection = () => {
             <Card className="border hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[10px]">
               <CardHeader className="text-center">
                 <CardTitle className="text-lg font-bold text-primary font-space-grotesk">Personalizado (máx 2)</CardTitle>
+                <Badge className="bg-warm text-white mx-auto">Duración 1 h</Badge>
               </CardHeader>
               <CardContent className="text-center space-y-4">
                 <p className="text-muted-foreground font-inter text-sm">
-                  Duración 1 h<br />
                   Respiración de a pares (máx 2) y entrada al hielo por separado, guiado y sostenido acorde a tu intensión de la sesión.
                 </p>
                 <div className="text-2xl font-bold text-foreground">$40.000</div>
