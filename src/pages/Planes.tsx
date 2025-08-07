@@ -31,8 +31,9 @@ const Planes = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Pricing Hero */}
-      <section id="hero-section" className="h-[80vh] bg-primary relative flex items-center justify-center text-center px-6">
-        <div className="max-w-4xl mx-auto space-y-8 animate-fade-in">
+      <section id="hero-section" className="h-[80vh] relative flex items-center justify-center text-center px-6" style={{backgroundImage: 'url(/lovable-uploads/b0ce44f8-4dbd-4c17-87ad-1026f3a0b43d.png)', backgroundSize: 'cover', backgroundPosition: 'center'}}>
+        <div className="absolute inset-0 bg-primary opacity-55"></div>
+        <div className="max-w-4xl mx-auto space-y-8 animate-fade-in relative z-10">
           <h1 className="text-5xl md:text-7xl font-bold text-white font-space tracking-heading">
             Elige tu plan y despega en la Nave
           </h1>
