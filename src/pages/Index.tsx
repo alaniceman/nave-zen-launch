@@ -5,6 +5,7 @@ import { PricingSection } from "@/components/PricingSection"
 import { CoachesSection } from "@/components/CoachesSection"
 import { FreeYogaSection } from "@/components/FreeYogaSection"
 import { LocationSection } from "@/components/LocationSection"
+import { Footer } from "@/components/Footer"
 
 const Index = () => {
   return (
@@ -27,6 +28,8 @@ const Index = () => {
           />
         </div>
       </section>
+      
+      <Footer />
       </main>
   );
 };
