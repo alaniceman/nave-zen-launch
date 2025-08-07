@@ -34,12 +34,6 @@ export const SocialProofSection = () => {
   }, {
     name: "YogaAlliance",
     logo: yogaAllianceLogo
-  }, {
-    name: "IceYoga",
-    logo: null
-  }, {
-    name: "Animal Flow",
-    logo: null
   }];
 
   return <section className="py-16 md:py-24 bg-neutral-light">
