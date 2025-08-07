@@ -26,7 +26,7 @@ const coaches: Coach[] = [
     role: "Instructora de Yoga y Movimiento Consciente – Kinesióloga en formación",
     credentials: "Crioguía de Inmersiones, Power Yoga e Yoga Integral · Biomecánica & prevención de lesiones",
     purpose: "Guío prácticas que cultivan fuerza y flexibilidad sin perder el equilibrio interno.",
-    image: "/lovable-uploads/1f80e046-a0e6-4b38-a2b1-73c27384f85a.png"
+    image: "/lovable-uploads/16afe771-f09d-472a-bc9d-ae33af798cc9.png"
   },
   {
     id: "gaston",
@@ -42,7 +42,7 @@ const coaches: Coach[] = [
     role: "Instructora de Ice Yoga · Reikista",
     credentials: "Crioguía de Inmersiones y Breathwork · Terapeuta Holística – Reiki Master",
     purpose: "Te acompaño a encontrar calma y fortaleza a través del frío, la respiración y la energía.",
-    image: "/lovable-uploads/16afe771-f09d-472a-bc9d-ae33af798cc9.png"
+    image: "/lovable-uploads/f65792e3-e19c-49b3-a7fc-ce59b6a20ed3.png"
   },
   {
     id: "mar",
@@ -58,7 +58,7 @@ const coaches: Coach[] = [
     role: "Instructora de Yin Yoga · Actriz",
     credentials: "Facilitadora de Meditación y Mindfulness · Exploradora del movimiento lento y la introspección",
     purpose: "Te invito a habitar tu cuerpo con suavidad y consciencia profunda.",
-    image: "/lovable-uploads/f65792e3-e19c-49b3-a7fc-ce59b6a20ed3.png"
+    image: "/lovable-uploads/56138f79-7a92-46b6-8fdf-8bff1ef72d26.png"
   },
   {
     id: "amber",
@@ -66,7 +66,7 @@ const coaches: Coach[] = [
     role: "Instructora de Yoga · Doula · Reikista",
     credentials: "Crioguía de Inmersiones y Yoga Integral · Facilitadora de Círculos Femeninos y Ceremonias de Cacao",
     purpose: "Te acompaño a transitar etapas de cambio con serenidad, cuerpo y corazón alineados.",
-    image: "/lovable-uploads/56138f79-7a92-46b6-8fdf-8bff1ef72d26.png"
+    image: "/lovable-uploads/1f80e046-a0e6-4b38-a2b1-73c27384f85a.png"
   }
 ];
 
