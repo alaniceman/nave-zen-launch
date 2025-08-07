@@ -20,12 +20,12 @@ const PricingSection = () => {
         <div className="mb-20">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {/* Eclipse Plan */}
-            <Card className="relative border-2 hover:shadow-lg transition-all duration-300 animate-fade-in flex flex-col h-full">
+            <Card className="relative border-2 hover:shadow-lg transition-all duration-300 animate-fade-in">
               <CardHeader className="text-center pb-4">
                 <CardTitle className="text-xl font-bold text-foreground font-space">Eclipse</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4 flex-1 flex flex-col">
-                <div className="space-y-3 flex-1">
+              <CardContent className="space-y-4">
+                <div className="space-y-3">
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">Sesiones presenciales</span>
                     <span className="font-medium">1 / sem</span>
@@ -50,8 +50,6 @@ const PricingSection = () => {
                     <span className="text-sm text-muted-foreground">Comunidad online + mentorías</span>
                     <span className="text-muted-foreground">—</span>
                   </div>
-                  {/* Spacer for alignment */}
-                  <div className="hidden md:block h-6"></div>
                 </div>
                 <div className="pt-4 border-t">
                   <div className="text-center">
@@ -65,12 +63,12 @@ const PricingSection = () => {
             </Card>
 
             {/* Órbita Plan */}
-            <Card className="relative border-2 hover:shadow-lg transition-all duration-300 animate-fade-in flex flex-col h-full">
+            <Card className="relative border-2 hover:shadow-lg transition-all duration-300 animate-fade-in">
               <CardHeader className="text-center pb-4">
                 <CardTitle className="text-xl font-bold text-foreground font-space">Órbita</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4 flex-1 flex flex-col">
-                <div className="space-y-3 flex-1">
+              <CardContent className="space-y-4">
+                <div className="space-y-3">
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">Sesiones presenciales</span>
                     <span className="font-medium">2 / sem</span>
@@ -109,15 +107,15 @@ const PricingSection = () => {
             </Card>
 
             {/* Universo Plan - Most Popular */}
-            <Card className="relative border-2 border-accent bg-neutral-50/50 hover:shadow-lg transition-all duration-300 animate-fade-in flex flex-col h-full">
+            <Card className="relative border-2 border-accent bg-neutral-50/50 hover:shadow-lg transition-all duration-300 animate-fade-in">
               <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-accent text-white">
                 Más popular
               </Badge>
               <CardHeader className="text-center pb-4 pt-8">
                 <CardTitle className="text-xl font-bold text-foreground font-space">Universo</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4 flex-1 flex flex-col">
-                <div className="space-y-3 flex-1">
+              <CardContent className="space-y-4">
+                <div className="space-y-3">
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">Sesiones presenciales</span>
                     <span className="font-medium">Ilimitadas</span>
