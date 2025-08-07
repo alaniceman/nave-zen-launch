@@ -99,14 +99,14 @@ export const SocialProofSection = () => {
 
         {/* Certificaciones */}
         <div className="text-center mb-16">
-          <div className="flex flex-wrap justify-center items-center gap-12 md:gap-16 opacity-80">
+          <div className="flex flex-wrap justify-center items-center gap-16 md:gap-24 opacity-80">
             {certifications.map((cert, index) => (
-              <div key={index} className="flex items-center justify-center h-32">
+              <div key={index} className="flex items-center justify-center h-40">
                 {cert.logo ? (
                   <img 
                     src={cert.logo} 
                     alt={cert.name} 
-                    className="h-28 w-auto object-contain"
+                    className="h-36 w-auto object-contain"
                   />
                 ) : (
                   <span className="font-inter text-lg text-neutral-mid font-medium">
