@@ -1,0 +1,177 @@
+import { Button } from "./ui/button";
+
+interface Coach {
+  id: string;
+  name: string;
+  role: string;
+  credentials: string;
+  purpose: string;
+  isFounder?: boolean;
+  image: string;
+}
+
+const coaches: Coach[] = [
+  {
+    id: "alan",
+    name: "Alan Iceman Earle",
+    role: "Fundador – Crioguía de Inmersiones y Breathwork",
+    credentials: "Instructor Certificado Método Wim Hof · Coach Ontológico · Ingeniero Civil PUC",
+    purpose: "Ayudo a las personas a vivir con la certeza de que pueden lograr lo que se propongan, sin sacrificar su bienestar.",
+    isFounder: true,
+    image: "/src/assets/alan-iceman.jpg"
+  },
+  {
+    id: "maral",
+    name: "Maral Hekmat",
+    role: "Instructora de Yoga y Movimiento Consciente – Kinesióloga en formación",
+    credentials: "Crioguía de Inmersiones, Power Yoga e Yoga Integral · Biomecánica & prevención de lesiones",
+    purpose: "Guío prácticas que cultivan fuerza y flexibilidad sin perder el equilibrio interno.",
+    image: "/src/assets/maral-hekmat.jpg"
+  },
+  {
+    id: "gaston",
+    name: "Gastón Serrano",
+    role: "Coach de Hábitos Saludables y Movimiento Consciente",
+    credentials: "Crioguía de Biohacking, HIIT y Movimiento Funcional · Entrenador Funcional Certificado",
+    purpose: "Te ayudo a diseñar hábitos sostenibles que potencian tu rendimiento sin descuidar tu bienestar.",
+    image: "/src/assets/gaston-serrano.jpg"
+  },
+  {
+    id: "sol",
+    name: "Sol Evans",
+    role: "Instructora de Ice Yoga · Reikista",
+    credentials: "Crioguía de Inmersiones y Breathwork · Terapeuta Holística – Reiki Master",
+    purpose: "Te acompaño a encontrar calma y fortaleza a través del frío, la respiración y la energía.",
+    image: "/src/assets/sol-evans.jpg"
+  },
+  {
+    id: "mar",
+    name: "Mar Carrasco",
+    role: "Instructora de Vinyasa Yoga y Danza",
+    credentials: "Especialista en Conexión Movimiento–Respiración · Bailarina Profesional y Educadora Somática",
+    purpose: "Guío secuencias fluidas que despiertan tu creatividad y presencia corporal.",
+    image: "/src/assets/mar-carrasco.jpg"
+  },
+  {
+    id: "val",
+    name: "Val Medina",
+    role: "Instructora de Yin Yoga · Actriz",
+    credentials: "Facilitadora de Meditación y Mindfulness · Exploradora del movimiento lento y la introspección",
+    purpose: "Te invito a habitar tu cuerpo con suavidad y consciencia profunda.",
+    image: "/src/assets/val-medina.jpg"
+  },
+  {
+    id: "amber",
+    name: "Ámbar Vidal",
+    role: "Instructora de Yoga · Doula · Reikista",
+    credentials: "Crioguía de Inmersiones y Yoga Integral · Facilitadora de Círculos Femeninos y Ceremonias de Cacao",
+    purpose: "Te acompaño a transitar etapas de cambio con serenidad, cuerpo y corazón alineados.",
+    image: "/src/assets/amber-vidal.jpg"
+  }
+];
+
+export const CoachesSection = () => {
+  return (
+    <section className="py-20 bg-background">
+      <div className="container mx-auto px-6">
+        {/* Header */}
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-bold text-primary font-space mb-6">
+            Conoce al equipo que te acompañará
+          </h2>
+          <p className="text-xl text-neutral-mid font-inter max-w-3xl mx-auto">
+            Expertos en frío, movimiento, mente y nutrición comprometidos con tu longevidad.
+          </p>
+        </div>
+
+        {/* Coaches Grid - Desktop & Tablet */}
+        <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+          {coaches.map((coach) => (
+            <CoachCard key={coach.id} coach={coach} />
+          ))}
+        </div>
+
+        {/* Coaches Slider - Mobile */}
+        <div className="sm:hidden mb-12">
+          <div className="flex overflow-x-auto gap-6 pb-4 snap-x snap-mandatory">
+            {coaches.map((coach) => (
+              <div key={coach.id} className="flex-none w-full snap-center">
+                <CoachCard coach={coach} />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* CTA */}
+        <div className="text-center mt-12">
+          <p className="text-lg text-neutral-mid font-inter">
+            ¿No sabes con quién empezar?{" "}
+            <a 
+              href="#contacto" 
+              className="text-secondary underline hover:text-primary font-medium transition-colors duration-300"
+            >
+              Agenda una llamada de descubrimiento gratuita →
+            </a>
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const CoachCard = ({ coach }: { coach: Coach }) => {
+  return (
+    <div className="relative bg-card rounded-xl p-6 shadow-[0_4px_10px_rgba(0,0,0,0.08)] hover:scale-105 hover:shadow-lg transition-all duration-300">
+      {/* Founder Badge */}
+      {coach.isFounder && (
+        <div className="absolute top-4 left-4 bg-warm text-white text-xs px-3 py-1 rounded-full uppercase tracking-wide font-medium">
+          Fundador
+        </div>
+      )}
+      
+      {/* Profile Image */}
+      <div className="text-center mb-6">
+        <div className="w-30 h-30 mx-auto mb-4 rounded-full overflow-hidden shadow-md">
+          <img
+            src={coach.image}
+            alt={`${coach.name} — ${coach.role.split(' –')[0]}`}
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              e.currentTarget.src = 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&h=120&fit=crop&crop=face';
+            }}
+          />
+        </div>
+        
+        {/* Name */}
+        <h3 className="text-xl font-bold text-primary font-space mb-2">
+          {coach.name}
+        </h3>
+        
+        {/* Role */}
+        <h4 className="text-sm font-semibold text-neutral-dark font-inter mb-3">
+          {coach.role}
+        </h4>
+        
+        {/* Credentials */}
+        <p className="text-xs text-neutral-mid font-inter mb-4 leading-relaxed">
+          {coach.credentials}
+        </p>
+        
+        {/* Purpose */}
+        <p className="text-sm text-neutral-dark font-inter mb-6 italic leading-relaxed">
+          "{coach.purpose}"
+        </p>
+      </div>
+      
+      {/* CTA Button */}
+      <div className="text-center">
+        <Button 
+          variant="outline" 
+          className="border-2 border-secondary text-secondary py-2 px-5 rounded-lg font-medium font-inter transition-all duration-300 hover:bg-secondary hover:text-white focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-opacity-50"
+        >
+          Reservar
+        </Button>
+      </div>
+    </div>
+  );
+};
