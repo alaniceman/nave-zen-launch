@@ -258,7 +258,7 @@ const PricingSection = () => {
               <CardContent className="space-y-4">
                 <p className="text-muted-foreground font-inter text-sm">
                   1 sesión de Yoga con opción de Ice Bath al final.<br />
-                  Requiere haber completado previamente la sesión guiada de agua fría.
+                  Requiere haber completado previamente una sesión guiada de agua fría.
                 </p>
                 <div className="text-2xl font-bold text-foreground">$15.000</div>
                 <Button variant="secondary" className="w-full font-inter font-medium">
