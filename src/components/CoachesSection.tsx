@@ -58,7 +58,7 @@ const coaches: Coach[] = [
     role: "Instructora de Yin Yoga · Actriz",
     credentials: "Facilitadora de Meditación y Mindfulness · Exploradora del movimiento lento y la introspección",
     purpose: "Te invito a habitar tu cuerpo con suavidad y consciencia profunda.",
-    image: "/lovable-uploads/a3fa415f-0bc3-425d-b80a-6be9b04df24c.png"
+    image: "/lovable-uploads/2425772f-0211-4f7f-97f8-d0aabb7ece26.png"
   },
   {
     id: "amber",
