@@ -19,6 +19,9 @@ const FreeYogaSection = () => {
             Agenda tu clase de prueba
           </a>
         </Button>
+        <p className="text-xs text-muted-foreground mt-4 font-inter">
+          *clase gratuita no incluye baño de agua fría
+        </p>
       </div>
     </section>
   )
