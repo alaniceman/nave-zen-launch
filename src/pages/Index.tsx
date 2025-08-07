@@ -4,6 +4,7 @@ import { MethodologiesSection } from "@/components/MethodologiesSection"
 import { PricingSection } from "@/components/PricingSection"
 import { CoachesSection } from "@/components/CoachesSection"
 import { FreeYogaSection } from "@/components/FreeYogaSection"
+import { LocationSection } from "@/components/LocationSection"
 
 const Index = () => {
   return (
@@ -14,6 +15,7 @@ const Index = () => {
       <PricingSection />
       <CoachesSection />
       <FreeYogaSection />
+      <LocationSection />
       
       {/* Wim Hof Certification Logo */}
       <section className="py-12 bg-background">
