@@ -192,8 +192,7 @@ const PricingSection = () => {
               <CardContent className="text-center space-y-4">
                 <p className="text-muted-foreground font-inter text-sm">
                   Duración 1 h<br />
-                  Breathwork Wim Hof + Ice Bath individual<br />
-                  Respiración en pareja (máx 2) y entrada al hielo por separado, guiada según tus objetivos.
+                  Respiración de a pares (máx 2) y entrada al hielo por separado, guiado y sostenido acorde a tu intensión de la sesión.
                 </p>
                 <div className="text-2xl font-bold text-foreground">$40.000</div>
                 <Button variant="secondary" className="w-full font-inter font-medium">
