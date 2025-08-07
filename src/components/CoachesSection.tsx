@@ -47,9 +47,9 @@ const coaches: Coach[] = [
   {
     id: "mar",
     name: "Mar Carrasco",
-    role: "Instructora de Vinyasa Yoga y Danza",
-    credentials: "Especialista en Conexión Movimiento–Respiración · Bailarina Profesional y Educadora Somática",
-    purpose: "Guío secuencias fluidas que despiertan tu creatividad y presencia corporal.",
+    role: "Instructora de Vinyasa Yoga, Inside Flow y Danza",
+    credentials: "Especialista en Conexión Movimiento–Respiración · Bailarina Profesional",
+    purpose: "Guío secuencias fluidas que despiertan tu creatividad, presencia corporal y conexión interior, para habitarte con más amor, libertad y conciencia.",
     image: "/lovable-uploads/8e3c9f77-5221-40ea-91f2-0a59bd9fbbd0.png"
   },
   {
