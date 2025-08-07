@@ -86,8 +86,8 @@ export const MethodologiesSection = () => {
                 
                 <div className="relative z-10">
                   {/* Icon */}
-                  <div className="mx-auto w-20 h-20 bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-sm">
-                    <IconComponent className="w-9 h-9 text-primary" />
+                  <div className="mx-auto w-16 h-16 bg-gradient-to-br from-primary/20 to-primary/10 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-sm">
+                    <IconComponent className="w-7 h-7 text-primary" />
                   </div>
 
                   {/* Title */}
