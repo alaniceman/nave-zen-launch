@@ -120,21 +120,41 @@ export const SocialProofSection = () => {
 
         {/* Métricas de calidad */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          <div className="text-center p-8 bg-background rounded-[var(--radius)] shadow-light">
-            <div className="space-y-2">
-              <div className="font-space-grotesk font-bold text-4xl text-primary">9.8/10</div>
-              <p className="font-inter text-neutral-mid">promedio en 477 encuestas</p>
+          <div className="group text-center p-8 bg-background rounded-[var(--radius)] shadow-light hover:shadow-medium transition-all duration-300 hover-scale">
+            <div className="space-y-4">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-2">
+                <div className="text-primary text-2xl">⭐</div>
+              </div>
+              <div className="space-y-2">
+                <div className="font-space-grotesk font-bold text-5xl text-primary group-hover:scale-110 transition-transform duration-300">
+                  9.8<span className="text-2xl text-neutral-mid">/10</span>
+                </div>
+                <p className="font-inter text-neutral-mid font-medium">
+                  Promedio de satisfacción
+                </p>
+                <p className="font-inter text-sm text-neutral-mid opacity-80">
+                  basado en 477 encuestas
+                </p>
+              </div>
             </div>
           </div>
           
-          <div className="text-center p-8 bg-background rounded-[var(--radius)] shadow-light">
-            <div className="space-y-2">
-              <div className="font-space-grotesk font-bold text-4xl text-primary">
-                97%
+          <div className="group text-center p-8 bg-background rounded-[var(--radius)] shadow-light hover:shadow-medium transition-all duration-300 hover-scale">
+            <div className="space-y-4">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-2">
+                <div className="text-primary text-2xl">🧘‍♀️</div>
               </div>
-              <p className="font-inter text-neutral-mid">
-                de los miembros reporta menos estrés en 30 días
-              </p>
+              <div className="space-y-2">
+                <div className="font-space-grotesk font-bold text-5xl text-primary group-hover:scale-110 transition-transform duration-300">
+                  97<span className="text-2xl text-neutral-mid">%</span>
+                </div>
+                <p className="font-inter text-neutral-mid font-medium">
+                  Reducción del estrés
+                </p>
+                <p className="font-inter text-sm text-neutral-mid opacity-80">
+                  reportada en los primeros 30 días
+                </p>
+              </div>
             </div>
           </div>
         </div>
