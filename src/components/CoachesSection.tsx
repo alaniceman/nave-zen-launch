@@ -30,10 +30,10 @@ const coaches: Coach[] = [
   },
   {
     id: "gaston",
-    name: "Gastón Serrano",
+    name: "Gastón Serrano Horton",
     role: "Coach de Hábitos Saludables y Movimiento Consciente",
-    credentials: "Crioguía de Biohacking, HIIT y Movimiento Funcional · Entrenador Funcional Certificado",
-    purpose: "Te ayudo a diseñar hábitos sostenibles que potencian tu rendimiento sin descuidar tu bienestar.",
+    credentials: "Crioguía de Biohacking: Respiración + HIIT + Chi Kung + Agua Fría",
+    purpose: "Impulso tu vitalidad con hábitos simples y poderosos, para que vivas en plena coherencia física, mental y emocional.",
     image: "/lovable-uploads/6dafbe55-50e1-4124-9e81-2e1c5ccfdc02.png"
   },
   {
