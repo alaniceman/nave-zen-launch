@@ -156,12 +156,6 @@ const PricingSection = () => {
           </div>
         </div>
 
-        {/* Disclaimer post-pricing */}
-        <p className="text-center text-sm text-muted-foreground mt-4 max-w-xl mx-auto">
-          Las clases de <strong>Yoga</strong> finalizan con un Ice Bath <em>opcional</em>.  
-          Para ingresar al hielo debes haber completado previamente una sesión guiada del <strong>Método Wim Hof</strong>.
-        </p>
-
         {/* Wim Hof Method Section */}
         <div className="mb-20">
           <h3 className="text-center text-primary text-2xl font-bold mb-8 font-space-grotesk">
