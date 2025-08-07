@@ -250,49 +250,93 @@ const Planes = () => {
               </CardContent>
             </Card>
 
-            {/* Órbita and Eclipse for mobile */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <Card className="relative border-2">
-                <CardHeader className="text-center pb-4">
-                  <CardTitle className="text-xl font-bold text-foreground font-space">Órbita</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-3">
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm text-muted-foreground">Sesiones</span>
-                      <span className="font-medium">2/sem</span>
-                    </div>
-                    <div className="text-center space-y-2">
-                      <span className="text-2xl font-bold text-foreground">$79.000</span>
-                      <Badge className="bg-warm text-white text-xs">50% OFF 1° mes</Badge>
-                    </div>
+            {/* Órbita Card */}
+            <Card className="relative border-2 hover:shadow-light transition-all duration-300">
+              <CardHeader className="text-center pb-4">
+                <CardTitle className="text-xl font-bold text-foreground font-space">Órbita</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-muted-foreground">Sesiones presenciales</span>
+                    <span className="font-medium">2 / sem</span>
                   </div>
-                  <Button className="w-full bg-accent hover:bg-primary text-white font-inter font-medium">
-                    Suscribirme
-                  </Button>
-                </CardContent>
-              </Card>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-muted-foreground">Método Wim Hof</span>
+                    <CheckIcon className="h-5 w-5 text-accent" />
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-muted-foreground">Yoga (Yin · Yang · Integral)</span>
+                    <CheckIcon className="h-5 w-5 text-accent" />
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-muted-foreground">Breathwork & Meditación</span>
+                    <CheckIcon className="h-5 w-5 text-accent" />
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-muted-foreground">Biohacking (Breathwork + HIIT + Ice Bath)</span>
+                    <CheckIcon className="h-5 w-5 text-accent" />
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-muted-foreground">Comunidad online + mentorías</span>
+                    <CheckIcon className="h-5 w-5 text-accent" />
+                  </div>
+                </div>
+                <div className="pt-4 border-t">
+                  <div className="text-center space-y-2">
+                    <span className="text-3xl font-bold text-foreground">$79.000</span>
+                    <Badge className="bg-warm text-white text-xs">50% OFF 1° mes - código 1MES</Badge>
+                  </div>
+                </div>
+                <Button className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium">
+                  Suscribirme
+                </Button>
+              </CardContent>
+            </Card>
 
-              <Card className="relative border-2">
-                <CardHeader className="text-center pb-4">
-                  <CardTitle className="text-xl font-bold text-foreground font-space">Eclipse</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-3">
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm text-muted-foreground">Sesiones</span>
-                      <span className="font-medium">1/sem</span>
-                    </div>
-                    <div className="text-center">
-                      <span className="text-2xl font-bold text-foreground">$49.000</span>
-                    </div>
+            {/* Eclipse Card */}
+            <Card className="relative border-2 hover:shadow-light transition-all duration-300">
+              <CardHeader className="text-center pb-4">
+                <CardTitle className="text-xl font-bold text-foreground font-space">Eclipse</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-muted-foreground">Sesiones presenciales</span>
+                    <span className="font-medium">1 / sem</span>
                   </div>
-                  <Button className="w-full bg-accent hover:bg-primary text-white font-inter font-medium">
-                    Suscribirme
-                  </Button>
-                </CardContent>
-              </Card>
-            </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-muted-foreground">Método Wim Hof</span>
+                    <CheckIcon className="h-5 w-5 text-accent" />
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-muted-foreground">Yoga (Yin · Yang · Integral)</span>
+                    <CheckIcon className="h-5 w-5 text-accent" />
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-muted-foreground">Breathwork & Meditación</span>
+                    <CheckIcon className="h-5 w-5 text-accent" />
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-muted-foreground">Biohacking (Breathwork + HIIT + Ice Bath)</span>
+                    <CheckIcon className="h-5 w-5 text-accent" />
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-muted-foreground">Comunidad online + mentorías</span>
+                    <span className="text-muted-foreground">—</span>
+                  </div>
+                </div>
+                <div className="pt-4 border-t">
+                  <div className="text-center space-y-2">
+                    <span className="text-3xl font-bold text-foreground">$49.000</span>
+                    <div className="h-6"></div>
+                  </div>
+                </div>
+                <Button className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium">
+                  Suscribirme
+                </Button>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
