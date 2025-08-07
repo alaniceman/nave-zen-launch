@@ -24,7 +24,7 @@ const Footer = () => {
               Experiencias
             </a>
             <a 
-              href="#planes" 
+              href="/planes" 
               className="text-accent hover:text-warm transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
             >
               Planes & Precios
@@ -36,16 +36,16 @@ const Footer = () => {
               Coaches
             </a>
             <a 
+              href="#testimonios" 
+              className="text-accent hover:text-warm transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
+            >
+              Testimonios
+            </a>
+            <a 
               href="#contacto" 
               className="text-accent hover:text-warm transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
             >
               Contacto
-            </a>
-            <a 
-              href="#faq" 
-              className="text-accent hover:text-warm transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
-            >
-              FAQs
             </a>
           </nav>
 
