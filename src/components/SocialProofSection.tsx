@@ -3,7 +3,7 @@ import panchoImage from "@/assets/pancho-saavedra.jpg";
 import drNeiraImage from "@/assets/dr-neira.jpg";
 import nicoImage from "@/assets/nico-jarry.jpg";
 const wimHofLogo = "/lovable-uploads/4237a4a8-4b67-4133-9d1e-5a134df22d8c.png";
-import yogaAllianceLogo from "@/assets/yogaalliance-logo.png";
+const yogaAllianceLogo = "/lovable-uploads/cdad4a3b-fb0e-4d9c-8089-e085dbc1c718.png";
 
 export const SocialProofSection = () => {
   const testimonials = [{
