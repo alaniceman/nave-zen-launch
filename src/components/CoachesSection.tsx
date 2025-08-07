@@ -113,7 +113,7 @@ export const CoachesSection = () => {
           <p className="text-lg text-neutral-mid font-inter">
             ¿No sabes con quién empezar?{" "}
             <a 
-              href="#contacto" 
+              href="https://wa.link/wh4f79" 
               className="text-secondary underline hover:text-primary font-medium transition-colors duration-300"
             >
               Agenda una llamada de descubrimiento gratuita →
