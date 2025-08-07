@@ -123,7 +123,6 @@ export const SocialProofSection = () => {
           <div className="group text-center p-8 bg-background rounded-[var(--radius)] shadow-light hover:shadow-medium transition-all duration-300 hover-scale">
             <div className="space-y-4">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-2">
-                <div className="text-primary text-2xl">⭐</div>
               </div>
               <div className="space-y-2">
                 <div className="font-space-grotesk font-bold text-5xl text-primary group-hover:scale-110 transition-transform duration-300">
@@ -142,7 +141,6 @@ export const SocialProofSection = () => {
           <div className="group text-center p-8 bg-background rounded-[var(--radius)] shadow-light hover:shadow-medium transition-all duration-300 hover-scale">
             <div className="space-y-4">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-2">
-                <div className="text-primary text-2xl">🧘‍♀️</div>
               </div>
               <div className="space-y-2">
                 <div className="font-space-grotesk font-bold text-5xl text-primary group-hover:scale-110 transition-transform duration-300">
