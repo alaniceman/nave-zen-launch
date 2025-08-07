@@ -51,8 +51,8 @@ export const SocialProofSection = () => {
           </h2>
         </div>
 
-        {/* Grid de testimonios */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+        {/* Grid de testimonios - Desktop & Tablet */}
+        <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
           {testimonials.map((testimonial, index) => <div key={index} className="bg-background rounded-[var(--radius)] p-8 shadow-light text-center space-y-6">
               <div className="mx-auto w-32 h-32 rounded-full overflow-hidden shadow-medium">
                 <img src={testimonial.image} alt={`${testimonial.name} - ${testimonial.role}`} className="w-full h-full object-cover" />
@@ -69,6 +69,38 @@ export const SocialProofSection = () => {
                 "{testimonial.quote}"
               </blockquote>
             </div>)}
+        </div>
+
+        {/* Testimonios Slider - Mobile */}
+        <div className="md:hidden mb-16">
+          <div className="flex overflow-x-auto gap-4 pb-4 px-4 -mx-4" style={{scrollSnapType: 'x mandatory'}}>
+            {testimonials.map((testimonial, index) => (
+              <div key={index} className="flex-none w-80 max-w-[calc(100vw-2rem)]" style={{scrollSnapAlign: 'center'}}>
+                <div className="bg-background rounded-[var(--radius)] p-8 shadow-light text-center space-y-6">
+                  <div className="mx-auto w-24 h-24 rounded-full overflow-hidden shadow-medium">
+                    <img src={testimonial.image} alt={`${testimonial.name} - ${testimonial.role}`} className="w-full h-full object-cover" />
+                  </div>
+                  <div className="space-y-2">
+                    <h3 className="font-space-grotesk font-bold text-xl text-neutral-dark">
+                      {testimonial.name}
+                    </h3>
+                    <p className="font-inter text-base text-neutral-mid">
+                      {testimonial.role}
+                    </p>
+                  </div>
+                  <blockquote className="font-inter text-base text-neutral-dark italic leading-relaxed">
+                    "{testimonial.quote}"
+                  </blockquote>
+                </div>
+              </div>
+            ))}
+          </div>
+          {/* Mobile scroll indicator */}
+          <div className="flex justify-center gap-2 mt-4">
+            {testimonials.map((_, index) => (
+              <div key={index} className="w-2 h-2 rounded-full bg-neutral-light"></div>
+            ))}
+          </div>
         </div>
 
         {/* Certificaciones */}
