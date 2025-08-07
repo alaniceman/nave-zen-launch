@@ -78,46 +78,53 @@ export const MethodologiesSection = () => {
             return (
               <div 
                 key={index} 
-                className="bg-neutral-light rounded-[var(--radius)] p-8 text-center animate-fade-in transition-all duration-300 shadow-light hover:shadow-medium hover:scale-105 flex-shrink-0 w-80 md:w-auto scroll-snap-start flex flex-col min-h-[500px]"
+                className="group relative bg-gradient-to-br from-neutral-light via-neutral-light to-primary/5 rounded-[var(--radius)] p-8 text-center animate-fade-in transition-all duration-300 shadow-light hover:shadow-medium hover:scale-105 flex-shrink-0 w-80 md:w-auto scroll-snap-start flex flex-col min-h-[500px] border border-primary/10 hover:border-primary/20"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
-                {/* Icon */}
-                <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6">
-                  <IconComponent className="w-8 h-8 text-primary" />
-                </div>
+                {/* Gradient overlay on hover */}
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent rounded-[var(--radius)] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                
+                <div className="relative z-10">
+                  {/* Icon */}
+                  <div className="mx-auto w-20 h-20 bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-sm">
+                    <IconComponent className="w-9 h-9 text-primary" />
+                  </div>
 
-                {/* Title */}
-                <h3 className="font-space-grotesk font-semibold text-xl text-primary mb-6">
-                  {method.title}
-                </h3>
+                  {/* Title */}
+                  <h3 className="font-space-grotesk font-semibold text-xl text-primary mb-6 group-hover:text-primary/90 transition-colors duration-300">
+                    {method.title}
+                  </h3>
 
-                {/* Description */}
-                <p className="font-inter text-sm text-neutral-mid leading-relaxed mb-8 whitespace-pre-line">
-                  {method.description}
-                </p>
+                  {/* Description */}
+                  <p className="font-inter text-sm text-neutral-mid leading-relaxed mb-8 whitespace-pre-line">
+                    {method.description}
+                  </p>
 
-                {/* Benefits */}
-                <div className="space-y-4 mb-8 flex-grow">
-                  <h4 className="font-inter font-medium text-warm text-sm">
-                    {method.benefits}
-                  </h4>
-                  <ul className="text-left space-y-3">
-                    {method.benefitsList.map((benefit, idx) => (
-                      <li key={idx} className="font-inter text-xs text-neutral-dark flex items-start">
-                        <span className="w-1.5 h-1.5 bg-primary rounded-full mr-3 flex-shrink-0 mt-2"></span>
-                        <span className="leading-relaxed">{benefit}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                  {/* Benefits */}
+                  <div className="space-y-4 mb-8 flex-grow">
+                    <div className="relative">
+                      <h4 className="font-inter font-medium text-warm text-sm bg-warm/10 px-3 py-2 rounded-lg border border-warm/20">
+                        {method.benefits}
+                      </h4>
+                    </div>
+                    <ul className="text-left space-y-3 bg-background/50 p-4 rounded-lg border border-primary/10">
+                      {method.benefitsList.map((benefit, idx) => (
+                        <li key={idx} className="font-inter text-xs text-neutral-dark flex items-start">
+                          <span className="w-2 h-2 bg-gradient-to-r from-primary to-primary/60 rounded-full mr-3 flex-shrink-0 mt-1.5 shadow-sm"></span>
+                          <span className="leading-relaxed">{benefit}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
 
-                {/* CTA Button */}
-                <div className="mt-auto">
-                  <Button 
-                    className="w-full bg-neutral-dark hover:bg-primary text-white font-inter font-medium transition-all duration-300 hover:scale-105 rounded-[10px]"
-                  >
-                    {method.ctaText}
-                  </Button>
+                  {/* CTA Button */}
+                  <div className="mt-auto">
+                    <Button 
+                      className="w-full bg-gradient-to-r from-neutral-dark to-neutral-dark/90 hover:from-primary hover:to-primary/90 text-white font-inter font-medium transition-all duration-300 hover:scale-105 rounded-[10px] shadow-sm hover:shadow-lg"
+                    >
+                      {method.ctaText}
+                    </Button>
+                  </div>
                 </div>
               </div>
             );
