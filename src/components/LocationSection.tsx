@@ -1,83 +1,12 @@
 import { Button } from "@/components/ui/button"
 
 const LocationSection = () => {
-  // Placeholder images - estas serían reemplazadas por fotos reales del estudio
-  const studioImages = [
-    {
-      src: "/lovable-uploads/placeholder-studio-1.jpg",
-      alt: "Interior de Nave Studio con zona de yoga"
-    },
-    {
-      src: "/lovable-uploads/placeholder-studio-2.jpg", 
-      alt: "Área de ice bath en Nave Studio"
-    },
-    {
-      src: "/lovable-uploads/placeholder-studio-3.jpg",
-      alt: "Espacio de breathwork y meditación"
-    },
-    {
-      src: "/lovable-uploads/placeholder-studio-4.jpg",
-      alt: "Vista general del estudio Nave"
-    }
-  ]
-
   return (
     <section className="py-20 bg-background">
-      <div className="container mx-auto px-6 max-w-7xl">
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12">
-          {/* Galería de fotos - 60% */}
-          <div className="lg:col-span-3 animate-fade-in">
-            {/* Desktop/Tablet Gallery Grid */}
-            <div className="hidden sm:grid sm:grid-cols-2 gap-4">
-              {studioImages.map((image, index) => (
-                <div 
-                  key={index}
-                  className="aspect-[4/3] rounded-[10px] overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300"
-                >
-                  <img
-                    src={image.src}
-                    alt={image.alt}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                    onError={(e) => {
-                      // Fallback a una imagen de Unsplash si no existe el placeholder
-                      e.currentTarget.src = `https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop&crop=center`;
-                    }}
-                  />
-                </div>
-              ))}
-            </div>
-
-            {/* Mobile Slider */}
-            <div className="sm:hidden">
-              <div className="flex overflow-x-auto gap-4 pb-4 px-4 -mx-4" style={{scrollSnapType: 'x mandatory'}}>
-                {studioImages.map((image, index) => (
-                  <div 
-                    key={index}
-                    className="flex-none w-80 max-w-[calc(100vw-2rem)] aspect-[4/3] rounded-[10px] overflow-hidden shadow-sm"
-                    style={{scrollSnapAlign: 'center'}}
-                  >
-                    <img
-                      src={image.src}
-                      alt={image.alt}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        e.currentTarget.src = `https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop&crop=center`;
-                      }}
-                    />
-                  </div>
-                ))}
-              </div>
-              {/* Mobile scroll indicator */}
-              <div className="flex justify-center gap-2 mt-4">
-                {studioImages.map((_, index) => (
-                  <div key={index} className="w-2 h-2 rounded-full bg-neutral-light"></div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Panel de información - 40% */}
-          <div className="lg:col-span-2 bg-white rounded-[10px] p-8 lg:p-10 shadow-sm animate-fade-in">
+      <div className="container mx-auto px-6 max-w-4xl">
+        <div className="flex justify-center">
+          {/* Panel de información */}
+          <div className="bg-white rounded-[10px] p-8 lg:p-10 shadow-sm animate-fade-in max-w-2xl w-full">
             <div className="text-primary">
               <h2 className="text-3xl font-bold mb-6 font-space-grotesk">
                 Visítanos en Nave Studio
