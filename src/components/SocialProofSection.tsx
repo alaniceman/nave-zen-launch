@@ -120,19 +120,27 @@ export const SocialProofSection = () => {
 
         {/* Métricas de calidad */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          <div className="text-center p-8 bg-background rounded-[var(--radius)] shadow-light">
-            <div className="space-y-2">
-              <div className="font-space-grotesk font-bold text-4xl text-primary">9.8/10</div>
-              <p className="font-inter text-neutral-mid">promedio en 477 encuestas</p>
+          <div className="group relative text-center p-10 bg-gradient-to-br from-background via-background to-primary/5 rounded-[var(--radius)] shadow-light border border-primary/10 hover:shadow-medium hover:scale-105 transition-all duration-300 hover:border-primary/20">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent rounded-[var(--radius)] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div className="relative space-y-3">
+              <div className="font-space-grotesk font-bold text-5xl bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
+                9.8/10
+              </div>
+              <div className="w-16 h-1 bg-gradient-to-r from-primary to-primary/60 mx-auto rounded-full"></div>
+              <p className="font-inter text-neutral-mid font-medium">
+                promedio en 477 encuestas
+              </p>
             </div>
           </div>
           
-          <div className="text-center p-8 bg-background rounded-[var(--radius)] shadow-light">
-            <div className="space-y-2">
-              <div className="font-space-grotesk font-bold text-4xl text-primary">
+          <div className="group relative text-center p-10 bg-gradient-to-br from-background via-background to-secondary/5 rounded-[var(--radius)] shadow-light border border-secondary/10 hover:shadow-medium hover:scale-105 transition-all duration-300 hover:border-secondary/20">
+            <div className="absolute inset-0 bg-gradient-to-br from-secondary/5 to-transparent rounded-[var(--radius)] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div className="relative space-y-3">
+              <div className="font-space-grotesk font-bold text-5xl bg-gradient-to-r from-secondary to-secondary/80 bg-clip-text text-transparent">
                 97%
               </div>
-              <p className="font-inter text-neutral-mid">
+              <div className="w-16 h-1 bg-gradient-to-r from-secondary to-secondary/60 mx-auto rounded-full"></div>
+              <p className="font-inter text-neutral-mid font-medium">
                 de los miembros reporta menos estrés en 30 días
               </p>
             </div>
