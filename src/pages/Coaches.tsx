@@ -170,36 +170,6 @@ const Coaches = () => {
         </Button>
       </section>
 
-      {/* Filter Section */}
-      <section className="py-8 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-wrap justify-center gap-3">
-            <button
-              onClick={() => setActiveFilter(null)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                activeFilter === null
-                  ? 'bg-secondary text-white'
-                  : 'bg-neutral-light text-neutral-mid hover:bg-secondary hover:text-white'
-              }`}
-            >
-              Todos
-            </button>
-            {filters.map((filter) => (
-              <button
-                key={filter}
-                onClick={() => setActiveFilter(filter)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                  activeFilter === filter
-                    ? 'bg-secondary text-white'
-                    : 'bg-neutral-light text-neutral-mid hover:bg-secondary hover:text-white'
-                }`}
-              >
-                {filter}
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* Grid Coaches */}
       <section id="grid-coaches" className="py-16 px-6">
