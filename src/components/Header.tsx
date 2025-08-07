@@ -30,16 +30,20 @@ export const Header = () => {
 
   const navigationLinks = [
     { label: "Experiencias", href: "#experiencias" },
-    { label: "Planes & Precios", href: "#planes" },
+    { label: "Planes & Precios", href: "/planes", isExternal: true },
     { label: "Coaches", href: "#coaches" },
     { label: "Testimonios", href: "#testimonios" },
     { label: "Contacto", href: "#contacto" }
   ]
 
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href)
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' })
+  const handleNavigation = (link: { href: string; isExternal?: boolean }) => {
+    if (link.isExternal) {
+      window.location.href = link.href
+    } else {
+      const element = document.querySelector(link.href)
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' })
+      }
     }
     setIsMobileMenuOpen(false)
   }
@@ -55,7 +59,7 @@ export const Header = () => {
         <div className="container mx-auto px-6 h-full flex items-center justify-between">
           {/* Logo */}
           <button
-            onClick={() => scrollToSection('#home')}
+            onClick={() => window.location.href = '/'}
             className="font-space-grotesk font-bold text-xl md:text-2xl text-primary hover:text-warm transition-colors duration-200 focus:outline-dashed focus:outline-2 focus:outline-secondary"
             aria-label="Ir al inicio"
           >
@@ -67,7 +71,7 @@ export const Header = () => {
             {navigationLinks.map((link) => (
               <button
                 key={link.label}
-                onClick={() => scrollToSection(link.href)}
+                onClick={() => handleNavigation(link)}
                 className="group font-inter text-sm lg:text-base text-neutral-mid hover:text-warm transition-colors duration-200 relative focus:outline-dashed focus:outline-2 focus:outline-secondary"
               >
                 {link.label}
@@ -78,7 +82,7 @@ export const Header = () => {
 
           {/* Desktop CTA */}
           <Button
-            onClick={() => scrollToSection('#reservar')}
+            onClick={() => handleNavigation({ href: '#reservar' })}
             className="hidden md:inline-flex bg-secondary hover:bg-primary text-white font-inter font-medium px-6 py-2.5 rounded-[10px] transition-all duration-200 hover:scale-105 focus:outline-dashed focus:outline-2 focus:outline-secondary"
           >
             Reservar clase
@@ -141,7 +145,7 @@ export const Header = () => {
                 {navigationLinks.map((link) => (
                   <li key={link.label}>
                     <button
-                      onClick={() => scrollToSection(link.href)}
+                      onClick={() => handleNavigation(link)}
                       className="block w-full text-left px-6 py-3 font-inter text-lg text-neutral-dark hover:text-warm hover:bg-neutral-light transition-all duration-200"
                     >
                       {link.label}
@@ -154,7 +158,7 @@ export const Header = () => {
             {/* Mobile CTA */}
             <div className="p-6 border-t border-border">
               <Button
-                onClick={() => scrollToSection('#reservar')}
+                onClick={() => handleNavigation({ href: '#reservar' })}
                 className="w-full bg-secondary hover:bg-primary text-white font-inter font-medium py-3 rounded-[10px] transition-all duration-200 hover:scale-105"
               >
                 Reservar clase
