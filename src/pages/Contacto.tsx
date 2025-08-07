@@ -43,7 +43,7 @@ const Contacto = () => {
       <section 
         className="relative h-[60vh] flex flex-col items-center justify-center text-center px-6 bg-cover bg-center"
         style={{
-          backgroundImage: `linear-gradient(rgba(46, 77, 58, 0.5), rgba(46, 77, 58, 0.5)), url('/lovable-uploads/5c461ccf-2208-4880-9a88-ca5863df238a.png')`,
+          backgroundImage: `linear-gradient(rgba(46, 77, 58, 0.5), rgba(46, 77, 58, 0.5)), url('/lovable-uploads/7abb4236-6843-43ff-b24a-755130061826.png')`,
         }}
       >
         <h1 className="text-4xl md:text-5xl font-heading text-white mb-4 animate-fade-in">
