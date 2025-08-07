@@ -87,17 +87,23 @@ export const CoachesSection = () => {
         {/* Coaches Grid - Desktop & Tablet */}
         <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
           {coaches.map((coach) => (
-            <CoachCard key={coach.id} coach={coach} />
+            <CoachCard key={coach.id} coach={coach} isMobile={false} />
           ))}
         </div>
 
         {/* Coaches Slider - Mobile */}
         <div className="sm:hidden mb-12">
-          <div className="flex overflow-x-auto gap-6 pb-4 snap-x snap-mandatory">
-            {coaches.map((coach) => (
-              <div key={coach.id} className="flex-none w-full snap-center">
-                <CoachCard coach={coach} />
+          <div className="flex overflow-x-auto gap-4 pb-4 px-4 -mx-4" style={{scrollSnapType: 'x mandatory'}}>
+            {coaches.map((coach, index) => (
+              <div key={coach.id} className="flex-none w-80 max-w-[calc(100vw-2rem)]" style={{scrollSnapAlign: 'center'}}>
+                <CoachCard coach={coach} isMobile={true} />
               </div>
+            ))}
+          </div>
+          {/* Mobile scroll indicator */}
+          <div className="flex justify-center gap-2 mt-4">
+            {coaches.map((_, index) => (
+              <div key={index} className="w-2 h-2 rounded-full bg-neutral-light"></div>
             ))}
           </div>
         </div>
@@ -119,7 +125,7 @@ export const CoachesSection = () => {
   );
 };
 
-const CoachCard = ({ coach }: { coach: Coach }) => {
+const CoachCard = ({ coach, isMobile = false }: { coach: Coach; isMobile?: boolean }) => {
   return (
     <div className="relative bg-card rounded-xl p-6 shadow-[0_4px_10px_rgba(0,0,0,0.08)] hover:scale-105 hover:shadow-lg transition-all duration-300">
       {/* Founder Badge */}
@@ -131,7 +137,7 @@ const CoachCard = ({ coach }: { coach: Coach }) => {
       
       {/* Profile Image */}
       <div className="text-center mb-6">
-        <div className="w-30 h-30 mx-auto mb-4 rounded-full overflow-hidden shadow-md">
+        <div className={`${isMobile ? 'w-24 h-24' : 'w-30 h-30'} mx-auto mb-4 rounded-full overflow-hidden shadow-md`}>
           <img
             src={coach.image}
             alt={`${coach.name} — ${coach.role.split(' –')[0]}`}
