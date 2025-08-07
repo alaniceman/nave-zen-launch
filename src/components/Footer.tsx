@@ -18,7 +18,7 @@ const Footer = () => {
           {/* Column 2: Navigation */}
           <nav className="text-sm flex flex-col gap-2 font-inter">
             <a 
-              href="#experiencias" 
+              href="/experiencias" 
               className="text-accent hover:text-warm transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
             >
               Experiencias
