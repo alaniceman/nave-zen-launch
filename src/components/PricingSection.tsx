@@ -50,6 +50,8 @@ const PricingSection = () => {
                     <span className="text-sm text-muted-foreground">Comunidad online + mentorías</span>
                     <span className="text-muted-foreground">—</span>
                   </div>
+                  {/* Spacer for alignment */}
+                  <div className="hidden md:block h-6"></div>
                 </div>
                 <div className="pt-4 border-t">
                   <div className="text-center">
