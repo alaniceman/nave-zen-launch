@@ -52,8 +52,9 @@ const PricingSection = () => {
                   </div>
                 </div>
                 <div className="pt-4 border-t">
-                  <div className="text-center">
+                  <div className="text-center space-y-2">
                     <span className="text-3xl font-bold text-foreground">$49.000</span>
+                    <div className="h-6"></div>
                   </div>
                 </div>
                 <Button className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium">
