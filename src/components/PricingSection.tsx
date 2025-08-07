@@ -156,103 +156,120 @@ const PricingSection = () => {
           </div>
         </div>
 
+        {/* Disclaimer post-pricing */}
+        <p className="text-center text-sm text-muted-foreground mt-4 max-w-xl mx-auto">
+          Las clases de <strong>Yoga</strong> finalizan con un Ice Bath <em>opcional</em>.  
+          Para ingresar al hielo debes haber completado previamente una sesión guiada del <strong>Método Wim Hof</strong>.
+        </p>
+
         {/* Wim Hof Method Section */}
         <div className="mb-20">
-          <h3 className="text-2xl font-bold text-center text-foreground mb-8 font-space">
-            Método Wim Hof
+          <h3 className="text-center text-primary text-2xl font-bold mb-8 font-space-grotesk">
+            Método Wim Hof – Respira, sumérgete, renace
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <Card className="border-2 hover:shadow-lg transition-all duration-300 animate-fade-in">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <Card className="border hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[10px]">
               <CardHeader className="text-center">
-                <CardTitle className="text-lg font-bold text-foreground font-space">Grupal</CardTitle>
+                <CardTitle className="text-lg font-bold text-primary font-space-grotesk">Grupal (máx 6)</CardTitle>
               </CardHeader>
               <CardContent className="text-center space-y-4">
-                <p className="text-muted-foreground">
-                  1 h Breathwork + Ice Bath guiado
+                <p className="text-muted-foreground font-inter text-sm">
+                  1 h Breathwork Wim Hof + Ice Bath guiado y sostenido<br />
+                  Ideal para primerizos que quieren vivir su primer baño de agua fría con acompañamiento experto.
                 </p>
                 <div className="text-2xl font-bold text-foreground">$30.000</div>
-                <Button variant="outline" className="w-full border-2 border-accent text-accent hover:bg-accent hover:text-white font-inter font-medium">
+                <Button variant="secondary" className="w-full font-inter font-medium">
                   Agendar sesión
                 </Button>
               </CardContent>
             </Card>
 
-            <Card className="border-2 hover:shadow-lg transition-all duration-300 animate-fade-in">
+            <Card className="border hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[10px]">
               <CardHeader className="text-center">
-                <CardTitle className="text-lg font-bold text-foreground font-space">Personalizada</CardTitle>
+                <CardTitle className="text-lg font-bold text-primary font-space-grotesk">Personalizado (máx 2)</CardTitle>
               </CardHeader>
               <CardContent className="text-center space-y-4">
-                <p className="text-muted-foreground">
-                  Igual, máx 2 personas (inmersión individual)
+                <p className="text-muted-foreground font-inter text-sm">
+                  1 h Breathwork Wim Hof + Ice Bath individual<br />
+                  Respiración en pareja (máx 2) y entrada al hielo por separado, guiada según tus objetivos.
                 </p>
                 <div className="text-2xl font-bold text-foreground">$40.000</div>
-                <Button variant="outline" className="w-full border-2 border-accent text-accent hover:bg-accent hover:text-white font-inter font-medium">
+                <Button variant="secondary" className="w-full font-inter font-medium">
                   Agendar sesión
                 </Button>
               </CardContent>
             </Card>
           </div>
-          <p className="text-center text-sm text-muted-foreground mt-4 italic">
-            *Nota: para hacer Ice Bath post-yoga se requiere completar esta sesión guiada.
+          <p className="text-center text-sm text-muted-foreground mt-6 font-inter">
+            Completa esta sesión guiada para habilitar tu ingreso al Ice Bath post-yoga.
           </p>
         </div>
 
         {/* Special Plans */}
         <div className="mb-20">
-          <h3 className="text-2xl font-bold text-center text-foreground mb-8 font-space">
+          <h3 className="text-2xl font-bold text-center text-primary mb-8 font-space-grotesk">
             Planes Especiales
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-            <Card className="border-2 hover:shadow-lg transition-all duration-300 animate-fade-in">
+            <Card className="border hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[10px]">
               <CardHeader>
-                <CardTitle className="text-lg font-bold text-foreground font-space">Misión 90 Órbita</CardTitle>
+                <CardTitle className="text-lg font-bold text-primary font-space-grotesk">Misión 90 Órbita</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-muted-foreground">90 días · 2/sem</p>
+                <p className="text-muted-foreground font-inter text-sm">
+                  27 sesiones en 90 días · 2/sem · plan trimestral con ahorro — ¡la mejor oferta!
+                </p>
                 <div className="flex items-center justify-between">
                   <span className="text-2xl font-bold text-foreground">$219.000</span>
-                  <Badge className="bg-warm text-white">Paga en 3 cuotas</Badge>
+                  <Badge className="bg-warm text-white">Paga en 3 cuotas sin interés</Badge>
                 </div>
-                <Button className="w-full bg-accent hover:bg-primary text-white font-inter font-medium">
-                  Comenzar Misión
+                <Button className="w-full bg-primary hover:bg-primary/90 text-white font-inter font-medium">
+                  Comenzar misión
                 </Button>
               </CardContent>
             </Card>
 
-            <Card className="border-2 hover:shadow-lg transition-all duration-300 animate-fade-in">
+            <Card className="border hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[10px]">
               <CardHeader>
-                <CardTitle className="text-lg font-bold text-foreground font-space">Drop-In Discovery</CardTitle>
+                <CardTitle className="text-lg font-bold text-primary font-space-grotesk">Drop-In Discovery</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-muted-foreground">3 sesiones en 60 días</p>
+                <p className="text-muted-foreground font-inter text-sm">
+                  3 sesiones en 60 días. Elige la disciplina que quieras (Ice Bath, Yoga, Breathwork, Biohacking) y descubre tu fórmula.
+                </p>
                 <div className="text-2xl font-bold text-foreground">$59.000</div>
-                <Button className="w-full bg-accent hover:bg-primary text-white font-inter font-medium">
+                <Button variant="secondary" className="w-full font-inter font-medium">
                   Descubrir
                 </Button>
               </CardContent>
             </Card>
 
-            <Card className="border-2 hover:shadow-lg transition-all duration-300 animate-fade-in">
+            <Card className="border hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[10px]">
               <CardHeader>
-                <CardTitle className="text-lg font-bold text-foreground font-space">Membresía Yin-Yang Yoga</CardTitle>
+                <CardTitle className="text-lg font-bold text-primary font-space-grotesk">Membresía Yin-Yang Yoga</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-muted-foreground">1 clase/sem</p>
+                <p className="text-muted-foreground font-inter text-sm">
+                  1 clase semanal de Yoga (Yin, Yang o Integral). Sin inmersión obligatoria.
+                </p>
                 <div className="text-2xl font-bold text-foreground">$39.000</div>
-                <Button className="w-full bg-accent hover:bg-primary text-white font-inter font-medium">
+                <Button variant="secondary" className="w-full font-inter font-medium">
                   Suscribirme
                 </Button>
               </CardContent>
             </Card>
 
-            <Card className="border-2 hover:shadow-lg transition-all duration-300 animate-fade-in">
+            <Card className="border hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[10px]">
               <CardHeader>
-                <CardTitle className="text-lg font-bold text-foreground font-space">Yoga + Ice Bath</CardTitle>
+                <CardTitle className="text-lg font-bold text-primary font-space-grotesk">Yoga + Ice Bath</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-muted-foreground">Requiere Método Wim Hof previo</p>
+                <p className="text-muted-foreground font-inter text-sm">
+                  1 sesión de Yoga con opción de Ice Bath al final.<br />
+                  Requiere haber completado previamente la sesión guiada de agua fría.
+                </p>
                 <div className="text-2xl font-bold text-foreground">$15.000</div>
-                <Button className="w-full bg-accent hover:bg-primary text-white font-inter font-medium">
+                <Button variant="secondary" className="w-full font-inter font-medium">
                   Reservar
                 </Button>
               </CardContent>

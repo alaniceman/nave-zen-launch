@@ -3,6 +3,7 @@ import { SocialProofSection } from "@/components/SocialProofSection"
 import { MethodologiesSection } from "@/components/MethodologiesSection"
 import { PricingSection } from "@/components/PricingSection"
 import { CoachesSection } from "@/components/CoachesSection"
+import { FreeYogaSection } from "@/components/FreeYogaSection"
 
 const Index = () => {
   return (
@@ -12,6 +13,7 @@ const Index = () => {
       <MethodologiesSection />
       <PricingSection />
       <CoachesSection />
+      <FreeYogaSection />
       
       {/* Wim Hof Certification Logo */}
       <section className="py-12 bg-background">
