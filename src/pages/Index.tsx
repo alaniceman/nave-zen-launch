@@ -2,6 +2,7 @@ import { Header } from "@/components/Header"
 import { HeroSection } from "@/components/HeroSection"
 import { SocialProofSection } from "@/components/SocialProofSection"
 import { MethodologiesSection } from "@/components/MethodologiesSection"
+import { PricingSection } from "@/components/PricingSection"
 
 const Index = () => {
   return (
@@ -11,6 +12,7 @@ const Index = () => {
       <HeroSection />
       <SocialProofSection />
       <MethodologiesSection />
+      <PricingSection />
       
       {/* Wim Hof Certification Logo */}
       <section className="py-12 bg-background">
