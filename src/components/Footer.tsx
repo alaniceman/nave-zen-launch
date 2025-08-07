@@ -51,7 +51,16 @@ const Footer = () => {
 
           {/* Column 3: Contact */}
           <div className="text-sm font-inter md:col-span-2 lg:col-span-1">
-            <p className="mb-2">Antares 259, Las Condes</p>
+            <p className="mb-2">
+              <a 
+                href="https://maps.app.goo.gl/oW6G58gLd5oYWmGn8"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white hover:text-white transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
+              >
+                Antares 259, Las Condes
+              </a>
+            </p>
             <p className="mb-2">
               WhatsApp:{" "}
               <a 
