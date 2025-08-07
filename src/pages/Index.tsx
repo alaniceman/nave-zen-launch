@@ -1,4 +1,3 @@
-import { Header } from "@/components/Header"
 import { HeroSection } from "@/components/HeroSection"
 import { SocialProofSection } from "@/components/SocialProofSection"
 import { MethodologiesSection } from "@/components/MethodologiesSection"
@@ -6,9 +5,7 @@ import { PricingSection } from "@/components/PricingSection"
 
 const Index = () => {
   return (
-    <>
-      <Header />
-      <main className="overflow-x-hidden" id="home">
+    <main className="overflow-x-hidden" id="home">
       <HeroSection />
       <SocialProofSection />
       <MethodologiesSection />
@@ -25,7 +22,6 @@ const Index = () => {
         </div>
       </section>
       </main>
-    </>
   );
 };
 
