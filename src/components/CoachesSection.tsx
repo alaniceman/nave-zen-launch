@@ -137,7 +137,7 @@ const CoachCard = ({ coach, isMobile = false }: { coach: Coach; isMobile?: boole
       
       {/* Profile Image */}
       <div className="text-center mb-6">
-        <div className={`${isMobile ? 'w-24 h-24' : 'w-20 h-20'} mx-auto mb-4 rounded-full overflow-hidden shadow-md`}>
+        <div className={`${isMobile ? 'w-48 h-48' : 'w-40 h-40'} mx-auto mb-4 rounded-full overflow-hidden shadow-md`}>
           <img
             src={coach.image}
             alt={`${coach.name} — ${coach.role.split(' –')[0]}`}
