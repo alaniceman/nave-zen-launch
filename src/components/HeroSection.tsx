@@ -6,9 +6,10 @@ export const HeroSection = () => {
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image with Overlay */}
       <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        className="absolute inset-0 bg-cover bg-no-repeat bg-center md:bg-center"
         style={{
           backgroundImage: `url(/lovable-uploads/923c01f2-ceec-42a1-8418-1da57f72fb81.png)`,
+          backgroundPosition: 'left 20% center',
         }}
       />
       
