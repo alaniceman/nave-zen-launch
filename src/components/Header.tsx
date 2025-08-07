@@ -32,7 +32,6 @@ export const Header = () => {
     { label: "Experiencias", href: "#experiencias" },
     { label: "Planes & Precios", href: "/planes", isExternal: true },
     { label: "Coaches", href: "#coaches" },
-    { label: "Testimonios", href: "#testimonios" },
     { label: "Contacto", href: "#contacto" }
   ]
 

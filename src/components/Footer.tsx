@@ -36,12 +36,6 @@ const Footer = () => {
               Coaches
             </a>
             <a 
-              href="#testimonios" 
-              className="text-accent hover:text-warm transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
-            >
-              Testimonios
-            </a>
-            <a 
               href="#contacto" 
               className="text-accent hover:text-warm transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
             >
