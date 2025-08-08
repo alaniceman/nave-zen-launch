@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Star, Quote, ChevronLeft, ChevronRight } from "lucide-react"
@@ -7,6 +7,8 @@ import { Footer } from "@/components/Footer"
 const Coaches = () => {
   const [activeFilter, setActiveFilter] = useState<string | null>(null)
   const [currentTestimonial, setCurrentTestimonial] = useState(0)
+  const [currentCoachIndex, setCurrentCoachIndex] = useState(0)
+  const sliderRef = useRef<HTMLDivElement | null>(null)
 
   // Scroll reveal animation
   useEffect(() => {
@@ -143,6 +145,27 @@ const Coaches = () => {
   const prevTestimonial = () => {
     setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length)
   }
+  const scrollToCoach = (index: number) => {
+    const container = sliderRef.current
+    if (!container) return
+    const firstChild = container.firstElementChild as HTMLElement | null
+    if (!firstChild) return
+    const cardWidth = firstChild.getBoundingClientRect().width
+    const gap = 24 // gap-6
+    container.scrollTo({ left: index * (cardWidth + gap), behavior: 'smooth' })
+    setCurrentCoachIndex(index)
+  }
+
+  const handleCoachScroll = () => {
+    const container = sliderRef.current
+    if (!container) return
+    const firstChild = container.firstElementChild as HTMLElement | null
+    if (!firstChild) return
+    const cardWidth = firstChild.getBoundingClientRect().width
+    const gap = 24 // gap-6
+    const idx = Math.round(container.scrollLeft / (cardWidth + gap))
+    setCurrentCoachIndex(Math.max(0, Math.min(idx, filteredCoaches.length - 1)))
+  }
 
   return (
     <main className="min-h-screen" id="coaches">
@@ -224,11 +247,16 @@ const Coaches = () => {
 
           {/* Mobile: Slider */}
           <div className="block md:hidden">
-            <div className="flex overflow-x-auto gap-6 pb-6 snap-x snap-mandatory">
+            <div
+              ref={sliderRef}
+              onScroll={handleCoachScroll}
+              className="flex overflow-x-auto gap-6 pb-6 snap-x snap-mandatory px-4 -mx-4"
+              style={{ scrollSnapType: 'x mandatory', scrollPaddingLeft: '1rem' }}
+            >
               {filteredCoaches.map((coach, index) => (
                 <div
                   key={coach.id}
-                  className="coach-card flex-none w-80 bg-white rounded-xl shadow-lg p-6 text-center snap-start opacity-0 translate-y-5 transition-all duration-500"
+                  className="coach-card flex-none w-[85vw] max-w-xs bg-white rounded-xl shadow-lg p-6 text-center snap-start opacity-0 translate-y-5 transition-all duration-500"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
                   {coach.badge && (
@@ -262,6 +290,16 @@ const Coaches = () => {
                     Reservar sesión
                   </Button>
                 </div>
+              ))}
+            </div>
+            <div className="flex justify-center gap-2 mt-2">
+              {filteredCoaches.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => scrollToCoach(index)}
+                  className={`w-2 h-2 rounded-full transition-colors duration-200 ${index === currentCoachIndex ? 'bg-secondary' : 'bg-neutral-mid/30'}`}
+                  aria-label={`Ir al slide ${index + 1}`}
+                />
               ))}
             </div>
           </div>
