@@ -150,7 +150,7 @@ const Coaches = () => {
       <section 
         className="relative h-[65vh] flex flex-col items-center justify-center text-center px-6 bg-cover bg-center"
         style={{
-          backgroundImage: `var(--hero-overlay), url('/lovable-uploads/56138f79-7a92-46b6-8fdf-8bff1ef72d26.png')`,
+          backgroundImage: `var(--hero-overlay), url('/lovable-uploads/29ec3d19-9f96-4f1c-83c7-3478795d74fe.png')`,
         }}
       >
         <h1 className="text-4xl md:text-5xl font-heading text-white mb-4 animate-fade-in">
