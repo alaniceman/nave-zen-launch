@@ -1,7 +1,13 @@
 import { Button } from "@/components/ui/button-variants"
+import { useNavigate } from "react-router-dom"
 import heroImage from "@/assets/nave-studio-hero.jpg"
 
 export const HeroSection = () => {
+  const navigate = useNavigate()
+
+  const handlePlanClick = () => {
+    navigate('/planes')
+  }
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image with Overlay */}
@@ -45,6 +51,7 @@ export const HeroSection = () => {
               variant="hero" 
               size="xl"
               className="w-full md:w-auto min-w-[320px]"
+              onClick={handlePlanClick}
             >
               Empieza hoy con 50% OFF el primer mes
             </Button>
