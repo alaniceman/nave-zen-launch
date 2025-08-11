@@ -11,7 +11,7 @@ export const ImageOptimizationDemo = () => {
       <section>
         <h2 className="text-2xl font-bold mb-4">Hero Image (LCP - High Priority)</h2>
         <OptimizedImage
-          srcBase="src/assets/hero/nave-hero"
+          srcBase="/images/hero/nave-hero"
           alt="Interior de Nave Studio con tina de hielo"
           width={1920}
           height={1080}
@@ -49,7 +49,7 @@ export const ImageOptimizationDemo = () => {
         <h2 className="text-2xl font-bold mb-4">Method Cards (Responsive)</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <OptimizedImage
-            srcBase="src/assets/methods/ice-bath"
+            srcBase="/images/methods/ice-bath"
             alt="Sesión de Ice Bath"
             width={640}
             height={480}
@@ -57,7 +57,7 @@ export const ImageOptimizationDemo = () => {
             className="w-full h-64 object-cover rounded-xl"
           />
           <OptimizedImage
-            srcBase="src/assets/methods/breathwork"
+            srcBase="/images/methods/breathwork"
             alt="Sesión de Breathwork"
             width={640}
             height={480}

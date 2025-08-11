@@ -7,7 +7,7 @@ export const HeroSection = () => {
       {/* Background Image with Overlay */}
       <div className="absolute inset-0">
         <OptimizedImage
-          srcBase="src/assets/hero/nave-hero-1920"
+          srcBase="/images/hero/nave-hero"
           alt="Interior de Nave Studio con tina de hielo y ambiente moderno"
           width={1920}
           height={1080}
