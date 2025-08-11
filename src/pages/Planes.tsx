@@ -67,8 +67,15 @@ const Planes = () => {
                       <div className="h-6"></div>
                     </div>
                   </div>
-                  <Button className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium">
-                    Suscribirme
+                  <Button asChild className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium">
+                    <a
+                      href="https://boxmagic.link/checkout/eclipse"
+                      data-plan="Eclipse"
+                      data-checkout-url="https://boxmagic.link/checkout/eclipse"
+                      rel="noopener"
+                    >
+                      Suscribirme
+                    </a>
                   </Button>
                 </CardContent>
               </Card>
@@ -111,8 +118,15 @@ const Planes = () => {
                       <Badge className="bg-warm text-white">50% OFF 1° mes - código 1MES</Badge>
                     </div>
                   </div>
-                  <Button className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium">
-                    Suscribirme
+                  <Button asChild className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium">
+                    <a
+                      href="https://boxmagic.link/checkout/orbita"
+                      data-plan="Órbita"
+                      data-checkout-url="https://boxmagic.link/checkout/orbita"
+                      rel="noopener"
+                    >
+                      Suscribirme
+                    </a>
                   </Button>
                 </CardContent>
               </Card>
@@ -158,8 +172,15 @@ const Planes = () => {
                       <Badge className="bg-warm text-white">50% OFF 1° mes - código 1MES</Badge>
                     </div>
                   </div>
-                  <Button className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium">
-                    Suscribirme
+                  <Button asChild className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium">
+                    <a
+                      href="https://boxmagic.link/checkout/universo"
+                      data-plan="Universo"
+                      data-checkout-url="https://boxmagic.link/checkout/universo"
+                      rel="noopener"
+                    >
+                      Suscribirme
+                    </a>
                   </Button>
                 </CardContent>
               </Card>

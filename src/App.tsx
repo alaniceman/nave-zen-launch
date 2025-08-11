@@ -10,6 +10,7 @@ import Experiencias from "./pages/Experiencias";
 import Coaches from "./pages/Coaches";
 import Contacto from "./pages/Contacto";
 import NotFound from "./pages/NotFound";
+import { CheckoutRedirectManager } from "@/components/CheckoutRedirectManager";
 
 const queryClient = new QueryClient();
 
@@ -18,6 +19,7 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
+      <CheckoutRedirectManager />
       <BrowserRouter>
         <Header />
         <Routes>
