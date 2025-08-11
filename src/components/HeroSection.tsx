@@ -8,7 +8,7 @@ export const HeroSection = () => {
       <div 
         className="absolute inset-0 bg-cover bg-no-repeat bg-center md:bg-center"
         style={{
-          backgroundImage: `url(/lovable-uploads/923c01f2-ceec-42a1-8418-1da57f72fb81.png)`,
+          backgroundImage: `url(/lovable-uploads/d042f35b-eb14-4e19-baa1-bda8b5fbbcc2.png)`,
           backgroundPosition: 'right 32% center',
         }}
       />
