@@ -22,16 +22,16 @@ export const RedirectModal: React.FC<RedirectModalProps> = ({ isOpen, onClose, c
         aria-modal="true"
         aria-labelledby={titleId}
         aria-describedby={descId}
-        className="w-full sm:max-w-md sm:rounded-xl rounded-none bg-card text-foreground shadow-lg data-[state=open]:animate-scale-in data-[state=closed]:animate-scale-out sm:h-auto h-screen"
+        className="w-[92vw] sm:w-full sm:max-w-md rounded-xl bg-card text-foreground shadow-lg p-4 sm:p-6 data-[state=open]:animate-scale-in data-[state=closed]:animate-scale-out h-auto max-h-[85vh]"
       >
         <DialogHeader>
-          <DialogTitle id={titleId} className="font-space text-xl">Redirigiendo a BoxMagic…</DialogTitle>
-          <DialogDescription id={descId} className="font-inter">
+          <DialogTitle id={titleId} className="font-space text-xl sm:text-2xl text-center">Redirigiendo a BoxMagic…</DialogTitle>
+          <DialogDescription id={descId} className="font-inter text-center">
             Estamos abriendo tu checkout seguro{plan ? ` para el plan ${plan}.` : "."}
           </DialogDescription>
         </DialogHeader>
 
-        <div className="mt-4 flex items-center gap-3">
+        <div className="mt-4 flex items-center justify-center gap-3">
           <span
             aria-hidden
             className="inline-block size-5 rounded-full border-2 border-accent border-t-transparent animate-spin"
@@ -45,13 +45,13 @@ export const RedirectModal: React.FC<RedirectModalProps> = ({ isOpen, onClose, c
               href={checkoutUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-accent hover:text-primary underline-offset-4 hover:underline font-medium story-link"
+              className="text-accent hover:text-primary underline-offset-4 hover:underline font-medium story-link block text-center"
             >
               Si no te redirige, haz clic aquí
             </a>
           )}
 
-          <div className="flex justify-end">
+          <div className="flex justify-center sm:justify-end">
             <Button
               variant="outline"
               onClick={onClose}
