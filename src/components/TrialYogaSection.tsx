@@ -16,16 +16,15 @@ export const TrialYogaSection = () => {
               Vive una sesión de Yoga (Yin, Yang o Integral) para conocer la Nave, a tu profesor/a y la energía del espacio.
             </p>
 
-            <ul className="space-y-3 mb-6 md:mb-8">
+            <ul className="space-y-3 mb-4 md:mb-6">
               <li className="text-neutral-dark flex items-start">
                 <span className="w-2 h-2 rounded-full bg-accent mr-3 mt-2" />
                 Duración: 60 minutos · nivel principiante bienvenido
               </li>
-              <li className="text-neutral-dark flex items-start">
-                <span className="w-2 h-2 rounded-full bg-accent mr-3 mt-2" />
-                <strong>Ice Bath opcional</strong> al finalizar solo si ya completaste el Método Wim Hof.
-              </li>
             </ul>
+            <p className="text-neutral-dark mb-6 md:mb-8">
+              <strong>Ice Bath opcional</strong> al finalizar solo si ya completaste el Método Wim Hof.
+            </p>
 
             <div className="bg-warm/20 text-primary rounded-[10px] p-4 mb-6 md:mb-8 border border-warm/30">
               Para ingresar al hielo después de Yoga debes haber realizado <strong>una sesión guiada del Método Wim Hof</strong> (breathwork + ice bath).
