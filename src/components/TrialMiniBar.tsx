@@ -2,7 +2,7 @@ import { Link } from "react-router-dom"
 
 export const TrialMiniBar = () => {
   return (
-    <aside aria-label="Aviso: clase de prueba de Yoga gratuita" className="w-full bg-neutral-light mt-4 md:mt-0">
+    <aside aria-label="Aviso: clase de prueba de Yoga gratuita" className="w-full bg-neutral-light">
       <div className="container mx-auto px-6">
         <div className="h-12 md:h-14 flex items-center justify-center text-center animate-fade-in">
           <p className="text-primary text-sm md:text-base">
