@@ -22,9 +22,6 @@ export const TrialYogaSection = () => {
                 Duración: 60 minutos · nivel principiante bienvenido
               </li>
             </ul>
-            <p className="text-neutral-dark mb-6 md:mb-8">
-              <strong>Ice Bath opcional</strong> al finalizar solo si ya completaste el Método Wim Hof.
-            </p>
 
             <div className="bg-warm/20 text-primary rounded-[10px] p-4 mb-6 md:mb-8 border border-warm/30">
               Para ingresar al hielo después de Yoga debes haber realizado <strong>una sesión guiada del Método Wim Hof</strong> (breathwork + ice bath).
