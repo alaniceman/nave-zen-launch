@@ -57,9 +57,13 @@ const PricingSection = () => {
                     <div className="h-6"></div>
                   </div>
                 </div>
-                <Button className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium">
-                  Suscribirme
-                </Button>
+                 <Button
+                   className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium"
+                   data-plan="Eclipse"
+                   data-checkout-url="https://boxmagic.cl/market/plan_subscription/VrD8wRx0Qz"
+                 >
+                   Suscribirme
+                 </Button>
               </CardContent>
             </Card>
 
