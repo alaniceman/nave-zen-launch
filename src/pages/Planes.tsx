@@ -7,7 +7,7 @@ const Planes = () => {
   return (
     <main className="min-h-screen bg-background">
       {/* Pricing Hero */}
-      <section className="h-[80vh] relative flex items-center justify-center text-center px-6" style={{backgroundImage: 'url(/lovable-uploads/c5bf234d-000a-48ed-b357-759fc786fe0d.png)', backgroundSize: 'cover', backgroundPosition: 'center'}}>
+      <section className="h-[80vh] relative flex items-center justify-center text-center px-6" style={{backgroundImage: 'image-set(url(/lovable-uploads/hero-planes.webp) type("image/webp") 1x, url(/lovable-uploads/c5bf234d-000a-48ed-b357-759fc786fe0d.png) type("image/png") 1x)', backgroundSize: 'cover', backgroundPosition: 'center'}}>
         <div className="absolute inset-0 bg-primary opacity-55"></div>
         <div className="max-w-4xl mx-auto space-y-8 animate-fade-in relative z-10">
           <h1 className="text-5xl md:text-7xl font-bold text-white font-space tracking-heading">
