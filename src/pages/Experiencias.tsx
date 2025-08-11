@@ -220,17 +220,17 @@ const Experiencias = () => {
         <div className="block md:hidden">
           <div className="relative">
             <div 
-              className="flex overflow-x-auto gap-4 pb-6 snap-x snap-mandatory scrollbar-hide"
-              style={{ paddingLeft: '1.5rem', paddingRight: '4rem' }}
+              className="flex overflow-x-auto gap-3 pb-6 snap-x snap-mandatory scrollbar-hide"
+              style={{ paddingLeft: '1.5rem', paddingRight: '6rem' }}
               onScroll={(e) => {
                 const container = e.target as HTMLElement
-                const cardWidth = 320 + 16 // w-80 + gap
+                const cardWidth = 320 + 12 // w-80 + gap
                 const scrollLeft = container.scrollLeft
                 const activeIndex = Math.round(scrollLeft / cardWidth)
                 setActiveCard(activeIndex)
               }}
             >
-              {methods.map((method) => (
+              {methods.map((method, index) => (
                 <div
                   key={method.id}
                   className="method-card flex-none w-80 bg-white rounded-xl shadow-lg p-6 snap-start opacity-0 translate-y-5 transition-all duration-500"
@@ -238,6 +238,7 @@ const Experiencias = () => {
                   <img
                     src={method.image}
                     alt={method.title}
+                    loading={index <= 1 ? "eager" : "lazy"}
                     className="w-full h-48 object-cover rounded-xl mb-4"
                   />
                   <h3 className="text-xl font-heading text-primary mb-2">
