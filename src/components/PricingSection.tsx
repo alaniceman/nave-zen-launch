@@ -148,7 +148,11 @@ const PricingSection = () => {
                     <Badge className="bg-warm text-white">50% OFF 1° mes - código 1MES</Badge>
                   </div>
                 </div>
-                <Button className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium">
+                <Button
+                  className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium"
+                  data-plan="Universo"
+                  data-checkout-url="https://boxmagic.cl/market/plan_subscription/j80p5OdDW6"
+                >
                   Suscribirme
                 </Button>
               </CardContent>
