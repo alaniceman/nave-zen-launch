@@ -5,7 +5,7 @@ export const TrialMiniBar = () => {
     <aside aria-label="Aviso: clase de prueba de Yoga gratuita" className="w-full bg-neutral-light">
       <div className="container mx-auto px-6">
         <div className="h-12 md:h-14 flex items-center justify-center text-center animate-fade-in">
-          <p className="text-primary text-sm md:text-base">
+          <p className="text-primary text-sm md:text-base transform translate-y-1 md:translate-y-0">
             ¿Primera vez en la Nave? Clase de prueba <strong className="text-accent font-semibold">GRATIS</strong> de Yoga (Yin · Yang · Integral).{" "}
             <Link 
               to="#trial-yoga" 
