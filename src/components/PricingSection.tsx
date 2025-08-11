@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 const PricingSection = () => {
   return (
-    <section className="py-20 bg-background">
+    <section id="planes" className="py-20 bg-background">
       <div className="container mx-auto px-6">
         {/* Title Section */}
         <div className="text-center mb-16 animate-fade-in">
