@@ -1,17 +1,21 @@
 import { Button } from "@/components/ui/button-variants"
-import heroImage from "@/assets/nave-studio-hero.jpg"
+import { OptimizedImage } from "@/components/OptimizedImage"
 
 export const HeroSection = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image with Overlay */}
-      <div 
-        className="absolute inset-0 bg-cover bg-no-repeat bg-center md:bg-center"
-        style={{
-          backgroundImage: `url(/lovable-uploads/923c01f2-ceec-42a1-8418-1da57f72fb81.png)`,
-          backgroundPosition: 'right 32% center',
-        }}
-      />
+      <div className="absolute inset-0">
+        <OptimizedImage
+          srcBase="src/assets/hero/nave-hero-1920"
+          alt="Interior de Nave Studio con tina de hielo y ambiente moderno"
+          width={1920}
+          height={1080}
+          priority
+          sizes="100vw"
+          className="w-full h-full object-cover object-[right_32%_center]"
+        />
+      </div>
       
       {/* Green Overlay */}
       <div className="absolute inset-0 bg-primary opacity-55" />

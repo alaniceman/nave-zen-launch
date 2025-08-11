@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { OptimizedImage } from "@/components/OptimizedImage"
 import { Footer } from "@/components/Footer"
 
 const Experiencias = () => {
@@ -98,24 +99,35 @@ const Experiencias = () => {
   return (
     <main className="min-h-screen" id="experiencias">
       {/* Hero Section */}
-      <section 
-        className="relative h-[70vh] flex flex-col items-center justify-center text-center px-6 bg-cover bg-center"
-        style={{
-          backgroundImage: `var(--hero-overlay), url('/lovable-uploads/195023f2-6c17-433e-9e1d-e453eaede57a.png')`,
-        }}
-      >
-        <h1 className="text-4xl md:text-5xl font-heading text-white mb-4 animate-fade-in">
-          Explora nuestras experiencias
-        </h1>
-        <p className="text-lg md:text-xl text-white/90 max-w-xl animate-fade-in">
-          Frío, respiración, movimiento y ciencia para que estés sano, fuerte y feliz.
-        </p>
-        <Button
-          onClick={() => scrollToSection('#grid-experiencias')}
-          className="mt-8 bg-secondary hover:bg-primary text-white py-3 px-8 rounded-[10px] transition-all duration-200 hover:scale-105 animate-fade-in"
-        >
-          Ver experiencias
-        </Button>
+      <section className="relative h-[70vh] flex flex-col items-center justify-center text-center px-6 overflow-hidden">
+        <div className="absolute inset-0">
+          <OptimizedImage
+            srcBase="/lovable-uploads/195023f2-6c17-433e-9e1d-e453eaede57a"
+            alt="Experiencias de bienestar en Nave Studio"
+            width={1920}
+            height={1080}
+            priority
+            sizes="100vw"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-primary opacity-55" />
+        </div>
+        <div className="relative z-10">{/* Rest stays the same */}
+        </div>
+        <div className="relative z-10">
+          <h1 className="text-4xl md:text-5xl font-heading text-white mb-4 animate-fade-in">
+            Explora nuestras experiencias
+          </h1>
+          <p className="text-lg md:text-xl text-white/90 max-w-xl animate-fade-in">
+            Frío, respiración, movimiento y ciencia para que estés sano, fuerte y feliz.
+          </p>
+          <Button
+            onClick={() => scrollToSection('#grid-experiencias')}
+            className="mt-8 bg-secondary hover:bg-primary text-white py-3 px-8 rounded-[10px] transition-all duration-200 hover:scale-105 animate-fade-in"
+          >
+            Ver experiencias
+          </Button>
+        </div>
       </section>
 
       {/* Grid Experiencias */}
@@ -139,9 +151,12 @@ const Experiencias = () => {
               }`}
             >
               <div className={`${index % 2 === 1 ? 'order-2' : 'order-1'}`}>
-                <img
-                  src={method.image}
+                <OptimizedImage
+                  srcBase={method.image.replace(/\.(jpg|jpeg|png|webp)$/i, '')}
                   alt={method.title}
+                  width={640}
+                  height={480}
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                   className="w-full h-64 object-cover rounded-xl shadow-lg"
                 />
               </div>
@@ -181,9 +196,12 @@ const Experiencias = () => {
         <div className="hidden md:block lg:hidden space-y-12">
           {methods.map((method) => (
             <div key={method.id} className="method-card opacity-0 translate-y-5 transition-all duration-500">
-              <img
-                src={method.image}
+              <OptimizedImage
+                srcBase={method.image.replace(/\.(jpg|jpeg|png|webp)$/i, '')}
                 alt={method.title}
+                width={640}
+                height={480}
+                sizes="(max-width: 768px) 100vw, 100vw"
                 className="w-full h-64 object-cover rounded-xl shadow-lg mb-6"
               />
               <h3 className="text-2xl font-heading text-primary mb-3">
@@ -224,9 +242,12 @@ const Experiencias = () => {
                 key={method.id}
                 className="method-card flex-none w-80 bg-white rounded-xl shadow-lg p-6 snap-start opacity-0 translate-y-5 transition-all duration-500"
               >
-                <img
-                  src={method.image}
+                <OptimizedImage
+                  srcBase={method.image.replace(/\.(jpg|jpeg|png|webp)$/i, '')}
                   alt={method.title}
+                  width={640}
+                  height={360}
+                  sizes="320px"
                   className="w-full h-48 object-cover rounded-xl mb-4"
                 />
                 <h3 className="text-xl font-heading text-primary mb-2">
