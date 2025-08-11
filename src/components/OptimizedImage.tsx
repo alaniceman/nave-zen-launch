@@ -38,8 +38,8 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
   const [hasError, setHasError] = useState(false)
 
   // Generate srcset for different formats
-  const generateSrcSet = (format: 'avif' | 'webp' | 'jpg') => {
-    const widths = [320, 640, 1024, 1440, 1920]
+  const generateSrcSet = (format: 'webp' | 'jpg') => {
+    const widths = [320, 640, 1024, 1920]
     return widths
       .map(w => `${srcBase}-${w}.${format} ${w}w`)
       .join(', ')
@@ -89,13 +89,6 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
       )}
 
       <picture className="block w-full h-full">
-        {/* AVIF format - best compression */}
-        <source
-          type="image/avif"
-          srcSet={generateSrcSet('avif')}
-          sizes={sizes}
-        />
-        
         {/* WebP format - good compression, wide support */}
         <source
           type="image/webp"
