@@ -216,47 +216,71 @@ const Experiencias = () => {
           ))}
         </div>
 
-        {/* Mobile: Slider */}
+        {/* Mobile: Slider with sneak preview */}
         <div className="block md:hidden">
-          <div className="flex overflow-x-auto gap-6 pb-6 snap-x snap-mandatory">
-            {methods.map((method) => (
-              <div
-                key={method.id}
-                className="method-card flex-none w-80 bg-white rounded-xl shadow-lg p-6 snap-start opacity-0 translate-y-5 transition-all duration-500"
-              >
-                <img
-                  src={method.image}
-                  alt={method.title}
-                  className="w-full h-48 object-cover rounded-xl mb-4"
-                />
-                <h3 className="text-xl font-heading text-primary mb-2">
-                  {method.title}
-                </h3>
-                <p className="text-neutral-mid mb-3 text-sm leading-relaxed">
-                  {method.subtitle}
-                </p>
-                {method.note && (
-                  <div className="bg-warm/20 text-warm p-2 rounded-lg mb-3 text-xs">
-                    {method.note}
-                  </div>
-                )}
-                <ul className="space-y-1 mb-4">
-                  {method.benefits.map((benefit, i) => (
-                    <li key={i} className="text-neutral-dark text-sm flex items-center">
-                      <span className="text-secondary mr-2">•</span>
-                      {benefit}
-                    </li>
-                  ))}
-                </ul>
-                <Button
-                  onClick={() => scrollToSection(method.href)}
-                  variant="secondary"
-                  className="w-full bg-secondary hover:bg-primary text-white py-2 px-4 rounded-[10px] transition-all duration-200 hover:scale-105 text-sm"
+          <div className="relative">
+            <div 
+              className="flex overflow-x-auto gap-4 pb-6 snap-x snap-mandatory scrollbar-hide"
+              style={{ paddingLeft: '1.5rem', paddingRight: '4rem' }}
+              onScroll={(e) => {
+                const container = e.target as HTMLElement
+                const cardWidth = 320 + 16 // w-80 + gap
+                const scrollLeft = container.scrollLeft
+                const activeIndex = Math.round(scrollLeft / cardWidth)
+                setActiveCard(activeIndex)
+              }}
+            >
+              {methods.map((method) => (
+                <div
+                  key={method.id}
+                  className="method-card flex-none w-80 bg-white rounded-xl shadow-lg p-6 snap-start opacity-0 translate-y-5 transition-all duration-500"
                 >
-                  {method.cta}
-                </Button>
-              </div>
-            ))}
+                  <img
+                    src={method.image}
+                    alt={method.title}
+                    className="w-full h-48 object-cover rounded-xl mb-4"
+                  />
+                  <h3 className="text-xl font-heading text-primary mb-2">
+                    {method.title}
+                  </h3>
+                  <p className="text-neutral-mid mb-3 text-sm leading-relaxed">
+                    {method.subtitle}
+                  </p>
+                  {method.note && (
+                    <div className="bg-warm/20 text-warm p-2 rounded-lg mb-3 text-xs">
+                      {method.note}
+                    </div>
+                  )}
+                  <ul className="space-y-1 mb-4">
+                    {method.benefits.map((benefit, i) => (
+                      <li key={i} className="text-neutral-dark text-sm flex items-center">
+                        <span className="text-secondary mr-2">•</span>
+                        {benefit}
+                      </li>
+                    ))}
+                  </ul>
+                  <Button
+                    onClick={() => scrollToSection(method.href)}
+                    variant="secondary"
+                    className="w-full bg-secondary hover:bg-primary text-white py-2 px-4 rounded-[10px] transition-all duration-200 hover:scale-105 text-sm"
+                  >
+                    {method.cta}
+                  </Button>
+                </div>
+              ))}
+            </div>
+            
+            {/* Dots indicator */}
+            <div className="flex justify-center space-x-2 mt-4">
+              {methods.map((_, index) => (
+                <div
+                  key={index}
+                  className={`w-2 h-2 rounded-full transition-all duration-200 ${
+                    activeCard === index ? 'bg-secondary' : 'bg-neutral-light'
+                  }`}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </section>
