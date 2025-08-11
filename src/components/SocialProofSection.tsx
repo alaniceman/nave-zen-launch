@@ -1,3 +1,4 @@
+import { OptimizedImage } from "./OptimizedImage";
 import kikaImage from "@/assets/kika-silva.jpg";
 import panchoImage from "@/assets/pancho-saavedra.jpg";
 import drNeiraImage from "@/assets/dr-neira.jpg";
@@ -49,7 +50,14 @@ export const SocialProofSection = () => {
         <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
           {testimonials.map((testimonial, index) => <div key={index} className="bg-background rounded-[var(--radius)] p-8 shadow-light text-center space-y-6">
               <div className="mx-auto w-32 h-32 rounded-full overflow-hidden shadow-medium">
-                <img src={testimonial.image} alt={`${testimonial.name} - ${testimonial.role}`} className="w-full h-full object-cover" />
+                <OptimizedImage 
+                  src={testimonial.image} 
+                  alt={`${testimonial.name} - ${testimonial.role}`} 
+                  width={320}
+                  height={320}
+                  sizes="128px"
+                  className="w-full h-full object-cover" 
+                />
               </div>
               <div className="space-y-2">
                 <h3 className="font-space-grotesk font-bold text-xl text-neutral-dark">
@@ -72,7 +80,14 @@ export const SocialProofSection = () => {
               <div key={index} className="flex-none w-80 max-w-[calc(100vw-2rem)]" style={{scrollSnapAlign: 'center'}}>
                 <div className="bg-background rounded-[var(--radius)] p-8 shadow-light text-center space-y-6">
                   <div className="mx-auto w-24 h-24 rounded-full overflow-hidden shadow-medium">
-                    <img src={testimonial.image} alt={`${testimonial.name} - ${testimonial.role}`} className="w-full h-full object-cover" />
+                    <OptimizedImage 
+                      src={testimonial.image} 
+                      alt={`${testimonial.name} - ${testimonial.role}`} 
+                      width={320}
+                      height={320}
+                      sizes="96px"
+                      className="w-full h-full object-cover" 
+                    />
                   </div>
                   <div className="space-y-2">
                     <h3 className="font-space-grotesk font-bold text-xl text-neutral-dark">
@@ -103,9 +118,12 @@ export const SocialProofSection = () => {
             {certifications.map((cert, index) => (
               <div key={index} className="flex items-center justify-center h-40">
                 {cert.logo ? (
-                  <img 
+                  <OptimizedImage 
                     src={cert.logo} 
                     alt={cert.name} 
+                    width={640}
+                    height={640}
+                    sizes="(max-width: 768px) 120px, 144px"
                     className="h-36 w-auto object-contain"
                   />
                 ) : (

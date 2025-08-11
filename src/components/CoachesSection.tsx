@@ -1,4 +1,5 @@
 import { Button } from "./ui/button";
+import { OptimizedImage } from "./OptimizedImage";
 
 interface Coach {
   id: string;
@@ -140,13 +141,13 @@ const CoachCard = ({ coach, isMobile = false }: { coach: Coach; isMobile?: boole
       {/* Profile Image */}
       <div className="text-center mb-6">
         <div className={`${isMobile ? 'w-48 h-48' : 'w-40 h-40'} mx-auto mb-4 rounded-full overflow-hidden shadow-md`}>
-          <img
+          <OptimizedImage
             src={coach.image}
             alt={`${coach.name} — ${coach.role.split(' –')[0]}`}
+            width={640}
+            height={640}
+            sizes="(max-width: 768px) 192px, 160px"
             className="w-full h-full object-cover"
-            onError={(e) => {
-              e.currentTarget.src = 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&h=120&fit=crop&crop=face';
-            }}
           />
         </div>
         
