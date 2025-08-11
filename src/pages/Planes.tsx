@@ -67,15 +67,12 @@ const Planes = () => {
                       <div className="h-6"></div>
                     </div>
                   </div>
-                  <Button asChild className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium">
-                    <a
-                      href="https://boxmagic.link/checkout/eclipse"
-                      data-plan="Eclipse"
-                      data-checkout-url="https://boxmagic.link/checkout/eclipse"
-                      rel="noopener"
-                    >
-                      Suscribirme
-                    </a>
+                  <Button 
+                    className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium"
+                    data-plan="Eclipse"
+                    data-checkout-url="https://boxmagic.cl/market/plan_subscription/VrD8wRx0Qz"
+                  >
+                    Suscribirme
                   </Button>
                 </CardContent>
               </Card>
@@ -118,15 +115,12 @@ const Planes = () => {
                       <Badge className="bg-warm text-white">50% OFF 1° mes - código 1MES</Badge>
                     </div>
                   </div>
-                  <Button asChild className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium">
-                    <a
-                      href="https://boxmagic.link/checkout/orbita"
-                      data-plan="Órbita"
-                      data-checkout-url="https://boxmagic.link/checkout/orbita"
-                      rel="noopener"
-                    >
-                      Suscribirme
-                    </a>
+                  <Button 
+                    className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium"
+                    data-plan="Órbita"
+                    data-checkout-url="https://boxmagic.cl/market/plan_subscription/ev4VPzOD9A"
+                  >
+                    Suscribirme
                   </Button>
                 </CardContent>
               </Card>
@@ -172,15 +166,12 @@ const Planes = () => {
                       <Badge className="bg-warm text-white">50% OFF 1° mes - código 1MES</Badge>
                     </div>
                   </div>
-                  <Button asChild className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium">
-                    <a
-                      href="https://boxmagic.link/checkout/universo"
-                      data-plan="Universo"
-                      data-checkout-url="https://boxmagic.link/checkout/universo"
-                      rel="noopener"
-                    >
-                      Suscribirme
-                    </a>
+                  <Button 
+                    className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium"
+                    data-plan="Universo"
+                    data-checkout-url="https://boxmagic.cl/market/plan_subscription/universo"
+                  >
+                    Suscribirme
                   </Button>
                 </CardContent>
               </Card>
