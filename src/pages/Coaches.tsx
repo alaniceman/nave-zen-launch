@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { OptimizedImage } from "@/components/OptimizedImage"
 import { Star, Quote, ChevronLeft, ChevronRight } from "lucide-react"
 import { Footer } from "@/components/Footer"
 
@@ -218,12 +217,9 @@ const Coaches = () => {
                   </Badge>
                 )}
                 <div className="relative mb-6">
-                  <OptimizedImage
-                    srcBase={coach.image.replace(/\.(jpg|jpeg|png|webp)$/i, '')}
+                  <img
+                    src={coach.image}
                     alt={`${coach.name} – ${coach.title}`}
-                    width={320}
-                    height={320}
-                    sizes="128px"
                     className="w-32 h-32 mx-auto rounded-full object-cover shadow-md"
                   />
                 </div>
@@ -269,12 +265,9 @@ const Coaches = () => {
                     </Badge>
                   )}
                   <div className="relative mb-6">
-                    <OptimizedImage
-                      srcBase={coach.image.replace(/\.(jpg|jpeg|png|webp)$/i, '')}
+                    <img
+                      src={coach.image}
                       alt={`${coach.name} – ${coach.title}`}
-                      width={320}
-                      height={320}
-                      sizes="112px"
                       className="w-28 h-28 mx-auto rounded-full object-cover shadow-md"
                     />
                   </div>
