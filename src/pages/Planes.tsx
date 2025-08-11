@@ -2,6 +2,8 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Footer } from "@/components/Footer"
+import { PricingTrialMiniBar } from "@/components/PricingTrialMiniBar"
+import { PricingTrialYogaSection } from "@/components/PricingTrialYogaSection"
 
 const Planes = () => {
   return (
@@ -18,6 +20,9 @@ const Planes = () => {
           </p>
         </div>
       </section>
+
+      {/* Trial Mini Bar */}
+      <PricingTrialMiniBar />
 
       <section className="py-20 bg-background">
         <div className="container mx-auto px-6">
@@ -159,10 +164,27 @@ const Planes = () => {
                 </CardContent>
               </Card>
             </div>
+            
+            {/* Contextual link below pricing table */}
+            <div className="text-center mt-8 mb-12">
+              <p className="text-sm text-muted-foreground font-inter">
+                ¿Solo te interesa Yoga? Empieza con una{" "}
+                <a 
+                  href="#trial-yoga-pricing"
+                  className="text-accent hover:text-primary underline-offset-4 hover:underline transition-colors font-medium"
+                >
+                  clase de prueba gratuita
+                </a>
+                .
+              </p>
+            </div>
           </div>
 
+          {/* Trial Yoga Section */}
+          <PricingTrialYogaSection />
+
           {/* Wim Hof Method Section */}
-          <div className="mb-20">
+          <div className="mb-20" id="wim-hof-section">
             <h3 className="text-center text-primary text-2xl font-bold mb-8 font-space-grotesk">
               Método Wim Hof – Respira, sumérgete, renace
             </h3>
