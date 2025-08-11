@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 interface OptimizedImageProps {
   src: string;
@@ -8,7 +8,6 @@ interface OptimizedImageProps {
   className?: string;
   priority?: boolean;
   sizes?: string;
-  quality?: number;
 }
 
 export const OptimizedImage = ({
@@ -18,89 +17,51 @@ export const OptimizedImage = ({
   height,
   className = '',
   priority = false,
-  sizes = '100vw',
-  quality = 80
+  sizes = '100vw'
 }: OptimizedImageProps) => {
   const [imageLoaded, setImageLoaded] = useState(false);
-  const [hasWebPSupport, setHasWebPSupport] = useState(true);
+  const [imageError, setImageError] = useState(false);
 
-  // Check WebP support
-  useEffect(() => {
-    const checkWebPSupport = () => {
-      const canvas = document.createElement('canvas');
-      canvas.width = 1;
-      canvas.height = 1;
-      return canvas.toDataURL('image/webp').indexOf('data:image/webp') === 0;
-    };
-    
-    setHasWebPSupport(checkWebPSupport());
-  }, []);
-
-  // Generate responsive image sources
-  const generateSrcSet = (baseSrc: string, extension: string) => {
-    const baseName = baseSrc.replace(/\.[^/.]+$/, '');
-    const breakpoints = [320, 640, 1024, 1440, 1920];
-    
-    return breakpoints
-      .map(bp => `${baseName}-${bp}.${extension} ${bp}w`)
-      .join(', ');
-  };
-
-  // Get base filename without extension
-  const baseSrc = src.replace(/\.[^/.]+$/, '');
-  const originalExt = src.split('.').pop() || 'jpg';
-
-  // Generate WebP and fallback srcsets
-  const webpSrcSet = generateSrcSet(src, 'webp');
-  const fallbackSrcSet = generateSrcSet(src, originalExt);
-
-  // Default image for fallback
-  const defaultSrc = `${baseSrc}-1920.${originalExt}`;
-
+  // For now, use direct image source since we don't have all responsive variants
+  // In production, you would generate all sizes: 320w, 640w, 1024w, 1440w, 1920w
+  
   return (
     <div className={`relative overflow-hidden ${className}`}>
       {/* Loading placeholder */}
-      {!imageLoaded && (
+      {!imageLoaded && !imageError && (
         <div 
           className="absolute inset-0 bg-neutral-light animate-pulse"
           style={{ aspectRatio: `${width} / ${height}` }}
         />
       )}
       
-      <picture>
-        {/* WebP source */}
-        <source
-          type="image/webp"
-          srcSet={webpSrcSet}
-          sizes={sizes}
-        />
-        
-        {/* Fallback source */}
-        <source
-          type={`image/${originalExt}`}
-          srcSet={fallbackSrcSet}
-          sizes={sizes}
-        />
-        
-        {/* Main img element */}
-        <img
-          src={defaultSrc}
-          alt={alt}
-          width={width}
-          height={height}
-          loading={priority ? 'eager' : 'lazy'}
-          decoding={priority ? 'sync' : 'async'}
-          fetchPriority={priority ? 'high' : 'auto'}
-          className={`w-full h-full object-cover transition-opacity duration-300 ${
-            imageLoaded ? 'opacity-100' : 'opacity-0'
-          }`}
-          onLoad={() => setImageLoaded(true)}
-          onError={(e) => {
-            // Fallback to original src if responsive images fail
-            e.currentTarget.src = src;
-          }}
-        />
-      </picture>
+      {/* Error placeholder */}
+      {imageError && (
+        <div 
+          className="absolute inset-0 bg-neutral-light flex items-center justify-center"
+          style={{ aspectRatio: `${width} / ${height}` }}
+        >
+          <span className="text-neutral-mid text-sm">Image not found</span>
+        </div>
+      )}
+      
+      <img
+        src={src}
+        alt={alt}
+        width={width}
+        height={height}
+        loading={priority ? 'eager' : 'lazy'}
+        decoding={priority ? 'sync' : 'async'}
+        fetchPriority={priority ? 'high' : 'auto'}
+        className={`w-full h-full object-cover transition-opacity duration-300 ${
+          imageLoaded ? 'opacity-100' : 'opacity-0'
+        }`}
+        onLoad={() => setImageLoaded(true)}
+        onError={() => {
+          setImageError(true);
+          setImageLoaded(false);
+        }}
+      />
     </div>
   );
 };

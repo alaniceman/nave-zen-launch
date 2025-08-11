@@ -144,9 +144,8 @@ const CoachCard = ({ coach, isMobile = false }: { coach: Coach; isMobile?: boole
           <OptimizedImage
             src={coach.image}
             alt={`${coach.name} — ${coach.role.split(' –')[0]}`}
-            width={640}
-            height={640}
-            sizes="(max-width: 768px) 192px, 160px"
+            width={400}
+            height={400}
             className="w-full h-full object-cover"
           />
         </div>

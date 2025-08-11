@@ -53,9 +53,8 @@ export const SocialProofSection = () => {
                 <OptimizedImage 
                   src={testimonial.image} 
                   alt={`${testimonial.name} - ${testimonial.role}`} 
-                  width={320}
-                  height={320}
-                  sizes="128px"
+                  width={256}
+                  height={256}
                   className="w-full h-full object-cover" 
                 />
               </div>
@@ -83,9 +82,8 @@ export const SocialProofSection = () => {
                     <OptimizedImage 
                       src={testimonial.image} 
                       alt={`${testimonial.name} - ${testimonial.role}`} 
-                      width={320}
-                      height={320}
-                      sizes="96px"
+                      width={192}
+                      height={192}
                       className="w-full h-full object-cover" 
                     />
                   </div>
@@ -121,9 +119,8 @@ export const SocialProofSection = () => {
                   <OptimizedImage 
                     src={cert.logo} 
                     alt={cert.name} 
-                    width={640}
-                    height={640}
-                    sizes="(max-width: 768px) 120px, 144px"
+                    width={400}
+                    height={400}
                     className="h-36 w-auto object-contain"
                   />
                 ) : (
