@@ -7,12 +7,13 @@ export const HeroSection = () => {
       {/* Background Image with Overlay */}
       <div className="absolute inset-0">
         <OptimizedImage
-          src="/lovable-uploads/923c01f2-ceec-42a1-8418-1da57f72fb81.png"
-          alt="Interior de Nave Studio con tinas de hielo y equipamiento wellness moderno"
+          srcBase="/images/hero/nave-hero"
+          alt="Interior de Nave Studio con tina de hielo y ambiente moderno"
           width={1920}
           height={1080}
-          priority={true}
-          className="w-full h-full object-cover"
+          priority
+          sizes="100vw"
+          className="w-full h-full object-cover object-[right_32%_center]"
         />
       </div>
       
