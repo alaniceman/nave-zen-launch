@@ -19,10 +19,21 @@ const Contacto = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // Here you would typically send the form data to your backend
-    console.log("Form submitted:", formData)
-    // For now, we'll just show an alert
-    alert("¡Gracias por tu mensaje! Te contactaremos pronto.")
+    
+    // Construct WhatsApp message
+    const message = `Hola! Mi nombre es ${formData.name}.
+    
+Email: ${formData.email}
+
+Mensaje: ${formData.message}`
+    
+    // Create WhatsApp URL
+    const whatsappURL = `https://wa.me/56946120426?text=${encodeURIComponent(message)}`
+    
+    // Open WhatsApp in new tab
+    window.open(whatsappURL, '_blank')
+    
+    // Reset form
     setFormData({ name: "", email: "", message: "" })
   }
 
@@ -211,7 +222,7 @@ const Contacto = () => {
               type="submit"
               className="w-full bg-secondary hover:bg-primary text-white py-3 px-8 rounded-[10px] transition-all duration-200 hover:scale-105 font-medium"
             >
-              Enviar mensaje
+              Enviar WhatsApp
             </Button>
           </form>
         </div>
