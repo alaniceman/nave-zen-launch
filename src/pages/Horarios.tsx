@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { Calendar, Clock, Users, Thermometer, Zap, MapPin } from "lucide-react";
+import { Footer } from "../components/Footer";
 
 // Types
 interface ClassItem {
@@ -507,6 +508,8 @@ export default function Horarios() {
           </div>
         </section>
       </div>
+      
+      <Footer />
     </>
   );
 }

@@ -47,6 +47,12 @@ const Footer = () => {
             >
               Contacto
             </a>
+            <a 
+              href="/faq" 
+              className="text-accent hover:text-warm transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
+            >
+              FAQ
+            </a>
           </nav>
 
           {/* Column 3: Contact */}
