@@ -41,7 +41,7 @@ export const PricingTrialYogaSection = () => {
               
               <div className="flex flex-col sm:flex-row gap-4 text-sm">
                 <a
-                  href="#/horarios"
+                  href="/horarios"
                   className="text-accent underline-offset-4 hover:underline hover:text-primary transition-colors font-inter"
                 >
                   Ver horarios de Yoga →
