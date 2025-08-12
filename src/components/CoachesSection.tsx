@@ -1,3 +1,4 @@
+import { useState, useRef } from "react";
 import { Button } from "./ui/button";
 
 interface Coach {
@@ -71,6 +72,30 @@ const coaches: Coach[] = [
 ];
 
 export const CoachesSection = () => {
+  const [currentCoachIndex, setCurrentCoachIndex] = useState(0);
+  const sliderRef = useRef<HTMLDivElement | null>(null);
+
+  const handleCoachScroll = () => {
+    const container = sliderRef.current;
+    if (!container) return;
+    const firstChild = container.firstElementChild as HTMLElement | null;
+    if (!firstChild) return;
+    const cardWidth = firstChild.getBoundingClientRect().width;
+    const gap = 16; // gap-4
+    const idx = Math.round(container.scrollLeft / (cardWidth + gap));
+    setCurrentCoachIndex(Math.max(0, Math.min(idx, coaches.length - 1)));
+  };
+
+  const scrollToCoach = (index: number) => {
+    const container = sliderRef.current;
+    if (!container) return;
+    const firstChild = container.firstElementChild as HTMLElement | null;
+    if (!firstChild) return;
+    const cardWidth = firstChild.getBoundingClientRect().width;
+    const gap = 16; // gap-4
+    container.scrollTo({ left: index * (cardWidth + gap), behavior: 'smooth' });
+    setCurrentCoachIndex(index);
+  };
   return (
     <section className="py-20 bg-background">
       <div className="container mx-auto px-6">
@@ -93,7 +118,12 @@ export const CoachesSection = () => {
 
         {/* Coaches Slider - Mobile */}
         <div className="sm:hidden mb-12">
-          <div className="flex overflow-x-auto gap-4 pb-4 px-4 -mx-4" style={{scrollSnapType: 'x mandatory'}}>
+          <div 
+            ref={sliderRef}
+            onScroll={handleCoachScroll}
+            className="flex overflow-x-auto gap-4 pb-4 px-4 -mx-4" 
+            style={{scrollSnapType: 'x mandatory'}}
+          >
             {coaches.map((coach, index) => (
               <div key={coach.id} className="flex-none w-80 max-w-[calc(100vw-2rem)]" style={{scrollSnapAlign: 'center'}}>
                 <CoachCard coach={coach} isMobile={true} />
@@ -103,7 +133,14 @@ export const CoachesSection = () => {
           {/* Mobile scroll indicator */}
           <div className="flex justify-center gap-2 mt-4">
             {coaches.map((_, index) => (
-              <div key={index} className="w-2 h-2 rounded-full bg-neutral-light"></div>
+              <button
+                key={index}
+                onClick={() => scrollToCoach(index)}
+                className={`w-2 h-2 rounded-full transition-colors duration-200 ${
+                  index === currentCoachIndex ? 'bg-secondary' : 'bg-neutral-light'
+                }`}
+                aria-label={`Ir al slide ${index + 1}`}
+              />
             ))}
           </div>
         </div>

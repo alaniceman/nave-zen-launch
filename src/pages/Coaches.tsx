@@ -308,7 +308,14 @@ const Coaches = () => {
             {/* Mobile scroll indicator */}
             <div className="flex justify-center gap-2 mt-4">
               {filteredCoaches.map((_, index) => (
-                <div key={index} className="w-2 h-2 rounded-full bg-neutral-light"></div>
+                <button
+                  key={index}
+                  onClick={() => scrollToCoach(index)}
+                  className={`w-2 h-2 rounded-full transition-colors duration-200 ${
+                    index === currentCoachIndex ? 'bg-secondary' : 'bg-neutral-light'
+                  }`}
+                  aria-label={`Ir al slide ${index + 1}`}
+                />
               ))}
             </div>
           </div>
