@@ -3,9 +3,20 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar, User, Tag } from "lucide-react";
 import heroImage from "@/assets/blog-wim-hof-hero.jpg";
+import biohackingHeroImage from "@/assets/blog-biohacking-hero.jpg";
 
 const Blog = () => {
   const blogPosts = [
+    {
+      title: "Biohacking para longevidad: HIIT + Breathwork + Agua fría (la tríada que entrena tu futuro)",
+      slug: "/blog/biohacking-hiit-breathwork-agua-fria-longevidad",
+      excerpt: "HIIT, breathwork y agua fría generan hormesis bien dosificada: mejor VO₂ máx, regulación del estrés y flexibilidad metabólica para vivir más y mejor.",
+      author: "Alan Iceman Earle",
+      date: "12 de agosto, 2025",
+      categories: ["Biohacking", "HIIT", "Respiración WHM", "Longevidad"],
+      image: biohackingHeroImage,
+      imageAlt: "Entrenamiento HIIT combinado con breathwork y agua fría para biohacking"
+    },
     {
       title: "Método Wim Hof: respiración, frío y mente — lo esencial (y cómo empezar hoy)",
       slug: "/blog/metodo-wim-hof-respiracion-frio-mente",
