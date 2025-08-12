@@ -368,7 +368,12 @@ const Planes = () => {
                     Requiere haber completado previamente una sesión guiada de agua fría.
                   </p>
                   <div className="text-2xl font-bold text-foreground">$15.000</div>
-                  <Button variant="secondary" className="w-full font-inter font-medium">
+                  <Button 
+                    variant="secondary" 
+                    className="w-full font-inter font-medium"
+                    data-checkout-url="https://boxmagic.cl/market/plan/jwDyZPALqv"
+                    data-plan="Yoga + Ice Bath"
+                  >
                     Reservar
                   </Button>
                 </CardContent>
