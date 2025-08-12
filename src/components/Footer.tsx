@@ -24,6 +24,12 @@ const Footer = () => {
               Experiencias
             </a>
             <a 
+              href="/horarios" 
+              className="text-accent hover:text-warm transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
+            >
+              Horarios
+            </a>
+            <a 
               href="/planes" 
               className="text-accent hover:text-warm transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
             >
