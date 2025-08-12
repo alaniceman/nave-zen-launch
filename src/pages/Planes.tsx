@@ -30,7 +30,7 @@ const Planes = () => {
           <div className="mb-20">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
               {/* Eclipse Plan */}
-              <Card className="relative border-2 hover:shadow-lg transition-all duration-300 animate-fade-in">
+              <Card id="eclipse" className="relative border-2 hover:shadow-lg transition-all duration-300 animate-fade-in">
                 <CardHeader className="text-center pb-4">
                   <CardTitle className="text-xl font-bold text-foreground font-space">Eclipse</CardTitle>
                 </CardHeader>
