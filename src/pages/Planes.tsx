@@ -327,7 +327,12 @@ const Planes = () => {
                     3 sesiones en 60 días. Elige la disciplina que quieras (Ice Bath, Yoga, Breathwork, Biohacking) y descubre tu fórmula.
                   </p>
                   <div className="text-2xl font-bold text-foreground">$59.000</div>
-                  <Button variant="secondary" className="w-full font-inter font-medium">
+                  <Button 
+                    variant="secondary" 
+                    className="w-full font-inter font-medium"
+                    data-checkout-url="https://boxmagic.cl/market/plan/bQDN8Jq4M7"
+                    data-plan="Drop-In Discovery"
+                  >
                     Descubrir
                   </Button>
                 </CardContent>
