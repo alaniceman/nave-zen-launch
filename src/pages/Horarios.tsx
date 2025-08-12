@@ -431,7 +431,7 @@ export default function Horarios() {
                           {/* Actions */}
                           <div className="space-y-3">
                             <button
-                              data-checkout-url="URL_PLACEHOLDER"
+                              data-checkout-url="https://members.boxmagic.app/acceso/ingreso"
                               data-plan={classItem.title}
                               className="w-full bg-primary text-primary-foreground px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors font-medium"
                             >
