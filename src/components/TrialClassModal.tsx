@@ -103,7 +103,7 @@ export const TrialClassModal = ({ isOpen, onClose }: TrialClassModalProps) => {
         {/* Subtitle */}
         <div className="px-5 pt-2 pb-4">
           <p id="trial-modal-description" className="text-sm text-muted-foreground font-inter">
-            Para conocer la Nave puedes tomar una clase de <strong>Yoga</strong> (Yin · Yang · Integral) o una sesión de <strong>Respiración Wim Hof</strong>. El <strong>Ice Bath es opcional</strong> y solo está disponible si ya completaste previamente el <strong>Método Wim Hof</strong>.
+            Para conocer Nave Studio puedes tomar una clase de prueba de <strong>Yoga</strong> (Yin · Yang · Integral) o de <strong>Respiración Wim Hof</strong>. Las clases de prueba no incluyen sesiones del <strong>Método Wim Hof</strong> (breathwork + ice bath).
           </p>
         </div>
 
