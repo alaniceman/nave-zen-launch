@@ -448,16 +448,6 @@ export default function Horarios() {
                               Agregar a Google Calendar
                             </a>
 
-                            {classItem.isPersonalized && (
-                              <a
-                                href="https://wa.me/56985273088"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="w-full inline-flex items-center justify-center gap-2 bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors text-sm"
-                              >
-                                Coordinar por WhatsApp
-                              </a>
-                            )}
                           </div>
                         </div>
                       </div>
