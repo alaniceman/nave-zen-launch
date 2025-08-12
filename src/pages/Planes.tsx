@@ -347,7 +347,12 @@ const Planes = () => {
                     1 clase semanal de Yoga (Yin, Yang o Integral). Sin inmersión obligatoria.
                   </p>
                   <div className="text-2xl font-bold text-foreground">$39.000</div>
-                  <Button variant="secondary" className="w-full font-inter font-medium">
+                  <Button 
+                    variant="secondary" 
+                    className="w-full font-inter font-medium"
+                    data-checkout-url="https://boxmagic.cl/market/plan_subscription/95DrVeqDpY"
+                    data-plan="Membresía Yin-Yang Yoga"
+                  >
                     Suscribirme
                   </Button>
                 </CardContent>
