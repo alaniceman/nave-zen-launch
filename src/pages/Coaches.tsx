@@ -247,59 +247,68 @@ const Coaches = () => {
 
           {/* Mobile: Slider */}
           <div className="block md:hidden">
-            <div
-              ref={sliderRef}
-              onScroll={handleCoachScroll}
-              className="flex overflow-x-auto gap-6 pb-6 snap-x snap-mandatory px-4 -mx-4"
-              style={{ scrollSnapType: 'x mandatory', scrollPaddingLeft: '1rem' }}
-            >
+            <div className="flex overflow-x-auto gap-4 pb-4 px-4 -mx-4" style={{scrollSnapType: 'x mandatory'}}>
               {filteredCoaches.map((coach, index) => (
-                <div
-                  key={coach.id}
-                  className="coach-card flex-none w-[85vw] max-w-xs bg-white rounded-xl shadow-lg p-6 text-center snap-start opacity-0 translate-y-5 transition-all duration-500"
-                  style={{ animationDelay: `${index * 100}ms` }}
-                >
-                  {coach.badge && (
-                    <Badge className="absolute top-4 left-4 bg-warm text-white text-xs rounded-full px-3 py-1 uppercase font-medium">
-                      {coach.badge}
-                    </Badge>
-                  )}
-                  <div className="relative mb-6">
-                    <img
-                      src={coach.image}
-                      alt={`${coach.name} – ${coach.title}`}
-                      className="w-28 h-28 mx-auto rounded-full object-cover shadow-md"
-                    />
+                <div key={coach.id} className="flex-none w-80 max-w-[calc(100vw-2rem)]" style={{scrollSnapAlign: 'center'}}>
+                  <div className="relative bg-card rounded-xl p-6 shadow-[0_4px_10px_rgba(0,0,0,0.08)] hover:scale-105 hover:shadow-lg transition-all duration-300">
+                    {/* Founder Badge */}
+                    {coach.badge && (
+                      <div className="absolute top-4 left-4 bg-warm text-white text-xs px-3 py-1 rounded-full uppercase tracking-wide font-medium">
+                        {coach.badge}
+                      </div>
+                    )}
+                    
+                    {/* Profile Image */}
+                    <div className="text-center mb-6">
+                      <div className="w-48 h-48 mx-auto mb-4 rounded-full overflow-hidden shadow-md">
+                        <img
+                          src={coach.image}
+                          alt={`${coach.name} — ${coach.title.split(' –')[0]}`}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.currentTarget.src = 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&h=120&fit=crop&crop=face';
+                          }}
+                        />
+                      </div>
+                      
+                      {/* Name */}
+                      <h3 className="text-xl font-bold text-primary font-space mb-2">
+                        {coach.name}
+                      </h3>
+                      
+                      {/* Role */}
+                      <h4 className="text-sm font-semibold text-neutral-dark font-inter mb-3">
+                        {coach.title}
+                      </h4>
+                      
+                      {/* Credentials */}
+                      <p className="text-xs text-neutral-mid font-inter mb-4 leading-relaxed">
+                        {coach.credentials}
+                      </p>
+                      
+                      {/* Purpose */}
+                      <p className="text-sm text-neutral-dark font-inter mb-6 italic leading-relaxed">
+                        "{coach.description}"
+                      </p>
+                    </div>
+                    
+                    {/* CTA Button */}
+                    <div className="text-center">
+                      <Button 
+                        variant="outline" 
+                        className="border-2 border-secondary text-secondary py-2 px-5 rounded-lg font-medium font-inter transition-all duration-300 hover:bg-secondary hover:text-white focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-opacity-50"
+                      >
+                        Reservar
+                      </Button>
+                    </div>
                   </div>
-                  <h3 className="text-lg font-heading text-primary mb-2">
-                    {coach.name}
-                  </h3>
-                  <h4 className="text-sm font-medium text-neutral-mid mb-2">
-                    {coach.title}
-                  </h4>
-                  <p className="text-xs text-neutral-mid mb-3 leading-relaxed">
-                    {coach.credentials}
-                  </p>
-                  <p className="text-sm text-neutral-dark mb-6 leading-relaxed italic">
-                    "{coach.description}"
-                  </p>
-                  <Button
-                    variant="outline"
-                    className="w-full border-2 border-secondary text-secondary hover:bg-secondary hover:text-white py-2 px-4 rounded-[10px] transition-all duration-200 hover:scale-105 text-sm"
-                  >
-                    Reservar sesión
-                  </Button>
                 </div>
               ))}
             </div>
-            <div className="flex justify-center gap-2 mt-2">
+            {/* Mobile scroll indicator */}
+            <div className="flex justify-center gap-2 mt-4">
               {filteredCoaches.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => scrollToCoach(index)}
-                  className={`w-2 h-2 rounded-full transition-colors duration-200 ${index === currentCoachIndex ? 'bg-secondary' : 'bg-neutral-mid/30'}`}
-                  aria-label={`Ir al slide ${index + 1}`}
-                />
+                <div key={index} className="w-2 h-2 rounded-full bg-neutral-light"></div>
               ))}
             </div>
           </div>
