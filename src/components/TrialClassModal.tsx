@@ -136,7 +136,7 @@ export const TrialClassModal = ({ isOpen, onClose }: TrialClassModalProps) => {
               Si no ves el formulario, ábrelo aquí
             </a>
             <a
-              href="https://wa.me/56985273088"
+              href="https://wa.me/56946120426?text=Hola%21%20quiero%20agendar%20una%20clase%20de%20prueba%20en%20Nave%20Studio"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-accent text-white rounded-lg py-2.5 px-5 hover:bg-primary transition-colors text-sm font-medium"
