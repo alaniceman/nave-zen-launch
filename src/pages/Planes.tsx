@@ -268,7 +268,12 @@ const Planes = () => {
                     Respiración de a pares (máx 2) y entrada al hielo por separado, guiado y sostenido acorde a tu intensión de la sesión.
                   </p>
                   <div className="text-2xl font-bold text-foreground">$40.000</div>
-                  <Button variant="secondary" className="w-full font-inter font-medium">
+                  <Button 
+                    variant="secondary" 
+                    className="w-full font-inter font-medium"
+                    data-checkout-url="https://boxmagic.cl/market/plan/j80pKrK4W6"
+                    data-plan="Wim Hof Personalizado"
+                  >
                     Agendar sesión
                   </Button>
                 </CardContent>
