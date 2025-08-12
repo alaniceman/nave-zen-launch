@@ -109,7 +109,7 @@ const Footer = () => {
           </a>{" "}
           ·{" "}
           <a 
-            href="/privacidad1" 
+            href="/privacidad" 
             className="text-accent hover:text-warm transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
           >
             Política de privacidad
