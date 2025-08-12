@@ -29,15 +29,14 @@ export const PricingTrialYogaSection = () => {
             </div>
 
             <div className="space-y-4 mb-6">
-              <Button
-                asChild
-                className="w-full sm:w-auto bg-accent hover:bg-primary text-white rounded-[10px] px-6 py-3 font-medium transition-transform duration-200 hover:scale-105 focus-visible:outline-2 focus-visible:outline-dashed focus-visible:outline-accent font-inter"
-                aria-label="Agendar clase de prueba por WhatsApp"
+              <a
+                href="#"
+                data-open-trial="true"
+                className="w-full sm:w-auto bg-accent hover:bg-primary text-white rounded-[10px] px-6 py-3 font-medium transition-transform duration-200 hover:scale-105 focus-visible:outline-2 focus-visible:outline-dashed focus-visible:outline-accent font-inter inline-flex items-center justify-center"
+                aria-label="Agendar clase de prueba"
               >
-                <a href="https://wa.me/56985273088" target="_blank" rel="noopener noreferrer">
-                  Agendar clase de prueba
-                </a>
-              </Button>
+                Agendar clase de prueba
+              </a>
               
               <div className="flex flex-col sm:flex-row gap-4 text-sm">
                 <a

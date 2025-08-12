@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
+import { TrialModalProvider } from "@/context/TrialModalProvider";
 import { Header } from "@/components/Header";
 import Index from "./pages/Index";
 import Planes from "./pages/Planes";
@@ -20,6 +21,7 @@ import Privacidad from "./pages/Privacidad";
 import NotFound from "./pages/NotFound";
 import { CheckoutRedirectManager } from "@/components/CheckoutRedirectManager";
 import { SEOHead } from "@/components/SEOHead";
+import { TrialDelegationHandler } from "@/components/TrialDelegationHandler";
 
 const queryClient = new QueryClient();
 
@@ -27,12 +29,14 @@ const App = () => (
   <HelmetProvider>
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <CheckoutRedirectManager />
-        <BrowserRouter>
-          <SEOHead />
-          <Header />
+        <TrialModalProvider>
+          <Toaster />
+          <Sonner />
+          <CheckoutRedirectManager />
+          <BrowserRouter>
+            <SEOHead />
+            <TrialDelegationHandler />
+            <Header />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/planes-precios" element={<Planes />} />
@@ -52,6 +56,7 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
+        </TrialModalProvider>
       </TooltipProvider>
     </QueryClientProvider>
   </HelmetProvider>
