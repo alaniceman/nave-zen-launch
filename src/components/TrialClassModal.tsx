@@ -103,7 +103,7 @@ export const TrialClassModal = ({ isOpen, onClose }: TrialClassModalProps) => {
         {/* Subtitle */}
         <div className="px-5 pt-2 pb-4">
           <p id="trial-modal-description" className="text-sm text-muted-foreground font-inter">
-            Para conocer Nave Studio puedes tomar una clase de prueba de <strong>Yoga</strong> (Yin · Yang · Integral) o de <strong>Respiración Wim Hof</strong>. Las clases de prueba no incluyen sesiones del <strong>Método Wim Hof</strong> (breathwork + ice bath).
+            Para conocer Nave Studio puedes tomar una clase de prueba de Yoga o de Respiración Wim Hof. Las clases de prueba no incluyen sesiones del Método Wim Hof (breathwork + ice bath).
           </p>
         </div>
 
@@ -126,7 +126,6 @@ export const TrialClassModal = ({ isOpen, onClose }: TrialClassModalProps) => {
 
         {/* Footer */}
         <div className="px-5 py-4 flex flex-col md:flex-row gap-3 md:justify-between items-center border-t border-black/10">
-          <div className="flex flex-col sm:flex-row gap-3 items-center">
             <a
               href="https://boxmagic.cl/sp/NaveStudio"
               target="_blank"
@@ -135,15 +134,6 @@ export const TrialClassModal = ({ isOpen, onClose }: TrialClassModalProps) => {
             >
               Si no ves el formulario, ábrelo aquí
             </a>
-            <a
-              href="https://wa.me/56946120426?text=Hola%21%20quiero%20agendar%20una%20clase%20de%20prueba%20en%20Nave%20Studio"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-accent text-white rounded-lg py-2.5 px-5 hover:bg-primary transition-colors text-sm font-medium"
-            >
-              Prefiero WhatsApp
-            </a>
-          </div>
           <button
             onClick={onClose}
             className="border-2 border-accent text-accent rounded-lg py-2.5 px-5 hover:bg-accent hover:text-white transition-colors text-sm font-medium"
