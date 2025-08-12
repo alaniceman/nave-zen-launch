@@ -46,7 +46,7 @@ export const PricingTrialYogaSection = () => {
                   Ver horarios de Yoga →
                 </a>
                 <a
-                  href="#wim-hof-section"
+                  href="/blog/metodo-wim-hof-respiracion-frio-mente"
                   className="text-accent underline-offset-4 hover:underline hover:text-primary transition-colors font-inter"
                 >
                   ¿Aún no haces Wim Hof? Conócelo aquí →
