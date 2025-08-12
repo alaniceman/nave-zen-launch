@@ -247,7 +247,12 @@ const Planes = () => {
                     Ideal para quienes quieren vivir un baño de hielo con acompañamiento experto.
                   </p>
                   <div className="text-2xl font-bold text-foreground">$30.000</div>
-                  <Button variant="secondary" className="w-full font-inter font-medium">
+                  <Button 
+                    variant="secondary" 
+                    className="w-full font-inter font-medium"
+                    data-checkout-url="https://boxmagic.cl/market/plan/RZ0vlQyLQ6"
+                    data-plan="Wim Hof Grupal"
+                  >
                     Agendar sesión
                   </Button>
                 </CardContent>
