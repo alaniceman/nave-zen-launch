@@ -74,6 +74,13 @@ const Planes = () => {
                   >
                     Suscribirme
                   </Button>
+                  {/* B) Contextual link within plan card */}
+                  <a 
+                    href="/horarios#hoy" 
+                    className="inline-block mt-2 text-accent underline hover:text-primary transition-colors text-sm"
+                  >
+                    Ver horarios de clases →
+                  </a>
                 </CardContent>
               </Card>
 
@@ -122,6 +129,13 @@ const Planes = () => {
                   >
                     Suscribirme
                   </Button>
+                  {/* B) Contextual link within plan card */}
+                  <a 
+                    href="/horarios#hoy" 
+                    className="inline-block mt-2 text-accent underline hover:text-primary transition-colors text-sm"
+                  >
+                    Ver horarios de clases →
+                  </a>
                 </CardContent>
               </Card>
 
@@ -173,8 +187,29 @@ const Planes = () => {
                   >
                     Suscribirme
                   </Button>
+                  {/* B) Contextual link within plan card */}
+                  <a 
+                    href="/horarios#hoy" 
+                    className="inline-block mt-2 text-accent underline hover:text-primary transition-colors text-sm"
+                  >
+                    Ver horarios de clases →
+                  </a>
                 </CardContent>
               </Card>
+            </div>
+            
+            {/* A) Main button below membership table */}
+            <div className="mt-8 text-center">
+              <a 
+                href="/horarios" 
+                className="inline-block border-2 border-accent text-accent py-3 px-6 rounded-lg hover:bg-accent hover:text-white transition-all duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
+                aria-label="Ver horarios de Nave Studio"
+              >
+                Ver horarios de clases
+              </a>
+              <p className="text-xs text-muted-foreground mt-2 font-inter">
+                Mira el día de hoy y planifica tu semana.
+              </p>
             </div>
             
             {/* Contextual link below pricing table */}
@@ -234,6 +269,15 @@ const Planes = () => {
                 </CardContent>
               </Card>
             </div>
+            {/* C) Link in Método Wim Hof section */}
+            <p className="text-center mt-6">
+              <a 
+                href="/horarios#hoy" 
+                className="text-accent underline hover:text-primary transition-colors"
+              >
+                Ver próximos horarios de Wim Hof →
+              </a>
+            </p>
             <p className="text-center text-sm text-muted-foreground mt-6 font-inter">
               Completa esta sesión guiada para habilitar tu ingreso al Ice Bath post-yoga.
             </p>
