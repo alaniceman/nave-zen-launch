@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Footer } from "@/components/Footer"
 import { PricingTrialMiniBar } from "@/components/PricingTrialMiniBar"
 import { PricingTrialYogaSection } from "@/components/PricingTrialYogaSection"
+import { CheckoutRedirectButton } from "@/components/CheckoutRedirectButton"
 
 const Planes = () => {
   return (
@@ -180,13 +181,13 @@ const Planes = () => {
                       <Badge className="bg-warm text-white">50% OFF 1° mes - código 1MES</Badge>
                     </div>
                   </div>
-                  <Button 
+                  <CheckoutRedirectButton
+                    url="https://boxmagic.cl/market/plan_subscription/j80p5OdDW6"
+                    plan="Universo"
                     className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium"
-                    data-plan="Universo"
-                    data-checkout-url="https://boxmagic.cl/market/plan_subscription/universo"
                   >
                     Suscribirme
-                  </Button>
+                  </CheckoutRedirectButton>
                   {/* B) Contextual link within plan card */}
                   <a 
                     href="/horarios#hoy" 
