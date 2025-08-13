@@ -59,7 +59,7 @@ export const PricingTrialYogaSection = () => {
           <div className="order-1 lg:order-2">
             <div className="rounded-xl overflow-hidden shadow-lg">
               <img
-                src={heroYoga}
+                src="/lovable-uploads/82672388-9723-4aee-a1f2-ac72618cd26a.png"
                 alt="Sala de Yoga de Nave Studio"
                 className="w-full aspect-[4/3] object-cover"
                 loading="lazy"
