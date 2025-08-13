@@ -28,7 +28,7 @@ const Experiencias = () => {
     {
       id: 1,
       title: "Método Wim Hof",
-      subtitle: "1 h Breathwork + Ice Bath (3 °C) guiado y sostenido. Ideal para tu primera inmersión.",
+      subtitle: "1 h Breathwork + Ice Bath (3 °C) guiado y sostenido.",
       image: "/lovable-uploads/2c005154-6b4f-43b7-b3cb-d3f15869f7ef.png",
       benefits: [
         "↓ inflamación y dolor",
@@ -146,9 +146,14 @@ const Experiencias = () => {
                 />
               </div>
               <div className={`${index % 2 === 1 ? 'order-1' : 'order-2'}`}>
-                <h3 className="text-2xl font-heading text-primary mb-3">
-                  {method.title}
-                </h3>
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-2xl font-heading text-primary">
+                    {method.title}
+                  </h3>
+                  <span className="text-sm font-medium text-accent bg-accent/10 px-3 py-1 rounded-full">
+                    Sesión de 1 hora
+                  </span>
+                </div>
                 <p className="text-neutral-mid mb-4 leading-relaxed">
                   {method.subtitle}
                 </p>
@@ -165,13 +170,6 @@ const Experiencias = () => {
                     </li>
                   ))}
                 </ul>
-                <Button
-                  onClick={() => scrollToSection(method.href)}
-                  variant="secondary"
-                  className="bg-secondary hover:bg-primary text-white px-6 py-2.5 rounded-[10px] transition-all duration-200 hover:scale-105"
-                >
-                  {method.cta}
-                </Button>
               </div>
             </div>
           ))}
@@ -186,9 +184,14 @@ const Experiencias = () => {
                 alt={method.title}
                 className="w-full h-64 object-cover rounded-xl shadow-lg mb-6"
               />
-              <h3 className="text-2xl font-heading text-primary mb-3">
-                {method.title}
-              </h3>
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-2xl font-heading text-primary">
+                  {method.title}
+                </h3>
+                <span className="text-sm font-medium text-accent bg-accent/10 px-3 py-1 rounded-full">
+                  Sesión de 1 hora
+                </span>
+              </div>
               <p className="text-neutral-mid mb-4 leading-relaxed">
                 {method.subtitle}
               </p>
@@ -205,13 +208,6 @@ const Experiencias = () => {
                   </li>
                 ))}
               </ul>
-              <Button
-                onClick={() => scrollToSection(method.href)}
-                variant="secondary"
-                className="bg-secondary hover:bg-primary text-white px-6 py-2.5 rounded-[10px] transition-all duration-200 hover:scale-105"
-              >
-                {method.cta}
-              </Button>
             </div>
           ))}
         </div>
@@ -241,9 +237,14 @@ const Experiencias = () => {
                     loading={index <= 1 ? "eager" : "lazy"}
                     className="w-full h-48 object-cover rounded-xl mb-4"
                   />
-                  <h3 className="text-xl font-heading text-primary mb-2">
-                    {method.title}
-                  </h3>
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-xl font-heading text-primary">
+                      {method.title}
+                    </h3>
+                    <span className="text-xs font-medium text-accent bg-accent/10 px-2 py-1 rounded-full">
+                      Sesión de 1 hora
+                    </span>
+                  </div>
                   <p className="text-neutral-mid mb-3 text-sm leading-relaxed">
                     {method.subtitle}
                   </p>
@@ -260,13 +261,6 @@ const Experiencias = () => {
                       </li>
                     ))}
                   </ul>
-                  <Button
-                    onClick={() => scrollToSection(method.href)}
-                    variant="secondary"
-                    className="w-full bg-secondary hover:bg-primary text-white py-2 px-4 rounded-[10px] transition-all duration-200 hover:scale-105 text-sm"
-                  >
-                    {method.cta}
-                  </Button>
                 </div>
               ))}
             </div>
