@@ -218,7 +218,8 @@ const Planes = () => {
               <p className="text-sm text-muted-foreground font-inter">
                 ¿Solo te interesa Yoga? Empieza con una{" "}
                 <a 
-                  href="#trial-yoga-pricing"
+                  href="#"
+                  data-open-trial="true"
                   className="text-accent hover:text-primary underline-offset-4 hover:underline transition-colors font-medium"
                 >
                   clase de prueba gratuita
