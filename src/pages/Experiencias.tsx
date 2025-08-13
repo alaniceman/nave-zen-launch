@@ -146,14 +146,12 @@ const Experiencias = () => {
                 />
               </div>
               <div className={`${index % 2 === 1 ? 'order-1' : 'order-2'}`}>
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-2xl font-heading text-primary">
-                    {method.title}
-                  </h3>
-                  <span className="text-sm font-medium text-accent bg-accent/10 px-3 py-1 rounded-full">
-                    Sesión de 1 hora
-                  </span>
-                </div>
+                <h3 className="text-2xl font-heading text-primary mb-2">
+                  {method.title}
+                </h3>
+                <span className="text-sm font-medium text-accent bg-accent/10 px-3 py-1 rounded-full mb-3 inline-block">
+                  Sesión de 1 hora
+                </span>
                 <p className="text-neutral-mid mb-4 leading-relaxed">
                   {method.subtitle}
                 </p>
@@ -184,14 +182,12 @@ const Experiencias = () => {
                 alt={method.title}
                 className="w-full h-64 object-cover rounded-xl shadow-lg mb-6"
               />
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="text-2xl font-heading text-primary">
-                  {method.title}
-                </h3>
-                <span className="text-sm font-medium text-accent bg-accent/10 px-3 py-1 rounded-full">
-                  Sesión de 1 hora
-                </span>
-              </div>
+              <h3 className="text-2xl font-heading text-primary mb-2">
+                {method.title}
+              </h3>
+              <span className="text-sm font-medium text-accent bg-accent/10 px-3 py-1 rounded-full mb-3 inline-block">
+                Sesión de 1 hora
+              </span>
               <p className="text-neutral-mid mb-4 leading-relaxed">
                 {method.subtitle}
               </p>
@@ -237,14 +233,12 @@ const Experiencias = () => {
                     loading={index <= 1 ? "eager" : "lazy"}
                     className="w-full h-48 object-cover rounded-xl mb-4"
                   />
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-xl font-heading text-primary">
-                      {method.title}
-                    </h3>
-                    <span className="text-xs font-medium text-accent bg-accent/10 px-2 py-1 rounded-full">
-                      Sesión de 1 hora
-                    </span>
-                  </div>
+                  <h3 className="text-xl font-heading text-primary mb-2">
+                    {method.title}
+                  </h3>
+                  <span className="text-xs font-medium text-accent bg-accent/10 px-2 py-1 rounded-full mb-3 inline-block">
+                    Sesión de 1 hora
+                  </span>
                   <p className="text-neutral-mid mb-3 text-sm leading-relaxed">
                     {method.subtitle}
                   </p>
