@@ -63,9 +63,9 @@ const scheduleData: Record<string, ClassItem[]> = {
     },
     {
       time: "20:15",
-      title: "Yoga Integral",
+      title: "Yoga Integral + Ice Bath (opcional)",
       tags: ["Yoga"],
-      badges: [],
+      badges: ["Ice Bath opcional"],
       duration: 60
     }
   ],
