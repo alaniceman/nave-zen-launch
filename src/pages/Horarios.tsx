@@ -60,6 +60,13 @@ const scheduleData: Record<string, ClassItem[]> = {
       tags: ["Método Wim Hof"],
       badges: [],
       duration: 60
+    },
+    {
+      time: "20:15",
+      title: "Yoga Integral",
+      tags: ["Yoga"],
+      badges: [],
+      duration: 60
     }
   ],
   miercoles: [
