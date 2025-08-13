@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react"
 import { Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useCheckoutRedirect } from "@/hooks/useCheckoutRedirect"
 
 export const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const { start: startCheckoutRedirect } = useCheckoutRedirect()
 
   // Scroll detection for sticky behavior
   useEffect(() => {
@@ -83,10 +85,10 @@ export const Header = () => {
 
           {/* Desktop CTA */}
           <Button
-            onClick={() => handleNavigation({ href: '#reservar' })}
+            onClick={() => startCheckoutRedirect('https://members.boxmagic.app/')}
             className="hidden md:inline-flex bg-secondary hover:bg-primary text-white font-inter font-medium px-6 py-2.5 rounded-[10px] transition-all duration-200 hover:scale-105 focus:outline-dashed focus:outline-2 focus:outline-secondary"
           >
-            Reservar clase
+            Ingresar
           </Button>
 
           {/* Mobile Menu Button */}
