@@ -1,4 +1,3 @@
-import { useCheckoutRedirect } from "@/hooks/useCheckoutRedirect";
 import { Button } from "@/components/ui/button";
 import { ReactNode } from "react";
 
@@ -15,15 +14,10 @@ export const CheckoutRedirectButton = ({
   className = "",
   plan 
 }: CheckoutRedirectButtonProps) => {
-  const { start } = useCheckoutRedirect();
-
-  const handleClick = () => {
-    start(url, plan);
-  };
-
   return (
     <Button
-      onClick={handleClick}
+      data-checkout-url={url}
+      data-plan={plan}
       className={className}
     >
       {children}
