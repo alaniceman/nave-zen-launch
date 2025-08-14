@@ -395,7 +395,7 @@ const Coaches = () => {
           </p>
           <div className="flex flex-col md:flex-row gap-4 justify-center">
             <Button
-              onClick={() => scrollToSection('/planes')}
+              onClick={() => scrollToSection('/planes-precios')}
               className="bg-secondary hover:bg-primary text-white py-3 px-8 rounded-[10px] transition-all duration-200 hover:scale-105"
             >
               Ver planes
