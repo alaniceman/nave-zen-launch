@@ -56,7 +56,7 @@ const Experiencias = () => {
       id: 3,
       title: "Breathwork & Meditación",
       subtitle: "Técnicas WHM, respiración consciente y mindfulness para regular el estrés.",
-      image: "/lovable-uploads/4237a4a8-4b67-4133-9d1e-5a134df22d8c.png",
+      image: "/lovable-uploads/ae8dc267-b3c4-4b99-aedd-4e39f167b9cb.png",
       benefits: [
         "Regula el sistema nervioso",
         "Mejora la concentración",
