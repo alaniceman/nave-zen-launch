@@ -507,7 +507,7 @@ export default function Horarios() {
             </h3>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="/planes"
+                href="/planes-precios"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-lg hover:bg-primary/90 transition-colors font-medium"
               >
                 Ver planes y precios
