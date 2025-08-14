@@ -117,14 +117,6 @@ export const MethodologiesSection = () => {
                     </ul>
                   </div>
 
-                  {/* CTA Button */}
-                  <div className="mt-auto">
-                    <Button 
-                      className="w-full bg-gradient-to-r from-neutral-dark to-neutral-dark/90 hover:from-primary hover:to-primary/90 text-white font-inter font-medium transition-all duration-300 hover:scale-105 rounded-[10px] shadow-sm hover:shadow-lg"
-                    >
-                      {method.ctaText}
-                    </Button>
-                  </div>
                 </div>
               </div>
             );
