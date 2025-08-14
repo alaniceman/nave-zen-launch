@@ -7,7 +7,7 @@ import { PricingTrialYogaSection } from "@/components/PricingTrialYogaSection"
 import { LocationSection } from "@/components/LocationSection"
 import { Footer } from "@/components/Footer"
 import { TrialMiniBar } from "@/components/TrialMiniBar"
-
+import { TrialYogaSection } from "@/components/TrialYogaSection"
 
 const Index = () => {
   return (
@@ -16,7 +16,7 @@ const Index = () => {
       <TrialMiniBar />
       <SocialProofSection />
       <MethodologiesSection />
-      
+      <TrialYogaSection />
       <PricingSection />
       <CoachesSection />
       <PricingTrialYogaSection />
