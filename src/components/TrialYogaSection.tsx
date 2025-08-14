@@ -28,15 +28,15 @@ export const TrialYogaSection = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 sm:items-center mb-6">
-              <a
-                href="https://wa.me/56985273088"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-accent hover:text-primary underline-offset-4 hover:underline transition-colors"
+              <Button
+                asChild
+                className="w-full sm:w-auto bg-accent hover:bg-primary text-white rounded-[10px] px-6 py-3 font-medium transition-transform duration-200 hover:scale-105 focus-visible:ring-2 focus-visible:ring-accent"
                 aria-label="Agendar clase de prueba por WhatsApp"
               >
-                Agendar clase de prueba →
-              </a>
+                <a href="https://wa.me/56985273088" target="_blank" rel="noopener noreferrer">
+                  Agendar clase de prueba
+                </a>
+              </Button>
               <a
                 href="/#planes"
                 className="text-accent underline-offset-4 hover:underline hover:text-primary transition-colors"
