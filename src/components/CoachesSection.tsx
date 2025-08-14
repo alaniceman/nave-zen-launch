@@ -27,7 +27,7 @@ const coaches: Coach[] = [
     role: "Instructora de Yoga y Movimiento Consciente – Kinesióloga en formación",
     credentials: "Crioguía de Inmersiones, Power Yoga e Yoga Integral · Biomecánica & prevención de lesiones",
     purpose: "Guío prácticas que cultivan fuerza y flexibilidad sin perder el equilibrio interno.",
-    image: "/lovable-uploads/16afe771-f09d-472a-bc9d-ae33af798cc9.png"
+    image: "/lovable-uploads/30549bc9-e0a1-4084-927b-f3eadfec8372.png"
   },
   {
     id: "gaston",
