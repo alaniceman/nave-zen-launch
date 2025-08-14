@@ -259,9 +259,6 @@ const Planes = () => {
                   >
                     Comprar 1 sesión
                   </a>
-                  <p className="text-sm text-muted-foreground mt-3">
-                    Incluye Breathwork Wim Hof + 1 inmersión en hielo guiada (60 min). <strong>No es una membresía.</strong>
-                  </p>
                 </CardContent>
               </Card>
 
@@ -286,9 +283,6 @@ const Planes = () => {
                   >
                     Comprar 1 sesión
                   </a>
-                  <p className="text-sm text-muted-foreground mt-3">
-                    Incluye Breathwork Wim Hof + 1 inmersión en hielo guiada (60 min). <strong>No es una membresía.</strong>
-                  </p>
                 </CardContent>
               </Card>
             </div>
