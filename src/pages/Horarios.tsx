@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { Calendar, Clock, Users, Thermometer, Zap, MapPin } from "lucide-react";
 import { Footer } from "../components/Footer";
+import { OpenTrialModalButton } from "../components/OpenTrialModalButton";
 
 // Types
 interface ClassItem {
@@ -518,12 +519,9 @@ export default function Horarios() {
               >
                 Conocer a los coaches
               </a>
-              <button
-                data-open-trial="true"
-                className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-lg hover:bg-primary/90 transition-colors font-medium"
-              >
+              <OpenTrialModalButton className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-lg hover:bg-primary/90 transition-colors font-medium">
                 Agendar clase de prueba (Yoga)
-              </button>
+              </OpenTrialModalButton>
             </div>
           </div>
         </section>
