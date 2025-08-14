@@ -15,7 +15,7 @@ export const SocialProofSection = () => {
     name: "Pancho Saavedra",
     role: "Conductor de TV",
     quote: "Creí que el hielo sería imposible; ahora lo recomiendo.",
-    image: panchoImage
+    image: "/lovable-uploads/c85720fb-0980-440e-b669-5f9d0dab8edf.png"
   }, {
     name: "Dr. Rodolfo Neira",
     role: "Médico Metabólico - Cancer",
