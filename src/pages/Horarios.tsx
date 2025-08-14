@@ -335,7 +335,7 @@ export default function Horarios() {
         </section>
 
         {/* Filters */}
-        <section className="py-8 px-4 border-b sticky top-0 z-40 bg-background/95 backdrop-blur-sm">
+        <section className="py-4 md:py-8 px-4 border-b sticky top-0 z-40 bg-background/95 backdrop-blur-sm">
           <div className="max-w-6xl mx-auto">
             <div className="flex flex-wrap gap-3 mb-6">
               {filters.map((filter) => (
