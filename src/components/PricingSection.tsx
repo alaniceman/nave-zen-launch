@@ -191,7 +191,7 @@ const PricingSection = () => {
                 </p>
                 <div className="mt-4">
                   <p className="text-4xl font-bold text-primary">$40.000</p>
-                  <p className="text-sm md:text-base text-muted-foreground md:inline md:ml-2">/ sesión por persona</p>
+                  <p className="text-sm md:text-base text-muted-foreground md:inline md:ml-2 mx-[7px]">/ sesión por persona</p>
                 </div>
                 <a className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground hover:bg-secondary/80 h-10 px-4 py-2 w-full font-inter font-medium" href="https://boxmagic.link/checkout/wimhof-personalizado" data-checkout-url="https://boxmagic.link/checkout/wimhof-personalizado" data-plan="Wim Hof (Personalizado) — 1 sesión" aria-label="Comprar 1 sesión Wim Hof personalizada">
                   Comprar 1 sesión
@@ -214,9 +214,7 @@ const PricingSection = () => {
         <section id="planes-teaser" className="py-16 mb-20">
           <div className="max-w-4xl mx-auto text-center px-6">
             <h2 className="text-3xl md:text-4xl font-bold text-primary font-space-grotesk">Planes para cada ritmo</h2>
-            <p className="text-muted-foreground mt-3 max-w-2xl mx-auto font-inter">
-              Desde sesiones sueltas hasta membresías ilimitadas. Elige cómo empezar y mejora tu energía, foco y bienestar.
-            </p>
+            
 
             {/* highlights mínimos */}
             <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
