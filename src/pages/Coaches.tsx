@@ -55,7 +55,7 @@ const Coaches = () => {
       title: "Instructora de Yoga y Movimiento Consciente – Kinesióloga en formación",
       credentials: "Crioguía de Inmersiones, Power Yoga e Yoga Integral",
       description: "Guío prácticas que cultivan fuerza y flexibilidad sin perder el equilibrio interno.",
-      image: "/lovable-uploads/ab5a63aa-6876-49c9-a04d-0e549bfefbb0.png",
+      image: "/lovable-uploads/b009e7fc-5c3e-4b38-99e1-a3cc58605206.png",
       tags: ["Movimiento", "Terapia"]
     },
     {
