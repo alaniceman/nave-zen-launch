@@ -4,7 +4,6 @@ import drNeiraImage from "@/assets/dr-neira.jpg";
 import nicoImage from "@/assets/nico-jarry.jpg";
 const wimHofLogo = "/lovable-uploads/4237a4a8-4b67-4133-9d1e-5a134df22d8c.png";
 const yogaAllianceLogo = "/lovable-uploads/cdad4a3b-fb0e-4d9c-8089-e085dbc1c718.png";
-
 export const SocialProofSection = () => {
   const testimonials = [{
     name: "Kika Silva",
@@ -27,7 +26,6 @@ export const SocialProofSection = () => {
     quote: "El frío acelera mi recuperación entre torneos.",
     image: "/lovable-uploads/ebd077e5-b969-4bfd-9fdc-2c4b51948b9b.png"
   }];
-
   const certifications = [{
     name: "Wim Hof Instructor",
     logo: wimHofLogo
@@ -35,7 +33,6 @@ export const SocialProofSection = () => {
     name: "YogaAlliance",
     logo: yogaAllianceLogo
   }];
-
   return <section className="py-16 md:py-24 bg-neutral-light">
       <div className="container mx-auto px-6">
         {/* Hook métrico */}
@@ -67,9 +64,12 @@ export const SocialProofSection = () => {
 
         {/* Testimonios Slider - Mobile */}
         <div className="md:hidden mb-16">
-          <div className="flex overflow-x-auto gap-4 pb-4 px-4 -mx-4" style={{scrollSnapType: 'x mandatory'}}>
-            {testimonials.map((testimonial, index) => (
-              <div key={index} className="flex-none w-80 max-w-[calc(100vw-2rem)]" style={{scrollSnapAlign: 'center'}}>
+          <div className="flex overflow-x-auto gap-4 pb-4 px-4 -mx-4" style={{
+          scrollSnapType: 'x mandatory'
+        }}>
+            {testimonials.map((testimonial, index) => <div key={index} className="flex-none w-80 max-w-[calc(100vw-2rem)]" style={{
+            scrollSnapAlign: 'center'
+          }}>
                 <div className="bg-background rounded-[var(--radius)] p-8 shadow-light text-center space-y-6">
                   <div className="mx-auto w-24 h-24 rounded-full overflow-hidden shadow-medium">
                     <img src={testimonial.image} alt={`${testimonial.name} - ${testimonial.role}`} className="w-full h-full object-cover" />
@@ -86,35 +86,20 @@ export const SocialProofSection = () => {
                     "{testimonial.quote}"
                   </blockquote>
                 </div>
-              </div>
-            ))}
+              </div>)}
           </div>
           {/* Mobile scroll indicator */}
-          <div className="flex justify-center gap-2 mt-4">
-            {testimonials.map((_, index) => (
-              <div key={index} className="w-2 h-2 rounded-full bg-neutral-light"></div>
-            ))}
-          </div>
+          
         </div>
 
         {/* Certificaciones */}
         <div className="text-center mb-16">
           <div className="flex flex-wrap justify-center items-center gap-16 md:gap-24 opacity-80">
-            {certifications.map((cert, index) => (
-              <div key={index} className="flex items-center justify-center h-40">
-                {cert.logo ? (
-                  <img 
-                    src={cert.logo} 
-                    alt={cert.name} 
-                    className="h-36 w-auto object-contain"
-                  />
-                ) : (
-                  <span className="font-inter text-lg text-neutral-mid font-medium">
+            {certifications.map((cert, index) => <div key={index} className="flex items-center justify-center h-40">
+                {cert.logo ? <img src={cert.logo} alt={cert.name} className="h-36 w-auto object-contain" /> : <span className="font-inter text-lg text-neutral-mid font-medium">
                     {cert.name}
-                  </span>
-                )}
-              </div>
-            ))}
+                  </span>}
+              </div>)}
           </div>
         </div>
 
