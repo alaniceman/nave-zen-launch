@@ -269,20 +269,6 @@ export default function Horarios() {
     setTodayKey(getTodayInSantiago());
   }, []);
 
-  // Header scroll effect for mobile
-  useEffect(() => {
-    const header = document.querySelector('.mobile-header');
-    const onScroll = () => {
-      if (!header) return;
-      header.classList.toggle('is-scrolled', window.scrollY > 8);
-      const h = header.getBoundingClientRect().height || 56;
-      document.documentElement.style.setProperty('--header-h', `${Math.round(h)}px`);
-    };
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
   const toggleFilter = (filter: string) => {
     if (filter === "Todos") {
       setActiveFilters(["Todos"]);
@@ -326,61 +312,11 @@ export default function Horarios() {
         <meta property="og:title" content="Horarios - Nave Studio" />
         <meta property="og:description" content="Horarios de clases de Método Wim Hof, Yoga, Breathwork y Biohacking. Programa tu semana y vive nuestras experiencias en Nave Studio." />
         <link rel="canonical" href="https://studiolanave.com/horarios" />
-        <style>{`
-          :root { --header-h: 56px; --daybar-h: 48px; }
-          html { scroll-padding-top: calc(var(--header-h) + var(--daybar-h) + 8px); }
-          .mobile-header { position: sticky; top: 0; z-index: 50; transition: all 0.2s; }
-          .mobile-header.is-scrolled { --header-h: 48px; padding-top: 0.25rem; padding-bottom: 0.25rem; }
-          @media (max-width: 767px) {
-            .filters-row { position: static !important; }
-          }
-          .daybar {
-            position: sticky;
-            top: var(--header-h);
-            z-index: 40;
-            height: var(--daybar-h);
-            background: hsl(var(--background));
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            border-bottom: 1px solid hsl(var(--border));
-          }
-          .daybar::-webkit-scrollbar { display: none; }
-          .daybar-wrap { position: relative; }
-          .daybar-wrap::before,
-          .daybar-wrap::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            width: 24px;
-            pointer-events: none;
-          }
-          .daybar-wrap::before {
-            left: 0;
-            background: linear-gradient(90deg, hsl(var(--background)), transparent);
-          }
-          .daybar-wrap::after {
-            right: 0;
-            background: linear-gradient(270deg, hsl(var(--background)), transparent);
-          }
-          .chip {
-            height: 36px;
-            padding: 0 0.75rem;
-            font-size: 0.875rem;
-            border-radius: 9999px;
-          }
-          .day-section {
-            scroll-margin-top: calc(var(--header-h) + var(--daybar-h) + 8px);
-          }
-        `}</style>
       </Helmet>
 
       <div className="min-h-screen bg-background">
         {/* Hero Section */}
-        <section className="mobile-header relative py-20 px-4 text-center bg-gradient-to-br from-background to-muted/30">
+        <section className="relative py-20 px-4 text-center bg-gradient-to-br from-background to-muted/30">
           <div className="max-w-4xl mx-auto">
             <h1 className="text-4xl md:text-5xl font-bold mb-6 text-foreground">
               Horarios de Nave Studio
@@ -399,14 +335,14 @@ export default function Horarios() {
         </section>
 
         {/* Filters */}
-        <section className="filters-row py-2 md:py-4 px-4 border-b md:sticky md:top-0 z-30 bg-background/95 backdrop-blur-sm">
+        <section className="py-8 px-4 border-b sticky top-0 z-40 bg-background/95 backdrop-blur-sm">
           <div className="max-w-6xl mx-auto">
-            <div className="flex flex-wrap gap-2 my-2">
+            <div className="flex flex-wrap gap-3 mb-6">
               {filters.map((filter) => (
                 <button
                   key={filter}
                   onClick={() => toggleFilter(filter)}
-                  className={`chip px-3 py-1.5 text-sm font-medium transition-all ${
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                     activeFilters.includes(filter)
                       ? 'bg-primary text-primary-foreground'
                       : 'bg-muted text-muted-foreground hover:bg-muted/80'
@@ -416,36 +352,34 @@ export default function Horarios() {
                 </button>
               ))}
             </div>
+
+            {/* Day Navigation */}
+            <div className="flex gap-2 overflow-x-auto pb-2">
+              <button
+                onClick={scrollToToday}
+                className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
+                  todayKey ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                }`}
+                aria-current={todayKey ? "date" : undefined}
+              >
+                Hoy
+              </button>
+              {Object.entries(dayNames).map(([key, name]) => (
+                <button
+                  key={key}
+                  onClick={() => scrollToDay(key)}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
+                    key === todayKey
+                      ? 'bg-primary/20 text-primary border border-primary/30'
+                      : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                  }`}
+                >
+                  {name}
+                </button>
+              ))}
+            </div>
           </div>
         </section>
-
-        {/* Day Navigation - Sticky Bar */}
-        <div className="daybar-wrap">
-          <nav className="daybar px-4">
-            <button
-              onClick={scrollToToday}
-              className={`chip px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors ${
-                todayKey ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:bg-muted/80'
-              }`}
-              aria-current={todayKey ? "date" : undefined}
-            >
-              Hoy
-            </button>
-            {Object.entries(dayNames).map(([key, name]) => (
-              <button
-                key={key}
-                onClick={() => scrollToDay(key)}
-                className={`chip px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors ${
-                  key === todayKey
-                    ? 'bg-primary/20 text-primary border border-primary/30'
-                    : 'bg-muted text-muted-foreground hover:bg-muted/80'
-                }`}
-              >
-                {name}
-              </button>
-            ))}
-          </nav>
-        </div>
 
         {/* Schedule */}
         <section className="py-12 px-4">
@@ -454,7 +388,7 @@ export default function Horarios() {
               <div
                 key={dayKey}
                 id={dayKey === todayKey ? 'hoy' : dayKey}
-                className="day-section animate-fade-in"
+                className="animate-fade-in"
               >
                 <h2 className="text-2xl font-bold mb-6 text-foreground flex items-center gap-3">
                   {dayNames[dayKey as keyof typeof dayNames]}
