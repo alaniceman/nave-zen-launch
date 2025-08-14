@@ -245,8 +245,8 @@ const Planes = () => {
                 </CardHeader>
                 <CardContent className="text-center space-y-4">
                   <p className="text-muted-foreground font-inter text-sm">
-                    Breathwork Wim Hof + Ice Bath guiado y sostenido<br />
-                    Ideal para quienes quieren vivir un baño de hielo con acompañamiento experto.
+                    Una sesión completa de Breathwork Wim Hof + Ice Bath guiado y sostenido<br />
+                    Ideal para quienes quieren vivir su primera experiencia de baño de hielo con acompañamiento experto.
                   </p>
                   <div className="text-2xl font-bold text-foreground">$30.000</div>
                   <Button 
@@ -267,7 +267,7 @@ const Planes = () => {
                 </CardHeader>
                 <CardContent className="text-center space-y-4">
                   <p className="text-muted-foreground font-inter text-sm">
-                    Respiración de a pares (máx 2) y entrada al hielo por separado, guiado y sostenido acorde a tu intensión de la sesión.
+                    Una sesión personalizada de respiración de a pares (máx 2) y entrada al hielo por separado, guiado y sostenido acorde a tu intención de la sesión.
                   </p>
                   <div className="text-2xl font-bold text-foreground">$40.000</div>
                   <Button 
