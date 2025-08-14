@@ -19,7 +19,7 @@ const coaches: Coach[] = [
     credentials: "Instructor Certificado Método Wim Hof · Coach Ontológico · Ingeniero Civil PUC",
     purpose: "Ayudo a las personas a vivir con la certeza de que pueden lograr lo que se propongan, sin sacrificar su bienestar.",
     isFounder: true,
-    image: "/lovable-uploads/d4e6319c-db70-4990-9f8d-ef7f76f87b6d.png"
+    image: "/lovable-uploads/b009e7fc-5c3e-4b38-99e1-a3cc58605206.png"
   },
   {
     id: "maral",
