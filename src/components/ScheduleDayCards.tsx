@@ -13,6 +13,11 @@ const getCardBgColor = (tags: string[]) => {
 };
 
 export default function ScheduleDayCards() {
+  // Touch/swipe handling
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+  const minSwipeDistance = 50;
   const [selectedDay, setSelectedDay] = useState<string>("");
   const [todayKey, setTodayKey] = useState<string>("");
 
@@ -39,6 +44,39 @@ export default function ScheduleDayCards() {
 
   const currentDayClasses = scheduleData[getActiveDay()] || [];
   const currentDayName = dayNames[getActiveDay() as keyof typeof dayNames] || "";
+
+  // Swipe handlers
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe || isRightSwipe) {
+      const currentIndex = dayTabs.findIndex(tab => tab.key === selectedDay);
+      let newIndex = currentIndex;
+
+      if (isLeftSwipe && currentIndex < dayTabs.length - 1) {
+        newIndex = currentIndex + 1;
+      } else if (isRightSwipe && currentIndex > 0) {
+        newIndex = currentIndex - 1;
+      }
+
+      if (newIndex !== currentIndex) {
+        setSelectedDay(dayTabs[newIndex].key);
+      }
+    }
+  };
 
   return (
     <section id="horarios" className="py-8 md:py-10">
@@ -85,7 +123,14 @@ export default function ScheduleDayCards() {
           </h2>
 
           {/* Cards */}
-          <div className="px-4 space-y-4 md:space-y-5" role="tabpanel" id={`panel-${selectedDay}`}>
+          <div 
+            className="px-4 space-y-4 md:space-y-5 animate-fade-in" 
+            role="tabpanel" 
+            id={`panel-${selectedDay}`}
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
+          >
             {currentDayClasses.map((classItem, index) => (
               <div
                 key={index}
