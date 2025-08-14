@@ -44,7 +44,7 @@ const coaches: Coach[] = [{
   role: "Instructora de Vinyasa Yoga, Inside Flow y Danza",
   credentials: "Especialista en Conexión Movimiento–Respiración · Bailarina Profesional",
   purpose: "Guío secuencias fluidas que despiertan tu creatividad, presencia corporal y conexión interior, para habitarte con más amor, libertad y conciencia.",
-  image: "/lovable-uploads/8e3c9f77-5221-40ea-91f2-0a59bd9fbbd0.png"
+  image: "/lovable-uploads/bb33cba0-3deb-41b3-97f1-c55d9dc169c1.png"
 }, {
   id: "val",
   name: "Val Medina",
