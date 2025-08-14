@@ -29,7 +29,7 @@ const Experiencias = () => {
       id: 1,
       title: "Método Wim Hof",
       subtitle: "1 h Breathwork + Ice Bath (3 °C) guiado y sostenido.",
-      image: "/lovable-uploads/2c005154-6b4f-43b7-b3cb-d3f15869f7ef.png",
+      image: "/lovable-uploads/0ead276d-928f-4395-b552-f0bebcc62ede.png",
       benefits: [
         "↓ inflamación y dolor",
         "↑ energía y claridad mental", 
