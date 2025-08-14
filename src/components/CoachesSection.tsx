@@ -1,6 +1,5 @@
 import { useState, useRef } from "react";
 import { Button } from "./ui/button";
-
 interface Coach {
   id: string;
   name: string;
@@ -10,71 +9,60 @@ interface Coach {
   isFounder?: boolean;
   image: string;
 }
-
-const coaches: Coach[] = [
-  {
-    id: "alan",
-    name: "Alan Iceman Earle",
-    role: "Fundador – Crioguía de Inmersiones y Breathwork",
-    credentials: "Instructor Certificado Método Wim Hof · Coach Ontológico · Ingeniero Civil PUC",
-    purpose: "Ayudo a las personas a vivir con la certeza de que pueden lograr lo que se propongan, sin sacrificar su bienestar.",
-    isFounder: true,
-    image: "/lovable-uploads/b009e7fc-5c3e-4b38-99e1-a3cc58605206.png"
-  },
-  {
-    id: "maral",
-    name: "Maral Hekmat",
-    role: "Instructora de Yoga y Movimiento Consciente – Kinesióloga en formación",
-    credentials: "Crioguía de Inmersiones, Power Yoga e Yoga Integral · Biomecánica & prevención de lesiones",
-    purpose: "Guío prácticas que cultivan fuerza y flexibilidad sin perder el equilibrio interno.",
-    image: "/lovable-uploads/30549bc9-e0a1-4084-927b-f3eadfec8372.png"
-  },
-  {
-    id: "gaston",
-    name: "Gastón Serrano Horton",
-    role: "Coach de Hábitos Saludables y Movimiento Consciente",
-    credentials: "Crioguía de Biohacking: Respiración + HIIT + Chi Kung + Agua Fría",
-    purpose: "Impulso tu vitalidad con hábitos simples y poderosos, para que vivas en plena coherencia física, mental y emocional.",
-    image: "/lovable-uploads/6dafbe55-50e1-4124-9e81-2e1c5ccfdc02.png"
-  },
-  {
-    id: "sol",
-    name: "Sol Evans",
-    role: "Instructora de Ice Yoga · Reikista",
-    credentials: "Crioguía de Inmersiones y Breathwork · Terapeuta Holística – Reiki Master",
-    purpose: "Te acompaño a encontrar calma y fortaleza a través del frío, la respiración y la energía.",
-    image: "/lovable-uploads/f65792e3-e19c-49b3-a7fc-ce59b6a20ed3.png"
-  },
-  {
-    id: "mar",
-    name: "Mar Carrasco",
-    role: "Instructora de Vinyasa Yoga, Inside Flow y Danza",
-    credentials: "Especialista en Conexión Movimiento–Respiración · Bailarina Profesional",
-    purpose: "Guío secuencias fluidas que despiertan tu creatividad, presencia corporal y conexión interior, para habitarte con más amor, libertad y conciencia.",
-    image: "/lovable-uploads/8e3c9f77-5221-40ea-91f2-0a59bd9fbbd0.png"
-  },
-  {
-    id: "val",
-    name: "Val Medina",
-    role: "Instructora de Yin Yoga · Actriz",
-    credentials: "Facilitadora de Meditación y Mindfulness · Exploradora del movimiento lento y la introspección",
-    purpose: "Te invito a habitar tu cuerpo con suavidad y consciencia profunda.",
-    image: "/lovable-uploads/56138f79-7a92-46b6-8fdf-8bff1ef72d26.png"
-  },
-  {
-    id: "amber",
-    name: "Ámbar Vidal",
-    role: "Instructora de Yoga · Doula · Reikista",
-    credentials: "Crioguía de Inmersiones y Yoga Integral · Facilitadora de Círculos Femeninos y Ceremonias de Cacao",
-    purpose: "Te acompaño a transitar etapas de cambio con serenidad, cuerpo y corazón alineados.",
-    image: "/lovable-uploads/1f80e046-a0e6-4b38-a2b1-73c27384f85a.png"
-  }
-];
-
+const coaches: Coach[] = [{
+  id: "alan",
+  name: "Alan Iceman Earle",
+  role: "Fundador – Crioguía de Inmersiones y Breathwork",
+  credentials: "Instructor Certificado Método Wim Hof · Coach Ontológico · Ingeniero Civil PUC",
+  purpose: "Ayudo a las personas a vivir con la certeza de que pueden lograr lo que se propongan, sin sacrificar su bienestar.",
+  isFounder: true,
+  image: "/lovable-uploads/b009e7fc-5c3e-4b38-99e1-a3cc58605206.png"
+}, {
+  id: "maral",
+  name: "Maral Hekmat",
+  role: "Instructora de Yoga y Movimiento Consciente – Kinesióloga en formación",
+  credentials: "Crioguía de Inmersiones, Power Yoga e Yoga Integral · Biomecánica & prevención de lesiones",
+  purpose: "Guío prácticas que cultivan fuerza y flexibilidad sin perder el equilibrio interno.",
+  image: "/lovable-uploads/30549bc9-e0a1-4084-927b-f3eadfec8372.png"
+}, {
+  id: "gaston",
+  name: "Gastón Serrano Horton",
+  role: "Coach de Hábitos Saludables y Movimiento Consciente",
+  credentials: "Crioguía de Biohacking: Respiración + HIIT + Chi Kung + Agua Fría",
+  purpose: "Impulso tu vitalidad con hábitos simples y poderosos, para que vivas en plena coherencia física, mental y emocional.",
+  image: "/lovable-uploads/6dafbe55-50e1-4124-9e81-2e1c5ccfdc02.png"
+}, {
+  id: "sol",
+  name: "Sol Evans",
+  role: "Instructora de Ice Yoga · Reikista",
+  credentials: "Crioguía de Inmersiones y Breathwork · Terapeuta Holística – Reiki Master",
+  purpose: "Te acompaño a encontrar calma y fortaleza a través del frío, la respiración y la energía.",
+  image: "/lovable-uploads/f65792e3-e19c-49b3-a7fc-ce59b6a20ed3.png"
+}, {
+  id: "mar",
+  name: "Mar Carrasco",
+  role: "Instructora de Vinyasa Yoga, Inside Flow y Danza",
+  credentials: "Especialista en Conexión Movimiento–Respiración · Bailarina Profesional",
+  purpose: "Guío secuencias fluidas que despiertan tu creatividad, presencia corporal y conexión interior, para habitarte con más amor, libertad y conciencia.",
+  image: "/lovable-uploads/8e3c9f77-5221-40ea-91f2-0a59bd9fbbd0.png"
+}, {
+  id: "val",
+  name: "Val Medina",
+  role: "Instructora de Yin Yoga · Actriz",
+  credentials: "Facilitadora de Meditación y Mindfulness · Exploradora del movimiento lento y la introspección",
+  purpose: "Te invito a habitar tu cuerpo con suavidad y consciencia profunda.",
+  image: "/lovable-uploads/56138f79-7a92-46b6-8fdf-8bff1ef72d26.png"
+}, {
+  id: "amber",
+  name: "Ámbar Vidal",
+  role: "Instructora de Yoga · Doula · Reikista",
+  credentials: "Crioguía de Inmersiones y Yoga Integral · Facilitadora de Círculos Femeninos y Ceremonias de Cacao",
+  purpose: "Te acompaño a transitar etapas de cambio con serenidad, cuerpo y corazón alineados.",
+  image: "/lovable-uploads/1f80e046-a0e6-4b38-a2b1-73c27384f85a.png"
+}];
 export const CoachesSection = () => {
   const [currentCoachIndex, setCurrentCoachIndex] = useState(0);
   const sliderRef = useRef<HTMLDivElement | null>(null);
-
   const handleCoachScroll = () => {
     const container = sliderRef.current;
     if (!container) return;
@@ -85,7 +73,6 @@ export const CoachesSection = () => {
     const idx = Math.round(container.scrollLeft / (cardWidth + gap));
     setCurrentCoachIndex(Math.max(0, Math.min(idx, coaches.length - 1)));
   };
-
   const scrollToCoach = (index: number) => {
     const container = sliderRef.current;
     if (!container) return;
@@ -93,11 +80,13 @@ export const CoachesSection = () => {
     if (!firstChild) return;
     const cardWidth = firstChild.getBoundingClientRect().width;
     const gap = 16; // gap-4
-    container.scrollTo({ left: index * (cardWidth + gap), behavior: 'smooth' });
+    container.scrollTo({
+      left: index * (cardWidth + gap),
+      behavior: 'smooth'
+    });
     setCurrentCoachIndex(index);
   };
-  return (
-    <section className="py-20 bg-background">
+  return <section className="bg-background py-[38px]">
       <div className="container mx-auto px-6">
         {/* Header */}
         <div className="text-center mb-16">
@@ -111,37 +100,23 @@ export const CoachesSection = () => {
 
         {/* Coaches Grid - Desktop & Tablet */}
         <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-          {coaches.map((coach) => (
-            <CoachCard key={coach.id} coach={coach} isMobile={false} />
-          ))}
+          {coaches.map(coach => <CoachCard key={coach.id} coach={coach} isMobile={false} />)}
         </div>
 
         {/* Coaches Slider - Mobile */}
         <div className="sm:hidden mb-12">
-          <div 
-            ref={sliderRef}
-            onScroll={handleCoachScroll}
-            className="flex overflow-x-auto gap-4 pb-4 px-4 -mx-4" 
-            style={{scrollSnapType: 'x mandatory'}}
-          >
-            {coaches.map((coach, index) => (
-              <div key={coach.id} className="flex-none w-80 max-w-[calc(100vw-2rem)]" style={{scrollSnapAlign: 'center'}}>
+          <div ref={sliderRef} onScroll={handleCoachScroll} className="flex overflow-x-auto gap-4 pb-4 px-4 -mx-4" style={{
+          scrollSnapType: 'x mandatory'
+        }}>
+            {coaches.map((coach, index) => <div key={coach.id} className="flex-none w-80 max-w-[calc(100vw-2rem)]" style={{
+            scrollSnapAlign: 'center'
+          }}>
                 <CoachCard coach={coach} isMobile={true} />
-              </div>
-            ))}
+              </div>)}
           </div>
           {/* Mobile scroll indicator */}
           <div className="flex justify-center gap-2 mt-4">
-            {coaches.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => scrollToCoach(index)}
-                className={`w-2 h-2 rounded-full transition-colors duration-200 ${
-                  index === currentCoachIndex ? 'bg-secondary' : 'bg-neutral-light'
-                }`}
-                aria-label={`Ir al slide ${index + 1}`}
-              />
-            ))}
+            {coaches.map((_, index) => <button key={index} onClick={() => scrollToCoach(index)} className={`w-2 h-2 rounded-full transition-colors duration-200 ${index === currentCoachIndex ? 'bg-secondary' : 'bg-neutral-light'}`} aria-label={`Ir al slide ${index + 1}`} />)}
           </div>
         </div>
 
@@ -149,42 +124,33 @@ export const CoachesSection = () => {
         <div className="text-center mt-12">
           <p className="text-lg text-neutral-mid font-inter">
             ¿No sabes con quién empezar?{" "}
-            <a 
-              href="https://wa.link/wh4f79" 
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-secondary underline hover:text-primary font-medium transition-colors duration-300"
-            >
+            <a href="https://wa.link/wh4f79" target="_blank" rel="noopener noreferrer" className="text-secondary underline hover:text-primary font-medium transition-colors duration-300">
               Agenda una llamada de descubrimiento gratuita →
             </a>
           </p>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
-const CoachCard = ({ coach, isMobile = false }: { coach: Coach; isMobile?: boolean }) => {
-  return (
-    <div className="relative bg-card rounded-xl p-6 shadow-[0_4px_10px_rgba(0,0,0,0.08)] hover:scale-105 hover:shadow-lg transition-all duration-300">
+const CoachCard = ({
+  coach,
+  isMobile = false
+}: {
+  coach: Coach;
+  isMobile?: boolean;
+}) => {
+  return <div className="relative bg-card rounded-xl p-6 shadow-[0_4px_10px_rgba(0,0,0,0.08)] hover:scale-105 hover:shadow-lg transition-all duration-300">
       {/* Founder Badge */}
-      {coach.isFounder && (
-        <div className="absolute top-4 left-4 bg-warm text-white text-xs px-3 py-1 rounded-full uppercase tracking-wide font-medium">
+      {coach.isFounder && <div className="absolute top-4 left-4 bg-warm text-white text-xs px-3 py-1 rounded-full uppercase tracking-wide font-medium">
           Fundador
-        </div>
-      )}
+        </div>}
       
       {/* Profile Image */}
       <div className="text-center mb-6">
         <div className={`${isMobile ? 'w-48 h-48' : 'w-40 h-40'} mx-auto mb-4 rounded-full overflow-hidden shadow-md`}>
-          <img
-            src={coach.image}
-            alt={`${coach.name} — ${coach.role.split(' –')[0]}`}
-            className="w-full h-full object-cover"
-            onError={(e) => {
-              e.currentTarget.src = 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&h=120&fit=crop&crop=face';
-            }}
-          />
+          <img src={coach.image} alt={`${coach.name} — ${coach.role.split(' –')[0]}`} className="w-full h-full object-cover" onError={e => {
+          e.currentTarget.src = 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&h=120&fit=crop&crop=face';
+        }} />
         </div>
         
         {/* Name */}
@@ -210,13 +176,9 @@ const CoachCard = ({ coach, isMobile = false }: { coach: Coach; isMobile?: boole
       
       {/* CTA Button */}
       <div className="text-center">
-        <Button 
-          variant="outline" 
-          className="border-2 border-secondary text-secondary py-2 px-5 rounded-lg font-medium font-inter transition-all duration-300 hover:bg-secondary hover:text-white focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-opacity-50"
-        >
+        <Button variant="outline" className="border-2 border-secondary text-secondary py-2 px-5 rounded-lg font-medium font-inter transition-all duration-300 hover:bg-secondary hover:text-white focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-opacity-50">
           Reservar
         </Button>
       </div>
-    </div>
-  );
+    </div>;
 };
