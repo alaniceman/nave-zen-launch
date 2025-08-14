@@ -51,7 +51,7 @@ const coaches: Coach[] = [{
   role: "Instructora de Yin Yoga · Actriz",
   credentials: "Facilitadora de Meditación y Mindfulness · Exploradora del movimiento lento y la introspección",
   purpose: "Te invito a habitar tu cuerpo con suavidad y consciencia profunda.",
-  image: "/lovable-uploads/56138f79-7a92-46b6-8fdf-8bff1ef72d26.png"
+  image: "/lovable-uploads/bab00752-1c18-40b5-bfeb-4089da69749a.png"
 }, {
   id: "amber",
   name: "Ámbar Vidal",
