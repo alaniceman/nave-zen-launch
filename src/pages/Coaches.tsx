@@ -55,7 +55,7 @@ const Coaches = () => {
       title: "Instructora de Yoga y Movimiento Consciente – Kinesióloga en formación",
       credentials: "Crioguía de Inmersiones, Power Yoga e Yoga Integral",
       description: "Guío prácticas que cultivan fuerza y flexibilidad sin perder el equilibrio interno.",
-      image: "/lovable-uploads/b009e7fc-5c3e-4b38-99e1-a3cc58605206.png",
+      image: "/lovable-uploads/30549bc9-e0a1-4084-927b-f3eadfec8372.png",
       tags: ["Movimiento", "Terapia"]
     },
     {
@@ -64,7 +64,7 @@ const Coaches = () => {
       title: "Coach de Hábitos Saludables y Movimiento Consciente",
       credentials: "Crioguía de Biohacking, HIIT y Movimiento Funcional · Entrenador Funcional Cert.",
       description: "Te ayudo a diseñar hábitos sostenibles que potencian tu rendimiento sin descuidar tu bienestar.",
-      image: "/lovable-uploads/6dafbe55-50e1-4124-9e81-2e1c5ccfdc02.png",
+      image: "/lovable-uploads/3c50219e-f0ad-4310-b333-f50970387dad.png",
       tags: ["Movimiento", "Mindset"]
     },
     {
@@ -73,7 +73,7 @@ const Coaches = () => {
       title: "Instructora de Ice Yoga · Reikista · Terapeuta Holística",
       credentials: "Reiki Master",
       description: "Te acompaño a encontrar calma y fortaleza a través del frío, la respiración y la energía.",
-      image: "/lovable-uploads/f65792e3-e19c-49b3-a7fc-ce59b6a20ed3.png",
+      image: "/lovable-uploads/27a0352e-30dd-41fc-8a91-48b297e8615a.png",
       tags: ["Energía", "Terapia"]
     },
     {
@@ -82,7 +82,7 @@ const Coaches = () => {
       title: "Instructora de Vinyasa Yoga y Danza · Educadora Somática",
       credentials: "Educadora Somática Certificada",
       description: "Guío secuencias fluidas que despiertan tu creatividad y presencia corporal.",
-      image: "/lovable-uploads/8e3c9f77-5221-40ea-91f2-0a59bd9fbbd0.png",
+      image: "/lovable-uploads/bb33cba0-3deb-41b3-97f1-c55d9dc169c1.png",
       tags: ["Movimiento", "Energía"]
     },
     {
@@ -91,7 +91,7 @@ const Coaches = () => {
       title: "Instructora de Yin Yoga · Facilitadora de Meditación y Mindfulness",
       credentials: "Certificada en Mindfulness y Meditación",
       description: "Te invito a habitar tu cuerpo con suavidad y consciencia profunda.",
-      image: "/lovable-uploads/56138f79-7a92-46b6-8fdf-8bff1ef72d26.png",
+      image: "/lovable-uploads/bab00752-1c18-40b5-bfeb-4089da69749a.png",
       tags: ["Mindset", "Terapia"]
     },
     {
@@ -100,7 +100,7 @@ const Coaches = () => {
       title: "Instructora de Yoga · Doula · Reikista",
       credentials: "Doula Certificada · Reiki Master",
       description: "Te acompaño a transitar etapas de cambio con serenidad, cuerpo y corazón alineados.",
-      image: "/lovable-uploads/1f80e046-a0e6-4b38-a2b1-73c27384f85a.png",
+      image: "/lovable-uploads/367f27fb-5f27-4b38-bc21-af8951de42aa.png",
       tags: ["Energía", "Terapia"]
     }
   ]
