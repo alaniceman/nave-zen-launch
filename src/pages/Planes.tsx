@@ -247,9 +247,10 @@ const Planes = () => {
                   <p className="text-muted-foreground font-inter text-sm">
                     Breathwork Wim Hof + Ice Bath guiado y sostenido. Ideal para quienes quieren vivir un baño de hielo con acompañamiento experto.
                   </p>
-                  <p className="text-4xl font-bold text-primary mt-4">
-                    $30.000 <span className="text-base text-muted-foreground align-middle">/ sesión por persona</span>
-                  </p>
+                  <div className="mt-4">
+                    <p className="text-4xl font-bold text-primary">$30.000</p>
+                    <p className="text-sm md:text-base text-muted-foreground md:inline md:ml-2">/ sesión por persona</p>
+                  </div>
                   <a
                     className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground hover:bg-secondary/80 h-10 px-4 py-2 w-full font-inter font-medium"
                     href="https://boxmagic.link/checkout/wimhof-grupal"
@@ -271,9 +272,10 @@ const Planes = () => {
                   <p className="text-muted-foreground font-inter text-sm">
                     Respiración en pareja (máx 2) y entrada al hielo por separado, guiada y sostenida acorde a tu objetivo.
                   </p>
-                  <p className="text-4xl font-bold text-primary mt-4">
-                    $40.000 <span className="text-base text-muted-foreground align-middle">/ sesión por persona</span>
-                  </p>
+                  <div className="mt-4">
+                    <p className="text-4xl font-bold text-primary">$40.000</p>
+                    <p className="text-sm md:text-base text-muted-foreground md:inline md:ml-2">/ sesión por persona</p>
+                  </div>
                   <a
                     className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground hover:bg-secondary/80 h-10 px-4 py-2 w-full font-inter font-medium"
                     href="https://boxmagic.link/checkout/wimhof-personalizado"
