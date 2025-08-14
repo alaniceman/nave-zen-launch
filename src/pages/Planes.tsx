@@ -238,49 +238,72 @@ const Planes = () => {
               Método Wim Hof – Respira, sumérgete, renace
             </h3>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              <Card className="border hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[10px]">
-                <CardHeader className="text-center">
-                  <CardTitle className="text-lg font-bold text-primary font-space-grotesk">Grupal (máx 6)</CardTitle>
+              <Card className="relative border hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[16px] bg-white">
+                <span className="absolute top-4 left-4 bg-warm text-white text-xs px-3 py-1 rounded-full uppercase tracking-wide">
+                  Sesión única
+                </span>
+                <CardHeader className="text-center pt-12">
+                  <CardTitle className="text-lg font-bold text-primary font-space-grotesk">Grupal (máx 6) — 1 sesión</CardTitle>
                   <Badge className="bg-warm text-white mx-auto">Duración 1 h</Badge>
                 </CardHeader>
                 <CardContent className="text-center space-y-4">
                   <p className="text-muted-foreground font-inter text-sm">
-                    Breathwork Wim Hof + Ice Bath guiado y sostenido<br />
-                    Ideal para quienes quieren vivir un baño de hielo con acompañamiento experto.
+                    Breathwork Wim Hof + Ice Bath guiado y sostenido. Ideal para quienes quieren vivir un baño de hielo con acompañamiento experto.
                   </p>
-                  <div className="text-2xl font-bold text-foreground">$30.000</div>
-                  <Button 
-                    variant="secondary" 
-                    className="w-full font-inter font-medium"
-                    data-checkout-url="https://boxmagic.cl/market/plan/RZ0vlQyLQ6"
-                    data-plan="Wim Hof Grupal"
+                  <p className="text-4xl font-bold text-primary mt-4">
+                    $30.000 <span className="text-base text-muted-foreground align-middle">/ sesión por persona</span>
+                  </p>
+                  <a
+                    className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground hover:bg-secondary/80 h-10 px-4 py-2 w-full font-inter font-medium"
+                    href="https://boxmagic.link/checkout/wimhof-grupal"
+                    data-checkout-url="https://boxmagic.link/checkout/wimhof-grupal"
+                    data-plan="Wim Hof (Grupal) — 1 sesión"
+                    aria-label="Comprar 1 sesión Wim Hof grupal"
                   >
-                    Agendar sesión
-                  </Button>
+                    Comprar 1 sesión
+                  </a>
+                  <p className="text-sm text-muted-foreground mt-3">
+                    Incluye Breathwork Wim Hof + 1 inmersión en hielo guiada (60 min). <strong>No es una membresía.</strong>
+                  </p>
                 </CardContent>
               </Card>
 
-              <Card className="border hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[10px]">
-                <CardHeader className="text-center">
-                  <CardTitle className="text-lg font-bold text-primary font-space-grotesk">Personalizado (máx 2)</CardTitle>
+              <Card className="relative border hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[16px] bg-white">
+                <span className="absolute top-4 left-4 bg-warm text-white text-xs px-3 py-1 rounded-full uppercase tracking-wide">
+                  Sesión única
+                </span>
+                <CardHeader className="text-center pt-12">
+                  <CardTitle className="text-lg font-bold text-primary font-space-grotesk">Personalizado (máx 2) — 1 sesión</CardTitle>
                   <Badge className="bg-warm text-white mx-auto">Duración 1 h</Badge>
                 </CardHeader>
                 <CardContent className="text-center space-y-4">
                   <p className="text-muted-foreground font-inter text-sm">
-                    Respiración de a pares (máx 2) y entrada al hielo por separado, guiado y sostenido acorde a tu intensión de la sesión.
+                    Respiración en pareja (máx 2) y entrada al hielo por separado, guiada y sostenida acorde a tu objetivo.
                   </p>
-                  <div className="text-2xl font-bold text-foreground">$40.000</div>
-                  <Button 
-                    variant="secondary" 
-                    className="w-full font-inter font-medium"
-                    data-checkout-url="https://boxmagic.cl/market/plan/j80pKrK4W6"
-                    data-plan="Wim Hof Personalizado"
+                  <p className="text-4xl font-bold text-primary mt-4">
+                    $40.000 <span className="text-base text-muted-foreground align-middle">/ sesión por persona</span>
+                  </p>
+                  <a
+                    className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground hover:bg-secondary/80 h-10 px-4 py-2 w-full font-inter font-medium"
+                    href="https://boxmagic.link/checkout/wimhof-personalizado"
+                    data-checkout-url="https://boxmagic.link/checkout/wimhof-personalizado"
+                    data-plan="Wim Hof (Personalizado) — 1 sesión"
+                    aria-label="Comprar 1 sesión Wim Hof personalizada"
                   >
-                    Agendar sesión
-                  </Button>
+                    Comprar 1 sesión
+                  </a>
+                  <p className="text-sm text-muted-foreground mt-3">
+                    Incluye Breathwork Wim Hof + 1 inmersión en hielo guiada (60 min). <strong>No es una membresía.</strong>
+                  </p>
                 </CardContent>
               </Card>
             </div>
+            <p className="text-center text-primary mt-8">
+              ¿Quieres venir varias veces? → 
+              <a href="/planes#membresias" className="text-accent underline hover:text-primary">
+                Ver planes y membresías
+              </a>
+            </p>
             {/* C) Link in Método Wim Hof section */}
             <p className="text-center mt-6">
               <a 
