@@ -10,7 +10,7 @@ export const SocialProofSection = () => {
     name: "Kika Silva",
     role: "Influencer de Wellness",
     quote: "Nave me recordó lo importante que es escuchar a mi cuerpo.",
-    image: "/lovable-uploads/bc3e8711-ef57-4b4d-94ae-32762ca32112.png"
+    image: "/lovable-uploads/36038e1c-8f1a-4986-b800-057928669d24.png"
   }, {
     name: "Pancho Saavedra",
     role: "Conductor de TV",
