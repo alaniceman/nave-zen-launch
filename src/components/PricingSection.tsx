@@ -294,7 +294,7 @@ const PricingSection = () => {
             className="bg-accent hover:bg-primary text-white font-inter font-medium hover:scale-105 transition-transform duration-300 h-14 px-10 text-base"
             asChild
           >
-            <a href="https://wa.link/wh4f79" target="_blank" rel="noopener noreferrer">
+            <a href="/planes-precios">
               Comienza hoy con 50% OFF
             </a>
           </Button>
