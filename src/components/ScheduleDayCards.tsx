@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Clock } from "lucide-react";
-import { scheduleData, dayNames, getTodayInSantiago, type ClassItem } from "../data/schedule";
+import { scheduleData, dayNames, getTodayInSantiago, CL_TZ, type ClassItem } from "../data/schedule";
 
 // Get background color based on class tags
 const getCardBgColor = (tags: string[]) => {
@@ -13,6 +13,15 @@ const getCardBgColor = (tags: string[]) => {
 };
 
 export default function ScheduleDayCards() {
+  // Helper to check if class is coming soon
+  const isComingSoon = (item: ClassItem) => {
+    if (!item.goLiveDate) return false;
+    // Comparar en TZ America/Santiago
+    const todayCL = new Date().toLocaleDateString('en-CA', { timeZone: CL_TZ }); // "YYYY-MM-DD"
+    const goLive = item.goLiveDate;
+    return todayCL < goLive; // antes de goLive → "Pronto"
+  };
+
   // Touch/swipe handling
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
@@ -140,6 +149,11 @@ export default function ScheduleDayCards() {
                 <div className="flex items-center gap-2 text-white/90 text-xl md:text-2xl font-semibold mb-2">
                   <Clock className="w-5 h-5 md:w-6 md:h-6" />
                   {classItem.time}
+                  {isComingSoon(classItem) && (
+                    <span className="ml-3 bg-white/20 text-white rounded-full text-xs px-2.5 py-1 backdrop-blur">
+                      Pronto
+                    </span>
+                  )}
                 </div>
 
                 {/* Title */}
@@ -215,6 +229,11 @@ export default function ScheduleDayCards() {
                   <div className="flex items-center gap-2 text-white/90 text-xl md:text-2xl font-semibold mb-2">
                     <Clock className="w-5 h-5 md:w-6 md:h-6" />
                     {classItem.time}
+                    {isComingSoon(classItem) && (
+                      <span className="ml-3 bg-white/20 text-white rounded-full text-xs px-2.5 py-1 backdrop-blur">
+                        Pronto
+                      </span>
+                    )}
                   </div>
 
                   {/* Title */}

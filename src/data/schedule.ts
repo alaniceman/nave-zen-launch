@@ -6,7 +6,11 @@ export interface ClassItem {
   badges: string[];
   duration: number;
   isPersonalized?: boolean;
+  goLiveDate?: string; // "YYYY-MM-DD" — visible 'normal' desde esta fecha (CLT). Antes = "Pronto"
 }
+
+// Zona horaria consistente
+export const CL_TZ = 'America/Santiago';
 
 export const scheduleData: Record<string, ClassItem[]> = {
   lunes: [
@@ -138,28 +142,22 @@ export const scheduleData: Record<string, ClassItem[]> = {
       tags: ["Método Wim Hof"],
       badges: [],
       duration: 60
+    },
+    {
+      time: "18:00",
+      title: "Yang Yoga",
+      tags: ["Yoga"],
+      badges: [],
+      duration: 60,
+      goLiveDate: "2025-09-13"
     }
   ],
   sabado: [
     {
-      time: "09:00",
-      title: "Método Wim Hof (Breathwork + Ice Bath)",
-      tags: ["Método Wim Hof"],
-      badges: [],
-      duration: 60
-    },
-    {
       time: "10:15",
-      title: "Método Wim Hof (Breathwork + Ice Bath)",
-      tags: ["Método Wim Hof"],
-      badges: [],
-      duration: 60
-    },
-    {
-      time: "11:45",
-      title: "Método Wim Hof (Breathwork + Ice Bath)",
-      tags: ["Método Wim Hof"],
-      badges: [],
+      title: "Vinyasa Yoga + Ice Bath (opcional)",
+      tags: ["Yoga"],
+      badges: ["Ice Bath opcional"],
       duration: 60
     }
   ],
