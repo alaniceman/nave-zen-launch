@@ -239,10 +239,7 @@ const Planes = () => {
             </h3>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
               <Card className="relative border hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[16px] bg-white">
-                <span className="absolute top-4 left-4 bg-warm text-white text-xs px-3 py-1 rounded-full uppercase tracking-wide">
-                  Sesión única
-                </span>
-                <CardHeader className="text-center pt-12">
+                <CardHeader className="text-center">
                   <CardTitle className="text-lg font-bold text-primary font-space-grotesk">Grupal (máx 6) — 1 sesión</CardTitle>
                   <Badge className="bg-warm text-white mx-auto">Duración 1 h</Badge>
                 </CardHeader>
@@ -269,10 +266,7 @@ const Planes = () => {
               </Card>
 
               <Card className="relative border hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[16px] bg-white">
-                <span className="absolute top-4 left-4 bg-warm text-white text-xs px-3 py-1 rounded-full uppercase tracking-wide">
-                  Sesión única
-                </span>
-                <CardHeader className="text-center pt-12">
+                <CardHeader className="text-center">
                   <CardTitle className="text-lg font-bold text-primary font-space-grotesk">Personalizado (máx 2) — 1 sesión</CardTitle>
                   <Badge className="bg-warm text-white mx-auto">Duración 1 h</Badge>
                 </CardHeader>
