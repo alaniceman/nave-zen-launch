@@ -20,7 +20,7 @@ export const SocialProofSection = () => {
     name: "Dr. Rodolfo Neira",
     role: "Médico Metabólico - Cancer",
     quote: "Creo que todos deberían vivir esta experiencia.",
-    image: drNeiraImage
+    image: "/lovable-uploads/cdd1290b-d682-42ab-8225-001d1c4e4306.png"
   }, {
     name: "Nico Jarry",
     role: "Tenista ATP",
