@@ -312,6 +312,15 @@ export default function Horarios() {
         <meta property="og:title" content="Horarios - Nave Studio" />
         <meta property="og:description" content="Horarios de clases de Método Wim Hof, Yoga, Breathwork y Biohacking. Programa tu semana y vive nuestras experiencias en Nave Studio." />
         <link rel="canonical" href="https://studiolanave.com/horarios" />
+        <style>{`
+          :root {
+            --header-h: 56px;
+            --daybar-h: 48px;
+          }
+          html {
+            scroll-padding-top: calc(var(--header-h) + var(--daybar-h) + 8px);
+          }
+        `}</style>
       </Helmet>
 
       <div className="min-h-screen bg-background">
@@ -335,14 +344,14 @@ export default function Horarios() {
         </section>
 
         {/* Filters */}
-        <section className="py-8 px-4 border-b sticky top-0 z-40 bg-background/95 backdrop-blur-sm">
+        <section className="py-4 md:py-8 px-4 border-b md:sticky md:top-0 z-40 bg-background/95 backdrop-blur-sm">
           <div className="max-w-6xl mx-auto">
-            <div className="flex flex-wrap gap-3 mb-6">
+            <div className="flex flex-wrap gap-2 mb-4 md:mb-6">
               {filters.map((filter) => (
                 <button
                   key={filter}
                   onClick={() => toggleFilter(filter)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                  className={`px-3 py-2 rounded-full text-sm font-medium transition-all h-9 ${
                     activeFilters.includes(filter)
                       ? 'bg-primary text-primary-foreground'
                       : 'bg-muted text-muted-foreground hover:bg-muted/80'
@@ -352,9 +361,13 @@ export default function Horarios() {
                 </button>
               ))}
             </div>
+          </div>
+        </section>
 
-            {/* Day Navigation */}
-            <div className="flex gap-2 overflow-x-auto pb-2">
+        {/* Day Navigation - Always sticky */}
+        <nav className="sticky top-0 md:top-[var(--header-h)] z-40 h-12 bg-background border-b border-border">
+          <div className="max-w-6xl mx-auto h-full">
+            <div className="flex gap-2 overflow-x-auto h-full items-center px-4">
               <button
                 onClick={scrollToToday}
                 className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
@@ -379,7 +392,7 @@ export default function Horarios() {
               ))}
             </div>
           </div>
-        </section>
+        </nav>
 
         {/* Schedule */}
         <section className="py-12 px-4">
@@ -388,7 +401,7 @@ export default function Horarios() {
               <div
                 key={dayKey}
                 id={dayKey === todayKey ? 'hoy' : dayKey}
-                className="animate-fade-in"
+                className="animate-fade-in scroll-mt-[calc(var(--header-h)+var(--daybar-h)+8px)]"
               >
                 <h2 className="text-2xl font-bold mb-6 text-foreground flex items-center gap-3">
                   {dayNames[dayKey as keyof typeof dayNames]}
