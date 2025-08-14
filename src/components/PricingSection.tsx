@@ -1,11 +1,9 @@
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { CheckoutRedirectButton } from "@/components/CheckoutRedirectButton"
-
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CheckoutRedirectButton } from "@/components/CheckoutRedirectButton";
 const PricingSection = () => {
-  return (
-    <section id="planes" className="py-20 bg-background">
+  return <section id="planes" className="py-20 bg-background">
       <div className="container mx-auto px-6">
         {/* Title Section */}
         <div className="text-center mb-16 animate-fade-in">
@@ -58,11 +56,7 @@ const PricingSection = () => {
                     <div className="h-6"></div>
                   </div>
                 </div>
-                 <Button
-                   className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium"
-                   data-plan="Eclipse"
-                   data-checkout-url="https://boxmagic.cl/market/plan_subscription/VrD8wRx0Qz"
-                 >
+                 <Button className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium" data-plan="Eclipse" data-checkout-url="https://boxmagic.cl/market/plan_subscription/VrD8wRx0Qz">
                    Suscribirme
                  </Button>
               </CardContent>
@@ -106,11 +100,7 @@ const PricingSection = () => {
                     <Badge className="bg-warm text-white">50% OFF 1° mes - código 1MES</Badge>
                   </div>
                 </div>
-                <Button
-                  className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium"
-                  data-plan="Órbita"
-                  data-checkout-url="https://boxmagic.cl/market/plan_subscription/ev4VPzOD9A"
-                >
+                <Button className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium" data-plan="Órbita" data-checkout-url="https://boxmagic.cl/market/plan_subscription/ev4VPzOD9A">
                   Suscribirme
                 </Button>
               </CardContent>
@@ -157,11 +147,7 @@ const PricingSection = () => {
                     <Badge className="bg-warm text-white">50% OFF 1° mes - código 1MES</Badge>
                   </div>
                 </div>
-                <CheckoutRedirectButton
-                  url="https://boxmagic.cl/market/plan_subscription/j80p5OdDW6"
-                  plan="Universo"
-                  className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium"
-                >
+                <CheckoutRedirectButton url="https://boxmagic.cl/market/plan_subscription/j80p5OdDW6" plan="Universo" className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium">
                   Suscribirme
                 </CheckoutRedirectButton>
               </CardContent>
@@ -188,13 +174,7 @@ const PricingSection = () => {
                   <p className="text-4xl font-bold text-primary">$30.000</p>
                   <p className="text-sm md:text-base text-muted-foreground md:inline md:ml-2">/ sesión por persona</p>
                 </div>
-                <a
-                  className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground hover:bg-secondary/80 h-10 px-4 py-2 w-full font-inter font-medium"
-                  href="https://boxmagic.link/checkout/wimhof-grupal"
-                  data-checkout-url="https://boxmagic.link/checkout/wimhof-grupal"
-                  data-plan="Wim Hof (Grupal) — 1 sesión"
-                  aria-label="Comprar 1 sesión Wim Hof grupal"
-                >
+                <a className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground hover:bg-secondary/80 h-10 px-4 py-2 w-full font-inter font-medium" href="https://boxmagic.link/checkout/wimhof-grupal" data-checkout-url="https://boxmagic.link/checkout/wimhof-grupal" data-plan="Wim Hof (Grupal) — 1 sesión" aria-label="Comprar 1 sesión Wim Hof grupal">
                   Comprar 1 sesión
                 </a>
               </CardContent>
@@ -213,13 +193,7 @@ const PricingSection = () => {
                   <p className="text-4xl font-bold text-primary">$40.000</p>
                   <p className="text-sm md:text-base text-muted-foreground md:inline md:ml-2">/ sesión por persona</p>
                 </div>
-                <a
-                  className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground hover:bg-secondary/80 h-10 px-4 py-2 w-full font-inter font-medium"
-                  href="https://boxmagic.link/checkout/wimhof-personalizado"
-                  data-checkout-url="https://boxmagic.link/checkout/wimhof-personalizado"
-                  data-plan="Wim Hof (Personalizado) — 1 sesión"
-                  aria-label="Comprar 1 sesión Wim Hof personalizada"
-                >
+                <a className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground hover:bg-secondary/80 h-10 px-4 py-2 w-full font-inter font-medium" href="https://boxmagic.link/checkout/wimhof-personalizado" data-checkout-url="https://boxmagic.link/checkout/wimhof-personalizado" data-plan="Wim Hof (Personalizado) — 1 sesión" aria-label="Comprar 1 sesión Wim Hof personalizada">
                   Comprar 1 sesión
                 </a>
               </CardContent>
@@ -253,28 +227,11 @@ const PricingSection = () => {
 
             {/* CTAs */}
             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <a 
-                href="/planes-precios" 
-                className="inline-block bg-accent text-white font-medium py-3 px-8 rounded-lg hover:bg-primary transition font-inter"
-                aria-label="Ver todos los planes y precios"
-              >
+              <a href="/planes-precios" className="inline-block bg-accent text-white font-medium py-3 px-8 rounded-lg hover:bg-primary transition font-inter" aria-label="Ver todos los planes y precios">
                 Ver todos los planes →
               </a>
-              <a 
-                href="/horarios#hoy" 
-                className="inline-block border-2 border-accent text-accent font-medium py-3 px-8 rounded-lg hover:bg-accent hover:text-white transition font-inter"
-                aria-label="Ver horarios de clases"
-              >
-                Ver horarios
-              </a>
-              <a 
-                href="#" 
-                data-open-trial="true" 
-                className="inline-block text-accent underline hover:text-primary font-inter transition-colors"
-                aria-label="Agendar clase de prueba de Yoga"
-              >
-                Clase de prueba de Yoga
-              </a>
+              
+              
             </div>
 
             {/* micro nota opcional */}
@@ -289,19 +246,13 @@ const PricingSection = () => {
               <strong>Garantía Nave:</strong> si en los primeros 14 días no sientes la diferencia, te devolvemos tu inversión.
             </p>
           </div>
-          <Button 
-            size="lg" 
-            className="bg-accent hover:bg-primary text-white font-inter font-medium hover:scale-105 transition-transform duration-300 h-14 px-10 text-base"
-            asChild
-          >
+          <Button size="lg" className="bg-accent hover:bg-primary text-white font-inter font-medium hover:scale-105 transition-transform duration-300 h-14 px-10 text-base" asChild>
             <a href="/planes-precios">
               Comienza hoy con 50% OFF
             </a>
           </Button>
         </div>
       </div>
-    </section>
-  )
-}
-
-export { PricingSection }
+    </section>;
+};
+export { PricingSection };
