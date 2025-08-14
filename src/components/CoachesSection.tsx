@@ -37,7 +37,7 @@ const coaches: Coach[] = [{
   role: "Instructora de Ice Yoga · Reikista",
   credentials: "Crioguía de Inmersiones y Breathwork · Terapeuta Holística – Reiki Master",
   purpose: "Te acompaño a encontrar calma y fortaleza a través del frío, la respiración y la energía.",
-  image: "/lovable-uploads/f65792e3-e19c-49b3-a7fc-ce59b6a20ed3.png"
+  image: "/lovable-uploads/27a0352e-30dd-41fc-8a91-48b297e8615a.png"
 }, {
   id: "mar",
   name: "Mar Carrasco",
