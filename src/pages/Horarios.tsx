@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet-async";
 import { Calendar, Clock, Users, Thermometer, Zap, MapPin } from "lucide-react";
 import { Footer } from "../components/Footer";
 import { OpenTrialModalButton } from "../components/OpenTrialModalButton";
+import { WeekCalendar } from "../components/WeekCalendar";
 
 // Types
 interface ClassItem {
@@ -396,7 +397,7 @@ export default function Horarios() {
         </nav>
 
         {/* Schedule */}
-        <section className="py-12 px-4">
+        <section id="top-horarios" className="py-12 px-4">
           <div className="max-w-6xl mx-auto space-y-12">
             {Object.entries(scheduleData).map(([dayKey, classes]) => (
               <div
@@ -479,6 +480,13 @@ export default function Horarios() {
             ))}
           </div>
         </section>
+
+        {/* Week Calendar View */}
+        <WeekCalendar 
+          scheduleData={scheduleData}
+          activeFilters={activeFilters}
+          shouldShowClass={shouldShowClass}
+        />
 
         {/* Important Notices */}
         <section className="py-12 px-4 bg-orange-50 border-t">
