@@ -321,7 +321,7 @@ const Experiencias = () => {
               Ver planes
             </Button>
             <Button
-              onClick={() => scrollToSection('#coaches')}
+              onClick={() => window.location.href = '/coaches'}
               variant="outline"
               className="border-2 border-secondary text-secondary hover:bg-secondary hover:text-white py-3 px-8 rounded-[10px] transition-all duration-200 hover:scale-105"
             >
