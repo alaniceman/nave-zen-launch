@@ -78,7 +78,7 @@ export const MethodologiesSection = () => {
             return (
               <div 
                 key={index} 
-                className="group relative bg-gradient-to-br from-neutral-light via-neutral-light to-primary/5 rounded-[var(--radius)] p-8 text-center animate-fade-in transition-all duration-300 shadow-light hover:shadow-medium hover:scale-105 flex-shrink-0 w-80 md:w-auto scroll-snap-start flex flex-col min-h-[500px] border border-primary/10 hover:border-primary/20"
+                className="group relative bg-gradient-to-br from-neutral-light via-neutral-light to-primary/5 rounded-[var(--radius)] p-6 text-center animate-fade-in transition-all duration-300 shadow-light hover:shadow-medium hover:scale-105 flex-shrink-0 w-80 md:w-auto scroll-snap-start flex flex-col min-h-[400px] border border-primary/10 hover:border-primary/20"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
                 {/* Gradient overlay on hover */}
