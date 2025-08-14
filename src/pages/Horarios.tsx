@@ -1,193 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Calendar, Clock, Users, Thermometer, Zap, MapPin } from "lucide-react";
+import { Calendar } from "lucide-react";
 import { Footer } from "../components/Footer";
 import { OpenTrialModalButton } from "../components/OpenTrialModalButton";
-import { WeekCalendar } from "../components/WeekCalendar";
-
-// Types
-interface ClassItem {
-  time: string;
-  title: string;
-  tags: string[];
-  badges: string[];
-  duration: number;
-  isPersonalized?: boolean;
-}
-
-// Schedule data structure
-const scheduleData: Record<string, ClassItem[]> = {
-  lunes: [
-    {
-      time: "08:00",
-      title: "Yin Yoga + Ice Bath (opcional)",
-      tags: ["Yoga"],
-      badges: ["Ice Bath opcional"],
-      duration: 60
-    },
-    {
-      time: "09:15",
-      title: "Método Wim Hof (Breathwork + Ice Bath)",
-      tags: ["Método Wim Hof"],
-      badges: [],
-      duration: 60
-    }
-  ],
-  martes: [
-    {
-      time: "10:00",
-      title: "Personalizado Método Wim Hof",
-      tags: ["Personalizado", "Método Wim Hof"],
-      badges: ["Máx 1–2 personas"],
-      duration: 60,
-      isPersonalized: true
-    },
-    {
-      time: "11:15",
-      title: "Método Wim Hof (Breathwork + Ice Bath)",
-      tags: ["Método Wim Hof"],
-      badges: [],
-      duration: 60
-    },
-    {
-      time: "13:00",
-      title: "Biohacking: Breathwork + HIIT + Ice Bath",
-      tags: ["Biohacking"],
-      badges: ["Respiración + HIIT + Hielo"],
-      duration: 60
-    },
-    {
-      time: "19:15",
-      title: "Método Wim Hof (Breathwork + Ice Bath)",
-      tags: ["Método Wim Hof"],
-      badges: [],
-      duration: 60
-    },
-    {
-      time: "20:15",
-      title: "Yoga Integral + Ice Bath (opcional)",
-      tags: ["Yoga"],
-      badges: ["Ice Bath opcional"],
-      duration: 60
-    }
-  ],
-  miercoles: [
-    {
-      time: "08:00",
-      title: "Vinyasa Yoga + Ice Bath (opcional)",
-      tags: ["Yoga"],
-      badges: ["Ice Bath opcional"],
-      duration: 60
-    },
-    {
-      time: "09:15",
-      title: "Método Wim Hof (Breathwork + Ice Bath)",
-      tags: ["Método Wim Hof"],
-      badges: [],
-      duration: 60
-    },
-    {
-      time: "18:30",
-      title: "Yin Yoga + Ice Bath (opcional)",
-      tags: ["Yoga"],
-      badges: ["Ice Bath opcional"],
-      duration: 60
-    },
-    {
-      time: "19:30",
-      title: "Breathwork Wim Hof",
-      tags: ["Breathwork & Meditación"],
-      badges: ["Sin inmersión"],
-      duration: 60
-    }
-  ],
-  jueves: [
-    {
-      time: "10:00",
-      title: "Personalizado Método Wim Hof",
-      tags: ["Personalizado", "Método Wim Hof"],
-      badges: ["Máx 1–2 personas"],
-      duration: 60,
-      isPersonalized: true
-    },
-    {
-      time: "11:15",
-      title: "Método Wim Hof (Breathwork + Ice Bath)",
-      tags: ["Método Wim Hof"],
-      badges: [],
-      duration: 60
-    },
-    {
-      time: "13:00",
-      title: "Biohacking: Breathwork + HIIT + Ice Bath",
-      tags: ["Biohacking"],
-      badges: ["Respiración + HIIT + Hielo"],
-      duration: 60
-    },
-    {
-      time: "18:00",
-      title: "Método Wim Hof (Breathwork + Ice Bath)",
-      tags: ["Método Wim Hof"],
-      badges: [],
-      duration: 60
-    },
-    {
-      time: "20:00",
-      title: "Vinyasa Yoga + Ice Bath (opcional)",
-      tags: ["Yoga"],
-      badges: ["Ice Bath opcional"],
-      duration: 60
-    }
-  ],
-  viernes: [
-    {
-      time: "07:00",
-      title: "Método Wim Hof (Breathwork + Ice Bath)",
-      tags: ["Método Wim Hof"],
-      badges: [],
-      duration: 60
-    }
-  ],
-  sabado: [
-    {
-      time: "09:00",
-      title: "Método Wim Hof (Breathwork + Ice Bath)",
-      tags: ["Método Wim Hof"],
-      badges: [],
-      duration: 60
-    },
-    {
-      time: "10:15",
-      title: "Método Wim Hof (Breathwork + Ice Bath)",
-      tags: ["Método Wim Hof"],
-      badges: [],
-      duration: 60
-    },
-    {
-      time: "11:45",
-      title: "Método Wim Hof (Breathwork + Ice Bath)",
-      tags: ["Método Wim Hof"],
-      badges: [],
-      duration: 60
-    }
-  ],
-  domingo: [
-    {
-      time: "09:00",
-      title: "Power Yoga + Ice Bath (opcional)",
-      tags: ["Yoga"],
-      badges: ["Ice Bath opcional"],
-      duration: 60
-    },
-    {
-      time: "10:15",
-      title: "Power Yoga + Ice Bath (opcional)",
-      tags: ["Yoga"],
-      badges: ["Ice Bath opcional"],
-      duration: 60
-    }
-  ]
-};
+import ScheduleDayCards from "../components/ScheduleDayCards";
 
 const filters = [
   "Todos",
@@ -198,78 +14,8 @@ const filters = [
   "Personalizado"
 ];
 
-const dayNames = {
-  lunes: "Lunes",
-  martes: "Martes",
-  miercoles: "Miércoles",
-  jueves: "Jueves",
-  viernes: "Viernes",
-  sabado: "Sábado",
-  domingo: "Domingo"
-};
-
-// Utility functions
-const getTodayInSantiago = () => {
-  const now = new Date();
-  const santiago = new Intl.DateTimeFormat('es-CL', {
-    weekday: 'long',
-    timeZone: 'America/Santiago'
-  }).format(now).toLowerCase();
-  
-  const dayMap: { [key: string]: string } = {
-    'lunes': 'lunes',
-    'martes': 'martes',
-    'miércoles': 'miercoles',
-    'jueves': 'jueves',
-    'viernes': 'viernes',
-    'sábado': 'sabado',
-    'domingo': 'domingo'
-  };
-  
-  return dayMap[santiago] || 'lunes';
-};
-
-const generateCalendarLink = (title: string, day: string, time: string, duration: number) => {
-  const now = new Date();
-  const daysOfWeek = ['domingo', 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado'];
-  const currentDay = now.getDay();
-  const targetDay = Object.keys(dayNames).indexOf(day);
-  
-  let daysUntilTarget = targetDay - (currentDay === 0 ? 6 : currentDay - 1);
-  if (daysUntilTarget < 0) daysUntilTarget += 7;
-  
-  const targetDate = new Date(now);
-  targetDate.setDate(now.getDate() + daysUntilTarget);
-  
-  const [hours, minutes] = time.split(':').map(Number);
-  targetDate.setHours(hours, minutes, 0, 0);
-  
-  const endDate = new Date(targetDate);
-  endDate.setMinutes(endDate.getMinutes() + duration);
-  
-  const formatDate = (date: Date) => {
-    return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
-  };
-  
-  const params = new URLSearchParams({
-    action: 'TEMPLATE',
-    text: title,
-    dates: `${formatDate(targetDate)}/${formatDate(endDate)}`,
-    details: 'Nave Studio - Antares 259',
-    location: 'Antares 259, Las Condes',
-    ctz: 'America/Santiago'
-  });
-  
-  return `https://calendar.google.com/calendar/render?${params.toString()}`;
-};
-
 export default function Horarios() {
   const [activeFilters, setActiveFilters] = useState<string[]>(["Todos"]);
-  const [todayKey, setTodayKey] = useState<string>("");
-
-  useEffect(() => {
-    setTodayKey(getTodayInSantiago());
-  }, []);
 
   const toggleFilter = (filter: string) => {
     if (filter === "Todos") {
@@ -287,20 +33,8 @@ export default function Horarios() {
     }
   };
 
-  const shouldShowClass = (classTags: string[]) => {
-    if (activeFilters.includes("Todos")) return true;
-    return classTags.some(tag => activeFilters.includes(tag));
-  };
-
-  const scrollToDay = (day: string) => {
-    const element = document.getElementById(day);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
-
-  const scrollToToday = () => {
-    const element = document.getElementById('hoy');
+  const scrollToSchedule = () => {
+    const element = document.getElementById('horarios-cards');
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
@@ -336,7 +70,7 @@ export default function Horarios() {
               Programa tu semana y vive nuestras experiencias.
             </p>
             <button
-              onClick={scrollToToday}
+              onClick={scrollToSchedule}
               className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors"
             >
               <Calendar className="w-5 h-5" />
@@ -346,7 +80,7 @@ export default function Horarios() {
         </section>
 
         {/* Filters */}
-        <section className="py-4 md:py-8 px-4 border-b md:sticky md:top-0 z-40 bg-background/95 backdrop-blur-sm">
+        <section className="py-4 md:py-8 px-4 border-b">
           <div className="max-w-6xl mx-auto">
             <div className="flex flex-wrap gap-2 mb-4 md:mb-6">
               {filters.map((filter) => (
@@ -366,142 +100,22 @@ export default function Horarios() {
           </div>
         </section>
 
-        {/* Day Navigation - Always sticky */}
-        <nav className="sticky top-0 md:top-[var(--header-h)] z-40 h-12 bg-background border-b border-border">
-          <div className="max-w-6xl mx-auto h-full">
-            <div className="flex gap-2 overflow-x-auto h-full items-center px-4">
-              <button
-                onClick={scrollToToday}
-                className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
-                  todayKey ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:bg-muted/80'
-                }`}
-                aria-current={todayKey ? "date" : undefined}
-              >
-                Hoy
-              </button>
-              {Object.entries(dayNames).map(([key, name]) => (
-                <button
-                  key={key}
-                  onClick={() => scrollToDay(key)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
-                    key === todayKey
-                      ? 'bg-primary/20 text-primary border border-primary/30'
-                      : 'bg-muted text-muted-foreground hover:bg-muted/80'
-                  }`}
-                >
-                  {name}
-                </button>
-              ))}
-            </div>
-          </div>
-        </nav>
-
-        {/* Schedule */}
-        <section id="top-horarios" className="py-12 px-4">
-          <div className="max-w-6xl mx-auto space-y-12">
-            {Object.entries(scheduleData).map(([dayKey, classes]) => (
-              <div
-                key={dayKey}
-                id={dayKey === todayKey ? 'hoy' : dayKey}
-                className="animate-fade-in scroll-mt-[calc(var(--header-h)+var(--daybar-h)+8px)]"
-              >
-                <h2 className="text-2xl font-bold mb-6 text-foreground flex items-center gap-3">
-                  {dayNames[dayKey as keyof typeof dayNames]}
-                  {dayKey === todayKey && (
-                    <span className="text-sm bg-primary text-primary-foreground px-3 py-1 rounded-full">
-                      Hoy
-                    </span>
-                  )}
-                </h2>
-                
-                <div className="space-y-4">
-                  {classes
-                    .filter(classItem => shouldShowClass(classItem.tags))
-                    .map((classItem, index) => (
-                      <div
-                        key={index}
-                        className="bg-card text-card-foreground border border-border rounded-xl p-6 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
-                      >
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
-                          {/* Class Info */}
-                          <div className="space-y-4">
-                            <div className="flex items-center gap-4">
-                              <div className="flex items-center gap-2 text-primary font-bold text-xl">
-                                <Clock className="w-5 h-5" />
-                                {classItem.time}
-                              </div>
-                            </div>
-                            
-                            <h3 className="text-lg font-semibold text-foreground">
-                              {classItem.title}
-                            </h3>
-                            
-                            <div className="flex flex-wrap gap-2">
-                              {classItem.badges.map((badge, badgeIndex) => (
-                                <span
-                                  key={badgeIndex}
-                                  className="inline-flex items-center gap-1 px-3 py-1 bg-muted text-muted-foreground text-sm rounded-full"
-                                >
-                                  {badge.includes("Ice Bath") && <Thermometer className="w-3 h-3" />}
-                                  {badge.includes("personas") && <Users className="w-3 h-3" />}
-                                  {badge.includes("HIIT") && <Zap className="w-3 h-3" />}
-                                  {badge}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-
-                          {/* Actions */}
-                          <div className="space-y-3">
-                            <button
-                              data-checkout-url="https://members.boxmagic.app/acceso/ingreso"
-                              data-plan={classItem.title}
-                              className="w-full bg-primary text-primary-foreground px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors font-medium"
-                            >
-                              Reservar
-                            </button>
-                            
-                            <a
-                              href={generateCalendarLink(classItem.title, dayKey, classItem.time, classItem.duration)}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="w-full inline-flex items-center justify-center gap-2 border border-border px-6 py-3 rounded-lg hover:bg-muted transition-colors text-sm"
-                            >
-                              <Calendar className="w-4 h-4" />
-                              Agregar a Google Calendar
-                            </a>
-
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Week Calendar View */}
-        <WeekCalendar 
-          scheduleData={scheduleData}
-          activeFilters={activeFilters}
-          shouldShowClass={shouldShowClass}
-        />
+        {/* Schedule Day Cards */}
+        <ScheduleDayCards activeFilters={activeFilters} />
 
         {/* Important Notices */}
-        <section className="py-12 px-4 bg-orange-50 border-t">
+        <section className="py-12 px-4 bg-[#C49A6C1F] border-t">
           <div className="max-w-4xl mx-auto">
-            <div className="bg-orange-100 border border-orange-200 rounded-xl p-6">
-              <h3 className="text-lg font-semibold text-orange-900 mb-4 flex items-center gap-2">
-                <Thermometer className="w-5 h-5" />
+            <div className="bg-[#C49A6C1F] border border-[#C49A6C] rounded-xl p-6">
+              <h3 className="text-lg font-semibold text-foreground mb-4">
                 Avisos importantes
               </h3>
-              <div className="space-y-3 text-orange-800">
+              <div className="space-y-3 text-foreground">
                 <p>
-                  <strong>Yoga:</strong> el Ice Bath al final es <strong>opcional</strong>.
+                  <strong>Clase de prueba:</strong> Yoga (Yin · Yang · Integral) o Respiración Wim Hof.
                 </p>
                 <p>
-                  Para entrar al hielo después de Yoga debes haber completado <strong>una sesión guiada del Método Wim Hof</strong> (breathwork + ice bath).
+                  Las clases de prueba no incluyen sesiones del <strong>Método Wim Hof</strong>. Para ingresar al Ice Bath después de Yoga debes haber realizado una sesión guiada del <strong>Método Wim Hof</strong> (breathwork + ice bath).
                 </p>
               </div>
             </div>
