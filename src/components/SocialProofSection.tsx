@@ -25,7 +25,7 @@ export const SocialProofSection = () => {
     name: "Nico Jarry",
     role: "Tenista ATP",
     quote: "El frío acelera mi recuperación entre torneos.",
-    image: nicoImage
+    image: "/lovable-uploads/ebd077e5-b969-4bfd-9fdc-2c4b51948b9b.png"
   }];
 
   const certifications = [{
