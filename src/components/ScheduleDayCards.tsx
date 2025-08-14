@@ -436,27 +436,6 @@ function ClassCard({ classItem, dayKey }: ClassCardProps) {
         </div>
       )}
 
-      {/* Actions */}
-      <div className="space-y-3">
-        <button
-          data-checkout-url="https://boxmagic.link/PLACEHOLDER"
-          data-plan={classItem.title}
-          aria-label={`Reservar ${classItem.title}`}
-          className="w-full bg-white/20 backdrop-blur text-white border border-white/30 px-6 py-3 rounded-lg hover:bg-white/30 transition-all font-medium"
-        >
-          Reservar
-        </button>
-        
-        <a
-          href={generateCalendarLink(classItem.title, dayKey, classItem.time, classItem.duration)}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="w-full inline-flex items-center justify-center gap-2 bg-white/10 backdrop-blur text-white border border-white/20 px-6 py-3 rounded-lg hover:bg-white/20 transition-all text-sm"
-        >
-          <Calendar className="w-4 h-4" />
-          Agregar a Google Calendar
-        </a>
-      </div>
     </div>
   );
 }
