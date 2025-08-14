@@ -45,7 +45,7 @@ const Coaches = () => {
       title: "Fundador – Crioguía de Inmersiones y Breathwork",
       credentials: "Instructor Cert. Método Wim Hof · Coach Ontológico · Ing. Civil PUC",
       description: "Ayudo a las personas a vivir con la certeza de que pueden lograr lo que se propongan, sin sacrificar su bienestar.",
-      image: "/lovable-uploads/d4e6319c-db70-4990-9f8d-ef7f76f87b6d.png",
+      image: "/lovable-uploads/b009e7fc-5c3e-4b38-99e1-a3cc58605206.png",
       badge: "Fundador",
       tags: ["Mindset", "Movimiento"]
     },
@@ -55,7 +55,7 @@ const Coaches = () => {
       title: "Instructora de Yoga y Movimiento Consciente – Kinesióloga en formación",
       credentials: "Crioguía de Inmersiones, Power Yoga e Yoga Integral",
       description: "Guío prácticas que cultivan fuerza y flexibilidad sin perder el equilibrio interno.",
-      image: "/lovable-uploads/16afe771-f09d-472a-bc9d-ae33af798cc9.png",
+      image: "/lovable-uploads/b009e7fc-5c3e-4b38-99e1-a3cc58605206.png",
       tags: ["Movimiento", "Terapia"]
     },
     {
