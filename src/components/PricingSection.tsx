@@ -254,7 +254,7 @@ const PricingSection = () => {
             {/* CTAs */}
             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
               <a 
-                href="/planes" 
+                href="/planes-precios" 
                 className="inline-block bg-accent text-white font-medium py-3 px-8 rounded-lg hover:bg-primary transition font-inter"
                 aria-label="Ver todos los planes y precios"
               >
