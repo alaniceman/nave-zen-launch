@@ -30,7 +30,7 @@ const coaches: Coach[] = [{
   role: "Coach de Hábitos Saludables y Movimiento Consciente",
   credentials: "Crioguía de Biohacking: Respiración + HIIT + Chi Kung + Agua Fría",
   purpose: "Impulso tu vitalidad con hábitos simples y poderosos, para que vivas en plena coherencia física, mental y emocional.",
-  image: "/lovable-uploads/6dafbe55-50e1-4124-9e81-2e1c5ccfdc02.png"
+  image: "/lovable-uploads/3c50219e-f0ad-4310-b333-f50970387dad.png"
 }, {
   id: "sol",
   name: "Sol Evans",
