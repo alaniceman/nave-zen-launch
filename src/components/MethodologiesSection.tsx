@@ -72,13 +72,13 @@ export const MethodologiesSection = () => {
         </div>
 
         {/* Methodologies Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16 overflow-x-auto md:overflow-visible scroll-snap-x md:scroll-snap-none px-6 md:px-0 -mx-6 md:mx-0">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 mb-16">
           {methodologies.map((method, index) => {
             const IconComponent = method.icon;
             return (
               <div 
                 key={index} 
-                className="group relative bg-gradient-to-br from-neutral-light via-neutral-light to-primary/5 rounded-[var(--radius)] p-6 text-center animate-fade-in transition-all duration-300 shadow-light hover:shadow-medium hover:scale-105 flex-shrink-0 w-80 md:w-auto scroll-snap-start flex flex-col min-h-[400px] border border-primary/10 hover:border-primary/20"
+                className="group relative bg-gradient-to-br from-neutral-light via-neutral-light to-primary/5 rounded-[var(--radius)] p-4 md:p-6 text-center animate-fade-in transition-all duration-300 shadow-light hover:shadow-medium hover:scale-105 flex flex-col min-h-[380px] md:min-h-[400px] border border-primary/10 hover:border-primary/20 mx-auto max-w-sm md:max-w-none"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
                 {/* Gradient overlay on hover */}
@@ -86,31 +86,31 @@ export const MethodologiesSection = () => {
                 
                 <div className="relative z-10">
                   {/* Icon */}
-                  <div className="mx-auto w-16 h-16 bg-gradient-to-br from-primary/20 to-primary/10 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-sm">
-                    <IconComponent className="w-7 h-7 text-primary" />
+                  <div className="mx-auto w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-primary/20 to-primary/10 rounded-full flex items-center justify-center mb-4 md:mb-6 group-hover:scale-110 transition-transform duration-300 shadow-sm">
+                    <IconComponent className="w-6 h-6 md:w-7 md:h-7 text-primary" />
                   </div>
 
                   {/* Title */}
-                  <h3 className="font-space-grotesk font-semibold text-xl text-primary mb-6 group-hover:text-primary/90 transition-colors duration-300">
+                  <h3 className="font-space-grotesk font-semibold text-lg md:text-xl text-primary mb-4 md:mb-6 group-hover:text-primary/90 transition-colors duration-300">
                     {method.title}
                   </h3>
 
                   {/* Description */}
-                  <p className="font-inter text-sm text-neutral-mid leading-relaxed mb-8 whitespace-pre-line">
+                  <p className="font-inter text-xs md:text-sm text-neutral-mid leading-relaxed mb-6 md:mb-8 whitespace-pre-line px-2 md:px-0">
                     {method.description}
                   </p>
 
                   {/* Benefits */}
-                  <div className="space-y-4 mb-8 flex-grow">
+                  <div className="space-y-3 md:space-y-4 mb-6 md:mb-8 flex-grow">
                     <div className="relative">
-                      <h4 className="font-inter font-medium text-warm text-sm bg-warm/10 px-3 py-2 rounded-lg border border-warm/20">
+                      <h4 className="font-inter font-medium text-warm text-xs md:text-sm bg-warm/10 px-2 md:px-3 py-1.5 md:py-2 rounded-lg border border-warm/20">
                         {method.benefits}
                       </h4>
                     </div>
-                    <ul className="text-left space-y-3 bg-background/50 p-4 rounded-lg border border-primary/10">
+                    <ul className="text-left space-y-2 md:space-y-3 bg-background/50 p-3 md:p-4 rounded-lg border border-primary/10">
                       {method.benefitsList.map((benefit, idx) => (
                         <li key={idx} className="font-inter text-xs text-neutral-dark flex items-start">
-                          <span className="w-2 h-2 bg-gradient-to-r from-primary to-primary/60 rounded-full mr-3 flex-shrink-0 mt-1.5 shadow-sm"></span>
+                          <span className="w-1.5 h-1.5 md:w-2 md:h-2 bg-gradient-to-r from-primary to-primary/60 rounded-full mr-2 md:mr-3 flex-shrink-0 mt-1.5 shadow-sm"></span>
                           <span className="leading-relaxed">{benefit}</span>
                         </li>
                       ))}
