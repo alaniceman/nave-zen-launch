@@ -270,7 +270,7 @@ const PricingSection = () => {
               <a 
                 href="#" 
                 data-open-trial="true" 
-                className="inline-block text-accent underline hover:text-primary font-inter"
+                className="inline-block text-accent underline hover:text-primary font-inter transition-colors"
                 aria-label="Agendar clase de prueba de Yoga"
               >
                 Clase de prueba de Yoga
