@@ -63,7 +63,7 @@ export const SocialProofSection = () => {
         </div>
 
         {/* Testimonios Slider - Mobile */}
-        <div className="md:hidden mb-8">
+        <div className="md:hidden mb-1">
           <div className="flex overflow-x-auto gap-4 pb-4 px-4 -mx-4" style={{
           scrollSnapType: 'x mandatory'
         }}>
