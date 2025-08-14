@@ -58,7 +58,7 @@ const coaches: Coach[] = [{
   role: "Instructora de Yoga · Doula · Reikista",
   credentials: "Crioguía de Inmersiones y Yoga Integral · Facilitadora de Círculos Femeninos y Ceremonias de Cacao",
   purpose: "Te acompaño a transitar etapas de cambio con serenidad, cuerpo y corazón alineados.",
-  image: "/lovable-uploads/1f80e046-a0e6-4b38-a2b1-73c27384f85a.png"
+  image: "/lovable-uploads/367f27fb-5f27-4b38-bc21-af8951de42aa.png"
 }];
 export const CoachesSection = () => {
   const [currentCoachIndex, setCurrentCoachIndex] = useState(0);
