@@ -42,7 +42,7 @@ const Experiencias = () => {
       id: 2,
       title: "Yoga (Yin · Yang · Integral)",
       subtitle: "Secuencias para fuerza, flexibilidad y equilibrio interno. Ice Bath opcional al final.",
-      image: "/lovable-uploads/1f80e046-a0e6-4b38-a2b1-73c27384f85a.png",
+      image: "/lovable-uploads/3649b4d9-a5b6-40c3-a674-5ce8da8b13e4.png",
       note: "Para sumergirte necesitas haber completado Método Wim Hof.",
       benefits: [
         "Desarrolla fuerza y flexibilidad",
