@@ -69,7 +69,7 @@ const Experiencias = () => {
       id: 4,
       title: "Biohacking (Breathwork + HIIT + Ice Bath)",
       subtitle: "Explosión metabólica: 15 min respiración, circuito HIIT y baño de hielo.",
-      image: "/lovable-uploads/bd41d348-08a8-468a-b986-090216e63e46.png",
+      image: "/lovable-uploads/4483c652-df99-4b53-9841-a5b5b2ff21c4.png",
       benefits: [
         "Acelera el metabolismo",
         "Optimiza la recuperación",
