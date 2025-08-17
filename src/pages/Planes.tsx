@@ -258,7 +258,7 @@ const Planes = () => {
                     <p className="text-4xl font-bold text-primary">$40.000</p>
                     <p className="text-sm text-muted-foreground">/ sesión por persona</p>
                   </div>
-                  <a className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground hover:bg-secondary/80 h-10 px-4 py-2 w-full font-inter font-medium" href="https://boxmagic.link/checkout/wimhof-personalizado" data-checkout-url="https://boxmagic.link/checkout/wimhof-personalizado" data-plan="Wim Hof (Personalizado) — 1 sesión" aria-label="Comprar 1 sesión Wim Hof personalizada">
+                  <a className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground hover:bg-secondary/80 h-10 px-4 py-2 w-full font-inter font-medium" href="https://boxmagic.cl/market/plan/j80pKrK4W6" data-checkout-url="https://boxmagic.cl/market/plan/j80pKrK4W6" data-plan="Wim Hof (Personalizado) — 1 sesión" aria-label="Comprar 1 sesión Wim Hof personalizada">
                     Comprar 1 sesión
                   </a>
                 </CardContent>
