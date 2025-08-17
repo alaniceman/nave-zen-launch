@@ -7,6 +7,12 @@ All colors MUST be HSL.
 */
 
 @layer base {
+  /* Smooth scroll behavior and padding for anchor links */
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 72px;
+  }
+  
   :root {
     /* Nave Studio Design System */
     --background: 0 0% 100%;

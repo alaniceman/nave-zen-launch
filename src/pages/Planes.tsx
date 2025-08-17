@@ -22,13 +22,54 @@ const Planes = () => {
         </div>
       </section>
 
+      {/* Menú de Intención */}
+      <section id="intent-menu" className="py-16 bg-neutral-50">
+        <div className="max-w-6xl mx-auto px-4 md:px-6">
+          <h1 className="text-3xl md:text-4xl font-bold text-primary text-center font-space">Elige cómo quieres empezar</h1>
+          <p className="text-muted-foreground text-center mt-2 font-inter">Selecciona tu objetivo y te mostramos el plan ideal.</p>
+          <div className="grid gap-4 mt-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+            {/* Hábito Semanal */}
+            <a href="#habito-semanal" className="group rounded-2xl p-6 bg-white hover:bg-gradient-to-br hover:from-white hover:to-neutral-50 hover:shadow-lg transition-all duration-300 border border-neutral-200 hover:border-accent">
+              <h3 className="font-semibold text-primary font-space text-lg">Mantener mi hábito semanal</h3>
+              <p className="text-sm text-muted-foreground mt-2 font-inter">Quiero venir todas las semanas y construir consistencia.</p>
+              <span className="inline-block mt-4 text-accent group-hover:underline font-medium">Ver membresías →</span>
+            </a>
+            
+            {/* Personalizado */}
+            <a href="#personalizado" className="group rounded-2xl p-6 bg-white hover:bg-gradient-to-br hover:from-white hover:to-neutral-50 hover:shadow-lg transition-all duration-300 border border-neutral-200 hover:border-accent">
+              <h3 className="font-semibold text-primary font-space text-lg">Sesión personalizada 1:1 / 1:2</h3>
+              <p className="text-sm text-muted-foreground mt-2 font-inter">Quiero una guía privada para avanzar más rápido.</p>
+              <span className="inline-block mt-4 text-accent group-hover:underline font-medium">Ver personalizado →</span>
+            </a>
+            
+            {/* Sesión Única */}
+            <a href="#sesion-unica" className="group rounded-2xl p-6 bg-white hover:bg-gradient-to-br hover:from-white hover:to-neutral-50 hover:shadow-lg transition-all duration-300 border border-neutral-200 hover:border-accent">
+              <h3 className="font-semibold text-primary font-space text-lg">Probar el Ice Bath una sola vez</h3>
+              <p className="text-sm text-muted-foreground mt-2 font-inter">Quiero vivir la experiencia de hielo + respiración.</p>
+              <span className="inline-block mt-4 text-accent group-hover:underline font-medium">Ver sesión única →</span>
+            </a>
+            
+            {/* Solo Yoga */}
+            <a href="#solo-yoga" className="group rounded-2xl p-6 bg-white hover:bg-gradient-to-br hover:from-white hover:to-neutral-50 hover:shadow-lg transition-all duration-300 border border-neutral-200 hover:border-accent">
+              <h3 className="font-semibold text-primary font-space text-lg">Solo Yoga</h3>
+              <p className="text-sm text-muted-foreground mt-2 font-inter">Busco practicar Yoga sin compromiso.</p>
+              <span className="inline-block mt-4 text-accent group-hover:underline font-medium">Ver Yoga →</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* Trial Mini Bar */}
       <PricingTrialMiniBar />
 
       <section className="py-20 bg-background">
         <div className="container mx-auto px-6">
-          {/* Main Pricing Table */}
-          <div className="mb-20">
+          {/* HÁBITO SEMANAL - Membresías */}
+          <section id="habito-semanal" className="mb-24">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-primary font-space">Mantener mi hábito semanal</h2>
+              <p className="text-muted-foreground mt-2 font-inter text-lg">Membresías para consistencia y resultados sostenibles.</p>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
               {/* Eclipse Plan */}
               <Card id="eclipse" className="relative border-2 hover:shadow-lg transition-all duration-300 animate-fade-in">
@@ -75,7 +116,6 @@ const Planes = () => {
                   >
                     Suscribirme
                   </Button>
-                  {/* B) Contextual link within plan card */}
                   <a 
                     href="/horarios#hoy" 
                     className="inline-block mt-2 text-accent underline hover:text-primary transition-colors text-sm"
@@ -87,7 +127,10 @@ const Planes = () => {
 
               {/* Órbita Plan */}
               <Card className="relative border-2 hover:shadow-lg transition-all duration-300 animate-fade-in">
-                <CardHeader className="text-center pb-4">
+                <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-warm text-white">
+                  Más popular
+                </Badge>
+                <CardHeader className="text-center pb-4 pt-8">
                   <CardTitle className="text-xl font-bold text-foreground font-space">Órbita</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -130,7 +173,6 @@ const Planes = () => {
                   >
                     Suscribirme
                   </Button>
-                  {/* B) Contextual link within plan card */}
                   <a 
                     href="/horarios#hoy" 
                     className="inline-block mt-2 text-accent underline hover:text-primary transition-colors text-sm"
@@ -140,12 +182,9 @@ const Planes = () => {
                 </CardContent>
               </Card>
 
-              {/* Universo Plan - Most Popular */}
+              {/* Universo Plan */}
               <Card className="relative border-2 border-accent bg-neutral-50/50 hover:shadow-lg transition-all duration-300 animate-fade-in">
-                <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-accent text-white">
-                  Más popular
-                </Badge>
-                <CardHeader className="text-center pb-4 pt-8">
+                <CardHeader className="text-center pb-4">
                   <CardTitle className="text-xl font-bold text-foreground font-space">Universo</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -188,7 +227,6 @@ const Planes = () => {
                   >
                     Suscribirme
                   </CheckoutRedirectButton>
-                  {/* B) Contextual link within plan card */}
                   <a 
                     href="/horarios#hoy" 
                     className="inline-block mt-2 text-accent underline hover:text-primary transition-colors text-sm"
@@ -199,74 +237,41 @@ const Planes = () => {
               </Card>
             </div>
             
-            {/* A) Main button below membership table */}
-            <div className="mt-8 text-center">
-              <a 
-                href="/horarios" 
-                className="inline-block border-2 border-accent text-accent py-3 px-6 rounded-lg hover:bg-accent hover:text-white transition-all duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
-                aria-label="Ver horarios de Nave Studio"
-              >
-                Ver horarios de clases
-              </a>
-              <p className="text-xs text-muted-foreground mt-2 font-inter">
-                Mira el día de hoy y planifica tu semana.
-              </p>
-            </div>
-            
-            {/* Contextual link below pricing table */}
-            <div className="text-center mt-8 mb-12">
-              <p className="text-sm text-muted-foreground font-inter">
-                ¿Solo te interesa Yoga? Empieza con una{" "}
-                <a 
-                  href="#"
-                  data-open-trial="true"
-                  className="text-accent hover:text-primary underline-offset-4 hover:underline transition-colors font-medium"
-                >
-                  clase de prueba gratuita
-                </a>
-                .
-              </p>
-            </div>
-          </div>
-
-          {/* Trial Yoga Section */}
-          <PricingTrialYogaSection />
-
-          {/* Wim Hof Method Section */}
-          <div className="mb-20" id="wim-hof-section">
-            <h3 className="text-center text-primary text-2xl font-bold mb-8 font-space-grotesk">
-              Método Wim Hof – Respira, sumérgete, renace
-            </h3>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              <Card className="relative border hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[16px] bg-white">
+            {/* Misión 90 Órbita en hábito semanal */}
+            <div className="mt-12 max-w-md mx-auto">
+              <Card className="border-2 border-warm hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[16px]">
                 <CardHeader className="text-center">
-                  <CardTitle className="text-lg font-bold text-primary font-space-grotesk">Grupal (máx 6) — 1 sesión</CardTitle>
-                  <Badge className="bg-warm text-white mx-auto">Duración 1 h</Badge>
+                  <CardTitle className="text-xl font-bold text-primary font-space">Misión 90 Órbita</CardTitle>
+                  <Badge className="bg-warm text-white mx-auto">Paga en 3 cuotas sin interés</Badge>
                 </CardHeader>
-                <CardContent className="text-center space-y-4">
+                <CardContent className="space-y-4 text-center">
                   <p className="text-muted-foreground font-inter text-sm">
-                    Breathwork Wim Hof + Ice Bath guiado y sostenido. Ideal para quienes quieren vivir un baño de hielo con acompañamiento experto.
+                    27 sesiones en 90 días · 2/sem · plan trimestral con ahorro — ¡la mejor oferta!
                   </p>
-                  <div className="mt-4">
-                    <p className="text-4xl font-bold text-primary">$30.000</p>
-                    <p className="text-sm md:text-base text-muted-foreground md:inline md:ml-2">/ sesión por persona</p>
-                  </div>
-                  <a
-                    className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground hover:bg-secondary/80 h-10 px-4 py-2 w-full font-inter font-medium"
-                    href="https://boxmagic.link/checkout/wimhof-grupal"
-                    data-checkout-url="https://boxmagic.link/checkout/wimhof-grupal"
-                    data-plan="Wim Hof (Grupal) — 1 sesión"
-                    aria-label="Comprar 1 sesión Wim Hof grupal"
+                  <div className="text-3xl font-bold text-foreground">$219.000</div>
+                  <Button 
+                    className="w-full bg-primary hover:bg-primary/90 text-white font-inter font-medium"
+                    data-checkout-url="https://boxmagic.cl/market/plan/WkD17d743z"
+                    data-plan="Misión 90 Órbita"
                   >
-                    Comprar 1 sesión
-                  </a>
+                    Comenzar misión
+                  </Button>
                 </CardContent>
               </Card>
+            </div>
+          </section>
 
-              <Card className="relative border hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[16px] bg-white">
+          {/* PERSONALIZADO - Sesión privada */}
+          <section id="personalizado" className="mb-24">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-primary font-space">Sesión personalizada 1:1 / 1:2</h2>
+              <p className="text-muted-foreground mt-2 font-inter text-lg">Sesión privada con acompañamiento experto.</p>
+            </div>
+            <div className="max-w-md mx-auto">
+              <Card className="relative border-2 border-accent hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[16px] bg-white">
                 <CardHeader className="text-center">
-                  <CardTitle className="text-lg font-bold text-primary font-space-grotesk">Personalizado (máx 2) — 1 sesión</CardTitle>
-                  <Badge className="bg-warm text-white mx-auto">Duración 1 h</Badge>
+                  <CardTitle className="text-xl font-bold text-primary font-space">Personalizado Método Wim Hof</CardTitle>
+                  <Badge className="bg-warm text-white mx-auto">máx 2 personas · inmersión individual</Badge>
                 </CardHeader>
                 <CardContent className="text-center space-y-4">
                   <p className="text-muted-foreground font-inter text-sm">
@@ -274,7 +279,7 @@ const Planes = () => {
                   </p>
                   <div className="mt-4">
                     <p className="text-4xl font-bold text-primary">$40.000</p>
-                    <p className="text-sm md:text-base text-muted-foreground md:inline md:ml-2">/ sesión por persona</p>
+                    <p className="text-sm text-muted-foreground">/ sesión por persona</p>
                   </div>
                   <a
                     className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground hover:bg-secondary/80 h-10 px-4 py-2 w-full font-inter font-medium"
@@ -288,60 +293,53 @@ const Planes = () => {
                 </CardContent>
               </Card>
             </div>
-            <p className="text-center text-primary mt-8">
-              ¿Quieres venir varias veces? → 
-              <a href="/planes#membresias" className="text-accent underline hover:text-primary">
-                Ver planes y membresías
-              </a>
-            </p>
-            {/* C) Link in Método Wim Hof section */}
-            <p className="text-center mt-6">
-              <a 
-                href="/horarios#hoy" 
-                className="text-accent underline hover:text-primary transition-colors"
-              >
-                Ver próximos horarios de Wim Hof →
-              </a>
-            </p>
-            <p className="text-center text-sm text-muted-foreground mt-6 font-inter">
-              Completa esta sesión guiada para habilitar tu ingreso al Ice Bath post-yoga.
-            </p>
-          </div>
+          </section>
 
-          {/* Special Plans */}
-          <div className="mb-20">
-            <h3 className="text-2xl font-bold text-center text-primary mb-8 font-space-grotesk">
-              Planes Especiales
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-              <Card className="border hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[10px]">
-                <CardHeader>
-                  <CardTitle className="text-lg font-bold text-primary font-space-grotesk">Misión 90 Órbita</CardTitle>
+          {/* SESIÓN ÚNICA - Probar Ice Bath */}
+          <section id="sesion-unica" className="mb-24">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-primary font-space">Probar el Ice Bath una sola vez</h2>
+              <p className="text-muted-foreground mt-2 font-inter text-lg">Vive la experiencia completa de hielo + respiración.</p>
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
+              <Card className="relative border hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[16px] bg-white">
+                <CardHeader className="text-center">
+                  <CardTitle className="text-lg font-bold text-primary font-space">1 Sesión Método Wim Hof (Grupal)</CardTitle>
+                  <Badge className="bg-warm text-white mx-auto">Breathwork + Ice Bath guiado · 60 min</Badge>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="text-center space-y-4">
                   <p className="text-muted-foreground font-inter text-sm">
-                    27 sesiones en 90 días · 2/sem · plan trimestral con ahorro — ¡la mejor oferta!
+                    Breathwork Wim Hof + Ice Bath guiado y sostenido. Ideal para quienes quieren vivir un baño de hielo con acompañamiento experto.
                   </p>
-                  <div className="text-2xl font-bold text-foreground">$219.000</div>
-                  <Button 
-                    className="w-full bg-primary hover:bg-primary/90 text-white font-inter font-medium"
-                    data-checkout-url="https://boxmagic.cl/market/plan/WkD17d743z"
-                    data-plan="Misión 90 Órbita"
+                  <div className="mt-4">
+                    <p className="text-4xl font-bold text-primary">$30.000</p>
+                    <p className="text-sm text-muted-foreground">/ sesión por persona</p>
+                  </div>
+                  <a
+                    className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground hover:bg-secondary/80 h-10 px-4 py-2 w-full font-inter font-medium"
+                    href="https://boxmagic.link/checkout/wimhof-grupal"
+                    data-checkout-url="https://boxmagic.link/checkout/wimhof-grupal"
+                    data-plan="Wim Hof (Grupal) — 1 sesión"
+                    aria-label="Comprar 1 sesión Wim Hof grupal"
                   >
-                    Comenzar misión
-                  </Button>
+                    Comprar 1 sesión
+                  </a>
+                  <p className="text-xs text-muted-foreground mt-2 font-inter">
+                    Incluye Breathwork Wim Hof + 1 inmersión guiada (60 min). No es una membresía.
+                  </p>
                 </CardContent>
               </Card>
 
-              <Card className="border hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[10px]">
-                <CardHeader>
-                  <CardTitle className="text-lg font-bold text-primary font-space-grotesk">Drop-In Discovery</CardTitle>
+              <Card className="border hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[16px]">
+                <CardHeader className="text-center">
+                  <CardTitle className="text-lg font-bold text-primary font-space">Drop-In Discovery</CardTitle>
+                  <Badge className="bg-accent text-white mx-auto">3 sesiones en 60 días</Badge>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="text-center space-y-4">
                   <p className="text-muted-foreground font-inter text-sm">
-                    3 sesiones en 60 días. Elige la disciplina que quieras (Ice Bath, Yoga, Breathwork, Biohacking) y descubre tu fórmula.
+                    Elige la disciplina que quieras (Ice Bath, Yoga, Breathwork, Biohacking) y descubre tu fórmula.
                   </p>
-                  <div className="text-2xl font-bold text-foreground">$59.000</div>
+                  <div className="text-3xl font-bold text-foreground">$59.000</div>
                   <Button 
                     variant="secondary" 
                     className="w-full font-inter font-medium"
@@ -352,16 +350,29 @@ const Planes = () => {
                   </Button>
                 </CardContent>
               </Card>
+            </div>
+            <p className="text-center text-sm text-muted-foreground mt-6 font-inter">
+              Completa esta sesión guiada para habilitar tu ingreso al Ice Bath post-yoga.
+            </p>
+          </section>
 
-              <Card className="border hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[10px]">
-                <CardHeader>
-                  <CardTitle className="text-lg font-bold text-primary font-space-grotesk">Membresía Yin-Yang Yoga</CardTitle>
+          {/* SOLO YOGA - Planes de Yoga */}
+          <section id="solo-yoga" className="mb-24">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-primary font-space">Solo Yoga</h2>
+              <p className="text-muted-foreground mt-2 font-inter text-lg">Planes de Yoga sin compromiso.</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+              <Card className="border hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[16px]">
+                <CardHeader className="text-center">
+                  <CardTitle className="text-lg font-bold text-primary font-space">Membresía Yin-Yang Yoga</CardTitle>
+                  <Badge className="bg-accent text-white mx-auto">1 clase/sem</Badge>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="text-center space-y-4">
                   <p className="text-muted-foreground font-inter text-sm">
                     1 clase semanal de Yoga (Yin, Yang o Integral). Sin inmersión obligatoria.
                   </p>
-                  <div className="text-2xl font-bold text-foreground">$39.000</div>
+                  <div className="text-3xl font-bold text-foreground">$39.000</div>
                   <Button 
                     variant="secondary" 
                     className="w-full font-inter font-medium"
@@ -373,16 +384,16 @@ const Planes = () => {
                 </CardContent>
               </Card>
 
-              <Card className="border hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[10px]">
-                <CardHeader>
-                  <CardTitle className="text-lg font-bold text-primary font-space-grotesk">Yoga + Ice Bath</CardTitle>
+              <Card className="border hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[16px]">
+                <CardHeader className="text-center">
+                  <CardTitle className="text-lg font-bold text-primary font-space">Yoga + Ice Bath</CardTitle>
+                  <Badge className="bg-warm text-white mx-auto">1 sesión con opción Ice Bath</Badge>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="text-center space-y-4">
                   <p className="text-muted-foreground font-inter text-sm">
-                    1 sesión de Yoga con opción de Ice Bath al final.<br />
-                    Requiere haber completado previamente una sesión guiada de agua fría.
+                    1 sesión de Yoga con opción de Ice Bath al final.
                   </p>
-                  <div className="text-2xl font-bold text-foreground">$15.000</div>
+                  <div className="text-3xl font-bold text-foreground">$15.000</div>
                   <Button 
                     variant="secondary" 
                     className="w-full font-inter font-medium"
@@ -391,10 +402,16 @@ const Planes = () => {
                   >
                     Reservar
                   </Button>
+                  <p className="text-xs text-muted-foreground mt-2 font-inter">
+                    Para ingresar al <strong>Ice Bath</strong> después de Yoga debes haber completado previamente una sesión guiada del <strong>Método Wim Hof</strong>.
+                  </p>
                 </CardContent>
               </Card>
             </div>
-          </div>
+          </section>
+
+          {/* Trial Yoga Section */}
+          <PricingTrialYogaSection />
 
           {/* Guarantee & Final CTA */}
           <div className="text-center space-y-6 animate-fade-in">
@@ -408,7 +425,7 @@ const Planes = () => {
               className="bg-accent hover:bg-primary text-white font-inter font-medium hover:scale-105 transition-transform duration-300 h-14 px-10 text-base"
               asChild
             >
-              <a href="/planes-precios#eclipse">
+              <a href="#habito-semanal">
                 Comienza hoy con 50% OFF
               </a>
             </Button>
