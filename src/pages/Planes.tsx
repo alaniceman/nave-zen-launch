@@ -1,16 +1,18 @@
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Footer } from "@/components/Footer"
-import { PricingTrialMiniBar } from "@/components/PricingTrialMiniBar"
-import { PricingTrialYogaSection } from "@/components/PricingTrialYogaSection"
-import { CheckoutRedirectButton } from "@/components/CheckoutRedirectButton"
-
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Footer } from "@/components/Footer";
+import { PricingTrialMiniBar } from "@/components/PricingTrialMiniBar";
+import { PricingTrialYogaSection } from "@/components/PricingTrialYogaSection";
+import { CheckoutRedirectButton } from "@/components/CheckoutRedirectButton";
 const Planes = () => {
-  return (
-    <main className="min-h-screen bg-background">
+  return <main className="min-h-screen bg-background">
       {/* Pricing Hero */}
-      <section className="h-[80vh] relative flex items-center justify-center text-center px-6" style={{backgroundImage: 'url(/lovable-uploads/ef74bdd8-fac8-490a-80e9-61b767656331.png)', backgroundSize: 'cover', backgroundPosition: 'center'}}>
+      <section className="h-[80vh] relative flex items-center justify-center text-center px-6" style={{
+      backgroundImage: 'url(/lovable-uploads/ef74bdd8-fac8-490a-80e9-61b767656331.png)',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center'
+    }}>
         <div className="absolute inset-0 bg-primary opacity-55"></div>
         <div className="max-w-4xl mx-auto space-y-8 animate-fade-in relative z-10">
           <h1 className="text-5xl md:text-7xl font-bold text-white font-space tracking-heading">
@@ -109,17 +111,10 @@ const Planes = () => {
                       <div className="h-6"></div>
                     </div>
                   </div>
-                  <Button 
-                    className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium"
-                    data-plan="Eclipse"
-                    data-checkout-url="https://boxmagic.cl/market/plan_subscription/VrD8wRx0Qz"
-                  >
+                  <Button className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium" data-plan="Eclipse" data-checkout-url="https://boxmagic.cl/market/plan_subscription/VrD8wRx0Qz">
                     Suscribirme
                   </Button>
-                  <a 
-                    href="/horarios#hoy" 
-                    className="inline-block mt-2 text-accent underline hover:text-primary transition-colors text-sm"
-                  >
+                  <a href="/horarios#hoy" className="inline-block mt-2 text-accent underline hover:text-primary transition-colors text-sm">
                     Ver horarios de clases →
                   </a>
                 </CardContent>
@@ -166,17 +161,10 @@ const Planes = () => {
                       <Badge className="bg-warm text-white">50% OFF 1° mes - código 1MES</Badge>
                     </div>
                   </div>
-                  <Button 
-                    className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium"
-                    data-plan="Órbita"
-                    data-checkout-url="https://boxmagic.cl/market/plan_subscription/ev4VPzOD9A"
-                  >
+                  <Button className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium" data-plan="Órbita" data-checkout-url="https://boxmagic.cl/market/plan_subscription/ev4VPzOD9A">
                     Suscribirme
                   </Button>
-                  <a 
-                    href="/horarios#hoy" 
-                    className="inline-block mt-2 text-accent underline hover:text-primary transition-colors text-sm"
-                  >
+                  <a href="/horarios#hoy" className="inline-block mt-2 text-accent underline hover:text-primary transition-colors text-sm">
                     Ver horarios de clases →
                   </a>
                 </CardContent>
@@ -220,17 +208,10 @@ const Planes = () => {
                       <Badge className="bg-warm text-white">50% OFF 1° mes - código 1MES</Badge>
                     </div>
                   </div>
-                  <CheckoutRedirectButton
-                    url="https://boxmagic.cl/market/plan_subscription/j80p5OdDW6"
-                    plan="Universo"
-                    className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium"
-                  >
+                  <CheckoutRedirectButton url="https://boxmagic.cl/market/plan_subscription/j80p5OdDW6" plan="Universo" className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium">
                     Suscribirme
                   </CheckoutRedirectButton>
-                  <a 
-                    href="/horarios#hoy" 
-                    className="inline-block mt-2 text-accent underline hover:text-primary transition-colors text-sm"
-                  >
+                  <a href="/horarios#hoy" className="inline-block mt-2 text-accent underline hover:text-primary transition-colors text-sm">
                     Ver horarios de clases →
                   </a>
                 </CardContent>
@@ -249,11 +230,7 @@ const Planes = () => {
                     27 sesiones en 90 días · 2/sem · plan trimestral con ahorro — ¡la mejor oferta!
                   </p>
                   <div className="text-3xl font-bold text-foreground">$219.000</div>
-                  <Button 
-                    className="w-full bg-primary hover:bg-primary/90 text-white font-inter font-medium"
-                    data-checkout-url="https://boxmagic.cl/market/plan/WkD17d743z"
-                    data-plan="Misión 90 Órbita"
-                  >
+                  <Button className="w-full bg-primary hover:bg-primary/90 text-white font-inter font-medium" data-checkout-url="https://boxmagic.cl/market/plan/WkD17d743z" data-plan="Misión 90 Órbita">
                     Comenzar misión
                   </Button>
                 </CardContent>
@@ -281,13 +258,7 @@ const Planes = () => {
                     <p className="text-4xl font-bold text-primary">$40.000</p>
                     <p className="text-sm text-muted-foreground">/ sesión por persona</p>
                   </div>
-                  <a
-                    className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground hover:bg-secondary/80 h-10 px-4 py-2 w-full font-inter font-medium"
-                    href="https://boxmagic.link/checkout/wimhof-personalizado"
-                    data-checkout-url="https://boxmagic.link/checkout/wimhof-personalizado"
-                    data-plan="Wim Hof (Personalizado) — 1 sesión"
-                    aria-label="Comprar 1 sesión Wim Hof personalizada"
-                  >
+                  <a className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground hover:bg-secondary/80 h-10 px-4 py-2 w-full font-inter font-medium" href="https://boxmagic.link/checkout/wimhof-personalizado" data-checkout-url="https://boxmagic.link/checkout/wimhof-personalizado" data-plan="Wim Hof (Personalizado) — 1 sesión" aria-label="Comprar 1 sesión Wim Hof personalizada">
                     Comprar 1 sesión
                   </a>
                 </CardContent>
@@ -298,7 +269,7 @@ const Planes = () => {
           {/* SESIÓN ÚNICA - Probar Ice Bath */}
           <section id="sesion-unica" className="mb-24">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-primary font-space">Probar el Ice Bath una sola vez</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-primary font-space">Probar el Ice Bath una o más veces</h2>
               <p className="text-muted-foreground mt-2 font-inter text-lg">Vive la experiencia completa de hielo + respiración.</p>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
@@ -315,13 +286,7 @@ const Planes = () => {
                     <p className="text-4xl font-bold text-primary">$30.000</p>
                     <p className="text-sm text-muted-foreground">/ sesión por persona</p>
                   </div>
-                  <a
-                    className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground hover:bg-secondary/80 h-10 px-4 py-2 w-full font-inter font-medium"
-                    href="https://boxmagic.link/checkout/wimhof-grupal"
-                    data-checkout-url="https://boxmagic.link/checkout/wimhof-grupal"
-                    data-plan="Wim Hof (Grupal) — 1 sesión"
-                    aria-label="Comprar 1 sesión Wim Hof grupal"
-                  >
+                  <a className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground hover:bg-secondary/80 h-10 px-4 py-2 w-full font-inter font-medium" href="https://boxmagic.link/checkout/wimhof-grupal" data-checkout-url="https://boxmagic.link/checkout/wimhof-grupal" data-plan="Wim Hof (Grupal) — 1 sesión" aria-label="Comprar 1 sesión Wim Hof grupal">
                     Comprar 1 sesión
                   </a>
                   <p className="text-xs text-muted-foreground mt-2 font-inter">
@@ -340,12 +305,7 @@ const Planes = () => {
                     Elige la disciplina que quieras (Ice Bath, Yoga, Breathwork, Biohacking) y descubre tu fórmula.
                   </p>
                   <div className="text-3xl font-bold text-foreground">$59.000</div>
-                  <Button 
-                    variant="secondary" 
-                    className="w-full font-inter font-medium"
-                    data-checkout-url="https://boxmagic.cl/market/plan/bQDN8Jq4M7"
-                    data-plan="Drop-In Discovery"
-                  >
+                  <Button variant="secondary" className="w-full font-inter font-medium" data-checkout-url="https://boxmagic.cl/market/plan/bQDN8Jq4M7" data-plan="Drop-In Discovery">
                     Descubrir
                   </Button>
                 </CardContent>
@@ -373,12 +333,7 @@ const Planes = () => {
                     1 clase semanal de Yoga (Yin, Yang o Integral). Sin inmersión obligatoria.
                   </p>
                   <div className="text-3xl font-bold text-foreground">$39.000</div>
-                  <Button 
-                    variant="secondary" 
-                    className="w-full font-inter font-medium"
-                    data-checkout-url="https://boxmagic.cl/market/plan_subscription/95DrVeqDpY"
-                    data-plan="Membresía Yin-Yang Yoga"
-                  >
+                  <Button variant="secondary" className="w-full font-inter font-medium" data-checkout-url="https://boxmagic.cl/market/plan_subscription/95DrVeqDpY" data-plan="Membresía Yin-Yang Yoga">
                     Suscribirme
                   </Button>
                 </CardContent>
@@ -394,12 +349,7 @@ const Planes = () => {
                     1 sesión de Yoga con opción de Ice Bath al final.
                   </p>
                   <div className="text-3xl font-bold text-foreground">$15.000</div>
-                  <Button 
-                    variant="secondary" 
-                    className="w-full font-inter font-medium"
-                    data-checkout-url="https://boxmagic.cl/market/plan/jwDyZPALqv"
-                    data-plan="Yoga + Ice Bath"
-                  >
+                  <Button variant="secondary" className="w-full font-inter font-medium" data-checkout-url="https://boxmagic.cl/market/plan/jwDyZPALqv" data-plan="Yoga + Ice Bath">
                     Reservar
                   </Button>
                   <p className="text-xs text-muted-foreground mt-2 font-inter">
@@ -420,11 +370,7 @@ const Planes = () => {
                 <strong>Garantía Nave:</strong> si en los primeros 14 días no sientes la diferencia, te devolvemos tu inversión.
               </p>
             </div>
-            <Button 
-              size="lg" 
-              className="bg-accent hover:bg-primary text-white font-inter font-medium hover:scale-105 transition-transform duration-300 h-14 px-10 text-base"
-              asChild
-            >
+            <Button size="lg" className="bg-accent hover:bg-primary text-white font-inter font-medium hover:scale-105 transition-transform duration-300 h-14 px-10 text-base" asChild>
               <a href="#habito-semanal">
                 Comienza hoy con 50% OFF
               </a>
@@ -434,8 +380,6 @@ const Planes = () => {
       </section>
 
       <Footer />
-    </main>
-  )
-}
-
-export default Planes
+    </main>;
+};
+export default Planes;
