@@ -44,7 +44,7 @@ const coaches: Coach[] = [{
   role: "Instructor Certificado – Ice Yoga Method",
   credentials: "Crioguía de Inmersiones y Breathwork",
   purpose: "Te acompaño a fortalecer cuerpo y mente con frío, respiración y movimiento, cultivando foco y resiliencia sin burnout.",
-  image: "/images/coaches/rolo-varela.jpg"
+  image: "/lovable-uploads/10cde0b9-b008-44ba-aa09-dcd13c8e2826.png"
 }, {
   id: "mar",
   name: "Mar Carrasco",

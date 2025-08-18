@@ -82,7 +82,7 @@ const Coaches = () => {
       title: "Instructor Certificado – Ice Yoga Method",
       credentials: "Crioguía de Inmersiones y Breathwork",
       description: "Te acompaño a fortalecer cuerpo y mente con frío, respiración y movimiento, cultivando foco y resiliencia sin burnout.",
-      image: "/images/coaches/rolo-varela.jpg",
+      image: "/lovable-uploads/10cde0b9-b008-44ba-aa09-dcd13c8e2826.png",
       tags: ["Ice Yoga", "Breathwork", "Movimiento"]
     },
     {
