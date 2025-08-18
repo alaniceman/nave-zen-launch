@@ -36,7 +36,7 @@ const Coaches = () => {
     return () => clearInterval(timer)
   }, [])
 
-  const filters = ["Nutrición", "Mindset", "Terapia", "Movimiento", "Energía"]
+  const filters = ["Nutrición", "Mindset", "Terapia", "Movimiento", "Energía", "Ice Yoga", "Breathwork"]
 
   const coaches = [
     {
@@ -75,6 +75,15 @@ const Coaches = () => {
       description: "Te acompaño a encontrar calma y fortaleza a través del frío, la respiración y la energía.",
       image: "/lovable-uploads/27a0352e-30dd-41fc-8a91-48b297e8615a.png",
       tags: ["Energía", "Terapia"]
+    },
+    {
+      id: 8,
+      name: "Rolo Varela",
+      title: "Instructor Certificado – Ice Yoga Method",
+      credentials: "Crioguía de Inmersiones y Breathwork",
+      description: "Te acompaño a fortalecer cuerpo y mente con frío, respiración y movimiento, cultivando foco y resiliencia sin burnout.",
+      image: "/images/coaches/rolo-varela.jpg",
+      tags: ["Ice Yoga", "Breathwork", "Movimiento"]
     },
     {
       id: 5,
@@ -235,12 +244,19 @@ const Coaches = () => {
                 <p className="text-sm text-neutral-dark mb-6 leading-relaxed italic">
                   "{coach.description}"
                 </p>
-                <Button
-                  variant="outline"
-                  className="border-2 border-secondary text-secondary hover:bg-secondary hover:text-white py-2 px-6 rounded-[10px] transition-all duration-200 hover:scale-105 focus:outline-dashed focus:outline-2 focus:outline-secondary"
+                <a 
+                  href={`https://wa.me/56946120426?text=Hola%21%20quiero%20reservar%20con%20${encodeURIComponent(coach.name)}%20en%20Nave%20Studio`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Reservar con ${coach.name} por WhatsApp`}
                 >
-                  Reservar sesión
-                </Button>
+                  <Button
+                    variant="outline"
+                    className="border-2 border-secondary text-secondary hover:bg-secondary hover:text-white py-2 px-6 rounded-[10px] transition-all duration-200 hover:scale-105 focus:outline-dashed focus:outline-2 focus:outline-secondary"
+                  >
+                    Reservar sesión
+                  </Button>
+                </a>
               </div>
             ))}
           </div>
@@ -294,12 +310,19 @@ const Coaches = () => {
                     
                     {/* CTA Button */}
                     <div className="text-center">
-                      <Button 
-                        variant="outline" 
-                        className="border-2 border-secondary text-secondary py-2 px-5 rounded-lg font-medium font-inter transition-all duration-300 hover:bg-secondary hover:text-white focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-opacity-50"
+                      <a 
+                        href={`https://wa.me/56946120426?text=Hola%21%20quiero%20reservar%20con%20${encodeURIComponent(coach.name)}%20en%20Nave%20Studio`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`Reservar con ${coach.name} por WhatsApp`}
                       >
-                        Reservar
-                      </Button>
+                        <Button 
+                          variant="outline" 
+                          className="border-2 border-secondary text-secondary py-2 px-5 rounded-lg font-medium font-inter transition-all duration-300 hover:bg-secondary hover:text-white focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-opacity-50"
+                        >
+                          Reservar
+                        </Button>
+                      </a>
                     </div>
                   </div>
                 </div>

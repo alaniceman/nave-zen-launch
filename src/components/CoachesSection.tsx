@@ -39,6 +39,13 @@ const coaches: Coach[] = [{
   purpose: "Te acompaño a encontrar calma y fortaleza a través del frío, la respiración y la energía.",
   image: "/lovable-uploads/27a0352e-30dd-41fc-8a91-48b297e8615a.png"
 }, {
+  id: "rolo",
+  name: "Rolo Varela",
+  role: "Instructor Certificado – Ice Yoga Method",
+  credentials: "Crioguía de Inmersiones y Breathwork",
+  purpose: "Te acompaño a fortalecer cuerpo y mente con frío, respiración y movimiento, cultivando foco y resiliencia sin burnout.",
+  image: "/images/coaches/rolo-varela.jpg"
+}, {
   id: "mar",
   name: "Mar Carrasco",
   role: "Instructora de Vinyasa Yoga, Inside Flow y Danza",
@@ -176,9 +183,16 @@ const CoachCard = ({
       
       {/* CTA Button */}
       <div className="text-center">
-        <Button variant="outline" className="border-2 border-secondary text-secondary py-2 px-5 rounded-lg font-medium font-inter transition-all duration-300 hover:bg-secondary hover:text-white focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-opacity-50">
-          Reservar
-        </Button>
+        <a 
+          href={`https://wa.me/56946120426?text=Hola%21%20quiero%20reservar%20con%20${encodeURIComponent(coach.name)}%20en%20Nave%20Studio`}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`Reservar con ${coach.name} por WhatsApp`}
+        >
+          <Button variant="outline" className="border-2 border-secondary text-secondary py-2 px-5 rounded-lg font-medium font-inter transition-all duration-300 hover:bg-secondary hover:text-white focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-opacity-50">
+            Reservar
+          </Button>
+        </a>
       </div>
     </div>;
 };
