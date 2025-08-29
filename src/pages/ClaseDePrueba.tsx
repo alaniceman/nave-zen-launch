@@ -1,5 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import { useEffect } from "react";
+import { Footer } from "@/components/Footer";
 
 const ClaseDePrueba = () => {
   useEffect(() => {
@@ -122,6 +123,7 @@ const ClaseDePrueba = () => {
           </div>
         </section>
       </main>
+      <Footer />
     </>
   );
 };
