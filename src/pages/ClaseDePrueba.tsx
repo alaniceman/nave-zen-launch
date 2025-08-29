@@ -8,7 +8,7 @@ const ClaseDePrueba = () => {
     if (!el) return;
     const isMobile = window.matchMedia('(max-width: 640px)').matches;
     const isTablet = window.matchMedia('(max-width: 1024px)').matches;
-    el.style.height = isMobile ? '90vh' : (isTablet ? '1100px' : '1200px');
+    el.style.height = isMobile ? '50vh' : (isTablet ? '1100px' : '1200px');
   }, []);
 
   return (
