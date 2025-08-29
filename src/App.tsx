@@ -16,6 +16,7 @@ import BlogWimHof from "./pages/BlogWimHof";
 import BlogBiohacking from "./pages/BlogBiohacking";
 import Horarios from "./pages/Horarios";
 import FAQ from "./pages/FAQ";
+import ClaseDePrueba from "./pages/ClaseDePrueba";
 import Terminos from "./pages/Terminos";
 import Privacidad from "./pages/Privacidad";
 import NotFound from "./pages/NotFound";
@@ -48,6 +49,7 @@ const App = () => (
             <Route path="/blog/biohacking-hiit-breathwork-agua-fria-longevidad" element={<BlogBiohacking />} />
             <Route path="/horarios" element={<Horarios />} />
             <Route path="/faq" element={<FAQ />} />
+            <Route path="/clase-de-prueba" element={<ClaseDePrueba />} />
             <Route path="/terminos" element={<Terminos />} />
             <Route path="/privacidad" element={<Privacidad />} />
             {/* Redirect legacy routes */}
