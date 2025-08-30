@@ -1,8 +1,21 @@
-import { Helmet } from "react-helmet-async";
 import { useEffect } from "react";
+import { Helmet } from "react-helmet-async";
 import { Footer } from "@/components/Footer";
+import { useFacebookPixel } from "@/hooks/useFacebookPixel";
 
 const ClaseDePrueba = () => {
+  const { trackLead } = useFacebookPixel();
+
+  useEffect(() => {
+    // Track Lead event when iframe loads (trial form submission intent)
+    const iframe = document.querySelector('iframe[src="https://boxmagic.cl/sp/NaveStudio"]');
+    if (iframe) {
+      iframe.addEventListener('load', () => {
+        trackLead({ content_name: 'Trial Class Form', content_category: 'Lead Generation' });
+      });
+    }
+  }, [trackLead]);
+
   useEffect(() => {
     const el = document.querySelector('#trial-embed iframe[src="https://boxmagic.cl/sp/NaveStudio"]') as HTMLIFrameElement;
     if (!el) return;

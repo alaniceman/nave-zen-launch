@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -5,7 +6,57 @@ import { Footer } from "@/components/Footer";
 import { PricingTrialMiniBar } from "@/components/PricingTrialMiniBar";
 import { PricingTrialYogaSection } from "@/components/PricingTrialYogaSection";
 import { CheckoutRedirectButton } from "@/components/CheckoutRedirectButton";
+import { useFacebookPixel } from "@/hooks/useFacebookPixel";
 const Planes = () => {
+  const { trackViewContent, trackInitiateCheckout } = useFacebookPixel();
+
+  useEffect(() => {
+    // Track ViewContent event for pricing page
+    trackViewContent({
+      content_name: 'Pricing Plans',
+      content_category: 'E-commerce',
+      content_ids: ['eclipse', 'orbita', 'universo'],
+      content_type: 'product_group',
+    });
+
+    // Add event listeners for InitiateCheckout on all buttons
+    const handleCheckoutClick = (event: Event) => {
+      const target = event.target as HTMLElement;
+      const button = target.closest('[data-checkout-url]') as HTMLElement;
+      if (button) {
+        const plan = button.getAttribute('data-plan') || 'Unknown Plan';
+        trackInitiateCheckout({
+          content_name: plan,
+          content_category: 'Subscription',
+          currency: 'CLP',
+        });
+      }
+    };
+
+    // Add listeners to WhatsApp links
+    const handleWhatsAppClick = () => {
+      trackInitiateCheckout({
+        content_name: 'WhatsApp Contact',
+        content_category: 'Lead Generation',
+      });
+    };
+
+    document.addEventListener('click', handleCheckoutClick);
+    
+    // WhatsApp links
+    const whatsappLinks = document.querySelectorAll('a[href*="wa.me"]');
+    whatsappLinks.forEach(link => {
+      link.addEventListener('click', handleWhatsAppClick);
+    });
+
+    return () => {
+      document.removeEventListener('click', handleCheckoutClick);
+      whatsappLinks.forEach(link => {
+        link.removeEventListener('click', handleWhatsAppClick);
+      });
+    };
+  }, [trackViewContent, trackInitiateCheckout]);
+
   return <main className="min-h-screen bg-background">
       {/* Pricing Hero */}
       <section className="h-[80vh] relative flex items-center justify-center text-center px-6" style={{

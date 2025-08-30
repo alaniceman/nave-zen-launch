@@ -2,9 +2,21 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Footer } from "@/components/Footer"
+import { useFacebookPixel } from "@/hooks/useFacebookPixel"
 
 const Experiencias = () => {
   const [activeCard, setActiveCard] = useState<number | null>(null)
+  const { trackViewContent } = useFacebookPixel()
+
+  // Track ViewContent event for experiences page
+  useEffect(() => {
+    trackViewContent({
+      content_name: 'Experiences Overview',
+      content_category: 'Service Catalog',
+      content_ids: ['wim-hof', 'yoga', 'breathwork', 'biohacking'],
+      content_type: 'service_group',
+    });
+  }, [trackViewContent]);
 
   // Scroll reveal animation
   useEffect(() => {

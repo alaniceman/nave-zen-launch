@@ -23,11 +23,16 @@ import NotFound from "./pages/NotFound";
 import { CheckoutRedirectManager } from "@/components/CheckoutRedirectManager";
 import { SEOHead } from "@/components/SEOHead";
 import { TrialDelegationHandler } from "@/components/TrialDelegationHandler";
+import { useFacebookPixel } from "@/hooks/useFacebookPixel";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <HelmetProvider>
+const App = () => {
+  // Initialize Facebook Pixel tracking
+  useFacebookPixel();
+
+  return (
+    <HelmetProvider>
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <TrialModalProvider>
@@ -62,6 +67,7 @@ const App = () => (
       </TooltipProvider>
     </QueryClientProvider>
   </HelmetProvider>
-);
+  );
+};
 
 export default App;
