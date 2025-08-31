@@ -45,6 +45,7 @@ export const Header = () => {
 
   const navigationLinks = [
     { label: "Experiencias", href: "/experiencias", isExternal: true },
+    { label: "Criomedicina", href: "/criomedicina-metodo-wim-hof", isExternal: true },
     { label: "Horarios", href: "/horarios", isExternal: true },
     { label: "Planes & Precios", href: "/planes-precios", isExternal: true },
     { label: "Coaches", href: "/coaches", isExternal: true },

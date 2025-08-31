@@ -237,7 +237,7 @@ const CriomedicinMetodoWimHof = () => {
                 <CheckoutRedirectButton
                   url="/planes-precios#sesion-unica"
                   plan="Criomedicina — Pack 3 sesiones"
-                  className="mt-4 border-2 border-primary text-primary px-5 py-3 rounded-lg hover:bg-primary hover:text-primary-foreground w-full font-medium"
+                  className="mt-4 border-2 border-primary text-primary px-5 py-3 rounded-lg hover:bg-primary hover:text-primary-foreground w-full font-medium transition-colors"
                 >
                   Comprar pack
                 </CheckoutRedirectButton>
@@ -251,7 +251,7 @@ const CriomedicinMetodoWimHof = () => {
                 <CheckoutRedirectButton
                   url="https://boxmagic.cl/market/plan/j80pKrK4W6"
                   plan="Criomedicina — Personalizado (1–2)"
-                  className="mt-4 border-2 border-primary text-primary px-5 py-3 rounded-lg hover:bg-primary hover:text-primary-foreground w-full font-medium"
+                  className="mt-4 border-2 border-primary text-primary px-5 py-3 rounded-lg hover:bg-primary hover:text-primary-foreground w-full font-medium transition-colors"
                 >
                   Agendar personalizado
                 </CheckoutRedirectButton>

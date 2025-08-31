@@ -24,6 +24,12 @@ const Footer = () => {
               Experiencias
             </a>
             <a 
+              href="/criomedicina-metodo-wim-hof" 
+              className="text-accent hover:text-warm transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
+            >
+              Criomedicina
+            </a>
+            <a 
               href="/horarios" 
               className="text-accent hover:text-warm transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
             >
