@@ -115,34 +115,20 @@ const CriomedicinMetodoWimHof = () => {
             Respiración Wim Hof + Ice Bath guiado (60 min). Regula tu sistema nervioso, gana foco y energía.
           </p>
 
-          <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
+          <div className="mt-6 flex justify-center">
             <CheckoutRedirectButton
               url="https://boxmagic.cl/market/plan/RZ0vlQyLQ6"
               plan="Criomedicina / Wim Hof — 1 sesión grupal"
-              className="bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-3 rounded-xl"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-4 rounded-xl text-lg font-semibold"
             >
               Agendar 1 sesión — $30.000
             </CheckoutRedirectButton>
-
-            <CheckoutRedirectButton
-              url="/planes-precios#sesion-unica"
-              plan="Criomedicina — Pack 3 sesiones (60 días)"
-              className="border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground px-6 py-3 rounded-xl"
-            >
-              3 sesiones — $59.000
-            </CheckoutRedirectButton>
-
-            <CheckoutRedirectButton
-              url="https://boxmagic.cl/market/plan/j80pKrK4W6"
-              plan="Criomedicina — Personalizado (1–2 personas)"
-              className="border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground px-6 py-3 rounded-xl"
-            >
-              Personalizado (1–2) — $40.000
-            </CheckoutRedirectButton>
           </div>
 
-          <p className="text-xs text-muted-foreground mt-3">
-            También incluido en nuestras <a href="/planes-precios#habito-semanal" className="underline text-primary hover:text-primary/80">membresías</a> (Universo, Órbita y Eclipse).
+          <p className="text-base text-muted-foreground mt-4 text-center">
+            <a href="#precios-criomedicina" className="underline text-primary hover:text-primary/80">
+              Explora las membresías y paquetes de sesiones
+            </a>
           </p>
         </section>
 
@@ -237,7 +223,7 @@ const CriomedicinMetodoWimHof = () => {
                 <CheckoutRedirectButton
                   url="https://boxmagic.cl/market/plan/RZ0vlQyLQ6"
                   plan="Criomedicina — 1 sesión grupal"
-                  className="mt-4 bg-primary text-primary-foreground px-5 py-3 rounded-lg hover:bg-primary/90 w-full"
+                  className="mt-4 bg-primary text-primary-foreground px-5 py-3 rounded-lg hover:bg-primary/90 w-full font-medium"
                 >
                   Agendar 1 sesión
                 </CheckoutRedirectButton>
@@ -251,7 +237,7 @@ const CriomedicinMetodoWimHof = () => {
                 <CheckoutRedirectButton
                   url="/planes-precios#sesion-unica"
                   plan="Criomedicina — Pack 3 sesiones"
-                  className="mt-4 border-2 border-primary text-primary px-5 py-3 rounded-lg hover:bg-primary hover:text-primary-foreground w-full"
+                  className="mt-4 border-2 border-primary text-primary px-5 py-3 rounded-lg hover:bg-primary hover:text-primary-foreground w-full font-medium"
                 >
                   Comprar pack
                 </CheckoutRedirectButton>
@@ -265,7 +251,7 @@ const CriomedicinMetodoWimHof = () => {
                 <CheckoutRedirectButton
                   url="https://boxmagic.cl/market/plan/j80pKrK4W6"
                   plan="Criomedicina — Personalizado (1–2)"
-                  className="mt-4 border-2 border-primary text-primary px-5 py-3 rounded-lg hover:bg-primary hover:text-primary-foreground w-full"
+                  className="mt-4 border-2 border-primary text-primary px-5 py-3 rounded-lg hover:bg-primary hover:text-primary-foreground w-full font-medium"
                 >
                   Agendar personalizado
                 </CheckoutRedirectButton>
@@ -282,7 +268,7 @@ const CriomedicinMetodoWimHof = () => {
                 <CheckoutRedirectButton
                   url="https://boxmagic.cl/market/plan_subscription/j80p5OdDW6"
                   plan="Membresía Universo"
-                  className="mt-3 bg-primary text-primary-foreground px-5 py-3 rounded-lg hover:bg-primary/90 w-full"
+                  className="mt-3 bg-primary text-primary-foreground px-5 py-3 rounded-lg hover:bg-primary/90 w-full font-medium"
                 >
                   Suscribirme
                 </CheckoutRedirectButton>
@@ -295,7 +281,7 @@ const CriomedicinMetodoWimHof = () => {
                 <CheckoutRedirectButton
                   url="https://boxmagic.cl/market/plan_subscription/ev4VPzOD9A"
                   plan="Membresía Órbita"
-                  className="mt-3 bg-primary text-primary-foreground px-5 py-3 rounded-lg hover:bg-primary/90 w-full"
+                  className="mt-3 bg-primary text-primary-foreground px-5 py-3 rounded-lg hover:bg-primary/90 w-full font-medium"
                 >
                   Suscribirme
                 </CheckoutRedirectButton>
@@ -307,7 +293,7 @@ const CriomedicinMetodoWimHof = () => {
                 <CheckoutRedirectButton
                   url="https://boxmagic.cl/market/plan_subscription/VrD8wRx0Qz"
                   plan="Membresía Eclipse"
-                  className="mt-3 bg-primary text-primary-foreground px-5 py-3 rounded-lg hover:bg-primary/90 w-full"
+                  className="mt-3 bg-primary text-primary-foreground px-5 py-3 rounded-lg hover:bg-primary/90 w-full font-medium"
                 >
                   Suscribirme
                 </CheckoutRedirectButton>
