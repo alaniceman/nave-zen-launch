@@ -46,6 +46,11 @@ const seoData = {
     title: "Política de privacidad | Nave Studio",
     description: "Política de privacidad de Nave Studio",
     canonical: "https://studiolanave.com/privacidad"
+  },
+  "/criomedicina-metodo-wim-hof": {
+    title: "Criomedicina (Método Wim Hof) en Chile — Ice Bath & Breathwork | Nave Studio",
+    description: "Sesiones guiadas de Método Wim Hof en Santiago (Las Condes): respiración + baño de hielo a 3 °C. Horarios, precios y reserva online.",
+    canonical: "https://studiolanave.com/criomedicina-metodo-wim-hof"
   }
 };
 
