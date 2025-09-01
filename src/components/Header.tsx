@@ -171,13 +171,13 @@ export const Header = () => {
         <div
           className={`
             absolute right-0 top-0 h-full w-[72%] bg-background shadow-[0_4px_20px_rgba(0,0,0,0.15)]
-            transform transition-transform duration-250 ease-out
+            transform transition-transform duration-250 ease-out overflow-hidden
             ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}
           `}
         >
-          <div className="flex flex-col h-full">
+          <div className="flex flex-col h-full max-h-screen">
             {/* Header with close button */}
-            <div className="flex justify-between items-center p-6 border-b border-border">
+            <div className="flex justify-between items-center p-4 border-b border-border flex-shrink-0">
               <span className="font-space-grotesk font-bold text-lg text-primary">
                 Menú
               </span>
@@ -190,14 +190,14 @@ export const Header = () => {
               </button>
             </div>
 
-            {/* Navigation Links */}
-            <nav className="flex-1 py-8">
-              <ul className="space-y-6">
+            {/* Navigation Links - Scrollable */}
+            <nav className="flex-1 overflow-y-auto py-4">
+              <ul className="space-y-3">
                 {navigationLinks.map((link) => (
                   <li key={link.label}>
                     <button
                       onClick={() => handleNavigation(link)}
-                      className="block w-full text-left px-6 py-3 font-inter text-lg text-neutral-dark hover:text-warm hover:bg-neutral-light transition-all duration-200"
+                      className="block w-full text-left px-6 py-2.5 font-inter text-base text-neutral-dark hover:text-warm hover:bg-neutral-light transition-all duration-200"
                     >
                       {link.label}
                     </button>
@@ -206,17 +206,17 @@ export const Header = () => {
               </ul>
             </nav>
 
-            {/* Mobile CTA */}
-            <div className="p-6 border-t border-border space-y-3">
+            {/* Mobile CTA - Fixed at bottom */}
+            <div className="p-4 border-t border-border space-y-2.5 flex-shrink-0">
               <a
                 href="https://members.boxmagic.app/"
-                className="block w-full bg-secondary hover:bg-primary text-white font-inter font-medium py-3 rounded-[10px] transition-all duration-200 text-center"
+                className="block w-full bg-secondary hover:bg-primary text-white font-inter font-medium py-2.5 rounded-[10px] transition-all duration-200 text-center text-sm"
               >
                 Ingresar a la app
               </a>
               <a
                 href="/clase-de-prueba"
-                className="block w-full bg-warm hover:bg-forest text-white font-inter font-medium py-3 rounded-[10px] transition-all duration-200 text-center"
+                className="block w-full bg-warm hover:bg-forest text-white font-inter font-medium py-2.5 rounded-[10px] transition-all duration-200 text-center text-sm"
               >
                 Clase de prueba
               </a>
