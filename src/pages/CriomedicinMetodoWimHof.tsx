@@ -235,9 +235,9 @@ const CriomedicinMetodoWimHof = () => {
                 <p className="text-4xl font-bold text-primary mt-1">$59.000</p>
                 <p className="text-sm text-muted-foreground mt-2">Usa 3 sesiones en 60 días. Ideal para consolidar el hábito.</p>
                 <CheckoutRedirectButton
-                  url="/planes-precios#sesion-unica"
+                  url="https://boxmagic.cl/market/plan/bQDN8Jq4M7"
                   plan="Criomedicina — Pack 3 sesiones"
-                  className="mt-4 border-2 border-primary text-primary px-5 py-3 rounded-lg hover:bg-primary hover:text-primary-foreground w-full font-medium transition-colors"
+                  className="mt-4 bg-primary text-primary-foreground px-5 py-3 rounded-lg hover:bg-primary/90 w-full font-medium"
                 >
                   Comprar pack
                 </CheckoutRedirectButton>
@@ -251,7 +251,7 @@ const CriomedicinMetodoWimHof = () => {
                 <CheckoutRedirectButton
                   url="https://boxmagic.cl/market/plan/j80pKrK4W6"
                   plan="Criomedicina — Personalizado (1–2)"
-                  className="mt-4 border-2 border-primary text-primary px-5 py-3 rounded-lg hover:bg-primary hover:text-primary-foreground w-full font-medium transition-colors"
+                  className="mt-4 bg-primary text-primary-foreground px-5 py-3 rounded-lg hover:bg-primary/90 w-full font-medium"
                 >
                   Agendar personalizado
                 </CheckoutRedirectButton>
