@@ -4,6 +4,8 @@ import { scheduleData, dayNames, getTodayInSantiago, CL_TZ, type ClassItem } fro
 import { EXPERIENCE_CATALOG } from "../lib/experiences";
 import { weeklyByExperience } from "../lib/scheduleByExperience";
 
+const DAY_ORDER = ["lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"] as const;
+
 // Get background color based on class tags
 const getCardBgColor = (tags: string[]) => {
   if (tags.includes("Método Wim Hof")) return "bg-[#35C7D2]";
@@ -160,30 +162,34 @@ export default function ScheduleDayCards() {
         {viewMode === "exp" && (
           <div className="mb-6">
             <div className="text-sm text-[#575757] mb-2">Experiencia:</div>
-            <div
-              role="radiogroup"
-              aria-label="Seleccionar experiencia"
-              className="flex gap-3 overflow-x-auto snap-x snap-mandatory pb-2 -mx-2 px-2
-                         [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']"
-            >
-              {EXPERIENCE_CATALOG.map(exp => {
-                const active = expSlug === exp.slug;
-                return (
-                  <button
-                    key={exp.slug}
-                    role="radio"
-                    aria-checked={active}
-                    onClick={() => setExpSlug(exp.slug)}
-                    className={`snap-start shrink-0 whitespace-nowrap rounded-full px-4 py-2 border transition-colors ${
-                      active
-                        ? "bg-[#2E4D3A] text-white border-[#2E4D3A]"
-                        : "bg-white text-[#2E4D3A] border-[#E2E8F0] hover:border-[#2E4D3A]/40"
-                    }`}
-                  >
-                    {exp.labelShort ?? exp.label}
-                  </button>
-                );
-              })}
+            <div className="relative">
+              <div
+                role="radiogroup"
+                aria-label="Seleccionar experiencia"
+                className="flex gap-3 overflow-x-auto snap-x snap-mandatory pb-2 -mx-2 px-2 pr-8
+                           [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']
+                           after:absolute after:right-0 after:top-0 after:bottom-2 after:w-8 
+                           after:bg-gradient-to-l after:from-white after:to-transparent after:pointer-events-none"
+              >
+                {EXPERIENCE_CATALOG.map(exp => {
+                  const active = expSlug === exp.slug;
+                  return (
+                    <button
+                      key={exp.slug}
+                      role="radio"
+                      aria-checked={active}
+                      onClick={() => setExpSlug(exp.slug)}
+                      className={`snap-start shrink-0 whitespace-nowrap rounded-full px-4 py-2 border transition-colors ${
+                        active
+                          ? "bg-[#2E4D3A] text-white border-[#2E4D3A]"
+                          : "bg-white text-[#2E4D3A] border-[#E2E8F0] hover:border-[#2E4D3A]/40"
+                      }`}
+                    >
+                      {exp.labelShort ?? exp.label}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
         )}
@@ -237,10 +243,15 @@ export default function ScheduleDayCards() {
             {currentDayClasses.map((classItem, index) => (
               <div
                 key={index}
-                className={`${getCardBgColor(classItem.tags)} text-white rounded-2xl px-4 py-4 md:px-5 md:py-5 shadow-sm`}
+                className={`${getCardBgColor(classItem.tags)} text-white rounded-2xl px-4 py-4 md:px-5 md:py-5 shadow-sm relative`}
               >
+                {/* Day abbreviation - mobile only */}
+                <div className="lg:hidden absolute top-3 right-3 text-xs font-medium text-white/80 bg-black/20 px-2 py-1 rounded backdrop-blur">
+                  {dayNames[selectedDay]?.slice(0, 3).toUpperCase()}
+                </div>
+                
                 {/* Time */}
-                <div className="flex items-center gap-2 text-white/90 text-xl md:text-2xl font-semibold mb-2">
+                <div className="flex items-center gap-2 text-white/90 text-xl md:text-2xl font-semibold mb-2 pr-12 lg:pr-0">
                   <Clock className="w-5 h-5 md:w-6 md:h-6" />
                   {classItem.time}
                   {showComingSoon(classItem) && (
@@ -270,6 +281,20 @@ export default function ScheduleDayCards() {
                 )}
               </div>
             ))}
+            
+            {/* Next day button - mobile only */}
+            <div className="lg:hidden mt-6 text-center">
+              <button
+                onClick={() => {
+                  const currentIndex = DAY_ORDER.indexOf(selectedDay as any);
+                  const nextIndex = (currentIndex + 1) % DAY_ORDER.length;
+                  setSelectedDay(DAY_ORDER[nextIndex]);
+                }}
+                className="bg-[#2E4D3A] text-white px-6 py-3 rounded-lg font-medium hover:bg-[#2E4D3A]/90 transition-colors"
+              >
+                Ver día siguiente
+              </button>
+            </div>
           </div>
         </div>
 

@@ -18,9 +18,9 @@ export const scheduleData: Record<string, ClassItem[]> = {
   lunes: [
     {
       time: "06:30",
-      title: "Yang Yoga",
+      title: "Yang Yoga + Ice Bath (opcional)",
       tags: ["Yoga"],
-      badges: ["Ice Bath opcional"],
+      badges: [],
       duration: 60,
       instructor: "Maral"
     },
@@ -35,9 +35,9 @@ export const scheduleData: Record<string, ClassItem[]> = {
   martes: [
     {
       time: "08:00",
-      title: "Vinyasa Yoga",
+      title: "Vinyasa Yoga + Ice Bath (opcional)",
       tags: ["Yoga"],
-      badges: ["Ice Bath opcional"],
+      badges: [],
       duration: 60,
       instructor: "Mar"
     },
@@ -81,9 +81,9 @@ export const scheduleData: Record<string, ClassItem[]> = {
   miercoles: [
     {
       time: "06:30",
-      title: "Yang Yoga",
+      title: "Yang Yoga + Ice Bath (opcional)",
       tags: ["Yoga"],
-      badges: ["Ice Bath opcional"],
+      badges: [],
       duration: 60,
       instructor: "Maral"
     },
@@ -112,9 +112,9 @@ export const scheduleData: Record<string, ClassItem[]> = {
   jueves: [
     {
       time: "08:00",
-      title: "Vinyasa Yoga",
+      title: "Vinyasa Yoga + Ice Bath (opcional)",
       tags: ["Yoga"],
-      badges: ["Ice Bath opcional"],
+      badges: [],
       duration: 60,
       instructor: "Mar"
     },
@@ -165,7 +165,7 @@ export const scheduleData: Record<string, ClassItem[]> = {
     },
     {
       time: "18:00",
-      title: "Power Yoga",
+      title: "Power Yoga + Ice Bath (opcional)",
       tags: ["Yoga"],
       badges: [],
       duration: 60,

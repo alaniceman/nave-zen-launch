@@ -7,11 +7,20 @@ export const EXPERIENCE_CATALOG = [
   {
     slug: "wim-hof-group",
     label: "Método Wim Hof (Breathwork + Ice Bath)",
-    labelShort: "Wim Hof",
+    labelShort: "Agua Fría",
     match: (item: ScheduleItem) =>
       /m(é|e)todo\s*wim\s*hof/i.test(item.title) &&
       /ice\s*bath|inmersi(ó|o)n/i.test(item.title) &&
       !/personalizad/i.test(item.title),
+    metaNote: null,
+  },
+  {
+    slug: "yoga",
+    label: "Yoga (Yin · Yang · Vinyasa · Integral · Power)",
+    labelShort: "Yoga",
+    match: (item: ScheduleItem) =>
+      /\byoga\b/i.test(item.title) ||
+      /\b(yin|yang|vinyasa|integral|power)\b\s*yoga/i.test(item.title),
     metaNote: null,
   },
   {
@@ -36,15 +45,6 @@ export const EXPERIENCE_CATALOG = [
     match: (item: ScheduleItem) =>
       /breathwork|meditaci(ó|o)n/i.test(item.title) &&
       !/wim\s*hof.*ice\s*bath/i.test(item.title),
-    metaNote: null,
-  },
-  {
-    slug: "yoga",
-    label: "Yoga (Yin · Yang · Vinyasa · Integral · Power)",
-    labelShort: "Yoga",
-    match: (item: ScheduleItem) =>
-      /\byoga\b/i.test(item.title) ||
-      /\b(yin|yang|vinyasa|integral|power)\b\s*yoga/i.test(item.title),
     metaNote: null,
   },
 ] as const;
