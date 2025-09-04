@@ -7,6 +7,8 @@ export interface ClassItem {
   duration: number;
   isPersonalized?: boolean;
   goLiveDate?: string; // "YYYY-MM-DD" — visible 'normal' desde esta fecha (CLT). Antes = "Pronto"
+  instructor?: string; // "Maral", "Mar", etc.
+  slug?: string; // "pronto" for coming soon
 }
 
 // Zona horaria consistente
@@ -15,11 +17,12 @@ export const CL_TZ = 'America/Santiago';
 export const scheduleData: Record<string, ClassItem[]> = {
   lunes: [
     {
-      time: "08:00",
-      title: "Yin Yoga + Ice Bath (opcional)",
+      time: "06:30",
+      title: "Yang Yoga",
       tags: ["Yoga"],
       badges: ["Ice Bath opcional"],
-      duration: 60
+      duration: 60,
+      instructor: "Maral"
     },
     {
       time: "09:15",
@@ -30,6 +33,14 @@ export const scheduleData: Record<string, ClassItem[]> = {
     }
   ],
   martes: [
+    {
+      time: "08:00",
+      title: "Vinyasa Yoga",
+      tags: ["Yoga"],
+      badges: ["Ice Bath opcional"],
+      duration: 60,
+      instructor: "Mar"
+    },
     {
       time: "10:00",
       title: "Personalizado Método Wim Hof",
@@ -69,11 +80,12 @@ export const scheduleData: Record<string, ClassItem[]> = {
   ],
   miercoles: [
     {
-      time: "08:00",
-      title: "Vinyasa Yoga + Ice Bath (opcional)",
+      time: "06:30",
+      title: "Yang Yoga",
       tags: ["Yoga"],
       badges: ["Ice Bath opcional"],
-      duration: 60
+      duration: 60,
+      instructor: "Maral"
     },
     {
       time: "09:15",
@@ -98,6 +110,14 @@ export const scheduleData: Record<string, ClassItem[]> = {
     }
   ],
   jueves: [
+    {
+      time: "08:00",
+      title: "Vinyasa Yoga",
+      tags: ["Yoga"],
+      badges: ["Ice Bath opcional"],
+      duration: 60,
+      instructor: "Mar"
+    },
     {
       time: "10:00",
       title: "Personalizado Método Wim Hof",
@@ -145,11 +165,12 @@ export const scheduleData: Record<string, ClassItem[]> = {
     },
     {
       time: "18:00",
-      title: "Yang Yoga",
+      title: "Power Yoga",
       tags: ["Yoga"],
       badges: [],
       duration: 60,
-      goLiveDate: "2025-09-13"
+      instructor: "Maral",
+      slug: "pronto"
     }
   ],
   sabado: [

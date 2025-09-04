@@ -22,6 +22,11 @@ export default function ScheduleDayCards() {
     return todayCL < goLive; // antes de goLive → "Pronto"
   };
 
+  // Helper to check if should show "Pronto" chip
+  const showComingSoon = (item: ClassItem) => {
+    return item.slug === "pronto" || isComingSoon(item);
+  };
+
   // Touch/swipe handling
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
@@ -149,7 +154,7 @@ export default function ScheduleDayCards() {
                 <div className="flex items-center gap-2 text-white/90 text-xl md:text-2xl font-semibold mb-2">
                   <Clock className="w-5 h-5 md:w-6 md:h-6" />
                   {classItem.time}
-                  {isComingSoon(classItem) && (
+                  {showComingSoon(classItem) && (
                     <span className="ml-3 bg-white/20 text-white rounded-full text-xs px-2.5 py-1 backdrop-blur">
                       Pronto
                     </span>
@@ -229,7 +234,7 @@ export default function ScheduleDayCards() {
                   <div className="flex items-center gap-2 text-white/90 text-xl md:text-2xl font-semibold mb-2">
                     <Clock className="w-5 h-5 md:w-6 md:h-6" />
                     {classItem.time}
-                    {isComingSoon(classItem) && (
+                    {showComingSoon(classItem) && (
                       <span className="ml-3 bg-white/20 text-white rounded-full text-xs px-2.5 py-1 backdrop-blur">
                         Pronto
                       </span>
