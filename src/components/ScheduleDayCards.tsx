@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Clock } from "lucide-react";
 import { scheduleData, dayNames, getTodayInSantiago, CL_TZ, type ClassItem } from "../data/schedule";
+import { EXPERIENCE_CATALOG } from "../lib/experiences";
+import { weeklyByExperience } from "../lib/scheduleByExperience";
 
 // Get background color based on class tags
 const getCardBgColor = (tags: string[]) => {
@@ -27,6 +29,15 @@ export default function ScheduleDayCards() {
     return item.slug === "pronto" || isComingSoon(item);
   };
 
+  // URL params for view mode
+  const params = new URLSearchParams(typeof window !== "undefined" ? window.location.search : "");
+  const initialView = params.get("view") === "exp" ? "exp" : "day";
+  const initialExp = params.get("exp") || "yoga";
+
+  // State
+  const [viewMode, setViewMode] = useState<"day" | "exp">(initialView);
+  const [expSlug, setExpSlug] = useState<string>(initialExp);
+
   // Touch/swipe handling
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
@@ -40,6 +51,20 @@ export default function ScheduleDayCards() {
     setTodayKey(today);
     setSelectedDay(today);
   }, []);
+
+  // Update URL when view mode or experience changes
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const p = new URLSearchParams(window.location.search);
+      p.set("view", viewMode);
+      if (viewMode === "exp") {
+        p.set("exp", expSlug);
+      } else {
+        p.delete("exp");
+      }
+      window.history.replaceState({}, "", `${window.location.pathname}?${p.toString()}`);
+    }
+  }, [viewMode, expSlug]);
 
   const dayTabs = [
     { key: "hoy", label: "Hoy", actual: todayKey },
@@ -58,6 +83,9 @@ export default function ScheduleDayCards() {
 
   const currentDayClasses = scheduleData[getActiveDay()] || [];
   const currentDayName = dayNames[getActiveDay() as keyof typeof dayNames] || "";
+
+  // Experience view data
+  const experienceWeekData = viewMode === "exp" ? weeklyByExperience(expSlug) : [];
 
   // Swipe handlers
   const onTouchStart = (e: React.TouchEvent) => {
@@ -101,6 +129,50 @@ export default function ScheduleDayCards() {
       `}</style>
       
       <div className="max-w-6xl mx-auto px-4 md:px-6">
+        {/* View mode controls */}
+        <div className="flex flex-wrap items-center gap-2 mb-6">
+          <button 
+            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+              viewMode === "day" 
+                ? "bg-[#2E4D3A] text-white" 
+                : "bg-[#F4F4F4] text-[#2E4D3A] hover:bg-[#E9E9E9]"
+            }`}
+            onClick={() => setViewMode("day")} 
+            aria-pressed={viewMode === "day"}
+          >
+            Filtrar por Día
+          </button>
+          <button 
+            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+              viewMode === "exp" 
+                ? "bg-[#2E4D3A] text-white" 
+                : "bg-[#F4F4F4] text-[#2E4D3A] hover:bg-[#E9E9E9]"
+            }`}
+            onClick={() => setViewMode("exp")} 
+            aria-pressed={viewMode === "exp"}
+          >
+            Filtrar por Experiencia
+          </button>
+
+          {viewMode === "exp" && (
+            <label className="ml-2 flex items-center gap-2">
+              <span className="text-sm text-[#575757]">Experiencia:</span>
+              <select 
+                className="px-3 py-2 rounded-lg border border-[#EAEAEA] bg-white text-[#2E4D3A]"
+                value={expSlug} 
+                onChange={(e) => setExpSlug(e.target.value)}
+                aria-label="Seleccionar experiencia"
+              >
+                {EXPERIENCE_CATALOG.map(exp => (
+                  <option key={exp.slug} value={exp.slug}>{exp.label}</option>
+                ))}
+              </select>
+            </label>
+          )}
+        </div>
+
+        {viewMode === "day" ? (
+          <>
         {/* Mobile/Tablet: Horizontal tabs */}
         <div className="lg:hidden">
           {/* Day tabs */}
@@ -264,6 +336,55 @@ export default function ScheduleDayCards() {
             </div>
           </div>
         </div>
+          </>
+        ) : (
+          /* Experience view */
+          <div className="space-y-8">
+            {experienceWeekData.map(({ day, dayName, items }) => (
+              <div key={day} className="bg-white rounded-2xl p-6 shadow-sm">
+                <h3 className="text-xl font-bold text-[#2E4D3A] mb-4">{dayName}</h3>
+                <ul className="space-y-3">
+                  {items.map((item, idx) => (
+                    <li key={idx} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 p-3 bg-[#F8F9FA] rounded-lg">
+                      <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2 text-[#2E4D3A]">
+                          <Clock className="w-4 h-4" />
+                          <time className="font-semibold min-w-[56px]">{item.time}</time>
+                        </div>
+                        <span className="text-[#2F2F2F] font-medium">{item.title}</span>
+                        {item.pronto && (
+                          <span className="bg-[#2E4D3A]/10 text-[#2E4D3A] border border-[#2E4D3A]/20 rounded-full text-xs px-2 py-0.5">
+                            Pronto
+                          </span>
+                        )}
+                      </div>
+                      <div className="text-sm text-[#575757] flex flex-wrap items-center gap-2">
+                        {item.instructor && (
+                          <span>con {item.instructor}</span>
+                        )}
+                        {item.metaNote && (
+                          <span className="bg-[#2E4D3A]/10 text-[#2E4D3A] rounded-full px-2 py-1 text-xs">
+                            {item.metaNote}
+                          </span>
+                        )}
+                        {item.badges.map((badge, badgeIdx) => (
+                          <span key={badgeIdx} className="bg-[#35C7D2]/10 text-[#35C7D2] rounded-full px-2 py-1 text-xs">
+                            {badge}
+                          </span>
+                        ))}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+            {experienceWeekData.length === 0 && (
+              <div className="text-center py-12 text-[#575757]">
+                <p>No hay clases programadas para esta experiencia.</p>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </section>
   );
