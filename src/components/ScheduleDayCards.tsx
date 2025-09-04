@@ -247,7 +247,7 @@ export default function ScheduleDayCards() {
               >
                 {/* Day abbreviation - mobile only */}
                 <div className="lg:hidden absolute top-3 right-3 text-xs font-medium text-white/80 bg-black/20 px-2 py-1 rounded backdrop-blur">
-                  {dayNames[selectedDay]?.slice(0, 3).toUpperCase()}
+                  {dayNames[getActiveDay()]?.slice(0, 3).toUpperCase()}
                 </div>
                 
                 {/* Time */}
