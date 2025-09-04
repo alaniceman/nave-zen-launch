@@ -7,6 +7,7 @@ export const EXPERIENCE_CATALOG = [
   {
     slug: "wim-hof-group",
     label: "Método Wim Hof (Breathwork + Ice Bath)",
+    labelShort: "Wim Hof",
     match: (item: ScheduleItem) =>
       /m(é|e)todo\s*wim\s*hof/i.test(item.title) &&
       /ice\s*bath|inmersi(ó|o)n/i.test(item.title) &&
@@ -16,6 +17,7 @@ export const EXPERIENCE_CATALOG = [
   {
     slug: "wim-hof-personalizado",
     label: "Personalizado Método Wim Hof",
+    labelShort: "WHM Perso.",
     match: (item: ScheduleItem) =>
       /personalizad/i.test(item.title) && /wim\s*hof/i.test(item.title),
     metaNote: "Máx 1–2 personas",
@@ -23,12 +25,14 @@ export const EXPERIENCE_CATALOG = [
   {
     slug: "biohacking",
     label: "Biohacking (Breathwork + HIIT + Ice Bath)",
+    labelShort: "Biohacking",
     match: (item: ScheduleItem) => /biohacking/i.test(item.title),
     metaNote: null,
   },
   {
     slug: "breathwork",
     label: "Breathwork & Meditación",
+    labelShort: "Breathwork",
     match: (item: ScheduleItem) =>
       /breathwork|meditaci(ó|o)n/i.test(item.title) &&
       !/wim\s*hof.*ice\s*bath/i.test(item.title),
@@ -37,6 +41,7 @@ export const EXPERIENCE_CATALOG = [
   {
     slug: "yoga",
     label: "Yoga (Yin · Yang · Vinyasa · Integral · Power)",
+    labelShort: "Yoga",
     match: (item: ScheduleItem) =>
       /\byoga\b/i.test(item.title) ||
       /\b(yin|yang|vinyasa|integral|power)\b\s*yoga/i.test(item.title),

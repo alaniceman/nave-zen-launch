@@ -154,22 +154,39 @@ export default function ScheduleDayCards() {
             Filtrar por Experiencia
           </button>
 
-          {viewMode === "exp" && (
-            <label className="ml-2 flex items-center gap-2">
-              <span className="text-sm text-[#575757]">Experiencia:</span>
-              <select 
-                className="px-3 py-2 rounded-lg border border-[#EAEAEA] bg-white text-[#2E4D3A]"
-                value={expSlug} 
-                onChange={(e) => setExpSlug(e.target.value)}
-                aria-label="Seleccionar experiencia"
-              >
-                {EXPERIENCE_CATALOG.map(exp => (
-                  <option key={exp.slug} value={exp.slug}>{exp.label}</option>
-                ))}
-              </select>
-            </label>
-          )}
         </div>
+
+        {/* Experience chips selector */}
+        {viewMode === "exp" && (
+          <div className="mb-6">
+            <div className="text-sm text-[#575757] mb-2">Experiencia:</div>
+            <div
+              role="radiogroup"
+              aria-label="Seleccionar experiencia"
+              className="flex gap-3 overflow-x-auto snap-x snap-mandatory pb-2 -mx-2 px-2
+                         [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']"
+            >
+              {EXPERIENCE_CATALOG.map(exp => {
+                const active = expSlug === exp.slug;
+                return (
+                  <button
+                    key={exp.slug}
+                    role="radio"
+                    aria-checked={active}
+                    onClick={() => setExpSlug(exp.slug)}
+                    className={`snap-start shrink-0 whitespace-nowrap rounded-full px-4 py-2 border transition-colors ${
+                      active
+                        ? "bg-[#2E4D3A] text-white border-[#2E4D3A]"
+                        : "bg-white text-[#2E4D3A] border-[#E2E8F0] hover:border-[#2E4D3A]/40"
+                    }`}
+                  >
+                    {exp.labelShort ?? exp.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {viewMode === "day" ? (
           <>
