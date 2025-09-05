@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { TrialModalProvider } from "@/context/TrialModalProvider";
+import { EmailCaptureModalProvider } from "@/context/EmailCaptureModalProvider";
 import { Header } from "@/components/Header";
 import Index from "./pages/Index";
 import Planes from "./pages/Planes";
@@ -33,10 +34,11 @@ const App = () => (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <TrialModalProvider>
-          <Toaster />
-          <Sonner />
-          <CheckoutRedirectManager />
-          <BrowserRouter>
+          <EmailCaptureModalProvider>
+            <Toaster />
+            <Sonner />
+            <CheckoutRedirectManager />
+            <BrowserRouter>
             <SEOHead />
             <FacebookPixelRouterTracker />
             <TrialDelegationHandler />
@@ -62,6 +64,7 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
+          </EmailCaptureModalProvider>
         </TrialModalProvider>
       </TooltipProvider>
     </QueryClientProvider>
