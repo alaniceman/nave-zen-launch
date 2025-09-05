@@ -67,6 +67,14 @@ export const EmailCaptureModal = ({ isOpen, onClose }: EmailCaptureModalProps) =
     // Remove all non-digits
     const digits = value.replace(/\D/g, '');
     
+    // Don't add +56 if it already starts with 56
+    if (digits.startsWith('56') && digits.length > 2) {
+      const phoneNumber = digits.slice(2);
+      if (phoneNumber.length <= 1) return `+56 ${phoneNumber}`;
+      if (phoneNumber.length <= 5) return `+56 ${phoneNumber.slice(0, 1)} ${phoneNumber.slice(1)}`;
+      return `+56 ${phoneNumber.slice(0, 1)} ${phoneNumber.slice(1, 5)} ${phoneNumber.slice(5, 9)}`;
+    }
+    
     // Format as Chilean number
     if (digits.length <= 1) return digits;
     if (digits.length <= 5) return `+56 ${digits}`;
