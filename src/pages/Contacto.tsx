@@ -102,10 +102,10 @@ Mensaje: ${formData.message}`
                   <div>
                     <span className="font-medium text-neutral-dark">WhatsApp: </span>
                     <a 
-                      href="https://wa.me/56985273088" 
+                      href="https://wa.me/56946120426" 
                       className="text-secondary underline hover:text-primary transition-colors duration-200"
                     >
-                      +56 9 8527 3088
+                      +56 9 4612 0426
                     </a>
                   </div>
                 </div>

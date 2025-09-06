@@ -29,8 +29,8 @@ const LocationSection = () => {
                 </p>
                 <p className="font-inter text-muted-foreground mb-2">
                   WhatsApp:{" "}
-                  <a href="https://wa.me/56985273088" target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp" className="text-accent underline hover:text-primary transition-colors duration-300 font-medium">
-                    +56 9 8527 3088
+                  <a href="https://wa.me/56946120426" target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp" className="text-accent underline hover:text-primary transition-colors duration-300 font-medium">
+                    +56 9 4612 0426
                   </a>
                 </p>
                 <p className="font-inter text-muted-foreground">

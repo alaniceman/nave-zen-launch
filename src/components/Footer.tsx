@@ -84,10 +84,10 @@ const Footer = () => {
             <p className="mb-2">
               WhatsApp:{" "}
               <a 
-                href="https://wa.me/56985273088" 
+                href="https://wa.me/56946120426" 
                 className="text-accent hover:text-warm transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
               >
-                +56 9 8527 3088
+                +56 9 4612 0426
               </a>
             </p>
             <p className="mb-4">
@@ -112,7 +112,7 @@ const Footer = () => {
                 <Instagram className="w-5 h-5" />
               </a>
               <a 
-                href="https://wa.me/56985273088" 
+                href="https://wa.me/56946120426" 
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-accent hover:text-warm hover:scale-110 transition-all duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
