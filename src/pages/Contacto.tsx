@@ -3,9 +3,12 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Footer } from "@/components/Footer"
+import { TrialClassModal } from "@/components/TrialClassModal"
 import { MapPin, Phone, Instagram, Clock } from "lucide-react"
 
 const Contacto = () => {
+  const [isTrialModalOpen, setIsTrialModalOpen] = useState(false)
+  
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -238,7 +241,7 @@ Mensaje: ${formData.message}`
             Agenda una clase gratuita de Yoga y siente la energía del espacio.
           </p>
           <Button
-            onClick={() => scrollToSection('/planes#clase-gratis')}
+            onClick={() => setIsTrialModalOpen(true)}
             className="bg-secondary hover:bg-primary text-white py-3 px-10 rounded-[10px] transition-all duration-200 hover:scale-105"
           >
             Reservar clase de prueba
@@ -246,6 +249,12 @@ Mensaje: ${formData.message}`
         </div>
       </section>
 
+      
+      <TrialClassModal 
+        isOpen={isTrialModalOpen} 
+        onClose={() => setIsTrialModalOpen(false)} 
+      />
+      
       <Footer />
     </main>
   )
