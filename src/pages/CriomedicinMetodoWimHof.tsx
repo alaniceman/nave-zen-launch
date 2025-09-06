@@ -83,6 +83,14 @@ const CriomedicinMetodoWimHof = () => {
                   "@type": "Answer",
                   "text": "Seguimos protocolos guiados, personalizamos tiempos y contraindicaciones. Consulta a tu médico si tienes condiciones preexistentes."
                 }
+              },
+              {
+                "@type": "Question",
+                "name": "¿Qué debo llevar a mi primera clase?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Para Ice Bath: traje de baño, toalla y ropa cómoda para después. Para Yoga: ropa deportiva cómoda y botella de agua. Nosotros proporcionamos esterillas y todo el equipamiento necesario."
+                }
               }
             ]
           })}
@@ -304,7 +312,7 @@ const CriomedicinMetodoWimHof = () => {
 
         {/* Facilitators Section */}
         <section id="facilitadores">
-          <CoachesSection />
+          <CoachesSection filterIds={["alan", "sol", "maral", "rolo"]} />
         </section>
 
         {/* How to Book Section */}
@@ -351,6 +359,10 @@ const CriomedicinMetodoWimHof = () => {
               <details className="rounded-xl border p-4 bg-card">
                 <summary className="font-semibold text-primary cursor-pointer">¿Es seguro?</summary>
                 <p className="text-foreground mt-2">Seguimos protocolos guiados, personalizamos tiempos y contraindicaciones. Consulta a tu médico si tienes condiciones preexistentes.</p>
+              </details>
+              <details className="rounded-xl border p-4 bg-card">
+                <summary className="font-semibold text-primary cursor-pointer">¿Qué debo llevar a mi primera clase?</summary>
+                <p className="text-foreground mt-2">Para Ice Bath: traje de baño, toalla y ropa cómoda para después. Para Yoga: ropa deportiva cómoda y botella de agua. Nosotros proporcionamos esterillas y todo el equipamiento necesario.</p>
               </details>
             </div>
           </div>

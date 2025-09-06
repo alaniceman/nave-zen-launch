@@ -67,7 +67,10 @@ const coaches: Coach[] = [{
   purpose: "Te acompaño a transitar etapas de cambio con serenidad, cuerpo y corazón alineados.",
   image: "/lovable-uploads/367f27fb-5f27-4b38-bc21-af8951de42aa.png"
 }];
-export const CoachesSection = () => {
+export const CoachesSection = ({ filterIds }: { filterIds?: string[] } = {}) => {
+  // Filter coaches if filterIds is provided
+  const displayedCoaches = filterIds ? coaches.filter(coach => filterIds.includes(coach.id)) : coaches;
+  
   const [currentCoachIndex, setCurrentCoachIndex] = useState(0);
   const sliderRef = useRef<HTMLDivElement | null>(null);
   const handleCoachScroll = () => {
@@ -78,7 +81,7 @@ export const CoachesSection = () => {
     const cardWidth = firstChild.getBoundingClientRect().width;
     const gap = 16; // gap-4
     const idx = Math.round(container.scrollLeft / (cardWidth + gap));
-    setCurrentCoachIndex(Math.max(0, Math.min(idx, coaches.length - 1)));
+    setCurrentCoachIndex(Math.max(0, Math.min(idx, displayedCoaches.length - 1)));
   };
   const scrollToCoach = (index: number) => {
     const container = sliderRef.current;
@@ -107,7 +110,7 @@ export const CoachesSection = () => {
 
         {/* Coaches Grid - Desktop & Tablet */}
         <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-          {coaches.map(coach => <CoachCard key={coach.id} coach={coach} isMobile={false} />)}
+          {displayedCoaches.map(coach => <CoachCard key={coach.id} coach={coach} isMobile={false} />)}
         </div>
 
         {/* Coaches Slider - Mobile */}
@@ -115,7 +118,7 @@ export const CoachesSection = () => {
           <div ref={sliderRef} onScroll={handleCoachScroll} className="flex overflow-x-auto gap-4 pb-4 px-4 -mx-4" style={{
           scrollSnapType: 'x mandatory'
         }}>
-            {coaches.map((coach, index) => <div key={coach.id} className="flex-none w-80 max-w-[calc(100vw-2rem)]" style={{
+            {displayedCoaches.map((coach, index) => <div key={coach.id} className="flex-none w-80 max-w-[calc(100vw-2rem)]" style={{
             scrollSnapAlign: 'center'
           }}>
                 <CoachCard coach={coach} isMobile={true} />
@@ -123,7 +126,7 @@ export const CoachesSection = () => {
           </div>
           {/* Mobile scroll indicator */}
           <div className="flex justify-center gap-2 mt-4">
-            {coaches.map((_, index) => <button key={index} onClick={() => scrollToCoach(index)} className={`w-2 h-2 rounded-full transition-colors duration-200 ${index === currentCoachIndex ? 'bg-secondary' : 'bg-neutral-light'}`} aria-label={`Ir al slide ${index + 1}`} />)}
+            {displayedCoaches.map((_, index) => <button key={index} onClick={() => scrollToCoach(index)} className={`w-2 h-2 rounded-full transition-colors duration-200 ${index === currentCoachIndex ? 'bg-secondary' : 'bg-neutral-light'}`} aria-label={`Ir al slide ${index + 1}`} />)}
           </div>
         </div>
 
