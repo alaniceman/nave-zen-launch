@@ -17,7 +17,7 @@ const WhatsAppWidget = () => {
         onClick={handleWhatsAppClick}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className="bg-[#25d366] hover:bg-[#128c7e] text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 animate-pulse hover:animate-none focus:outline-none focus:ring-4 focus:ring-[#25d366]/30"
+        className="bg-[#25d366] hover:bg-[#128c7e] text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-4 focus:ring-[#25d366]/30"
         aria-label="Contactar por WhatsApp"
       >
         <MessageCircle className="w-6 h-6 md:w-7 md:h-7" />
