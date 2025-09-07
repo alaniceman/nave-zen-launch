@@ -26,6 +26,7 @@ import { CheckoutRedirectManager } from "@/components/CheckoutRedirectManager";
 import { SEOHead } from "@/components/SEOHead";
 import { TrialDelegationHandler } from "@/components/TrialDelegationHandler";
 import FacebookPixelRouterTracker from "@/components/FacebookPixelRouterTracker";
+import { WhatsAppWidget } from "@/components/WhatsAppWidget";
 
 const queryClient = new QueryClient();
 
@@ -63,6 +64,7 @@ const App = () => (
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <WhatsAppWidget />
         </BrowserRouter>
           </EmailCaptureModalProvider>
         </TrialModalProvider>

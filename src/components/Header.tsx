@@ -50,7 +50,7 @@ export const Header = () => {
     { label: "Planes & Precios", href: "/planes-precios", isExternal: true },
     { label: "Coaches", href: "/coaches", isExternal: true },
     { label: "Blog", href: "/blog", isExternal: true },
-    { label: "Contacto", href: "/contacto", isExternal: true }
+    { label: "Contacto y Ubicación", href: "/contacto", isExternal: true }
   ]
 
   const handleNavigation = (link: { href: string; isExternal?: boolean }) => {

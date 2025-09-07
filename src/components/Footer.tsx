@@ -51,7 +51,7 @@ const Footer = () => {
               href="/contacto" 
               className="text-accent hover:text-warm transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
             >
-              Contacto
+              Contacto y Ubicación
             </a>
             <a 
               href="/faq" 
