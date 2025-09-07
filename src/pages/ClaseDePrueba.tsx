@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { Footer } from "@/components/Footer";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
+import { MapPin, Phone, Instagram, Clock } from "lucide-react";
 
 const ClaseDePrueba = () => {
   const { trackLead } = useFacebookPixel();
@@ -133,6 +134,94 @@ const ClaseDePrueba = () => {
               <h4 className="font-semibold text-forest">Explorar experiencias</h4>
               <p className="text-sm text-muted-foreground mt-1">Wim Hof, Yoga, Breathwork, Biohacking.</p>
             </a>
+          </div>
+        </section>
+
+        {/* Location Section */}
+        <section className="py-16 px-6 bg-neutral-light">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-2xl md:text-3xl font-heading text-primary mb-4">
+                Dónde nos encontramos
+              </h2>
+              <p className="text-neutral-mid max-w-2xl mx-auto">
+                Visítanos en nuestro estudio para tu clase de prueba
+              </p>
+            </div>
+            
+            <div className="grid gap-12 lg:grid-cols-2">
+              {/* Contact Info */}
+              <div className="animate-fade-in">
+                <div className="space-y-6">
+                  <div className="flex items-start gap-3">
+                    <MapPin className="w-5 h-5 text-secondary mt-1 flex-shrink-0" />
+                    <div>
+                      <p className="text-neutral-mid mb-2">Antares 259, Las Condes, Santiago</p>
+                      <a 
+                        href="https://maps.app.goo.gl/oW6G58gLd5oYWmGn8" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-secondary underline hover:text-primary transition-colors duration-200"
+                      >
+                        Ver mapa en Google →
+                      </a>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <Phone className="w-5 h-5 text-secondary flex-shrink-0" />
+                    <div>
+                      <span className="font-medium text-neutral-dark">WhatsApp: </span>
+                      <a 
+                        href="https://wa.me/56946120426" 
+                        className="text-secondary underline hover:text-primary transition-colors duration-200"
+                      >
+                        +56 9 4612 0426
+                      </a>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <Instagram className="w-5 h-5 text-secondary flex-shrink-0" />
+                    <div>
+                      <span className="font-medium text-neutral-dark">Instagram: </span>
+                      <a 
+                        href="https://www.instagram.com/nave.icestudio" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-secondary underline hover:text-primary transition-colors duration-200"
+                      >
+                        @nave.icestudio
+                      </a>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <Clock className="w-5 h-5 text-secondary flex-shrink-0" />
+                    <p className="text-neutral-dark">
+                      <span className="font-medium">Horarios: </span>
+                      Lun–Dom · 07:00 – 20:00 h
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Map */}
+              <div className="animate-fade-in">
+                <div className="relative">
+                  <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3328.4234567890123!2d-70.61234567890123!3d-33.41234567890123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662c5a1234567890%3A0x1234567890abcdef!2sAntares%20259%2C%20Las%20Condes%2C%20Regi%C3%B3n%20Metropolitana%2C%20Chile!5e0!3m2!1sen!2scl!4v1234567890123!5m2!1sen!2scl"
+                    width="100%" 
+                    height="320" 
+                    loading="lazy"
+                    className="rounded-[10px] shadow-lg border-0"
+                    allowFullScreen
+                    referrerPolicy="no-referrer-when-downgrade"
+                    title="Ubicación Nave Studio"
+                  ></iframe>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
       </main>
