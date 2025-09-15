@@ -148,11 +148,12 @@ export const scheduleData: Record<string, ClassItem[]> = {
       duration: 60
     },
     {
-      time: "20:00",
-      title: "Vinyasa Yoga + Ice Bath (opcional)",
+      time: "20:15",
+      title: "Yoga Integral + Ice Bath (opcional)",
       tags: ["Yoga"],
       badges: ["Ice Bath opcional"],
-      duration: 60
+      duration: 60,
+      instructor: "Maral"
     }
   ],
   viernes: [
