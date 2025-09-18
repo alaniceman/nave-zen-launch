@@ -33,13 +33,6 @@ export default function Horarios() {
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
               Programa tu semana y vive nuestras experiencias.
             </p>
-            <button
-              onClick={scrollToSchedule}
-              className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors"
-            >
-              <Calendar className="w-5 h-5" />
-              Ver el día de hoy
-            </button>
           </div>
         </section>
 
