@@ -69,7 +69,6 @@ export default function ScheduleDayCards() {
   }, [viewMode, expSlug]);
 
   const dayTabs = [
-    { key: "hoy", label: "Hoy", actual: todayKey },
     { key: "lunes", label: "Lun" },
     { key: "martes", label: "Mar" },
     { key: "miercoles", label: "Mié" },
@@ -80,7 +79,7 @@ export default function ScheduleDayCards() {
   ];
 
   const getActiveDay = () => {
-    return selectedDay === "hoy" ? todayKey : selectedDay;
+    return selectedDay || todayKey;
   };
 
   const currentDayClasses = scheduleData[getActiveDay()] || [];
@@ -142,7 +141,7 @@ export default function ScheduleDayCards() {
             onClick={() => setViewMode("day")} 
             aria-pressed={viewMode === "day"}
           >
-            Filtrar por Día
+            📅 Filtrar por Día
           </button>
           <button 
             className={`px-4 py-2 rounded-lg font-medium transition-colors ${
@@ -153,7 +152,7 @@ export default function ScheduleDayCards() {
             onClick={() => setViewMode("exp")} 
             aria-pressed={viewMode === "exp"}
           >
-            Filtrar por Experiencia
+            🎯 Filtrar por Experiencia
           </button>
 
         </div>
@@ -224,7 +223,7 @@ export default function ScheduleDayCards() {
           {/* Day title */}
           <h2 className="text-2xl md:text-3xl font-bold text-[#2E4D3A] px-4 mb-3 md:mb-4 flex items-center gap-2">
             {currentDayName}
-            {selectedDay === "hoy" && (
+            {selectedDay === todayKey && (
               <span className="bg-[#2E4D3A] text-white rounded-full text-sm px-3 py-1">
                 Hoy
               </span>
@@ -318,7 +317,7 @@ export default function ScheduleDayCards() {
                         : 'bg-[#F4F4F4] text-[#2E4D3A] hover:bg-[#E9E9E9]'
                     }`}
                   >
-                    {tab.key === "hoy" ? "Hoy" : dayNames[tab.key as keyof typeof dayNames]}
+                    {dayNames[tab.key as keyof typeof dayNames]}
                   </button>
                 );
               })}
@@ -330,7 +329,7 @@ export default function ScheduleDayCards() {
             {/* Day title */}
             <h2 className="text-2xl md:text-3xl font-bold text-[#2E4D3A] mb-3 md:mb-4 flex items-center gap-2">
               {currentDayName}
-              {selectedDay === "hoy" && (
+              {selectedDay === todayKey && (
                 <span className="bg-[#2E4D3A] text-white rounded-full text-sm px-3 py-1">
                   Hoy
                 </span>
