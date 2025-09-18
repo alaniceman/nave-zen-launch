@@ -122,7 +122,7 @@ export default function ScheduleDayCards() {
   };
 
   return (
-    <section id="horarios" className="py-8 md:py-10">
+    <section id="horarios" className="py-4 md:py-8">
       <style>{`
         html {
           scroll-padding-top: 70px;
@@ -131,41 +131,41 @@ export default function ScheduleDayCards() {
       
       <div className="max-w-6xl mx-auto px-4 md:px-6">
         {/* View mode controls */}
-        <div className="flex flex-wrap items-center gap-2 mb-6">
+        <div className="flex flex-wrap items-center gap-3 mb-6 md:mb-8">
           <button 
-            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+            className={`px-5 py-3 rounded-full font-medium text-sm transition-all ${
               viewMode === "day" 
-                ? "bg-[#2E4D3A] text-white" 
-                : "bg-[#F4F4F4] text-[#2E4D3A] hover:bg-[#E9E9E9]"
+                ? "bg-[#2E4D3A] text-white shadow-sm" 
+                : "bg-white text-[#2E4D3A] border border-[#E2E8F0] hover:border-[#2E4D3A]/40 hover:bg-[#F8F9FA]"
             }`}
             onClick={() => setViewMode("day")} 
             aria-pressed={viewMode === "day"}
           >
-            📅 Filtrar por Día
+            📅 Por Día
           </button>
           <button 
-            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+            className={`px-5 py-3 rounded-full font-medium text-sm transition-all ${
               viewMode === "exp" 
-                ? "bg-[#2E4D3A] text-white" 
-                : "bg-[#F4F4F4] text-[#2E4D3A] hover:bg-[#E9E9E9]"
+                ? "bg-[#2E4D3A] text-white shadow-sm" 
+                : "bg-white text-[#2E4D3A] border border-[#E2E8F0] hover:border-[#2E4D3A]/40 hover:bg-[#F8F9FA]"
             }`}
             onClick={() => setViewMode("exp")} 
             aria-pressed={viewMode === "exp"}
           >
-            🎯 Filtrar por Experiencia
+            🎯 Por Experiencia
           </button>
 
         </div>
 
         {/* Experience chips selector */}
         {viewMode === "exp" && (
-          <div className="mb-6">
-            <div className="text-sm text-[#575757] mb-2">Experiencia:</div>
+          <div className="mb-6 md:mb-8">
+            <div className="text-sm font-medium text-[#575757] mb-3">Selecciona una experiencia:</div>
             <div className="relative">
               <div
                 role="radiogroup"
                 aria-label="Seleccionar experiencia"
-                className="flex gap-3 overflow-x-auto snap-x snap-mandatory pb-2 -mx-2 px-2 pr-8
+                className="flex gap-2 md:gap-3 overflow-x-auto snap-x snap-mandatory pb-2 -mx-1 px-1 pr-8
                            [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']
                            after:absolute after:right-0 after:top-0 after:bottom-2 after:w-8 
                            after:bg-gradient-to-l after:from-white after:to-transparent after:pointer-events-none"
@@ -178,10 +178,10 @@ export default function ScheduleDayCards() {
                       role="radio"
                       aria-checked={active}
                       onClick={() => setExpSlug(exp.slug)}
-                      className={`snap-start shrink-0 whitespace-nowrap rounded-full px-4 py-2 border transition-colors ${
+                      className={`snap-start shrink-0 whitespace-nowrap rounded-full px-4 py-2.5 border transition-all text-sm font-medium ${
                         active
-                          ? "bg-[#2E4D3A] text-white border-[#2E4D3A]"
-                          : "bg-white text-[#2E4D3A] border-[#E2E8F0] hover:border-[#2E4D3A]/40"
+                          ? "bg-[#2E4D3A] text-white border-[#2E4D3A] shadow-sm"
+                          : "bg-white text-[#2E4D3A] border-[#E2E8F0] hover:border-[#2E4D3A]/40 hover:bg-[#F8F9FA]"
                       }`}
                     >
                       {exp.labelShort ?? exp.label}
@@ -198,7 +198,7 @@ export default function ScheduleDayCards() {
         {/* Mobile/Tablet: Horizontal tabs */}
         <div className="lg:hidden">
           {/* Day tabs */}
-          <div className="flex gap-3 overflow-x-auto px-4 pb-2 mb-6" role="tablist">
+          <div className="flex gap-2 overflow-x-auto px-4 pb-2 mb-4" role="tablist">
             {dayTabs.map((tab) => {
               const isActive = selectedDay === tab.key;
               return (
@@ -208,10 +208,10 @@ export default function ScheduleDayCards() {
                   aria-selected={isActive}
                   aria-controls={`panel-${tab.key}`}
                   onClick={() => setSelectedDay(tab.key)}
-                  className={`rounded-2xl px-4 py-2 font-semibold whitespace-nowrap transition-colors ${
+                  className={`rounded-xl px-4 py-2.5 font-medium text-sm whitespace-nowrap transition-all ${
                     isActive
-                      ? 'bg-[#2E4D3A] text-white'
-                      : 'bg-[#F4F4F4] text-[#2E4D3A]'
+                      ? 'bg-[#2E4D3A] text-white shadow-sm'
+                      : 'bg-white text-[#2E4D3A] border border-[#E2E8F0] hover:bg-[#F8F9FA]'
                   }`}
                 >
                   {tab.label}
@@ -221,7 +221,7 @@ export default function ScheduleDayCards() {
           </div>
 
           {/* Day title */}
-          <h2 className="text-2xl md:text-3xl font-bold text-[#2E4D3A] px-4 mb-3 md:mb-4 flex items-center gap-2">
+          <h2 className="text-xl md:text-2xl font-bold text-[#2E4D3A] px-4 mb-4 flex items-center gap-2">
             {currentDayName}
             {selectedDay === todayKey && (
               <span className="bg-[#2E4D3A] text-white rounded-full text-sm px-3 py-1">
