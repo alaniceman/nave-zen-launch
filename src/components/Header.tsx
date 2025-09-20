@@ -135,6 +135,13 @@ export const Header = () => {
                 >
                   Clase de prueba
                 </a>
+                <a
+                  role="menuitem"
+                  href="https://boxmagic.cl/crear_cuenta/NaveStudio"
+                  className="block px-4 py-3 text-foreground hover:bg-neutral-light transition-all duration-200 focus:outline-dashed focus:outline-2 focus:outline-secondary"
+                >
+                  Registrarse
+                </a>
               </div>
             )}
           </div>
@@ -190,7 +197,7 @@ export const Header = () => {
               </button>
             </div>
 
-            {/* Navigation Links - Scrollable */}
+            {/* Navigation Links and Actions - Scrollable */}
             <nav className="flex-1 overflow-y-auto py-4">
               <ul className="space-y-3">
                 {navigationLinks.map((link) => (
@@ -204,23 +211,29 @@ export const Header = () => {
                   </li>
                 ))}
               </ul>
+              
+              {/* Action buttons after navigation links */}
+              <div className="mt-6 px-6 space-y-2.5">
+                <a
+                  href="https://members.boxmagic.app/"
+                  className="block w-full bg-secondary hover:bg-primary text-white font-inter font-medium py-2.5 rounded-[10px] transition-all duration-200 text-center text-sm"
+                >
+                  Ingresar a la app
+                </a>
+                <a
+                  href="/clase-de-prueba"
+                  className="block w-full bg-warm hover:bg-forest text-white font-inter font-medium py-2.5 rounded-[10px] transition-all duration-200 text-center text-sm"
+                >
+                  Clase de prueba
+                </a>
+                <a
+                  href="https://boxmagic.cl/crear_cuenta/NaveStudio"
+                  className="block w-full bg-primary hover:bg-secondary text-white font-inter font-medium py-2.5 rounded-[10px] transition-all duration-200 text-center text-sm"
+                >
+                  Registrarse
+                </a>
+              </div>
             </nav>
-
-            {/* Mobile CTA - Fixed at bottom */}
-            <div className="p-4 border-t border-border space-y-2.5 flex-shrink-0">
-              <a
-                href="https://members.boxmagic.app/"
-                className="block w-full bg-secondary hover:bg-primary text-white font-inter font-medium py-2.5 rounded-[10px] transition-all duration-200 text-center text-sm"
-              >
-                Ingresar a la app
-              </a>
-              <a
-                href="/clase-de-prueba"
-                className="block w-full bg-warm hover:bg-forest text-white font-inter font-medium py-2.5 rounded-[10px] transition-all duration-200 text-center text-sm"
-              >
-                Clase de prueba
-              </a>
-            </div>
           </div>
         </div>
       </div>
