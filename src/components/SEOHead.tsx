@@ -51,6 +51,11 @@ const seoData = {
     title: "Criomedicina (Método Wim Hof) en Chile — Ice Bath & Breathwork | Nave Studio",
     description: "Sesiones guiadas de Método Wim Hof en Santiago (Las Condes): respiración + baño de hielo a 3 °C. Horarios, precios y reserva online.",
     canonical: "https://studiolanave.com/criomedicina-metodo-wim-hof"
+  },
+  "/criomedicina-ice-bath-en-grupo": {
+    title: "Criomedicina en grupo — Ice Bath grupal con descuento | Nave Studio",
+    description: "Experiencia grupal de criomedicina (Método Wim Hof) en Santiago. Descuentos especiales para grupos de 3-10 personas. Reserva tu cupo grupal.",
+    canonical: "https://studiolanave.com/criomedicina-ice-bath-en-grupo"
   }
 };
 

@@ -123,7 +123,7 @@ const CriomedicinMetodoWimHof = () => {
             Respiración Wim Hof + Ice Bath guiado (60 min). Regula tu sistema nervioso, gana foco y energía.
           </p>
 
-          <div className="mt-6 flex justify-center">
+          <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center items-center">
             <CheckoutRedirectButton
               url="https://boxmagic.cl/market/plan/RZ0vlQyLQ6"
               plan="Criomedicina / Wim Hof — 1 sesión grupal"
@@ -131,6 +131,13 @@ const CriomedicinMetodoWimHof = () => {
             >
               Agendar 1 sesión — $30.000
             </CheckoutRedirectButton>
+            
+            <a
+              href="/criomedicina-ice-bath-en-grupo"
+              className="bg-secondary text-secondary-foreground hover:bg-secondary/90 px-8 py-4 rounded-xl text-lg font-semibold inline-flex items-center justify-center transition-colors"
+            >
+              Agenda grupal
+            </a>
           </div>
 
           <p className="text-base text-muted-foreground mt-4 text-center">

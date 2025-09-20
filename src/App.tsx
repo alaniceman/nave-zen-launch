@@ -19,6 +19,7 @@ import Horarios from "./pages/Horarios";
 import FAQ from "./pages/FAQ";
 import ClaseDePrueba from "./pages/ClaseDePrueba";
 import CriomedicinMetodoWimHof from "./pages/CriomedicinMetodoWimHof";
+import CriomedicinIceBathEnGrupo from "./pages/CriomedicinIceBathEnGrupo";
 import Terminos from "./pages/Terminos";
 import Privacidad from "./pages/Privacidad";
 import NotFound from "./pages/NotFound";
@@ -57,6 +58,7 @@ const App = () => (
             <Route path="/faq" element={<FAQ />} />
             <Route path="/clase-de-prueba" element={<ClaseDePrueba />} />
             <Route path="/criomedicina-metodo-wim-hof" element={<CriomedicinMetodoWimHof />} />
+            <Route path="/criomedicina-ice-bath-en-grupo" element={<CriomedicinIceBathEnGrupo />} />
             <Route path="/terminos" element={<Terminos />} />
             <Route path="/privacidad" element={<Privacidad />} />
             {/* Redirect legacy routes */}
