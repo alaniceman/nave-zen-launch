@@ -123,13 +123,6 @@ export const Header = () => {
               >
                 <a
                   role="menuitem"
-                  href="https://members.boxmagic.app/"
-                  className="block px-4 py-3 text-foreground hover:bg-neutral-light transition-all duration-200 focus:outline-dashed focus:outline-2 focus:outline-secondary"
-                >
-                  Ingresar a la app
-                </a>
-                <a
-                  role="menuitem"
                   href="/clase-de-prueba"
                   className="block px-4 py-3 text-foreground hover:bg-neutral-light transition-all duration-200 focus:outline-dashed focus:outline-2 focus:outline-secondary"
                 >
@@ -141,6 +134,13 @@ export const Header = () => {
                   className="block px-4 py-3 text-foreground hover:bg-neutral-light transition-all duration-200 focus:outline-dashed focus:outline-2 focus:outline-secondary"
                 >
                   Registrarse
+                </a>
+                <a
+                  role="menuitem"
+                  href="https://members.boxmagic.app/"
+                  className="block px-4 py-3 text-foreground hover:bg-neutral-light transition-all duration-200 focus:outline-dashed focus:outline-2 focus:outline-secondary"
+                >
+                  Ingresar a la app
                 </a>
               </div>
             )}
@@ -215,12 +215,6 @@ export const Header = () => {
               {/* Action buttons after navigation links */}
               <div className="mt-6 px-6 space-y-2.5">
                 <a
-                  href="https://members.boxmagic.app/"
-                  className="block w-full bg-secondary hover:bg-primary text-white font-inter font-medium py-2.5 rounded-[10px] transition-all duration-200 text-center text-sm"
-                >
-                  Ingresar a la app
-                </a>
-                <a
                   href="/clase-de-prueba"
                   className="block w-full bg-warm hover:bg-forest text-white font-inter font-medium py-2.5 rounded-[10px] transition-all duration-200 text-center text-sm"
                 >
@@ -231,6 +225,12 @@ export const Header = () => {
                   className="block w-full bg-primary hover:bg-secondary text-white font-inter font-medium py-2.5 rounded-[10px] transition-all duration-200 text-center text-sm"
                 >
                   Registrarse
+                </a>
+                <a
+                  href="https://members.boxmagic.app/"
+                  className="block w-full bg-secondary hover:bg-primary text-white font-inter font-medium py-2.5 rounded-[10px] transition-all duration-200 text-center text-sm"
+                >
+                  Ingresar a la app
                 </a>
               </div>
             </nav>
