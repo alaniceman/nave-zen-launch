@@ -11,12 +11,14 @@ export const HeroSection = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image with Overlay */}
-      <div 
-        className="absolute inset-0 bg-cover bg-no-repeat bg-center md:bg-center"
+      <img 
+        src="/lovable-uploads/82672388-9723-4aee-a1f2-ac72618cd26a.png"
+        alt="Nave Studio wellness center hero background"
+        className="absolute inset-0 w-full h-full object-cover"
         style={{
-          backgroundImage: `url(/lovable-uploads/82672388-9723-4aee-a1f2-ac72618cd26a.png)`,
-          backgroundPosition: 'right 32% center',
+          objectPosition: 'right 32% center',
         }}
+        fetchPriority="high"
       />
       
       {/* Green Overlay */}
