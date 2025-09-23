@@ -46,7 +46,7 @@ export const SocialProofSection = () => {
         <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
           {testimonials.map((testimonial, index) => <div key={index} className="bg-background rounded-[var(--radius)] p-8 shadow-light text-center space-y-6">
               <div className="mx-auto w-32 h-32 rounded-full overflow-hidden shadow-medium">
-                <img src={testimonial.image} alt={`${testimonial.name} - ${testimonial.role}`} className="w-full h-full object-cover" />
+                <img src={testimonial.image} alt={`${testimonial.name} - ${testimonial.role}`} className="w-full h-full object-cover" loading="lazy" />
               </div>
               <div className="space-y-2">
                 <h3 className="font-space-grotesk font-bold text-xl text-neutral-dark">
@@ -72,7 +72,7 @@ export const SocialProofSection = () => {
           }}>
                 <div className="bg-background rounded-[var(--radius)] p-8 shadow-light text-center space-y-6">
                   <div className="mx-auto w-24 h-24 rounded-full overflow-hidden shadow-medium">
-                    <img src={testimonial.image} alt={`${testimonial.name} - ${testimonial.role}`} className="w-full h-full object-cover" />
+                    <img src={testimonial.image} alt={`${testimonial.name} - ${testimonial.role}`} className="w-full h-full object-cover" loading="lazy" />
                   </div>
                   <div className="space-y-2">
                     <h3 className="font-space-grotesk font-bold text-xl text-neutral-dark">
@@ -96,7 +96,7 @@ export const SocialProofSection = () => {
         <div className="text-center mb-8 md:mb-16">
           <div className="flex flex-wrap justify-center items-center gap-16 md:gap-24 opacity-80">
             {certifications.map((cert, index) => <div key={index} className="flex items-center justify-center h-40">
-                {cert.logo ? <img src={cert.logo} alt={cert.name} className="h-36 w-auto object-contain" /> : <span className="font-inter text-lg text-neutral-mid font-medium">
+                {cert.logo ? <img src={cert.logo} alt={cert.name} className="h-36 w-auto object-contain" loading="lazy" /> : <span className="font-inter text-lg text-neutral-mid font-medium">
                     {cert.name}
                   </span>}
               </div>)}
