@@ -30,6 +30,14 @@ export const scheduleData: Record<string, ClassItem[]> = {
       tags: ["Método Wim Hof"],
       badges: [],
       duration: 60
+    },
+    {
+      time: "18:30",
+      title: "Yin Yoga + Ice Bath (opcional)",
+      tags: ["Yoga"],
+      badges: ["Ice Bath opcional"],
+      duration: 60,
+      instructor: "Val Medina"
     }
   ],
   martes: [
@@ -99,7 +107,8 @@ export const scheduleData: Record<string, ClassItem[]> = {
       title: "Yin Yoga + Ice Bath (opcional)",
       tags: ["Yoga"],
       badges: ["Ice Bath opcional"],
-      duration: 60
+      duration: 60,
+      instructor: "Val Medina"
     },
     {
       time: "19:30",
