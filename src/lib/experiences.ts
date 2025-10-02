@@ -10,8 +10,7 @@ export const EXPERIENCE_CATALOG = [
     labelShort: "Agua Fría",
     match: (item: ScheduleItem) =>
       /m(é|e)todo\s*wim\s*hof/i.test(item.title) &&
-      /ice\s*bath|inmersi(ó|o)n/i.test(item.title) &&
-      !/personalizad/i.test(item.title),
+      (/ice\s*bath|inmersi(ó|o)n|personalizad/i.test(item.title)),
     metaNote: null,
   },
   {
