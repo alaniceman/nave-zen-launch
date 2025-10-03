@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import { Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { CheckoutRedirectButton } from "@/components/CheckoutRedirectButton"
+import naveStudioLogo from "@/assets/nave-studio-logo.png"
 
 export const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -77,10 +78,14 @@ export const Header = () => {
           {/* Logo */}
           <button
             onClick={() => window.location.href = '/'}
-            className="font-space-grotesk font-bold text-xl md:text-2xl text-primary hover:text-warm transition-colors duration-200 focus:outline-dashed focus:outline-2 focus:outline-secondary"
+            className="hover:opacity-80 transition-opacity duration-200 focus:outline-dashed focus:outline-2 focus:outline-secondary"
             aria-label="Ir al inicio"
           >
-            NAVE Studio
+            <img 
+              src={naveStudioLogo} 
+              alt="NAVE Studio" 
+              className="h-8 md:h-10 w-auto"
+            />
           </button>
 
           {/* Desktop Navigation */}
