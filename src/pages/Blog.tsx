@@ -5,9 +5,20 @@ import { Calendar, User, Tag } from "lucide-react";
 import heroImage from "@/assets/blog-wim-hof-hero.jpg";
 import biohackingHeroImage from "@/assets/blog-biohacking-hero.jpg";
 import yinVinyasaHeroImage from "@/assets/blog-yin-vinyasa-hero.jpg";
+import habitosDisciplinaHeroImage from "@/assets/blog-habitos-disciplina-hero.jpg";
 
 const Blog = () => {
   const blogPosts = [
+    {
+      title: "Hábitos y disciplina: el arte de construirte a ti mismo (paso a paso)",
+      slug: "/blog/habitos-disciplina-como-construirte-a-ti-mismo",
+      excerpt: "La motivación prende la chispa, pero la disciplina mantiene el fuego. Aprende a construir hábitos sostenibles para cuerpo, mente y espíritu.",
+      author: "Alan Iceman Earle",
+      date: "14 de agosto, 2025",
+      categories: ["Hábitos", "Disciplina", "Criocoaching", "Crecimiento personal"],
+      image: habitosDisciplinaHeroImage,
+      imageAlt: "Hábitos y disciplina para el crecimiento personal en Nave Studio"
+    },
     {
       title: "Yin Yoga y Vinyasa Yoga: dos caminos complementarios para regular tu cuerpo y tu mente",
       slug: "/blog/yin-yoga-vinyasa-yoga-beneficios-como-combinarlos",
