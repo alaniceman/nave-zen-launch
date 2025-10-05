@@ -3,7 +3,6 @@ import { X, Mail, Phone, Clock, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 
 interface EmailCaptureModalProps {
   isOpen: boolean;
@@ -103,16 +102,18 @@ export const EmailCaptureModal = ({ isOpen, onClose }: EmailCaptureModalProps) =
     setIsSubmitting(true);
 
     try {
-      const { data, error } = await supabase.functions.invoke('subscribe-mailerlite', {
-        body: {
+      const response = await fetch('/api/subscribe-mailerlite', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
           email,
           whatsapp,
           tags: ['Oferta-Septiembre-2024', 'Modal-Capture'],
           source: 'email-capture-modal'
-        }
+        })
       });
 
-      if (error) throw error;
+      if (!response.ok) throw new Error('Error al suscribirse');
 
       // Store in localStorage to prevent showing again
       localStorage.setItem('email-capture-subscribed', 'true');
