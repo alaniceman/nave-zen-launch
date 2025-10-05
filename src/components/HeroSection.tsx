@@ -9,7 +9,7 @@ export const HeroSection = () => {
     navigate('/planes')
   }
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center md:justify-center justify-start pt-24 md:pt-0 overflow-hidden">
       {/* Background Image with Overlay */}
       <img 
         src="/lovable-uploads/82672388-9723-4aee-a1f2-ac72618cd26a.png"
