@@ -32,16 +32,17 @@ const Cyber2025 = () => {
         <link rel="canonical" href="https://studiolanave.com/cyber-2025" />
         
         {/* Open Graph */}
-        <meta property="og:title" content="Cyber La Nave 2025 — 80% OFF en Nave Studio Santiago" />
-        <meta property="og:description" content="Vive el poder del Método Wim Hof, Yoga y Biohacking con 80% de descuento por 2 meses. Solo del 6 al 8 de octubre en Nave Studio, Las Condes." />
+        <meta property="og:title" content="🔥 Cyber La Nave 2025 — 80% OFF en entrenamientos de bienestar" />
+        <meta property="og:description" content="Solo quedan 4 cupos. Método Wim Hof, Ice Bath, Yoga y Biohacking a precio único. Termina el 8 de octubre. ⏰" />
         <meta property="og:url" content="https://studiolanave.com/cyber-2025" />
         <meta property="og:type" content="website" />
         <meta property="og:image" content="https://studiolanave.com/og-image.png" />
         
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Cyber La Nave 2025 — 80% OFF en Nave Studio Santiago" />
-        <meta name="twitter:description" content="Vive el poder del Método Wim Hof, Yoga y Biohacking con 80% de descuento por 2 meses. Solo del 6 al 8 de octubre en Nave Studio, Las Condes." />
+        <meta name="twitter:title" content="🔥 Cyber La Nave 2025 — 80% OFF en entrenamientos de bienestar" />
+        <meta name="twitter:description" content="Solo quedan 4 cupos. Método Wim Hof, Ice Bath, Yoga y Biohacking a precio único. Termina el 8 de octubre. ⏰" />
+        <meta name="twitter:image" content="https://studiolanave.com/og-image.png" />
       </Helmet>
 
       <main className="min-h-screen">
