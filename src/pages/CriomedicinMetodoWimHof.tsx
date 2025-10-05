@@ -2,6 +2,7 @@ import { Helmet } from "react-helmet-async";
 import { CheckoutRedirectButton } from "@/components/CheckoutRedirectButton";
 import { CoachesSection } from "@/components/CoachesSection";
 import { Footer } from "@/components/Footer";
+import { GiftCardSection } from "@/components/GiftCardSection";
 
 const CriomedicinMetodoWimHof = () => {
   return (
@@ -376,6 +377,7 @@ const CriomedicinMetodoWimHof = () => {
         </section>
       </main>
 
+      <GiftCardSection />
       <Footer />
     </div>
   );
