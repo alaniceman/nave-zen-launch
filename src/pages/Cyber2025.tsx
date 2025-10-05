@@ -152,7 +152,7 @@ const Cyber2025 = () => {
               {/* CTA Buttons */}
               <div className="grid md:grid-cols-2 gap-6">
                 <a
-                  href="https://boxmagic.cl/market/plan_subscription/ev4VPzOD9A"
+                  href="https://boxmagic.cl/market/plan/Vx0JnJw0vB"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block bg-gradient-to-r from-[#00C2CB] to-primary hover:from-primary hover:to-[#00C2CB] text-white rounded-xl p-8 text-center transition-all transform hover:scale-105 shadow-lg"
@@ -164,7 +164,7 @@ const Cyber2025 = () => {
                 </a>
 
                 <a
-                  href="https://boxmagic.cl/market/plan_subscription/j80p5OdDW6"
+                  href="https://boxmagic.cl/market/plan/Kp0MnaPD8x"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white rounded-xl p-8 text-center transition-all transform hover:scale-105 shadow-lg"
