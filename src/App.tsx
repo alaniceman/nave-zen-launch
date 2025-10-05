@@ -17,6 +17,7 @@ import BlogWimHof from "./pages/BlogWimHof";
 import BlogBiohacking from "./pages/BlogBiohacking";
 import BlogYinVinyasa from "./pages/BlogYinVinyasa";
 import BlogHabitosDisciplina from "./pages/BlogHabitosDisciplina";
+import BlogAguaFriaGuiado from "./pages/BlogAguaFriaGuiado";
 import Horarios from "./pages/Horarios";
 import FAQ from "./pages/FAQ";
 import ClaseDePrueba from "./pages/ClaseDePrueba";
@@ -58,6 +59,7 @@ const App = () => (
             <Route path="/blog/biohacking-hiit-breathwork-agua-fria-longevidad" element={<BlogBiohacking />} />
             <Route path="/blog/yin-yoga-vinyasa-yoga-beneficios-como-combinarlos" element={<BlogYinVinyasa />} />
             <Route path="/blog/habitos-disciplina-como-construirte-a-ti-mismo" element={<BlogHabitosDisciplina />} />
+            <Route path="/blog/agua-fria-guiado-vs-solo-experiencia-wim-hof" element={<BlogAguaFriaGuiado />} />
             <Route path="/horarios" element={<Horarios />} />
             <Route path="/faq" element={<FAQ />} />
             <Route path="/clase-de-prueba" element={<ClaseDePrueba />} />

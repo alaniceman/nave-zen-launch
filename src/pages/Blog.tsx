@@ -6,9 +6,20 @@ import heroImage from "@/assets/blog-wim-hof-hero.jpg";
 import biohackingHeroImage from "@/assets/blog-biohacking-hero.jpg";
 import yinVinyasaHeroImage from "@/assets/blog-yin-vinyasa-hero.jpg";
 import habitosDisciplinaHeroImage from "@/assets/blog-habitos-disciplina-hero.jpg";
+import aguaFriaGuiadoHeroImage from "@/assets/blog-agua-fria-guiado-hero.jpg";
 
 const Blog = () => {
   const blogPosts = [
+    {
+      title: "Agua fría: la diferencia entre hacerlo solo y vivirlo guiado (y por qué nunca es lo mismo)",
+      slug: "/blog/agua-fria-guiado-vs-solo-experiencia-wim-hof",
+      excerpt: "Duchas frías en casa pueden cambiar tu energía, pero vivir el agua fría guiado cambia tu mente. Conoce la diferencia entre hacerlo solo y vivirlo con acompañamiento.",
+      author: "Alan Iceman Earle",
+      date: "15 de agosto, 2025",
+      categories: ["Agua fría", "Criomedicina", "Wim Hof Method", "Respiración consciente"],
+      image: aguaFriaGuiadoHeroImage,
+      imageAlt: "Sesión guiada de inmersión en agua fría en Nave Studio Las Condes"
+    },
     {
       title: "Hábitos y disciplina: el arte de construirte a ti mismo (paso a paso)",
       slug: "/blog/habitos-disciplina-como-construirte-a-ti-mismo",
