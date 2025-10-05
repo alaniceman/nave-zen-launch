@@ -1,10 +1,29 @@
 import { Footer } from "@/components/Footer";
 import { Helmet } from "react-helmet-async";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Check } from "lucide-react";
+import { Check, Flame } from "lucide-react";
 import heroImage from "@/assets/cyber-2025-hero.jpg";
+import { useEffect, useState } from "react";
 
 const Cyber2025 = () => {
+  const [showStickyBar, setShowStickyBar] = useState(true);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const planesSection = document.getElementById('planes');
+      if (planesSection) {
+        const rect = planesSection.getBoundingClientRect();
+        // Hide sticky bar when planes section is visible
+        setShowStickyBar(rect.top > window.innerHeight || rect.bottom < 0);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Check initial position
+    
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <>
       <Helmet>
@@ -146,6 +165,18 @@ const Cyber2025 = () => {
                   <p>💳 Compromiso mínimo: 2 meses al valor promocional.</p>
                   <p>📅 Pasado el periodo Cyber, el plan continúa al valor regular.</p>
                   <p>🧊 Promoción válida solo para nuevos miembros o quienes no tengan plan activo.</p>
+                </div>
+              </div>
+
+              {/* Urgency Box */}
+              <div className="relative bg-gradient-to-r from-red-500/10 via-orange-500/10 to-red-500/10 border-2 border-red-500 rounded-xl p-6 mb-8 overflow-hidden">
+                <div className="absolute inset-0 bg-red-500/5 animate-pulse" />
+                <div className="relative flex flex-col md:flex-row items-center justify-center gap-3 md:gap-4">
+                  <Flame className="w-8 h-8 md:w-10 md:h-10 text-red-500 animate-pulse flex-shrink-0" />
+                  <p className="text-base md:text-xl font-bold text-red-600 text-center leading-tight">
+                    Solo quedan <span className="text-xl md:text-2xl">4 de las 15</span> suscripciones disponibles en promoción Cyber
+                  </p>
+                  <Flame className="w-8 h-8 md:w-10 md:h-10 text-red-500 animate-pulse flex-shrink-0" />
                 </div>
               </div>
 
@@ -311,6 +342,23 @@ const Cyber2025 = () => {
 
         <Footer />
       </main>
+
+      {/* Sticky Urgency Bar */}
+      {showStickyBar && (
+        <div className="fixed bottom-0 left-0 right-0 bg-black/90 backdrop-blur-md text-white py-3 md:py-4 px-4 md:px-6 z-50 shadow-2xl border-t border-red-500/50">
+          <div className="container mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
+            <p className="text-xs sm:text-sm md:text-base font-medium text-center sm:text-left">
+              ⏰ Solo quedan <span className="text-red-400 font-bold">4 cupos</span> | Termina el 8 de octubre
+            </p>
+            <a 
+              href="#planes" 
+              className="bg-[#00C2CB] hover:bg-primary px-4 md:px-6 py-2 rounded-lg text-xs sm:text-sm font-bold whitespace-nowrap transition-all transform hover:scale-105 shadow-lg"
+            >
+              Ver planes
+            </a>
+          </div>
+        </div>
+      )}
     </>
   );
 };
