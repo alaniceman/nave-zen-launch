@@ -137,8 +137,11 @@ const Cyber2025 = () => {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-border">
-                      <tr className="hover:bg-secondary/5 transition-colors">
-                        <td className="px-6 py-6 font-medium text-primary">
+                      <tr 
+                        onClick={() => window.open('https://boxmagic.cl/market/plan/Vx0JnJw0vB', '_blank')}
+                        className="hover:bg-[#00C2CB]/10 transition-all cursor-pointer group"
+                      >
+                        <td className="px-6 py-6 font-medium text-primary group-hover:text-[#00C2CB] transition-colors">
                           Membresía Órbita<br />
                           <span className="text-sm text-neutral-mid">(2 sesiones/semana)</span>
                         </td>
@@ -146,8 +149,11 @@ const Cyber2025 = () => {
                         <td className="px-6 py-6 font-bold text-[#00C2CB] text-lg">$15.800/mes x 2</td>
                         <td className="px-6 py-6 font-bold text-secondary text-lg">–80%</td>
                       </tr>
-                      <tr className="hover:bg-secondary/5 transition-colors">
-                        <td className="px-6 py-6 font-medium text-primary">
+                      <tr 
+                        onClick={() => window.open('https://boxmagic.cl/market/plan/Kp0MnaPD8x', '_blank')}
+                        className="hover:bg-primary/10 transition-all cursor-pointer group"
+                      >
+                        <td className="px-6 py-6 font-medium text-primary group-hover:text-primary transition-colors">
                           Membresía Universo<br />
                           <span className="text-sm text-neutral-mid">(acceso ilimitado)</span>
                         </td>
