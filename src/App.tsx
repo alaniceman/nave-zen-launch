@@ -15,6 +15,7 @@ import Contacto from "./pages/Contacto";
 import Blog from "./pages/Blog";
 import BlogWimHof from "./pages/BlogWimHof";
 import BlogBiohacking from "./pages/BlogBiohacking";
+import BlogYinVinyasa from "./pages/BlogYinVinyasa";
 import Horarios from "./pages/Horarios";
 import FAQ from "./pages/FAQ";
 import ClaseDePrueba from "./pages/ClaseDePrueba";
@@ -54,6 +55,7 @@ const App = () => (
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/metodo-wim-hof-respiracion-frio-mente" element={<BlogWimHof />} />
             <Route path="/blog/biohacking-hiit-breathwork-agua-fria-longevidad" element={<BlogBiohacking />} />
+            <Route path="/blog/yin-yoga-vinyasa-yoga-beneficios-como-combinarlos" element={<BlogYinVinyasa />} />
             <Route path="/horarios" element={<Horarios />} />
             <Route path="/faq" element={<FAQ />} />
             <Route path="/clase-de-prueba" element={<ClaseDePrueba />} />

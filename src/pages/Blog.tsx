@@ -4,9 +4,20 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Calendar, User, Tag } from "lucide-react";
 import heroImage from "@/assets/blog-wim-hof-hero.jpg";
 import biohackingHeroImage from "@/assets/blog-biohacking-hero.jpg";
+import yinVinyasaHeroImage from "@/assets/blog-yin-vinyasa-hero.jpg";
 
 const Blog = () => {
   const blogPosts = [
+    {
+      title: "Yin Yoga y Vinyasa Yoga: dos caminos complementarios para regular tu cuerpo y tu mente",
+      slug: "/blog/yin-yoga-vinyasa-yoga-beneficios-como-combinarlos",
+      excerpt: "Yin calma y movilidad; Vinyasa activa y fortalece. Cómo funcionan, a quién sirven y cómo combinarlos (con respiración y agua fría opcional).",
+      author: "Alan Iceman Earle",
+      date: "13 de agosto, 2025",
+      categories: ["Yoga", "Yin", "Vinyasa", "Regulación del estrés"],
+      image: yinVinyasaHeroImage,
+      imageAlt: "Práctica de Yin Yoga y Vinyasa Yoga en Nave Studio"
+    },
     {
       title: "Biohacking para longevidad: HIIT + Breathwork + Agua fría (la tríada que entrena tu futuro)",
       slug: "/blog/biohacking-hiit-breathwork-agua-fria-longevidad",
