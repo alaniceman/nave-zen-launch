@@ -9,7 +9,7 @@ export const HeroSection = () => {
     navigate('/planes')
   }
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-screen flex items-start md:items-center justify-center pt-20 md:pt-0 overflow-hidden">
       {/* Background Image with Overlay */}
       <img 
         src="/lovable-uploads/82672388-9723-4aee-a1f2-ac72618cd26a.png"
@@ -26,9 +26,9 @@ export const HeroSection = () => {
       
       {/* Content */}
       <div className="relative z-10 container mx-auto px-6 text-center text-white">
-        <div className="max-w-4xl mx-auto space-y-8">
+        <div className="max-w-4xl mx-auto space-y-4 md:space-y-8">
           {/* Main Heading */}
-          <h1 className="font-space-grotesk font-bold text-4xl md:text-6xl lg:text-7xl leading-tight">
+          <h1 className="font-space-grotesk font-bold text-3xl md:text-6xl lg:text-7xl leading-tight">
             El centro de bienestar basado en ciencia
           </h1>
           
@@ -48,7 +48,7 @@ export const HeroSection = () => {
           </p>
           
           {/* CTA Section */}
-          <div className="space-y-4 pt-8">
+          <div className="space-y-4 pt-4 md:pt-8">
             <Button 
               variant="hero" 
               size="xl"
