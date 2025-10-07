@@ -137,7 +137,7 @@ export const Header = () => {
                 </a>
                 <a
                   role="menuitem"
-                  href="https://members.boxmagic.app/"
+                  href="https://members.boxmagic.app/a/g/Kp0MWKaL8x"
                   className="block px-4 py-3 text-foreground hover:bg-neutral-light transition-all duration-200 focus:outline-dashed focus:outline-2 focus:outline-secondary"
                 >
                   Ingresar a la app
@@ -227,7 +227,7 @@ export const Header = () => {
                   Registrarse
                 </a>
                 <a
-                  href="https://members.boxmagic.app/"
+                  href="https://members.boxmagic.app/a/g/Kp0MWKaL8x"
                   className="block w-full bg-secondary hover:bg-primary text-white font-inter font-medium py-2.5 rounded-[10px] transition-all duration-200 text-center text-sm"
                 >
                   Ingresar a la app
