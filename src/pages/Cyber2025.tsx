@@ -27,7 +27,7 @@ const Cyber2025 = () => {
   return (
     <>
       <Helmet>
-        <title>Cyber La Nave 2025 — 80% OFF en Nave Studio Santiago</title>
+        <title>Cyber La Nave 2025 — 50% OFF en Nave Studio Santiago</title>
       </Helmet>
 
       <main className="min-h-screen">
@@ -49,7 +49,7 @@ const Cyber2025 = () => {
               </h1>
               
               <p className="text-xl md:text-2xl text-secondary mb-4 font-medium">
-                💨 Durante el Cyber La Nave, entrena tu bienestar con 80% OFF los primeros 2 meses.
+                💨 Durante el Cyber La Nave, entrena tu bienestar con 50% OFF los primeros 2 meses.
               </p>
               
               <p className="text-lg md:text-xl text-primary mb-8">
@@ -123,7 +123,7 @@ const Cyber2025 = () => {
                     </thead>
                     <tbody className="divide-y divide-border">
                       <tr 
-                        onClick={() => window.open('https://boxmagic.cl/market/plan/Vx0JnJw0vB', '_blank')}
+                        onClick={() => window.open('https://boxmagic.cl/market/plan/Kp0Mnb7D8x', '_blank')}
                         className="hover:bg-[#00C2CB]/10 transition-all cursor-pointer group"
                       >
                         <td className="px-6 py-6 font-medium text-primary group-hover:text-[#00C2CB] transition-colors">
@@ -131,11 +131,11 @@ const Cyber2025 = () => {
                           <span className="text-sm text-neutral-mid">(2 sesiones/semana)</span>
                         </td>
                         <td className="px-6 py-6 text-neutral-mid">$79.000</td>
-                        <td className="px-6 py-6 font-bold text-[#00C2CB] text-lg">$15.800/mes x 2</td>
-                        <td className="px-6 py-6 font-bold text-secondary text-lg">–80%</td>
+                        <td className="px-6 py-6 font-bold text-[#00C2CB] text-lg">$39.500/mes x 2</td>
+                        <td className="px-6 py-6 font-bold text-secondary text-lg">–50%</td>
                       </tr>
                       <tr 
-                        onClick={() => window.open('https://boxmagic.cl/market/plan/Kp0MnaPD8x', '_blank')}
+                        onClick={() => window.open('https://boxmagic.cl/market/plan/Vx0JnbA0vB', '_blank')}
                         className="hover:bg-primary/10 transition-all cursor-pointer group"
                       >
                         <td className="px-6 py-6 font-medium text-primary group-hover:text-primary transition-colors">
@@ -143,8 +143,8 @@ const Cyber2025 = () => {
                           <span className="text-sm text-neutral-mid">(acceso ilimitado)</span>
                         </td>
                         <td className="px-6 py-6 text-neutral-mid">$95.000</td>
-                        <td className="px-6 py-6 font-bold text-[#00C2CB] text-lg">$19.000/mes x 2</td>
-                        <td className="px-6 py-6 font-bold text-secondary text-lg">–80%</td>
+                        <td className="px-6 py-6 font-bold text-[#00C2CB] text-lg">$47.500/mes x 2</td>
+                        <td className="px-6 py-6 font-bold text-secondary text-lg">–50%</td>
                       </tr>
                     </tbody>
                   </table>
@@ -175,27 +175,27 @@ const Cyber2025 = () => {
               {/* CTA Buttons */}
               <div className="grid md:grid-cols-2 gap-6">
                 <a
-                  href="https://boxmagic.cl/market/plan/Vx0JnJw0vB"
+                  href="https://boxmagic.cl/market/plan/Kp0Mnb7D8x"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block bg-gradient-to-r from-[#00C2CB] to-primary hover:from-primary hover:to-[#00C2CB] text-white rounded-xl p-8 text-center transition-all transform hover:scale-105 shadow-lg"
                 >
                   <div className="text-4xl mb-3">🪐</div>
                   <h3 className="text-2xl font-heading mb-3">Membresía Órbita</h3>
-                  <p className="text-lg mb-2">$15.800/mes x 2 meses</p>
-                  <p className="text-sm opacity-90">(80% OFF)</p>
+                  <p className="text-lg mb-2">$39.500/mes x 2 meses</p>
+                  <p className="text-sm opacity-90">(50% OFF)</p>
                 </a>
 
                 <a
-                  href="https://boxmagic.cl/market/plan/Kp0MnaPD8x"
+                  href="https://boxmagic.cl/market/plan/Vx0JnbA0vB"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white rounded-xl p-8 text-center transition-all transform hover:scale-105 shadow-lg"
                 >
                   <div className="text-4xl mb-3">🌌</div>
                   <h3 className="text-2xl font-heading mb-3">Membresía Universo</h3>
-                  <p className="text-lg mb-2">$19.000/mes x 2 meses</p>
-                  <p className="text-sm opacity-90">(80% OFF)</p>
+                  <p className="text-lg mb-2">$47.500/mes x 2 meses</p>
+                  <p className="text-sm opacity-90">(50% OFF)</p>
                 </a>
               </div>
             </div>
@@ -326,7 +326,7 @@ const Cyber2025 = () => {
                 href="#planes"
                 className="inline-flex items-center justify-center px-10 py-4 text-lg bg-gradient-to-r from-[#00C2CB] to-primary hover:from-primary hover:to-secondary text-white font-medium rounded-lg transition-all transform hover:scale-105 shadow-lg"
               >
-                Aprovecha el 80% OFF antes del 8 de octubre →
+                Aprovecha el 50% OFF antes del 8 de octubre →
               </a>
             </div>
           </div>
