@@ -114,38 +114,63 @@ const CriomedicinMetodoWimHof = () => {
         </script>
       </Helmet>
 
-      <main className="pt-20">
+      <main>
         {/* Hero Section */}
-        <section className="py-12 md:py-16 text-center px-4">
-          <h1 className="text-3xl md:text-5xl font-bold text-primary">
-            Criomedicina (Método Wim Hof) en Chile — Santiago
-          </h1>
-          <p className="text-lg md:text-xl text-muted-foreground mt-2">
-            Respiración Wim Hof + Ice Bath guiado (60 min). Regula tu sistema nervioso, gana foco y energía.
-          </p>
-
-          <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <CheckoutRedirectButton
-              url="https://boxmagic.cl/market/plan/RZ0vlQyLQ6"
-              plan="Criomedicina / Wim Hof — 1 sesión grupal"
-              className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-4 rounded-xl text-lg font-semibold"
-            >
-              Agendar 1 sesión — $30.000
-            </CheckoutRedirectButton>
-            
-            <a
-              href="/criomedicina-ice-bath-en-grupo"
-              className="bg-secondary text-secondary-foreground hover:bg-secondary/90 px-8 py-4 rounded-xl text-lg font-semibold inline-flex items-center justify-center transition-colors"
-            >
-              Agenda grupal
-            </a>
+        <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+          {/* Background Image with Overlay */}
+          <img 
+            src="/lovable-uploads/criomedicina-hero.webp"
+            alt="Criomedicina Método Wim Hof - Ice bath y breathwork en naturaleza"
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{
+              objectPosition: 'center',
+            }}
+            fetchPriority="high"
+          />
+          
+          {/* Green Overlay */}
+          <div className="absolute inset-0 bg-primary opacity-55" />
+          
+          {/* Content */}
+          <div className="relative z-10 container mx-auto px-6 text-center text-white pt-20">
+            <div className="max-w-4xl mx-auto space-y-6 md:space-y-8">
+              {/* Main Heading */}
+              <h1 className="font-space-grotesk font-bold text-3xl md:text-6xl lg:text-7xl leading-tight">
+                Criomedicina (Método Wim Hof) en Chile — Santiago
+              </h1>
+              
+              {/* Subheading */}
+              <p className="font-inter font-medium text-xl md:text-2xl lg:text-3xl text-white/90 leading-relaxed">
+                Respiración Wim Hof + Ice Bath guiado (60 min). Regula tu sistema nervioso, gana foco y energía.
+              </p>
+              
+              {/* CTA Section */}
+              <div className="space-y-4 pt-4 md:pt-8">
+                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                  <CheckoutRedirectButton
+                    url="https://boxmagic.cl/market/plan/RZ0vlQyLQ6"
+                    plan="Criomedicina / Wim Hof — 1 sesión grupal"
+                    className="bg-white text-primary hover:bg-white/90 px-8 py-4 rounded-xl text-lg font-semibold w-full sm:w-auto min-w-[280px] transition-all"
+                  >
+                    Agendar 1 sesión — $30.000
+                  </CheckoutRedirectButton>
+                  
+                  <a
+                    href="/criomedicina-ice-bath-en-grupo"
+                    className="bg-white/20 text-white border border-white/30 hover:bg-white/30 px-8 py-4 rounded-xl text-lg font-semibold inline-flex items-center justify-center transition-all w-full sm:w-auto"
+                  >
+                    Agenda grupal
+                  </a>
+                </div>
+                
+                <p className="font-inter text-base text-white/80">
+                  <a href="#precios-criomedicina" className="underline hover:text-white transition-colors">
+                    Explora las membresías y paquetes de sesiones
+                  </a>
+                </p>
+              </div>
+            </div>
           </div>
-
-          <p className="text-base text-muted-foreground mt-4 text-center">
-            <a href="#precios-criomedicina" className="underline text-primary hover:text-primary/80">
-              Explora las membresías y paquetes de sesiones
-            </a>
-          </p>
         </section>
 
         {/* What is Criomedicina Section */}
