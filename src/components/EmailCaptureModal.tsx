@@ -117,7 +117,7 @@ export const EmailCaptureModal = ({ isOpen, onClose }: EmailCaptureModalProps) =
         body: {
           email,
           whatsapp: cleanWhatsApp,
-          tags: ["Oferta-Octubre-2024", "Modal-Capture"],
+          tags: ["Oferta-Octubre-2025", "Modal-Capture"],
           groups: ["168517368312498017"], // Reemplaza con tu Group ID de MailerLite
           source: "email-capture-modal",
         },
@@ -242,7 +242,7 @@ export const EmailCaptureModal = ({ isOpen, onClose }: EmailCaptureModalProps) =
               <br />
               🧊 Método Wim Hof completo
               <br />
-              💪 Solo por octubre 2024
+              💪 Solo por octubre 2025
             </p>
           </div>
 
