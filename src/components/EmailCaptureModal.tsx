@@ -108,6 +108,7 @@ export const EmailCaptureModal = ({ isOpen, onClose }: EmailCaptureModalProps) =
           email,
           whatsapp,
           tags: ['Oferta-Septiembre-2024', 'Modal-Capture'],
+          groups: ['TU_GROUP_ID_AQUI'], // Reemplaza con tu Group ID de MailerLite
           source: 'email-capture-modal'
         }
       });

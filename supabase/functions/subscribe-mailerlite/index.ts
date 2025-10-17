@@ -5,6 +5,7 @@ interface SubscribeRequest {
   email: string;
   whatsapp: string;
   tags?: string[];
+  groups?: string[];
   source?: string;
 }
 
@@ -15,7 +16,7 @@ serve(async (req) => {
   }
 
   try {
-    const { email, whatsapp, tags = [], source = 'unknown' }: SubscribeRequest = await req.json()
+    const { email, whatsapp, tags = [], groups = [], source = 'unknown' }: SubscribeRequest = await req.json()
 
     // Validate required fields
     if (!email || !whatsapp) {
@@ -44,6 +45,7 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         email: email,
+        groups: groups,
         fields: {
           phone: whatsapp,
           source: source,
