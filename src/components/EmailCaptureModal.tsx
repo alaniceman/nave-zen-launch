@@ -68,22 +68,26 @@ export const EmailCaptureModal = ({ isOpen, onClose }: EmailCaptureModalProps) =
   }, [isOpen, onClose]);
 
   const formatWhatsAppNumber = (value: string) => {
-    // Remove all non-digits
+    // Extract only digits
     const digits = value.replace(/\D/g, "");
-
-    // Don't add +56 if it already starts with 56
-    if (digits.startsWith("56") && digits.length > 2) {
-      const phoneNumber = digits.slice(2);
-      if (phoneNumber.length <= 1) return `+56 ${phoneNumber}`;
-      if (phoneNumber.length <= 5) return `+56 ${phoneNumber.slice(0, 1)} ${phoneNumber.slice(1)}`;
-      return `+56 ${phoneNumber.slice(0, 1)} ${phoneNumber.slice(1, 5)} ${phoneNumber.slice(5, 9)}`;
+    
+    // If starts with 56, remove the prefix
+    const cleanNumber = digits.startsWith("56") ? digits.slice(2) : digits;
+    
+    // Return empty if no digits
+    if (cleanNumber.length === 0) return "";
+    
+    // Limit to 9 digits (Chilean format)
+    const limitedNumber = cleanNumber.slice(0, 9);
+    
+    // Format according to number of digits
+    if (limitedNumber.length <= 1) {
+      return `+56 ${limitedNumber}`;
+    } else if (limitedNumber.length <= 5) {
+      return `+56 ${limitedNumber.slice(0, 1)} ${limitedNumber.slice(1)}`;
+    } else {
+      return `+56 ${limitedNumber.slice(0, 1)} ${limitedNumber.slice(1, 5)} ${limitedNumber.slice(5)}`;
     }
-
-    // Format as Chilean number
-    if (digits.length <= 1) return digits;
-    if (digits.length <= 5) return `+56 ${digits}`;
-    if (digits.length <= 9) return `+56 ${digits.slice(0, 1)} ${digits.slice(1)}`;
-    return `+56 ${digits.slice(0, 1)} ${digits.slice(1, 5)} ${digits.slice(5, 9)}`;
   };
 
   const handleWhatsAppChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -106,10 +110,13 @@ export const EmailCaptureModal = ({ isOpen, onClose }: EmailCaptureModalProps) =
     setIsSubmitting(true);
 
     try {
+      // Clean WhatsApp number for submission (remove spaces, keep +56 prefix)
+      const cleanWhatsApp = whatsapp.replace(/\s/g, "");
+      
       const { data, error } = await supabase.functions.invoke("subscribe-mailerlite", {
         body: {
           email,
-          whatsapp,
+          whatsapp: cleanWhatsApp,
           tags: ["Oferta-Octubre-2024", "Modal-Capture"],
           groups: ["168517368312498017"], // Reemplaza con tu Group ID de MailerLite
           source: "email-capture-modal",
