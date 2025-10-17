@@ -19,18 +19,18 @@ export const EmailCaptureModal = ({ isOpen, onClose }: EmailCaptureModalProps) =
   const [timeLeft, setTimeLeft] = useState(0);
   const { toast } = useToast();
 
-  // Calculate time left until end of September
+  // Calculate time left until end of October
   useEffect(() => {
     const calculateTimeLeft = () => {
       const now = new Date();
-      const endOfSeptember = new Date(now.getFullYear(), 8, 30, 23, 59, 59); // September is month 8 (0-indexed)
+      const endOfOctober = new Date(now.getFullYear(), 9, 31, 23, 59, 59); // October is month 9 (0-indexed)
 
-      if (now > endOfSeptember) {
-        // If we're past September, show next year's September
-        endOfSeptember.setFullYear(endOfSeptember.getFullYear() + 1);
+      if (now > endOfOctober) {
+        // If we're past October, show next year's October
+        endOfOctober.setFullYear(endOfOctober.getFullYear() + 1);
       }
 
-      const difference = endOfSeptember.getTime() - now.getTime();
+      const difference = endOfOctober.getTime() - now.getTime();
       return Math.max(0, Math.floor(difference / (1000 * 60 * 60 * 24))); // Days left
     };
 
@@ -110,7 +110,7 @@ export const EmailCaptureModal = ({ isOpen, onClose }: EmailCaptureModalProps) =
         body: {
           email,
           whatsapp,
-          tags: ["Oferta-Septiembre-2024", "Modal-Capture"],
+          tags: ["Oferta-Octubre-2024", "Modal-Capture"],
           groups: ["168517368312498017"], // Reemplaza con tu Group ID de MailerLite
           source: "email-capture-modal",
         },
@@ -177,7 +177,7 @@ export const EmailCaptureModal = ({ isOpen, onClose }: EmailCaptureModalProps) =
           {/* Badge */}
           <div className="inline-flex items-center gap-2 bg-gradient-to-r from-primary to-accent text-primary-foreground px-4 py-2 rounded-full text-sm font-medium mb-4">
             <Sparkles className="w-4 h-4" />
-            OFERTA EXCLUSIVA SEPTIEMBRE
+            OFERTA EXCLUSIVA OCTUBRE
           </div>
 
           {/* Title */}
@@ -235,7 +235,7 @@ export const EmailCaptureModal = ({ isOpen, onClose }: EmailCaptureModalProps) =
               <br />
               🧊 Método Wim Hof completo
               <br />
-              💪 Solo por septiembre 2024
+              💪 Solo por octubre 2024
             </p>
           </div>
         </div>
