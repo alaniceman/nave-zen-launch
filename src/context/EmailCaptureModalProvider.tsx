@@ -20,9 +20,6 @@ export const EmailCaptureModalProvider = ({ children }: EmailCaptureModalProvide
 
   // Smart trigger logic
   useEffect(() => {
-    // DISABLED: Modal temporarily deactivated
-    return;
-    
     // Don't show if already subscribed
     if (localStorage.getItem('email-capture-subscribed')) {
       return;
