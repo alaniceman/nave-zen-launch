@@ -245,6 +245,11 @@ export const EmailCaptureModal = ({ isOpen, onClose }: EmailCaptureModalProps) =
               💪 Solo por octubre 2024
             </p>
           </div>
+
+          {/* Disclaimer */}
+          <p className="text-xs text-muted-foreground/60 text-center mt-4">
+            *solo clientes nuevos
+          </p>
         </div>
       </div>
     </div>
