@@ -24,20 +24,23 @@ export const EmailCaptureModal = ({ isOpen, onClose }: EmailCaptureModalProps) =
     const calculateTimeLeft = () => {
       const now = new Date();
       const endOfSeptember = new Date(now.getFullYear(), 8, 30, 23, 59, 59); // September is month 8 (0-indexed)
-      
+
       if (now > endOfSeptember) {
         // If we're past September, show next year's September
         endOfSeptember.setFullYear(endOfSeptember.getFullYear() + 1);
       }
-      
+
       const difference = endOfSeptember.getTime() - now.getTime();
       return Math.max(0, Math.floor(difference / (1000 * 60 * 60 * 24))); // Days left
     };
 
     setTimeLeft(calculateTimeLeft());
-    const timer = setInterval(() => {
-      setTimeLeft(calculateTimeLeft());
-    }, 1000 * 60 * 60); // Update every hour
+    const timer = setInterval(
+      () => {
+        setTimeLeft(calculateTimeLeft());
+      },
+      1000 * 60 * 60,
+    ); // Update every hour
 
     return () => clearInterval(timer);
   }, []);
@@ -46,17 +49,17 @@ export const EmailCaptureModal = ({ isOpen, onClose }: EmailCaptureModalProps) =
     if (isOpen) {
       previousFocusRef.current = document.activeElement as HTMLElement;
       modalRef.current?.focus();
-      document.body.style.overflow = 'hidden';
-      
+      document.body.style.overflow = "hidden";
+
       const handleEscape = (e: KeyboardEvent) => {
-        if (e.key === 'Escape') onClose();
+        if (e.key === "Escape") onClose();
       };
-      
-      document.addEventListener('keydown', handleEscape);
-      
+
+      document.addEventListener("keydown", handleEscape);
+
       return () => {
-        document.removeEventListener('keydown', handleEscape);
-        document.body.style.overflow = 'unset';
+        document.removeEventListener("keydown", handleEscape);
+        document.body.style.overflow = "unset";
         if (previousFocusRef.current) {
           previousFocusRef.current.focus();
         }
@@ -66,16 +69,16 @@ export const EmailCaptureModal = ({ isOpen, onClose }: EmailCaptureModalProps) =
 
   const formatWhatsAppNumber = (value: string) => {
     // Remove all non-digits
-    const digits = value.replace(/\D/g, '');
-    
+    const digits = value.replace(/\D/g, "");
+
     // Don't add +56 if it already starts with 56
-    if (digits.startsWith('56') && digits.length > 2) {
+    if (digits.startsWith("56") && digits.length > 2) {
       const phoneNumber = digits.slice(2);
       if (phoneNumber.length <= 1) return `+56 ${phoneNumber}`;
       if (phoneNumber.length <= 5) return `+56 ${phoneNumber.slice(0, 1)} ${phoneNumber.slice(1)}`;
       return `+56 ${phoneNumber.slice(0, 1)} ${phoneNumber.slice(1, 5)} ${phoneNumber.slice(5, 9)}`;
     }
-    
+
     // Format as Chilean number
     if (digits.length <= 1) return digits;
     if (digits.length <= 5) return `+56 ${digits}`;
@@ -90,12 +93,12 @@ export const EmailCaptureModal = ({ isOpen, onClose }: EmailCaptureModalProps) =
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!email || !whatsapp) {
       toast({
         title: "Campos requeridos",
         description: "Por favor completa email y WhatsApp",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
@@ -103,21 +106,21 @@ export const EmailCaptureModal = ({ isOpen, onClose }: EmailCaptureModalProps) =
     setIsSubmitting(true);
 
     try {
-      const { data, error } = await supabase.functions.invoke('subscribe-mailerlite', {
+      const { data, error } = await supabase.functions.invoke("subscribe-mailerlite", {
         body: {
           email,
           whatsapp,
-          tags: ['Oferta-Septiembre-2024', 'Modal-Capture'],
-          groups: ['TU_GROUP_ID_AQUI'], // Reemplaza con tu Group ID de MailerLite
-          source: 'email-capture-modal'
-        }
+          tags: ["Oferta-Septiembre-2024", "Modal-Capture"],
+          groups: ["168517368312498017"], // Reemplaza con tu Group ID de MailerLite
+          source: "email-capture-modal",
+        },
       });
 
       if (error) throw error;
 
       // Store in localStorage to prevent showing again
-      localStorage.setItem('email-capture-subscribed', 'true');
-      localStorage.setItem('email-capture-email', email);
+      localStorage.setItem("email-capture-subscribed", "true");
+      localStorage.setItem("email-capture-email", email);
 
       toast({
         title: "¡Suscripción exitosa! 🎉",
@@ -126,12 +129,11 @@ export const EmailCaptureModal = ({ isOpen, onClose }: EmailCaptureModalProps) =
 
       // Close modal after short delay
       setTimeout(onClose, 2000);
-
     } catch (error) {
       toast({
         title: "Error al suscribirse",
         description: "Por favor intenta nuevamente",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsSubmitting(false);
@@ -160,7 +162,7 @@ export const EmailCaptureModal = ({ isOpen, onClose }: EmailCaptureModalProps) =
         {/* Decorative elements */}
         <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-primary/20 to-transparent rounded-full -translate-y-16 translate-x-16" />
         <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-accent/20 to-transparent rounded-full translate-y-12 -translate-x-12" />
-        
+
         {/* Close button */}
         <button
           onClick={onClose}
@@ -180,16 +182,15 @@ export const EmailCaptureModal = ({ isOpen, onClose }: EmailCaptureModalProps) =
 
           {/* Title */}
           <h2 id="email-capture-title" className="text-2xl font-bold text-foreground mb-2 leading-tight">
-            Membresía Ilimitada<br />
+            Membresía Ilimitada
+            <br />
             <span className="text-primary">al precio de 2x semana</span>
           </h2>
 
           {/* Urgency */}
           <div className="flex items-center gap-2 text-muted-foreground mb-6">
             <Clock className="w-4 h-4" />
-            <span className="text-sm">
-              {timeLeft > 0 ? `${timeLeft} días restantes` : 'Últimas horas'}
-            </span>
+            <span className="text-sm">{timeLeft > 0 ? `${timeLeft} días restantes` : "Últimas horas"}</span>
           </div>
 
           {/* Form */}
@@ -230,8 +231,10 @@ export const EmailCaptureModal = ({ isOpen, onClose }: EmailCaptureModalProps) =
           {/* Benefits */}
           <div className="mt-6 pt-6 border-t border-border/30">
             <p className="text-sm text-muted-foreground text-center">
-              ✨ Acceso ilimitado a yoga<br />
-              🧊 Método Wim Hof completo<br />
+              ✨ Acceso ilimitado a yoga
+              <br />
+              🧊 Método Wim Hof completo
+              <br />
               💪 Solo por septiembre 2024
             </p>
           </div>
