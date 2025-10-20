@@ -67,33 +67,6 @@ export const EmailCaptureModal = ({ isOpen, onClose }: EmailCaptureModalProps) =
     }
   }, [isOpen, onClose]);
 
-  const formatWhatsAppNumber = (value: string) => {
-    // Extract only digits
-    const digits = value.replace(/\D/g, "");
-    
-    // If starts with 56, remove the prefix
-    const cleanNumber = digits.startsWith("56") ? digits.slice(2) : digits;
-    
-    // Return empty if no digits
-    if (cleanNumber.length === 0) return "";
-    
-    // Limit to 9 digits (Chilean format)
-    const limitedNumber = cleanNumber.slice(0, 9);
-    
-    // Format according to number of digits
-    if (limitedNumber.length <= 1) {
-      return `+56 ${limitedNumber}`;
-    } else if (limitedNumber.length <= 5) {
-      return `+56 ${limitedNumber.slice(0, 1)} ${limitedNumber.slice(1)}`;
-    } else {
-      return `+56 ${limitedNumber.slice(0, 1)} ${limitedNumber.slice(1, 5)} ${limitedNumber.slice(5)}`;
-    }
-  };
-
-  const handleWhatsAppChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatWhatsAppNumber(e.target.value);
-    setWhatsapp(formatted);
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -218,9 +191,9 @@ export const EmailCaptureModal = ({ isOpen, onClose }: EmailCaptureModalProps) =
               <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
               <Input
                 type="tel"
-                placeholder="+56 9 1234 5678"
+                placeholder="WhatsApp"
                 value={whatsapp}
-                onChange={handleWhatsAppChange}
+                onChange={(e) => setWhatsapp(e.target.value)}
                 className="pl-10 h-12 border-border/50 focus:border-primary"
                 required
               />
