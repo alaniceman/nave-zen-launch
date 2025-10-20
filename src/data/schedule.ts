@@ -150,7 +150,7 @@ export const scheduleData: Record<string, ClassItem[]> = {
       duration: 60
     },
     {
-      time: "18:00",
+      time: "19:15",
       title: "Método Wim Hof (Breathwork + Ice Bath)",
       tags: ["Método Wim Hof"],
       badges: [],

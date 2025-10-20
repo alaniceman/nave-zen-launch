@@ -223,7 +223,7 @@ const CriomedicinMetodoWimHof = () => {
                 <ul className="mt-2 text-foreground">
                   <li>10:00 — Personalizado (1–2)</li>
                   <li>11:15 — Wim Hof (Breathwork + Ice Bath)</li>
-                  <li>18:00 — Wim Hof (Breathwork + Ice Bath)</li>
+                  <li>19:15 — Wim Hof (Breathwork + Ice Bath)</li>
                 </ul>
               </div>
               <div className="rounded-xl border p-4">
