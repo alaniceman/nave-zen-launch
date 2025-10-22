@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3'
 import { corsHeaders } from '../_shared/cors.ts'
 
 interface SubscribeRequest {
@@ -27,6 +28,33 @@ serve(async (req) => {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
         }
       )
+    }
+
+    // Initialize Supabase client
+    const supabaseClient = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+    )
+
+    // Save to local database first
+    const { data: dbData, error: dbError } = await supabaseClient
+      .from('email_subscribers')
+      .insert({
+        email,
+        whatsapp,
+        source,
+        tags,
+        groups,
+        mailerlite_synced: false
+      })
+      .select()
+      .single()
+
+    if (dbError) {
+      console.error('Database insert error:', dbError)
+      // Continue with MailerLite even if DB insert fails
+    } else {
+      console.log('Saved to database:', dbData.id)
     }
 
     // Get Mailerlite API key from Supabase secrets
@@ -58,6 +86,18 @@ serve(async (req) => {
 
     const mailerliteData = await mailerliteResponse.json()
 
+    // Update DB record with MailerLite sync status
+    if (mailerliteResponse.ok && dbData) {
+      await supabaseClient
+        .from('email_subscribers')
+        .update({
+          mailerlite_synced: true,
+          mailerlite_response: mailerliteData.data,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', dbData.id)
+    }
+
     if (!mailerliteResponse.ok) {
       console.error('Mailerlite error:', mailerliteData)
       
@@ -85,7 +125,8 @@ serve(async (req) => {
       JSON.stringify({ 
         success: true, 
         message: 'Successfully subscribed',
-        subscriber: mailerliteData.data 
+        subscriber: mailerliteData.data,
+        db_id: dbData?.id
       }),
       { 
         status: 200, 

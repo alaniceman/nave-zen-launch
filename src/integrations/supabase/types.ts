@@ -14,7 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      email_subscribers: {
+        Row: {
+          created_at: string | null
+          email: string
+          groups: string[] | null
+          id: string
+          mailerlite_response: Json | null
+          mailerlite_synced: boolean | null
+          source: string | null
+          tags: string[] | null
+          updated_at: string | null
+          whatsapp: string
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          groups?: string[] | null
+          id?: string
+          mailerlite_response?: Json | null
+          mailerlite_synced?: boolean | null
+          source?: string | null
+          tags?: string[] | null
+          updated_at?: string | null
+          whatsapp: string
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          groups?: string[] | null
+          id?: string
+          mailerlite_response?: Json | null
+          mailerlite_synced?: boolean | null
+          source?: string | null
+          tags?: string[] | null
+          updated_at?: string | null
+          whatsapp?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
