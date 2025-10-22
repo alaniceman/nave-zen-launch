@@ -14,6 +14,7 @@ interface EmailCaptureModalProviderProps {
 
 export const EmailCaptureModalProvider = ({ children }: EmailCaptureModalProviderProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [hasShownThisSession, setHasShownThisSession] = useState(false);
 
   const openEmailCaptureModal = () => setIsOpen(true);
   const closeEmailCaptureModal = () => setIsOpen(false);
@@ -26,12 +27,11 @@ export const EmailCaptureModalProvider = ({ children }: EmailCaptureModalProvide
     }
 
     let timeoutId: NodeJS.Timeout;
-    let hasShownThisSession = false;
 
     const showModal = () => {
       if (!hasShownThisSession && !isOpen) {
         setIsOpen(true);
-        hasShownThisSession = true;
+        setHasShownThisSession(true);
       }
     };
 

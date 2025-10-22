@@ -183,19 +183,6 @@ export const EmailCaptureModal = ({ isOpen, onClose }: EmailCaptureModalProps) =
             </Button>
           </form>
 
-          {/* Benefits */}
-          <div className="mt-6 pt-6 border-t border-border/30">
-            <p className="text-sm text-muted-foreground text-center leading-relaxed">
-              🗓️ Calendario de clases y cupos
-              <br />
-              🎟️ Eventos, talleres y retiros
-              <br />
-              ❄️ Consejos de criomedicina y breathwork
-              <br />
-              🔔 Beneficios y promociones exclusivas
-            </p>
-          </div>
-
           {/* Close button at bottom */}
           <div className="mt-6 flex justify-center">
             <button
