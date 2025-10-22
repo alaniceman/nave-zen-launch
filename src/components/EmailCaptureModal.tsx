@@ -166,11 +166,11 @@ export const EmailCaptureModal = ({ isOpen, onClose }: EmailCaptureModalProps) =
               <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
               <Input
                 type="tel"
-                placeholder="Tu WhatsApp (opcional)"
+                placeholder="Tu WhatsApp"
                 value={whatsapp}
                 onChange={(e) => setWhatsapp(e.target.value)}
                 className="pl-10 h-12 border-border/50 focus:border-primary"
-                aria-label="Tu WhatsApp (opcional)"
+                aria-label="Tu WhatsApp"
               />
             </div>
 
