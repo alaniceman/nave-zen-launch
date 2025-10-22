@@ -17,7 +17,10 @@ export const EmailCaptureModalProvider = ({ children }: EmailCaptureModalProvide
   const [hasShownThisSession, setHasShownThisSession] = useState(false);
 
   const openEmailCaptureModal = () => setIsOpen(true);
-  const closeEmailCaptureModal = () => setIsOpen(false);
+  const closeEmailCaptureModal = () => {
+    setIsOpen(false);
+    setHasShownThisSession(true);
+  };
 
   // Smart trigger logic
   useEffect(() => {
