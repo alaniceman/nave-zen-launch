@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { X, Mail, Phone, Clock, Sparkles } from "lucide-react";
+import { X, Mail, Phone, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
@@ -16,34 +16,7 @@ export const EmailCaptureModal = ({ isOpen, onClose }: EmailCaptureModalProps) =
   const [email, setEmail] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(0);
   const { toast } = useToast();
-
-  // Calculate time left until end of October
-  useEffect(() => {
-    const calculateTimeLeft = () => {
-      const now = new Date();
-      const endOfOctober = new Date(now.getFullYear(), 9, 31, 23, 59, 59); // October is month 9 (0-indexed)
-
-      if (now > endOfOctober) {
-        // If we're past October, show next year's October
-        endOfOctober.setFullYear(endOfOctober.getFullYear() + 1);
-      }
-
-      const difference = endOfOctober.getTime() - now.getTime();
-      return Math.max(0, Math.floor(difference / (1000 * 60 * 60 * 24))); // Days left
-    };
-
-    setTimeLeft(calculateTimeLeft());
-    const timer = setInterval(
-      () => {
-        setTimeLeft(calculateTimeLeft());
-      },
-      1000 * 60 * 60,
-    ); // Update every hour
-
-    return () => clearInterval(timer);
-  }, []);
 
   useEffect(() => {
     if (isOpen) {
@@ -71,10 +44,10 @@ export const EmailCaptureModal = ({ isOpen, onClose }: EmailCaptureModalProps) =
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!email || !whatsapp) {
+    if (!email) {
       toast({
-        title: "Campos requeridos",
-        description: "Por favor completa email y WhatsApp",
+        title: "Email requerido",
+        description: "Por favor ingresa tu email",
         variant: "destructive",
       });
       return;
@@ -89,10 +62,10 @@ export const EmailCaptureModal = ({ isOpen, onClose }: EmailCaptureModalProps) =
       const { data, error } = await supabase.functions.invoke("subscribe-mailerlite", {
         body: {
           email,
-          whatsapp: cleanWhatsApp,
-          tags: ["Oferta-Octubre-2025", "Modal-Capture"],
+          whatsapp: whatsapp ? cleanWhatsApp : "",
+          tags: ["Comunidad-Nave-Studio", "Modal-Capture"],
           groups: ["168517368312498017"], // Reemplaza con tu Group ID de MailerLite
-          source: "email-capture-modal",
+          source: "email-capture-modal-community",
         },
       });
 
@@ -103,8 +76,8 @@ export const EmailCaptureModal = ({ isOpen, onClose }: EmailCaptureModalProps) =
       localStorage.setItem("email-capture-email", email);
 
       toast({
-        title: "¡Suscripción exitosa! 🎉",
-        description: "Revisa tu email para confirmar y acceder a tu descuento",
+        title: "¡Bienvenido a la comunidad! 🎉",
+        description: "Revisa tu email para confirmar tu suscripción",
       });
 
       // Close modal after short delay
@@ -157,21 +130,22 @@ export const EmailCaptureModal = ({ isOpen, onClose }: EmailCaptureModalProps) =
           {/* Badge */}
           <div className="inline-flex items-center gap-2 bg-gradient-to-r from-primary to-accent text-primary-foreground px-4 py-2 rounded-full text-sm font-medium mb-4">
             <Sparkles className="w-4 h-4" />
-            OFERTA EXCLUSIVA OCTUBRE
+            ÚNETE A LA COMUNIDAD
           </div>
 
           {/* Title */}
           <h2 id="email-capture-title" className="text-2xl font-bold text-foreground mb-2 leading-tight">
-            Membresía Ilimitada
+            Únete a la Comunidad de Nave Studio
             <br />
-            <span className="text-primary">al precio de 2x semana</span>
+            <span className="text-primary">Recibe inspiración, ciencia y bienestar en tu inbox 🧊</span>
           </h2>
 
-          {/* Urgency */}
-          <div className="flex items-center gap-2 text-muted-foreground mb-6">
-            <Clock className="w-4 h-4" />
-            <span className="text-sm">{timeLeft > 0 ? `${timeLeft} días restantes` : "Últimas horas"}</span>
-          </div>
+          {/* Short description */}
+          <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
+            Descubre los beneficios del agua fría, la respiración y el movimiento.
+            <br />
+            Recibe información sobre clases, eventos, retiros y promociones exclusivas.
+          </p>
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -179,10 +153,11 @@ export const EmailCaptureModal = ({ isOpen, onClose }: EmailCaptureModalProps) =
               <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
               <Input
                 type="email"
-                placeholder="tu@email.com"
+                placeholder="Tu email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="pl-10 h-12 border-border/50 focus:border-primary"
+                aria-label="Tu email"
                 required
               />
             </div>
@@ -191,11 +166,11 @@ export const EmailCaptureModal = ({ isOpen, onClose }: EmailCaptureModalProps) =
               <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
               <Input
                 type="tel"
-                placeholder="WhatsApp"
+                placeholder="Tu WhatsApp (opcional)"
                 value={whatsapp}
                 onChange={(e) => setWhatsapp(e.target.value)}
                 className="pl-10 h-12 border-border/50 focus:border-primary"
-                required
+                aria-label="Tu WhatsApp (opcional)"
               />
             </div>
 
@@ -204,24 +179,28 @@ export const EmailCaptureModal = ({ isOpen, onClose }: EmailCaptureModalProps) =
               disabled={isSubmitting}
               className="w-full h-12 text-base font-medium bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 transition-all duration-300"
             >
-              {isSubmitting ? "Suscribiendo..." : "Quiero mi descuento 🔥"}
+              {isSubmitting ? "Suscribiendo..." : "Quiero recibir info y beneficios 💙"}
             </Button>
           </form>
 
           {/* Benefits */}
           <div className="mt-6 pt-6 border-t border-border/30">
-            <p className="text-sm text-muted-foreground text-center">
-              ✨ Acceso ilimitado a yoga
+            <p className="text-sm text-muted-foreground text-center leading-relaxed">
+              🗓️ Calendario de clases y cupos
               <br />
-              🧊 Método Wim Hof completo
+              🎟️ Eventos, talleres y retiros
               <br />
-              💪 Solo por octubre 2025
+              ❄️ Consejos de criomedicina y breathwork
+              <br />
+              🔔 Beneficios y promociones exclusivas
             </p>
           </div>
 
           {/* Disclaimer */}
-          <p className="text-xs text-muted-foreground/60 text-center mt-4">
-            *solo clientes nuevos
+          <p className="text-xs text-muted-foreground/60 text-center mt-4 leading-relaxed">
+            🧘 Clases · 🧊 Criomedicina · 💨 Breathwork · 🌞 Bienestar basado en ciencia
+            <br />
+            *Puedes darte de baja en cualquier momento. Cuidamos tus datos.
           </p>
         </div>
       </div>
