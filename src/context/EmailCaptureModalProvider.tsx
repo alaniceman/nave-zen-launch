@@ -35,10 +35,8 @@ export const EmailCaptureModalProvider = ({ children }: EmailCaptureModalProvide
       }
     };
 
-    // Show after 30 seconds on homepage
-    if (window.location.pathname === '/') {
-      timeoutId = setTimeout(showModal, 30000);
-    }
+    // Show after 30 seconds on any page
+    timeoutId = setTimeout(showModal, 30000);
 
     // Exit intent detection
     const handleMouseLeave = (e: MouseEvent) => {

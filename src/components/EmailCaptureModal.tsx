@@ -196,12 +196,15 @@ export const EmailCaptureModal = ({ isOpen, onClose }: EmailCaptureModalProps) =
             </p>
           </div>
 
-          {/* Disclaimer */}
-          <p className="text-xs text-muted-foreground/60 text-center mt-4 leading-relaxed">
-            🧘 Clases · 🧊 Criomedicina · 💨 Breathwork · 🌞 Bienestar basado en ciencia
-            <br />
-            *Puedes darte de baja en cualquier momento. Cuidamos tus datos.
-          </p>
+          {/* Close button at bottom */}
+          <div className="mt-6 flex justify-center">
+            <button
+              onClick={onClose}
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors underline"
+            >
+              Cerrar
+            </button>
+          </div>
         </div>
       </div>
     </div>
