@@ -174,13 +174,28 @@ export const scheduleData: Record<string, ClassItem[]> = {
       duration: 60
     },
     {
-      time: "18:00",
-      title: "Power Yoga + Ice Bath (opcional)",
-      tags: ["Yoga"],
+      time: "15:00",
+      title: "Método Wim Hof (Breathwork + Ice Bath)",
+      tags: ["Método Wim Hof"],
       badges: [],
       duration: 60,
-      instructor: "Maral",
-      slug: "pronto"
+      instructor: "Sol"
+    },
+    {
+      time: "18:00",
+      title: "Yoga Integral + Ice Bath (opcional)",
+      tags: ["Yoga"],
+      badges: ["Ice Bath opcional"],
+      duration: 60,
+      instructor: "Val"
+    },
+    {
+      time: "19:15",
+      title: "Biohacking: Breathwork + HIIT + Ice Bath",
+      tags: ["Biohacking"],
+      badges: ["Respiración + HIIT + Hielo"],
+      duration: 60,
+      instructor: "Maral"
     }
   ],
   sabado: [
