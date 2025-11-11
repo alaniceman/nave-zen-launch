@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3'
-import { corsHeaders } from '../_shared/cors.ts'
+import { getCorsHeaders } from '../_shared/cors.ts'
 
 interface SubscribeRequest {
   email: string;
@@ -11,6 +11,8 @@ interface SubscribeRequest {
 }
 
 serve(async (req) => {
+  const corsHeaders = getCorsHeaders(req);
+  
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
@@ -51,7 +53,7 @@ serve(async (req) => {
       .single()
 
     if (dbError) {
-      console.error('Database insert error:', dbError)
+      console.error('Database insert error:', { errorType: dbError.code })
       // Continue with MailerLite even if DB insert fails
     } else {
       console.log('Saved to database:', dbData.id)
@@ -99,7 +101,10 @@ serve(async (req) => {
     }
 
     if (!mailerliteResponse.ok) {
-      console.error('Mailerlite error:', mailerliteData)
+      console.error('Mailerlite error:', { 
+        status: mailerliteResponse.status,
+        hasMessage: !!mailerliteData.message 
+      })
       
       // Handle duplicate subscriber
       if (mailerliteData.message?.includes('already exists')) {
@@ -119,7 +124,7 @@ serve(async (req) => {
       throw new Error(mailerliteData.message || 'Error subscribing to Mailerlite')
     }
 
-    console.log('Successfully subscribed:', email, 'with tags:', tags)
+    console.log('Successfully subscribed:', dbData?.id, 'tag count:', tags.length)
 
     return new Response(
       JSON.stringify({ 
@@ -135,9 +140,9 @@ serve(async (req) => {
     )
 
   } catch (error) {
-    console.error('Subscription error:', error)
+    console.error('Subscription error:', { errorType: error.name })
     return new Response(
-      JSON.stringify({ error: error.message || 'Internal server error' }),
+      JSON.stringify({ error: 'Internal server error' }),
       { 
         status: 500, 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
