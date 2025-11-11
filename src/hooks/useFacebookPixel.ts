@@ -13,7 +13,9 @@ export const useFacebookPixel = () => {
   // Track PageView on route changes
   useEffect(() => {
     if (typeof window !== 'undefined' && window.fbq) {
-      window.fbq('track', 'PageView');
+      setTimeout(() => {
+        window.fbq('track', 'PageView');
+      }, 100);
     }
   }, [location.pathname]);
 
