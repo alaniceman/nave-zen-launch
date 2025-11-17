@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Loader2, Calendar, Clock, User, DollarSign } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 const bookingSchema = z.object({
   customerName: z.string().min(2, "El nombre debe tener al menos 2 caracteres").max(100),
@@ -64,26 +65,19 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
     setIsSubmitting(true);
     
     try {
-      const response = await fetch("/api/book", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      const { data: result, error } = await supabase.functions.invoke("create-booking", {
+        body: {
           professionalId: timeSlot.professionalId,
           serviceId: service.id,
           dateTimeStart: timeSlot.dateTimeStart,
           ...data,
-        }),
+        },
       });
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Error al crear la reserva");
+      if (error) {
+        throw new Error(error.message || "Error al crear la reserva");
       }
 
-      const result = await response.json();
-      
       // Redirect to Mercado Pago
       if (result.initPoint) {
         window.location.href = result.initPoint;

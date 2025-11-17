@@ -11,8 +11,19 @@ serve(async (req) => {
 
   try {
     const url = new URL(req.url);
-    const date = url.searchParams.get("date"); // YYYY-MM-DD
-    const professionalId = url.searchParams.get("professionalId");
+    
+    // Support both GET (with query params) and POST (with body)
+    let date: string | null = null;
+    let professionalId: string | null = null;
+    
+    if (req.method === "GET") {
+      date = url.searchParams.get("date");
+      professionalId = url.searchParams.get("professionalId");
+    } else if (req.method === "POST") {
+      const body = await req.json();
+      date = body.date;
+      professionalId = body.professionalId;
+    }
 
     if (!date) {
       return new Response(
