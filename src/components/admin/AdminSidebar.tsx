@@ -30,7 +30,7 @@ export function AdminSidebar() {
 
   return (
     <Sidebar collapsible="icon" className={collapsed ? 'w-14' : 'w-64'}>
-      <SidebarHeader className="border-b border-border p-4">
+      <SidebarHeader className="border-b border-border bg-background p-4">
         {!collapsed && (
           <h2 className="text-lg font-semibold text-foreground">Nave Studio Admin</h2>
         )}
@@ -38,7 +38,7 @@ export function AdminSidebar() {
 
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Gestión</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-muted-foreground font-semibold">Gestión</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {menuItems.map((item) => (
@@ -49,8 +49,8 @@ export function AdminSidebar() {
                       className={({ isActive }) =>
                         `flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${
                           isActive
-                            ? 'bg-primary text-primary-foreground font-medium'
-                            : 'hover:bg-muted text-foreground'
+                            ? 'bg-primary text-primary-foreground font-semibold shadow-sm'
+                            : 'text-foreground hover:bg-accent hover:text-accent-foreground'
                         }`
                       }
                     >
@@ -65,17 +65,18 @@ export function AdminSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="border-t border-border p-4">
+      <SidebarFooter className="border-t border-border bg-background p-4">
         {!collapsed && user && (
-          <div className="mb-2 text-sm text-muted-foreground truncate">
+          <div className="mb-2 text-sm text-muted-foreground truncate font-medium">
+            <User className="h-3 w-3 inline mr-1" />
             {user.email}
           </div>
         )}
         <Button
-          variant="ghost"
+          variant="outline"
           size={collapsed ? 'icon' : 'default'}
           onClick={signOut}
-          className="w-full justify-start"
+          className="w-full justify-start hover:bg-destructive hover:text-destructive-foreground"
         >
           <LogOut className="h-4 w-4" />
           {!collapsed && <span className="ml-2">Cerrar Sesión</span>}
