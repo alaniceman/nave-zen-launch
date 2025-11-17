@@ -2,6 +2,55 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 import { getCorsHeaders } from "../_shared/cors.ts";
 
+// Helper function to verify Mercado Pago webhook signature
+async function verifyMercadoPagoSignature(
+  xSignature: string | null,
+  xRequestId: string | null,
+  dataId: string,
+  secret: string
+): Promise<boolean> {
+  if (!xSignature || !xRequestId) {
+    return false;
+  }
+
+  try {
+    // Parse signature header (format: "ts=timestamp,v1=hash")
+    const parts = xSignature.split(',');
+    const ts = parts.find(p => p.startsWith('ts='))?.split('=')[1];
+    const hash = parts.find(p => p.startsWith('v1='))?.split('=')[1];
+
+    if (!ts || !hash) {
+      return false;
+    }
+
+    // Create the manifest (what Mercado Pago signed)
+    const manifest = `id:${dataId};request-id:${xRequestId};ts:${ts};`;
+
+    // Create HMAC-SHA256 hash
+    const encoder = new TextEncoder();
+    const keyData = encoder.encode(secret);
+    const messageData = encoder.encode(manifest);
+
+    const cryptoKey = await crypto.subtle.importKey(
+      'raw',
+      keyData,
+      { name: 'HMAC', hash: 'SHA-256' },
+      false,
+      ['sign']
+    );
+
+    const signature = await crypto.subtle.sign('HMAC', cryptoKey, messageData);
+    const signatureHex = Array.from(new Uint8Array(signature))
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
+
+    return signatureHex === hash;
+  } catch (error) {
+    console.error('Error verifying signature:', error);
+    return false;
+  }
+}
+
 const corsHeaders = getCorsHeaders();
 
 serve(async (req) => {
@@ -22,8 +71,35 @@ serve(async (req) => {
     }
 
     const mercadoPagoAccessToken = Deno.env.get("MERCADO_PAGO_ACCESS_TOKEN");
+    const webhookSecret = Deno.env.get("MERCADO_PAGO_WEBHOOK_SECRET");
+    
     if (!mercadoPagoAccessToken) {
       throw new Error("Mercado Pago not configured");
+    }
+
+    // Verify webhook signature
+    if (webhookSecret) {
+      const xSignature = req.headers.get('x-signature');
+      const xRequestId = req.headers.get('x-request-id');
+      const dataId = body.data?.id;
+
+      const isValid = await verifyMercadoPagoSignature(
+        xSignature,
+        xRequestId,
+        dataId,
+        webhookSecret
+      );
+
+      if (!isValid) {
+        console.error('Invalid webhook signature');
+        return new Response(JSON.stringify({ error: 'Invalid signature' }), {
+          status: 401,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      console.log('Webhook signature verified successfully');
+    } else {
+      console.warn('MERCADO_PAGO_WEBHOOK_SECRET not configured - webhook signature verification skipped');
     }
 
     // Get payment details from Mercado Pago
@@ -48,9 +124,10 @@ serve(async (req) => {
     const payment = await paymentResponse.json();
     console.log("Payment details:", payment);
 
-    const bookingId = payment.metadata?.booking_id;
+    // Get booking ID from external_reference (set in create-booking)
+    const bookingId = payment.external_reference;
     if (!bookingId) {
-      console.error("No booking_id in payment metadata");
+      console.error("No booking ID in payment external_reference");
       return new Response(JSON.stringify({ status: "no_booking_id" }), {
         status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -171,7 +248,7 @@ serve(async (req) => {
   } catch (error: any) {
     console.error("Error in mercadopago-webhook:", error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: "Unable to process webhook" }),
       {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
