@@ -36,6 +36,14 @@ import { SEOHead } from "@/components/SEOHead";
 import { TrialDelegationHandler } from "@/components/TrialDelegationHandler";
 import FacebookPixelRouterTracker from "@/components/FacebookPixelRouterTracker";
 import { WhatsAppWidget } from "@/components/WhatsAppWidget";
+import { AuthProvider } from "@/context/AuthContext";
+import { ProtectedRoute } from "@/components/admin/ProtectedRoute";
+import { AdminLayout } from "@/components/admin/AdminLayout";
+import AdminLogin from "./pages/admin/Login";
+import AdminBookings from "./pages/admin/AdminBookings";
+import AdminProfessionals from "./pages/admin/AdminProfessionals";
+import AdminServices from "./pages/admin/AdminServices";
+import AdminAvailability from "./pages/admin/AdminAvailability";
 
 const queryClient = new QueryClient();
 
@@ -43,17 +51,18 @@ const App = () => (
   <HelmetProvider>
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <TrialModalProvider>
-          <EmailCaptureModalProvider>
-            <Toaster />
-            <Sonner />
-            <CheckoutRedirectManager />
-            <BrowserRouter>
-            <SEOHead />
-            <FacebookPixelRouterTracker />
-            <TrialDelegationHandler />
-            <Header />
-          <Routes>
+        <AuthProvider>
+          <TrialModalProvider>
+            <EmailCaptureModalProvider>
+              <Toaster />
+              <Sonner />
+              <CheckoutRedirectManager />
+              <BrowserRouter>
+              <SEOHead />
+              <FacebookPixelRouterTracker />
+              <TrialDelegationHandler />
+              <Header />
+            <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/planes-precios" element={<Planes />} />
             <Route path="/experiencias" element={<Experiencias />} />
@@ -80,6 +89,16 @@ const App = () => (
             <Route path="/agenda-nave-studio/:professionalSlug" element={<AgendaNaveStudio />} />
             <Route path="/agenda-nave-studio/:professionalSlug/:dateParam" element={<AgendaNaveStudio />} />
             <Route path="/agenda-nave-studio/:professionalSlug/:dateParam/:timeParam" element={<AgendaNaveStudio />} />
+            
+            {/* Admin Routes */}
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin" element={<ProtectedRoute requireAdmin><AdminLayout /></ProtectedRoute>}>
+              <Route path="agenda" element={<AdminBookings />} />
+              <Route path="profesionales" element={<AdminProfessionals />} />
+              <Route path="servicios" element={<AdminServices />} />
+              <Route path="disponibilidad" element={<AdminAvailability />} />
+            </Route>
+            
             {/* Redirect legacy routes */}
             <Route path="/planes" element={<Navigate to="/planes-precios" replace />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
@@ -89,6 +108,7 @@ const App = () => (
         </BrowserRouter>
           </EmailCaptureModalProvider>
         </TrialModalProvider>
+        </AuthProvider>
       </TooltipProvider>
     </QueryClientProvider>
   </HelmetProvider>

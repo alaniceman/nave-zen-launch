@@ -1,0 +1,226 @@
+import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Loader2, Search, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
+
+const statusColors = {
+  PENDING_PAYMENT: 'bg-yellow-500',
+  CONFIRMED: 'bg-green-500',
+  CANCELLED: 'bg-red-500',
+  COMPLETED: 'bg-blue-500',
+};
+
+const statusLabels = {
+  PENDING_PAYMENT: 'Pendiente Pago',
+  CONFIRMED: 'Confirmada',
+  CANCELLED: 'Cancelada',
+  COMPLETED: 'Completada',
+};
+
+export default function AdminBookings() {
+  const { session } = useAuth();
+  const [page, setPage] = useState(1);
+  const [status, setStatus] = useState<string>('all');
+  const [search, setSearch] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
+
+  // Debounce search
+  useState(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 500);
+    return () => clearTimeout(timer);
+  });
+
+  const { data, isLoading } = useQuery({
+    queryKey: ['admin-bookings', page, status, debouncedSearch],
+    queryFn: async () => {
+      const params = new URLSearchParams({
+        page: page.toString(),
+        limit: '20',
+      });
+
+      if (status !== 'all') {
+        params.append('status', status);
+      }
+
+      if (debouncedSearch) {
+        params.append('search', debouncedSearch);
+      }
+
+      const { data, error } = await supabase.functions.invoke('admin-bookings', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${session?.access_token}`,
+        },
+      });
+
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!session,
+  });
+
+  const { data: professionals } = useQuery({
+    queryKey: ['professionals'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('professionals')
+        .select('*')
+        .eq('is_active', true);
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  return (
+    <div className="p-6 space-y-6">
+      <div className="flex items-center justify-between">
+        <h1 className="text-3xl font-bold text-foreground">Gestión de Reservas</h1>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Filtros</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex-1">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Buscar por nombre, email o teléfono..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+            </div>
+
+            <Select value={status} onValueChange={setStatus}>
+              <SelectTrigger className="w-full sm:w-48">
+                <SelectValue placeholder="Estado" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todos los estados</SelectItem>
+                <SelectItem value="PENDING_PAYMENT">Pendiente Pago</SelectItem>
+                <SelectItem value="CONFIRMED">Confirmada</SelectItem>
+                <SelectItem value="CANCELLED">Cancelada</SelectItem>
+                <SelectItem value="COMPLETED">Completada</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </CardContent>
+      </Card>
+
+      {isLoading ? (
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      ) : (
+        <>
+          <Card>
+            <CardContent className="p-0">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Cliente</TableHead>
+                    <TableHead>Profesional</TableHead>
+                    <TableHead>Servicio</TableHead>
+                    <TableHead>Fecha y Hora</TableHead>
+                    <TableHead>Estado</TableHead>
+                    <TableHead>Precio</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {data?.bookings?.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                        No se encontraron reservas
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    data?.bookings?.map((booking: any) => (
+                      <TableRow key={booking.id}>
+                        <TableCell>
+                          <div>
+                            <div className="font-medium text-foreground">{booking.customer_name}</div>
+                            <div className="text-sm text-muted-foreground">{booking.customer_email}</div>
+                            <div className="text-sm text-muted-foreground">{booking.customer_phone}</div>
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-foreground">{booking.professionals.name}</TableCell>
+                        <TableCell className="text-foreground">{booking.services.name}</TableCell>
+                        <TableCell className="text-foreground">
+                          {format(new Date(booking.date_time_start), "d 'de' MMMM, yyyy 'a las' HH:mm", { locale: es })}
+                        </TableCell>
+                        <TableCell>
+                          <Badge className={statusColors[booking.status as keyof typeof statusColors]}>
+                            {statusLabels[booking.status as keyof typeof statusLabels]}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-foreground font-medium">
+                          ${booking.services.price_clp.toLocaleString('es-CL')}
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+
+          {data && data.totalPages > 1 && (
+            <div className="flex items-center justify-between">
+              <p className="text-sm text-muted-foreground">
+                Página {page} de {data.totalPages}
+              </p>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setPage(p => Math.max(1, p - 1))}
+                  disabled={page === 1}
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                  Anterior
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setPage(p => p + 1)}
+                  disabled={page >= data.totalPages}
+                >
+                  Siguiente
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
