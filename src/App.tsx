@@ -27,6 +27,10 @@ import CriomedicinIceBathEnGrupo from "./pages/CriomedicinIceBathEnGrupo";
 import Terminos from "./pages/Terminos";
 import Privacidad from "./pages/Privacidad";
 import NotFound from "./pages/NotFound";
+import AgendaNaveStudio from "./pages/AgendaNaveStudio";
+import AgendaSuccess from "./pages/AgendaSuccess";
+import AgendaFailure from "./pages/AgendaFailure";
+import AgendaPending from "./pages/AgendaPending";
 import { CheckoutRedirectManager } from "@/components/CheckoutRedirectManager";
 import { SEOHead } from "@/components/SEOHead";
 import { TrialDelegationHandler } from "@/components/TrialDelegationHandler";
@@ -69,6 +73,13 @@ const App = () => (
             <Route path="/criomedicina-ice-bath-en-grupo" element={<CriomedicinIceBathEnGrupo />} />
             <Route path="/terminos" element={<Terminos />} />
             <Route path="/privacidad" element={<Privacidad />} />
+            <Route path="/agenda-nave-studio" element={<AgendaNaveStudio />} />
+            <Route path="/agenda-nave-studio/success" element={<AgendaSuccess />} />
+            <Route path="/agenda-nave-studio/failure" element={<AgendaFailure />} />
+            <Route path="/agenda-nave-studio/pending" element={<AgendaPending />} />
+            <Route path="/agenda-nave-studio/:professionalSlug" element={<AgendaNaveStudio />} />
+            <Route path="/agenda-nave-studio/:professionalSlug/:dateParam" element={<AgendaNaveStudio />} />
+            <Route path="/agenda-nave-studio/:professionalSlug/:dateParam/:timeParam" element={<AgendaNaveStudio />} />
             {/* Redirect legacy routes */}
             <Route path="/planes" element={<Navigate to="/planes-precios" replace />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
