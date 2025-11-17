@@ -21,8 +21,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  const checkIsAdmin = async (): Promise<boolean> => {
-    if (!session) {
+  const checkIsAdmin = async (providedSession?: Session | null): Promise<boolean> => {
+    const sessionToUse = providedSession ?? session;
+    
+    if (!sessionToUse) {
       setIsAdmin(false);
       return false;
     }
@@ -30,7 +32,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const { data, error } = await supabase.functions.invoke('check-admin-role', {
         headers: {
-          Authorization: `Bearer ${session.access_token}`,
+          Authorization: `Bearer ${sessionToUse.access_token}`,
         },
       });
 
@@ -96,9 +98,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return { error };
       }
 
-      // Wait a bit for the session to be established
-      await new Promise(resolve => setTimeout(resolve, 500));
-      const adminStatus = await checkIsAdmin();
+      // Obtener la sesión actual directamente de Supabase
+      const { data: { session: currentSession } } = await supabase.auth.getSession();
+      
+      if (!currentSession) {
+        return { error: new Error('No se pudo establecer la sesión') };
+      }
+
+      // Pasar la sesión actual a checkIsAdmin
+      const adminStatus = await checkIsAdmin(currentSession);
       
       if (!adminStatus) {
         await supabase.auth.signOut();
