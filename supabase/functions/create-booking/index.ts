@@ -148,11 +148,16 @@ serve(async (req) => {
       throw new Error("Mercado Pago not configured");
     }
 
+    console.log("Creating Mercado Pago preference for booking:", booking.id);
+
     const professional = await supabase
       .from("professionals")
       .select("name")
       .eq("id", validatedData.professionalId)
       .single();
+
+    const siteUrl = Deno.env.get("SITE_URL");
+    console.log("Using SITE_URL:", siteUrl);
 
     const preferenceData = {
       items: [
@@ -171,16 +176,16 @@ serve(async (req) => {
         },
       },
       back_urls: {
-        success: `${Deno.env.get("SITE_URL")}/agenda-nave-studio/success`,
-        failure: `${Deno.env.get("SITE_URL")}/agenda-nave-studio/failure`,
-        pending: `${Deno.env.get("SITE_URL")}/agenda-nave-studio/pending`,
+        success: `${siteUrl}/agenda-nave-studio/success`,
+        failure: `${siteUrl}/agenda-nave-studio/failure`,
+        pending: `${siteUrl}/agenda-nave-studio/pending`,
       },
       auto_return: "approved",
+      external_reference: booking.id,
       notification_url: `${Deno.env.get("SUPABASE_URL")}/functions/v1/mercadopago-webhook`,
-      metadata: {
-        booking_id: booking.id,
-      },
     };
+
+    console.log("Preference data:", JSON.stringify(preferenceData, null, 2));
 
     const mpResponse = await fetch(
       "https://api.mercadopago.com/checkout/preferences",
@@ -194,19 +199,25 @@ serve(async (req) => {
       }
     );
 
+    const responseText = await mpResponse.text();
+    console.log("Mercado Pago response status:", mpResponse.status);
+    console.log("Mercado Pago response:", responseText);
+
     if (!mpResponse.ok) {
-      const errorText = await mpResponse.text();
-      console.error("Mercado Pago error:", errorText);
-      throw new Error("Error creating payment preference");
+      console.error("Mercado Pago error:", responseText);
+      throw new Error(`Mercado Pago API error: ${responseText}`);
     }
 
-    const preference = await mpResponse.json();
+    const preference = JSON.parse(responseText);
 
     // Update booking with preference ID
     await supabase
       .from("bookings")
       .update({ mercado_pago_preference_id: preference.id })
       .eq("id", booking.id);
+
+    console.log("Payment preference created successfully:", preference.id);
+
 
     return new Response(
       JSON.stringify({
