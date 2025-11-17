@@ -59,10 +59,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
         
-        // Check admin status asynchronously
+        // Check admin status asynchronously with the current session
         if (currentSession?.user) {
           setTimeout(() => {
-            checkIsAdmin();
+            checkIsAdmin(currentSession);
           }, 0);
         } else {
           setIsAdmin(false);
@@ -77,7 +77,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       
       if (currentSession?.user) {
         setTimeout(() => {
-          checkIsAdmin().finally(() => setIsLoading(false));
+          checkIsAdmin(currentSession).finally(() => setIsLoading(false));
         }, 0);
       } else {
         setIsLoading(false);
