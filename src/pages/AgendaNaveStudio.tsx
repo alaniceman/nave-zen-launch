@@ -105,13 +105,15 @@ export default function AgendaNaveStudio() {
         const dateStr = format(selectedDate, "yyyy-MM-dd");
         const professionalId = selectedProfessional === "any" ? null : selectedProfessional;
         
-        const response = await fetch(
-          `/api/availability?date=${dateStr}${professionalId ? `&professionalId=${professionalId}` : ""}`
-        );
+        const { data, error } = await supabase.functions.invoke("get-availability", {
+          body: { 
+            date: dateStr,
+            professionalId: professionalId 
+          }
+        });
         
-        if (!response.ok) throw new Error("Error loading availability");
+        if (error) throw error;
         
-        const data = await response.json();
         setAvailableSlots(data.slots || []);
       } catch (error) {
         console.error("Error loading slots:", error);
