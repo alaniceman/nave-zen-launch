@@ -156,7 +156,7 @@ serve(async (req) => {
       .eq("id", validatedData.professionalId)
       .single();
 
-    const siteUrl = Deno.env.get("SITE_URL");
+    const siteUrl = Deno.env.get("SITE_URL")?.replace(/\/$/, "") || "https://studiolanave.com";
     console.log("Using SITE_URL:", siteUrl);
 
     const preferenceData = {
