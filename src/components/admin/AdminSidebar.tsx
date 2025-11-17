@@ -29,8 +29,8 @@ export function AdminSidebar() {
   const collapsed = state === 'collapsed';
 
   return (
-    <Sidebar collapsible="icon" className={collapsed ? 'w-14' : 'w-64'}>
-      <SidebarHeader className="border-b border-border bg-card p-4">
+    <Sidebar collapsible="icon" className="border-r">
+      <SidebarHeader className="border-b border-border bg-card p-4 hidden lg:block">
         {!collapsed && (
           <h2 className="text-lg font-bold text-card-foreground">Nave Studio Admin</h2>
         )}
