@@ -107,7 +107,7 @@ export function AvailabilityForm({ open, onClose, rule }: AvailabilityFormProps)
     resolver: zodResolver(availabilitySchema),
     defaultValues: {
       professionalId: '',
-      serviceId: '',
+      serviceId: undefined,
       recurrenceType: 'weekly',
       startTime: '09:00',
       endTime: '18:00',
@@ -122,7 +122,7 @@ export function AvailabilityForm({ open, onClose, rule }: AvailabilityFormProps)
     if (rule) {
       form.reset({
         professionalId: rule.professional_id,
-        serviceId: rule.service_id || '',
+        serviceId: rule.service_id || undefined,
         recurrenceType: rule.recurrence_type,
         dayOfWeek: rule.day_of_week,
         specificDate: rule.specific_date,
@@ -221,14 +221,17 @@ export function AvailabilityForm({ open, onClose, rule }: AvailabilityFormProps)
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Servicio (opcional)</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
+                  <Select 
+                    onValueChange={(value) => field.onChange(value === 'all' ? undefined : value)} 
+                    value={field.value || 'all'}
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Todos los servicios" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="">Todos los servicios</SelectItem>
+                      <SelectItem value="all">Todos los servicios</SelectItem>
                       {services?.map((service) => (
                         <SelectItem key={service.id} value={service.id}>
                           {service.name}
