@@ -14,6 +14,138 @@ export type Database = {
   }
   public: {
     Tables: {
+      availability_rules: {
+        Row: {
+          created_at: string
+          day_of_week: number | null
+          duration_minutes: number
+          end_time: string
+          id: string
+          is_active: boolean
+          max_days_in_future: number
+          min_hours_before_booking: number
+          professional_id: string
+          recurrence_type: string
+          service_id: string | null
+          specific_date: string | null
+          start_time: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          day_of_week?: number | null
+          duration_minutes?: number
+          end_time: string
+          id?: string
+          is_active?: boolean
+          max_days_in_future?: number
+          min_hours_before_booking?: number
+          professional_id: string
+          recurrence_type: string
+          service_id?: string | null
+          specific_date?: string | null
+          start_time: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          day_of_week?: number | null
+          duration_minutes?: number
+          end_time?: string
+          id?: string
+          is_active?: boolean
+          max_days_in_future?: number
+          min_hours_before_booking?: number
+          professional_id?: string
+          recurrence_type?: string
+          service_id?: string | null
+          specific_date?: string | null
+          start_time?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "availability_rules_professional_id_fkey"
+            columns: ["professional_id"]
+            isOneToOne: false
+            referencedRelation: "professionals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "availability_rules_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bookings: {
+        Row: {
+          created_at: string
+          customer_comments: string | null
+          customer_email: string
+          customer_name: string
+          customer_phone: string
+          date_time_end: string
+          date_time_start: string
+          id: string
+          mercado_pago_payment_id: string | null
+          mercado_pago_preference_id: string | null
+          professional_id: string
+          service_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          customer_comments?: string | null
+          customer_email: string
+          customer_name: string
+          customer_phone: string
+          date_time_end: string
+          date_time_start: string
+          id?: string
+          mercado_pago_payment_id?: string | null
+          mercado_pago_preference_id?: string | null
+          professional_id: string
+          service_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          customer_comments?: string | null
+          customer_email?: string
+          customer_name?: string
+          customer_phone?: string
+          date_time_end?: string
+          date_time_start?: string
+          id?: string
+          mercado_pago_payment_id?: string | null
+          mercado_pago_preference_id?: string | null
+          professional_id?: string
+          service_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bookings_professional_id_fkey"
+            columns: ["professional_id"]
+            isOneToOne: false
+            referencedRelation: "professionals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       email_subscribers: {
         Row: {
           created_at: string | null
@@ -50,6 +182,69 @@ export type Database = {
           tags?: string[] | null
           updated_at?: string | null
           whatsapp?: string
+        }
+        Relationships: []
+      }
+      professionals: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          is_active: boolean
+          name: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          is_active?: boolean
+          name: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      services: {
+        Row: {
+          created_at: string
+          description: string | null
+          duration_minutes: number
+          id: string
+          is_active: boolean
+          name: string
+          price_clp: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          duration_minutes: number
+          id?: string
+          is_active?: boolean
+          name: string
+          price_clp: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          duration_minutes?: number
+          id?: string
+          is_active?: boolean
+          name?: string
+          price_clp?: number
+          updated_at?: string
         }
         Relationships: []
       }
