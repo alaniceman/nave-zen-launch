@@ -29,16 +29,16 @@ export function AdminSidebar() {
   const collapsed = state === 'collapsed';
 
   return (
-    <Sidebar collapsible="icon" className="border-r">
-      <SidebarHeader className="border-b border-border bg-card p-4 hidden lg:block">
+    <Sidebar collapsible="icon" className="border-r bg-sidebar">
+      <SidebarHeader className="border-b border-sidebar-border bg-sidebar p-4 hidden lg:block">
         {!collapsed && (
-          <h2 className="text-lg font-bold text-card-foreground">Nave Studio Admin</h2>
+          <h2 className="text-lg font-bold text-sidebar-foreground">Nave Studio Admin</h2>
         )}
       </SidebarHeader>
 
-      <SidebarContent className="bg-card">
+      <SidebarContent className="bg-sidebar">
         <SidebarGroup className="px-2">
-          <SidebarGroupLabel className="text-muted-foreground font-bold text-xs uppercase tracking-wider mb-2 px-2">
+          <SidebarGroupLabel className="text-sidebar-foreground/70 font-bold text-xs uppercase tracking-wider mb-2 px-2">
             Gestión
           </SidebarGroupLabel>
           <SidebarGroupContent>
@@ -51,8 +51,8 @@ export function AdminSidebar() {
                       className={({ isActive }) =>
                         `flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${
                           isActive
-                            ? 'bg-primary text-primary-foreground font-bold shadow-md scale-[1.02]'
-                            : 'text-card-foreground hover:bg-accent hover:text-accent-foreground hover:scale-[1.02] font-medium'
+                            ? 'bg-sidebar-primary text-sidebar-primary-foreground font-bold shadow-md scale-[1.02]'
+                            : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:scale-[1.02] font-medium'
                         }`
                       }
                     >
@@ -67,9 +67,9 @@ export function AdminSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="border-t border-border bg-card p-4">
+      <SidebarFooter className="border-t border-sidebar-border bg-sidebar p-4">
         {!collapsed && user && (
-          <div className="mb-3 p-2 rounded-md bg-muted/50 text-sm text-card-foreground truncate font-medium">
+          <div className="mb-3 p-2 rounded-md bg-sidebar-accent text-sm text-sidebar-accent-foreground truncate font-medium">
             <User className="h-4 w-4 inline mr-2" />
             <span className="text-xs">{user.email}</span>
           </div>
@@ -78,7 +78,7 @@ export function AdminSidebar() {
           variant="outline"
           size={collapsed ? 'icon' : 'default'}
           onClick={signOut}
-          className="w-full justify-start border-2 hover:bg-destructive hover:text-destructive-foreground hover:border-destructive font-semibold"
+          className="w-full justify-start border-2 bg-sidebar text-sidebar-foreground hover:bg-destructive hover:text-destructive-foreground hover:border-destructive font-semibold"
         >
           <LogOut className="h-4 w-4" />
           {!collapsed && <span className="ml-2">Cerrar Sesión</span>}
