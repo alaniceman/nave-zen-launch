@@ -120,10 +120,13 @@ export function AvailabilityForm({ open, onClose, rule }: AvailabilityFormProps)
 
   useEffect(() => {
     if (rule) {
+      // Convertir valores de la base de datos al formato del formulario
+      const recurrenceTypeForm = rule.recurrence_type === 'WEEKLY' ? 'weekly' : 'specific_date';
+      
       form.reset({
         professionalId: rule.professional_id,
         serviceId: rule.service_id || undefined,
-        recurrenceType: rule.recurrence_type,
+        recurrenceType: recurrenceTypeForm,
         dayOfWeek: rule.day_of_week,
         specificDate: rule.specific_date,
         startTime: rule.start_time,
@@ -138,10 +141,13 @@ export function AvailabilityForm({ open, onClose, rule }: AvailabilityFormProps)
 
   const mutation = useMutation({
     mutationFn: async (data: AvailabilityFormData) => {
+      // Convertir los valores del formulario al formato de la base de datos
+      const recurrenceTypeDB = data.recurrenceType === 'weekly' ? 'WEEKLY' : 'ONCE';
+      
       const payload = {
         professional_id: data.professionalId,
         service_id: data.serviceId || null,
-        recurrence_type: data.recurrenceType,
+        recurrence_type: recurrenceTypeDB,
         day_of_week: data.recurrenceType === 'weekly' ? data.dayOfWeek : null,
         specific_date: data.recurrenceType === 'specific_date' ? data.specificDate : null,
         start_time: data.startTime,
