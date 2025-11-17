@@ -3,6 +3,7 @@ const allowedOrigins = [
   'https://pyupvlgdtcxgqjungiof.supabase.co',
   'http://localhost:5173',
   'http://localhost:4173',
+  'https://bbb25e4c-159b-4989-9432-0c5a5bc36284.lovableproject.com',
 ];
 
 export const getCorsHeaders = (req: Request) => {
