@@ -51,8 +51,8 @@ export default function AdminAvailability() {
     },
   });
 
-  const weeklyRules = rules?.filter(r => r.recurrence_type === 'weekly') || [];
-  const specificRules = rules?.filter(r => r.recurrence_type === 'specific_date') || [];
+  const weeklyRules = rules?.filter(r => r.recurrence_type === 'WEEKLY') || [];
+  const specificRules = rules?.filter(r => r.recurrence_type === 'ONCE') || [];
 
   const toggleActiveMutation = useMutation({
     mutationFn: async ({ id, isActive }: { id: string; isActive: boolean }) => {
@@ -125,7 +125,7 @@ export default function AdminAvailability() {
               <TableCell className="font-medium text-foreground">{rule.professionals.name}</TableCell>
               <TableCell className="text-foreground">{rule.services?.name || 'Todos'}</TableCell>
               <TableCell className="text-foreground">
-                {rule.recurrence_type === 'weekly' 
+                {rule.recurrence_type === 'WEEKLY' 
                   ? DAYS_OF_WEEK[rule.day_of_week!]
                   : rule.specific_date}
               </TableCell>
