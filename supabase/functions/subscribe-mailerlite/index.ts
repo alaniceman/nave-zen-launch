@@ -1,14 +1,16 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3'
 import { getCorsHeaders } from '../_shared/cors.ts'
+import { z } from 'https://deno.land/x/zod@v3.22.4/mod.ts'
 
-interface SubscribeRequest {
-  email: string;
-  whatsapp: string;
-  tags?: string[];
-  groups?: string[];
-  source?: string;
-}
+// Validation schema for subscriber data
+const subscribeSchema = z.object({
+  email: z.string().trim().email('Invalid email format').max(255, 'Email too long'),
+  whatsapp: z.string().trim().regex(/^\+?[0-9]{8,15}$/, 'Invalid phone number format').max(20, 'Phone number too long'),
+  tags: z.array(z.string().max(50, 'Tag too long')).max(10, 'Too many tags').optional().default([]),
+  groups: z.array(z.string().max(100, 'Group name too long')).max(5, 'Too many groups').optional().default([]),
+  source: z.string().max(100, 'Source identifier too long').optional().default('unknown')
+})
 
 serve(async (req) => {
   const corsHeaders = getCorsHeaders(req);
@@ -19,18 +21,24 @@ serve(async (req) => {
   }
 
   try {
-    const { email, whatsapp, tags = [], groups = [], source = 'unknown' }: SubscribeRequest = await req.json()
+    const requestData = await req.json()
 
-    // Validate required fields
-    if (!email || !whatsapp) {
+    // Validate input data
+    let validatedData
+    try {
+      validatedData = subscribeSchema.parse(requestData)
+    } catch (validationError) {
+      console.error('Validation error:', { errorType: 'validation_failed' })
       return new Response(
-        JSON.stringify({ error: 'Email and WhatsApp are required' }),
+        JSON.stringify({ error: 'Invalid input data' }),
         { 
           status: 400, 
           headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
         }
       )
     }
+
+    const { email, whatsapp, tags, groups, source } = validatedData
 
     // Initialize Supabase client
     const supabaseClient = createClient(
