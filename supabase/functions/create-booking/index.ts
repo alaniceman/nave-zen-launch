@@ -61,18 +61,37 @@ serve(async (req) => {
       startDate.getTime() + service.duration_minutes * 60000
     );
 
-    // Check if slot is still available
-    const { data: existingBooking } = await supabase
-      .from("bookings")
-      .select("id")
-      .eq("professional_id", validatedData.professionalId)
-      .eq("date_time_start", validatedData.dateTimeStart)
-      .eq("status", "CONFIRMED")
+    // Validate capacity before creating booking
+    const startTime = validatedData.dateTimeStart.split('T')[1].substring(0, 8);
+    const requestDateOnly = validatedData.dateTimeStart.split('T')[0];
+
+    const { data: override } = await supabase
+      .from('capacity_overrides')
+      .select('max_capacity')
+      .eq('professional_id', validatedData.professionalId)
+      .eq('service_id', validatedData.serviceId)
+      .eq('date', requestDateOnly)
+      .eq('start_time', startTime)
       .maybeSingle();
 
-    if (existingBooking) {
+    const maxCapacity = override?.max_capacity ?? service.max_capacity;
+
+    // Count confirmed bookings for this slot
+    const { count: confirmedCount } = await supabase
+      .from('bookings')
+      .select('id', { count: 'exact', head: true })
+      .eq('professional_id', validatedData.professionalId)
+      .eq('service_id', validatedData.serviceId)
+      .eq('date_time_start', validatedData.dateTimeStart)
+      .eq('status', 'CONFIRMED');
+
+    if (confirmedCount && confirmedCount >= maxCapacity) {
       return new Response(
-        JSON.stringify({ error: "Este horario ya no está disponible" }),
+        JSON.stringify({ 
+          error: 'No hay cupos disponibles para este horario',
+          availableCapacity: 0,
+          maxCapacity 
+        }),
         {
           status: 409,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
