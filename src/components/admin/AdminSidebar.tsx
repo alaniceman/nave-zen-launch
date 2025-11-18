@@ -21,6 +21,7 @@ const menuItems = [
   { title: 'Profesionales', url: '/admin/profesionales', icon: Users },
   { title: 'Servicios', url: '/admin/servicios', icon: Package },
   { title: 'Disponibilidad', url: '/admin/disponibilidad', icon: Clock },
+  { title: 'Gestión de Cupos', url: '/admin/cupos', icon: Users },
 ];
 
 export function AdminSidebar() {

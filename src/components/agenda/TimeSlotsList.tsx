@@ -8,6 +8,8 @@ interface TimeSlot {
   dateTimeEnd: string;
   professionalId: string;
   professionalName: string;
+  availableCapacity?: number;
+  maxCapacity?: number;
 }
 
 interface TimeSlotsListProps {
@@ -45,6 +47,11 @@ export function TimeSlotsList({ slots, selectedDate, onSelectSlot }: TimeSlotsLi
               <span className="font-semibold">
                 {format(parseISO(slot.dateTimeStart), "HH:mm")}
               </span>
+              {slot.availableCapacity && slot.availableCapacity > 0 && (
+                <span className="text-xs text-muted-foreground">
+                  ({slot.availableCapacity} cupos)
+                </span>
+              )}
               <div className="flex items-center gap-2 ml-auto text-sm text-muted-foreground">
                 <User className="h-3 w-3" />
                 {slot.professionalName}

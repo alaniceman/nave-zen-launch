@@ -107,15 +107,16 @@ export default function AdminServices() {
         <Card>
           <CardContent className="p-0">
             <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Nombre</TableHead>
-                  <TableHead>Duración</TableHead>
-                  <TableHead>Precio</TableHead>
-                  <TableHead>Activo</TableHead>
-                  <TableHead className="text-right">Acciones</TableHead>
-                </TableRow>
-              </TableHeader>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Nombre</TableHead>
+                <TableHead>Duración</TableHead>
+                <TableHead>Precio</TableHead>
+                <TableHead>Cupos</TableHead>
+                <TableHead>Activo</TableHead>
+                <TableHead className="text-right">Acciones</TableHead>
+              </TableRow>
+            </TableHeader>
               <TableBody>
                 {services?.length === 0 ? (
                   <TableRow>
@@ -140,6 +141,7 @@ export default function AdminServices() {
                       <TableCell className="text-foreground font-medium">
                         ${service.price_clp.toLocaleString('es-CL')}
                       </TableCell>
+                      <TableCell className="text-foreground">{service.max_capacity} cupos</TableCell>
                       <TableCell>
                         <Switch
                           checked={service.is_active}

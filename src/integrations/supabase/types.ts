@@ -146,6 +146,54 @@ export type Database = {
           },
         ]
       }
+      capacity_overrides: {
+        Row: {
+          created_at: string
+          date: string
+          id: string
+          max_capacity: number
+          professional_id: string
+          service_id: string
+          start_time: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          date: string
+          id?: string
+          max_capacity: number
+          professional_id: string
+          service_id: string
+          start_time: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          id?: string
+          max_capacity?: number
+          professional_id?: string
+          service_id?: string
+          start_time?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "capacity_overrides_professional_id_fkey"
+            columns: ["professional_id"]
+            isOneToOne: false
+            referencedRelation: "professionals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "capacity_overrides_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       email_subscribers: {
         Row: {
           created_at: string | null
@@ -243,6 +291,7 @@ export type Database = {
           duration_minutes: number
           id: string
           is_active: boolean
+          max_capacity: number
           name: string
           price_clp: number
           updated_at: string
@@ -253,6 +302,7 @@ export type Database = {
           duration_minutes: number
           id?: string
           is_active?: boolean
+          max_capacity?: number
           name: string
           price_clp: number
           updated_at?: string
@@ -263,6 +313,7 @@ export type Database = {
           duration_minutes?: number
           id?: string
           is_active?: boolean
+          max_capacity?: number
           name?: string
           price_clp?: number
           updated_at?: string

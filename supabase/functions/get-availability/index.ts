@@ -77,63 +77,114 @@ serve(async (req) => {
       );
       if (daysDiff > rule.max_days_in_future) continue;
 
-      // Generate slots for this rule
-      const startTime = rule.start_time;
-      const endTime = rule.end_time;
-      const duration = rule.duration_minutes;
+    // Generate slots for this rule
+    const startTime = rule.start_time;
+    const endTime = rule.end_time;
+    const duration = rule.duration_minutes;
 
-      let currentTime = startTime;
-      while (currentTime < endTime) {
-        const slotStart = new Date(`${date}T${currentTime}`);
-        const slotEnd = new Date(slotStart.getTime() + duration * 60000);
+    let currentTime = startTime;
+    while (currentTime < endTime) {
+      const slotStart = new Date(`${date}T${currentTime}`);
+      const slotEnd = new Date(slotStart.getTime() + duration * 60000);
 
-        // Check min_hours_before_booking
-        const hoursUntilSlot =
-          (slotStart.getTime() - now.getTime()) / (1000 * 60 * 60);
-        if (hoursUntilSlot >= rule.min_hours_before_booking) {
-          slots.push({
-            dateTimeStart: slotStart.toISOString(),
-            dateTimeEnd: slotEnd.toISOString(),
-            professionalId: rule.professional_id,
-            professionalName: rule.professionals.name,
-            ruleId: rule.id,
-          });
-        }
-
-        // Move to next slot
-        const [hours, minutes] = currentTime.split(":").map(Number);
-        const totalMinutes = hours * 60 + minutes + duration;
-        const newHours = Math.floor(totalMinutes / 60);
-        const newMinutes = totalMinutes % 60;
-        currentTime = `${String(newHours).padStart(2, "0")}:${String(
-          newMinutes
-        ).padStart(2, "0")}`;
+      // Check min_hours_before_booking
+      const hoursUntilSlot =
+        (slotStart.getTime() - now.getTime()) / (1000 * 60 * 60);
+      if (hoursUntilSlot >= rule.min_hours_before_booking) {
+        slots.push({
+          dateTimeStart: slotStart.toISOString(),
+          dateTimeEnd: slotEnd.toISOString(),
+          professionalId: rule.professional_id,
+          professionalName: rule.professionals.name,
+          serviceId: rule.service_id,
+          ruleId: rule.id,
+        });
       }
+
+      // Move to next slot
+      const [hours, minutes] = currentTime.split(":").map(Number);
+      const totalMinutes = hours * 60 + minutes + duration;
+      const newHours = Math.floor(totalMinutes / 60);
+      const newMinutes = totalMinutes % 60;
+      currentTime = `${String(newHours).padStart(2, "0")}:${String(
+        newMinutes
+      ).padStart(2, "0")}`;
     }
+  }
 
-    // Filter out booked slots
-    const { data: bookings, error: bookingsError } = await supabase
-      .from("bookings")
-      .select("professional_id, date_time_start")
-      .eq("status", "CONFIRMED")
-      .gte("date_time_start", `${date}T00:00:00`)
-      .lt("date_time_start", `${date}T23:59:59`);
+  // Fetch capacity overrides for this date
+  const { data: overrides } = await supabase
+    .from('capacity_overrides')
+    .select('*')
+    .eq('date', date);
 
-    if (bookingsError) throw bookingsError;
+  const overridesMap = new Map();
+  if (overrides) {
+    for (const override of overrides) {
+      const key = `${override.professional_id}_${override.service_id}_${override.start_time}`;
+      overridesMap.set(key, override.max_capacity);
+    }
+  }
 
-    const bookedSlots = new Set(
-      bookings?.map(
-        (b) => `${b.professional_id}-${b.date_time_start}`
-      ) || []
-    );
+  // Fetch services to get default capacities
+  const serviceIds = [...new Set(rules?.map(r => r.service_id).filter(Boolean))];
+  const { data: services } = await supabase
+    .from('services')
+    .select('id, max_capacity')
+    .in('id', serviceIds);
 
-    const availableSlots = slots.filter(
-      (slot) =>
-        !bookedSlots.has(`${slot.professionalId}-${slot.dateTimeStart}`)
-    );
+  const servicesMap = new Map();
+  if (services) {
+    for (const service of services) {
+      servicesMap.set(service.id, service.max_capacity);
+    }
+  }
 
-    return new Response(
-      JSON.stringify({ slots: availableSlots }),
+  // Count confirmed bookings per slot
+  const { data: bookings, error: bookingsError } = await supabase
+    .from("bookings")
+    .select("professional_id, service_id, date_time_start")
+    .gte("date_time_start", `${date}T00:00:00`)
+    .lte("date_time_start", `${date}T23:59:59`)
+    .eq("status", "CONFIRMED");
+
+  if (bookingsError) throw bookingsError;
+
+  // Create a map of booking counts per slot
+  const bookingCounts = new Map();
+  for (const booking of bookings || []) {
+    const key = `${booking.professional_id}_${booking.service_id}_${booking.date_time_start}`;
+    bookingCounts.set(key, (bookingCounts.get(key) || 0) + 1);
+  }
+
+  // Filter slots and add available capacity
+  const availableSlots = slots
+    .map(slot => {
+      // Get the time portion
+      const startTime = slot.dateTimeStart.split('T')[1].substring(0, 5);
+      
+      // Check for capacity override
+      const overrideKey = `${slot.professionalId}_${slot.serviceId}_${startTime}`;
+      const serviceMaxCapacity = servicesMap.get(slot.serviceId) || 1;
+      const maxCapacity = overridesMap.get(overrideKey) ?? serviceMaxCapacity;
+      
+      // Count confirmed bookings for this slot
+      const bookingKey = `${slot.professionalId}_${slot.serviceId}_${slot.dateTimeStart}`;
+      const confirmedBookings = bookingCounts.get(bookingKey) || 0;
+      
+      const availableCapacity = maxCapacity - confirmedBookings;
+      
+      return {
+        ...slot,
+        maxCapacity,
+        confirmedBookings,
+        availableCapacity
+      };
+    })
+    .filter(slot => slot.availableCapacity > 0);
+
+  return new Response(
+    JSON.stringify({ slots: availableSlots }),
       {
         status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },

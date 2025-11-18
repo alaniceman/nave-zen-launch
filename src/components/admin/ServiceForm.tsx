@@ -30,6 +30,7 @@ const serviceSchema = z.object({
   description: z.string().optional(),
   durationMinutes: z.number().min(15, 'Mínimo 15 minutos').max(480, 'Máximo 480 minutos'),
   priceClp: z.number().min(1000, 'El precio mínimo es $1.000'),
+  maxCapacity: z.number().min(1, 'Mínimo 1 cupo').max(100, 'Máximo 100 cupos'),
   isActive: z.boolean().default(true),
 });
 
@@ -52,6 +53,7 @@ export function ServiceForm({ open, onClose, service }: ServiceFormProps) {
       description: '',
       durationMinutes: 60,
       priceClp: 25000,
+      maxCapacity: 6,
       isActive: true,
     },
   });
@@ -63,6 +65,7 @@ export function ServiceForm({ open, onClose, service }: ServiceFormProps) {
         description: service.description || '',
         durationMinutes: service.duration_minutes,
         priceClp: service.price_clp,
+        maxCapacity: service.max_capacity,
         isActive: service.is_active,
       });
     } else {
@@ -83,6 +86,7 @@ export function ServiceForm({ open, onClose, service }: ServiceFormProps) {
         description: data.description || null,
         duration_minutes: data.durationMinutes,
         price_clp: data.priceClp,
+        max_capacity: data.maxCapacity,
         is_active: data.isActive,
       };
 
@@ -176,6 +180,24 @@ export function ServiceForm({ open, onClose, service }: ServiceFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Precio (CLP)</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      type="number"
+                      onChange={(e) => field.onChange(parseInt(e.target.value))}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="maxCapacity"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Cupos por Horario</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
