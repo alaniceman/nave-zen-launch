@@ -1,1 +1,4 @@
 project_id = "pyupvlgdtcxgqjungiof"
+
+[functions.get-availability]
+verify_jwt = false
