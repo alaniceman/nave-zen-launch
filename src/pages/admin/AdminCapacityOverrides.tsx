@@ -371,7 +371,7 @@ export default function AdminCapacityOverrides() {
                 <TableCell>{override.professionals?.name}</TableCell>
                 <TableCell>{override.services?.name}</TableCell>
                 <TableCell>
-                  {format(new Date(override.date), "EEEE d 'de' MMMM, yyyy", { locale: es })}
+                  {format(new Date(override.date + 'T12:00:00'), "EEEE d 'de' MMMM, yyyy", { locale: es })}
                 </TableCell>
                 <TableCell>{override.start_time}</TableCell>
                 <TableCell className="font-bold">{override.max_capacity}</TableCell>
