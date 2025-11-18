@@ -41,7 +41,8 @@ serve(async (req) => {
     );
 
     // Get the day of week (0 = Sunday, 1 = Monday, etc.)
-    const requestDate = new Date(date + "T00:00:00");
+    // Force Chile timezone (UTC-3)
+    const requestDate = new Date(date + "T00:00:00-03:00");
     const dayOfWeek = requestDate.getDay();
 
     // Get availability rules
@@ -61,7 +62,7 @@ serve(async (req) => {
     // Generate time slots
     const slots: any[] = [];
     const now = new Date();
-    const requestDateTime = new Date(date + "T00:00:00");
+    const requestDateTime = new Date(date + "T00:00:00-03:00");
 
     for (const rule of rules || []) {
       // Check if rule applies to this date
@@ -84,7 +85,8 @@ serve(async (req) => {
 
     let currentTime = startTime;
     while (currentTime < endTime) {
-      const slotStart = new Date(`${date}T${currentTime}`);
+      // Force Chile timezone for slot creation
+      const slotStart = new Date(`${date}T${currentTime}-03:00`);
       const slotEnd = new Date(slotStart.getTime() + duration * 60000);
 
       // Check min_hours_before_booking
@@ -106,9 +108,10 @@ serve(async (req) => {
       const totalMinutes = hours * 60 + minutes + duration;
       const newHours = Math.floor(totalMinutes / 60);
       const newMinutes = totalMinutes % 60;
+      // Add seconds to fix string comparison bug
       currentTime = `${String(newHours).padStart(2, "0")}:${String(
         newMinutes
-      ).padStart(2, "0")}`;
+      ).padStart(2, "0")}:00`;
     }
   }
 
