@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { getCorsHeaders } from "../_shared/cors.ts";
 import { toZonedTime } from "https://esm.sh/date-fns-tz@3.1.3";
+import { generateSlotsFromRules } from "../_shared/slotGenerator.ts";
 
 serve(async (req) => {
   const corsHeaders = getCorsHeaders(req);
@@ -15,15 +16,35 @@ serve(async (req) => {
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
+    const body = await req.json().catch(() => ({}));
     console.log("Starting slot generation...");
 
-    // Get all active availability rules
-    const { data: rules, error: rulesError } = await supabase
+    // Get parameters from request
+    const daysAhead = body.daysAhead || 60;
+    const dateFrom = body.dateFrom; // YYYY-MM-DD format
+    const dateTo = body.dateTo;     // YYYY-MM-DD format
+    const professionalId = body.professionalId;
+    const serviceId = body.serviceId;
+
+    // Fetch all active availability rules with related data
+    let rulesQuery = supabase
       .from("availability_rules")
-      .select("*, professionals!inner(name, is_active), services!inner(name, max_capacity, is_active)")
-      .eq("is_active", true)
-      .eq("professionals.is_active", true)
-      .eq("services.is_active", true);
+      .select(`
+        *,
+        professionals:professional_id(id, name),
+        services:service_id(id, name, max_capacity)
+      `)
+      .eq("is_active", true);
+
+    // Apply filters if provided
+    if (professionalId) {
+      rulesQuery = rulesQuery.eq("professional_id", professionalId);
+    }
+    if (serviceId) {
+      rulesQuery = rulesQuery.eq("service_id", serviceId);
+    }
+
+    const { data: rules, error: rulesError } = await rulesQuery;
 
     if (rulesError) {
       console.error("Error fetching rules:", rulesError);
@@ -40,85 +61,46 @@ serve(async (req) => {
 
     console.log(`Found ${rules.length} active rules`);
 
-    // Get request body for custom days ahead (default 60)
-    const body = await req.json().catch(() => ({}));
-    const daysAhead = body.daysAhead || 60;
-
     const slotsToInsert = [];
     const timezone = "America/Santiago";
-    const today = toZonedTime(new Date(), timezone);
-    today.setHours(0, 0, 0, 0);
+    
+    // Determine date range
+    let startDate: Date;
+    let endDate: Date;
 
-    // Generate slots for next X days
-    for (let dayOffset = 0; dayOffset <= daysAhead; dayOffset++) {
-      const currentDate = new Date(today);
-      currentDate.setDate(today.getDate() + dayOffset);
-      const dayOfWeek = currentDate.getDay();
+    if (dateFrom && dateTo) {
+      // Use specific date range from request
+      startDate = toZonedTime(new Date(dateFrom + "T00:00:00-03:00"), timezone);
+      endDate = toZonedTime(new Date(dateTo + "T00:00:00-03:00"), timezone);
+      console.log(`Generating slots from ${dateFrom} to ${dateTo}`);
+    } else {
+      // Use daysAhead from today
+      startDate = toZonedTime(new Date(), timezone);
+      startDate.setHours(0, 0, 0, 0);
+      endDate = new Date(startDate);
+      endDate.setDate(startDate.getDate() + daysAhead);
+      console.log(`Generating slots for next ${daysAhead} days`);
+    }
 
-      // Format date as YYYY-MM-DD for specific_date comparison
+    // Extract services data
+    const services = rules
+      .map(r => r.services)
+      .filter(Boolean)
+      .map(s => ({ id: s.id, max_capacity: s.max_capacity }));
+
+    // Generate slots for each day in range
+    const currentDate = new Date(startDate);
+    while (currentDate <= endDate) {
       const year = currentDate.getFullYear();
       const month = String(currentDate.getMonth() + 1).padStart(2, '0');
       const day = String(currentDate.getDate()).padStart(2, '0');
       const dateStr = `${year}-${month}-${day}`;
 
-      for (const rule of rules) {
-        let shouldGenerateSlot = false;
+      // Use shared helper function to generate slots
+      const daySlots = generateSlotsFromRules(dateStr, rules, services);
+      slotsToInsert.push(...daySlots);
 
-        // Check if rule applies to this date
-        if (rule.recurrence_type.toLowerCase() === "weekly" && rule.day_of_week === dayOfWeek) {
-          shouldGenerateSlot = true;
-        } else if (rule.recurrence_type.toLowerCase() === "specific" && rule.specific_date === dateStr) {
-          shouldGenerateSlot = true;
-        }
-
-        if (!shouldGenerateSlot) continue;
-
-        // Check max_days_in_future limit
-        const daysFromToday = Math.floor((currentDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-        if (daysFromToday > rule.max_days_in_future) {
-          continue;
-        }
-
-        // Parse start and end times
-        const [startHour, startMinute] = rule.start_time.split(":").map(Number);
-        const [endHour, endMinute] = rule.end_time.split(":").map(Number);
-
-        // Generate slots based on duration - create times in Chile timezone
-        const year = currentDate.getFullYear();
-        const month = currentDate.getMonth();
-        const date = currentDate.getDate();
-        
-        let currentSlotStart = new Date(Date.UTC(year, month, date, startHour + 3, startMinute, 0, 0));
-        const ruleEndTime = new Date(Date.UTC(year, month, date, endHour + 3, endMinute, 0, 0));
-
-        while (currentSlotStart < ruleEndTime) {
-          const slotEnd = new Date(currentSlotStart.getTime() + rule.duration_minutes * 60 * 1000);
-
-          if (slotEnd > ruleEndTime) break;
-
-          // Check min_hours_before_booking
-          const now = new Date();
-          const hoursUntilSlot = (currentSlotStart.getTime() - now.getTime()) / (1000 * 60 * 60);
-          
-          if (hoursUntilSlot >= rule.min_hours_before_booking) {
-            // Use service max_capacity as default
-            const maxCapacity = rule.services.max_capacity;
-
-            slotsToInsert.push({
-              professional_id: rule.professional_id,
-              service_id: rule.service_id,
-              date_time_start: currentSlotStart.toISOString(),
-              date_time_end: slotEnd.toISOString(),
-              max_capacity: maxCapacity,
-              confirmed_bookings: 0,
-              is_active: true,
-            });
-          }
-
-          // Move to next slot
-          currentSlotStart = new Date(slotEnd);
-        }
-      }
+      currentDate.setDate(currentDate.getDate() + 1);
     }
 
     console.log(`Generated ${slotsToInsert.length} potential slots`);
@@ -132,11 +114,12 @@ serve(async (req) => {
 
     // Check which slots already exist to avoid duplicates
     const existingSlots = new Set();
+    
     const { data: existing } = await supabase
       .from("generated_slots")
       .select("professional_id, service_id, date_time_start")
-      .gte("date_time_start", today.toISOString())
-      .lte("date_time_start", new Date(today.getTime() + daysAhead * 24 * 60 * 60 * 1000).toISOString());
+      .gte("date_time_start", startDate.toISOString())
+      .lte("date_time_start", endDate.toISOString());
 
     if (existing) {
       for (const slot of existing) {

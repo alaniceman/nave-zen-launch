@@ -120,9 +120,14 @@ export default function AdminFutureSlots() {
 
   // Generate slots mutation
   const generateSlotsMutation = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (params: { dateFrom: string; dateTo: string }) => {
       const { data, error } = await supabase.functions.invoke("generate-future-slots", {
-        body: { daysAhead: 60 },
+        body: {
+          dateFrom: params.dateFrom,
+          dateTo: params.dateTo,
+          professionalId: selectedProfessional !== "all" ? selectedProfessional : undefined,
+          serviceId: selectedService !== "all" ? selectedService : undefined,
+        },
       });
       if (error) throw error;
       return data;
@@ -137,9 +142,23 @@ export default function AdminFutureSlots() {
   });
 
   const handleGenerateSlots = async () => {
+    const fromDate = new Date(dateFrom);
+    const toDate = new Date(dateTo);
+    
+    if (toDate < fromDate) {
+      toast.error("La fecha 'hasta' debe ser posterior a la fecha 'desde'");
+      return;
+    }
+
+    const confirmed = window.confirm(
+      `Se generarán slots para el período:\n${format(fromDate, "d MMM yyyy", { locale: es })} - ${format(toDate, "d MMM yyyy", { locale: es })}\n\n¿Confirmar?`
+    );
+
+    if (!confirmed) return;
+
     setIsGenerating(true);
     try {
-      await generateSlotsMutation.mutateAsync();
+      await generateSlotsMutation.mutateAsync({ dateFrom, dateTo });
     } finally {
       setIsGenerating(false);
     }
@@ -187,7 +206,7 @@ export default function AdminFutureSlots() {
           ) : (
             <>
               <RefreshCw className="mr-2 h-4 w-4" />
-              Generar Slots
+              Generar Slots para Rango Actual
             </>
           )}
         </Button>

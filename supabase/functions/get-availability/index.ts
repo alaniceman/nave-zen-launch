@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 import { getCorsHeaders } from "../_shared/cors.ts";
+import { generateSlotsFromRules } from "../_shared/slotGenerator.ts";
 
 serve(async (req) => {
   const corsHeaders = getCorsHeaders(req);
@@ -71,11 +72,77 @@ serve(async (req) => {
       throw slotsError;
     }
 
-    console.log(`Found ${slots?.length || 0} slots`);
+    console.log(`Found ${slots?.length || 0} slots in generated_slots table`);
 
+    // If no slots found, generate on-the-fly from availability_rules
     if (!slots || slots.length === 0) {
+      console.log("No slots in DB, generating from rules...");
+
+      // Fetch availability rules for this date
+      const dayOfWeek = new Date(startOfDay).getDay();
+      
+      let rulesQuery = supabase
+        .from("availability_rules")
+        .select(`
+          *,
+          services:service_id(id, max_capacity)
+        `)
+        .eq("is_active", true);
+
+      if (professionalId) {
+        rulesQuery = rulesQuery.eq("professional_id", professionalId);
+      }
+
+      const { data: rules, error: rulesError } = await rulesQuery;
+
+      if (rulesError) {
+        console.error("Error fetching rules:", rulesError);
+        throw rulesError;
+      }
+
+      console.log(`Found ${rules?.length || 0} active rules`);
+
+      if (!rules || rules.length === 0) {
+        return new Response(
+          JSON.stringify({ slots: [] }),
+          { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
+      // Extract services data
+      const services = rules
+        .map(r => r.services)
+        .filter(Boolean)
+        .map(s => ({ id: s.id, max_capacity: s.max_capacity }));
+
+      // Generate slots on-the-fly
+      const generatedSlots = generateSlotsFromRules(
+        date,
+        rules,
+        services,
+        professionalId || undefined
+      );
+
+      console.log(`Generated ${generatedSlots.length} slots from rules`);
+
+      // Format for response (without inserting to DB)
+      const availableSlots = generatedSlots.map(slot => ({
+        id: null, // No DB id since it's not persisted
+        professionalId: slot.professional_id,
+        professionalName: rules.find(r => r.professional_id === slot.professional_id)?.professionals?.name || "Unknown",
+        serviceId: slot.service_id,
+        serviceName: rules.find(r => r.service_id === slot.service_id)?.services?.name || "Unknown",
+        dateTimeStart: slot.date_time_start,
+        dateTimeEnd: slot.date_time_end,
+        maxCapacity: slot.max_capacity,
+        confirmedBookings: 0,
+        availableCapacity: slot.max_capacity,
+      }));
+
+      console.log(`Returning ${availableSlots.length} on-the-fly slots`);
+
       return new Response(
-        JSON.stringify({ slots: [] }),
+        JSON.stringify({ slots: availableSlots }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -99,7 +166,7 @@ serve(async (req) => {
         availableCapacity: slot.max_capacity - slot.confirmed_bookings,
       }));
 
-    console.log(`Returning ${availableSlots.length} available slots`);
+    console.log(`Returning ${availableSlots.length} available slots from DB`);
 
     return new Response(
       JSON.stringify({ slots: availableSlots }),
