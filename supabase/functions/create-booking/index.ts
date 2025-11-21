@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 import { getCorsHeaders } from "../_shared/cors.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { generateSlotsFromRules } from "../_shared/slotGenerator.ts";
 
 const bookingSchema = z.object({
   professionalId: z.string().uuid(),
@@ -61,8 +62,12 @@ serve(async (req) => {
       startDate.getTime() + service.duration_minutes * 60000
     );
 
-    // Find the generated slot for this booking
-    const { data: slot, error: slotError } = await supabase
+    // Find or create the generated slot for this booking
+    let slot = null;
+    let slotId = null;
+
+    // Try to find existing slot
+    const { data: existingSlot, error: slotError } = await supabase
       .from('generated_slots')
       .select('*')
       .eq('professional_id', validatedData.professionalId)
@@ -76,76 +81,103 @@ serve(async (req) => {
       throw slotError;
     }
 
-    if (!slot) {
-      return new Response(
-        JSON.stringify({ 
-          error: 'Este horario no está disponible',
-        }),
-        {
-          status: 404,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        }
-      );
+    if (existingSlot) {
+      console.log("Found existing slot:", existingSlot.id);
+      slot = existingSlot;
+      slotId = existingSlot.id;
+
+      // Check if there's available capacity
+      const availableCapacity = slot.max_capacity - slot.confirmed_bookings;
+      if (availableCapacity <= 0) {
+        return new Response(
+          JSON.stringify({ 
+            error: 'No hay cupos disponibles para este horario',
+            availableCapacity: 0,
+            maxCapacity: slot.max_capacity 
+          }),
+          {
+            status: 409,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          }
+        );
+      }
+    } else {
+      console.log("No slot found, will create just-in-time...");
+      
+      // Verify availability rules before creating slot
+      const now = new Date();
+      const hoursUntilBooking =
+        (startDate.getTime() - now.getTime()) / (1000 * 60 * 60);
+
+      const requestDate = validatedData.dateTimeStart.split("T")[0];
+      const dayOfWeek = startDate.getDay();
+
+      const { data: rules } = await supabase
+        .from("availability_rules")
+        .select(`
+          *,
+          services:service_id(id, max_capacity)
+        `)
+        .eq("professional_id", validatedData.professionalId)
+        .eq("is_active", true);
+
+      const validRule = rules?.find((rule) => {
+        const applies =
+          (rule.recurrence_type === "WEEKLY" && rule.day_of_week === dayOfWeek) ||
+          (rule.recurrence_type === "ONCE" && rule.specific_date === requestDate);
+
+        if (!applies) return false;
+
+        const daysDiff = Math.floor(
+          (startDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
+        );
+
+        return (
+          hoursUntilBooking >= rule.min_hours_before_booking &&
+          daysDiff <= rule.max_days_in_future
+        );
+      });
+
+      if (!validRule) {
+        return new Response(
+          JSON.stringify({
+            error: "Este horario no cumple con las reglas de disponibilidad",
+          }),
+          {
+            status: 400,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          }
+        );
+      }
+
+      // Create the slot just-in-time
+      console.log("Creating slot just-in-time for booking");
+      const maxCapacity = service.max_capacity || 1;
+
+      const { data: newSlot, error: createSlotError } = await supabase
+        .from('generated_slots')
+        .insert({
+          professional_id: validatedData.professionalId,
+          service_id: validatedData.serviceId,
+          date_time_start: validatedData.dateTimeStart,
+          date_time_end: endDate.toISOString(),
+          max_capacity: maxCapacity,
+          confirmed_bookings: 0,
+          is_active: true,
+        })
+        .select()
+        .single();
+
+      if (createSlotError) {
+        console.error("Error creating slot:", createSlotError);
+        throw createSlotError;
+      }
+
+      console.log("Created new slot:", newSlot.id);
+      slot = newSlot;
+      slotId = newSlot.id;
     }
 
-    // Check if there's available capacity
-    const availableCapacity = slot.max_capacity - slot.confirmed_bookings;
-    if (availableCapacity <= 0) {
-      return new Response(
-        JSON.stringify({ 
-          error: 'No hay cupos disponibles para este horario',
-          availableCapacity: 0,
-          maxCapacity: slot.max_capacity 
-        }),
-        {
-          status: 409,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        }
-      );
-    }
-
-    // Verify availability rules
-    const now = new Date();
-    const hoursUntilBooking =
-      (startDate.getTime() - now.getTime()) / (1000 * 60 * 60);
-
-    const requestDate = validatedData.dateTimeStart.split("T")[0];
-    const dayOfWeek = startDate.getDay();
-
-    const { data: rules } = await supabase
-      .from("availability_rules")
-      .select("*")
-      .eq("professional_id", validatedData.professionalId)
-      .eq("is_active", true);
-
-    const hasValidRule = rules?.some((rule) => {
-      const applies =
-        (rule.recurrence_type === "WEEKLY" && rule.day_of_week === dayOfWeek) ||
-        (rule.recurrence_type === "ONCE" && rule.specific_date === requestDate);
-
-      if (!applies) return false;
-
-      const daysDiff = Math.floor(
-        (startDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
-      );
-
-      return (
-        hoursUntilBooking >= rule.min_hours_before_booking &&
-        daysDiff <= rule.max_days_in_future
-      );
-    });
-
-    if (!hasValidRule) {
-      return new Response(
-        JSON.stringify({
-          error: "Este horario no cumple con las reglas de disponibilidad",
-        }),
-        {
-          status: 400,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        }
-      );
-    }
 
     // Create booking with PENDING_PAYMENT status
     const { data: booking, error: bookingError } = await supabase
@@ -170,7 +202,7 @@ serve(async (req) => {
     const { error: slotUpdateError } = await supabase
       .from('generated_slots')
       .update({ confirmed_bookings: slot.confirmed_bookings + 1 })
-      .eq('id', slot.id);
+      .eq('id', slotId);
 
     if (slotUpdateError) {
       console.error("Error updating slot confirmed_bookings:", slotUpdateError);
