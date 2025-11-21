@@ -124,7 +124,9 @@ serve(async (req) => {
   const overridesMap = new Map();
   if (overrides) {
     for (const override of overrides) {
-      const key = `${override.professional_id}_${override.service_id}_${override.start_time}`;
+      // Normalize time format to HH:mm (without seconds) for consistent comparison
+      const normalizedTime = override.start_time.substring(0, 5);
+      const key = `${override.professional_id}_${override.service_id}_${normalizedTime}`;
       overridesMap.set(key, override.max_capacity);
     }
   }
