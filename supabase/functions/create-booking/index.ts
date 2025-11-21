@@ -61,36 +61,41 @@ serve(async (req) => {
       startDate.getTime() + service.duration_minutes * 60000
     );
 
-    // Validate capacity before creating booking
-    const startTime = validatedData.dateTimeStart.split('T')[1].substring(0, 8);
-    const requestDateOnly = validatedData.dateTimeStart.split('T')[0];
-
-    const { data: override } = await supabase
-      .from('capacity_overrides')
-      .select('max_capacity')
-      .eq('professional_id', validatedData.professionalId)
-      .eq('service_id', validatedData.serviceId)
-      .eq('date', requestDateOnly)
-      .eq('start_time', startTime)
-      .maybeSingle();
-
-    const maxCapacity = override?.max_capacity ?? service.max_capacity;
-
-    // Count confirmed bookings for this slot
-    const { count: confirmedCount } = await supabase
-      .from('bookings')
-      .select('id', { count: 'exact', head: true })
+    // Find the generated slot for this booking
+    const { data: slot, error: slotError } = await supabase
+      .from('generated_slots')
+      .select('*')
       .eq('professional_id', validatedData.professionalId)
       .eq('service_id', validatedData.serviceId)
       .eq('date_time_start', validatedData.dateTimeStart)
-      .eq('status', 'CONFIRMED');
+      .eq('is_active', true)
+      .maybeSingle();
 
-    if (confirmedCount && confirmedCount >= maxCapacity) {
+    if (slotError) {
+      console.error("Error fetching slot:", slotError);
+      throw slotError;
+    }
+
+    if (!slot) {
+      return new Response(
+        JSON.stringify({ 
+          error: 'Este horario no está disponible',
+        }),
+        {
+          status: 404,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    // Check if there's available capacity
+    const availableCapacity = slot.max_capacity - slot.confirmed_bookings;
+    if (availableCapacity <= 0) {
       return new Response(
         JSON.stringify({ 
           error: 'No hay cupos disponibles para este horario',
           availableCapacity: 0,
-          maxCapacity 
+          maxCapacity: slot.max_capacity 
         }),
         {
           status: 409,
@@ -160,6 +165,17 @@ serve(async (req) => {
       .single();
 
     if (bookingError) throw bookingError;
+
+    // Increment confirmed_bookings in generated_slots
+    const { error: slotUpdateError } = await supabase
+      .from('generated_slots')
+      .update({ confirmed_bookings: slot.confirmed_bookings + 1 })
+      .eq('id', slot.id);
+
+    if (slotUpdateError) {
+      console.error("Error updating slot confirmed_bookings:", slotUpdateError);
+      // Don't fail the booking, but log the error
+    }
 
     // Create Mercado Pago preference
     const mercadoPagoAccessToken = Deno.env.get("MERCADO_PAGO_ACCESS_TOKEN");
