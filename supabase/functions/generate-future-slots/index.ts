@@ -60,9 +60,9 @@ serve(async (req) => {
         let shouldGenerateSlot = false;
 
         // Check if rule applies to this date
-        if (rule.recurrence_type === "weekly" && rule.day_of_week === dayOfWeek) {
+        if (rule.recurrence_type.toLowerCase() === "weekly" && rule.day_of_week === dayOfWeek) {
           shouldGenerateSlot = true;
-        } else if (rule.recurrence_type === "specific" && rule.specific_date === dateStr) {
+        } else if (rule.recurrence_type.toLowerCase() === "specific" && rule.specific_date === dateStr) {
           shouldGenerateSlot = true;
         }
 
