@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { getCorsHeaders } from "../_shared/cors.ts";
+import { toZonedTime } from "https://esm.sh/date-fns-tz@3.1.3";
 
 serve(async (req) => {
   const corsHeaders = getCorsHeaders(req);
@@ -44,7 +45,8 @@ serve(async (req) => {
     const daysAhead = body.daysAhead || 60;
 
     const slotsToInsert = [];
-    const today = new Date();
+    const timezone = "America/Santiago";
+    const today = toZonedTime(new Date(), timezone);
     today.setHours(0, 0, 0, 0);
 
     // Generate slots for next X days
@@ -54,7 +56,10 @@ serve(async (req) => {
       const dayOfWeek = currentDate.getDay();
 
       // Format date as YYYY-MM-DD for specific_date comparison
-      const dateStr = currentDate.toISOString().split("T")[0];
+      const year = currentDate.getFullYear();
+      const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+      const day = String(currentDate.getDate()).padStart(2, '0');
+      const dateStr = `${year}-${month}-${day}`;
 
       for (const rule of rules) {
         let shouldGenerateSlot = false;
@@ -78,12 +83,13 @@ serve(async (req) => {
         const [startHour, startMinute] = rule.start_time.split(":").map(Number);
         const [endHour, endMinute] = rule.end_time.split(":").map(Number);
 
-        // Generate slots based on duration
-        let currentSlotStart = new Date(currentDate);
-        currentSlotStart.setHours(startHour, startMinute, 0, 0);
-
-        const ruleEndTime = new Date(currentDate);
-        ruleEndTime.setHours(endHour, endMinute, 0, 0);
+        // Generate slots based on duration - create times in Chile timezone
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth();
+        const date = currentDate.getDate();
+        
+        let currentSlotStart = new Date(Date.UTC(year, month, date, startHour + 3, startMinute, 0, 0));
+        const ruleEndTime = new Date(Date.UTC(year, month, date, endHour + 3, endMinute, 0, 0));
 
         while (currentSlotStart < ruleEndTime) {
           const slotEnd = new Date(currentSlotStart.getTime() + rule.duration_minutes * 60 * 1000);
