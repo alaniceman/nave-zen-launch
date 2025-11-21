@@ -233,6 +233,60 @@ export type Database = {
         }
         Relationships: []
       }
+      generated_slots: {
+        Row: {
+          confirmed_bookings: number
+          created_at: string
+          date_time_end: string
+          date_time_start: string
+          id: string
+          is_active: boolean
+          max_capacity: number
+          professional_id: string
+          service_id: string
+          updated_at: string
+        }
+        Insert: {
+          confirmed_bookings?: number
+          created_at?: string
+          date_time_end: string
+          date_time_start: string
+          id?: string
+          is_active?: boolean
+          max_capacity: number
+          professional_id: string
+          service_id: string
+          updated_at?: string
+        }
+        Update: {
+          confirmed_bookings?: number
+          created_at?: string
+          date_time_end?: string
+          date_time_start?: string
+          id?: string
+          is_active?: boolean
+          max_capacity?: number
+          professional_id?: string
+          service_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "generated_slots_professional_id_fkey"
+            columns: ["professional_id"]
+            isOneToOne: false
+            referencedRelation: "professionals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "generated_slots_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       professionals: {
         Row: {
           created_at: string

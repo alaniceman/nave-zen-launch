@@ -44,7 +44,7 @@ import AdminBookings from "./pages/admin/AdminBookings";
 import AdminProfessionals from "./pages/admin/AdminProfessionals";
 import AdminServices from "./pages/admin/AdminServices";
 import AdminAvailability from "./pages/admin/AdminAvailability";
-import AdminCapacityOverrides from "./pages/admin/AdminCapacityOverrides";
+import AdminFutureSlots from "./pages/admin/AdminFutureSlots";
 
 const queryClient = new QueryClient();
 
@@ -98,7 +98,7 @@ const App = () => (
               <Route path="profesionales" element={<AdminProfessionals />} />
               <Route path="servicios" element={<AdminServices />} />
               <Route path="disponibilidad" element={<AdminAvailability />} />
-              <Route path="cupos" element={<AdminCapacityOverrides />} />
+              <Route path="agendas-futuras" element={<AdminFutureSlots />} />
             </Route>
             
             {/* Redirect legacy routes */}
