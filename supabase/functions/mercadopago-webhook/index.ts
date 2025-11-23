@@ -213,11 +213,20 @@ serve(async (req) => {
 
       console.log("Booking confirmed:", bookingId);
 
-      // TODO: Send confirmation emails
-      // You can implement email sending here using Resend
-      // For now, we'll just log it
-      console.log("Should send confirmation email to:", booking.customer_email);
-      console.log("Should send notification to:", booking.professionals.email);
+      // Send confirmation email
+      try {
+        const emailResponse = await supabase.functions.invoke("send-booking-confirmation", {
+          body: { bookingId },
+        });
+
+        if (emailResponse.error) {
+          console.error("Error sending confirmation email:", emailResponse.error);
+        } else {
+          console.log("Confirmation email sent successfully");
+        }
+      } catch (emailError) {
+        console.error("Failed to invoke send-booking-confirmation:", emailError);
+      }
 
       return new Response(JSON.stringify({ status: "confirmed" }), {
         status: 200,
