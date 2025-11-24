@@ -99,22 +99,29 @@ export default function AdminBookings() {
 
   const confirmBookingMutation = useMutation({
     mutationFn: async (bookingId: string) => {
+      console.log('Confirming booking:', bookingId);
+      console.log('Session token available:', !!session?.access_token);
+      
       const { data, error } = await supabase.functions.invoke('admin-bookings', {
         body: { id: bookingId, status: 'CONFIRMED' },
-        headers: {
-          Authorization: `Bearer ${session?.access_token}`,
-        },
       });
       
-      if (error) throw error;
+      console.log('Response data:', data);
+      console.log('Response error:', error);
+      
+      if (error) {
+        console.error('Function invoke error:', error);
+        throw new Error(error.message || 'Error al confirmar reserva');
+      }
       return data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log('Confirmation successful:', data);
       queryClient.invalidateQueries({ queryKey: ['admin-bookings'] });
       toast.success('Reserva confirmada y email enviado al cliente');
     },
     onError: (error: any) => {
-      console.error('Error confirming booking:', error);
+      console.error('Mutation error:', error);
       toast.error(`Error al confirmar: ${error.message}`);
     }
   });
