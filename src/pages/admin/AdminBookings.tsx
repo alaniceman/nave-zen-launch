@@ -99,23 +99,15 @@ export default function AdminBookings() {
 
   const confirmBookingMutation = useMutation({
     mutationFn: async (bookingId: string) => {
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-      const response = await fetch(`${supabaseUrl}/functions/v1/admin-bookings`, {
-        method: 'PATCH',
+      const { data, error } = await supabase.functions.invoke('admin-bookings', {
+        body: { id: bookingId, status: 'CONFIRMED' },
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session?.access_token}`,
-          'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+          Authorization: `Bearer ${session?.access_token}`,
         },
-        body: JSON.stringify({ id: bookingId, status: 'CONFIRMED' }),
       });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Error al confirmar reserva');
-      }
-
-      return await response.json();
+      
+      if (error) throw error;
+      return data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-bookings'] });
