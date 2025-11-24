@@ -111,7 +111,7 @@ Deno.serve(async (req) => {
     }
 
     // Handle PATCH - Update booking status
-    if (req.method === 'PATCH') {
+    if (req.method === 'PATCH' || req.method === 'POST') {
       const { id, status: newStatus } = await req.json();
 
       if (!id || !newStatus) {
