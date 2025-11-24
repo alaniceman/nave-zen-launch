@@ -136,6 +136,24 @@ Deno.serve(async (req) => {
         );
       }
 
+      // Si el status cambió a CONFIRMED, enviar email de confirmación automáticamente
+      if (newStatus === 'CONFIRMED') {
+        console.log('Triggering confirmation email for booking:', id);
+        try {
+          const emailResponse = await supabase.functions.invoke('send-booking-confirmation', {
+            body: { bookingId: id },
+          });
+          
+          if (emailResponse.error) {
+            console.error('Error sending confirmation email:', emailResponse.error);
+          } else {
+            console.log('Confirmation email sent successfully');
+          }
+        } catch (emailError) {
+          console.error('Failed to invoke send-booking-confirmation:', emailError);
+        }
+      }
+
       return new Response(
         JSON.stringify({ booking: data }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }

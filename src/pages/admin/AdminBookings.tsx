@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import {
@@ -41,6 +42,7 @@ const statusLabels = {
 
 export default function AdminBookings() {
   const { session } = useAuth();
+  const queryClient = useQueryClient();
   const [page, setPage] = useState(1);
   const [status, setStatus] = useState<string>('all');
   const [search, setSearch] = useState('');
@@ -93,6 +95,28 @@ export default function AdminBookings() {
       if (error) throw error;
       return data;
     },
+  });
+
+  const confirmBookingMutation = useMutation({
+    mutationFn: async (bookingId: string) => {
+      const { data, error } = await supabase.functions.invoke('admin-bookings', {
+        body: { id: bookingId, status: 'CONFIRMED' },
+        headers: {
+          Authorization: `Bearer ${session?.access_token}`,
+        },
+      });
+      
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin-bookings'] });
+      toast.success('Reserva confirmada y email enviado al cliente');
+    },
+    onError: (error: any) => {
+      console.error('Error confirming booking:', error);
+      toast.error(`Error al confirmar: ${error.message}`);
+    }
   });
 
   return (
@@ -152,12 +176,13 @@ export default function AdminBookings() {
                     <TableHead>Fecha y Hora</TableHead>
                     <TableHead>Estado</TableHead>
                     <TableHead>Precio</TableHead>
+                    <TableHead>Acciones</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {data?.bookings?.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                      <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
                         No se encontraron reservas
                       </TableCell>
                     </TableRow>
@@ -183,6 +208,25 @@ export default function AdminBookings() {
                         </TableCell>
                         <TableCell className="text-foreground font-medium">
                           ${booking.services.price_clp.toLocaleString('es-CL')}
+                        </TableCell>
+                        <TableCell>
+                          {booking.status === 'PENDING_PAYMENT' && (
+                            <Button
+                              size="sm"
+                              variant="default"
+                              onClick={() => confirmBookingMutation.mutate(booking.id)}
+                              disabled={confirmBookingMutation.isPending}
+                            >
+                              {confirmBookingMutation.isPending ? (
+                                <>
+                                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                  Confirmando...
+                                </>
+                              ) : (
+                                'Confirmar Manualmente'
+                              )}
+                            </Button>
+                          )}
                         </TableCell>
                       </TableRow>
                     ))
