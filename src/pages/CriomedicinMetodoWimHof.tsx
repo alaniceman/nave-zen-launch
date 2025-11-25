@@ -230,6 +230,7 @@ const CriomedicinMetodoWimHof = () => {
                 <h3 className="font-semibold text-primary">Viernes</h3>
                 <ul className="mt-2 text-foreground">
                   <li>07:00 — Wim Hof (Breathwork + Ice Bath)</li>
+                  <li>15:00 — Wim Hof (Breathwork + Ice Bath) — <span className="text-muted-foreground">Sol</span></li>
                 </ul>
               </div>
               <div className="rounded-xl border p-4">
