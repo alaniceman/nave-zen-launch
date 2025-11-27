@@ -252,7 +252,7 @@ const handler = async (req: Request): Promise<Response> => {
     ];
 
     const { error: emailError } = await resend.emails.send({
-      from: "Nave Studio <onboarding@resend.dev>",
+      from: "Nave Studio <agenda@studiolanave.com>",
       to: recipients,
       subject: "✓ Confirmación de tu Reserva - Nave Studio",
       html: emailHtml,
