@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 import { Resend } from "npm:resend@2.0.0";
 import { format } from "https://esm.sh/date-fns@3.6.0";
+import { es } from "https://esm.sh/date-fns@3.6.0/locale";
 import { toZonedTime } from "https://esm.sh/date-fns-tz@3.1.3";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
@@ -35,7 +36,7 @@ const handler = async (req: Request): Promise<Response> => {
       .from("bookings")
       .select(`
         *,
-        professional:professionals (name),
+        professional:professionals (name, email),
         service:services (name, description)
       `)
       .eq("id", bookingId)
@@ -54,7 +55,7 @@ const handler = async (req: Request): Promise<Response> => {
     const startDateTime = toZonedTime(new Date(booking.date_time_start), timezone);
     const endDateTime = toZonedTime(new Date(booking.date_time_end), timezone);
     
-    const formattedDate = format(startDateTime, "EEEE d 'de' MMMM 'de' yyyy", { locale: { code: 'es' } });
+    const formattedDate = format(startDateTime, "EEEE d 'de' MMMM 'de' yyyy", { locale: es });
     const formattedStartTime = format(startDateTime, "HH:mm");
     const formattedEndTime = format(endDateTime, "HH:mm");
 
@@ -243,10 +244,16 @@ const handler = async (req: Request): Promise<Response> => {
       </html>
     `;
 
-    // Send email via Resend
+    // Send email to customer, La Nave, and instructor
+    const recipients = [
+      booking.customer_email,
+      "lanave@alaniceman.com",
+      booking.professional.email
+    ];
+
     const { error: emailError } = await resend.emails.send({
       from: "Nave Studio <onboarding@resend.dev>",
-      to: [booking.customer_email],
+      to: recipients,
       subject: "✓ Confirmación de tu Reserva - Nave Studio",
       html: emailHtml,
     });
@@ -259,7 +266,7 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    console.log("Confirmation email sent successfully to:", booking.customer_email);
+    console.log("Confirmation email sent successfully to:", recipients.join(", "));
 
     return new Response(
       JSON.stringify({ success: true }),
