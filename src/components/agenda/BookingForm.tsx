@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Loader2, Calendar, Clock, User, DollarSign } from "lucide-react";
+import { Loader2, Calendar, Clock, User, DollarSign, Tag, Check, X } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -52,6 +52,10 @@ interface BookingFormProps {
 
 export function BookingForm({ timeSlot, professional, service, onBack }: BookingFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [couponCode, setCouponCode] = useState("");
+  const [isValidatingCoupon, setIsValidatingCoupon] = useState(false);
+  const [appliedCoupon, setAppliedCoupon] = useState<any>(null);
+  const [couponError, setCouponError] = useState("");
 
   const {
     register,
@@ -60,6 +64,88 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
   } = useForm<BookingFormData>({
     resolver: zodResolver(bookingSchema),
   });
+
+  const validateCoupon = async () => {
+    if (!couponCode.trim()) {
+      setCouponError("Ingresa un código de cupón");
+      return;
+    }
+
+    setIsValidatingCoupon(true);
+    setCouponError("");
+
+    try {
+      const { data: coupon, error } = await supabase
+        .from("discount_coupons")
+        .select("*")
+        .eq("code", couponCode.toUpperCase())
+        .eq("is_active", true)
+        .single();
+
+      if (error || !coupon) {
+        setCouponError("Cupón no válido");
+        setIsValidatingCoupon(false);
+        return;
+      }
+
+      // Validar fecha
+      const now = new Date();
+      const validFrom = new Date(coupon.valid_from);
+      const validUntil = coupon.valid_until ? new Date(coupon.valid_until) : null;
+
+      if (now < validFrom) {
+        setCouponError("Este cupón aún no es válido");
+        setIsValidatingCoupon(false);
+        return;
+      }
+
+      if (validUntil && now > validUntil) {
+        setCouponError("Este cupón ha expirado");
+        setIsValidatingCoupon(false);
+        return;
+      }
+
+      // Validar usos
+      if (coupon.max_uses && coupon.current_uses >= coupon.max_uses) {
+        setCouponError("Este cupón ya no tiene usos disponibles");
+        setIsValidatingCoupon(false);
+        return;
+      }
+
+      // Validar monto mínimo
+      if (coupon.min_purchase_amount > service.price_clp) {
+        setCouponError(
+          `Este cupón requiere una compra mínima de $${coupon.min_purchase_amount.toLocaleString("es-CL")}`
+        );
+        setIsValidatingCoupon(false);
+        return;
+      }
+
+      setAppliedCoupon(coupon);
+      toast.success("¡Cupón aplicado!");
+    } catch (error) {
+      setCouponError("Error al validar el cupón");
+    } finally {
+      setIsValidatingCoupon(false);
+    }
+  };
+
+  const removeCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponCode("");
+    setCouponError("");
+  };
+
+  const calculateDiscount = () => {
+    if (!appliedCoupon) return 0;
+    
+    if (appliedCoupon.discount_type === "percentage") {
+      return Math.floor((service.price_clp * appliedCoupon.discount_value) / 100);
+    }
+    return appliedCoupon.discount_value;
+  };
+
+  const finalPrice = service.price_clp - calculateDiscount();
 
   const onSubmit = async (data: BookingFormData) => {
     setIsSubmitting(true);
@@ -70,6 +156,7 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
           professionalId: timeSlot.professionalId,
           serviceId: service.id,
           dateTimeStart: timeSlot.dateTimeStart,
+          couponCode: appliedCoupon?.code || null,
           ...data,
         },
       });
@@ -115,13 +202,91 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
         </div>
         <div className="flex items-center gap-3">
           <DollarSign className="h-4 w-4 text-muted-foreground" />
-          <div>
+          <div className="flex-1">
             <span className="font-medium">{service.name}</span>
-            <span className="text-sm text-muted-foreground ml-2">
-              ${service.price_clp.toLocaleString("es-CL")} CLP
-            </span>
+            <div className="text-sm mt-1">
+              {appliedCoupon ? (
+                <>
+                  <span className="text-muted-foreground line-through mr-2">
+                    ${service.price_clp.toLocaleString("es-CL")} CLP
+                  </span>
+                  <span className="text-green-600 font-bold">
+                    ${finalPrice.toLocaleString("es-CL")} CLP
+                  </span>
+                  <span className="text-xs ml-2 text-green-600">
+                    (Ahorro: ${calculateDiscount().toLocaleString("es-CL")})
+                  </span>
+                </>
+              ) : (
+                <span className="text-muted-foreground">
+                  ${service.price_clp.toLocaleString("es-CL")} CLP
+                </span>
+              )}
+            </div>
           </div>
         </div>
+      </div>
+
+      {/* Coupon Section */}
+      <div className="bg-background rounded-lg border p-4 mb-6">
+        <Label className="flex items-center gap-2 mb-3">
+          <Tag className="h-4 w-4" />
+          ¿Tienes un cupón de descuento?
+        </Label>
+        
+        {appliedCoupon ? (
+          <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-lg p-3">
+            <div className="flex items-center gap-2">
+              <Check className="h-5 w-5 text-green-600" />
+              <div>
+                <span className="font-mono font-bold text-green-700">
+                  {appliedCoupon.code}
+                </span>
+                <p className="text-sm text-green-600">
+                  {appliedCoupon.discount_type === "percentage"
+                    ? `${appliedCoupon.discount_value}% de descuento`
+                    : `$${appliedCoupon.discount_value.toLocaleString("es-CL")} de descuento`}
+                </p>
+              </div>
+            </div>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={removeCoupon}
+              disabled={isSubmitting}
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+        ) : (
+          <div className="space-y-2">
+            <div className="flex gap-2">
+              <Input
+                value={couponCode}
+                onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                placeholder="CODIGO"
+                disabled={isSubmitting || isValidatingCoupon}
+                className="font-mono uppercase"
+              />
+              <Button
+                type="button"
+                variant="outline"
+                onClick={validateCoupon}
+                disabled={isSubmitting || isValidatingCoupon || !couponCode.trim()}
+              >
+                {isValidatingCoupon ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  "Aplicar"
+                )}
+              </Button>
+            </div>
+            {couponError && (
+              <p className="text-sm text-destructive">{couponError}</p>
+            )}
+          </div>
+        )}
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

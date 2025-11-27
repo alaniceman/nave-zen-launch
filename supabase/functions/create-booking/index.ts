@@ -12,6 +12,7 @@ const bookingSchema = z.object({
   customerEmail: z.string().email().max(255),
   customerPhone: z.string().min(8).max(20),
   customerComments: z.string().max(500).optional(),
+  couponCode: z.string().optional().nullable(),
 });
 
 serve(async (req) => {
@@ -61,6 +62,107 @@ serve(async (req) => {
     const endDate = new Date(
       startDate.getTime() + service.duration_minutes * 60000
     );
+
+    // Validate and apply coupon if provided
+    let couponId = null;
+    let discountAmount = 0;
+    let originalPrice = service.price_clp;
+    let finalPrice = service.price_clp;
+
+    if (validatedData.couponCode) {
+      console.log("Validating coupon:", validatedData.couponCode);
+      
+      const { data: coupon, error: couponError } = await supabase
+        .from("discount_coupons")
+        .select("*")
+        .eq("code", validatedData.couponCode.toUpperCase())
+        .eq("is_active", true)
+        .single();
+
+      if (couponError || !coupon) {
+        return new Response(
+          JSON.stringify({ error: "Cupón no válido" }),
+          {
+            status: 400,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          }
+        );
+      }
+
+      // Validate coupon dates
+      const now = new Date();
+      const validFrom = new Date(coupon.valid_from);
+      const validUntil = coupon.valid_until ? new Date(coupon.valid_until) : null;
+
+      if (now < validFrom) {
+        return new Response(
+          JSON.stringify({ error: "Este cupón aún no es válido" }),
+          {
+            status: 400,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          }
+        );
+      }
+
+      if (validUntil && now > validUntil) {
+        return new Response(
+          JSON.stringify({ error: "Este cupón ha expirado" }),
+          {
+            status: 400,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          }
+        );
+      }
+
+      // Validate max uses
+      if (coupon.max_uses && coupon.current_uses >= coupon.max_uses) {
+        return new Response(
+          JSON.stringify({ error: "Este cupón ya no tiene usos disponibles" }),
+          {
+            status: 400,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          }
+        );
+      }
+
+      // Validate minimum purchase
+      if (coupon.min_purchase_amount > service.price_clp) {
+        return new Response(
+          JSON.stringify({ 
+            error: `Este cupón requiere una compra mínima de $${coupon.min_purchase_amount.toLocaleString('es-CL')}` 
+          }),
+          {
+            status: 400,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          }
+        );
+      }
+
+      // Calculate discount
+      if (coupon.discount_type === "percentage") {
+        discountAmount = Math.floor((service.price_clp * coupon.discount_value) / 100);
+      } else {
+        discountAmount = coupon.discount_value;
+      }
+
+      // Ensure discount doesn't exceed price
+      discountAmount = Math.min(discountAmount, service.price_clp);
+      finalPrice = service.price_clp - discountAmount;
+      couponId = coupon.id;
+
+      console.log(`Coupon applied: ${coupon.code}, discount: ${discountAmount}, final price: ${finalPrice}`);
+
+      // Increment coupon usage
+      const { error: updateCouponError } = await supabase
+        .from("discount_coupons")
+        .update({ current_uses: coupon.current_uses + 1 })
+        .eq("id", coupon.id);
+
+      if (updateCouponError) {
+        console.error("Error updating coupon usage:", updateCouponError);
+        // Don't fail the booking, but log the error
+      }
+    }
 
     // Find or create the generated slot for this booking
     let slot = null;
@@ -192,6 +294,10 @@ serve(async (req) => {
         date_time_start: validatedData.dateTimeStart,
         date_time_end: endDate.toISOString(),
         status: "PENDING_PAYMENT",
+        coupon_id: couponId,
+        discount_amount: discountAmount,
+        original_price: originalPrice,
+        final_price: finalPrice,
       })
       .select()
       .single();
@@ -231,7 +337,7 @@ serve(async (req) => {
         {
           title: `${service.name} - ${professional.data?.name}`,
           quantity: 1,
-          unit_price: service.price_clp,
+          unit_price: finalPrice,
           currency_id: "CLP",
         },
       ],

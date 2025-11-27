@@ -82,6 +82,7 @@ export type Database = {
       }
       bookings: {
         Row: {
+          coupon_id: string | null
           created_at: string
           customer_comments: string | null
           customer_email: string
@@ -89,15 +90,19 @@ export type Database = {
           customer_phone: string
           date_time_end: string
           date_time_start: string
+          discount_amount: number | null
+          final_price: number | null
           id: string
           mercado_pago_payment_id: string | null
           mercado_pago_preference_id: string | null
+          original_price: number | null
           professional_id: string
           service_id: string
           status: string
           updated_at: string
         }
         Insert: {
+          coupon_id?: string | null
           created_at?: string
           customer_comments?: string | null
           customer_email: string
@@ -105,15 +110,19 @@ export type Database = {
           customer_phone: string
           date_time_end: string
           date_time_start: string
+          discount_amount?: number | null
+          final_price?: number | null
           id?: string
           mercado_pago_payment_id?: string | null
           mercado_pago_preference_id?: string | null
+          original_price?: number | null
           professional_id: string
           service_id: string
           status?: string
           updated_at?: string
         }
         Update: {
+          coupon_id?: string | null
           created_at?: string
           customer_comments?: string | null
           customer_email?: string
@@ -121,15 +130,25 @@ export type Database = {
           customer_phone?: string
           date_time_end?: string
           date_time_start?: string
+          discount_amount?: number | null
+          final_price?: number | null
           id?: string
           mercado_pago_payment_id?: string | null
           mercado_pago_preference_id?: string | null
+          original_price?: number | null
           professional_id?: string
           service_id?: string
           status?: string
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "bookings_coupon_id_fkey"
+            columns: ["coupon_id"]
+            isOneToOne: false
+            referencedRelation: "discount_coupons"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "bookings_professional_id_fkey"
             columns: ["professional_id"]
@@ -193,6 +212,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      discount_coupons: {
+        Row: {
+          code: string
+          created_at: string | null
+          current_uses: number | null
+          discount_type: string
+          discount_value: number
+          id: string
+          is_active: boolean | null
+          max_uses: number | null
+          min_purchase_amount: number | null
+          updated_at: string | null
+          valid_from: string | null
+          valid_until: string | null
+        }
+        Insert: {
+          code: string
+          created_at?: string | null
+          current_uses?: number | null
+          discount_type: string
+          discount_value: number
+          id?: string
+          is_active?: boolean | null
+          max_uses?: number | null
+          min_purchase_amount?: number | null
+          updated_at?: string | null
+          valid_from?: string | null
+          valid_until?: string | null
+        }
+        Update: {
+          code?: string
+          created_at?: string | null
+          current_uses?: number | null
+          discount_type?: string
+          discount_value?: number
+          id?: string
+          is_active?: boolean | null
+          max_uses?: number | null
+          min_purchase_amount?: number | null
+          updated_at?: string | null
+          valid_from?: string | null
+          valid_until?: string | null
+        }
+        Relationships: []
       }
       email_subscribers: {
         Row: {

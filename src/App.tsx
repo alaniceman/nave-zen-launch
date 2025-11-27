@@ -45,6 +45,7 @@ import AdminProfessionals from "./pages/admin/AdminProfessionals";
 import AdminServices from "./pages/admin/AdminServices";
 import AdminAvailability from "./pages/admin/AdminAvailability";
 import AdminFutureSlots from "./pages/admin/AdminFutureSlots";
+import AdminCoupons from "./pages/admin/AdminCoupons";
 
 const queryClient = new QueryClient();
 
@@ -97,6 +98,7 @@ const App = () => (
               <Route path="agenda" element={<AdminBookings />} />
               <Route path="profesionales" element={<AdminProfessionals />} />
               <Route path="servicios" element={<AdminServices />} />
+              <Route path="cupones" element={<AdminCoupons />} />
               <Route path="disponibilidad" element={<AdminAvailability />} />
               <Route path="agendas-futuras" element={<AdminFutureSlots />} />
             </Route>
