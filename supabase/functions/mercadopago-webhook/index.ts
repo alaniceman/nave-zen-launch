@@ -156,9 +156,14 @@ serve(async (req) => {
 
     // Update booking based on payment status
     if (payment.status === "approved") {
-      // Verify amount
-      if (payment.transaction_amount !== booking.services.price_clp) {
-        console.error("Payment amount mismatch");
+      // Verify amount - use final_price to support discount coupons
+      const expectedAmount = booking.final_price || booking.services.price_clp;
+      console.log("Payment amount:", payment.transaction_amount);
+      console.log("Expected amount (final_price):", booking.final_price);
+      console.log("Service price:", booking.services.price_clp);
+      
+      if (payment.transaction_amount !== expectedAmount) {
+        console.error("Payment amount mismatch - Expected:", expectedAmount, "Received:", payment.transaction_amount);
         return new Response(JSON.stringify({ status: "amount_mismatch" }), {
           status: 200,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
