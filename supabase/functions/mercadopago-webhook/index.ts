@@ -62,13 +62,19 @@ serve(async (req) => {
     const body = await req.json();
     console.log("Mercado Pago webhook received:", body);
 
-    // Mercado Pago sends notifications with type "payment"
-    if (body.type !== "payment") {
+    // Support both webhook formats: new (body.type) and IPN (body.topic)
+    const isWebhookFormat = body.type === "payment";
+    const isIPNFormat = body.topic === "payment";
+    
+    if (!isWebhookFormat && !isIPNFormat) {
+      console.log("Ignoring non-payment notification:", body.type || body.topic);
       return new Response(JSON.stringify({ status: "ignored" }), {
         status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+    
+    console.log(`Processing ${isWebhookFormat ? 'Webhook' : 'IPN'} format payment notification`);
 
     const mercadoPagoAccessToken = Deno.env.get("MERCADO_PAGO_ACCESS_TOKEN");
     const webhookSecret = Deno.env.get("MERCADO_PAGO_WEBHOOK_SECRET");
@@ -101,7 +107,8 @@ serve(async (req) => {
     }
 
     // Get payment details from Mercado Pago
-    const paymentId = body.data?.id;
+    // Support both formats: webhook (body.data.id) and IPN (body.resource)
+    const paymentId = isWebhookFormat ? body.data?.id : body.resource;
     if (!paymentId) {
       throw new Error("No payment ID in webhook");
     }
@@ -168,18 +175,47 @@ serve(async (req) => {
         });
       }
 
-      // Check if slot is still available
-      const { data: existingConfirmed } = await supabase
-        .from("bookings")
-        .select("id")
+      // Check if slot is still available by verifying capacity
+      const { data: slot, error: slotError } = await supabase
+        .from("generated_slots")
+        .select("id, max_capacity, confirmed_bookings")
         .eq("professional_id", booking.professional_id)
+        .eq("service_id", booking.service_id)
         .eq("date_time_start", booking.date_time_start)
-        .eq("status", "CONFIRMED")
-        .neq("id", bookingId)
+        .eq("is_active", true)
         .maybeSingle();
 
-      if (existingConfirmed) {
-        console.error("Slot already confirmed by another booking");
+      if (slotError) {
+        console.error("Error fetching slot:", slotError);
+        throw slotError;
+      }
+
+      if (!slot) {
+        console.error("No active slot found for this booking");
+        
+        // Update to CANCELLED
+        await supabase
+          .from("bookings")
+          .update({
+            status: "CANCELLED",
+            mercado_pago_payment_id: paymentId,
+          })
+          .eq("id", bookingId);
+
+        return new Response(
+          JSON.stringify({ status: "slot_not_found" }),
+          {
+            status: 200,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          }
+        );
+      }
+
+      console.log(`Slot capacity check: ${slot.confirmed_bookings}/${slot.max_capacity} bookings confirmed`);
+
+      // Check if slot has reached max capacity
+      if (slot.confirmed_bookings >= slot.max_capacity) {
+        console.error(`Slot at max capacity: ${slot.confirmed_bookings}/${slot.max_capacity}`);
         
         // Update to CANCELLED
         await supabase
@@ -200,7 +236,7 @@ serve(async (req) => {
         );
       }
 
-      // Confirm booking
+      // Confirm booking and increment slot counter
       const { error: updateError } = await supabase
         .from("bookings")
         .update({
@@ -214,7 +250,20 @@ serve(async (req) => {
         throw updateError;
       }
 
-      console.log("Booking confirmed:", bookingId);
+      // Increment confirmed bookings count in the slot
+      const { error: slotUpdateError } = await supabase
+        .from("generated_slots")
+        .update({
+          confirmed_bookings: slot.confirmed_bookings + 1,
+        })
+        .eq("id", slot.id);
+
+      if (slotUpdateError) {
+        console.error("Error updating slot confirmed_bookings:", slotUpdateError);
+        // Don't throw - booking is already confirmed
+      }
+
+      console.log(`Booking confirmed: ${bookingId} (slot now ${slot.confirmed_bookings + 1}/${slot.max_capacity})`);
 
       // Send confirmation email
       try {
