@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { format } from 'date-fns';
+import { formatInTimeZone } from 'date-fns-tz';
 import { es } from 'date-fns/locale';
 import {
   Table,
@@ -207,7 +207,7 @@ export default function AdminBookings() {
                         <TableCell className="text-foreground">{booking.professionals.name}</TableCell>
                         <TableCell className="text-foreground">{booking.services.name}</TableCell>
                         <TableCell className="text-foreground">
-                          {format(new Date(booking.date_time_start), "d 'de' MMMM, yyyy 'a las' HH:mm", { locale: es })}
+                          {formatInTimeZone(booking.date_time_start, 'America/Santiago', "d 'de' MMMM, yyyy 'a las' HH:mm", { locale: es })}
                         </TableCell>
                         <TableCell>
                           <Badge className={statusColors[booking.status as keyof typeof statusColors]}>
