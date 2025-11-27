@@ -85,7 +85,8 @@ serve(async (req) => {
         .from("availability_rules")
         .select(`
           *,
-          services:service_id(id, max_capacity)
+          professionals:professional_id(id, name, slug),
+          services:service_id(id, name, max_capacity)
         `)
         .eq("is_active", true);
 
@@ -126,18 +127,26 @@ serve(async (req) => {
       console.log(`Generated ${generatedSlots.length} slots from rules`);
 
       // Format for response (without inserting to DB)
-      const availableSlots = generatedSlots.map(slot => ({
-        id: null, // No DB id since it's not persisted
-        professionalId: slot.professional_id,
-        professionalName: rules.find(r => r.professional_id === slot.professional_id)?.professionals?.name || "Unknown",
-        serviceId: slot.service_id,
-        serviceName: rules.find(r => r.service_id === slot.service_id)?.services?.name || "Unknown",
-        dateTimeStart: slot.date_time_start,
-        dateTimeEnd: slot.date_time_end,
-        maxCapacity: slot.max_capacity,
-        confirmedBookings: 0,
-        availableCapacity: slot.max_capacity,
-      }));
+      const availableSlots = generatedSlots
+        .map(slot => {
+          const rule = rules.find(r => 
+            r.professional_id === slot.professional_id && 
+            r.service_id === slot.service_id
+          );
+          return {
+            id: null, // No DB id since it's not persisted
+            professionalId: slot.professional_id,
+            professionalName: rule?.professionals?.name || "Unknown",
+            serviceId: slot.service_id,
+            serviceName: rule?.services?.name || "Unknown",
+            dateTimeStart: slot.date_time_start,
+            dateTimeEnd: slot.date_time_end,
+            maxCapacity: slot.max_capacity,
+            confirmedBookings: 0,
+            availableCapacity: slot.max_capacity,
+          };
+        })
+        .sort((a, b) => a.dateTimeStart.localeCompare(b.dateTimeStart));
 
       console.log(`Returning ${availableSlots.length} on-the-fly slots`);
 
@@ -164,7 +173,8 @@ serve(async (req) => {
         maxCapacity: slot.max_capacity,
         confirmedBookings: slot.confirmed_bookings,
         availableCapacity: slot.max_capacity - slot.confirmed_bookings,
-      }));
+      }))
+      .sort((a, b) => a.dateTimeStart.localeCompare(b.dateTimeStart));
 
     console.log(`Returning ${availableSlots.length} available slots from DB`);
 

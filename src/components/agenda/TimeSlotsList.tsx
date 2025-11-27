@@ -1,4 +1,5 @@
 import { format, parseISO } from "date-fns";
+import { formatInTimeZone } from "date-fns-tz";
 import { es } from "date-fns/locale";
 import { Button } from "@/components/ui/button";
 import { Clock, User } from "lucide-react";
@@ -35,30 +36,32 @@ export function TimeSlotsList({ slots, selectedDate, onSelectSlot }: TimeSlotsLi
         {format(selectedDate, "EEEE d 'de' MMMM", { locale: es })}
       </h3>
       <div className="max-h-[500px] overflow-y-auto space-y-2 pr-2">
-        {slots.map((slot, index) => (
-          <Button
-            key={index}
-            variant="outline"
-            className="w-full justify-start text-left h-auto py-3"
-            onClick={() => onSelectSlot(slot)}
-          >
-            <div className="flex items-center gap-3 w-full">
-              <Clock className="h-4 w-4 text-muted-foreground" />
-              <span className="font-semibold">
-                {format(parseISO(slot.dateTimeStart), "HH:mm")}
-              </span>
-              {slot.availableCapacity && slot.availableCapacity > 0 && (
-                <span className="text-xs text-muted-foreground">
-                  ({slot.availableCapacity} cupos)
+        {slots
+          .sort((a, b) => a.dateTimeStart.localeCompare(b.dateTimeStart))
+          .map((slot, index) => (
+            <Button
+              key={index}
+              variant="outline"
+              className="w-full justify-start text-left h-auto py-3"
+              onClick={() => onSelectSlot(slot)}
+            >
+              <div className="flex items-center gap-3 w-full">
+                <Clock className="h-4 w-4 text-muted-foreground" />
+                <span className="font-semibold">
+                  {formatInTimeZone(parseISO(slot.dateTimeStart), "America/Santiago", "HH:mm")}
                 </span>
-              )}
-              <div className="flex items-center gap-2 ml-auto text-sm text-muted-foreground">
-                <User className="h-3 w-3" />
-                {slot.professionalName}
+                {slot.availableCapacity && slot.availableCapacity > 0 && (
+                  <span className="text-xs text-muted-foreground">
+                    ({slot.availableCapacity} cupos)
+                  </span>
+                )}
+                <div className="flex items-center gap-2 ml-auto text-sm text-muted-foreground">
+                  <User className="h-3 w-3" />
+                  {slot.professionalName}
+                </div>
               </div>
-            </div>
-          </Button>
-        ))}
+            </Button>
+          ))}
       </div>
     </div>
   );
