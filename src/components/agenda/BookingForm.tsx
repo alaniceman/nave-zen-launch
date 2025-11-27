@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { format, parseISO } from "date-fns";
+import { formatInTimeZone } from "date-fns-tz";
 import { es } from "date-fns/locale";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -187,13 +188,13 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
         <div className="flex items-center gap-3">
           <Calendar className="h-4 w-4 text-muted-foreground" />
           <span className="font-medium">
-            {format(parseISO(timeSlot.dateTimeStart), "EEEE d 'de' MMMM 'de' yyyy", { locale: es })}
+            {formatInTimeZone(parseISO(timeSlot.dateTimeStart), "America/Santiago", "EEEE d 'de' MMMM 'de' yyyy", { locale: es })}
           </span>
         </div>
         <div className="flex items-center gap-3">
           <Clock className="h-4 w-4 text-muted-foreground" />
           <span className="font-medium">
-            {format(parseISO(timeSlot.dateTimeStart), "HH:mm")} - {format(parseISO(timeSlot.dateTimeEnd), "HH:mm")}
+            {formatInTimeZone(parseISO(timeSlot.dateTimeStart), "America/Santiago", "HH:mm")} - {formatInTimeZone(parseISO(timeSlot.dateTimeEnd), "America/Santiago", "HH:mm")}
           </span>
         </div>
         <div className="flex items-center gap-3">
