@@ -161,6 +161,15 @@ serve(async (req) => {
 
     // Update booking based on payment status
     if (payment.status === "approved") {
+      // Check if booking is already confirmed (deduplication for multiple webhook notifications)
+      if (booking.status === "CONFIRMED") {
+        console.log(`Booking ${bookingId} already confirmed, skipping duplicate processing`);
+        return new Response(JSON.stringify({ status: "already_confirmed" }), {
+          status: 200,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
       // Verify amount - use final_price to support discount coupons
       const expectedAmount = booking.final_price || booking.services.price_clp;
       console.log("Payment amount:", payment.transaction_amount);
