@@ -7,9 +7,20 @@ import biohackingHeroImage from "@/assets/blog-biohacking-hero.jpg";
 import yinVinyasaHeroImage from "@/assets/blog-yin-vinyasa-hero.jpg";
 import habitosDisciplinaHeroImage from "@/assets/blog-habitos-disciplina-hero.jpg";
 import aguaFriaGuiadoHeroImage from "@/assets/blog-agua-fria-guiado-hero.jpg";
+import protocoloSeguroHeroImage from "@/assets/blog-protocolo-seguro-hero.jpg";
 
 const Blog = () => {
   const blogPosts = [
+    {
+      title: "Lo que nadie te cuenta del agua fría y la respiración",
+      slug: "/blog/protocolo-seguro-agua-fria-respiracion",
+      excerpt: "El protocolo seguro para iniciar con agua fría y respiración. Las 3 fases esenciales que nadie te cuenta para empezar sin traumas ni forzar nada.",
+      author: "Alan Iceman Earle",
+      date: "16 de agosto, 2025",
+      categories: ["Wim Hof Method", "Protocolo seguro", "Agua fría", "Respiración guiada"],
+      image: protocoloSeguroHeroImage,
+      imageAlt: "Protocolo seguro de inmersión en agua fría y respiración en Nave Studio"
+    },
     {
       title: "Agua fría: la diferencia entre hacerlo solo y vivirlo guiado (y por qué nunca es lo mismo)",
       slug: "/blog/agua-fria-guiado-vs-solo-experiencia-wim-hof",
