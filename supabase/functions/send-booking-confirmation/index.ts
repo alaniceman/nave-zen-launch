@@ -150,18 +150,6 @@ const handler = async (req: Request): Promise<Response> => {
               font-size: 15px;
               line-height: 1.6;
             }
-            .cancel-button {
-              display: inline-block;
-              margin: 24px 0;
-              padding: 14px 32px;
-              background-color: #f44336;
-              color: #ffffff !important;
-              text-decoration: none;
-              border-radius: 6px;
-              font-size: 15px;
-              font-weight: 600;
-              text-align: center;
-            }
             .footer {
               padding: 30px;
               text-align: center;
@@ -222,13 +210,20 @@ const handler = async (req: Request): Promise<Response> => {
                 <strong>Importante:</strong> Por favor llega puntual y en ayunas ligeras para aprovechar al máximo tu experiencia.
               </div>
               
-              <p style="font-size: 15px; color: #555; margin-top: 32px;">
-                Si necesitas cancelar tu reserva, puedes hacerlo usando el siguiente botón:
-              </p>
-              
-              <a href="${Deno.env.get("SITE_URL")}/contacto" class="cancel-button">
-                Cancelar Reserva
-              </a>
+              <div style="background-color: #f0f7ff; border-left: 4px solid #2196F3; padding: 20px; margin: 24px 0;">
+                <h3 style="margin: 0 0 12px 0; font-size: 16px; color: #1a1a1a; font-weight: 600;">📍 Dirección:</h3>
+                <p style="margin: 0 0 8px 0; font-size: 15px; color: #333;">
+                  <strong>Antares 259, Las Condes</strong>
+                </p>
+                <p style="margin: 0 0 12px 0; font-size: 15px; color: #555;">
+                  <a href="https://maps.app.goo.gl/oW6G58gLd5oYWmGn8" style="color: #2196F3; text-decoration: none;">
+                    📍 Ver en Google Maps
+                  </a>
+                </p>
+                <p style="margin: 0; font-size: 14px; color: #666; line-height: 1.6;">
+                  <strong>Indicaciones:</strong> Portón negro de mano derecha. Tiene un cartel de un 🛸 en el borde del portón.
+                </p>
+              </div>
               
               <p style="font-size: 14px; color: #777; margin-top: 32px; line-height: 1.6;">
                 ¿Tienes preguntas? No dudes en contactarnos respondiendo a este email o a través de nuestro WhatsApp.
@@ -244,16 +239,16 @@ const handler = async (req: Request): Promise<Response> => {
       </html>
     `;
 
-    // Send email to customer, La Nave, and instructor
-    const recipients = [
-      booking.customer_email,
+    // Send email to customer with BCC to La Nave and instructor
+    const bccRecipients = [
       "lanave@alaniceman.com",
       booking.professional.email
     ];
 
     const { error: emailError } = await resend.emails.send({
       from: "Nave Studio <agenda@studiolanave.com>",
-      to: recipients,
+      to: [booking.customer_email],
+      bcc: bccRecipients,
       subject: "✓ Confirmación de tu Reserva - Nave Studio",
       html: emailHtml,
     });
@@ -266,7 +261,7 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    console.log("Confirmation email sent successfully to:", recipients.join(", "));
+    console.log("Confirmation email sent successfully to:", booking.customer_email, "with BCC to:", bccRecipients.join(", "));
 
     return new Response(
       JSON.stringify({ success: true }),
