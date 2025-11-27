@@ -63,7 +63,8 @@ Deno.serve(async (req) => {
         .select(`
           *,
           professionals!inner(name, email),
-          services!inner(name, price_clp)
+          services!inner(name, price_clp),
+          discount_coupons(code, discount_type, discount_value)
         `, { count: 'exact' })
         .order('date_time_start', { ascending: false });
 

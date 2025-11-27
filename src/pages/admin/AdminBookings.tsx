@@ -183,13 +183,14 @@ export default function AdminBookings() {
                     <TableHead>Fecha y Hora</TableHead>
                     <TableHead>Estado</TableHead>
                     <TableHead>Precio</TableHead>
+                    <TableHead>Cupón</TableHead>
                     <TableHead>Acciones</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {data?.bookings?.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
+                      <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
                         No se encontraron reservas
                       </TableCell>
                     </TableRow>
@@ -214,7 +215,27 @@ export default function AdminBookings() {
                           </Badge>
                         </TableCell>
                         <TableCell className="text-foreground font-medium">
-                          ${booking.services.price_clp.toLocaleString('es-CL')}
+                          {booking.discount_amount && booking.discount_amount > 0 ? (
+                            <div className="flex flex-col">
+                              <span className="line-through text-muted-foreground text-sm">
+                                ${booking.original_price?.toLocaleString('es-CL')}
+                              </span>
+                              <span className="text-green-600 font-semibold">
+                                ${booking.final_price?.toLocaleString('es-CL')}
+                              </span>
+                            </div>
+                          ) : (
+                            <span>${booking.services.price_clp.toLocaleString('es-CL')}</span>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          {booking.discount_coupons ? (
+                            <Badge variant="secondary" className="font-mono text-xs">
+                              {booking.discount_coupons.code}
+                            </Badge>
+                          ) : (
+                            <span className="text-muted-foreground text-sm">-</span>
+                          )}
                         </TableCell>
                         <TableCell>
                           {booking.status === 'PENDING_PAYMENT' && (
