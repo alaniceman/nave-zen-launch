@@ -184,46 +184,56 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
       <h2 className="text-2xl font-bold mb-6">Completa tus datos</h2>
 
       {/* Summary */}
-      <div className="bg-muted/50 rounded-lg p-4 mb-6 space-y-3">
-        <div className="flex items-center gap-3">
-          <Calendar className="h-4 w-4 text-muted-foreground" />
-          <span className="font-medium">
-            {formatInTimeZone(parseISO(timeSlot.dateTimeStart), "America/Santiago", "EEEE d 'de' MMMM 'de' yyyy", { locale: es })}
-          </span>
+      <div className="bg-muted/50 rounded-lg p-5 mb-6 space-y-4">
+        {/* Service Title */}
+        <div>
+          <h3 className="text-xl font-bold mb-1">{service.name}</h3>
+          <p className="text-sm text-muted-foreground">{service.description}</p>
         </div>
-        <div className="flex items-center gap-3">
-          <Clock className="h-4 w-4 text-muted-foreground" />
-          <span className="font-medium">
-            {formatInTimeZone(parseISO(timeSlot.dateTimeStart), "America/Santiago", "HH:mm")} - {formatInTimeZone(parseISO(timeSlot.dateTimeEnd), "America/Santiago", "HH:mm")}
-          </span>
-        </div>
-        <div className="flex items-center gap-3">
-          <User className="h-4 w-4 text-muted-foreground" />
-          <span className="font-medium">{professional.name}</span>
-        </div>
-        <div className="flex items-center gap-3">
-          <DollarSign className="h-4 w-4 text-muted-foreground" />
-          <div className="flex-1">
-            <span className="font-medium">{service.name}</span>
-            <div className="text-sm mt-1">
+
+        {/* Price */}
+        <div className="border-t pt-3">
+          <div className="flex items-center gap-2 mb-1">
+            <DollarSign className="h-5 w-5 text-muted-foreground" />
+            <span className="text-lg font-semibold">
               {appliedCoupon ? (
                 <>
                   <span className="text-muted-foreground line-through mr-2">
-                    ${service.price_clp.toLocaleString("es-CL")} CLP
+                    ${service.price_clp.toLocaleString("es-CL")}
                   </span>
-                  <span className="text-green-600 font-bold">
+                  <span className="text-green-600">
                     ${finalPrice.toLocaleString("es-CL")} CLP
-                  </span>
-                  <span className="text-xs ml-2 text-green-600">
-                    (Ahorro: ${calculateDiscount().toLocaleString("es-CL")})
                   </span>
                 </>
               ) : (
-                <span className="text-muted-foreground">
-                  ${service.price_clp.toLocaleString("es-CL")} CLP
-                </span>
+                <span>${service.price_clp.toLocaleString("es-CL")} CLP</span>
               )}
-            </div>
+            </span>
+          </div>
+          {appliedCoupon && (
+            <p className="text-sm text-green-600 ml-7">
+              Ahorro: ${calculateDiscount().toLocaleString("es-CL")}
+            </p>
+          )}
+        </div>
+
+        {/* Schedule Details */}
+        <div className="border-t pt-3 space-y-2">
+          <div className="flex items-center gap-3">
+            <Calendar className="h-4 w-4 text-muted-foreground" />
+            <span className="text-sm">
+              {formatInTimeZone(parseISO(timeSlot.dateTimeStart), "America/Santiago", "EEEE d 'de' MMMM 'de' yyyy", { locale: es })}
+            </span>
+          </div>
+          <div className="flex items-center gap-3">
+            <Clock className="h-4 w-4 text-muted-foreground" />
+            <span className="text-sm">
+              {formatInTimeZone(parseISO(timeSlot.dateTimeStart), "America/Santiago", "HH:mm")} - {formatInTimeZone(parseISO(timeSlot.dateTimeEnd), "America/Santiago", "HH:mm")}
+            </span>
+          </div>
+          <div className="flex items-center gap-3">
+            <User className="h-4 w-4 text-muted-foreground" />
+            <span className="text-sm">{professional.name}</span>
           </div>
         </div>
       </div>
