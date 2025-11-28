@@ -23,7 +23,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2, Search, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Loader2, Search, ChevronLeft, ChevronRight, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 
 const statusColors = {
@@ -48,6 +48,8 @@ export default function AdminBookings() {
   const [professionalFilter, setProfessionalFilter] = useState<string>('all');
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
+  const [sortBy, setSortBy] = useState<string>('created_at');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
   // Debounce search
   useState(() => {
@@ -58,11 +60,13 @@ export default function AdminBookings() {
   });
 
   const { data, isLoading } = useQuery({
-    queryKey: ['admin-bookings', page, status, professionalFilter, debouncedSearch],
+    queryKey: ['admin-bookings', page, status, professionalFilter, debouncedSearch, sortBy, sortOrder],
     queryFn: async () => {
       const params = new URLSearchParams({
         page: page.toString(),
         limit: '20',
+        sortBy,
+        sortOrder,
       });
 
       if (status !== 'all') {
@@ -142,6 +146,36 @@ export default function AdminBookings() {
     }
   });
 
+  const handleSort = (column: string) => {
+    if (sortBy === column) {
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortBy(column);
+      setSortOrder('desc');
+    }
+    setPage(1);
+  };
+
+  const SortButton = ({ column, label }: { column: string; label: string }) => (
+    <Button
+      variant="ghost"
+      size="sm"
+      onClick={() => handleSort(column)}
+      className="h-8 px-2 lg:px-3"
+    >
+      {label}
+      {sortBy === column ? (
+        sortOrder === 'asc' ? (
+          <ArrowUp className="ml-2 h-4 w-4" />
+        ) : (
+          <ArrowDown className="ml-2 h-4 w-4" />
+        )
+      ) : (
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      )}
+    </Button>
+  );
+
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
@@ -207,13 +241,23 @@ export default function AdminBookings() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Fecha de Pago</TableHead>
-                    <TableHead>Cliente</TableHead>
+                    <TableHead>
+                      <SortButton column="created_at" label="Fecha de Pago" />
+                    </TableHead>
+                    <TableHead>
+                      <SortButton column="customer_name" label="Cliente" />
+                    </TableHead>
                     <TableHead>Instructor</TableHead>
                     <TableHead>Servicio</TableHead>
-                    <TableHead>Fecha y Hora Sesión</TableHead>
-                    <TableHead>Estado</TableHead>
-                    <TableHead>Precio</TableHead>
+                    <TableHead>
+                      <SortButton column="date_time_start" label="Fecha y Hora Sesión" />
+                    </TableHead>
+                    <TableHead>
+                      <SortButton column="status" label="Estado" />
+                    </TableHead>
+                    <TableHead>
+                      <SortButton column="final_price" label="Precio" />
+                    </TableHead>
                     <TableHead>Cupón</TableHead>
                     <TableHead>Acciones</TableHead>
                   </TableRow>

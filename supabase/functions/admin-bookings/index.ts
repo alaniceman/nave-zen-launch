@@ -54,6 +54,8 @@ Deno.serve(async (req) => {
       const startDate = url.searchParams.get('startDate');
       const endDate = url.searchParams.get('endDate');
       const search = url.searchParams.get('search');
+      const sortBy = url.searchParams.get('sortBy') || 'created_at';
+      const sortOrder = url.searchParams.get('sortOrder') === 'asc';
       const page = parseInt(url.searchParams.get('page') || '1');
       const limit = parseInt(url.searchParams.get('limit') || '20');
       const offset = (page - 1) * limit;
@@ -65,9 +67,7 @@ Deno.serve(async (req) => {
           professionals!inner(name, email),
           services!inner(name, price_clp),
           discount_coupons(code, discount_type, discount_value)
-        `, { count: 'exact' })
-        .order('created_at', { ascending: false })
-        .order('date_time_start', { ascending: true });
+        `, { count: 'exact' });
 
       if (status) {
         query = query.eq('status', status);
@@ -88,6 +88,18 @@ Deno.serve(async (req) => {
       if (search) {
         query = query.or(`customer_name.ilike.%${search}%,customer_email.ilike.%${search}%,customer_phone.ilike.%${search}%`);
       }
+
+      // Apply sorting
+      const sortMapping: Record<string, string> = {
+        'created_at': 'created_at',
+        'customer_name': 'customer_name',
+        'date_time_start': 'date_time_start',
+        'status': 'status',
+        'final_price': 'final_price',
+      };
+
+      const sortColumn = sortMapping[sortBy] || 'created_at';
+      query = query.order(sortColumn, { ascending: sortOrder });
 
       query = query.range(offset, offset + limit - 1);
 
