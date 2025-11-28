@@ -8,15 +8,17 @@ import { PricingTrialYogaSection } from "@/components/PricingTrialYogaSection";
 import { CheckoutRedirectButton } from "@/components/CheckoutRedirectButton";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
 const Planes = () => {
-  const { trackViewContent, trackInitiateCheckout } = useFacebookPixel();
-
+  const {
+    trackViewContent,
+    trackInitiateCheckout
+  } = useFacebookPixel();
   useEffect(() => {
     // Track ViewContent event for pricing page
     trackViewContent({
       content_name: 'Pricing Plans',
       content_category: 'E-commerce',
       content_ids: ['eclipse', 'orbita', 'universo'],
-      content_type: 'product_group',
+      content_type: 'product_group'
     });
 
     // Add event listeners for InitiateCheckout on all buttons
@@ -28,7 +30,7 @@ const Planes = () => {
         trackInitiateCheckout({
           content_name: plan,
           content_category: 'Subscription',
-          currency: 'CLP',
+          currency: 'CLP'
         });
       }
     };
@@ -37,18 +39,16 @@ const Planes = () => {
     const handleWhatsAppClick = () => {
       trackInitiateCheckout({
         content_name: 'WhatsApp Contact',
-        content_category: 'Lead Generation',
+        content_category: 'Lead Generation'
       });
     };
-
     document.addEventListener('click', handleCheckoutClick);
-    
+
     // WhatsApp links
     const whatsappLinks = document.querySelectorAll('a[href*="wa.me"]');
     whatsappLinks.forEach(link => {
       link.addEventListener('click', handleWhatsAppClick);
     });
-
     return () => {
       document.removeEventListener('click', handleCheckoutClick);
       whatsappLinks.forEach(link => {
@@ -56,7 +56,6 @@ const Planes = () => {
       });
     };
   }, [trackViewContent, trackInitiateCheckout]);
-
   return <main className="min-h-screen bg-background">
       {/* Pricing Hero */}
       <section className="h-[80vh] relative flex items-center justify-center text-center px-6" style={{
@@ -352,9 +351,7 @@ const Planes = () => {
                   <Badge className="bg-accent text-white mx-auto">3 sesiones en 60 días</Badge>
                 </CardHeader>
                 <CardContent className="text-center space-y-4">
-                  <p className="text-muted-foreground font-inter text-sm">
-                    Elige la disciplina que quieras (Ice Bath, Yoga, Breathwork, Biohacking) y descubre tu fórmula.
-                  </p>
+                  <p className="text-muted-foreground font-inter text-sm">Elige la disciplina que quieras (Método Wim Hof, Ice Bath, Yoga, Breathwork, Biohacking) y descubre tu fórmula.</p>
                   <div className="text-3xl font-bold text-foreground">$59.000</div>
                   <Button variant="secondary" className="w-full font-inter font-medium" data-checkout-url="https://boxmagic.cl/market/plan/bQDN8Jq4M7" data-plan="Drop-In Discovery">
                     Descubrir
