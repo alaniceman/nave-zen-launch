@@ -72,14 +72,25 @@ export default function AdminBookings() {
         params.append('search', debouncedSearch);
       }
 
-      const { data, error } = await supabase.functions.invoke('admin-bookings', {
+      // Construct the full URL with query params
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const functionUrl = `${supabaseUrl}/functions/v1/admin-bookings?${params.toString()}`;
+
+      const response = await fetch(functionUrl, {
         method: 'GET',
         headers: {
-          Authorization: `Bearer ${session?.access_token}`,
+          'Authorization': `Bearer ${session?.access_token}`,
+          'Content-Type': 'application/json',
         },
       });
 
-      if (error) throw error;
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Error fetching bookings');
+      }
+
+      const data = await response.json();
+      console.log('Admin bookings response:', data);
       return data;
     },
     enabled: !!session,
