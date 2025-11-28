@@ -11,14 +11,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { TimeSlotsList } from "@/components/agenda/TimeSlotsList";
 import { BookingForm } from "@/components/agenda/BookingForm";
 import { toast } from "sonner";
-
 interface Professional {
   id: string;
   name: string;
   slug: string;
   email: string;
 }
-
 interface Service {
   id: string;
   name: string;
@@ -26,7 +24,6 @@ interface Service {
   price_clp: number;
   description: string;
 }
-
 interface TimeSlot {
   dateTimeStart: string;
   dateTimeEnd: string;
@@ -37,12 +34,14 @@ interface TimeSlot {
   availableCapacity?: number;
   maxCapacity?: number;
 }
-
 export default function AgendaNaveStudio() {
-  const { professionalSlug, dateParam, timeParam } = useParams();
+  const {
+    professionalSlug,
+    dateParam,
+    timeParam
+  } = useParams();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-
   const [professionals, setProfessionals] = useState<Professional[]>([]);
   const [services, setServices] = useState<Service[]>([]);
   const [selectedProfessional, setSelectedProfessional] = useState<string>("any");
@@ -57,17 +56,11 @@ export default function AgendaNaveStudio() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [profsResult, servicesResult] = await Promise.all([
-          supabase.from("professionals").select("*").eq("is_active", true).order("name"),
-          supabase.from("services").select("*").eq("is_active", true).order("name")
-        ]);
-
+        const [profsResult, servicesResult] = await Promise.all([supabase.from("professionals").select("*").eq("is_active", true).order("name"), supabase.from("services").select("*").eq("is_active", true).order("name")]);
         if (profsResult.error) throw profsResult.error;
         if (servicesResult.error) throw servicesResult.error;
-
         setProfessionals(profsResult.data || []);
         setServices(servicesResult.data || []);
-        
         if (servicesResult.data && servicesResult.data.length > 0) {
           setSelectedService(servicesResult.data[0].id);
         }
@@ -79,7 +72,6 @@ export default function AgendaNaveStudio() {
             setSelectedProfessional(prof.id);
           }
         }
-
         if (dateParam) {
           try {
             const date = parseISO(dateParam);
@@ -95,29 +87,27 @@ export default function AgendaNaveStudio() {
         setLoading(false);
       }
     };
-
     loadData();
   }, [professionalSlug, dateParam]);
 
   // Load available slots when date changes
   useEffect(() => {
     if (!selectedDate) return;
-
     const loadSlots = async () => {
       setLoadingSlots(true);
       try {
         const dateStr = format(selectedDate, "yyyy-MM-dd");
         const professionalId = selectedProfessional === "any" ? null : selectedProfessional;
-        
-        const { data, error } = await supabase.functions.invoke("get-availability", {
-          body: { 
+        const {
+          data,
+          error
+        } = await supabase.functions.invoke("get-availability", {
+          body: {
             date: dateStr,
-            professionalId: professionalId 
+            professionalId: professionalId
           }
         });
-        
         if (error) throw error;
-        
         setAvailableSlots(data.slots || []);
       } catch (error) {
         console.error("Error loading slots:", error);
@@ -127,10 +117,8 @@ export default function AgendaNaveStudio() {
         setLoadingSlots(false);
       }
     };
-
     loadSlots();
   }, [selectedDate, selectedProfessional]);
-
   const handleProfessionalChange = (value: string) => {
     setSelectedProfessional(value);
     const prof = professionals.find(p => p.id === value);
@@ -140,11 +128,9 @@ export default function AgendaNaveStudio() {
       navigate("/agenda-nave-studio");
     }
   };
-
   const handleDateSelect = (date: Date | undefined) => {
     setSelectedDate(date);
     setSelectedTimeSlot(null);
-    
     if (date) {
       const dateStr = format(date, "yyyy-MM-dd");
       const prof = professionals.find(p => p.id === selectedProfessional);
@@ -155,19 +141,15 @@ export default function AgendaNaveStudio() {
       }
     }
   };
-
   const handleTimeSlotSelect = (slot: TimeSlot) => {
     setSelectedTimeSlot(slot);
-    
     const prof = professionals.find(p => p.id === slot.professionalId);
     const dateStr = format(selectedDate!, "yyyy-MM-dd");
     const timeStr = format(parseISO(slot.dateTimeStart), "HH:mm");
-    
     if (prof) {
       navigate(`/agenda-nave-studio/${prof.slug}/${dateStr}/${timeStr}`);
     }
   };
-
   const handleBackToSlots = () => {
     setSelectedTimeSlot(null);
     if (selectedDate) {
@@ -180,102 +162,64 @@ export default function AgendaNaveStudio() {
       }
     }
   };
-
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
+    return <div className="min-h-screen flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
+      </div>;
   }
-
-  return (
-    <div className="min-h-screen bg-background py-8 px-4">
+  return <div className="min-h-screen bg-background py-8 px-4">
       <div className="max-w-6xl mx-auto">
         <div className="mb-8 text-center">
           <h1 className="text-4xl font-bold mb-2">Agenda tu Sesión</h1>
           <p className="text-muted-foreground">Elige profesional, fecha y hora para tu experiencia en Nave Studio</p>
         </div>
 
-        {!selectedTimeSlot ? (
-          <div className="grid md:grid-cols-2 gap-6">
+        {!selectedTimeSlot ? <div className="grid md:grid-cols-2 gap-6">
             {/* Left column: Professional selector and calendar */}
             <div className="space-y-4">
               <Card className="p-4">
-                <label className="text-sm font-medium mb-2 block">Profesional</label>
+                <label className="text-sm font-medium mb-2 block">Instructor</label>
                 <Select value={selectedProfessional} onValueChange={handleProfessionalChange}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="any">Cualquiera</SelectItem>
-                    {professionals.map(prof => (
-                      <SelectItem key={prof.id} value={prof.id}>
+                    {professionals.map(prof => <SelectItem key={prof.id} value={prof.id}>
                         {prof.name}
-                      </SelectItem>
-                    ))}
+                      </SelectItem>)}
                   </SelectContent>
                 </Select>
               </Card>
 
               <Card className="p-4">
-                <Calendar
-                  mode="single"
-                  selected={selectedDate}
-                  onSelect={handleDateSelect}
-                  locale={es}
-                  className="rounded-md border-0"
-                  disabled={(date) => {
-                    const today = new Date();
-                    today.setHours(0, 0, 0, 0);
-                    return date < today || date > addMonths(today, 1);
-                  }}
-                />
+                <Calendar mode="single" selected={selectedDate} onSelect={handleDateSelect} locale={es} className="rounded-md border-0" disabled={date => {
+              const today = new Date();
+              today.setHours(0, 0, 0, 0);
+              return date < today || date > addMonths(today, 1);
+            }} />
               </Card>
             </div>
 
             {/* Right column: Available time slots */}
             <div>
               <Card className="p-6">
-                {!selectedDate ? (
-                  <div className="text-center py-12 text-muted-foreground">
+                {!selectedDate ? <div className="text-center py-12 text-muted-foreground">
                     <User className="h-12 w-12 mx-auto mb-4 opacity-50" />
                     <p>Selecciona una fecha para ver horarios disponibles</p>
-                  </div>
-                ) : loadingSlots ? (
-                  <div className="flex justify-center py-12">
+                  </div> : loadingSlots ? <div className="flex justify-center py-12">
                     <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                  </div>
-                ) : (
-                  <TimeSlotsList
-                    slots={availableSlots}
-                    selectedDate={selectedDate}
-                    onSelectSlot={handleTimeSlotSelect}
-                  />
-                )}
+                  </div> : <TimeSlotsList slots={availableSlots} selectedDate={selectedDate} onSelectSlot={handleTimeSlotSelect} />}
               </Card>
             </div>
-          </div>
-        ) : (
-          <div className="max-w-2xl mx-auto">
-            <Button
-              variant="ghost"
-              onClick={handleBackToSlots}
-              className="mb-4"
-            >
+          </div> : <div className="max-w-2xl mx-auto">
+            <Button variant="ghost" onClick={handleBackToSlots} className="mb-4">
               <ChevronLeft className="mr-2 h-4 w-4" />
               Volver a horarios
             </Button>
             
-            <BookingForm
-              timeSlot={selectedTimeSlot}
-              professional={professionals.find(p => p.id === selectedTimeSlot.professionalId)!}
-              service={services.find(s => s.id === selectedService)!}
-              onBack={handleBackToSlots}
-            />
-          </div>
-        )}
+            <BookingForm timeSlot={selectedTimeSlot} professional={professionals.find(p => p.id === selectedTimeSlot.professionalId)!} service={services.find(s => s.id === selectedService)!} onBack={handleBackToSlots} />
+          </div>}
       </div>
-    </div>
-  );
+    </div>;
 }
