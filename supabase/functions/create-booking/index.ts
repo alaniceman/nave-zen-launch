@@ -304,17 +304,6 @@ serve(async (req) => {
 
     if (bookingError) throw bookingError;
 
-    // Increment confirmed_bookings in generated_slots
-    const { error: slotUpdateError } = await supabase
-      .from('generated_slots')
-      .update({ confirmed_bookings: slot.confirmed_bookings + 1 })
-      .eq('id', slotId);
-
-    if (slotUpdateError) {
-      console.error("Error updating slot confirmed_bookings:", slotUpdateError);
-      // Don't fail the booking, but log the error
-    }
-
     // Create Mercado Pago preference
     const mercadoPagoAccessToken = Deno.env.get("MERCADO_PAGO_ACCESS_TOKEN");
     if (!mercadoPagoAccessToken) {

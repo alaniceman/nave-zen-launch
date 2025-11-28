@@ -74,90 +74,90 @@ serve(async (req) => {
 
     console.log(`Found ${slots?.length || 0} slots in generated_slots table`);
 
-    // If no slots found, generate on-the-fly from availability_rules
-    if (!slots || slots.length === 0) {
-      console.log("No slots in DB, generating from rules...");
+    // Get professionals that have slots in DB for this date
+    const professionalsWithSlotsInDB = new Set(
+      (slots || []).map(slot => slot.professional_id)
+    );
 
-      // Fetch availability rules for this date
-      const dayOfWeek = new Date(startOfDay).getDay();
-      
-      let rulesQuery = supabase
-        .from("availability_rules")
-        .select(`
-          *,
-          professionals:professional_id(id, name, slug),
-          services:service_id(id, name, max_capacity)
-        `)
-        .eq("is_active", true);
+    console.log(`Professionals with slots in DB:`, Array.from(professionalsWithSlotsInDB));
 
-      if (professionalId) {
-        rulesQuery = rulesQuery.eq("professional_id", professionalId);
-      }
+    // Fetch availability rules for this date to find professionals without slots
+    let rulesQuery = supabase
+      .from("availability_rules")
+      .select(`
+        *,
+        professionals:professional_id(id, name, slug),
+        services:service_id(id, name, max_capacity)
+      `)
+      .eq("is_active", true);
 
-      const { data: rules, error: rulesError } = await rulesQuery;
+    if (professionalId) {
+      rulesQuery = rulesQuery.eq("professional_id", professionalId);
+    }
 
-      if (rulesError) {
-        console.error("Error fetching rules:", rulesError);
-        throw rulesError;
-      }
+    const { data: rules, error: rulesError } = await rulesQuery;
 
-      console.log(`Found ${rules?.length || 0} active rules`);
+    if (rulesError) {
+      console.error("Error fetching rules:", rulesError);
+      throw rulesError;
+    }
 
-      if (!rules || rules.length === 0) {
-        return new Response(
-          JSON.stringify({ slots: [] }),
-          { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
+    console.log(`Found ${rules?.length || 0} active rules`);
 
-      // Extract services data
-      const services = rules
-        .map(r => r.services)
-        .filter(Boolean)
-        .map(s => ({ id: s.id, max_capacity: s.max_capacity }));
-
-      // Generate slots on-the-fly
-      const generatedSlots = generateSlotsFromRules(
-        date,
-        rules,
-        services,
-        professionalId || undefined
+    // Generate on-the-fly slots for professionals NOT in DB
+    let generatedSlots: any[] = [];
+    
+    if (rules && rules.length > 0) {
+      // Filter rules for professionals that DON'T have slots in DB
+      const rulesToGenerate = rules.filter(rule => 
+        !professionalsWithSlotsInDB.has(rule.professional_id)
       );
 
-      console.log(`Generated ${generatedSlots.length} slots from rules`);
+      console.log(`Found ${rulesToGenerate.length} rules for professionals without DB slots`);
 
-      // Format for response (without inserting to DB)
-      const availableSlots = generatedSlots
-        .map(slot => {
-          const rule = rules.find(r => 
+      if (rulesToGenerate.length > 0) {
+        // Extract services data
+        const services = rulesToGenerate
+          .map(r => r.services)
+          .filter(Boolean)
+          .map(s => ({ id: s.id, max_capacity: s.max_capacity }));
+
+        // Generate slots on-the-fly only for professionals without DB slots
+        const generatedSlotsRaw = generateSlotsFromRules(
+          date,
+          rulesToGenerate,
+          services
+        );
+
+        console.log(`Generated ${generatedSlotsRaw.length} slots from rules`);
+
+        // Format generated slots for response
+        generatedSlots = generatedSlotsRaw.map(slot => {
+          const rule = rulesToGenerate.find(r => 
             r.professional_id === slot.professional_id && 
             r.service_id === slot.service_id
           );
           return {
             id: null, // No DB id since it's not persisted
-            professionalId: slot.professional_id,
-            professionalName: rule?.professionals?.name || "Unknown",
-            serviceId: slot.service_id,
-            serviceName: rule?.services?.name || "Unknown",
-            dateTimeStart: slot.date_time_start,
-            dateTimeEnd: slot.date_time_end,
-            maxCapacity: slot.max_capacity,
-            confirmedBookings: 0,
-            availableCapacity: slot.max_capacity,
+            professional_id: slot.professional_id,
+            professionals: rule?.professionals,
+            service_id: slot.service_id,
+            services: rule?.services,
+            date_time_start: slot.date_time_start,
+            date_time_end: slot.date_time_end,
+            max_capacity: slot.max_capacity,
+            confirmed_bookings: 0,
           };
-        })
-        .sort((a, b) => a.dateTimeStart.localeCompare(b.dateTimeStart));
-
-      console.log(`Returning ${availableSlots.length} on-the-fly slots`);
-
-      return new Response(
-        JSON.stringify({ slots: availableSlots }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+        });
+      }
     }
 
-    // Filter slots to only show those with available capacity
-    const availableSlots = slots
+    // Combine DB slots with generated slots
+    const allSlots = [...(slots || []), ...generatedSlots];
+    console.log(`Total slots (DB + generated): ${allSlots.length}`);
+
+    // Filter all slots to only show those with available capacity
+    const availableSlots = allSlots
       .filter(slot => {
         const availableCapacity = slot.max_capacity - slot.confirmed_bookings;
         return availableCapacity > 0;
@@ -176,7 +176,7 @@ serve(async (req) => {
       }))
       .sort((a, b) => a.dateTimeStart.localeCompare(b.dateTimeStart));
 
-    console.log(`Returning ${availableSlots.length} available slots from DB`);
+    console.log(`Returning ${availableSlots.length} available slots (${slots?.length || 0} from DB, ${generatedSlots.length} generated)`);
 
     return new Response(
       JSON.stringify({ slots: availableSlots }),
