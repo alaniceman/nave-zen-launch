@@ -100,10 +100,12 @@ Deno.serve(async (req) => {
         );
       }
 
+      console.log(`Fetched ${bookings?.length || 0} bookings, total count: ${count}`);
+
       return new Response(
         JSON.stringify({ 
-          bookings, 
-          count,
+          bookings: bookings || [], 
+          count: count || 0,
           page,
           totalPages: Math.ceil((count || 0) / limit)
         }),

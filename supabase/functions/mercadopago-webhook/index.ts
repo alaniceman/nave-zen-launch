@@ -161,15 +161,6 @@ serve(async (req) => {
 
     // Update booking based on payment status
     if (payment.status === "approved") {
-      // Check if booking is already confirmed (deduplication for multiple webhook notifications)
-      if (booking.status === "CONFIRMED") {
-        console.log(`Booking ${bookingId} already confirmed, skipping duplicate processing`);
-        return new Response(JSON.stringify({ status: "already_confirmed" }), {
-          status: 200,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-
       // Verify amount - use final_price to support discount coupons
       const expectedAmount = booking.final_price || booking.services.price_clp;
       console.log("Payment amount:", payment.transaction_amount);
@@ -245,18 +236,32 @@ serve(async (req) => {
         );
       }
 
-      // Confirm booking and increment slot counter
-      const { error: updateError } = await supabase
+      // ATOMIC UPDATE: Confirm booking only if it's still PENDING and hasn't been processed
+      // This prevents duplicate processing from multiple webhook notifications (IPN + Webhook format)
+      const { data: updatedBooking, error: updateError } = await supabase
         .from("bookings")
         .update({
           status: "CONFIRMED",
           mercado_pago_payment_id: paymentId,
         })
-        .eq("id", bookingId);
+        .eq("id", bookingId)
+        .eq("status", "PENDING_PAYMENT")
+        .is("mercado_pago_payment_id", null)
+        .select()
+        .maybeSingle();
 
       if (updateError) {
         console.error("Error updating booking:", updateError);
         throw updateError;
+      }
+
+      // If no rows were updated, another webhook already processed this payment
+      if (!updatedBooking) {
+        console.log(`Payment ${paymentId} already processed for booking ${bookingId}, skipping duplicate`);
+        return new Response(JSON.stringify({ status: "already_processed" }), {
+          status: 200,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
       }
 
       // Increment confirmed bookings count in the slot
