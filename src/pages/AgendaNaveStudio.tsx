@@ -32,6 +32,10 @@ interface TimeSlot {
   dateTimeEnd: string;
   professionalId: string;
   professionalName: string;
+  serviceId: string;
+  serviceName: string;
+  availableCapacity?: number;
+  maxCapacity?: number;
 }
 
 export default function AgendaNaveStudio() {
