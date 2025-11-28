@@ -61,8 +61,8 @@ export const HeroSection = () => {
               
               <Button 
                 variant="outline" 
-                size="xl"
-                className="w-full md:w-auto min-w-[320px] border-white text-white hover:bg-white hover:text-primary transition-colors"
+                size="lg"
+                className="w-full md:w-auto min-w-[280px] border-2 border-white/80 bg-white/10 text-white hover:bg-white hover:text-primary transition-colors backdrop-blur-sm"
                 onClick={() => navigate('/agenda-nave-studio')}
               >
                 Agenda tu sesión del Método Wim Hof →
