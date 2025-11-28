@@ -120,7 +120,7 @@ export default function BlogProtocoloSeguro() {
                 🛸 En NAVE Studio te comparto el protocolo que uso para iniciar a decenas de personas con agua fría + respiración, sin traumas ni forzar nada.
               </p>
               <Link to="/agenda-nave-studio">
-                <Button size="lg" className="w-full md:w-auto text-lg px-8 py-6">
+                <Button size="lg" className="w-full md:w-auto text-lg px-8 py-6 whitespace-normal h-auto leading-tight">
                   Agenda tu primera sesión del método Wim Hof
                 </Button>
               </Link>
