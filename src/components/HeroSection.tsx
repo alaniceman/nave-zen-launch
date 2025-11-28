@@ -49,14 +49,25 @@ export const HeroSection = () => {
           
           {/* CTA Section */}
           <div className="space-y-4 pt-4 md:pt-8">
-            <Button 
-              variant="hero" 
-              size="xl"
-              className="w-full md:w-auto min-w-[320px]"
-              onClick={handlePlanClick}
-            >
-              Empieza hoy con 50% OFF el primer mes
-            </Button>
+            <div className="flex flex-col gap-3 items-center">
+              <Button 
+                variant="hero" 
+                size="xl"
+                className="w-full md:w-auto min-w-[320px]"
+                onClick={handlePlanClick}
+              >
+                Empieza hoy con 50% OFF el primer mes
+              </Button>
+              
+              <Button 
+                variant="outline" 
+                size="xl"
+                className="w-full md:w-auto min-w-[320px] border-white text-white hover:bg-white hover:text-primary transition-colors"
+                onClick={() => navigate('/agenda-nave-studio')}
+              >
+                Agenda tu sesión del Método Wim Hof →
+              </Button>
+            </div>
             
             <p className="font-inter text-sm text-white/70">
               Válido solo este mes. Cancelas cuando quieras.
