@@ -45,6 +45,7 @@ export default function AdminBookings() {
   const queryClient = useQueryClient();
   const [page, setPage] = useState(1);
   const [status, setStatus] = useState<string>('all');
+  const [professionalFilter, setProfessionalFilter] = useState<string>('all');
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
 
@@ -57,7 +58,7 @@ export default function AdminBookings() {
   });
 
   const { data, isLoading } = useQuery({
-    queryKey: ['admin-bookings', page, status, debouncedSearch],
+    queryKey: ['admin-bookings', page, status, professionalFilter, debouncedSearch],
     queryFn: async () => {
       const params = new URLSearchParams({
         page: page.toString(),
@@ -66,6 +67,10 @@ export default function AdminBookings() {
 
       if (status !== 'all') {
         params.append('status', status);
+      }
+
+      if (professionalFilter !== 'all') {
+        params.append('professionalId', professionalFilter);
       }
 
       if (debouncedSearch) {
@@ -161,6 +166,20 @@ export default function AdminBookings() {
               </div>
             </div>
 
+            <Select value={professionalFilter} onValueChange={setProfessionalFilter}>
+              <SelectTrigger className="w-full sm:w-48">
+                <SelectValue placeholder="Instructor" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todos los instructores</SelectItem>
+                {professionals?.map((prof) => (
+                  <SelectItem key={prof.id} value={prof.id}>
+                    {prof.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
             <Select value={status} onValueChange={setStatus}>
               <SelectTrigger className="w-full sm:w-48">
                 <SelectValue placeholder="Estado" />
@@ -188,10 +207,11 @@ export default function AdminBookings() {
               <Table>
                 <TableHeader>
                   <TableRow>
+                    <TableHead>Fecha de Pago</TableHead>
                     <TableHead>Cliente</TableHead>
-                    <TableHead>Profesional</TableHead>
+                    <TableHead>Instructor</TableHead>
                     <TableHead>Servicio</TableHead>
-                    <TableHead>Fecha y Hora</TableHead>
+                    <TableHead>Fecha y Hora Sesión</TableHead>
                     <TableHead>Estado</TableHead>
                     <TableHead>Precio</TableHead>
                     <TableHead>Cupón</TableHead>
@@ -201,13 +221,16 @@ export default function AdminBookings() {
                 <TableBody>
                   {data?.bookings?.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
+                      <TableCell colSpan={9} className="text-center py-8 text-muted-foreground">
                         No se encontraron reservas
                       </TableCell>
                     </TableRow>
                   ) : (
                     data?.bookings?.map((booking: any) => (
                       <TableRow key={booking.id}>
+                        <TableCell className="text-foreground">
+                          {formatInTimeZone(booking.created_at, 'America/Santiago', "d 'de' MMM, yyyy HH:mm", { locale: es })}
+                        </TableCell>
                         <TableCell>
                           <div>
                             <div className="font-medium text-foreground">{booking.customer_name}</div>

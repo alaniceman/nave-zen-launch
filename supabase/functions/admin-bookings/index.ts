@@ -66,7 +66,8 @@ Deno.serve(async (req) => {
           services!inner(name, price_clp),
           discount_coupons(code, discount_type, discount_value)
         `, { count: 'exact' })
-        .order('date_time_start', { ascending: false });
+        .order('created_at', { ascending: false })
+        .order('date_time_start', { ascending: true });
 
       if (status) {
         query = query.eq('status', status);
