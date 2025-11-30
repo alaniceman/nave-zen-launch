@@ -43,6 +43,12 @@ export default function Bonos() {
   const [selectedPackage, setSelectedPackage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // Coupon state
+  const [couponCode, setCouponCode] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState<any>(null);
+  const [couponError, setCouponError] = useState("");
+  const [isValidatingCoupon, setIsValidatingCoupon] = useState(false);
 
   const {
     register,
@@ -108,6 +114,85 @@ export default function Bonos() {
       .join(", ");
   };
 
+  const validateCoupon = async () => {
+    if (!couponCode.trim() || !selectedPackage) return;
+
+    setIsValidatingCoupon(true);
+    setCouponError("");
+    setAppliedCoupon(null);
+
+    try {
+      const { data: couponData, error } = await supabase
+        .from("discount_coupons")
+        .select("*")
+        .eq("code", couponCode.toUpperCase())
+        .eq("is_active", true)
+        .maybeSingle();
+
+      if (error || !couponData) {
+        setCouponError("Cupón no encontrado");
+        return;
+      }
+
+      // Check if coupon applies to this package
+      if (couponData.applicable_package_ids && 
+          !couponData.applicable_package_ids.includes(selectedPackage)) {
+        setCouponError("Este cupón no aplica a este bono");
+        return;
+      }
+
+      // Check validity dates
+      const now = new Date();
+      if (couponData.valid_from && new Date(couponData.valid_from) > now) {
+        setCouponError("Este cupón aún no es válido");
+        return;
+      }
+      if (couponData.valid_until && new Date(couponData.valid_until) < now) {
+        setCouponError("Este cupón ha expirado");
+        return;
+      }
+
+      // Check max uses
+      if (couponData.max_uses && couponData.current_uses >= couponData.max_uses) {
+        setCouponError("Este cupón ha alcanzado su límite de usos");
+        return;
+      }
+
+      // Check minimum purchase amount
+      const pkg = packages.find(p => p.id === selectedPackage);
+      if (pkg && couponData.min_purchase_amount && pkg.price_clp < couponData.min_purchase_amount) {
+        setCouponError(`Compra mínima requerida: $${couponData.min_purchase_amount.toLocaleString("es-CL")}`);
+        return;
+      }
+
+      setAppliedCoupon(couponData);
+      toast.success("¡Cupón aplicado!");
+    } catch (error) {
+      console.error("Error validating coupon:", error);
+      setCouponError("Error al validar cupón");
+    } finally {
+      setIsValidatingCoupon(false);
+    }
+  };
+
+  const calculateFinalPrice = (packagePrice: number) => {
+    if (!appliedCoupon) return packagePrice;
+
+    let discount = 0;
+    if (appliedCoupon.discount_type === "percentage") {
+      discount = Math.floor(packagePrice * (appliedCoupon.discount_value / 100));
+    } else {
+      discount = appliedCoupon.discount_value;
+    }
+
+    return Math.max(0, packagePrice - discount);
+  };
+
+  const getDiscountAmount = (packagePrice: number) => {
+    if (!appliedCoupon) return 0;
+    return packagePrice - calculateFinalPrice(packagePrice);
+  };
+
   const onSubmit = async (data: PurchaseFormData) => {
     if (!selectedPackage) {
       toast.error("Selecciona un paquete");
@@ -120,6 +205,7 @@ export default function Bonos() {
       const { data: result, error } = await supabase.functions.invoke("purchase-session-package", {
         body: {
           packageId: selectedPackage,
+          couponCode: appliedCoupon?.code,
           ...data,
         },
       });
@@ -269,6 +355,91 @@ export default function Bonos() {
                           <p className="text-sm text-destructive mt-1">{errors.buyerPhone.message}</p>
                         )}
                       </div>
+
+                      {/* Coupon Input */}
+                      <div className="border-t pt-4">
+                        <Label htmlFor="couponCode">¿Tienes un código de descuento?</Label>
+                        <div className="flex gap-2 mt-2">
+                          <Input
+                            id="couponCode"
+                            value={couponCode}
+                            onChange={(e) => {
+                              setCouponCode(e.target.value.toUpperCase());
+                              setCouponError("");
+                              setAppliedCoupon(null);
+                            }}
+                            placeholder="CODIGO"
+                            className="font-mono uppercase"
+                            disabled={isSubmitting || isValidatingCoupon || !!appliedCoupon}
+                          />
+                          {!appliedCoupon && (
+                            <Button
+                              type="button"
+                              variant="outline"
+                              onClick={validateCoupon}
+                              disabled={!couponCode.trim() || isValidatingCoupon || isSubmitting}
+                            >
+                              {isValidatingCoupon ? (
+                                <Loader2 className="h-4 w-4 animate-spin" />
+                              ) : (
+                                "Aplicar"
+                              )}
+                            </Button>
+                          )}
+                          {appliedCoupon && (
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              onClick={() => {
+                                setAppliedCoupon(null);
+                                setCouponCode("");
+                              }}
+                              disabled={isSubmitting}
+                            >
+                              Quitar
+                            </Button>
+                          )}
+                        </div>
+                        {couponError && (
+                          <p className="text-sm text-destructive mt-1">{couponError}</p>
+                        )}
+                        {appliedCoupon && selectedPackage && (
+                          <div className="mt-3 p-3 bg-green-50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-900">
+                            <p className="text-sm font-semibold text-green-700 dark:text-green-400">
+                              ✓ Cupón {appliedCoupon.code} aplicado
+                            </p>
+                            <p className="text-xs text-green-600 dark:text-green-500 mt-1">
+                              {appliedCoupon.discount_type === "percentage"
+                                ? `-${appliedCoupon.discount_value}%`
+                                : `-$${appliedCoupon.discount_value.toLocaleString("es-CL")}`}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Price Summary */}
+                      {selectedPackage && appliedCoupon && (
+                        <div className="bg-muted/50 rounded-lg p-4 space-y-2">
+                          <div className="flex justify-between text-sm">
+                            <span className="text-muted-foreground line-through">Precio original:</span>
+                            <span className="text-muted-foreground line-through">
+                              ${packages.find(p => p.id === selectedPackage)?.price_clp.toLocaleString("es-CL")}
+                            </span>
+                          </div>
+                          <div className="flex justify-between text-sm text-green-600 dark:text-green-400">
+                            <span>Descuento:</span>
+                            <span>
+                              -${getDiscountAmount(packages.find(p => p.id === selectedPackage)!.price_clp).toLocaleString("es-CL")}
+                            </span>
+                          </div>
+                          <div className="flex justify-between text-lg font-bold border-t pt-2">
+                            <span>Total a pagar:</span>
+                            <span className="text-primary">
+                              ${calculateFinalPrice(packages.find(p => p.id === selectedPackage)!.price_clp).toLocaleString("es-CL")}
+                            </span>
+                          </div>
+                        </div>
+                      )}
 
                       <div className="bg-muted/50 rounded-lg p-4 space-y-2">
                         <p className="text-sm font-medium">📧 Recibirás tus códigos por email</p>
