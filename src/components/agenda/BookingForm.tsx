@@ -53,16 +53,15 @@ interface BookingFormProps {
 
 export function BookingForm({ timeSlot, professional, service, onBack }: BookingFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [couponCode, setCouponCode] = useState("");
-  const [isValidatingCoupon, setIsValidatingCoupon] = useState(false);
-  const [appliedCoupon, setAppliedCoupon] = useState<any>(null);
-  const [couponError, setCouponError] = useState("");
   
-  // Session code state
-  const [sessionCode, setSessionCode] = useState("");
-  const [isValidatingSessionCode, setIsValidatingSessionCode] = useState(false);
-  const [appliedSessionCode, setAppliedSessionCode] = useState<any>(null);
-  const [sessionCodeError, setSessionCodeError] = useState("");
+  // Unified code state
+  const [codeInput, setCodeInput] = useState("");
+  const [isValidating, setIsValidating] = useState(false);
+  const [codeError, setCodeError] = useState("");
+  const [appliedCode, setAppliedCode] = useState<{
+    type: "session" | "coupon";
+    data: any;
+  } | null>(null);
 
   const {
     register,
@@ -72,129 +71,106 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
     resolver: zodResolver(bookingSchema),
   });
 
-  const validateCoupon = async () => {
-    if (!couponCode.trim()) {
-      setCouponError("Ingresa un código de cupón");
+  const validateCode = async () => {
+    if (!codeInput.trim()) {
+      setCodeError("Ingresa un código");
       return;
     }
 
-    setIsValidatingCoupon(true);
-    setCouponError("");
+    setIsValidating(true);
+    setCodeError("");
 
     try {
-      const { data: coupon, error } = await supabase
+      // 1. PRIMERO: Intentar como código de sesión
+      const { data: sessionResult, error: sessionError } = await supabase.functions.invoke(
+        "validate-session-code",
+        {
+          body: { code: codeInput.toUpperCase(), serviceId: service.id },
+        }
+      );
+
+      if (!sessionError && sessionResult?.valid) {
+        setAppliedCode({ type: "session", data: sessionResult });
+        toast.success("¡Código de sesión aplicado! Tu sesión está prepagada");
+        setIsValidating(false);
+        return;
+      }
+
+      // 2. SEGUNDO: Intentar como cupón de descuento
+      const { data: coupon, error: couponError } = await supabase
         .from("discount_coupons")
         .select("*")
-        .eq("code", couponCode.toUpperCase())
+        .eq("code", codeInput.toUpperCase())
         .eq("is_active", true)
-        .single();
+        .maybeSingle();
 
-      if (error || !coupon) {
-        setCouponError("Cupón no válido");
-        setIsValidatingCoupon(false);
+      if (coupon && !couponError) {
+        // Validar fecha
+        const now = new Date();
+        const validFrom = new Date(coupon.valid_from);
+        const validUntil = coupon.valid_until ? new Date(coupon.valid_until) : null;
+
+        if (now < validFrom) {
+          setCodeError("Este cupón aún no es válido");
+          setIsValidating(false);
+          return;
+        }
+
+        if (validUntil && now > validUntil) {
+          setCodeError("Este cupón ha expirado");
+          setIsValidating(false);
+          return;
+        }
+
+        // Validar usos
+        if (coupon.max_uses && coupon.current_uses >= coupon.max_uses) {
+          setCodeError("Este cupón ya no tiene usos disponibles");
+          setIsValidating(false);
+          return;
+        }
+
+        // Validar monto mínimo
+        if (coupon.min_purchase_amount > service.price_clp) {
+          setCodeError(
+            `Este cupón requiere una compra mínima de $${coupon.min_purchase_amount.toLocaleString("es-CL")}`
+          );
+          setIsValidating(false);
+          return;
+        }
+
+        setAppliedCode({ type: "coupon", data: coupon });
+        toast.success("¡Cupón de descuento aplicado!");
+        setIsValidating(false);
         return;
       }
 
-      // Validar fecha
-      const now = new Date();
-      const validFrom = new Date(coupon.valid_from);
-      const validUntil = coupon.valid_until ? new Date(coupon.valid_until) : null;
-
-      if (now < validFrom) {
-        setCouponError("Este cupón aún no es válido");
-        setIsValidatingCoupon(false);
-        return;
-      }
-
-      if (validUntil && now > validUntil) {
-        setCouponError("Este cupón ha expirado");
-        setIsValidatingCoupon(false);
-        return;
-      }
-
-      // Validar usos
-      if (coupon.max_uses && coupon.current_uses >= coupon.max_uses) {
-        setCouponError("Este cupón ya no tiene usos disponibles");
-        setIsValidatingCoupon(false);
-        return;
-      }
-
-      // Validar monto mínimo
-      if (coupon.min_purchase_amount > service.price_clp) {
-        setCouponError(
-          `Este cupón requiere una compra mínima de $${coupon.min_purchase_amount.toLocaleString("es-CL")}`
-        );
-        setIsValidatingCoupon(false);
-        return;
-      }
-
-      setAppliedCoupon(coupon);
-      toast.success("¡Cupón aplicado!");
+      // 3. Ninguno encontrado
+      setCodeError("Código no válido");
     } catch (error) {
-      setCouponError("Error al validar el cupón");
+      console.error("Error validating code:", error);
+      setCodeError("Error al validar el código");
     } finally {
-      setIsValidatingCoupon(false);
+      setIsValidating(false);
     }
   };
 
-  const removeCoupon = () => {
-    setAppliedCoupon(null);
-    setCouponCode("");
-    setCouponError("");
-  };
-
-  const validateSessionCode = async () => {
-    if (!sessionCode.trim()) {
-      setSessionCodeError("Ingresa un código de sesión");
-      return;
-    }
-
-    setIsValidatingSessionCode(true);
-    setSessionCodeError("");
-
-    try {
-      const { data: result, error } = await supabase.functions.invoke("validate-session-code", {
-        body: {
-          code: sessionCode,
-          serviceId: service.id,
-        },
-      });
-
-      if (error || !result.valid) {
-        setSessionCodeError(result?.error || "Código no válido");
-        setIsValidatingSessionCode(false);
-        return;
-      }
-
-      setAppliedSessionCode(result);
-      // Remove coupon if session code is applied
-      if (appliedCoupon) {
-        removeCoupon();
-      }
-      toast.success("¡Código de sesión aplicado! Tu sesión está prepagada");
-    } catch (error) {
-      setSessionCodeError("Error al validar el código");
-    } finally {
-      setIsValidatingSessionCode(false);
-    }
-  };
-
-  const removeSessionCode = () => {
-    setAppliedSessionCode(null);
-    setSessionCode("");
-    setSessionCodeError("");
+  const removeCode = () => {
+    setAppliedCode(null);
+    setCodeInput("");
+    setCodeError("");
   };
 
   const calculateDiscount = () => {
-    if (!appliedCoupon || appliedSessionCode) return 0;
+    if (!appliedCode || appliedCode.type === "session") return 0;
     
-    if (appliedCoupon.discount_type === "percentage") {
-      return Math.floor((service.price_clp * appliedCoupon.discount_value) / 100);
+    const coupon = appliedCode.data;
+    if (coupon.discount_type === "percentage") {
+      return Math.floor((service.price_clp * coupon.discount_value) / 100);
     }
-    return appliedCoupon.discount_value;
+    return coupon.discount_value;
   };
 
-  const finalPrice = appliedSessionCode ? 0 : service.price_clp - calculateDiscount();
+  const finalPrice = appliedCode?.type === "session" ? 0 : service.price_clp - calculateDiscount();
 
   const onSubmit = async (data: BookingFormData) => {
     setIsSubmitting(true);
@@ -205,8 +181,8 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
           professionalId: timeSlot.professionalId,
           serviceId: service.id,
           dateTimeStart: timeSlot.dateTimeStart,
-          couponCode: appliedCoupon?.code || null,
-          sessionCode: appliedSessionCode?.code || null,
+          couponCode: appliedCode?.type === "coupon" ? appliedCode.data.code : null,
+          sessionCode: appliedCode?.type === "session" ? appliedCode.data.code : null,
           ...data,
         },
       });
@@ -252,9 +228,9 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
           <div className="flex items-center gap-2 mb-1">
             <DollarSign className="h-5 w-5 text-muted-foreground" />
             <span className="text-lg font-semibold">
-              {appliedSessionCode ? (
+              {appliedCode?.type === "session" ? (
                 <span className="text-green-600 font-bold">PREPAGADO ✓</span>
-              ) : appliedCoupon ? (
+              ) : appliedCode?.type === "coupon" ? (
                 <>
                   <span className="text-muted-foreground line-through mr-2">
                     ${service.price_clp.toLocaleString("es-CL")}
@@ -268,11 +244,11 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
               )}
             </span>
           </div>
-          {appliedSessionCode ? (
+          {appliedCode?.type === "session" ? (
             <p className="text-sm text-green-600 ml-7">
               Código de sesión aplicado
             </p>
-          ) : appliedCoupon ? (
+          ) : appliedCode?.type === "coupon" ? (
             <p className="text-sm text-green-600 ml-7">
               Ahorro: ${calculateDiscount().toLocaleString("es-CL")}
             </p>
@@ -300,23 +276,28 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
         </div>
       </div>
 
-      {/* Session Code Section */}
-      <div className="bg-primary/5 rounded-lg border border-primary/20 p-4 mb-4">
+      {/* Unified Code Section */}
+      <div className="bg-primary/5 rounded-lg border border-primary/20 p-4 mb-6">
         <Label className="flex items-center gap-2 mb-3 text-primary">
           <Tag className="h-4 w-4" />
-          ¿Tienes un código de sesión prepagado?
+          ¿Tienes un código de descuento o sesión prepagada?
         </Label>
         
-        {appliedSessionCode ? (
+        {appliedCode ? (
           <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-lg p-3">
             <div className="flex items-center gap-2">
               <Check className="h-5 w-5 text-green-600" />
               <div>
                 <span className="font-mono font-bold text-green-700">
-                  {appliedSessionCode.code}
+                  {appliedCode.type === "session" ? appliedCode.data.code : appliedCode.data.code}
                 </span>
                 <p className="text-sm text-green-600">
-                  Sesión prepagada - No requiere pago adicional
+                  {appliedCode.type === "session" 
+                    ? "Sesión prepagada - No requiere pago adicional"
+                    : appliedCode.data.discount_type === "percentage"
+                      ? `${appliedCode.data.discount_value}% de descuento`
+                      : `$${appliedCode.data.discount_value.toLocaleString("es-CL")} de descuento`
+                  }
                 </p>
               </div>
             </div>
@@ -324,7 +305,7 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
               type="button"
               variant="ghost"
               size="sm"
-              onClick={removeSessionCode}
+              onClick={removeCode}
               disabled={isSubmitting}
             >
               <X className="h-4 w-4" />
@@ -334,100 +315,39 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
           <div className="space-y-2">
             <div className="flex gap-2">
               <Input
-                value={sessionCode}
-                onChange={(e) => setSessionCode(e.target.value.toUpperCase())}
-                placeholder="CODIGO123"
-                disabled={isSubmitting || isValidatingSessionCode || !!appliedCoupon}
+                value={codeInput}
+                onChange={(e) => setCodeInput(e.target.value.toUpperCase())}
+                placeholder="CODIGO"
+                disabled={isSubmitting || isValidating}
                 className="font-mono uppercase"
               />
               <Button
                 type="button"
                 variant="default"
-                onClick={validateSessionCode}
-                disabled={isSubmitting || isValidatingSessionCode || !sessionCode.trim() || !!appliedCoupon}
+                onClick={validateCode}
+                disabled={isSubmitting || isValidating || !codeInput.trim()}
               >
-                {isValidatingSessionCode ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  "Validar"
-                )}
-              </Button>
-            </div>
-            {sessionCodeError && (
-              <p className="text-sm text-destructive">{sessionCodeError}</p>
-            )}
-            {appliedCoupon && (
-              <p className="text-xs text-muted-foreground">
-                No puedes usar código de sesión y cupón de descuento al mismo tiempo
-              </p>
-            )}
-          </div>
-        )}
-      </div>
-
-      {/* Coupon Section */}
-      {!appliedSessionCode && (
-        <div className="bg-background rounded-lg border p-4 mb-6">
-          <Label className="flex items-center gap-2 mb-3">
-            <Tag className="h-4 w-4" />
-            ¿Tienes un cupón de descuento?
-          </Label>
-        
-        {appliedCoupon ? (
-          <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-lg p-3">
-            <div className="flex items-center gap-2">
-              <Check className="h-5 w-5 text-green-600" />
-              <div>
-                <span className="font-mono font-bold text-green-700">
-                  {appliedCoupon.code}
-                </span>
-                <p className="text-sm text-green-600">
-                  {appliedCoupon.discount_type === "percentage"
-                    ? `${appliedCoupon.discount_value}% de descuento`
-                    : `$${appliedCoupon.discount_value.toLocaleString("es-CL")} de descuento`}
-                </p>
-              </div>
-            </div>
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={removeCoupon}
-              disabled={isSubmitting}
-            >
-              <X className="h-4 w-4" />
-            </Button>
-          </div>
-        ) : (
-          <div className="space-y-2">
-            <div className="flex gap-2">
-              <Input
-                value={couponCode}
-                onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                placeholder="CODIGO"
-                disabled={isSubmitting || isValidatingCoupon}
-                className="font-mono uppercase"
-              />
-              <Button
-                type="button"
-                variant="outline"
-                onClick={validateCoupon}
-                disabled={isSubmitting || isValidatingCoupon || !couponCode.trim()}
-              >
-                {isValidatingCoupon ? (
+                {isValidating ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
                   "Aplicar"
                 )}
               </Button>
             </div>
-            {couponError && (
-              <p className="text-sm text-destructive">{couponError}</p>
+            {codeError && (
+              <p className="text-sm text-destructive">{codeError}</p>
             )}
+            
+            {/* Link a bonos */}
+            <p className="text-xs text-muted-foreground mt-2">
+              💡 Compra varias sesiones con descuento{" "}
+              <a href="/bonos" className="text-primary underline hover:no-underline font-medium" target="_blank" rel="noopener noreferrer">
+                acá
+              </a>
+            </p>
           </div>
         )}
-        </div>
-      )}
+      </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
@@ -504,7 +424,7 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Procesando...
               </>
-            ) : appliedSessionCode ? (
+            ) : appliedCode?.type === "session" ? (
               "Confirmar sesión prepagada"
             ) : (
               "Agendar y pagar"
