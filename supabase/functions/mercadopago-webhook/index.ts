@@ -53,6 +53,133 @@ async function verifyMercadoPagoSignature(
 
 const corsHeaders = getCorsHeaders();
 
+// Helper function to generate unique session codes
+function generateSessionCode(): string {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let code = '';
+  for (let i = 0; i < 8; i++) {
+    code += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return code;
+}
+
+// Helper function to handle session package purchases
+async function handleSessionPackagePurchase(
+  payment: any,
+  packageData: any,
+  supabase: any,
+  corsHeaders: any
+) {
+  if (payment.status !== "approved") {
+    console.log("Package payment not approved yet:", payment.status);
+    return new Response(JSON.stringify({ status: "pending" }), {
+      status: 200,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  // Get package details
+  const { data: package_, error: packageError } = await supabase
+    .from("session_packages")
+    .select("*")
+    .eq("id", packageData.packageId)
+    .eq("is_active", true)
+    .single();
+
+  if (packageError || !package_) {
+    console.error("Package not found:", packageData.packageId);
+    return new Response(JSON.stringify({ status: "package_not_found" }), {
+      status: 200,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  // Verify amount
+  if (payment.transaction_amount !== package_.price_clp) {
+    console.error("Payment amount mismatch - Expected:", package_.price_clp, "Received:", payment.transaction_amount);
+    return new Response(JSON.stringify({ status: "amount_mismatch" }), {
+      status: 200,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  // Generate session codes
+  const codes = [];
+  const expiresAt = new Date();
+  expiresAt.setDate(expiresAt.getDate() + package_.validity_days);
+
+  for (let i = 0; i < package_.sessions_quantity; i++) {
+    let code = generateSessionCode();
+    let isUnique = false;
+    
+    // Ensure code is unique
+    while (!isUnique) {
+      const { data: existing } = await supabase
+        .from("session_codes")
+        .select("id")
+        .eq("code", code)
+        .maybeSingle();
+      
+      if (!existing) {
+        isUnique = true;
+      } else {
+        code = generateSessionCode();
+      }
+    }
+
+    codes.push({
+      package_id: package_.id,
+      code: code,
+      applicable_service_ids: package_.applicable_service_ids,
+      buyer_email: packageData.buyerEmail,
+      buyer_name: packageData.buyerName,
+      buyer_phone: packageData.buyerPhone,
+      purchased_at: new Date().toISOString(),
+      expires_at: expiresAt.toISOString(),
+      is_used: false,
+      mercado_pago_payment_id: payment.id.toString(),
+    });
+  }
+
+  // Insert codes into database
+  const { error: insertError } = await supabase
+    .from("session_codes")
+    .insert(codes);
+
+  if (insertError) {
+    console.error("Error inserting codes:", insertError);
+    throw insertError;
+  }
+
+  console.log(`Generated ${codes.length} session codes for package purchase`);
+
+  // Send confirmation email with codes
+  try {
+    const emailResponse = await supabase.functions.invoke("send-session-codes-email", {
+      body: {
+        buyerEmail: packageData.buyerEmail,
+        buyerName: packageData.buyerName,
+        packageName: package_.name,
+        codes: codes.map(c => c.code),
+        expiresAt: expiresAt.toISOString(),
+      },
+    });
+
+    if (emailResponse.error) {
+      console.error("Error sending codes email:", emailResponse.error);
+    } else {
+      console.log("Codes email sent successfully");
+    }
+  } catch (emailError) {
+    console.error("Failed to invoke send-session-codes-email:", emailError);
+  }
+
+  return new Response(JSON.stringify({ status: "codes_generated", count: codes.length }), {
+    status: 200,
+    headers: { ...corsHeaders, "Content-Type": "application/json" },
+  });
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -129,8 +256,35 @@ serve(async (req) => {
     const payment = await paymentResponse.json();
     console.log("Payment details:", payment);
 
-    // Get booking ID from external_reference (set in create-booking)
-    const bookingId = payment.external_reference;
+    // Check if this is a session package purchase or a booking
+    const externalReference = payment.external_reference;
+    if (!externalReference) {
+      console.error("No external_reference in payment");
+      return new Response(JSON.stringify({ status: "no_reference" }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Try to parse as session package purchase
+    let packagePurchaseData = null;
+    try {
+      packagePurchaseData = JSON.parse(externalReference);
+      if (packagePurchaseData.type === "session_package") {
+        console.log("Processing session package purchase:", packagePurchaseData);
+        return await handleSessionPackagePurchase(
+          payment,
+          packagePurchaseData,
+          supabase,
+          corsHeaders
+        );
+      }
+    } catch {
+      // Not JSON, treat as regular booking ID
+    }
+
+    // Regular booking flow
+    const bookingId = externalReference;
     if (!bookingId) {
       console.error("No booking ID in payment external_reference");
       return new Response(JSON.stringify({ status: "no_booking_id" }), {

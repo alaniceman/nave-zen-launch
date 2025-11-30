@@ -98,6 +98,7 @@ export type Database = {
           original_price: number | null
           professional_id: string
           service_id: string
+          session_code_id: string | null
           status: string
           updated_at: string
         }
@@ -118,6 +119,7 @@ export type Database = {
           original_price?: number | null
           professional_id: string
           service_id: string
+          session_code_id?: string | null
           status?: string
           updated_at?: string
         }
@@ -138,6 +140,7 @@ export type Database = {
           original_price?: number | null
           professional_id?: string
           service_id?: string
+          session_code_id?: string | null
           status?: string
           updated_at?: string
         }
@@ -161,6 +164,13 @@ export type Database = {
             columns: ["service_id"]
             isOneToOne: false
             referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_session_code_id_fkey"
+            columns: ["session_code_id"]
+            isOneToOne: false
+            referencedRelation: "session_codes"
             referencedColumns: ["id"]
           },
         ]
@@ -435,6 +445,111 @@ export type Database = {
           name?: string
           price_clp?: number
           updated_at?: string
+        }
+        Relationships: []
+      }
+      session_codes: {
+        Row: {
+          applicable_service_ids: string[]
+          buyer_email: string
+          buyer_name: string
+          buyer_phone: string | null
+          code: string
+          created_at: string | null
+          expires_at: string
+          id: string
+          is_used: boolean | null
+          mercado_pago_payment_id: string | null
+          package_id: string | null
+          purchased_at: string | null
+          used_at: string | null
+          used_in_booking_id: string | null
+        }
+        Insert: {
+          applicable_service_ids: string[]
+          buyer_email: string
+          buyer_name: string
+          buyer_phone?: string | null
+          code: string
+          created_at?: string | null
+          expires_at: string
+          id?: string
+          is_used?: boolean | null
+          mercado_pago_payment_id?: string | null
+          package_id?: string | null
+          purchased_at?: string | null
+          used_at?: string | null
+          used_in_booking_id?: string | null
+        }
+        Update: {
+          applicable_service_ids?: string[]
+          buyer_email?: string
+          buyer_name?: string
+          buyer_phone?: string | null
+          code?: string
+          created_at?: string | null
+          expires_at?: string
+          id?: string
+          is_used?: boolean | null
+          mercado_pago_payment_id?: string | null
+          package_id?: string | null
+          purchased_at?: string | null
+          used_at?: string | null
+          used_in_booking_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "session_codes_package_id_fkey"
+            columns: ["package_id"]
+            isOneToOne: false
+            referencedRelation: "session_packages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "session_codes_used_in_booking_id_fkey"
+            columns: ["used_in_booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      session_packages: {
+        Row: {
+          applicable_service_ids: string[]
+          created_at: string | null
+          description: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          price_clp: number
+          sessions_quantity: number
+          updated_at: string | null
+          validity_days: number
+        }
+        Insert: {
+          applicable_service_ids: string[]
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          price_clp: number
+          sessions_quantity: number
+          updated_at?: string | null
+          validity_days?: number
+        }
+        Update: {
+          applicable_service_ids?: string[]
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          price_clp?: number
+          sessions_quantity?: number
+          updated_at?: string | null
+          validity_days?: number
         }
         Relationships: []
       }

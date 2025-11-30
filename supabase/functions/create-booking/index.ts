@@ -13,6 +13,7 @@ const bookingSchema = z.object({
   customerPhone: z.string().min(8).max(20),
   customerComments: z.string().max(500).optional(),
   couponCode: z.string().optional().nullable(),
+  sessionCode: z.string().optional().nullable(),
 });
 
 serve(async (req) => {
@@ -63,13 +64,77 @@ serve(async (req) => {
       startDate.getTime() + service.duration_minutes * 60000
     );
 
-    // Validate and apply coupon if provided
+    // Check if using session code (prepaid)
+    let sessionCodeId = null;
+    let isPrepaid = false;
+
+    if (validatedData.sessionCode) {
+      console.log("Validating session code:", validatedData.sessionCode);
+      
+      const { data: sessionCode, error: codeError } = await supabase
+        .from("session_codes")
+        .select("*")
+        .eq("code", validatedData.sessionCode.toUpperCase())
+        .single();
+
+      if (codeError || !sessionCode) {
+        return new Response(
+          JSON.stringify({ error: "Código de sesión no válido" }),
+          {
+            status: 400,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          }
+        );
+      }
+
+      // Check if already used
+      if (sessionCode.is_used) {
+        return new Response(
+          JSON.stringify({ error: "Este código ya fue utilizado" }),
+          {
+            status: 400,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          }
+        );
+      }
+
+      // Check if expired
+      const now = new Date();
+      const expiresAt = new Date(sessionCode.expires_at);
+      if (now > expiresAt) {
+        return new Response(
+          JSON.stringify({ error: "Este código ha expirado" }),
+          {
+            status: 400,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          }
+        );
+      }
+
+      // Check if service is applicable
+      const isServiceApplicable = sessionCode.applicable_service_ids.includes(validatedData.serviceId);
+      if (!isServiceApplicable) {
+        return new Response(
+          JSON.stringify({ error: "Este código no es válido para este servicio" }),
+          {
+            status: 400,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          }
+        );
+      }
+
+      sessionCodeId = sessionCode.id;
+      isPrepaid = true;
+      console.log("Session code validated, booking will be prepaid");
+    }
+
+    // Validate and apply coupon if provided (only if not using session code)
     let couponId = null;
     let discountAmount = 0;
     let originalPrice = service.price_clp;
-    let finalPrice = service.price_clp;
+    let finalPrice = isPrepaid ? 0 : service.price_clp;
 
-    if (validatedData.couponCode) {
+    if (validatedData.couponCode && !isPrepaid) {
       console.log("Validating coupon:", validatedData.couponCode);
       
       const { data: coupon, error: couponError } = await supabase
@@ -281,7 +346,7 @@ serve(async (req) => {
     }
 
 
-    // Create booking with PENDING_PAYMENT status
+    // Create booking with appropriate status
     const { data: booking, error: bookingError } = await supabase
       .from("bookings")
       .insert({
@@ -293,16 +358,70 @@ serve(async (req) => {
         customer_comments: validatedData.customerComments || null,
         date_time_start: validatedData.dateTimeStart,
         date_time_end: endDate.toISOString(),
-        status: "PENDING_PAYMENT",
+        status: isPrepaid ? "CONFIRMED" : "PENDING_PAYMENT",
         coupon_id: couponId,
         discount_amount: discountAmount,
         original_price: originalPrice,
         final_price: finalPrice,
+        session_code_id: sessionCodeId,
       })
       .select()
       .single();
 
     if (bookingError) throw bookingError;
+
+    // If prepaid with session code, mark code as used and confirm booking
+    if (isPrepaid && sessionCodeId) {
+      console.log("Marking session code as used and confirming booking");
+
+      // Mark code as used
+      await supabase
+        .from("session_codes")
+        .update({
+          is_used: true,
+          used_in_booking_id: booking.id,
+          used_at: new Date().toISOString(),
+        })
+        .eq("id", sessionCodeId);
+
+      // Increment confirmed bookings in slot
+      if (slot) {
+        await supabase
+          .from("generated_slots")
+          .update({
+            confirmed_bookings: slot.confirmed_bookings + 1,
+          })
+          .eq("id", slot.id);
+      }
+
+      // Send confirmation email
+      try {
+        const emailResponse = await supabase.functions.invoke("send-booking-confirmation", {
+          body: { bookingId: booking.id },
+        });
+
+        if (emailResponse.error) {
+          console.error("Error sending confirmation email:", emailResponse.error);
+        } else {
+          console.log("Confirmation email sent successfully");
+        }
+      } catch (emailError) {
+        console.error("Failed to invoke send-booking-confirmation:", emailError);
+      }
+
+      // Return success without payment link
+      return new Response(
+        JSON.stringify({
+          bookingId: booking.id,
+          confirmed: true,
+          message: "Sesión confirmada con código prepagado",
+        }),
+        {
+          status: 200,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }
+      );
+    }
 
     // Create Mercado Pago preference
     const mercadoPagoAccessToken = Deno.env.get("MERCADO_PAGO_ACCESS_TOKEN");
