@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import {
   Dialog,
@@ -23,6 +23,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Select,
   SelectContent,
@@ -52,6 +53,7 @@ const couponSchema = z.object({
     .optional(),
   valid_from: z.string().optional(),
   valid_until: z.string().nullable().optional(),
+  applicable_package_ids: z.array(z.string()).optional(),
 }).refine((data) => {
   if (data.discount_type === 'percentage') {
     return data.discount_value <= 100;
@@ -73,6 +75,21 @@ interface CouponFormProps {
 export function CouponForm({ open, onClose, coupon }: CouponFormProps) {
   const queryClient = useQueryClient();
   const isEditing = !!coupon;
+  const [selectedPackages, setSelectedPackages] = useState<string[]>([]);
+
+  // Load session packages
+  const { data: packages = [] } = useQuery({
+    queryKey: ['session-packages-for-coupons'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('session_packages')
+        .select('*')
+        .eq('is_active', true)
+        .order('sessions_quantity', { ascending: true });
+      if (error) throw error;
+      return data || [];
+    },
+  });
 
   const form = useForm<CouponFormData>({
     resolver: zodResolver(couponSchema),
@@ -84,6 +101,7 @@ export function CouponForm({ open, onClose, coupon }: CouponFormProps) {
       max_uses: null,
       valid_from: new Date().toISOString().split('T')[0],
       valid_until: null,
+      applicable_package_ids: [],
     },
   });
 
@@ -97,7 +115,9 @@ export function CouponForm({ open, onClose, coupon }: CouponFormProps) {
         max_uses: coupon.max_uses,
         valid_from: coupon.valid_from ? new Date(coupon.valid_from).toISOString().split('T')[0] : undefined,
         valid_until: coupon.valid_until ? new Date(coupon.valid_until).toISOString().split('T')[0] : null,
+        applicable_package_ids: coupon.applicable_package_ids || [],
       });
+      setSelectedPackages(coupon.applicable_package_ids || []);
     } else {
       form.reset({
         code: '',
@@ -107,7 +127,9 @@ export function CouponForm({ open, onClose, coupon }: CouponFormProps) {
         max_uses: null,
         valid_from: new Date().toISOString().split('T')[0],
         valid_until: null,
+        applicable_package_ids: [],
       });
+      setSelectedPackages([]);
     }
   }, [coupon, form, open]);
 
@@ -121,6 +143,7 @@ export function CouponForm({ open, onClose, coupon }: CouponFormProps) {
         max_uses: data.max_uses || null,
         valid_from: data.valid_from || new Date().toISOString(),
         valid_until: data.valid_until || null,
+        applicable_package_ids: selectedPackages.length > 0 ? selectedPackages : null,
       };
 
       if (isEditing) {
@@ -315,11 +338,45 @@ export function CouponForm({ open, onClose, coupon }: CouponFormProps) {
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
-                )}
-              />
-            </div>
+              )}
+            />
+          </div>
 
-            <div className="flex gap-3 pt-4">
+          <div className="space-y-3">
+            <FormLabel>Aplicable a Bonos (opcional)</FormLabel>
+            <FormDescription>
+              Si no seleccionas ningún bono, el cupón solo aplicará a reservas directas (sin bonos)
+            </FormDescription>
+            <div className="grid grid-cols-1 gap-3 p-4 border rounded-lg bg-muted/50">
+              {packages.length === 0 ? (
+                <p className="text-sm text-muted-foreground">No hay bonos disponibles</p>
+              ) : (
+                packages.map((pkg: any) => (
+                  <div key={pkg.id} className="flex items-center space-x-2">
+                    <Checkbox
+                      id={`package-${pkg.id}`}
+                      checked={selectedPackages.includes(pkg.id)}
+                      onCheckedChange={(checked) => {
+                        setSelectedPackages(prev =>
+                          checked
+                            ? [...prev, pkg.id]
+                            : prev.filter(id => id !== pkg.id)
+                        );
+                      }}
+                    />
+                    <label
+                      htmlFor={`package-${pkg.id}`}
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                    >
+                      {pkg.name} - ${pkg.price_clp.toLocaleString('es-CL')} ({pkg.sessions_quantity} sesiones)
+                    </label>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+
+          <div className="flex gap-3 pt-4">
               <Button
                 type="button"
                 variant="outline"

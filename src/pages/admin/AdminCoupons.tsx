@@ -47,6 +47,30 @@ export default function AdminCoupons() {
     },
   });
 
+  // Load session packages to display names
+  const { data: packages = [] } = useQuery({
+    queryKey: ['session-packages-names'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('session_packages')
+        .select('id, name')
+        .eq('is_active', true);
+      if (error) throw error;
+      return data || [];
+    },
+  });
+
+  const getPackageNames = (packageIds: string[] | null) => {
+    if (!packageIds || packageIds.length === 0) {
+      return <span className="text-muted-foreground italic">Solo reservas directas</span>;
+    }
+    const names = packageIds
+      .map(id => packages.find((p: any) => p.id === id)?.name)
+      .filter(Boolean)
+      .join(', ');
+    return names || <span className="text-muted-foreground">—</span>;
+  };
+
   const toggleActiveMutation = useMutation({
     mutationFn: async ({ id, isActive }: { id: string; isActive: boolean }) => {
       const { error } = await supabase
@@ -134,6 +158,7 @@ export default function AdminCoupons() {
                 <TableRow>
                   <TableHead>Código</TableHead>
                   <TableHead>Descuento</TableHead>
+                  <TableHead>Aplica a</TableHead>
                   <TableHead>Usos</TableHead>
                   <TableHead>Validez</TableHead>
                   <TableHead>Estado</TableHead>
@@ -144,7 +169,7 @@ export default function AdminCoupons() {
               <TableBody>
                 {coupons?.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
+                    <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
                       No hay cupones registrados
                     </TableCell>
                   </TableRow>
@@ -167,6 +192,11 @@ export default function AdminCoupons() {
                               <span>${coupon.discount_value.toLocaleString('es-CL')}</span>
                             </>
                           )}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="text-sm max-w-xs truncate">
+                          {getPackageNames(coupon.applicable_package_ids)}
                         </div>
                       </TableCell>
                       <TableCell>

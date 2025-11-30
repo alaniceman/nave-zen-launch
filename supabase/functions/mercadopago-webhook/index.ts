@@ -94,9 +94,10 @@ async function handleSessionPackagePurchase(
     });
   }
 
-  // Verify amount
-  if (payment.transaction_amount !== package_.price_clp) {
-    console.error("Payment amount mismatch - Expected:", package_.price_clp, "Received:", payment.transaction_amount);
+  // Verify amount (use finalPrice from external reference if coupon was applied)
+  const expectedAmount = packageData.finalPrice || package_.price_clp;
+  if (payment.transaction_amount !== expectedAmount) {
+    console.error("Payment amount mismatch - Expected:", expectedAmount, "Received:", payment.transaction_amount);
     return new Response(JSON.stringify({ status: "amount_mismatch" }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -152,6 +153,32 @@ async function handleSessionPackagePurchase(
   }
 
   console.log(`Generated ${codes.length} session codes for package purchase`);
+
+  // Increment coupon usage if coupon was applied
+  if (packageData.couponId) {
+    console.log("Incrementing coupon usage for:", packageData.couponId);
+    
+    // Get current uses
+    const { data: currentCoupon } = await supabase
+      .from("discount_coupons")
+      .select("current_uses")
+      .eq("id", packageData.couponId)
+      .single();
+    
+    if (currentCoupon) {
+      const { error: couponError } = await supabase
+        .from("discount_coupons")
+        .update({ current_uses: (currentCoupon.current_uses || 0) + 1 })
+        .eq("id", packageData.couponId);
+
+      if (couponError) {
+        console.error("Error incrementing coupon uses:", couponError);
+        // Continue anyway - codes are already generated
+      } else {
+        console.log("Coupon usage incremented successfully");
+      }
+    }
+  }
 
   // Send confirmation email with codes
   try {

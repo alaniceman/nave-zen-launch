@@ -8,6 +8,7 @@ const purchaseSchema = z.object({
   buyerName: z.string().min(2).max(100),
   buyerEmail: z.string().email().max(255),
   buyerPhone: z.string().min(8).max(20),
+  couponCode: z.string().optional(),
 });
 
 serve(async (req) => {
@@ -54,6 +55,100 @@ serve(async (req) => {
 
     console.log("Creating Mercado Pago preference for package:", package_.id);
 
+    // Validate coupon if provided
+    let coupon = null;
+    let finalPrice = package_.price_clp;
+    let discountAmount = 0;
+
+    if (validatedData.couponCode) {
+      console.log("Validating coupon:", validatedData.couponCode);
+
+      const { data: couponData, error: couponError } = await supabase
+        .from("discount_coupons")
+        .select("*")
+        .eq("code", validatedData.couponCode.toUpperCase())
+        .eq("is_active", true)
+        .maybeSingle();
+
+      if (couponError || !couponData) {
+        return new Response(
+          JSON.stringify({ error: "Cupón no encontrado" }),
+          {
+            status: 400,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          }
+        );
+      }
+
+      // Validate coupon is applicable to this package
+      if (couponData.applicable_package_ids && 
+          !couponData.applicable_package_ids.includes(validatedData.packageId)) {
+        return new Response(
+          JSON.stringify({ error: "Este cupón no aplica a este bono" }),
+          {
+            status: 400,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          }
+        );
+      }
+
+      // Check if coupon is valid by date
+      const now = new Date();
+      if (couponData.valid_from && new Date(couponData.valid_from) > now) {
+        return new Response(
+          JSON.stringify({ error: "Este cupón aún no es válido" }),
+          {
+            status: 400,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          }
+        );
+      }
+
+      if (couponData.valid_until && new Date(couponData.valid_until) < now) {
+        return new Response(
+          JSON.stringify({ error: "Este cupón ha expirado" }),
+          {
+            status: 400,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          }
+        );
+      }
+
+      // Check if coupon has uses left
+      if (couponData.max_uses && couponData.current_uses >= couponData.max_uses) {
+        return new Response(
+          JSON.stringify({ error: "Este cupón ha alcanzado su límite de usos" }),
+          {
+            status: 400,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          }
+        );
+      }
+
+      // Check minimum purchase amount
+      if (couponData.min_purchase_amount && package_.price_clp < couponData.min_purchase_amount) {
+        return new Response(
+          JSON.stringify({ error: `Compra mínima requerida: $${couponData.min_purchase_amount.toLocaleString('es-CL')}` }),
+          {
+            status: 400,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          }
+        );
+      }
+
+      // Calculate discount
+      if (couponData.discount_type === "percentage") {
+        discountAmount = Math.floor(package_.price_clp * (couponData.discount_value / 100));
+      } else {
+        discountAmount = couponData.discount_value;
+      }
+
+      finalPrice = Math.max(0, package_.price_clp - discountAmount);
+      coupon = couponData;
+
+      console.log(`Coupon applied: ${coupon.code}, discount: $${discountAmount}, final price: $${finalPrice}`);
+    }
+
     const mercadoPagoAccessToken = Deno.env.get("MERCADO_PAGO_ACCESS_TOKEN");
     if (!mercadoPagoAccessToken) {
       throw new Error("Mercado Pago not configured");
@@ -69,15 +164,18 @@ serve(async (req) => {
       buyerEmail: validatedData.buyerEmail,
       buyerName: validatedData.buyerName,
       buyerPhone: validatedData.buyerPhone,
+      couponId: coupon?.id || null,
+      originalPrice: package_.price_clp,
+      finalPrice: finalPrice,
     });
 
     const preferenceData = {
       items: [
         {
           title: `${package_.name} - ${package_.sessions_quantity} sesiones`,
-          description: package_.description || "",
+          description: coupon ? `Cupón ${coupon.code} aplicado (-$${discountAmount.toLocaleString('es-CL')})` : (package_.description || ""),
           quantity: 1,
-          unit_price: package_.price_clp,
+          unit_price: finalPrice,
           currency_id: "CLP",
         },
       ],
