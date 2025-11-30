@@ -28,6 +28,8 @@ import CriomedicinIceBathEnGrupo from "./pages/CriomedicinIceBathEnGrupo";
 import Terminos from "./pages/Terminos";
 import Privacidad from "./pages/Privacidad";
 import NotFound from "./pages/NotFound";
+import Bonos from "./pages/Bonos";
+import BonosSuccess from "./pages/BonosSuccess";
 import AgendaNaveStudio from "./pages/AgendaNaveStudio";
 import AgendaSuccess from "./pages/AgendaSuccess";
 import AgendaFailure from "./pages/AgendaFailure";
@@ -47,6 +49,9 @@ import AdminServices from "./pages/admin/AdminServices";
 import AdminAvailability from "./pages/admin/AdminAvailability";
 import AdminFutureSlots from "./pages/admin/AdminFutureSlots";
 import AdminCoupons from "./pages/admin/AdminCoupons";
+import AdminCapacityOverrides from "./pages/admin/AdminCapacityOverrides";
+import AdminSessionPackages from "./pages/admin/AdminSessionPackages";
+import AdminSessionCodes from "./pages/admin/AdminSessionCodes";
 
 const queryClient = new QueryClient();
 
@@ -86,6 +91,8 @@ const App = () => (
             <Route path="/criomedicina-ice-bath-en-grupo" element={<CriomedicinIceBathEnGrupo />} />
             <Route path="/terminos" element={<Terminos />} />
             <Route path="/privacidad" element={<Privacidad />} />
+            <Route path="/bonos" element={<Bonos />} />
+            <Route path="/bonos/success" element={<BonosSuccess />} />
             <Route path="/agenda-nave-studio" element={<AgendaNaveStudio />} />
             <Route path="/agenda-nave-studio/success" element={<AgendaSuccess />} />
             <Route path="/agenda-nave-studio/failure" element={<AgendaFailure />} />
@@ -103,6 +110,9 @@ const App = () => (
               <Route path="cupones" element={<AdminCoupons />} />
               <Route path="disponibilidad" element={<AdminAvailability />} />
               <Route path="agendas-futuras" element={<AdminFutureSlots />} />
+              <Route path="capacidad" element={<AdminCapacityOverrides />} />
+              <Route path="paquetes-sesiones" element={<AdminSessionPackages />} />
+              <Route path="codigos-sesiones" element={<AdminSessionCodes />} />
             </Route>
             
             {/* Redirect legacy routes */}

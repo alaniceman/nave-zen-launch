@@ -57,6 +57,12 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
   const [isValidatingCoupon, setIsValidatingCoupon] = useState(false);
   const [appliedCoupon, setAppliedCoupon] = useState<any>(null);
   const [couponError, setCouponError] = useState("");
+  
+  // Session code state
+  const [sessionCode, setSessionCode] = useState("");
+  const [isValidatingSessionCode, setIsValidatingSessionCode] = useState(false);
+  const [appliedSessionCode, setAppliedSessionCode] = useState<any>(null);
+  const [sessionCodeError, setSessionCodeError] = useState("");
 
   const {
     register,
@@ -137,8 +143,50 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
     setCouponError("");
   };
 
+  const validateSessionCode = async () => {
+    if (!sessionCode.trim()) {
+      setSessionCodeError("Ingresa un código de sesión");
+      return;
+    }
+
+    setIsValidatingSessionCode(true);
+    setSessionCodeError("");
+
+    try {
+      const { data: result, error } = await supabase.functions.invoke("validate-session-code", {
+        body: {
+          code: sessionCode,
+          serviceId: service.id,
+        },
+      });
+
+      if (error || !result.valid) {
+        setSessionCodeError(result?.error || "Código no válido");
+        setIsValidatingSessionCode(false);
+        return;
+      }
+
+      setAppliedSessionCode(result);
+      // Remove coupon if session code is applied
+      if (appliedCoupon) {
+        removeCoupon();
+      }
+      toast.success("¡Código de sesión aplicado! Tu sesión está prepagada");
+    } catch (error) {
+      setSessionCodeError("Error al validar el código");
+    } finally {
+      setIsValidatingSessionCode(false);
+    }
+  };
+
+  const removeSessionCode = () => {
+    setAppliedSessionCode(null);
+    setSessionCode("");
+    setSessionCodeError("");
+  };
+
   const calculateDiscount = () => {
-    if (!appliedCoupon) return 0;
+    if (!appliedCoupon || appliedSessionCode) return 0;
     
     if (appliedCoupon.discount_type === "percentage") {
       return Math.floor((service.price_clp * appliedCoupon.discount_value) / 100);
@@ -146,7 +194,7 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
     return appliedCoupon.discount_value;
   };
 
-  const finalPrice = service.price_clp - calculateDiscount();
+  const finalPrice = appliedSessionCode ? 0 : service.price_clp - calculateDiscount();
 
   const onSubmit = async (data: BookingFormData) => {
     setIsSubmitting(true);
@@ -158,12 +206,20 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
           serviceId: service.id,
           dateTimeStart: timeSlot.dateTimeStart,
           couponCode: appliedCoupon?.code || null,
+          sessionCode: appliedSessionCode?.code || null,
           ...data,
         },
       });
 
       if (error) {
         throw new Error(error.message || "Error al crear la reserva");
+      }
+
+      // If confirmed (prepaid with session code), redirect to success page
+      if (result.confirmed) {
+        toast.success("¡Sesión confirmada!");
+        window.location.href = "/agenda-nave-studio/success";
+        return;
       }
 
       // Redirect to Mercado Pago
@@ -196,7 +252,9 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
           <div className="flex items-center gap-2 mb-1">
             <DollarSign className="h-5 w-5 text-muted-foreground" />
             <span className="text-lg font-semibold">
-              {appliedCoupon ? (
+              {appliedSessionCode ? (
+                <span className="text-green-600 font-bold">PREPAGADO ✓</span>
+              ) : appliedCoupon ? (
                 <>
                   <span className="text-muted-foreground line-through mr-2">
                     ${service.price_clp.toLocaleString("es-CL")}
@@ -210,11 +268,15 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
               )}
             </span>
           </div>
-          {appliedCoupon && (
+          {appliedSessionCode ? (
+            <p className="text-sm text-green-600 ml-7">
+              Código de sesión aplicado
+            </p>
+          ) : appliedCoupon ? (
             <p className="text-sm text-green-600 ml-7">
               Ahorro: ${calculateDiscount().toLocaleString("es-CL")}
             </p>
-          )}
+          ) : null}
         </div>
 
         {/* Schedule Details */}
@@ -238,12 +300,78 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
         </div>
       </div>
 
-      {/* Coupon Section */}
-      <div className="bg-background rounded-lg border p-4 mb-6">
-        <Label className="flex items-center gap-2 mb-3">
+      {/* Session Code Section */}
+      <div className="bg-primary/5 rounded-lg border border-primary/20 p-4 mb-4">
+        <Label className="flex items-center gap-2 mb-3 text-primary">
           <Tag className="h-4 w-4" />
-          ¿Tienes un cupón de descuento?
+          ¿Tienes un código de sesión prepagado?
         </Label>
+        
+        {appliedSessionCode ? (
+          <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-lg p-3">
+            <div className="flex items-center gap-2">
+              <Check className="h-5 w-5 text-green-600" />
+              <div>
+                <span className="font-mono font-bold text-green-700">
+                  {appliedSessionCode.code}
+                </span>
+                <p className="text-sm text-green-600">
+                  Sesión prepagada - No requiere pago adicional
+                </p>
+              </div>
+            </div>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={removeSessionCode}
+              disabled={isSubmitting}
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+        ) : (
+          <div className="space-y-2">
+            <div className="flex gap-2">
+              <Input
+                value={sessionCode}
+                onChange={(e) => setSessionCode(e.target.value.toUpperCase())}
+                placeholder="CODIGO123"
+                disabled={isSubmitting || isValidatingSessionCode || !!appliedCoupon}
+                className="font-mono uppercase"
+              />
+              <Button
+                type="button"
+                variant="default"
+                onClick={validateSessionCode}
+                disabled={isSubmitting || isValidatingSessionCode || !sessionCode.trim() || !!appliedCoupon}
+              >
+                {isValidatingSessionCode ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  "Validar"
+                )}
+              </Button>
+            </div>
+            {sessionCodeError && (
+              <p className="text-sm text-destructive">{sessionCodeError}</p>
+            )}
+            {appliedCoupon && (
+              <p className="text-xs text-muted-foreground">
+                No puedes usar código de sesión y cupón de descuento al mismo tiempo
+              </p>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Coupon Section */}
+      {!appliedSessionCode && (
+        <div className="bg-background rounded-lg border p-4 mb-6">
+          <Label className="flex items-center gap-2 mb-3">
+            <Tag className="h-4 w-4" />
+            ¿Tienes un cupón de descuento?
+          </Label>
         
         {appliedCoupon ? (
           <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-lg p-3">
@@ -298,7 +426,8 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
             )}
           </div>
         )}
-      </div>
+        </div>
+      )}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
@@ -375,6 +504,8 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Procesando...
               </>
+            ) : appliedSessionCode ? (
+              "Confirmar sesión prepagada"
             ) : (
               "Agendar y pagar"
             )}
