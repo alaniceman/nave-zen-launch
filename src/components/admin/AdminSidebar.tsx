@@ -55,13 +55,16 @@ export function AdminSidebar() {
                       className={({ isActive }) =>
                         `flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${
                           isActive
-                            ? 'bg-primary !text-white font-bold shadow-md scale-[1.02]'
-                            : '!text-gray-800 hover:bg-gray-100 hover:!text-gray-900 hover:scale-[1.02] font-medium'
+                            ? 'bg-primary font-bold shadow-md scale-[1.02]'
+                            : 'hover:bg-gray-100 hover:scale-[1.02] font-medium'
                         }`
                       }
+                      style={({ isActive }) => ({
+                        color: isActive ? '#ffffff' : '#1f2937'
+                      })}
                     >
                       <item.icon className="h-5 w-5 flex-shrink-0" />
-                      {!collapsed && <span className="text-sm !text-inherit">{item.title}</span>}
+                      {!collapsed && <span className="text-sm">{item.title}</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
