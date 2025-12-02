@@ -1,4 +1,4 @@
-import { Calendar, Users, Package, Clock, User, LogOut, Ticket } from 'lucide-react';
+import { Calendar, Users, Package, Clock, User, LogOut, Ticket, Gift, Key } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import {
@@ -20,6 +20,8 @@ const menuItems = [
   { title: 'Reservas', url: '/admin/agenda', icon: Calendar },
   { title: 'Profesionales', url: '/admin/profesionales', icon: Users },
   { title: 'Servicios', url: '/admin/servicios', icon: Package },
+  { title: 'Bonos', url: '/admin/paquetes-sesiones', icon: Gift },
+  { title: 'Códigos de Sesión', url: '/admin/codigos-sesiones', icon: Key },
   { title: 'Cupones', url: '/admin/cupones', icon: Ticket },
   { title: 'Disponibilidad', url: '/admin/disponibilidad', icon: Clock },
   { title: 'Agendas Futuras', url: '/admin/agendas-futuras', icon: Calendar },
@@ -53,13 +55,13 @@ export function AdminSidebar() {
                       className={({ isActive }) =>
                         `flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${
                           isActive
-                            ? 'bg-primary text-white font-bold shadow-md scale-[1.02]'
-                            : 'text-gray-800 hover:bg-gray-100 hover:text-gray-900 hover:scale-[1.02] font-medium'
+                            ? 'bg-primary !text-white font-bold shadow-md scale-[1.02]'
+                            : '!text-gray-800 hover:bg-gray-100 hover:!text-gray-900 hover:scale-[1.02] font-medium'
                         }`
                       }
                     >
                       <item.icon className="h-5 w-5 flex-shrink-0" />
-                      {!collapsed && <span className="text-sm">{item.title}</span>}
+                      {!collapsed && <span className="text-sm !text-inherit">{item.title}</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
