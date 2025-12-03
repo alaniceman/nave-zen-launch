@@ -1,25 +1,16 @@
-import { Button } from "@/components/ui/button-variants"
-import { useNavigate } from "react-router-dom"
-import heroImage from "@/assets/nave-studio-hero.jpg"
-
+import { Button } from "@/components/ui/button-variants";
+import { useNavigate } from "react-router-dom";
+import heroImage from "@/assets/nave-studio-hero.jpg";
 export const HeroSection = () => {
-  const navigate = useNavigate()
-
+  const navigate = useNavigate();
   const handlePlanClick = () => {
-    navigate('/planes')
-  }
-  return (
-    <section className="relative min-h-screen flex items-start md:items-center justify-center pt-20 md:pt-0 overflow-hidden">
+    navigate('/planes');
+  };
+  return <section className="relative min-h-screen flex items-start md:items-center justify-center pt-20 md:pt-0 overflow-hidden">
       {/* Background Image with Overlay */}
-      <img 
-        src="/lovable-uploads/82672388-9723-4aee-a1f2-ac72618cd26a.png"
-        alt="Nave Studio wellness center hero background"
-        className="absolute inset-0 w-full h-full object-cover"
-        style={{
-          objectPosition: 'right 32% center',
-        }}
-        fetchPriority="high"
-      />
+      <img src="/lovable-uploads/82672388-9723-4aee-a1f2-ac72618cd26a.png" alt="Nave Studio wellness center hero background" className="absolute inset-0 w-full h-full object-cover" style={{
+      objectPosition: 'right 32% center'
+    }} fetchPriority="high" />
       
       {/* Green Overlay */}
       <div className="absolute inset-0 bg-primary opacity-55" />
@@ -50,22 +41,12 @@ export const HeroSection = () => {
           {/* CTA Section */}
           <div className="space-y-4 pt-4 md:pt-8">
             <div className="flex flex-col gap-3 items-center">
-              <Button 
-                variant="hero" 
-                size="xl"
-                className="w-full md:w-auto min-w-[320px]"
-                onClick={handlePlanClick}
-              >
-                Empieza hoy con 50% OFF el primer mes
+              <Button variant="hero" size="xl" className="w-full md:w-auto min-w-[320px]" onClick={handlePlanClick}>
+                Empieza hoy con 50% OFF en tu Membresía   
               </Button>
               
-              <Button 
-                variant="outline" 
-                size="lg"
-                className="w-full md:w-auto min-w-[280px] border-2 border-white/80 bg-white/10 text-white hover:bg-white hover:text-primary transition-colors backdrop-blur-sm"
-                onClick={() => navigate('/agenda-nave-studio')}
-              >
-                Agenda tu sesión del Método Wim Hof →
+              <Button variant="outline" size="lg" className="w-full md:w-auto min-w-[280px] border-2 border-white/80 bg-white/10 text-white hover:bg-white hover:text-primary transition-colors backdrop-blur-sm" onClick={() => navigate('/agenda-nave-studio')}>
+                Agenda tu sesión de Criomedicina →
               </Button>
             </div>
             
@@ -75,6 +56,5 @@ export const HeroSection = () => {
           </div>
         </div>
       </div>
-    </section>
-  )
-}
+    </section>;
+};
