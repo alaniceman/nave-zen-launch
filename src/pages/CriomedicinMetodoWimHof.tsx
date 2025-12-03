@@ -3,8 +3,10 @@ import { CheckoutRedirectButton } from "@/components/CheckoutRedirectButton";
 import { CoachesSection } from "@/components/CoachesSection";
 import { Footer } from "@/components/Footer";
 import { GiftCardSection } from "@/components/GiftCardSection";
+import { useNavigate } from "react-router-dom";
 
 const CriomedicinMetodoWimHof = () => {
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
@@ -147,13 +149,12 @@ const CriomedicinMetodoWimHof = () => {
               {/* CTA Section */}
               <div className="space-y-4 pt-4 md:pt-8">
                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                  <CheckoutRedirectButton
-                    url="https://boxmagic.cl/market/plan/RZ0vlQyLQ6"
-                    plan="Criomedicina / Wim Hof — 1 sesión grupal"
+                  <button
+                    onClick={() => navigate('/agenda-nave-studio')}
                     className="bg-white text-primary hover:bg-white/90 px-8 py-4 rounded-xl text-lg font-semibold w-full sm:w-auto min-w-[280px] transition-all"
                   >
                     Agendar 1 sesión — $30.000
-                  </CheckoutRedirectButton>
+                  </button>
                   
                   <a
                     href="/criomedicina-ice-bath-en-grupo"
@@ -280,13 +281,12 @@ const CriomedicinMetodoWimHof = () => {
                 <h3 className="font-semibold text-primary">1 sesión — Grupal (máx 6)</h3>
                 <p className="text-4xl font-bold text-primary mt-1">$30.000 <span className="text-base text-muted-foreground">/ sesión</span></p>
                 <p className="text-sm text-muted-foreground mt-2">Breathwork Wim Hof + Ice Bath guiado (60 min).</p>
-                <CheckoutRedirectButton
-                  url="https://boxmagic.cl/market/plan/RZ0vlQyLQ6"
-                  plan="Criomedicina — 1 sesión grupal"
+                <button
+                  onClick={() => navigate('/agenda-nave-studio')}
                   className="mt-4 bg-primary text-primary-foreground px-5 py-3 rounded-lg hover:bg-primary/90 w-full font-medium"
                 >
                   Agendar 1 sesión
-                </CheckoutRedirectButton>
+                </button>
               </div>
 
               {/* Pack 3 Sessions */}
@@ -308,13 +308,12 @@ const CriomedicinMetodoWimHof = () => {
                 <h3 className="font-semibold text-primary">Personalizado (1–2)</h3>
                 <p className="text-4xl font-bold text-primary mt-1">$40.000 <span className="text-base text-muted-foreground">/ sesión</span></p>
                 <p className="text-sm text-muted-foreground mt-2">Respiración en pareja (máx 2) y entrada al hielo por separado, guiada.</p>
-                <CheckoutRedirectButton
-                  url="https://boxmagic.cl/market/plan/j80pKrK4W6"
-                  plan="Criomedicina — Personalizado (1–2)"
+                <button
+                  onClick={() => navigate('/agenda-nave-studio')}
                   className="mt-4 bg-primary text-primary-foreground px-5 py-3 rounded-lg hover:bg-primary/90 w-full font-medium"
                 >
                   Agendar personalizado
-                </CheckoutRedirectButton>
+                </button>
               </div>
             </div>
 
