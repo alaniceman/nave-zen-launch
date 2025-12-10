@@ -78,6 +78,22 @@ async function handleSessionPackagePurchase(
     });
   }
 
+  // IDEMPOTENCY CHECK: Verify if this payment was already processed
+  const paymentIdStr = payment.id.toString();
+  const { data: existingCodes } = await supabase
+    .from("session_codes")
+    .select("id")
+    .eq("mercado_pago_payment_id", paymentIdStr)
+    .limit(1);
+
+  if (existingCodes && existingCodes.length > 0) {
+    console.log(`Payment ${paymentIdStr} already processed - skipping duplicate webhook`);
+    return new Response(JSON.stringify({ status: "already_processed" }), {
+      status: 200,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
   // Get package details
   const { data: package_, error: packageError } = await supabase
     .from("session_packages")

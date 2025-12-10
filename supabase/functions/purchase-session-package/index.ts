@@ -9,6 +9,7 @@ const purchaseSchema = z.object({
   buyerEmail: z.string().email().max(255),
   buyerPhone: z.string().min(8).max(20),
   couponCode: z.string().optional(),
+  isGiftCard: z.boolean().optional().default(false),
 });
 
 serve(async (req) => {
@@ -167,6 +168,7 @@ serve(async (req) => {
       couponId: coupon?.id || null,
       originalPrice: package_.price_clp,
       finalPrice: finalPrice,
+      isGiftCard: validatedData.isGiftCard,
     });
 
     const preferenceData = {
