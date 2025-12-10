@@ -165,7 +165,7 @@ const handler = async (req: Request): Promise<Response> => {
       : `Tus códigos de sesión - ${packageName}`;
 
     const emailResponse = await resend.emails.send({
-      from: "Studio La Nave <onboarding@resend.dev>",
+      from: "Studio La Nave <agenda@studiolanave.com>",
       to: [buyerEmail],
       subject: subject,
       html: emailHtml,
