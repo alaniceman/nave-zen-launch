@@ -303,6 +303,12 @@ serve(async (req) => {
     const payment = await paymentResponse.json();
     console.log("Payment details:", payment);
 
+    // Create Supabase client early - needed for both session packages and bookings
+    const supabase = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
+    );
+
     // Check if this is a session package purchase or a booking
     const externalReference = payment.external_reference;
     if (!externalReference) {
@@ -339,11 +345,6 @@ serve(async (req) => {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
-
-    const supabase = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
-    );
 
     // Get booking
     const { data: booking, error: bookingError } = await supabase
