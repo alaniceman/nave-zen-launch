@@ -582,6 +582,17 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_active_professionals: {
+        Args: never
+        Returns: {
+          created_at: string
+          id: string
+          is_active: boolean
+          name: string
+          slug: string
+          updated_at: string
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

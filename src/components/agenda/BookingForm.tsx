@@ -33,7 +33,7 @@ interface TimeSlot {
 interface Professional {
   id: string;
   name: string;
-  email: string;
+  email?: string; // Optional - not returned by public API for privacy
 }
 
 interface Service {

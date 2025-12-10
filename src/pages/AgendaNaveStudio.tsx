@@ -15,7 +15,7 @@ interface Professional {
   id: string;
   name: string;
   slug: string;
-  email: string;
+  email?: string; // Optional - not returned by public API for privacy
 }
 interface Service {
   id: string;
@@ -56,10 +56,16 @@ export default function AgendaNaveStudio() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [profsResult, servicesResult] = await Promise.all([supabase.from("professionals").select("*").eq("is_active", true).order("name"), supabase.from("services").select("*").eq("is_active", true).order("name")]);
+        // Use the secure function that doesn't expose emails
+        const [profsResult, servicesResult] = await Promise.all([
+          supabase.rpc("get_active_professionals"),
+          supabase.from("services").select("*").eq("is_active", true).order("name")
+        ]);
         if (profsResult.error) throw profsResult.error;
         if (servicesResult.error) throw servicesResult.error;
-        setProfessionals(profsResult.data || []);
+        // Sort professionals by name client-side
+        const sortedProfs = (profsResult.data || []).sort((a, b) => a.name.localeCompare(b.name));
+        setProfessionals(sortedProfs);
         setServices(servicesResult.data || []);
         if (servicesResult.data && servicesResult.data.length > 0) {
           setSelectedService(servicesResult.data[0].id);
