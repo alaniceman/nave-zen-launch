@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Helmet } from "react-helmet-async";
+import { Link } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -240,7 +241,10 @@ export default function GiftCards() {
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-4">Gift Cards</h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Regala experiencias de bienestar. El regalo perfecto para quienes buscan transformar su vida.
+              Regala un pack de sesiones. Quien lo reciba obtendrá los códigos y podrá reservar cuando quiera en nuestra{" "}
+              <Link to="/agenda-nave-studio" className="text-primary hover:underline font-medium">
+                agenda
+              </Link>.
             </p>
           </div>
 
