@@ -26,6 +26,7 @@ interface SessionPackage {
   validity_days: number;
   applicable_service_ids: string[];
   is_active: boolean;
+  available_as_giftcard: boolean;
 }
 
 interface Service {
@@ -46,6 +47,7 @@ export default function AdminSessionPackages() {
     validity_days: 90,
     applicable_service_ids: [] as string[],
     is_active: true,
+    available_as_giftcard: false,
   });
 
   useEffect(() => {
@@ -136,6 +138,7 @@ export default function AdminSessionPackages() {
       validity_days: pkg.validity_days,
       applicable_service_ids: pkg.applicable_service_ids,
       is_active: pkg.is_active,
+      available_as_giftcard: pkg.available_as_giftcard ?? false,
     });
     setIsDialogOpen(true);
   };
@@ -150,6 +153,7 @@ export default function AdminSessionPackages() {
       validity_days: 90,
       applicable_service_ids: [],
       is_active: true,
+      available_as_giftcard: false,
     });
   };
 
@@ -268,6 +272,15 @@ export default function AdminSessionPackages() {
                 <Label htmlFor="is_active">Activo</Label>
               </div>
 
+              <div className="flex items-center space-x-2">
+                <Switch
+                  id="available_as_giftcard"
+                  checked={formData.available_as_giftcard}
+                  onCheckedChange={(checked) => setFormData({ ...formData, available_as_giftcard: checked })}
+                />
+                <Label htmlFor="available_as_giftcard">Disponible como Gift Card</Label>
+              </div>
+
               <Button type="submit" className="w-full">
                 {editingPackage ? "Actualizar" : "Crear"} Paquete
               </Button>
@@ -288,6 +301,7 @@ export default function AdminSessionPackages() {
                   <p><strong>Precio:</strong> ${pkg.price_clp.toLocaleString("es-CL")} CLP</p>
                   <p><strong>Validez:</strong> {pkg.validity_days} días</p>
                   <p><strong>Estado:</strong> {pkg.is_active ? "Activo" : "Inactivo"}</p>
+                  <p><strong>Gift Card:</strong> {pkg.available_as_giftcard ? "✅ Sí" : "No"}</p>
                 </div>
               </div>
               <div className="flex gap-2">

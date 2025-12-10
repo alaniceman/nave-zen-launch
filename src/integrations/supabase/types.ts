@@ -460,6 +460,7 @@ export type Database = {
           code: string
           created_at: string | null
           expires_at: string
+          giftcard_access_token: string | null
           id: string
           is_used: boolean | null
           mercado_pago_payment_id: string | null
@@ -476,6 +477,7 @@ export type Database = {
           code: string
           created_at?: string | null
           expires_at: string
+          giftcard_access_token?: string | null
           id?: string
           is_used?: boolean | null
           mercado_pago_payment_id?: string | null
@@ -492,6 +494,7 @@ export type Database = {
           code?: string
           created_at?: string | null
           expires_at?: string
+          giftcard_access_token?: string | null
           id?: string
           is_used?: boolean | null
           mercado_pago_payment_id?: string | null
@@ -520,6 +523,7 @@ export type Database = {
       session_packages: {
         Row: {
           applicable_service_ids: string[]
+          available_as_giftcard: boolean | null
           created_at: string | null
           description: string | null
           id: string
@@ -532,6 +536,7 @@ export type Database = {
         }
         Insert: {
           applicable_service_ids: string[]
+          available_as_giftcard?: boolean | null
           created_at?: string | null
           description?: string | null
           id?: string
@@ -544,6 +549,7 @@ export type Database = {
         }
         Update: {
           applicable_service_ids?: string[]
+          available_as_giftcard?: boolean | null
           created_at?: string | null
           description?: string | null
           id?: string
