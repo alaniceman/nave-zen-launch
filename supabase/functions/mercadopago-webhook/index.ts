@@ -109,6 +109,20 @@ async function handleSessionPackagePurchase(
   const expiresAt = new Date();
   expiresAt.setDate(expiresAt.getDate() + package_.validity_days);
 
+  // Generate giftcard access token for gift card purchases
+  const isGiftCard = packageData.isGiftCard === true;
+  let giftcardAccessToken: string | null = null;
+  
+  if (isGiftCard) {
+    // Generate unique token
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+    let token = '';
+    for (let i = 0; i < 32; i++) {
+      token += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    giftcardAccessToken = token;
+  }
+
   for (let i = 0; i < package_.sessions_quantity; i++) {
     let code = generateSessionCode();
     let isUnique = false;
@@ -139,6 +153,7 @@ async function handleSessionPackagePurchase(
       expires_at: expiresAt.toISOString(),
       is_used: false,
       mercado_pago_payment_id: payment.id.toString(),
+      giftcard_access_token: giftcardAccessToken,
     });
   }
 
@@ -182,6 +197,9 @@ async function handleSessionPackagePurchase(
 
   // Send confirmation email with codes
   try {
+    const siteUrl = Deno.env.get("SITE_URL") || "https://studiolanave.com";
+    const giftcardLink = giftcardAccessToken ? `${siteUrl}/giftcard/${giftcardAccessToken}` : null;
+
     const emailResponse = await supabase.functions.invoke("send-session-codes-email", {
       body: {
         buyerEmail: packageData.buyerEmail,
@@ -189,6 +207,8 @@ async function handleSessionPackagePurchase(
         packageName: package_.name,
         codes: codes.map(c => c.code),
         expiresAt: expiresAt.toISOString(),
+        isGiftCard: isGiftCard,
+        giftcardLink: giftcardLink,
       },
     });
 
