@@ -7,6 +7,12 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// Corporate colors
+const NAVY_BLUE = { r: 30, g: 41, b: 59 }; // #1E293B
+const LIGHT_NAVY = { r: 51, g: 65, b: 85 }; // #334155
+const ACCENT_BLUE = { r: 59, g: 130, b: 246 }; // #3B82F6
+const GOLD = { r: 234, g: 179, b: 8 }; // #EAB308
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -56,7 +62,7 @@ serve(async (req) => {
       month: "long",
       year: "numeric",
     });
-    const serviceNames = services?.map(s => s.name).join(" • ") || "";
+    const serviceNames = services?.map(s => s.name).join(", ") || "";
 
     // Create PDF
     const doc = new jsPDF({
@@ -70,119 +76,156 @@ serve(async (req) => {
     const margin = 20;
     const contentWidth = pageWidth - margin * 2;
 
-    // Background gradient effect (using rectangles)
-    doc.setFillColor(103, 58, 183); // Primary purple
-    doc.rect(0, 0, pageWidth, 80, "F");
+    // Navy blue header background
+    doc.setFillColor(NAVY_BLUE.r, NAVY_BLUE.g, NAVY_BLUE.b);
+    doc.rect(0, 0, pageWidth, 85, "F");
 
-    // Header area
+    // Decorative accent line
+    doc.setFillColor(GOLD.r, GOLD.g, GOLD.b);
+    doc.rect(0, 85, pageWidth, 3, "F");
+
+    // Header text
     doc.setTextColor(255, 255, 255);
-    doc.setFontSize(12);
-    doc.text("STUDIO LA NAVE", pageWidth / 2, 25, { align: "center" });
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "normal");
+    doc.text("STUDIO LA NAVE", pageWidth / 2, 20, { align: "center" });
 
-    doc.setFontSize(36);
-    doc.text("🎁 GIFT CARD", pageWidth / 2, 50, { align: "center" });
+    // GIFT CARD title
+    doc.setFontSize(42);
+    doc.setFont("helvetica", "bold");
+    doc.text("GIFT CARD", pageWidth / 2, 48, { align: "center" });
 
+    // Package name
     doc.setFontSize(14);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(GOLD.r, GOLD.g, GOLD.b);
     doc.text(packageName, pageWidth / 2, 65, { align: "center" });
 
+    // Sessions count
+    const sessionsCount = codes.filter(c => !c.is_used).length;
+    doc.setFontSize(11);
+    doc.setTextColor(200, 200, 200);
+    doc.text(`${sessionsCount} ${sessionsCount === 1 ? 'sesion' : 'sesiones'} disponibles`, pageWidth / 2, 75, { align: "center" });
+
     // White content area
-    const contentStartY = 90;
+    const contentStartY = 100;
 
     // From section
-    doc.setTextColor(100, 100, 100);
+    doc.setTextColor(120, 120, 120);
     doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
     doc.text("De parte de:", margin, contentStartY);
-    doc.setTextColor(0, 0, 0);
-    doc.setFontSize(14);
-    doc.text(buyerName, margin, contentStartY + 7);
+    doc.setTextColor(NAVY_BLUE.r, NAVY_BLUE.g, NAVY_BLUE.b);
+    doc.setFontSize(16);
+    doc.setFont("helvetica", "bold");
+    doc.text(buyerName, margin, contentStartY + 8);
 
     // Valid until
-    doc.setTextColor(100, 100, 100);
+    doc.setTextColor(120, 120, 120);
     doc.setFontSize(10);
-    doc.text("Válido hasta:", pageWidth - margin, contentStartY, { align: "right" });
-    doc.setTextColor(0, 0, 0);
-    doc.setFontSize(14);
-    doc.text(expiryDate, pageWidth - margin, contentStartY + 7, { align: "right" });
+    doc.setFont("helvetica", "normal");
+    doc.text("Valido hasta:", pageWidth - margin, contentStartY, { align: "right" });
+    doc.setTextColor(NAVY_BLUE.r, NAVY_BLUE.g, NAVY_BLUE.b);
+    doc.setFontSize(16);
+    doc.setFont("helvetica", "bold");
+    doc.text(expiryDate, pageWidth - margin, contentStartY + 8, { align: "right" });
 
     // Divider line
-    doc.setDrawColor(200, 200, 200);
-    doc.line(margin, contentStartY + 15, pageWidth - margin, contentStartY + 15);
+    doc.setDrawColor(230, 230, 230);
+    doc.setLineWidth(0.5);
+    doc.line(margin, contentStartY + 18, pageWidth - margin, contentStartY + 18);
 
     // Session codes title
-    let currentY = contentStartY + 30;
-    doc.setTextColor(0, 0, 0);
-    doc.setFontSize(16);
-    doc.text("Tus códigos de sesión:", margin, currentY);
+    let currentY = contentStartY + 35;
+    doc.setTextColor(NAVY_BLUE.r, NAVY_BLUE.g, NAVY_BLUE.b);
+    doc.setFontSize(14);
+    doc.setFont("helvetica", "bold");
+    doc.text("Tus codigos de sesion:", margin, currentY);
 
-    currentY += 10;
+    currentY += 12;
 
     // Codes
     const availableCodes = codes.filter(c => !c.is_used);
-    doc.setFontSize(18);
 
     for (const codeData of availableCodes) {
-      // Code box
-      doc.setDrawColor(103, 58, 183);
-      doc.setLineWidth(0.5);
-      doc.roundedRect(margin, currentY, contentWidth, 15, 3, 3, "S");
+      // Code box with navy border
+      doc.setDrawColor(NAVY_BLUE.r, NAVY_BLUE.g, NAVY_BLUE.b);
+      doc.setLineWidth(1);
+      doc.roundedRect(margin, currentY, contentWidth, 16, 4, 4, "S");
 
       // Code text
-      doc.setTextColor(103, 58, 183);
-      doc.setFontSize(16);
-      doc.text(codeData.code, pageWidth / 2, currentY + 10, { align: "center" });
+      doc.setTextColor(NAVY_BLUE.r, NAVY_BLUE.g, NAVY_BLUE.b);
+      doc.setFontSize(18);
+      doc.setFont("helvetica", "bold");
+      doc.text(codeData.code, pageWidth / 2, currentY + 11, { align: "center" });
 
-      currentY += 20;
+      currentY += 22;
     }
 
     // Services section
     if (serviceNames) {
       currentY += 5;
-      doc.setFillColor(245, 245, 250);
-      doc.roundedRect(margin, currentY, contentWidth, 20, 3, 3, "F");
+      doc.setFillColor(245, 247, 250);
+      doc.roundedRect(margin, currentY, contentWidth, 22, 4, 4, "F");
 
-      doc.setTextColor(100, 100, 100);
+      doc.setTextColor(120, 120, 120);
       doc.setFontSize(10);
-      doc.text("Válido para:", margin + 5, currentY + 8);
-      doc.setTextColor(0, 0, 0);
-      doc.setFontSize(11);
-      doc.text(serviceNames, margin + 5, currentY + 15);
+      doc.setFont("helvetica", "normal");
+      doc.text("Valido para:", margin + 8, currentY + 9);
+      doc.setTextColor(NAVY_BLUE.r, NAVY_BLUE.g, NAVY_BLUE.b);
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "bold");
+      doc.text(serviceNames, margin + 8, currentY + 17);
 
-      currentY += 30;
+      currentY += 32;
     }
 
     // Instructions
-    currentY += 10;
-    doc.setTextColor(0, 0, 0);
+    currentY += 8;
+    doc.setTextColor(NAVY_BLUE.r, NAVY_BLUE.g, NAVY_BLUE.b);
     doc.setFontSize(14);
-    doc.text("¿Cómo usar tus códigos?", margin, currentY);
+    doc.setFont("helvetica", "bold");
+    doc.text("Como usar tus codigos?", margin, currentY);
 
     currentY += 10;
     doc.setFontSize(11);
-    doc.setTextColor(60, 60, 60);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(80, 80, 80);
 
     const instructions = [
       "1. Ve a studiolanave.com/agenda-nave-studio",
       "2. Selecciona el profesional, fecha y hora",
-      "3. Ingresa tu código en el formulario de reserva",
-      "4. ¡Tu sesión quedará confirmada sin costo!",
+      "3. Ingresa tu codigo en el formulario de reserva",
+      "4. Tu sesion quedara confirmada sin costo!",
     ];
 
     for (const instruction of instructions) {
       doc.text(instruction, margin, currentY);
-      currentY += 7;
+      currentY += 8;
     }
 
     // Footer
-    const footerY = pageHeight - 25;
-    doc.setDrawColor(200, 200, 200);
-    doc.line(margin, footerY - 5, pageWidth - margin, footerY - 5);
+    const footerY = pageHeight - 30;
+    
+    // Footer divider
+    doc.setDrawColor(NAVY_BLUE.r, NAVY_BLUE.g, NAVY_BLUE.b);
+    doc.setLineWidth(0.5);
+    doc.line(margin, footerY - 10, pageWidth - margin, footerY - 10);
 
-    doc.setTextColor(100, 100, 100);
-    doc.setFontSize(10);
+    // Footer content
+    doc.setTextColor(NAVY_BLUE.r, NAVY_BLUE.g, NAVY_BLUE.b);
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "bold");
     doc.text("Studio La Nave", pageWidth / 2, footerY, { align: "center" });
-    doc.text("studiolanave.com", pageWidth / 2, footerY + 5, { align: "center" });
+    
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    doc.setTextColor(100, 100, 100);
+    doc.text("studiolanave.com", pageWidth / 2, footerY + 6, { align: "center" });
+    
     doc.setFontSize(8);
-    doc.text("Cada código puede usarse una sola vez.", pageWidth / 2, footerY + 12, { align: "center" });
+    doc.setTextColor(150, 150, 150);
+    doc.text("Cada codigo puede usarse una sola vez.", pageWidth / 2, footerY + 14, { align: "center" });
 
     // Get PDF as base64
     const pdfBase64 = doc.output("datauristring").split(",")[1];
