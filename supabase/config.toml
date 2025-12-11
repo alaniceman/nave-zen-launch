@@ -11,3 +11,6 @@ verify_jwt = false
 
 [functions.generate-giftcard-pdf]
 verify_jwt = false
+
+[functions.send-session-codes-email]
+verify_jwt = false
