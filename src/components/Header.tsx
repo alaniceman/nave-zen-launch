@@ -48,6 +48,7 @@ export const Header = () => {
     { label: "Criomedicina", href: "/criomedicina-metodo-wim-hof", isExternal: true },
     { label: "Horarios", href: "/horarios", isExternal: true },
     { label: "Planes & Precios", href: "/planes-precios", isExternal: true },
+    { label: "Gift Cards", href: "/giftcards", isExternal: true },
     { label: "Coaches", href: "/coaches", isExternal: true },
     { label: "Blog", href: "/blog", isExternal: true },
     { label: "Contacto y Ubicación", href: "/contacto", isExternal: true }

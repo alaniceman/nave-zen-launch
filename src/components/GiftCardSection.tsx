@@ -21,9 +21,7 @@ export const GiftCardSection = () => {
         
         {/* CTA Button */}
         <a
-          href="https://esponsor.com/alaniceman/shop/4f8ea06601"
-          target="_blank"
-          rel="noopener noreferrer"
+          href="/giftcards"
           className="inline-flex items-center justify-center gap-2 bg-accent hover:bg-primary 
                      text-white font-semibold text-lg px-8 py-4 rounded-xl 
                      transition-all duration-300 hover:scale-105 shadow-lg"
