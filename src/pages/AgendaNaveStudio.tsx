@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { TimeSlotsList } from "@/components/agenda/TimeSlotsList";
 import { BookingForm } from "@/components/agenda/BookingForm";
 import { toast } from "sonner";
+import { GiftCardSection } from "@/components/GiftCardSection";
 interface Professional {
   id: string;
   name: string;
@@ -173,7 +174,8 @@ export default function AgendaNaveStudio() {
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>;
   }
-  return <div className="min-h-screen bg-background py-8 px-4">
+  return <>
+    <div className="min-h-screen bg-background py-8 px-4">
       <div className="max-w-6xl mx-auto">
         <div className="mb-8 text-center">
           <h1 className="text-4xl font-bold mb-2">Agenda tu Sesión</h1>
@@ -227,5 +229,7 @@ export default function AgendaNaveStudio() {
             <BookingForm timeSlot={selectedTimeSlot} professional={professionals.find(p => p.id === selectedTimeSlot.professionalId)!} service={services.find(s => s.id === selectedService)!} onBack={handleBackToSlots} />
           </div>}
       </div>
-    </div>;
+    </div>
+    <GiftCardSection />
+  </>;
 }
