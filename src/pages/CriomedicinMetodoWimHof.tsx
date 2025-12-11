@@ -157,7 +157,7 @@ const CriomedicinMetodoWimHof = () => {
                   </button>
                   
                   <a
-                    href="/criomedicina-ice-bath-en-grupo"
+                    href="/bonos"
                     className="bg-white/20 text-white border border-white/30 hover:bg-white/30 px-8 py-4 rounded-xl text-lg font-semibold inline-flex items-center justify-center transition-all w-full sm:w-auto"
                   >
                     Agenda grupal

@@ -237,7 +237,8 @@ export default function Bonos() {
             </div> : <div className="grid md:grid-cols-2 gap-8">
               {/* Packages List */}
               <div className="space-y-4">
-                <h2 className="text-2xl font-bold mb-6">Paquetes Disponibles</h2>
+                <h2 className="text-2xl font-bold mb-2">Paquetes Disponibles</h2>
+                <p className="text-sm text-muted-foreground mb-6">Las sesiones las puedes compartir con quien tú quieras</p>
                 {packages.map(pkg => {
               const savings = calculateSavings(pkg);
               return <Card key={pkg.id} className={`p-6 cursor-pointer transition-all ${selectedPackage === pkg.id ? "border-primary shadow-lg" : "hover:shadow-md"}`} onClick={() => setSelectedPackage(pkg.id)}>
