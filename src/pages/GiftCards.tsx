@@ -60,6 +60,16 @@ export default function GiftCards() {
     resolver: zodResolver(purchaseSchema),
   });
 
+  const handlePackageSelect = (packageId: string) => {
+    setSelectedPackage(packageId);
+    // Scroll to form on mobile
+    if (window.innerWidth < 768) {
+      setTimeout(() => {
+        document.getElementById('purchase-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
+  };
+
   useEffect(() => {
     loadPackages();
     loadServices();
@@ -275,7 +285,7 @@ export default function GiftCards() {
                           ? "border-primary shadow-lg ring-2 ring-primary/20"
                           : "hover:shadow-md"
                       }`}
-                      onClick={() => setSelectedPackage(pkg.id)}
+                      onClick={() => handlePackageSelect(pkg.id)}
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
@@ -317,7 +327,7 @@ export default function GiftCards() {
               </div>
 
               {/* Purchase Form */}
-              <div>
+              <div id="purchase-form">
                 <Card className="p-6 sticky top-24">
                   <h2 className="text-2xl font-bold mb-6">Tus datos</h2>
                   
@@ -465,6 +475,14 @@ export default function GiftCards() {
                           <li>• Podrás descargar un PDF con diseño para regalar</li>
                           <li>• La persona que reciba el regalo usará los códigos para reservar</li>
                         </ul>
+                      </div>
+
+                      {/* Selected Package Info */}
+                      <div className="bg-primary/10 rounded-lg p-3 border border-primary/20">
+                        <p className="text-xs text-muted-foreground">Seleccionaste:</p>
+                        <p className="font-semibold text-primary">
+                          {packages.find(p => p.id === selectedPackage)?.name}
+                        </p>
                       </div>
 
                       <Button
