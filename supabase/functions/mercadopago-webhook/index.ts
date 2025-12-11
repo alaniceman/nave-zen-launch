@@ -213,7 +213,7 @@ async function handleSessionPackagePurchase(
 
   // Send confirmation email with codes
   try {
-    const siteUrl = Deno.env.get("SITE_URL") || "https://studiolanave.com";
+    const siteUrl = (Deno.env.get("SITE_URL") || "https://studiolanave.com").replace(/\/$/, "");
     const giftcardLink = giftcardAccessToken ? `${siteUrl}/giftcard/${giftcardAccessToken}` : null;
 
     const emailResponse = await supabase.functions.invoke("send-session-codes-email", {
