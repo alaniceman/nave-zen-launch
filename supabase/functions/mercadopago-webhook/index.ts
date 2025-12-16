@@ -78,8 +78,15 @@ async function handleSessionPackagePurchase(
     });
   }
 
-  // IDEMPOTENCY CHECK: Verify if this payment was already processed
   const paymentIdStr = payment.id.toString();
+
+  // RACE CONDITION FIX: Add random delay to desync concurrent webhooks
+  // This helps prevent two simultaneous webhooks from passing the idempotency check
+  const randomDelay = Math.floor(Math.random() * 400) + 100; // 100-500ms
+  console.log(`Adding ${randomDelay}ms delay to prevent race conditions for payment ${paymentIdStr}`);
+  await new Promise(resolve => setTimeout(resolve, randomDelay));
+
+  // IDEMPOTENCY CHECK: Verify if this payment was already processed
   const { data: existingCodes } = await supabase
     .from("session_codes")
     .select("id")
