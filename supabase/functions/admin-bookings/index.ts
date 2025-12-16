@@ -67,7 +67,7 @@ Deno.serve(async (req) => {
           professionals!inner(name, email),
           services!inner(name, price_clp),
           discount_coupons(code, discount_type, discount_value),
-          session_codes(code, package_id, session_packages(name))
+          session_codes!bookings_session_code_id_fkey(code, package_id, session_packages(name))
         `, { count: 'exact' });
 
       if (status) {
