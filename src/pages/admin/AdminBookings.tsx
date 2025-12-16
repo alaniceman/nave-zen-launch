@@ -258,7 +258,7 @@ export default function AdminBookings() {
                     <TableHead>
                       <SortButton column="final_price" label="Precio" />
                     </TableHead>
-                    <TableHead>Cupón</TableHead>
+                    <TableHead>Cupón/Código</TableHead>
                     <TableHead>Acciones</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -307,9 +307,20 @@ export default function AdminBookings() {
                           )}
                         </TableCell>
                         <TableCell>
-                          {booking.discount_coupons ? (
+                          {booking.session_codes ? (
+                            <div className="flex flex-col gap-1">
+                              <Badge variant="outline" className="font-mono text-xs border-primary text-primary">
+                                🎟️ {booking.session_codes.code}
+                              </Badge>
+                              {booking.session_codes.session_packages?.name && (
+                                <span className="text-xs text-muted-foreground">
+                                  {booking.session_codes.session_packages.name}
+                                </span>
+                              )}
+                            </div>
+                          ) : booking.discount_coupons ? (
                             <Badge variant="secondary" className="font-mono text-xs">
-                              {booking.discount_coupons.code}
+                              🏷️ {booking.discount_coupons.code}
                             </Badge>
                           ) : (
                             <span className="text-muted-foreground text-sm">-</span>
