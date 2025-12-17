@@ -280,7 +280,10 @@ serve(async (req) => {
       throw new Error("Mercado Pago not configured");
     }
 
-    // Verify webhook signature
+    // Verify webhook signature - CRITICAL SECURITY CHECK
+    // Mercado Pago signature format: "ts=timestamp,v1=hash"
+    // Template: id:[data.id];request-id:[x-request-id];ts:[ts];
+    // See: https://www.mercadopago.com.mx/developers/en/docs/your-integrations/notifications/webhooks
     if (webhookSecret) {
       const xSignature = req.headers.get('x-signature');
       const xRequestId = req.headers.get('x-request-id');
@@ -294,13 +297,19 @@ serve(async (req) => {
       );
 
       if (!isValid) {
-        console.warn('Invalid webhook signature - processing anyway for debugging');
-        // Changed from error to warning - allow processing to continue
-      } else {
-        console.log('Webhook signature verified successfully');
+        console.error('Invalid webhook signature - rejecting request');
+        console.error('Headers received:', { xSignature, xRequestId, dataId: dataId ? 'present' : 'missing' });
+        return new Response(
+          JSON.stringify({ error: 'Invalid signature' }),
+          { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
       }
+      console.log('Webhook signature verified successfully');
     } else {
-      console.warn('MERCADO_PAGO_WEBHOOK_SECRET not configured - webhook signature verification skipped');
+      // In production, the secret should always be configured
+      // For backwards compatibility, allow processing but log a warning
+      console.warn('MERCADO_PAGO_WEBHOOK_SECRET not configured - signature verification skipped');
+      console.warn('IMPORTANT: Configure MERCADO_PAGO_WEBHOOK_SECRET for production security');
     }
 
     // Get payment details from Mercado Pago
