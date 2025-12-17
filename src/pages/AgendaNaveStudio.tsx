@@ -12,6 +12,7 @@ import { TimeSlotsList } from "@/components/agenda/TimeSlotsList";
 import { BookingForm } from "@/components/agenda/BookingForm";
 import { toast } from "sonner";
 import { GiftCardSection } from "@/components/GiftCardSection";
+import { SessionPackagePromo } from "@/components/SessionPackagePromo";
 interface Professional {
   id: string;
   name: string;
@@ -181,6 +182,8 @@ export default function AgendaNaveStudio() {
           <h1 className="text-4xl font-bold mb-2">Agenda tu Sesión</h1>
           <p className="text-muted-foreground">Elige profesional, fecha y hora para tu experiencia en Nave Studio</p>
         </div>
+
+        <SessionPackagePromo />
 
         {!selectedTimeSlot ? <div className="grid md:grid-cols-2 gap-6">
             {/* Left column: Professional selector and calendar */}
