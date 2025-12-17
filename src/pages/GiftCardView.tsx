@@ -38,50 +38,26 @@ export default function GiftCardView() {
 
   const loadGiftCardData = async () => {
     try {
-      // First get all codes with this token
-      const { data: codes, error: codesError } = await supabase
-        .from("session_codes")
-        .select("code, is_used, expires_at, package_id, applicable_service_ids, buyer_name")
-        .eq("giftcard_access_token", token);
+      // Use edge function to securely fetch gift card data
+      const { data, error: fetchError } = await supabase.functions.invoke("get-giftcard-data", {
+        body: { token },
+      });
 
-      if (codesError) throw codesError;
+      if (fetchError) throw fetchError;
 
-      if (!codes || codes.length === 0) {
-        setError("Gift Card no encontrada o el link ha expirado");
+      if (data.error) {
+        setError(data.error);
         return;
       }
 
-      // Get package info
-      const packageId = codes[0].package_id;
-      const { data: packageData, error: packageError } = await supabase
-        .from("session_packages")
-        .select("name, sessions_quantity, validity_days")
-        .eq("id", packageId)
-        .single();
-
-      if (packageError) {
-        console.error("Package error:", packageError);
-      }
-
-      // Get service names
-      const serviceIds = codes[0].applicable_service_ids || [];
-      const { data: services } = await supabase
-        .from("services")
-        .select("name")
-        .in("id", serviceIds);
-
       setGiftCardData({
-        codes: codes.map(c => ({
-          code: c.code,
-          is_used: c.is_used,
-          expires_at: c.expires_at,
-        })),
-        packageName: packageData?.name || "Paquete de Sesiones",
-        buyerName: codes[0].buyer_name,
-        sessionsQuantity: packageData?.sessions_quantity || codes.length,
-        validityDays: packageData?.validity_days || 90,
-        expiresAt: codes[0].expires_at,
-        applicableServices: services?.map(s => s.name) || [],
+        codes: data.codes,
+        packageName: data.packageName,
+        buyerName: data.buyerName,
+        sessionsQuantity: data.sessionsQuantity,
+        validityDays: data.validityDays,
+        expiresAt: data.expiresAt,
+        applicableServices: data.applicableServices,
       });
     } catch (error) {
       console.error("Error loading gift card:", error);
