@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { X, Gift, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 interface GiftCardPromoModalProps {
   isOpen: boolean;
@@ -11,7 +11,6 @@ interface GiftCardPromoModalProps {
 export const GiftCardPromoModal = ({ isOpen, onClose }: GiftCardPromoModalProps) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (isOpen) {
@@ -34,11 +33,6 @@ export const GiftCardPromoModal = ({ isOpen, onClose }: GiftCardPromoModalProps)
       };
     }
   }, [isOpen, onClose]);
-
-  const handleGoToGiftCards = () => {
-    onClose();
-    navigate("/giftcards");
-  };
 
   if (!isOpen) return null;
 
@@ -111,13 +105,14 @@ export const GiftCardPromoModal = ({ isOpen, onClose }: GiftCardPromoModalProps)
           </p>
 
           {/* CTA Button */}
-          <Button
-            onClick={handleGoToGiftCards}
-            className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 transition-all duration-300 shadow-lg shadow-primary/30"
-          >
-            <Gift className="w-5 h-5 mr-2" />
-            Ver Gift Cards
-          </Button>
+          <Link to="/giftcards" onClick={onClose}>
+            <Button
+              className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 transition-all duration-300 shadow-lg shadow-primary/30"
+            >
+              <Gift className="w-5 h-5 mr-2" />
+              Ver Gift Cards
+            </Button>
+          </Link>
 
           {/* Close link */}
           <div className="mt-5">

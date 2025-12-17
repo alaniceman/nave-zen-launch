@@ -63,11 +63,11 @@ const App = () => (
       <TooltipProvider>
         <AuthProvider>
           <TrialModalProvider>
-            <EmailCaptureModalProvider>
               <Toaster />
               <Sonner />
               <CheckoutRedirectManager />
               <BrowserRouter>
+              <EmailCaptureModalProvider>
               <SEOHead />
               <FacebookPixelRouterTracker />
               <TrialDelegationHandler />
@@ -125,8 +125,8 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
           <WhatsAppWidget />
-        </BrowserRouter>
           </EmailCaptureModalProvider>
+        </BrowserRouter>
         </TrialModalProvider>
         </AuthProvider>
       </TooltipProvider>
