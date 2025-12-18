@@ -139,9 +139,20 @@ const handler = async (req: Request): Promise<Response> => {
     let sentCount = 0;
     let failedCount = 0;
 
+    // Helper function to add delay between emails (avoid Resend rate limit: 2 req/sec)
+    const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
     // Send email for each grouped session
+    let isFirstEmail = true;
     for (const [key, session] of groupedSessions) {
       try {
+        // Add delay before sending (except for first email) to avoid rate limiting
+        if (!isFirstEmail) {
+          console.log("Waiting 600ms before next email to avoid rate limit...");
+          await delay(600);
+        }
+        isFirstEmail = false;
+
         const startDateTime = toZonedTime(new Date(session.date_time_start), timezone);
         const endDateTime = toZonedTime(new Date(session.date_time_end), timezone);
 
@@ -356,8 +367,14 @@ const handler = async (req: Request): Promise<Response> => {
           html: emailHtml,
         });
 
-        console.log(`Summary email sent to ${toEmail} for session at ${session.date_time_start}`, emailResult);
-        sentCount++;
+        // Properly check for Resend API errors
+        if (emailResult.error) {
+          console.error(`Resend API error for ${toEmail}:`, emailResult.error);
+          failedCount++;
+        } else {
+          console.log(`Summary email sent successfully to ${toEmail} for session at ${session.date_time_start}`, emailResult.data);
+          sentCount++;
+        }
       } catch (emailError) {
         console.error(`Failed to send summary for session ${key}:`, emailError);
         failedCount++;
