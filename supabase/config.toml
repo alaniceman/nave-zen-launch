@@ -6,6 +6,9 @@ verify_jwt = false
 [functions.send-booking-reminder]
 verify_jwt = false
 
+[functions.send-instructor-summary]
+verify_jwt = false
+
 [functions.mercadopago-webhook]
 verify_jwt = false
 
