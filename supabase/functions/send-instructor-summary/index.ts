@@ -43,7 +43,18 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    console.log("Running instructor summary job...");
+    // Parse request body for test mode
+    let testMode = false;
+    let testEmail = "";
+    try {
+      const body = await req.json();
+      testMode = body.test === true;
+      testEmail = body.testEmail || "";
+    } catch {
+      // No body or invalid JSON, continue normally
+    }
+
+    console.log("Running instructor summary job...", testMode ? "(TEST MODE)" : "");
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
@@ -56,8 +67,8 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log("Looking for sessions between:", reminderTimeStart.toISOString(), "and", reminderTimeEnd.toISOString());
 
-    // Fetch confirmed bookings in the time window
-    const { data: bookings, error: fetchError } = await supabase
+    // Build query
+    let query = supabase
       .from("bookings")
       .select(`
         id,
@@ -71,9 +82,19 @@ const handler = async (req: Request): Promise<Response> => {
         professional:professionals (name, email),
         service:services (name)
       `)
-      .eq("status", "CONFIRMED")
-      .gte("date_time_start", reminderTimeStart.toISOString())
-      .lte("date_time_start", reminderTimeEnd.toISOString());
+      .eq("status", "CONFIRMED");
+
+    // In test mode, get the most recent confirmed bookings instead of time-filtered
+    if (testMode) {
+      query = query.order("date_time_start", { ascending: false }).limit(3);
+      console.log("TEST MODE: Fetching 3 most recent confirmed bookings");
+    } else {
+      query = query
+        .gte("date_time_start", reminderTimeStart.toISOString())
+        .lte("date_time_start", reminderTimeEnd.toISOString());
+    }
+
+    const { data: bookings, error: fetchError } = await query;
 
     if (fetchError) {
       console.error("Error fetching bookings:", fetchError);
@@ -324,15 +345,18 @@ const handler = async (req: Request): Promise<Response> => {
           </html>
         `;
 
+        // In test mode, override recipient if testEmail provided
+        const toEmail = testMode && testEmail ? testEmail : session.professional.email;
+        
         const emailResult = await resend.emails.send({
           from: "Nave Studio <agenda@studiolanave.com>",
-          to: [session.professional.email],
+          to: [toEmail],
           cc: ["agenda@alaniceman.com"],
-          subject: `📋 Tu sesión de ${session.service.name} en 2 horas - ${session.participants.length} participante(s)`,
+          subject: `${testMode ? "[TEST] " : ""}📋 Tu sesión de ${session.service.name} en 2 horas - ${session.participants.length} participante(s)`,
           html: emailHtml,
         });
 
-        console.log(`Summary email sent to ${session.professional.email} for session at ${session.date_time_start}`, emailResult);
+        console.log(`Summary email sent to ${toEmail} for session at ${session.date_time_start}`, emailResult);
         sentCount++;
       } catch (emailError) {
         console.error(`Failed to send summary for session ${key}:`, emailError);
