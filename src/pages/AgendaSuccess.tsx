@@ -1,13 +1,105 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, Clock, Loader2, XCircle } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+
+type BookingStatus = "CONFIRMED" | "PENDING_PAYMENT" | "CANCELLED" | null;
 
 export default function AgendaSuccess() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const [bookingStatus, setBookingStatus] = useState<BookingStatus>(null);
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    const checkBookingStatus = async () => {
+      // Mercado Pago sends external_reference with booking ID
+      const externalReference = searchParams.get("external_reference");
+
+      if (externalReference) {
+        const { data, error } = await supabase
+          .from("bookings")
+          .select("status")
+          .eq("id", externalReference)
+          .maybeSingle();
+
+        if (data) {
+          setBookingStatus(data.status as BookingStatus);
+        } else {
+          // If no booking found, assume pending (could be processing)
+          setBookingStatus("PENDING_PAYMENT");
+        }
+      } else {
+        // No external_reference, show pending state
+        setBookingStatus("PENDING_PAYMENT");
+      }
+      setLoading(false);
+    };
+
+    checkBookingStatus();
+  }, [searchParams]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+        <Card className="max-w-md w-full p-8 text-center">
+          <Loader2 className="h-16 w-16 text-primary mx-auto mb-4 animate-spin" />
+          <h1 className="text-2xl font-bold mb-2">Verificando tu pago...</h1>
+          <p className="text-muted-foreground">
+            Por favor espera mientras confirmamos el estado de tu reserva.
+          </p>
+        </Card>
+      </div>
+    );
+  }
+
+  // Payment was rejected/cancelled
+  if (bookingStatus === "CANCELLED") {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+        <Card className="max-w-md w-full p-8 text-center">
+          <XCircle className="h-16 w-16 text-destructive mx-auto mb-4" />
+          <h1 className="text-2xl font-bold mb-2">Pago Rechazado</h1>
+          <p className="text-muted-foreground mb-6">
+            Lamentablemente tu pago no pudo ser procesado. Por favor intenta nuevamente con otro medio de pago.
+          </p>
+          <div className="space-y-3">
+            <Button onClick={() => navigate("/agenda-nave-studio")} className="w-full">
+              Intentar nuevamente
+            </Button>
+            <Button onClick={() => navigate("/")} variant="outline" className="w-full">
+              Volver al inicio
+            </Button>
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
+  // Payment is pending (bank transfer, etc.)
+  if (bookingStatus === "PENDING_PAYMENT") {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+        <Card className="max-w-md w-full p-8 text-center">
+          <Clock className="h-16 w-16 text-yellow-500 mx-auto mb-4" />
+          <h1 className="text-2xl font-bold mb-2">Pago en Proceso</h1>
+          <p className="text-muted-foreground mb-6">
+            Tu pago está siendo procesado. Recibirás un email de confirmación una vez que se complete.
+          </p>
+          <p className="text-sm text-muted-foreground mb-6">
+            Si pagaste con transferencia bancaria, puede tomar hasta 24 horas en confirmarse.
+          </p>
+          <Button onClick={() => navigate("/")} className="w-full">
+            Volver al inicio
+          </Button>
+        </Card>
+      </div>
+    );
+  }
+
+  // Payment confirmed
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <Card className="max-w-md w-full p-8 text-center">
