@@ -20,3 +20,9 @@ verify_jwt = false
 
 [functions.get-giftcard-data]
 verify_jwt = false
+
+[functions.purchase-session-package]
+verify_jwt = false
+
+[functions.get-order-status]
+verify_jwt = false

@@ -14,7 +14,6 @@ async function verifyMercadoPagoSignature(
   }
 
   try {
-    // Parse signature header (format: "ts=timestamp,v1=hash")
     const parts = xSignature.split(',');
     const ts = parts.find(p => p.startsWith('ts='))?.split('=')[1];
     const hash = parts.find(p => p.startsWith('v1='))?.split('=')[1];
@@ -23,10 +22,7 @@ async function verifyMercadoPagoSignature(
       return false;
     }
 
-    // Create the manifest (what Mercado Pago signed)
     const manifest = `id:${dataId};request-id:${xRequestId};ts:${ts};`;
-
-    // Create HMAC-SHA256 hash
     const encoder = new TextEncoder();
     const keyData = encoder.encode(secret);
     const messageData = encoder.encode(manifest);
@@ -63,65 +59,136 @@ function generateSessionCode(): string {
   return code;
 }
 
-// Helper function to handle session package purchases
-async function handleSessionPackagePurchase(
+// Check if a string is a valid UUID
+function isValidUUID(str: string): boolean {
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  return uuidRegex.test(str);
+}
+
+// Handle session package/giftcard order payments using package_orders table
+async function handlePackageOrderPayment(
   payment: any,
-  packageData: any,
+  orderId: string,
   supabase: any,
   corsHeaders: any
 ) {
-  if (payment.status !== "approved") {
-    console.log("Package payment not approved yet:", payment.status);
-    return new Response(JSON.stringify({ status: "pending" }), {
+  const paymentIdStr = payment.id.toString();
+  console.log(`Processing package order payment: orderId=${orderId}, paymentId=${paymentIdStr}, status=${payment.status}`);
+
+  // Load order from database
+  const { data: order, error: orderError } = await supabase
+    .from("package_orders")
+    .select("*, session_packages(*)")
+    .eq("id", orderId)
+    .single();
+
+  if (orderError || !order) {
+    console.error("Order not found:", orderId, orderError);
+    return new Response(JSON.stringify({ status: "order_not_found" }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 
-  const paymentIdStr = payment.id.toString();
+  console.log(`Order found: ${order.id}, status=${order.status}, final_price=${order.final_price}`);
 
-  // RACE CONDITION FIX: Add random delay to desync concurrent webhooks
-  // This helps prevent two simultaneous webhooks from passing the idempotency check
-  const randomDelay = Math.floor(Math.random() * 400) + 100; // 100-500ms
-  console.log(`Adding ${randomDelay}ms delay to prevent race conditions for payment ${paymentIdStr}`);
-  await new Promise(resolve => setTimeout(resolve, randomDelay));
-
-  // IDEMPOTENCY CHECK: Verify if this payment was already processed
-  const { data: existingCodes } = await supabase
-    .from("session_codes")
-    .select("id")
-    .eq("mercado_pago_payment_id", paymentIdStr)
-    .limit(1);
-
-  if (existingCodes && existingCodes.length > 0) {
-    console.log(`Payment ${paymentIdStr} already processed - skipping duplicate webhook`);
+  // IDEMPOTENCY: Check if this order was already processed
+  if (order.status === "paid") {
+    console.log(`Order ${orderId} already paid - skipping duplicate webhook`);
     return new Response(JSON.stringify({ status: "already_processed" }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 
-  // Get package details
-  const { data: package_, error: packageError } = await supabase
-    .from("session_packages")
-    .select("*")
-    .eq("id", packageData.packageId)
-    .eq("is_active", true)
-    .single();
-
-  if (packageError || !package_) {
-    console.error("Package not found:", packageData.packageId);
-    return new Response(JSON.stringify({ status: "package_not_found" }), {
+  // Check if payment was already processed (by payment ID)
+  if (order.mercado_pago_payment_id === paymentIdStr) {
+    console.log(`Payment ${paymentIdStr} already recorded for order ${orderId}`);
+    return new Response(JSON.stringify({ status: "already_processed" }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 
-  // Verify amount (use finalPrice from external reference if coupon was applied)
-  const expectedAmount = packageData.finalPrice || package_.price_clp;
-  if (payment.transaction_amount !== expectedAmount) {
-    console.error("Payment amount mismatch - Expected:", expectedAmount, "Received:", payment.transaction_amount);
+  // Handle non-approved payments
+  if (payment.status !== "approved") {
+    console.log(`Payment not approved: ${payment.status}, status_detail: ${payment.status_detail}`);
+    
+    await supabase
+      .from("package_orders")
+      .update({
+        status: "failed",
+        mercado_pago_payment_id: paymentIdStr,
+        mercado_pago_status: payment.status,
+        mercado_pago_status_detail: payment.status_detail || null,
+        error_message: `Pago ${payment.status}: ${payment.status_detail || 'Sin detalle'}`,
+      })
+      .eq("id", orderId);
+
+    return new Response(JSON.stringify({ status: "payment_not_approved" }), {
+      status: 200,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  // APPROVED payment - verify amount with tolerance (CLP has no decimals)
+  const expectedAmount = order.final_price;
+  const receivedAmount = payment.transaction_amount;
+  const tolerance = 1; // 1 CLP tolerance for rounding
+
+  if (Math.abs(receivedAmount - expectedAmount) > tolerance) {
+    console.error(`Amount mismatch: expected ${expectedAmount}, received ${receivedAmount}`);
+    
+    await supabase
+      .from("package_orders")
+      .update({
+        status: "failed",
+        mercado_pago_payment_id: paymentIdStr,
+        mercado_pago_status: payment.status,
+        error_message: `Monto incorrecto: esperado ${expectedAmount}, recibido ${receivedAmount}`,
+      })
+      .eq("id", orderId);
+
     return new Response(JSON.stringify({ status: "amount_mismatch" }), {
+      status: 200,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  // ATOMIC UPDATE: Mark order as paid only if still in 'created' status
+  const { data: updatedOrder, error: updateError } = await supabase
+    .from("package_orders")
+    .update({
+      status: "paid",
+      mercado_pago_payment_id: paymentIdStr,
+      mercado_pago_status: payment.status,
+      mercado_pago_status_detail: payment.status_detail || null,
+    })
+    .eq("id", orderId)
+    .eq("status", "created")
+    .select()
+    .maybeSingle();
+
+  if (updateError) {
+    console.error("Error updating order:", updateError);
+    throw updateError;
+  }
+
+  if (!updatedOrder) {
+    console.log(`Order ${orderId} was already processed by another webhook`);
+    return new Response(JSON.stringify({ status: "already_processed" }), {
+      status: 200,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  console.log(`Order ${orderId} marked as paid`);
+
+  // Get package details
+  const package_ = order.session_packages;
+  if (!package_) {
+    console.error("Package not found in order");
+    return new Response(JSON.stringify({ status: "package_not_found" }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
@@ -132,12 +199,11 @@ async function handleSessionPackagePurchase(
   const expiresAt = new Date();
   expiresAt.setDate(expiresAt.getDate() + package_.validity_days);
 
-  // Generate giftcard access token for gift card purchases
-  const isGiftCard = packageData.isGiftCard === true;
+  // Generate giftcard access token if needed
+  const isGiftCard = order.is_giftcard === true;
   let giftcardAccessToken: string | null = null;
   
   if (isGiftCard) {
-    // Generate unique token
     const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
     let token = '';
     for (let i = 0; i < 32; i++) {
@@ -150,7 +216,6 @@ async function handleSessionPackagePurchase(
     let code = generateSessionCode();
     let isUnique = false;
     
-    // Ensure code is unique
     while (!isUnique) {
       const { data: existing } = await supabase
         .from("session_codes")
@@ -169,64 +234,65 @@ async function handleSessionPackagePurchase(
       package_id: package_.id,
       code: code,
       applicable_service_ids: package_.applicable_service_ids,
-      buyer_email: packageData.buyerEmail,
-      buyer_name: packageData.buyerName,
-      buyer_phone: packageData.buyerPhone,
+      buyer_email: order.buyer_email,
+      buyer_name: order.buyer_name,
+      buyer_phone: order.buyer_phone,
       purchased_at: new Date().toISOString(),
       expires_at: expiresAt.toISOString(),
       is_used: false,
-      mercado_pago_payment_id: payment.id.toString(),
+      mercado_pago_payment_id: paymentIdStr,
       giftcard_access_token: giftcardAccessToken,
     });
   }
 
-  // Insert codes into database
+  // Insert codes
   const { error: insertError } = await supabase
     .from("session_codes")
     .insert(codes);
 
   if (insertError) {
     console.error("Error inserting codes:", insertError);
+    // Mark order as failed
+    await supabase
+      .from("package_orders")
+      .update({ 
+        status: "failed", 
+        error_message: "Error al generar códigos de sesión" 
+      })
+      .eq("id", orderId);
     throw insertError;
   }
 
-  console.log(`Generated ${codes.length} session codes for package purchase`);
+  console.log(`Generated ${codes.length} session codes for order ${orderId}`);
 
-  // Increment coupon usage if coupon was applied
-  if (packageData.couponId) {
-    console.log("Incrementing coupon usage for:", packageData.couponId);
+  // Increment coupon usage if applicable
+  if (order.coupon_id) {
+    console.log("Incrementing coupon usage for:", order.coupon_id);
     
-    // Get current uses
     const { data: currentCoupon } = await supabase
       .from("discount_coupons")
       .select("current_uses")
-      .eq("id", packageData.couponId)
+      .eq("id", order.coupon_id)
       .single();
     
     if (currentCoupon) {
-      const { error: couponError } = await supabase
+      await supabase
         .from("discount_coupons")
         .update({ current_uses: (currentCoupon.current_uses || 0) + 1 })
-        .eq("id", packageData.couponId);
-
-      if (couponError) {
-        console.error("Error incrementing coupon uses:", couponError);
-        // Continue anyway - codes are already generated
-      } else {
-        console.log("Coupon usage incremented successfully");
-      }
+        .eq("id", order.coupon_id);
+      console.log("Coupon usage incremented");
     }
   }
 
-  // Send confirmation email with codes
+  // Send confirmation email
   try {
     const siteUrl = (Deno.env.get("SITE_URL") || "https://studiolanave.com").replace(/\/$/, "");
     const giftcardLink = giftcardAccessToken ? `${siteUrl}/giftcard/${giftcardAccessToken}` : null;
 
     const emailResponse = await supabase.functions.invoke("send-session-codes-email", {
       body: {
-        buyerEmail: packageData.buyerEmail,
-        buyerName: packageData.buyerName,
+        buyerEmail: order.buyer_email,
+        buyerName: order.buyer_name,
         packageName: package_.name,
         codes: codes.map(c => c.code),
         expiresAt: expiresAt.toISOString(),
@@ -250,6 +316,143 @@ async function handleSessionPackagePurchase(
   });
 }
 
+// Handle booking payments (legacy flow)
+async function handleBookingPayment(
+  payment: any,
+  bookingId: string,
+  supabase: any,
+  corsHeaders: any,
+  paymentId: string
+) {
+  console.log(`Processing booking payment: bookingId=${bookingId}, paymentId=${paymentId}`);
+
+  // Get booking
+  const { data: booking, error: bookingError } = await supabase
+    .from("bookings")
+    .select("*, professionals(name, email), services(name, price_clp)")
+    .eq("id", bookingId)
+    .single();
+
+  if (bookingError || !booking) {
+    console.error("Booking not found:", bookingId);
+    return new Response(JSON.stringify({ status: "booking_not_found" }), {
+      status: 200,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  if (payment.status === "approved") {
+    const expectedAmount = booking.final_price || booking.services.price_clp;
+    console.log("Payment amount:", payment.transaction_amount, "Expected:", expectedAmount);
+    
+    if (payment.transaction_amount !== expectedAmount) {
+      console.error("Payment amount mismatch");
+      return new Response(JSON.stringify({ status: "amount_mismatch" }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Check slot availability
+    const { data: slot, error: slotError } = await supabase
+      .from("generated_slots")
+      .select("id, max_capacity, confirmed_bookings")
+      .eq("professional_id", booking.professional_id)
+      .eq("service_id", booking.service_id)
+      .eq("date_time_start", booking.date_time_start)
+      .eq("is_active", true)
+      .maybeSingle();
+
+    if (slotError || !slot) {
+      console.error("No active slot found");
+      await supabase
+        .from("bookings")
+        .update({ status: "CANCELLED", mercado_pago_payment_id: paymentId })
+        .eq("id", bookingId);
+      return new Response(JSON.stringify({ status: "slot_not_found" }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    if (slot.confirmed_bookings >= slot.max_capacity) {
+      console.error("Slot at max capacity");
+      await supabase
+        .from("bookings")
+        .update({ status: "CANCELLED", mercado_pago_payment_id: paymentId })
+        .eq("id", bookingId);
+      return new Response(JSON.stringify({ status: "slot_unavailable" }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // ATOMIC UPDATE: Confirm booking
+    const { data: updatedBooking, error: updateError } = await supabase
+      .from("bookings")
+      .update({
+        status: "CONFIRMED",
+        mercado_pago_payment_id: paymentId,
+      })
+      .eq("id", bookingId)
+      .eq("status", "PENDING_PAYMENT")
+      .is("mercado_pago_payment_id", null)
+      .select()
+      .maybeSingle();
+
+    if (updateError) {
+      console.error("Error updating booking:", updateError);
+      throw updateError;
+    }
+
+    if (!updatedBooking) {
+      console.log("Booking already processed");
+      return new Response(JSON.stringify({ status: "already_processed" }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Update slot count
+    await supabase
+      .from("generated_slots")
+      .update({ confirmed_bookings: slot.confirmed_bookings + 1 })
+      .eq("id", slot.id);
+
+    console.log(`Booking confirmed: ${bookingId}`);
+
+    // Send confirmation email
+    try {
+      await supabase.functions.invoke("send-booking-confirmation", {
+        body: { bookingId },
+      });
+      console.log("Confirmation email sent");
+    } catch (emailError) {
+      console.error("Failed to send email:", emailError);
+    }
+
+    return new Response(JSON.stringify({ status: "confirmed" }), {
+      status: 200,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  } else if (payment.status === "rejected" || payment.status === "cancelled") {
+    await supabase
+      .from("bookings")
+      .update({ status: "CANCELLED", mercado_pago_payment_id: paymentId })
+      .eq("id", bookingId);
+
+    return new Response(JSON.stringify({ status: "cancelled" }), {
+      status: 200,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  return new Response(JSON.stringify({ status: "processed" }), {
+    status: 200,
+    headers: { ...corsHeaders, "Content-Type": "application/json" },
+  });
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -257,9 +460,9 @@ serve(async (req) => {
 
   try {
     const body = await req.json();
-    console.log("Mercado Pago webhook received:", body);
+    console.log("Mercado Pago webhook received:", JSON.stringify(body));
 
-    // Support both webhook formats: new (body.type) and IPN (body.topic)
+    // Support both webhook formats
     const isWebhookFormat = body.type === "payment";
     const isIPNFormat = body.topic === "payment";
     
@@ -271,7 +474,7 @@ serve(async (req) => {
       });
     }
     
-    console.log(`Processing ${isWebhookFormat ? 'Webhook' : 'IPN'} format payment notification`);
+    console.log(`Processing ${isWebhookFormat ? 'Webhook' : 'IPN'} format`);
 
     const mercadoPagoAccessToken = Deno.env.get("MERCADO_PAGO_ACCESS_TOKEN");
     const webhookSecret = Deno.env.get("MERCADO_PAGO_WEBHOOK_SECRET");
@@ -280,74 +483,43 @@ serve(async (req) => {
       throw new Error("Mercado Pago not configured");
     }
 
-    // Verify webhook signature - CRITICAL SECURITY CHECK
-    // Mercado Pago signature format: "ts=timestamp,v1=hash"
-    // Template: id:[data.id];request-id:[x-request-id];ts:[ts];
-    // See: https://www.mercadopago.com.mx/developers/en/docs/your-integrations/notifications/webhooks
+    // Verify signature if secret is configured
     if (webhookSecret) {
       const xSignature = req.headers.get('x-signature');
       const xRequestId = req.headers.get('x-request-id');
       
-      // Extract dataId based on format:
-      // - Webhook format: body.data.id
-      // - IPN format: body.resource (can be just ID or full URL like "https://api.mercadolibre.com/collections/notifications/138576500279")
       let dataId: string | undefined;
       if (isWebhookFormat && body.data?.id) {
         dataId = String(body.data.id);
       } else if (isIPNFormat && body.resource) {
-        // IPN resource can be a URL or just the ID
         const resource = String(body.resource);
-        if (resource.includes('/')) {
-          // Extract last segment from URL
-          dataId = resource.split('/').pop();
-        } else {
-          dataId = resource;
-        }
+        dataId = resource.includes('/') ? resource.split('/').pop() : resource;
       }
       
-      console.log(`Signature verification - Format: ${isWebhookFormat ? 'Webhook' : 'IPN'}, dataId: ${dataId || 'missing'}, xRequestId: ${xRequestId || 'missing'}`);
-
-      if (!dataId) {
-        console.warn('No dataId available for signature verification - skipping signature check for this request');
-        console.warn('Body received:', JSON.stringify({ type: body.type, topic: body.topic, data: body.data, resource: body.resource }));
-      } else {
-        const isValid = await verifyMercadoPagoSignature(
-          xSignature,
-          xRequestId,
-          dataId,
-          webhookSecret
-        );
-
+      if (dataId) {
+        const isValid = await verifyMercadoPagoSignature(xSignature, xRequestId, dataId, webhookSecret);
         if (!isValid) {
-          console.error('Invalid webhook signature - rejecting request');
-          console.error('Headers received:', { xSignature: xSignature ? 'present' : 'missing', xRequestId, dataId });
+          console.error('Invalid webhook signature');
           return new Response(
             JSON.stringify({ error: 'Invalid signature' }),
             { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
           );
         }
-        console.log('Webhook signature verified successfully');
+        console.log('Signature verified');
       }
-    } else {
-      // In production, the secret should always be configured
-      // For backwards compatibility, allow processing but log a warning
-      console.warn('MERCADO_PAGO_WEBHOOK_SECRET not configured - signature verification skipped');
-      console.warn('IMPORTANT: Configure MERCADO_PAGO_WEBHOOK_SECRET for production security');
     }
 
-    // Get payment details from Mercado Pago
-    // Support both formats: webhook (body.data.id) and IPN (body.resource)
+    // Get payment ID
     const paymentId = isWebhookFormat ? body.data?.id : body.resource;
     if (!paymentId) {
       throw new Error("No payment ID in webhook");
     }
 
+    // Fetch payment details from Mercado Pago
     const paymentResponse = await fetch(
       `https://api.mercadopago.com/v1/payments/${paymentId}`,
       {
-        headers: {
-          Authorization: `Bearer ${mercadoPagoAccessToken}`,
-        },
+        headers: { Authorization: `Bearer ${mercadoPagoAccessToken}` },
       }
     );
 
@@ -356,15 +528,19 @@ serve(async (req) => {
     }
 
     const payment = await paymentResponse.json();
-    console.log("Payment details:", payment);
+    console.log("Payment details:", JSON.stringify({
+      id: payment.id,
+      status: payment.status,
+      status_detail: payment.status_detail,
+      external_reference: payment.external_reference,
+      transaction_amount: payment.transaction_amount,
+    }));
 
-    // Create Supabase client early - needed for both session packages and bookings
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
 
-    // Check if this is a session package purchase or a booking
     const externalReference = payment.external_reference;
     if (!externalReference) {
       console.error("No external_reference in payment");
@@ -374,209 +550,50 @@ serve(async (req) => {
       });
     }
 
-    // Try to parse as session package purchase
-    let packagePurchaseData = null;
+    // Determine the type of payment based on external_reference format
+    // New format: UUID (package_orders table)
+    // Legacy format: UUID (bookings table) or JSON string
+    
+    // First, check if it's a valid UUID
+    if (isValidUUID(externalReference)) {
+      // Check if it's a package_order (new flow)
+      const { data: order } = await supabase
+        .from("package_orders")
+        .select("id")
+        .eq("id", externalReference)
+        .maybeSingle();
+
+      if (order) {
+        console.log("Processing as package order");
+        return await handlePackageOrderPayment(payment, externalReference, supabase, corsHeaders);
+      }
+
+      // Otherwise, treat as booking (legacy flow)
+      console.log("Processing as booking");
+      return await handleBookingPayment(payment, externalReference, supabase, corsHeaders, paymentId);
+    }
+
+    // Try to parse as JSON (legacy session_package format)
     try {
-      packagePurchaseData = JSON.parse(externalReference);
-      if (packagePurchaseData.type === "session_package") {
-        console.log("Processing session package purchase:", packagePurchaseData);
-        return await handleSessionPackagePurchase(
-          payment,
-          packagePurchaseData,
-          supabase,
-          corsHeaders
-        );
+      const packageData = JSON.parse(externalReference);
+      if (packageData.type === "session_package") {
+        console.warn("Legacy JSON external_reference detected - this should not happen with new flow");
+        // For backwards compatibility, we could handle this, but it shouldn't occur
+        return new Response(JSON.stringify({ status: "legacy_format_deprecated" }), {
+          status: 200,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
       }
     } catch {
-      // Not JSON, treat as regular booking ID
+      // Not JSON, unknown format
     }
 
-    // Regular booking flow
-    const bookingId = externalReference;
-    if (!bookingId) {
-      console.error("No booking ID in payment external_reference");
-      return new Response(JSON.stringify({ status: "no_booking_id" }), {
-        status: 200,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    // Get booking
-    const { data: booking, error: bookingError } = await supabase
-      .from("bookings")
-      .select("*, professionals(name, email), services(name, price_clp)")
-      .eq("id", bookingId)
-      .single();
-
-    if (bookingError || !booking) {
-      console.error("Booking not found:", bookingId);
-      return new Response(JSON.stringify({ status: "booking_not_found" }), {
-        status: 200,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    // Update booking based on payment status
-    if (payment.status === "approved") {
-      // Verify amount - use final_price to support discount coupons
-      const expectedAmount = booking.final_price || booking.services.price_clp;
-      console.log("Payment amount:", payment.transaction_amount);
-      console.log("Expected amount (final_price):", booking.final_price);
-      console.log("Service price:", booking.services.price_clp);
-      
-      if (payment.transaction_amount !== expectedAmount) {
-        console.error("Payment amount mismatch - Expected:", expectedAmount, "Received:", payment.transaction_amount);
-        return new Response(JSON.stringify({ status: "amount_mismatch" }), {
-          status: 200,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-
-      // Check if slot is still available by verifying capacity
-      const { data: slot, error: slotError } = await supabase
-        .from("generated_slots")
-        .select("id, max_capacity, confirmed_bookings")
-        .eq("professional_id", booking.professional_id)
-        .eq("service_id", booking.service_id)
-        .eq("date_time_start", booking.date_time_start)
-        .eq("is_active", true)
-        .maybeSingle();
-
-      if (slotError) {
-        console.error("Error fetching slot:", slotError);
-        throw slotError;
-      }
-
-      if (!slot) {
-        console.error("No active slot found for this booking");
-        
-        // Update to CANCELLED
-        await supabase
-          .from("bookings")
-          .update({
-            status: "CANCELLED",
-            mercado_pago_payment_id: paymentId,
-          })
-          .eq("id", bookingId);
-
-        return new Response(
-          JSON.stringify({ status: "slot_not_found" }),
-          {
-            status: 200,
-            headers: { ...corsHeaders, "Content-Type": "application/json" },
-          }
-        );
-      }
-
-      console.log(`Slot capacity check: ${slot.confirmed_bookings}/${slot.max_capacity} bookings confirmed`);
-
-      // Check if slot has reached max capacity
-      if (slot.confirmed_bookings >= slot.max_capacity) {
-        console.error(`Slot at max capacity: ${slot.confirmed_bookings}/${slot.max_capacity}`);
-        
-        // Update to CANCELLED
-        await supabase
-          .from("bookings")
-          .update({
-            status: "CANCELLED",
-            mercado_pago_payment_id: paymentId,
-          })
-          .eq("id", bookingId);
-
-        // TODO: Trigger refund process
-        return new Response(
-          JSON.stringify({ status: "slot_unavailable" }),
-          {
-            status: 200,
-            headers: { ...corsHeaders, "Content-Type": "application/json" },
-          }
-        );
-      }
-
-      // ATOMIC UPDATE: Confirm booking only if it's still PENDING and hasn't been processed
-      // This prevents duplicate processing from multiple webhook notifications (IPN + Webhook format)
-      const { data: updatedBooking, error: updateError } = await supabase
-        .from("bookings")
-        .update({
-          status: "CONFIRMED",
-          mercado_pago_payment_id: paymentId,
-        })
-        .eq("id", bookingId)
-        .eq("status", "PENDING_PAYMENT")
-        .is("mercado_pago_payment_id", null)
-        .select()
-        .maybeSingle();
-
-      if (updateError) {
-        console.error("Error updating booking:", updateError);
-        throw updateError;
-      }
-
-      // If no rows were updated, another webhook already processed this payment
-      if (!updatedBooking) {
-        console.log(`Payment ${paymentId} already processed for booking ${bookingId}, skipping duplicate`);
-        return new Response(JSON.stringify({ status: "already_processed" }), {
-          status: 200,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-
-      // Increment confirmed bookings count in the slot
-      const { error: slotUpdateError } = await supabase
-        .from("generated_slots")
-        .update({
-          confirmed_bookings: slot.confirmed_bookings + 1,
-        })
-        .eq("id", slot.id);
-
-      if (slotUpdateError) {
-        console.error("Error updating slot confirmed_bookings:", slotUpdateError);
-        // Don't throw - booking is already confirmed
-      }
-
-      console.log(`Booking confirmed: ${bookingId} (slot now ${slot.confirmed_bookings + 1}/${slot.max_capacity})`);
-
-      // Send confirmation email
-      try {
-        const emailResponse = await supabase.functions.invoke("send-booking-confirmation", {
-          body: { bookingId },
-        });
-
-        if (emailResponse.error) {
-          console.error("Error sending confirmation email:", emailResponse.error);
-        } else {
-          console.log("Confirmation email sent successfully");
-        }
-      } catch (emailError) {
-        console.error("Failed to invoke send-booking-confirmation:", emailError);
-      }
-
-      return new Response(JSON.stringify({ status: "confirmed" }), {
-        status: 200,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    } else if (
-      payment.status === "rejected" ||
-      payment.status === "cancelled"
-    ) {
-      await supabase
-        .from("bookings")
-        .update({
-          status: "CANCELLED",
-          mercado_pago_payment_id: paymentId,
-        })
-        .eq("id", bookingId);
-
-      return new Response(JSON.stringify({ status: "cancelled" }), {
-        status: 200,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    return new Response(JSON.stringify({ status: "processed" }), {
+    console.error("Unknown external_reference format:", externalReference);
+    return new Response(JSON.stringify({ status: "unknown_reference_format" }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
+
   } catch (error: any) {
     console.error("Error in mercadopago-webhook:", error);
     return new Response(

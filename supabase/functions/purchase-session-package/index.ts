@@ -12,6 +12,11 @@ const purchaseSchema = z.object({
   isGiftCard: z.boolean().optional().default(false),
 });
 
+// Sanitize phone number - keep only digits
+function sanitizePhone(phone: string): string {
+  return phone.replace(/\D/g, "");
+}
+
 serve(async (req) => {
   const corsHeaders = getCorsHeaders(req);
   
@@ -21,6 +26,7 @@ serve(async (req) => {
 
   try {
     const requestData = await req.json();
+    console.log("Purchase request received:", { ...requestData, buyerPhone: "[REDACTED]" });
 
     // Validate input
     let validatedData;
@@ -51,10 +57,17 @@ serve(async (req) => {
       .single();
 
     if (packageError || !package_) {
-      throw new Error("Paquete no encontrado");
+      console.error("Package not found:", validatedData.packageId);
+      return new Response(
+        JSON.stringify({ error: "Paquete no encontrado" }),
+        {
+          status: 404,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }
+      );
     }
 
-    console.log("Creating Mercado Pago preference for package:", package_.id);
+    console.log("Package found:", package_.id, package_.name);
 
     // Validate coupon if provided
     let coupon = null;
@@ -150,20 +163,54 @@ serve(async (req) => {
       console.log(`Coupon applied: ${coupon.code}, discount: $${discountAmount}, final price: $${finalPrice}`);
     }
 
-    const siteUrl = Deno.env.get("SITE_URL")?.replace(/\/$/, "") || "https://studiolanave.com";
+    // Determine order type
+    const orderType = validatedData.isGiftCard ? "giftcard" : "session_package";
 
-    // Create external reference with package info
-    const externalReference = JSON.stringify({
-      type: "session_package",
-      packageId: package_.id,
-      buyerEmail: validatedData.buyerEmail,
-      buyerName: validatedData.buyerName,
-      buyerPhone: validatedData.buyerPhone,
-      couponId: coupon?.id || null,
-      originalPrice: package_.price_clp,
-      finalPrice: finalPrice,
-      isGiftCard: validatedData.isGiftCard,
-    });
+    // Create order in database FIRST
+    const { data: order, error: orderError } = await supabase
+      .from("package_orders")
+      .insert({
+        order_type: orderType,
+        package_id: package_.id,
+        buyer_name: validatedData.buyerName,
+        buyer_email: validatedData.buyerEmail,
+        buyer_phone: validatedData.buyerPhone,
+        coupon_id: coupon?.id || null,
+        coupon_code: coupon?.code || null,
+        original_price: package_.price_clp,
+        discount_amount: discountAmount,
+        final_price: finalPrice,
+        is_giftcard: validatedData.isGiftCard,
+        status: "created",
+      })
+      .select()
+      .single();
+
+    if (orderError || !order) {
+      console.error("Error creating order:", orderError);
+      return new Response(
+        JSON.stringify({ error: "Error al crear la orden" }),
+        {
+          status: 500,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    console.log("Order created:", order.id);
+
+    const siteUrl = Deno.env.get("SITE_URL")?.replace(/\/$/, "") || "https://studiolanave.com";
+    
+    // Determine return URLs based on order type
+    const successUrl = validatedData.isGiftCard 
+      ? `${siteUrl}/giftcards/success?order=${order.id}`
+      : `${siteUrl}/bonos/success?order=${order.id}`;
+    const failureUrl = validatedData.isGiftCard 
+      ? `${siteUrl}/giftcards/failure?order=${order.id}`
+      : `${siteUrl}/bonos/failure?order=${order.id}`;
+    const pendingUrl = validatedData.isGiftCard 
+      ? `${siteUrl}/giftcards/pending?order=${order.id}`
+      : `${siteUrl}/bonos/pending?order=${order.id}`;
 
     // If final price is 0 (100% discount), complete purchase directly without payment
     if (finalPrice === 0) {
@@ -177,7 +224,7 @@ serve(async (req) => {
           .eq("id", coupon.id);
       }
 
-      // Generate session codes directly (similar to webhook logic)
+      // Generate session codes directly
       const codes = [];
       for (let i = 0; i < package_.sessions_quantity; i++) {
         let code: string;
@@ -198,8 +245,11 @@ serve(async (req) => {
       const expiresAt = new Date();
       expiresAt.setDate(expiresAt.getDate() + package_.validity_days);
 
+      // Generate giftcard access token if needed
+      const giftcardAccessToken = validatedData.isGiftCard ? crypto.randomUUID() : null;
+
       // Insert all session codes
-      const sessionCodesData = codes.map((code, index) => ({
+      const sessionCodesData = codes.map((code) => ({
         code,
         package_id: package_.id,
         buyer_email: validatedData.buyerEmail,
@@ -207,8 +257,8 @@ serve(async (req) => {
         buyer_phone: validatedData.buyerPhone,
         applicable_service_ids: package_.applicable_service_ids,
         expires_at: expiresAt.toISOString(),
-        mercado_pago_payment_id: "FREE_COUPON_" + Date.now(),
-        giftcard_access_token: validatedData.isGiftCard ? crypto.randomUUID() : null,
+        mercado_pago_payment_id: `FREE_ORDER_${order.id}`,
+        giftcard_access_token: giftcardAccessToken,
       }));
 
       const { error: codesError } = await supabase
@@ -217,13 +267,35 @@ serve(async (req) => {
 
       if (codesError) {
         console.error("Error inserting session codes:", codesError);
-        throw new Error("Error al crear los códigos de sesión");
+        // Update order status to failed
+        await supabase
+          .from("package_orders")
+          .update({ status: "failed", error_message: "Error al crear códigos" })
+          .eq("id", order.id);
+        return new Response(
+          JSON.stringify({ error: "Error al crear los códigos de sesión" }),
+          {
+            status: 500,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          }
+        );
       }
+
+      // Update order status to paid
+      await supabase
+        .from("package_orders")
+        .update({ 
+          status: "paid",
+          mercado_pago_payment_id: `FREE_ORDER_${order.id}`,
+        })
+        .eq("id", order.id);
 
       console.log(`Created ${codes.length} session codes for free purchase:`, codes);
 
       // Send confirmation email
       try {
+        const giftcardLink = giftcardAccessToken ? `${siteUrl}/giftcard/${giftcardAccessToken}` : null;
+        
         await supabase.functions.invoke("send-session-codes-email", {
           body: {
             buyerEmail: validatedData.buyerEmail,
@@ -233,6 +305,7 @@ serve(async (req) => {
             codes: codes,
             expiresAt: expiresAt.toISOString(),
             isGiftCard: validatedData.isGiftCard,
+            giftcardLink: giftcardLink,
           },
         });
         console.log("Confirmation email sent for free purchase");
@@ -244,6 +317,7 @@ serve(async (req) => {
         JSON.stringify({
           success: true,
           freeOrder: true,
+          orderId: order.id,
           message: "Compra completada con cupón de descuento 100%",
         }),
         {
@@ -256,19 +330,18 @@ serve(async (req) => {
     // Normal flow: create Mercado Pago preference
     const mercadoPagoAccessToken = Deno.env.get("MERCADO_PAGO_ACCESS_TOKEN");
     if (!mercadoPagoAccessToken) {
+      await supabase
+        .from("package_orders")
+        .update({ status: "failed", error_message: "Mercado Pago no configurado" })
+        .eq("id", order.id);
       throw new Error("Mercado Pago not configured");
     }
 
-    // Use simple format for description - avoid special characters and locale formatting
-    const descriptionText = coupon 
-      ? `Descuento ${coupon.code} aplicado` 
-      : (package_.description || "Paquete de sesiones");
-
+    // Simple, clean preference data - only what Mercado Pago needs
     const preferenceData = {
       items: [
         {
           title: `${package_.name} - ${package_.sessions_quantity} sesiones`,
-          description: descriptionText,
           quantity: 1,
           unit_price: finalPrice,
           currency_id: "CLP",
@@ -277,21 +350,25 @@ serve(async (req) => {
       payer: {
         name: validatedData.buyerName,
         email: validatedData.buyerEmail,
-        phone: {
-          number: validatedData.buyerPhone,
-        },
+        // Only include phone if it has digits
+        ...(sanitizePhone(validatedData.buyerPhone).length >= 8 && {
+          phone: {
+            number: sanitizePhone(validatedData.buyerPhone),
+          },
+        }),
       },
       back_urls: {
-        success: `${siteUrl}/bonos/success`,
-        failure: `${siteUrl}/bonos/failure`,
-        pending: `${siteUrl}/bonos/pending`,
+        success: successUrl,
+        failure: failureUrl,
+        pending: pendingUrl,
       },
       auto_return: "approved",
-      external_reference: externalReference,
+      // SIMPLE external_reference - just the order UUID
+      external_reference: order.id,
       notification_url: `${Deno.env.get("SUPABASE_URL")}/functions/v1/mercadopago-webhook`,
     };
 
-    console.log("Preference data:", JSON.stringify(preferenceData, null, 2));
+    console.log("Creating Mercado Pago preference with external_reference:", order.id);
 
     const mpResponse = await fetch(
       "https://api.mercadopago.com/checkout/preferences",
@@ -307,19 +384,29 @@ serve(async (req) => {
 
     const responseText = await mpResponse.text();
     console.log("Mercado Pago response status:", mpResponse.status);
-    console.log("Mercado Pago response:", responseText);
 
     if (!mpResponse.ok) {
       console.error("Mercado Pago error:", responseText);
+      await supabase
+        .from("package_orders")
+        .update({ status: "failed", error_message: `MP Error: ${mpResponse.status}` })
+        .eq("id", order.id);
       throw new Error(`Mercado Pago API error: ${responseText}`);
     }
 
     const preference = JSON.parse(responseText);
-    console.log("Payment preference created successfully:", preference.id);
+    console.log("Payment preference created:", preference.id);
+
+    // Update order with preference ID
+    await supabase
+      .from("package_orders")
+      .update({ mercado_pago_preference_id: preference.id })
+      .eq("id", order.id);
 
     return new Response(
       JSON.stringify({
         initPoint: preference.init_point,
+        orderId: order.id,
       }),
       {
         status: 200,
