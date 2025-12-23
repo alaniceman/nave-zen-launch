@@ -75,13 +75,16 @@ serve(async (req) => {
     console.log(`Found ${slots?.length || 0} slots in generated_slots table`);
 
     // Create a Set of existing slots for quick lookup: "professionalId-serviceId-dateTimeStart"
+    // Normalize timestamps to ISO format for consistent comparison
+    const normalizeTimestamp = (ts: string) => new Date(ts).toISOString();
+    
     const existingSlotsSet = new Set(
       (slots || []).map(slot => 
-        `${slot.professional_id}-${slot.service_id}-${slot.date_time_start}`
+        `${slot.professional_id}-${slot.service_id}-${normalizeTimestamp(slot.date_time_start)}`
       )
     );
 
-    console.log(`Existing slots in DB: ${existingSlotsSet.size}`);
+    console.log(`Existing slots in DB: ${existingSlotsSet.size}`, Array.from(existingSlotsSet));
 
     // Fetch availability rules for this date
     let rulesQuery = supabase
@@ -128,7 +131,7 @@ serve(async (req) => {
       // Filter out slots that already exist in DB and format for response
       generatedSlots = generatedSlotsRaw
         .filter(slot => {
-          const key = `${slot.professional_id}-${slot.service_id}-${slot.date_time_start}`;
+          const key = `${slot.professional_id}-${slot.service_id}-${normalizeTimestamp(slot.date_time_start)}`;
           const exists = existingSlotsSet.has(key);
           if (exists) {
             console.log(`Skipping slot (already in DB): ${key}`);
