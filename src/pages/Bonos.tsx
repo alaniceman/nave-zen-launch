@@ -218,10 +218,10 @@ export default function Bonos() {
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">Paquetes de Sesiones</h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Adquiere un pack de sesiones, recibe tus códigos por email y reserva cuando quieras en nuestra{" "}
+              Compra un pack de sesiones, recibe tus códigos por email y reserva cuando quieras en nuestra{" "}
               <Link to="/agenda-nave-studio" className="text-primary hover:underline font-medium">
                 agenda
-              </Link>.
+              </Link>. Puedes compartirlos con quien tú quieras.
             </p>
           </div>
 
