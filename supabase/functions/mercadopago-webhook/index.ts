@@ -287,24 +287,47 @@ serve(async (req) => {
     if (webhookSecret) {
       const xSignature = req.headers.get('x-signature');
       const xRequestId = req.headers.get('x-request-id');
-      const dataId = body.data?.id;
-
-      const isValid = await verifyMercadoPagoSignature(
-        xSignature,
-        xRequestId,
-        dataId,
-        webhookSecret
-      );
-
-      if (!isValid) {
-        console.error('Invalid webhook signature - rejecting request');
-        console.error('Headers received:', { xSignature, xRequestId, dataId: dataId ? 'present' : 'missing' });
-        return new Response(
-          JSON.stringify({ error: 'Invalid signature' }),
-          { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        );
+      
+      // Extract dataId based on format:
+      // - Webhook format: body.data.id
+      // - IPN format: body.resource (can be just ID or full URL like "https://api.mercadolibre.com/collections/notifications/138576500279")
+      let dataId: string | undefined;
+      if (isWebhookFormat && body.data?.id) {
+        dataId = String(body.data.id);
+      } else if (isIPNFormat && body.resource) {
+        // IPN resource can be a URL or just the ID
+        const resource = String(body.resource);
+        if (resource.includes('/')) {
+          // Extract last segment from URL
+          dataId = resource.split('/').pop();
+        } else {
+          dataId = resource;
+        }
       }
-      console.log('Webhook signature verified successfully');
+      
+      console.log(`Signature verification - Format: ${isWebhookFormat ? 'Webhook' : 'IPN'}, dataId: ${dataId || 'missing'}, xRequestId: ${xRequestId || 'missing'}`);
+
+      if (!dataId) {
+        console.warn('No dataId available for signature verification - skipping signature check for this request');
+        console.warn('Body received:', JSON.stringify({ type: body.type, topic: body.topic, data: body.data, resource: body.resource }));
+      } else {
+        const isValid = await verifyMercadoPagoSignature(
+          xSignature,
+          xRequestId,
+          dataId,
+          webhookSecret
+        );
+
+        if (!isValid) {
+          console.error('Invalid webhook signature - rejecting request');
+          console.error('Headers received:', { xSignature: xSignature ? 'present' : 'missing', xRequestId, dataId });
+          return new Response(
+            JSON.stringify({ error: 'Invalid signature' }),
+            { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          );
+        }
+        console.log('Webhook signature verified successfully');
+      }
     } else {
       // In production, the secret should always be configured
       // For backwards compatibility, allow processing but log a warning
