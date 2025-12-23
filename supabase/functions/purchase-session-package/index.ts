@@ -150,13 +150,7 @@ serve(async (req) => {
       console.log(`Coupon applied: ${coupon.code}, discount: $${discountAmount}, final price: $${finalPrice}`);
     }
 
-    const mercadoPagoAccessToken = Deno.env.get("MERCADO_PAGO_ACCESS_TOKEN");
-    if (!mercadoPagoAccessToken) {
-      throw new Error("Mercado Pago not configured");
-    }
-
     const siteUrl = Deno.env.get("SITE_URL")?.replace(/\/$/, "") || "https://studiolanave.com";
-    console.log("Using SITE_URL:", siteUrl);
 
     // Create external reference with package info
     const externalReference = JSON.stringify({
@@ -171,11 +165,110 @@ serve(async (req) => {
       isGiftCard: validatedData.isGiftCard,
     });
 
+    // If final price is 0 (100% discount), complete purchase directly without payment
+    if (finalPrice === 0) {
+      console.log("Final price is 0, completing purchase directly without Mercado Pago");
+      
+      // Increment coupon usage if applicable
+      if (coupon) {
+        await supabase
+          .from("discount_coupons")
+          .update({ current_uses: (coupon.current_uses || 0) + 1 })
+          .eq("id", coupon.id);
+      }
+
+      // Generate session codes directly (similar to webhook logic)
+      const codes = [];
+      for (let i = 0; i < package_.sessions_quantity; i++) {
+        let code: string;
+        let isUnique = false;
+        
+        while (!isUnique) {
+          code = Math.random().toString(36).substring(2, 10).toUpperCase();
+          const { data: existing } = await supabase
+            .from("session_codes")
+            .select("id")
+            .eq("code", code)
+            .maybeSingle();
+          isUnique = !existing;
+        }
+        codes.push(code!);
+      }
+
+      const expiresAt = new Date();
+      expiresAt.setDate(expiresAt.getDate() + package_.validity_days);
+
+      // Insert all session codes
+      const sessionCodesData = codes.map((code, index) => ({
+        code,
+        package_id: package_.id,
+        buyer_email: validatedData.buyerEmail,
+        buyer_name: validatedData.buyerName,
+        buyer_phone: validatedData.buyerPhone,
+        applicable_service_ids: package_.applicable_service_ids,
+        expires_at: expiresAt.toISOString(),
+        mercado_pago_payment_id: "FREE_COUPON_" + Date.now(),
+        giftcard_access_token: validatedData.isGiftCard ? crypto.randomUUID() : null,
+      }));
+
+      const { error: codesError } = await supabase
+        .from("session_codes")
+        .insert(sessionCodesData);
+
+      if (codesError) {
+        console.error("Error inserting session codes:", codesError);
+        throw new Error("Error al crear los códigos de sesión");
+      }
+
+      console.log(`Created ${codes.length} session codes for free purchase:`, codes);
+
+      // Send confirmation email
+      try {
+        await supabase.functions.invoke("send-session-codes-email", {
+          body: {
+            buyerEmail: validatedData.buyerEmail,
+            buyerName: validatedData.buyerName,
+            packageName: package_.name,
+            sessionsQuantity: package_.sessions_quantity,
+            codes: codes,
+            expiresAt: expiresAt.toISOString(),
+            isGiftCard: validatedData.isGiftCard,
+          },
+        });
+        console.log("Confirmation email sent for free purchase");
+      } catch (emailError) {
+        console.error("Error sending email:", emailError);
+      }
+
+      return new Response(
+        JSON.stringify({
+          success: true,
+          freeOrder: true,
+          message: "Compra completada con cupón de descuento 100%",
+        }),
+        {
+          status: 200,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    // Normal flow: create Mercado Pago preference
+    const mercadoPagoAccessToken = Deno.env.get("MERCADO_PAGO_ACCESS_TOKEN");
+    if (!mercadoPagoAccessToken) {
+      throw new Error("Mercado Pago not configured");
+    }
+
+    // Use simple format for description - avoid special characters and locale formatting
+    const descriptionText = coupon 
+      ? `Descuento ${coupon.code} aplicado` 
+      : (package_.description || "Paquete de sesiones");
+
     const preferenceData = {
       items: [
         {
           title: `${package_.name} - ${package_.sessions_quantity} sesiones`,
-          description: coupon ? `Cupón ${coupon.code} aplicado (-$${discountAmount.toLocaleString('es-CL')})` : (package_.description || ""),
+          description: descriptionText,
           quantity: 1,
           unit_price: finalPrice,
           currency_id: "CLP",
