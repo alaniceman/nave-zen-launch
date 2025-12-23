@@ -113,13 +113,30 @@ serve(async (req) => {
     }
 
     // Check which slots already exist to avoid duplicates
+    // Use explicit UTC date range to ensure correct comparison regardless of timezone
     const existingSlots = new Set();
+    
+    // Calculate the full UTC range for the date period
+    // For Chile (UTC-3), a date like 2025-12-25 00:00 Chile = 2025-12-25 03:00 UTC
+    // So we need to search from start of first day to end of last day in UTC
+    const startUtc = new Date(startDate);
+    startUtc.setHours(0, 0, 0, 0);
+    const endUtc = new Date(endDate);
+    endUtc.setHours(23, 59, 59, 999);
+    
+    // Expand range by 1 day on each side to catch any timezone edge cases
+    const searchStart = new Date(startUtc);
+    searchStart.setDate(searchStart.getDate() - 1);
+    const searchEnd = new Date(endUtc);
+    searchEnd.setDate(searchEnd.getDate() + 1);
+    
+    console.log(`Checking existing slots from ${searchStart.toISOString()} to ${searchEnd.toISOString()}`);
     
     const { data: existing } = await supabase
       .from("generated_slots")
       .select("professional_id, service_id, date_time_start")
-      .gte("date_time_start", startDate.toISOString())
-      .lte("date_time_start", endDate.toISOString());
+      .gte("date_time_start", searchStart.toISOString())
+      .lte("date_time_start", searchEnd.toISOString());
 
     if (existing) {
       for (const slot of existing) {
