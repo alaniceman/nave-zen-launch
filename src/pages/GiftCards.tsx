@@ -224,6 +224,13 @@ export default function GiftCards() {
         throw new Error(error.message || "Error al procesar la compra");
       }
 
+      // Handle free order (100% discount)
+      if (result.freeOrder) {
+        toast.success("¡Compra completada! Revisa tu email para obtener tus códigos.");
+        window.location.href = "/bonos/success?free=true";
+        return;
+      }
+
       if (result.initPoint) {
         window.location.href = result.initPoint;
       } else {
