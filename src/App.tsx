@@ -31,6 +31,8 @@ import NotFound from "./pages/NotFound";
 import Bonos from "./pages/Bonos";
 import BonosSuccess from "./pages/BonosSuccess";
 import GiftCards from "./pages/GiftCards";
+import GiftCardsSuccess from "./pages/GiftCardsSuccess";
+import GiftCardsFailure from "./pages/GiftCardsFailure";
 import GiftCardView from "./pages/GiftCardView";
 import AgendaNaveStudio from "./pages/AgendaNaveStudio";
 import AgendaSuccess from "./pages/AgendaSuccess";
@@ -96,6 +98,8 @@ const App = () => (
             <Route path="/bonos" element={<Bonos />} />
             <Route path="/bonos/success" element={<BonosSuccess />} />
             <Route path="/giftcards" element={<GiftCards />} />
+            <Route path="/giftcards/success" element={<GiftCardsSuccess />} />
+            <Route path="/giftcards/failure" element={<GiftCardsFailure />} />
             <Route path="/giftcard/:token" element={<GiftCardView />} />
             <Route path="/agenda-nave-studio" element={<AgendaNaveStudio />} />
             <Route path="/agenda-nave-studio/success" element={<AgendaSuccess />} />
