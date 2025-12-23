@@ -364,6 +364,90 @@ export type Database = {
           },
         ]
       }
+      package_orders: {
+        Row: {
+          buyer_email: string
+          buyer_name: string
+          buyer_phone: string | null
+          coupon_code: string | null
+          coupon_id: string | null
+          created_at: string
+          discount_amount: number
+          error_message: string | null
+          final_price: number
+          id: string
+          is_giftcard: boolean
+          mercado_pago_payment_id: string | null
+          mercado_pago_preference_id: string | null
+          mercado_pago_status: string | null
+          mercado_pago_status_detail: string | null
+          order_type: string
+          original_price: number
+          package_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          buyer_email: string
+          buyer_name: string
+          buyer_phone?: string | null
+          coupon_code?: string | null
+          coupon_id?: string | null
+          created_at?: string
+          discount_amount?: number
+          error_message?: string | null
+          final_price: number
+          id?: string
+          is_giftcard?: boolean
+          mercado_pago_payment_id?: string | null
+          mercado_pago_preference_id?: string | null
+          mercado_pago_status?: string | null
+          mercado_pago_status_detail?: string | null
+          order_type: string
+          original_price: number
+          package_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          buyer_email?: string
+          buyer_name?: string
+          buyer_phone?: string | null
+          coupon_code?: string | null
+          coupon_id?: string | null
+          created_at?: string
+          discount_amount?: number
+          error_message?: string | null
+          final_price?: number
+          id?: string
+          is_giftcard?: boolean
+          mercado_pago_payment_id?: string | null
+          mercado_pago_preference_id?: string | null
+          mercado_pago_status?: string | null
+          mercado_pago_status_detail?: string | null
+          order_type?: string
+          original_price?: number
+          package_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "package_orders_coupon_id_fkey"
+            columns: ["coupon_id"]
+            isOneToOne: false
+            referencedRelation: "discount_coupons"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "package_orders_package_id_fkey"
+            columns: ["package_id"]
+            isOneToOne: false
+            referencedRelation: "session_packages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       professionals: {
         Row: {
           created_at: string
