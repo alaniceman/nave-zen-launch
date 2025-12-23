@@ -74,14 +74,16 @@ serve(async (req) => {
 
     console.log(`Found ${slots?.length || 0} slots in generated_slots table`);
 
-    // Get professionals that have slots in DB for this date
-    const professionalsWithSlotsInDB = new Set(
-      (slots || []).map(slot => slot.professional_id)
+    // Create a Set of existing slots for quick lookup: "professionalId-serviceId-dateTimeStart"
+    const existingSlotsSet = new Set(
+      (slots || []).map(slot => 
+        `${slot.professional_id}-${slot.service_id}-${slot.date_time_start}`
+      )
     );
 
-    console.log(`Professionals with slots in DB:`, Array.from(professionalsWithSlotsInDB));
+    console.log(`Existing slots in DB: ${existingSlotsSet.size}`);
 
-    // Fetch availability rules for this date to find professionals without slots
+    // Fetch availability rules for this date
     let rulesQuery = supabase
       .from("availability_rules")
       .select(`
@@ -104,36 +106,37 @@ serve(async (req) => {
 
     console.log(`Found ${rules?.length || 0} active rules`);
 
-    // Generate on-the-fly slots for professionals NOT in DB
+    // Generate on-the-fly slots from ALL rules, then filter out those that already exist in DB
     let generatedSlots: any[] = [];
     
     if (rules && rules.length > 0) {
-      // Filter rules for professionals that DON'T have slots in DB
-      const rulesToGenerate = rules.filter(rule => 
-        !professionalsWithSlotsInDB.has(rule.professional_id)
+      // Extract services data from all rules
+      const services = rules
+        .map(r => r.services)
+        .filter(Boolean)
+        .map(s => ({ id: s.id, max_capacity: s.max_capacity }));
+
+      // Generate slots from ALL rules
+      const generatedSlotsRaw = generateSlotsFromRules(
+        date,
+        rules,
+        services
       );
 
-      console.log(`Found ${rulesToGenerate.length} rules for professionals without DB slots`);
+      console.log(`Generated ${generatedSlotsRaw.length} potential slots from rules`);
 
-      if (rulesToGenerate.length > 0) {
-        // Extract services data
-        const services = rulesToGenerate
-          .map(r => r.services)
-          .filter(Boolean)
-          .map(s => ({ id: s.id, max_capacity: s.max_capacity }));
-
-        // Generate slots on-the-fly only for professionals without DB slots
-        const generatedSlotsRaw = generateSlotsFromRules(
-          date,
-          rulesToGenerate,
-          services
-        );
-
-        console.log(`Generated ${generatedSlotsRaw.length} slots from rules`);
-
-        // Format generated slots for response
-        generatedSlots = generatedSlotsRaw.map(slot => {
-          const rule = rulesToGenerate.find(r => 
+      // Filter out slots that already exist in DB and format for response
+      generatedSlots = generatedSlotsRaw
+        .filter(slot => {
+          const key = `${slot.professional_id}-${slot.service_id}-${slot.date_time_start}`;
+          const exists = existingSlotsSet.has(key);
+          if (exists) {
+            console.log(`Skipping slot (already in DB): ${key}`);
+          }
+          return !exists;
+        })
+        .map(slot => {
+          const rule = rules.find(r => 
             r.professional_id === slot.professional_id && 
             r.service_id === slot.service_id
           );
@@ -149,7 +152,8 @@ serve(async (req) => {
             confirmed_bookings: 0,
           };
         });
-      }
+
+      console.log(`${generatedSlots.length} new slots generated on-the-fly (not in DB)`);
     }
 
     // Combine DB slots with generated slots
