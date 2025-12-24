@@ -12,6 +12,7 @@ import { Loader2, Package, Calendar, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Footer } from "@/components/Footer";
+import { PurchaseFAQ } from "@/components/PurchaseFAQ";
 const purchaseSchema = z.object({
   buyerName: z.string().min(2, "El nombre debe tener al menos 2 caracteres").max(100),
   buyerEmail: z.string().email("Email inválido").max(255),
@@ -402,6 +403,8 @@ export default function Bonos() {
             </div>}
         </div>
       </main>
+
+      <PurchaseFAQ type="bonos" />
 
       <Footer />
     </>;
