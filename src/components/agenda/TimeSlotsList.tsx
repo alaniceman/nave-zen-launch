@@ -11,6 +11,7 @@ interface TimeSlot {
   professionalName: string;
   serviceId: string;
   serviceName: string;
+  serviceSortOrder?: number;
   availableCapacity?: number;
   maxCapacity?: number;
 }
@@ -37,10 +38,15 @@ export function TimeSlotsList({ slots, selectedDate, onSelectSlot }: TimeSlotsLi
     .sort((a, b) => a.dateTimeStart.localeCompare(b.dateTimeStart))
     .reduce((acc, slot) => {
       const key = slot.serviceName;
-      if (!acc[key]) acc[key] = [];
-      acc[key].push(slot);
+      if (!acc[key]) acc[key] = { slots: [], sortOrder: slot.serviceSortOrder ?? 0 };
+      acc[key].slots.push(slot);
       return acc;
-    }, {} as Record<string, TimeSlot[]>);
+    }, {} as Record<string, { slots: TimeSlot[]; sortOrder: number }>);
+
+  // Sort service groups by sort_order
+  const sortedServiceGroups = Object.entries(groupedByService).sort(
+    ([, a], [, b]) => a.sortOrder - b.sortOrder
+  );
 
   return (
     <div className="space-y-6">
@@ -48,7 +54,7 @@ export function TimeSlotsList({ slots, selectedDate, onSelectSlot }: TimeSlotsLi
         {format(selectedDate, "EEEE d 'de' MMMM", { locale: es })}
       </h3>
       <div className="max-h-[500px] overflow-y-auto space-y-6 pr-2">
-        {Object.entries(groupedByService).map(([serviceName, serviceSlots]) => (
+        {sortedServiceGroups.map(([serviceName, { slots: serviceSlots }]) => (
           <div key={serviceName} className="space-y-3">
             <h4 className="font-semibold text-base text-primary border-b pb-2">
               {serviceName}
