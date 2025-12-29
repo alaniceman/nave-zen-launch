@@ -11,9 +11,9 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Loader2, Plus, Pencil, Trash2 } from 'lucide-react';
+import { Loader2, Plus, Pencil, Trash2, Star } from 'lucide-react';
 import { toast } from 'sonner';
-import { ServiceForm } from '@/components/admin/ServiceForm';
+import { BranchForm } from '@/components/admin/BranchForm';
 import { Switch } from '@/components/ui/switch';
 import {
   AlertDialog,
@@ -25,35 +25,47 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import { Badge } from '@/components/ui/badge';
 
-export default function AdminServices() {
+interface Branch {
+  id: string;
+  name: string;
+  slug: string;
+  address: string | null;
+  description: string | null;
+  is_default: boolean;
+  sort_order: number;
+  is_active: boolean;
+}
+
+export default function AdminBranches() {
   const queryClient = useQueryClient();
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [editingService, setEditingService] = useState<any>(null);
+  const [editingBranch, setEditingBranch] = useState<Branch | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
-  const { data: services, isLoading } = useQuery({
-    queryKey: ['services-admin'],
+  const { data: branches, isLoading } = useQuery({
+    queryKey: ['branches-admin'],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('services')
-        .select('*, branches(id, name)')
+        .from('branches')
+        .select('*')
         .order('sort_order', { ascending: true });
       if (error) throw error;
-      return data;
+      return data as Branch[];
     },
   });
 
   const toggleActiveMutation = useMutation({
     mutationFn: async ({ id, isActive }: { id: string; isActive: boolean }) => {
       const { error } = await supabase
-        .from('services')
+        .from('branches')
         .update({ is_active: isActive })
         .eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['services-admin'] });
+      queryClient.invalidateQueries({ queryKey: ['branches-admin'] });
       toast.success('Estado actualizado');
     },
     onError: () => {
@@ -64,38 +76,38 @@ export default function AdminServices() {
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
       const { error } = await supabase
-        .from('services')
+        .from('branches')
         .delete()
         .eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['services-admin'] });
-      toast.success('Servicio eliminado');
+      queryClient.invalidateQueries({ queryKey: ['branches-admin'] });
+      toast.success('Sucursal eliminada');
       setDeletingId(null);
     },
     onError: () => {
-      toast.error('Error al eliminar servicio');
+      toast.error('Error al eliminar sucursal. Puede que tenga servicios asociados.');
     },
   });
 
-  const handleEdit = (service: any) => {
-    setEditingService(service);
+  const handleEdit = (branch: Branch) => {
+    setEditingBranch(branch);
     setIsFormOpen(true);
   };
 
   const handleCloseForm = () => {
     setIsFormOpen(false);
-    setEditingService(null);
+    setEditingBranch(null);
   };
 
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-foreground">Gestión de Servicios</h1>
+        <h1 className="text-3xl font-bold text-foreground">Gestión de Sucursales</h1>
         <Button onClick={() => setIsFormOpen(true)}>
           <Plus className="h-4 w-4 mr-2" />
-          Nuevo Servicio
+          Nueva Sucursal
         </Button>
       </div>
 
@@ -107,54 +119,47 @@ export default function AdminServices() {
         <Card>
           <CardContent className="p-0">
             <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Orden</TableHead>
-                <TableHead>Nombre</TableHead>
-                <TableHead>Sucursal</TableHead>
-                <TableHead>Duración</TableHead>
-                <TableHead>Precio</TableHead>
-                <TableHead>Cupos</TableHead>
-                <TableHead>Activo</TableHead>
-                <TableHead className="text-right">Acciones</TableHead>
-              </TableRow>
-            </TableHeader>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Orden</TableHead>
+                  <TableHead>Nombre</TableHead>
+                  <TableHead>Slug</TableHead>
+                  <TableHead>Dirección</TableHead>
+                  <TableHead>Activa</TableHead>
+                  <TableHead className="text-right">Acciones</TableHead>
+                </TableRow>
+              </TableHeader>
               <TableBody>
-                {services?.length === 0 ? (
+                {branches?.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
-                      No hay servicios registrados
+                    <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                      No hay sucursales registradas
                     </TableCell>
                   </TableRow>
                 ) : (
-                  services?.map((service) => (
-                    <TableRow key={service.id}>
+                  branches?.map((branch) => (
+                    <TableRow key={branch.id}>
                       <TableCell className="text-foreground font-medium w-16">
-                        {service.sort_order ?? 0}
+                        {branch.sort_order}
                       </TableCell>
                       <TableCell>
-                        <div>
-                          <div className="font-medium text-foreground">{service.name}</div>
-                          {service.description && (
-                            <div className="text-sm text-muted-foreground line-clamp-1">
-                              {service.description}
-                            </div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium text-foreground">{branch.name}</span>
+                          {branch.is_default && (
+                            <Badge variant="secondary" className="gap-1">
+                              <Star className="h-3 w-3" />
+                              Por defecto
+                            </Badge>
                           )}
                         </div>
                       </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {(service as any).branches?.name || '-'}
-                      </TableCell>
-                      <TableCell className="text-foreground">{service.duration_minutes} min</TableCell>
-                      <TableCell className="text-foreground font-medium">
-                        ${service.price_clp.toLocaleString('es-CL')}
-                      </TableCell>
-                      <TableCell className="text-foreground">{service.max_capacity} cupos</TableCell>
+                      <TableCell className="text-muted-foreground">{branch.slug}</TableCell>
+                      <TableCell className="text-foreground">{branch.address || '-'}</TableCell>
                       <TableCell>
                         <Switch
-                          checked={service.is_active}
+                          checked={branch.is_active}
                           onCheckedChange={(checked) =>
-                            toggleActiveMutation.mutate({ id: service.id, isActive: checked })
+                            toggleActiveMutation.mutate({ id: branch.id, isActive: checked })
                           }
                         />
                       </TableCell>
@@ -163,14 +168,15 @@ export default function AdminServices() {
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => handleEdit(service)}
+                            onClick={() => handleEdit(branch)}
                           >
                             <Pencil className="h-4 w-4" />
                           </Button>
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => setDeletingId(service.id)}
+                            onClick={() => setDeletingId(branch.id)}
+                            disabled={branch.is_default}
                           >
                             <Trash2 className="h-4 w-4 text-destructive" />
                           </Button>
@@ -185,18 +191,19 @@ export default function AdminServices() {
         </Card>
       )}
 
-      <ServiceForm
+      <BranchForm
         open={isFormOpen}
         onClose={handleCloseForm}
-        service={editingService}
+        branch={editingBranch}
       />
 
       <AlertDialog open={!!deletingId} onOpenChange={() => setDeletingId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>¿Eliminar servicio?</AlertDialogTitle>
+            <AlertDialogTitle>¿Eliminar sucursal?</AlertDialogTitle>
             <AlertDialogDescription>
-              Esta acción no se puede deshacer. Se eliminará permanentemente el servicio.
+              Esta acción no se puede deshacer. Se eliminará permanentemente la sucursal.
+              Asegúrate de reasignar los servicios asociados primero.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
