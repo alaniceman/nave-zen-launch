@@ -31,6 +31,7 @@ const serviceSchema = z.object({
   durationMinutes: z.number().min(15, 'Mínimo 15 minutos').max(480, 'Máximo 480 minutos'),
   priceClp: z.number().min(1000, 'El precio mínimo es $1.000'),
   maxCapacity: z.number().min(1, 'Mínimo 1 cupo').max(100, 'Máximo 100 cupos'),
+  sortOrder: z.number().min(0, 'Mínimo 0').default(0),
   isActive: z.boolean().default(true),
 });
 
@@ -54,6 +55,7 @@ export function ServiceForm({ open, onClose, service }: ServiceFormProps) {
       durationMinutes: 60,
       priceClp: 25000,
       maxCapacity: 6,
+      sortOrder: 0,
       isActive: true,
     },
   });
@@ -66,6 +68,7 @@ export function ServiceForm({ open, onClose, service }: ServiceFormProps) {
         durationMinutes: service.duration_minutes,
         priceClp: service.price_clp,
         maxCapacity: service.max_capacity,
+        sortOrder: service.sort_order ?? 0,
         isActive: service.is_active,
       });
     } else {
@@ -74,6 +77,8 @@ export function ServiceForm({ open, onClose, service }: ServiceFormProps) {
         description: '',
         durationMinutes: 60,
         priceClp: 25000,
+        maxCapacity: 6,
+        sortOrder: 0,
         isActive: true,
       });
     }
@@ -87,6 +92,7 @@ export function ServiceForm({ open, onClose, service }: ServiceFormProps) {
         duration_minutes: data.durationMinutes,
         price_clp: data.priceClp,
         max_capacity: data.maxCapacity,
+        sort_order: data.sortOrder,
         is_active: data.isActive,
       };
 
@@ -203,6 +209,25 @@ export function ServiceForm({ open, onClose, service }: ServiceFormProps) {
                       {...field}
                       type="number"
                       onChange={(e) => field.onChange(parseInt(e.target.value))}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="sortOrder"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Orden de visualización</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      type="number"
+                      onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+                      placeholder="0 = primero"
                     />
                   </FormControl>
                   <FormMessage />

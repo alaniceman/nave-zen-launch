@@ -38,7 +38,7 @@ export default function AdminServices() {
       const { data, error } = await supabase
         .from('services')
         .select('*')
-        .order('created_at', { ascending: false });
+        .order('sort_order', { ascending: true });
       if (error) throw error;
       return data;
     },
@@ -109,6 +109,7 @@ export default function AdminServices() {
             <Table>
             <TableHeader>
               <TableRow>
+                <TableHead>Orden</TableHead>
                 <TableHead>Nombre</TableHead>
                 <TableHead>Duración</TableHead>
                 <TableHead>Precio</TableHead>
@@ -120,13 +121,16 @@ export default function AdminServices() {
               <TableBody>
                 {services?.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                    <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
                       No hay servicios registrados
                     </TableCell>
                   </TableRow>
                 ) : (
                   services?.map((service) => (
                     <TableRow key={service.id}>
+                      <TableCell className="text-foreground font-medium w-16">
+                        {service.sort_order ?? 0}
+                      </TableCell>
                       <TableCell>
                         <div>
                           <div className="font-medium text-foreground">{service.name}</div>
