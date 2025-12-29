@@ -1,4 +1,4 @@
-import { Calendar, Users, Package, Clock, User, LogOut, Ticket, Gift, Key } from 'lucide-react';
+import { Calendar, Users, Package, Clock, User, LogOut, Ticket, Gift, Key, MapPin } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import {
@@ -18,6 +18,7 @@ import { Button } from '@/components/ui/button';
 
 const menuItems = [
   { title: 'Reservas', url: '/admin/agenda', icon: Calendar },
+  { title: 'Sucursales', url: '/admin/sucursales', icon: MapPin },
   { title: 'Profesionales', url: '/admin/profesionales', icon: Users },
   { title: 'Servicios', url: '/admin/servicios', icon: Package },
   { title: 'Bonos', url: '/admin/paquetes-sesiones', icon: Gift },

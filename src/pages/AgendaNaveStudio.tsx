@@ -13,19 +13,31 @@ import { BookingForm } from "@/components/agenda/BookingForm";
 import { toast } from "sonner";
 import { GiftCardSection } from "@/components/GiftCardSection";
 import { SessionPackagePromo } from "@/components/SessionPackagePromo";
+
+interface Branch {
+  id: string;
+  name: string;
+  slug: string;
+  address: string | null;
+  is_default: boolean;
+}
+
 interface Professional {
   id: string;
   name: string;
   slug: string;
-  email?: string; // Optional - not returned by public API for privacy
+  email?: string;
 }
+
 interface Service {
   id: string;
   name: string;
   duration_minutes: number;
   price_clp: number;
   description: string;
+  branch_id: string | null;
 }
+
 interface TimeSlot {
   dateTimeStart: string;
   dateTimeEnd: string;
@@ -37,13 +49,12 @@ interface TimeSlot {
   maxCapacity?: number;
 }
 export default function AgendaNaveStudio() {
-  const {
-    professionalSlug,
-    dateParam,
-    timeParam
-  } = useParams();
+  const { professionalSlug, dateParam, timeParam } = useParams();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  
+  const [branches, setBranches] = useState<Branch[]>([]);
+  const [selectedBranch, setSelectedBranch] = useState<string>("");
   const [professionals, setProfessionals] = useState<Professional[]>([]);
   const [services, setServices] = useState<Service[]>([]);
   const [selectedProfessional, setSelectedProfessional] = useState<string>("any");
@@ -54,26 +65,32 @@ export default function AgendaNaveStudio() {
   const [loading, setLoading] = useState(true);
   const [loadingSlots, setLoadingSlots] = useState(false);
 
-  // Load professionals and services
+  // Load branches, professionals and services
   useEffect(() => {
     const loadData = async () => {
       try {
-        // Use the secure function that doesn't expose emails
-        const [profsResult, servicesResult] = await Promise.all([
+        const [branchesResult, profsResult, servicesResult] = await Promise.all([
+          supabase.from("branches").select("*").eq("is_active", true).order("sort_order", { ascending: true }),
           supabase.rpc("get_active_professionals"),
           supabase.from("services").select("*").eq("is_active", true).order("sort_order", { ascending: true })
         ]);
+        if (branchesResult.error) throw branchesResult.error;
         if (profsResult.error) throw profsResult.error;
         if (servicesResult.error) throw servicesResult.error;
-        // Sort professionals by name client-side
+        
+        const branchesData = branchesResult.data || [];
+        setBranches(branchesData);
+        
+        // Set default branch
+        const defaultBranch = branchesData.find(b => b.is_default) || branchesData[0];
+        if (defaultBranch) {
+          setSelectedBranch(defaultBranch.id);
+        }
+        
         const sortedProfs = (profsResult.data || []).sort((a, b) => a.name.localeCompare(b.name));
         setProfessionals(sortedProfs);
         setServices(servicesResult.data || []);
-        if (servicesResult.data && servicesResult.data.length > 0) {
-          setSelectedService(servicesResult.data[0].id);
-        }
 
-        // Handle URL params
         if (professionalSlug && profsResult.data) {
           const prof = profsResult.data.find(p => p.slug === professionalSlug);
           if (prof) {
@@ -97,6 +114,14 @@ export default function AgendaNaveStudio() {
     };
     loadData();
   }, [professionalSlug, dateParam]);
+
+  // Filter services by selected branch
+  const filteredServices = services.filter(s => s.branch_id === selectedBranch);
+  
+  // Filter slots by selected branch's services
+  const filteredSlots = availableSlots.filter(slot => 
+    filteredServices.some(s => s.id === slot.serviceId)
+  );
 
   // Load available slots when date changes
   useEffect(() => {
@@ -186,8 +211,26 @@ export default function AgendaNaveStudio() {
         <SessionPackagePromo />
 
         {!selectedTimeSlot ? <div className="grid md:grid-cols-2 gap-6">
-            {/* Left column: Professional selector and calendar */}
+            {/* Left column: Branch, Professional selector and calendar */}
             <div className="space-y-4">
+              {branches.length > 1 && (
+                <Card className="p-4">
+                  <label className="text-sm font-medium mb-2 block">Sucursal</label>
+                  <Select value={selectedBranch} onValueChange={setSelectedBranch}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {branches.map(branch => (
+                        <SelectItem key={branch.id} value={branch.id}>
+                          {branch.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </Card>
+              )}
+
               <Card className="p-4">
                 <label className="text-sm font-medium mb-2 block">Instructor</label>
                 <Select value={selectedProfessional} onValueChange={handleProfessionalChange}>
@@ -220,7 +263,7 @@ export default function AgendaNaveStudio() {
                     <p>Selecciona una fecha para ver horarios disponibles</p>
                   </div> : loadingSlots ? <div className="flex justify-center py-12">
                     <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                  </div> : <TimeSlotsList slots={availableSlots} selectedDate={selectedDate} onSelectSlot={handleTimeSlotSelect} />}
+                  </div> : <TimeSlotsList slots={filteredSlots} selectedDate={selectedDate} onSelectSlot={handleTimeSlotSelect} />}
               </Card>
             </div>
           </div> : <div className="max-w-2xl mx-auto">

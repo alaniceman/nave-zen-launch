@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import {
   Dialog,
@@ -22,12 +22,14 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 const serviceSchema = z.object({
   name: z.string().min(2, 'El nombre debe tener al menos 2 caracteres'),
   description: z.string().optional(),
+  branchId: z.string().min(1, 'Selecciona una sucursal'),
   durationMinutes: z.number().min(15, 'Mínimo 15 minutos').max(480, 'Máximo 480 minutos'),
   priceClp: z.number().min(1000, 'El precio mínimo es $1.000'),
   maxCapacity: z.number().min(1, 'Mínimo 1 cupo').max(100, 'Máximo 100 cupos'),
@@ -47,11 +49,24 @@ export function ServiceForm({ open, onClose, service }: ServiceFormProps) {
   const queryClient = useQueryClient();
   const isEditing = !!service;
 
+  const { data: branches } = useQuery({
+    queryKey: ['branches-admin'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('branches')
+        .select('*')
+        .order('sort_order', { ascending: true });
+      if (error) throw error;
+      return data;
+    },
+  });
+
   const form = useForm<ServiceFormData>({
     resolver: zodResolver(serviceSchema),
     defaultValues: {
       name: '',
       description: '',
+      branchId: '',
       durationMinutes: 60,
       priceClp: 25000,
       maxCapacity: 6,
@@ -65,6 +80,7 @@ export function ServiceForm({ open, onClose, service }: ServiceFormProps) {
       form.reset({
         name: service.name,
         description: service.description || '',
+        branchId: service.branch_id || '',
         durationMinutes: service.duration_minutes,
         priceClp: service.price_clp,
         maxCapacity: service.max_capacity,
@@ -72,9 +88,12 @@ export function ServiceForm({ open, onClose, service }: ServiceFormProps) {
         isActive: service.is_active,
       });
     } else {
+      // Set default branch when creating new service
+      const defaultBranch = branches?.find(b => b.is_default);
       form.reset({
         name: '',
         description: '',
+        branchId: defaultBranch?.id || '',
         durationMinutes: 60,
         priceClp: 25000,
         maxCapacity: 6,
@@ -82,13 +101,14 @@ export function ServiceForm({ open, onClose, service }: ServiceFormProps) {
         isActive: true,
       });
     }
-  }, [service, form]);
+  }, [service, form, branches]);
 
   const mutation = useMutation({
     mutationFn: async (data: ServiceFormData) => {
       const payload = {
         name: data.name,
         description: data.description || null,
+        branch_id: data.branchId,
         duration_minutes: data.durationMinutes,
         price_clp: data.priceClp,
         max_capacity: data.maxCapacity,
@@ -143,6 +163,31 @@ export function ServiceForm({ open, onClose, service }: ServiceFormProps) {
                   <FormControl>
                     <Input {...field} placeholder="Clase de Yoga" />
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="branchId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Sucursal</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecciona una sucursal" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {branches?.map((branch) => (
+                        <SelectItem key={branch.id} value={branch.id}>
+                          {branch.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
