@@ -509,6 +509,7 @@ export type Database = {
           max_capacity: number
           name: string
           price_clp: number
+          sort_order: number | null
           updated_at: string
         }
         Insert: {
@@ -520,6 +521,7 @@ export type Database = {
           max_capacity?: number
           name: string
           price_clp: number
+          sort_order?: number | null
           updated_at?: string
         }
         Update: {
@@ -531,6 +533,7 @@ export type Database = {
           max_capacity?: number
           name?: string
           price_clp?: number
+          sort_order?: number | null
           updated_at?: string
         }
         Relationships: []

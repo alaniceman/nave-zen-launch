@@ -53,7 +53,7 @@ serve(async (req) => {
       .select(`
         *,
         professionals:professional_id(id, name, slug),
-        services:service_id(id, name, duration_minutes, max_capacity)
+        services:service_id(id, name, duration_minutes, max_capacity, sort_order)
       `)
       .eq("is_active", true)
       .gte("date_time_start", startOfDay.toISOString())
@@ -92,7 +92,7 @@ serve(async (req) => {
       .select(`
         *,
         professionals:professional_id(id, name, slug),
-        services:service_id(id, name, max_capacity)
+        services:service_id(id, name, max_capacity, sort_order)
       `)
       .eq("is_active", true);
 
@@ -175,6 +175,7 @@ serve(async (req) => {
         professionalName: slot.professionals?.name || "Unknown",
         serviceId: slot.service_id,
         serviceName: slot.services?.name || "Unknown",
+        serviceSortOrder: slot.services?.sort_order ?? 0,
         dateTimeStart: slot.date_time_start,
         dateTimeEnd: slot.date_time_end,
         maxCapacity: slot.max_capacity,
