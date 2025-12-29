@@ -61,7 +61,7 @@ export default function AgendaNaveStudio() {
         // Use the secure function that doesn't expose emails
         const [profsResult, servicesResult] = await Promise.all([
           supabase.rpc("get_active_professionals"),
-          supabase.from("services").select("*").eq("is_active", true).order("name")
+          supabase.from("services").select("*").eq("is_active", true).order("sort_order", { ascending: true })
         ]);
         if (profsResult.error) throw profsResult.error;
         if (servicesResult.error) throw servicesResult.error;
@@ -229,7 +229,7 @@ export default function AgendaNaveStudio() {
               Volver a horarios
             </Button>
             
-            <BookingForm timeSlot={selectedTimeSlot} professional={professionals.find(p => p.id === selectedTimeSlot.professionalId)!} service={services.find(s => s.id === selectedService)!} onBack={handleBackToSlots} />
+            <BookingForm timeSlot={selectedTimeSlot} professional={professionals.find(p => p.id === selectedTimeSlot.professionalId)!} service={services.find(s => s.id === selectedTimeSlot.serviceId)!} onBack={handleBackToSlots} />
           </div>}
       </div>
     </div>
