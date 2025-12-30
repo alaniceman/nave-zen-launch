@@ -225,7 +225,7 @@ const PlanAnual2026 = () => {
                     variant="secondary"
                     className="mt-3 bg-primary/10 text-primary"
                   >
-                    2 meses gratis · $98.000 de descuento
+                    2 meses gratis · $98.000 de ahorro
                   </Badge>
                 </CardHeader>
                 <CardContent className="space-y-6">
@@ -311,7 +311,7 @@ const PlanAnual2026 = () => {
                     variant="secondary"
                     className="mt-3 bg-primary/10 text-primary"
                   >
-                    2 meses gratis · $158.000 de descuento
+                    2 meses gratis · $158.000 de ahorro
                   </Badge>
                 </CardHeader>
                 <CardContent className="space-y-6">
@@ -393,7 +393,7 @@ const PlanAnual2026 = () => {
                     variant="secondary"
                     className="mt-3 bg-primary/10 text-primary"
                   >
-                    2 meses gratis · $190.000 de descuento
+                    2 meses gratis · $190.000 de ahorro
                   </Badge>
                 </CardHeader>
                 <CardContent className="space-y-6">
