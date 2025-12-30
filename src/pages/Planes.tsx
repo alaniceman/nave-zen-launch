@@ -7,6 +7,7 @@ import { PricingTrialMiniBar } from "@/components/PricingTrialMiniBar";
 import { PricingTrialYogaSection } from "@/components/PricingTrialYogaSection";
 import { CheckoutRedirectButton } from "@/components/CheckoutRedirectButton";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
+import { PlanesAnualesPromo } from "@/components/PlanesAnualesPromo";
 const Planes = () => {
   const {
     trackViewContent,
@@ -73,6 +74,9 @@ const Planes = () => {
           </p>
         </div>
       </section>
+
+      {/* Planes Anuales Promo - Oferta Enero */}
+      <PlanesAnualesPromo />
 
       {/* Menú de Intención */}
       <section id="intent-menu" className="py-16 bg-neutral-50">
