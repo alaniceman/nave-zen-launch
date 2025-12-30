@@ -278,9 +278,10 @@ const PlanAnual2026 = () => {
                         rel="noopener noreferrer"
                       >
                         <CreditCard className="mr-2 w-4 h-4" />
-                        12 cuotas sin interés
+                        Págalo en 12 cuotas sin interés
                       </a>
                     </Button>
+                    <p className="text-xs text-muted-foreground text-center">vía Mercado Pago</p>
                   </div>
 
                   <p className="text-xs text-center text-muted-foreground">
@@ -364,9 +365,10 @@ const PlanAnual2026 = () => {
                         rel="noopener noreferrer"
                       >
                         <CreditCard className="mr-2 w-4 h-4" />
-                        12 cuotas sin interés
+                        Págalo en 12 cuotas sin interés
                       </a>
                     </Button>
+                    <p className="text-xs text-muted-foreground text-center">vía Mercado Pago</p>
                   </div>
 
                   <p className="text-xs text-center text-muted-foreground">
@@ -446,9 +448,10 @@ const PlanAnual2026 = () => {
                         rel="noopener noreferrer"
                       >
                         <CreditCard className="mr-2 w-4 h-4" />
-                        12 cuotas sin interés
+                        Págalo en 12 cuotas sin interés
                       </a>
                     </Button>
+                    <p className="text-xs text-muted-foreground text-center">vía Mercado Pago</p>
                   </div>
 
                   <p className="text-xs text-center text-muted-foreground">
