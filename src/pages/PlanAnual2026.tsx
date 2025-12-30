@@ -229,23 +229,28 @@ const PlanAnual2026 = () => {
                   </Badge>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <div className="space-y-3 text-sm">
-                    <div className="flex items-start gap-2">
-                      <Snowflake className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                      <div>
-                        <p className="font-medium">1 entrada a Icefest 2026</p>
-                        <p className="text-muted-foreground text-xs">
-                          Transferible · Valor $70.000
-                        </p>
+                  <div className="relative border border-dashed border-primary/40 rounded-lg p-4 bg-primary/5">
+                    <Badge className="absolute -top-2.5 left-3 bg-primary text-primary-foreground text-xs px-2">
+                      🎁 BONUS
+                    </Badge>
+                    <div className="space-y-3 text-sm pt-1">
+                      <div className="flex items-start gap-2">
+                        <Snowflake className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                        <div>
+                          <p className="font-medium">1 entrada a Icefest 2026</p>
+                          <p className="text-muted-foreground text-xs">
+                            Transferible · Valor $70.000
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <Gift className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                      <div>
-                        <p className="font-medium">5% dcto Retiro Guatemala</p>
-                        <p className="text-muted-foreground text-xs">
-                          Valor $100.000
-                        </p>
+                      <div className="flex items-start gap-2">
+                        <Gift className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                        <div>
+                          <p className="font-medium">5% dcto Retiro Guatemala</p>
+                          <p className="text-muted-foreground text-xs">
+                            Valor $100.000
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -310,23 +315,28 @@ const PlanAnual2026 = () => {
                   </Badge>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <div className="space-y-3 text-sm">
-                    <div className="flex items-start gap-2">
-                      <Snowflake className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                      <div>
-                        <p className="font-medium">2 entradas a Icefest 2026</p>
-                        <p className="text-muted-foreground text-xs">
-                          Transferibles · Valor $140.000
-                        </p>
+                  <div className="relative border border-dashed border-primary/40 rounded-lg p-4 bg-primary/5">
+                    <Badge className="absolute -top-2.5 left-3 bg-primary text-primary-foreground text-xs px-2">
+                      🎁 BONUS
+                    </Badge>
+                    <div className="space-y-3 text-sm pt-1">
+                      <div className="flex items-start gap-2">
+                        <Snowflake className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                        <div>
+                          <p className="font-medium">2 entradas a Icefest 2026</p>
+                          <p className="text-muted-foreground text-xs">
+                            Transferibles · Valor $140.000
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <Gift className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                      <div>
-                        <p className="font-medium">7% dcto Retiro Guatemala</p>
-                        <p className="text-muted-foreground text-xs">
-                          Valor $140.000
-                        </p>
+                      <div className="flex items-start gap-2">
+                        <Gift className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                        <div>
+                          <p className="font-medium">7% dcto Retiro Guatemala</p>
+                          <p className="text-muted-foreground text-xs">
+                            Valor $140.000
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -387,23 +397,28 @@ const PlanAnual2026 = () => {
                   </Badge>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <div className="space-y-3 text-sm">
-                    <div className="flex items-start gap-2">
-                      <Snowflake className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                      <div>
-                        <p className="font-medium">3 entradas a Icefest 2026</p>
-                        <p className="text-muted-foreground text-xs">
-                          Transferibles · Valor $210.000
-                        </p>
+                  <div className="relative border border-dashed border-primary/40 rounded-lg p-4 bg-primary/5">
+                    <Badge className="absolute -top-2.5 left-3 bg-primary text-primary-foreground text-xs px-2">
+                      🎁 BONUS
+                    </Badge>
+                    <div className="space-y-3 text-sm pt-1">
+                      <div className="flex items-start gap-2">
+                        <Snowflake className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                        <div>
+                          <p className="font-medium">3 entradas a Icefest 2026</p>
+                          <p className="text-muted-foreground text-xs">
+                            Transferibles · Valor $210.000
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <Gift className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                      <div>
-                        <p className="font-medium">10% dcto Retiro Guatemala</p>
-                        <p className="text-muted-foreground text-xs">
-                          Valor $200.000
-                        </p>
+                      <div className="flex items-start gap-2">
+                        <Gift className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                        <div>
+                          <p className="font-medium">10% dcto Retiro Guatemala</p>
+                          <p className="text-muted-foreground text-xs">
+                            Valor $200.000
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>
