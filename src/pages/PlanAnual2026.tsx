@@ -89,12 +89,12 @@ const PlanAnual2026 = () => {
               >
                 Quiero mi Plan Anual 2026
               </Button>
-              <Button
-                variant="outline"
-                size="lg"
-                className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10 text-lg px-8"
-                onClick={scrollToPlans}
-              >
+          <Button
+            variant="outline"
+            size="lg"
+            className="border-primary-foreground text-primary-foreground bg-transparent hover:bg-primary-foreground/10 text-lg px-8"
+            onClick={scrollToPlans}
+          >
                 Ver planes y beneficios
                 <ChevronDown className="ml-2 w-5 h-5" />
               </Button>
