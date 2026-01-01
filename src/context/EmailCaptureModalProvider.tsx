@@ -1,5 +1,5 @@
 import { createContext, useState, ReactNode, useEffect } from "react";
-import { GiftCardPromoModal } from "@/components/GiftCardPromoModal";
+import { EmailCaptureModal } from "@/components/EmailCaptureModal";
 
 interface EmailCaptureModalContextType {
   openEmailCaptureModal: () => void;
@@ -24,8 +24,8 @@ export const EmailCaptureModalProvider = ({ children }: EmailCaptureModalProvide
 
   // Smart trigger logic
   useEffect(() => {
-    // Don't show if already seen the promo
-    if (localStorage.getItem('giftcard-promo-seen')) {
+    // Don't show if already seen the modal
+    if (localStorage.getItem('email-capture-seen')) {
       return;
     }
 
@@ -35,7 +35,7 @@ export const EmailCaptureModalProvider = ({ children }: EmailCaptureModalProvide
       if (!hasShownThisSession && !isOpen) {
         setIsOpen(true);
         setHasShownThisSession(true);
-        localStorage.setItem('giftcard-promo-seen', 'true');
+        localStorage.setItem('email-capture-seen', 'true');
       }
     };
 
@@ -74,7 +74,7 @@ export const EmailCaptureModalProvider = ({ children }: EmailCaptureModalProvide
   return (
     <EmailCaptureModalContext.Provider value={{ openEmailCaptureModal, closeEmailCaptureModal }}>
       {children}
-      <GiftCardPromoModal isOpen={isOpen} onClose={closeEmailCaptureModal} />
+      <EmailCaptureModal isOpen={isOpen} onClose={closeEmailCaptureModal} />
     </EmailCaptureModalContext.Provider>
   );
 };
