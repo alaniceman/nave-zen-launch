@@ -25,6 +25,14 @@ export const scheduleData: Record<string, ClassItem[]> = {
       instructor: "Maral"
     },
     {
+      time: "08:00",
+      title: "Isométrica + Flexibilidad",
+      tags: ["Yoga"],
+      badges: [],
+      duration: 60,
+      instructor: "Maral Hekmat"
+    },
+    {
       time: "09:15",
       title: "Método Wim Hof (Breathwork + Ice Bath)",
       tags: ["Método Wim Hof"],
@@ -96,6 +104,14 @@ export const scheduleData: Record<string, ClassItem[]> = {
       instructor: "Maral"
     },
     {
+      time: "08:00",
+      title: "Biohacking: Breathwork + HIIT + Ice Bath",
+      tags: ["Biohacking"],
+      badges: ["Respiración + HIIT + Hielo"],
+      duration: 60,
+      instructor: "Maral Hekmat"
+    },
+    {
       time: "09:15",
       title: "Método Wim Hof (Breathwork + Ice Bath)",
       tags: ["Método Wim Hof"],
@@ -108,7 +124,7 @@ export const scheduleData: Record<string, ClassItem[]> = {
       tags: ["Yoga"],
       badges: ["Ice Bath opcional"],
       duration: 60,
-      instructor: "Val Medina"
+      instructor: "Maral Hekmat"
     },
     {
       time: "19:30",
@@ -155,14 +171,6 @@ export const scheduleData: Record<string, ClassItem[]> = {
       tags: ["Método Wim Hof"],
       badges: [],
       duration: 60
-    },
-    {
-      time: "20:15",
-      title: "Yoga Integral + Ice Bath (opcional)",
-      tags: ["Yoga"],
-      badges: ["Ice Bath opcional"],
-      duration: 60,
-      instructor: "Maral"
     }
   ],
   viernes: [
@@ -172,6 +180,14 @@ export const scheduleData: Record<string, ClassItem[]> = {
       tags: ["Método Wim Hof"],
       badges: [],
       duration: 60
+    },
+    {
+      time: "09:00",
+      title: "Vinyasa Yoga + Ice Bath (opcional)",
+      tags: ["Yoga"],
+      badges: ["Ice Bath opcional"],
+      duration: 60,
+      instructor: "Val Medina"
     },
     {
       time: "15:00",
@@ -187,15 +203,7 @@ export const scheduleData: Record<string, ClassItem[]> = {
       tags: ["Yoga"],
       badges: ["Ice Bath opcional"],
       duration: 60,
-      instructor: "Val"
-    },
-    {
-      time: "19:15",
-      title: "Biohacking: Breathwork + HIIT + Ice Bath",
-      tags: ["Biohacking"],
-      badges: ["Respiración + HIIT + Hielo"],
-      duration: 60,
-      instructor: "Maral"
+      instructor: "Maral Hekmat"
     }
   ],
   sabado: [
