@@ -42,7 +42,7 @@ export const HeroSection = () => {
           <div className="space-y-4 pt-4 md:pt-8">
             <div className="flex flex-col gap-3 items-center">
               <Button variant="hero" size="xl" className="w-full md:w-auto min-w-[320px]" onClick={handlePlanClick}>
-                Empieza hoy con 50% OFF en tu Membresía   
+                Empieza hoy con 30% OFF en tu Membresía
               </Button>
               
               <Button variant="outline" size="lg" className="w-full md:w-auto min-w-[280px] border-2 border-white/80 bg-white/10 text-white hover:bg-white hover:text-primary transition-colors backdrop-blur-sm" onClick={() => navigate('/agenda-nave-studio')}>

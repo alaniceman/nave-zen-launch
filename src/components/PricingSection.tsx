@@ -73,7 +73,7 @@ const PricingSection = () => {
           </a>
 
           <p className="text-xs text-muted-foreground mt-3 font-inter">
-            50% OFF el primer mes con código <strong>1MES</strong> (aplica a Universo y Órbita).
+            30% OFF el primer mes con código <strong>1MES</strong> (aplica a Universo y Órbita).
           </p>
         </div>
       </section>
