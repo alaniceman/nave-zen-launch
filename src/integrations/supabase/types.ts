@@ -91,6 +91,7 @@ export type Database = {
           date_time_end: string
           date_time_start: string
           discount_amount: number | null
+          feedback_email_sent: boolean | null
           final_price: number | null
           id: string
           mercado_pago_payment_id: string | null
@@ -112,6 +113,7 @@ export type Database = {
           date_time_end: string
           date_time_start: string
           discount_amount?: number | null
+          feedback_email_sent?: boolean | null
           final_price?: number | null
           id?: string
           mercado_pago_payment_id?: string | null
@@ -133,6 +135,7 @@ export type Database = {
           date_time_end?: string
           date_time_start?: string
           discount_amount?: number | null
+          feedback_email_sent?: boolean | null
           final_price?: number | null
           id?: string
           mercado_pago_payment_id?: string | null
