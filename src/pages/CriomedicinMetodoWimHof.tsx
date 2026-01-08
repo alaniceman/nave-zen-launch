@@ -4,11 +4,9 @@ import { CoachesSection } from "@/components/CoachesSection";
 import { Footer } from "@/components/Footer";
 import { GiftCardSection } from "@/components/GiftCardSection";
 import { useNavigate } from "react-router-dom";
-
 const CriomedicinMetodoWimHof = () => {
   const navigate = useNavigate();
-  return (
-    <div className="min-h-screen bg-background">
+  return <div className="min-h-screen bg-background">
       <Helmet>
         <title>Criomedicina (Método Wim Hof) en Chile — Ice Bath & Breathwork | Nave Studio</title>
         <meta name="description" content="Sesiones guiadas de Método Wim Hof en Santiago (Las Condes): respiración + baño de hielo a 3 °C. Horarios, precios y reserva online." />
@@ -21,98 +19,99 @@ const CriomedicinMetodoWimHof = () => {
         {/* JSON-LD Structured Data */}
         <script type="application/ld+json">
           {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "LocalBusiness",
-            "name": "Nave Studio",
-            "description": "Criomedicina (Método Wim Hof) en Santiago, Chile: respiración Wim Hof + baño de hielo guiado. Horarios y reservas online.",
-            "url": "https://studiolanave.com/criomedicina-metodo-wim-hof",
-            "telephone": "+56 9 4612 0426",
-            "address": {
-              "@type": "PostalAddress",
-              "streetAddress": "Antares 259",
-              "addressLocality": "Las Condes",
-              "addressRegion": "RM",
-              "addressCountry": "CL"
-            },
-            "image": "https://studiolanave.com/og/wimhof.jpg",
-            "sameAs": ["https://www.instagram.com/nave.icestudio"]
-          })}
+          "@context": "https://schema.org",
+          "@type": "LocalBusiness",
+          "name": "Nave Studio",
+          "description": "Criomedicina (Método Wim Hof) en Santiago, Chile: respiración Wim Hof + baño de hielo guiado. Horarios y reservas online.",
+          "url": "https://studiolanave.com/criomedicina-metodo-wim-hof",
+          "telephone": "+56 9 4612 0426",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Antares 259",
+            "addressLocality": "Las Condes",
+            "addressRegion": "RM",
+            "addressCountry": "CL"
+          },
+          "image": "https://studiolanave.com/og/wimhof.jpg",
+          "sameAs": ["https://www.instagram.com/nave.icestudio"]
+        })}
         </script>
 
         <script type="application/ld+json">
           {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            "itemListElement": [
-              { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://studiolanave.com/" },
-              { "@type": "ListItem", "position": 2, "name": "Criomedicina (Método Wim Hof)", "item": "https://studiolanave.com/criomedicina-metodo-wim-hof" }
-            ]
-          })}
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Inicio",
+            "item": "https://studiolanave.com/"
+          }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Criomedicina (Método Wim Hof)",
+            "item": "https://studiolanave.com/criomedicina-metodo-wim-hof"
+          }]
+        })}
         </script>
 
         <script type="application/ld+json">
           {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            "mainEntity": [
-              {
-                "@type": "Question",
-                "name": "¿Qué es el Método Wim Hof y la Criomedicina?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Es la combinación de respiración Wim Hof y exposición al frío (ice bath) en un protocolo seguro y guiado."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "¿Cuánto cuesta una sesión en Chile?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "1 sesión grupal $30.000, pack 3 sesiones $59.000, personalizado (1–2) $40.000. También disponible en membresías."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "¿Dónde está Nave Studio?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Antares 259, Las Condes, Santiago de Chile."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "¿Es seguro?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Seguimos protocolos guiados, personalizamos tiempos y contraindicaciones. Consulta a tu médico si tienes condiciones preexistentes."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "¿Qué debo llevar a mi primera clase?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Para Ice Bath: traje de baño, toalla y ropa cómoda para después. Para Yoga: ropa deportiva cómoda y botella de agua. Nosotros proporcionamos esterillas y todo el equipamiento necesario."
-                }
-              }
-            ]
-          })}
-        </script>
-
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Product",
-            "name": "Sesión Método Wim Hof (Criomedicina) — Grupal",
-            "brand": "Nave Studio",
-            "offers": {
-              "@type": "Offer",
-              "priceCurrency": "CLP",
-              "price": "30000",
-              "availability": "https://schema.org/InStock",
-              "url": "https://boxmagic.cl/market/plan/RZ0vlQyLQ6"
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [{
+            "@type": "Question",
+            "name": "¿Qué es el Método Wim Hof y la Criomedicina?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Es la combinación de respiración Wim Hof y exposición al frío (ice bath) en un protocolo seguro y guiado."
             }
-          })}
+          }, {
+            "@type": "Question",
+            "name": "¿Cuánto cuesta una sesión en Chile?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "1 sesión grupal $30.000, pack 3 sesiones $59.000, personalizado (1–2) $40.000. También disponible en membresías."
+            }
+          }, {
+            "@type": "Question",
+            "name": "¿Dónde está Nave Studio?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Antares 259, Las Condes, Santiago de Chile."
+            }
+          }, {
+            "@type": "Question",
+            "name": "¿Es seguro?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Seguimos protocolos guiados, personalizamos tiempos y contraindicaciones. Consulta a tu médico si tienes condiciones preexistentes."
+            }
+          }, {
+            "@type": "Question",
+            "name": "¿Qué debo llevar a mi primera clase?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Para Ice Bath: traje de baño, toalla y ropa cómoda para después. Para Yoga: ropa deportiva cómoda y botella de agua. Nosotros proporcionamos esterillas y todo el equipamiento necesario."
+            }
+          }]
+        })}
+        </script>
+
+        <script type="application/ld+json">
+          {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Product",
+          "name": "Sesión Método Wim Hof (Criomedicina) — Grupal",
+          "brand": "Nave Studio",
+          "offers": {
+            "@type": "Offer",
+            "priceCurrency": "CLP",
+            "price": "30000",
+            "availability": "https://schema.org/InStock",
+            "url": "https://boxmagic.cl/market/plan/RZ0vlQyLQ6"
+          }
+        })}
         </script>
       </Helmet>
 
@@ -120,15 +119,9 @@ const CriomedicinMetodoWimHof = () => {
         {/* Hero Section */}
         <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
           {/* Background Image with Overlay */}
-          <img 
-            src="/lovable-uploads/criomedicina-hero.webp"
-            alt="Criomedicina Método Wim Hof - Ice bath y breathwork en naturaleza"
-            className="absolute inset-0 w-full h-full object-cover"
-            style={{
-              objectPosition: 'center',
-            }}
-            fetchPriority="high"
-          />
+          <img src="/lovable-uploads/criomedicina-hero.webp" alt="Criomedicina Método Wim Hof - Ice bath y breathwork en naturaleza" className="absolute inset-0 w-full h-full object-cover" style={{
+          objectPosition: 'center'
+        }} fetchPriority="high" />
           
           {/* Green Overlay */}
           <div className="absolute inset-0 bg-primary opacity-55" />
@@ -149,17 +142,11 @@ const CriomedicinMetodoWimHof = () => {
               {/* CTA Section */}
               <div className="space-y-4 pt-4 md:pt-8">
                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                  <button
-                    onClick={() => navigate('/agenda-nave-studio')}
-                    className="bg-white text-primary hover:bg-white/90 px-8 py-4 rounded-xl text-lg font-semibold w-full sm:w-auto min-w-[280px] transition-all"
-                  >
-                    Agendar 1 sesión — $30.000
+                  <button onClick={() => navigate('/agenda-nave-studio')} className="bg-white text-primary hover:bg-white/90 px-8 py-4 rounded-xl text-lg font-semibold w-full sm:w-auto min-w-[280px] transition-all">
+                    Agendar Sesión  
                   </button>
                   
-                  <a
-                    href="/bonos"
-                    className="bg-white/20 text-white border border-white/30 hover:bg-white/30 px-8 py-4 rounded-xl text-lg font-semibold inline-flex items-center justify-center transition-all w-full sm:w-auto"
-                  >
+                  <a href="/bonos" className="bg-white/20 text-white border border-white/30 hover:bg-white/30 px-8 py-4 rounded-xl text-lg font-semibold inline-flex items-center justify-center transition-all w-full sm:w-auto">
                     Agenda grupal
                   </a>
                 </div>
@@ -251,12 +238,7 @@ const CriomedicinMetodoWimHof = () => {
               <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
                 Accede al sistema de reservas en tiempo real y asegura tu horario preferido
               </p>
-              <a
-                href="https://boxmagic.cl/crear_cuenta/NaveStudio"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-4 rounded-xl text-lg font-semibold transition-colors"
-              >
+              <a href="https://boxmagic.cl/crear_cuenta/NaveStudio" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-4 rounded-xl text-lg font-semibold transition-colors">
                 Crea tu cuenta y revisa cupos disponibles
               </a>
             </div>
@@ -281,10 +263,7 @@ const CriomedicinMetodoWimHof = () => {
                 <h3 className="font-semibold text-primary">1 sesión — Grupal (máx 6)</h3>
                 <p className="text-4xl font-bold text-primary mt-1">$30.000 <span className="text-base text-muted-foreground">/ sesión</span></p>
                 <p className="text-sm text-muted-foreground mt-2">Breathwork Wim Hof + Ice Bath guiado (60 min).</p>
-                <button
-                  onClick={() => navigate('/agenda-nave-studio')}
-                  className="mt-4 bg-primary text-primary-foreground px-5 py-3 rounded-lg hover:bg-primary/90 w-full font-medium"
-                >
+                <button onClick={() => navigate('/agenda-nave-studio')} className="mt-4 bg-primary text-primary-foreground px-5 py-3 rounded-lg hover:bg-primary/90 w-full font-medium">
                   Agendar 1 sesión
                 </button>
               </div>
@@ -294,11 +273,7 @@ const CriomedicinMetodoWimHof = () => {
                 <h3 className="font-semibold text-primary">Pack 3 sesiones</h3>
                 <p className="text-4xl font-bold text-primary mt-1">$59.000</p>
                 <p className="text-sm text-muted-foreground mt-2">Usa 3 sesiones en 60 días. Ideal para consolidar el hábito.</p>
-                <CheckoutRedirectButton
-                  url="https://boxmagic.cl/market/plan/bQDN8Jq4M7"
-                  plan="Criomedicina — Pack 3 sesiones"
-                  className="mt-4 bg-primary text-primary-foreground px-5 py-3 rounded-lg hover:bg-primary/90 w-full font-medium"
-                >
+                <CheckoutRedirectButton url="https://boxmagic.cl/market/plan/bQDN8Jq4M7" plan="Criomedicina — Pack 3 sesiones" className="mt-4 bg-primary text-primary-foreground px-5 py-3 rounded-lg hover:bg-primary/90 w-full font-medium">
                   Comprar pack
                 </CheckoutRedirectButton>
               </div>
@@ -308,10 +283,7 @@ const CriomedicinMetodoWimHof = () => {
                 <h3 className="font-semibold text-primary">Personalizado (1–2)</h3>
                 <p className="text-4xl font-bold text-primary mt-1">$40.000 <span className="text-base text-muted-foreground">/ sesión</span></p>
                 <p className="text-sm text-muted-foreground mt-2">Respiración en pareja (máx 2) y entrada al hielo por separado, guiada.</p>
-                <button
-                  onClick={() => navigate('/agenda-nave-studio')}
-                  className="mt-4 bg-primary text-primary-foreground px-5 py-3 rounded-lg hover:bg-primary/90 w-full font-medium"
-                >
+                <button onClick={() => navigate('/agenda-nave-studio')} className="mt-4 bg-primary text-primary-foreground px-5 py-3 rounded-lg hover:bg-primary/90 w-full font-medium">
                   Agendar personalizado
                 </button>
               </div>
@@ -324,11 +296,7 @@ const CriomedicinMetodoWimHof = () => {
                 <p className="text-4xl font-bold text-primary mt-1">$95.000</p>
                 <p className="text-sm text-muted-foreground mt-2">Incluye Criomedicina, Yoga, Breathwork, Biohacking, Ice Bath.</p>
                 <p className="text-xs text-muted-foreground mt-1">30% OFF 1er mes con código <strong>1MES</strong>.</p>
-                <CheckoutRedirectButton
-                  url="https://boxmagic.cl/market/plan_subscription/j80p5OdDW6"
-                  plan="Membresía Universo"
-                  className="mt-3 bg-primary text-primary-foreground px-5 py-3 rounded-lg hover:bg-primary/90 w-full font-medium"
-                >
+                <CheckoutRedirectButton url="https://boxmagic.cl/market/plan_subscription/j80p5OdDW6" plan="Membresía Universo" className="mt-3 bg-primary text-primary-foreground px-5 py-3 rounded-lg hover:bg-primary/90 w-full font-medium">
                   Suscribirme
                 </CheckoutRedirectButton>
               </div>
@@ -337,11 +305,7 @@ const CriomedicinMetodoWimHof = () => {
                 <p className="text-4xl font-bold text-primary mt-1">$79.000</p>
                 <p className="text-sm text-muted-foreground mt-2">2 sesiones por semana en cualquier disciplina.</p>
                 <p className="text-xs text-muted-foreground mt-1">30% OFF 1er mes con código <strong>1MES</strong>.</p>
-                <CheckoutRedirectButton
-                  url="https://boxmagic.cl/market/plan_subscription/ev4VPzOD9A"
-                  plan="Membresía Órbita"
-                  className="mt-3 bg-primary text-primary-foreground px-5 py-3 rounded-lg hover:bg-primary/90 w-full font-medium"
-                >
+                <CheckoutRedirectButton url="https://boxmagic.cl/market/plan_subscription/ev4VPzOD9A" plan="Membresía Órbita" className="mt-3 bg-primary text-primary-foreground px-5 py-3 rounded-lg hover:bg-primary/90 w-full font-medium">
                   Suscribirme
                 </CheckoutRedirectButton>
               </div>
@@ -349,11 +313,7 @@ const CriomedicinMetodoWimHof = () => {
                 <h3 className="font-semibold text-primary">Eclipse — 1/sem</h3>
                 <p className="text-4xl font-bold text-primary mt-1">$49.000</p>
                 <p className="text-sm text-muted-foreground mt-2">1 sesión semanal, elige la disciplina.</p>
-                <CheckoutRedirectButton
-                  url="https://boxmagic.cl/market/plan_subscription/VrD8wRx0Qz"
-                  plan="Membresía Eclipse"
-                  className="mt-3 bg-primary text-primary-foreground px-5 py-3 rounded-lg hover:bg-primary/90 w-full font-medium"
-                >
+                <CheckoutRedirectButton url="https://boxmagic.cl/market/plan_subscription/VrD8wRx0Qz" plan="Membresía Eclipse" className="mt-3 bg-primary text-primary-foreground px-5 py-3 rounded-lg hover:bg-primary/90 w-full font-medium">
                   Suscribirme
                 </CheckoutRedirectButton>
               </div>
@@ -422,8 +382,6 @@ const CriomedicinMetodoWimHof = () => {
 
       <GiftCardSection />
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default CriomedicinMetodoWimHof;
