@@ -8,9 +8,20 @@ import yinVinyasaHeroImage from "@/assets/blog-yin-vinyasa-hero.jpg";
 import habitosDisciplinaHeroImage from "@/assets/blog-habitos-disciplina-hero.jpg";
 import aguaFriaGuiadoHeroImage from "@/assets/blog-agua-fria-guiado-hero.jpg";
 import protocoloSeguroHeroImage from "@/assets/blog-protocolo-seguro-hero.jpg";
+import protocolo15MinutosHeroImage from "@/assets/blog-protocolo-15-minutos-hero.jpg";
 
 const Blog = () => {
   const blogPosts = [
+    {
+      title: "Protocolo 15 Minutos: Respiración + Agua Fría para uso diario",
+      slug: "/blog/protocolo-15-minutos-respiracion-agua-fria",
+      excerpt: "Protocolo diario de 15 minutos que combina respiración consciente + exposición al frío para activar tu fisiología, entrenar tu mente y mejorar tu bienestar.",
+      author: "Alan Iceman Earle",
+      date: "8 de enero, 2026",
+      categories: ["Respiración", "Agua fría", "Wim Hof Method", "Protocolo diario"],
+      image: protocolo15MinutosHeroImage,
+      imageAlt: "Protocolo de 15 minutos de respiración y agua fría para uso diario"
+    },
     {
       title: "Lo que nadie te cuenta del agua fría y la respiración",
       slug: "/blog/protocolo-seguro-agua-fria-respiracion",

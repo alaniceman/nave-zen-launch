@@ -19,6 +19,7 @@ import BlogYinVinyasa from "./pages/BlogYinVinyasa";
 import BlogHabitosDisciplina from "./pages/BlogHabitosDisciplina";
 import BlogAguaFriaGuiado from "./pages/BlogAguaFriaGuiado";
 import BlogProtocoloSeguro from "./pages/BlogProtocoloSeguro";
+import BlogProtocolo15Minutos from "./pages/BlogProtocolo15Minutos";
 import Cyber2025 from "./pages/Cyber2025";
 import PlanAnual2026 from "./pages/PlanAnual2026";
 import Horarios from "./pages/Horarios";
@@ -90,6 +91,7 @@ const App = () => (
             <Route path="/blog/habitos-disciplina-como-construirte-a-ti-mismo" element={<BlogHabitosDisciplina />} />
             <Route path="/blog/agua-fria-guiado-vs-solo-experiencia-wim-hof" element={<BlogAguaFriaGuiado />} />
             <Route path="/blog/protocolo-seguro-agua-fria-respiracion" element={<BlogProtocoloSeguro />} />
+            <Route path="/blog/protocolo-15-minutos-respiracion-agua-fria" element={<BlogProtocolo15Minutos />} />
             <Route path="/cyber-2025" element={<Cyber2025 />} />
             <Route path="/anual" element={<PlanAnual2026 />} />
             <Route path="/horarios" element={<Horarios />} />
