@@ -23,12 +23,14 @@ const handler = async (req: Request): Promise<Response> => {
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Window: sessions that ended 50-70 minutes ago (1 hour ± 10 min buffer)
+    // Window: sessions that ended 50-170 minutes ago (wider 2-hour window for reliability)
+    // This ensures if a cron execution is missed, the next one will catch it
     const now = new Date();
-    const windowStart = subMinutes(now, 70);
-    const windowEnd = subMinutes(now, 50);
+    const windowStart = subMinutes(now, 170); // ~3 hours ago
+    const windowEnd = subMinutes(now, 50);    // ~50 minutes ago
 
-    console.log("Looking for sessions that ended between:", windowStart, "and", windowEnd);
+    console.log("Session feedback job started at:", now.toISOString());
+    console.log("Looking for sessions that ended between:", windowStart.toISOString(), "and", windowEnd.toISOString());
 
     const { data: bookings, error: fetchError } = await supabase
       .from("bookings")
