@@ -60,6 +60,7 @@ export function UpsellModal({
         .from("session_packages")
         .select("*")
         .eq("is_active", true)
+        .eq("show_in_upsell_modal", true)
         .contains("applicable_service_ids", [serviceId])
         .order("sessions_quantity", { ascending: true });
 
