@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Loader2, Calendar, Clock, User, DollarSign, Tag, Check, X } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { UpsellModal } from "./UpsellModal";
 
 const bookingSchema = z.object({
   customerName: z.string().min(2, "El nombre debe tener al menos 2 caracteres").max(100),
@@ -53,6 +54,8 @@ interface BookingFormProps {
 
 export function BookingForm({ timeSlot, professional, service, onBack }: BookingFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showUpsellModal, setShowUpsellModal] = useState(false);
+  const [pendingFormData, setPendingFormData] = useState<BookingFormData | null>(null);
   
   // Unified code state
   const [codeInput, setCodeInput] = useState("");
@@ -67,6 +70,7 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
     register,
     handleSubmit,
     formState: { errors },
+    getValues,
   } = useForm<BookingFormData>({
     resolver: zodResolver(bookingSchema),
   });
@@ -172,7 +176,22 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
 
   const finalPrice = appliedCode?.type === "session" ? 0 : service.price_clp - calculateDiscount();
 
-  const onSubmit = async (data: BookingFormData) => {
+  // Check if upsell should be shown (no code applied and service has packages)
+  const shouldShowUpsell = !appliedCode;
+
+  const handleFormSubmit = async (data: BookingFormData) => {
+    // If no code is applied, show upsell modal first
+    if (shouldShowUpsell) {
+      setPendingFormData(data);
+      setShowUpsellModal(true);
+      return;
+    }
+
+    // Otherwise proceed with booking
+    await processBooking(data);
+  };
+
+  const processBooking = async (data: BookingFormData) => {
     setIsSubmitting(true);
     
     try {
@@ -208,6 +227,13 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
       console.error("Error creating booking:", error);
       toast.error(error.message || "Error al agendar la sesión");
       setIsSubmitting(false);
+    }
+  };
+
+  const handleContinueSingle = () => {
+    setShowUpsellModal(false);
+    if (pendingFormData) {
+      processBooking(pendingFormData);
     }
   };
 
@@ -349,7 +375,7 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
         )}
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
         <div>
           <Label htmlFor="customerName">Nombre completo *</Label>
           <Input
@@ -432,6 +458,23 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
           </Button>
         </div>
       </form>
+
+      {/* Upsell Modal */}
+      <UpsellModal
+        isOpen={showUpsellModal}
+        onClose={() => setShowUpsellModal(false)}
+        onSelectPackage={(pkg) => {
+          // Package purchase is handled inside the modal
+        }}
+        onContinueSingle={handleContinueSingle}
+        serviceId={service.id}
+        singleSessionPrice={service.price_clp}
+        customerData={{
+          name: pendingFormData?.customerName || "",
+          email: pendingFormData?.customerEmail || "",
+          phone: pendingFormData?.customerPhone || "",
+        }}
+      />
     </Card>
   );
 }
