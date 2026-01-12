@@ -193,8 +193,8 @@ export function UpsellModal({
             {/* Continue with single session */}
             <div className="pt-2 border-t">
               <Button
-                variant="ghost"
-                className="w-full text-muted-foreground hover:text-foreground"
+                variant="outline"
+                className="w-full"
                 onClick={onContinueSingle}
                 disabled={isProcessing}
               >
