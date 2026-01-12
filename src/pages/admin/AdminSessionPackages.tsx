@@ -27,6 +27,7 @@ interface SessionPackage {
   applicable_service_ids: string[];
   is_active: boolean;
   available_as_giftcard: boolean;
+  show_in_upsell_modal: boolean;
 }
 
 interface Service {
@@ -48,6 +49,7 @@ export default function AdminSessionPackages() {
     applicable_service_ids: [] as string[],
     is_active: true,
     available_as_giftcard: false,
+    show_in_upsell_modal: false,
   });
 
   useEffect(() => {
@@ -139,6 +141,7 @@ export default function AdminSessionPackages() {
       applicable_service_ids: pkg.applicable_service_ids,
       is_active: pkg.is_active,
       available_as_giftcard: pkg.available_as_giftcard ?? false,
+      show_in_upsell_modal: pkg.show_in_upsell_modal ?? false,
     });
     setIsDialogOpen(true);
   };
@@ -154,6 +157,7 @@ export default function AdminSessionPackages() {
       applicable_service_ids: [],
       is_active: true,
       available_as_giftcard: false,
+      show_in_upsell_modal: false,
     });
   };
 
@@ -281,6 +285,15 @@ export default function AdminSessionPackages() {
                 <Label htmlFor="available_as_giftcard">Disponible como Gift Card</Label>
               </div>
 
+              <div className="flex items-center space-x-2">
+                <Switch
+                  id="show_in_upsell_modal"
+                  checked={formData.show_in_upsell_modal}
+                  onCheckedChange={(checked) => setFormData({ ...formData, show_in_upsell_modal: checked })}
+                />
+                <Label htmlFor="show_in_upsell_modal">Mostrar en modal de upsell (agenda)</Label>
+              </div>
+
               <Button type="submit" className="w-full">
                 {editingPackage ? "Actualizar" : "Crear"} Paquete
               </Button>
@@ -302,6 +315,7 @@ export default function AdminSessionPackages() {
                   <p><strong>Validez:</strong> {pkg.validity_days} días</p>
                   <p><strong>Estado:</strong> {pkg.is_active ? "Activo" : "Inactivo"}</p>
                   <p><strong>Gift Card:</strong> {pkg.available_as_giftcard ? "✅ Sí" : "No"}</p>
+                  <p><strong>Modal Upsell:</strong> {pkg.show_in_upsell_modal ? "✅ Sí" : "No"}</p>
                 </div>
               </div>
               <div className="flex gap-2">

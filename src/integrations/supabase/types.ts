@@ -671,6 +671,7 @@ export type Database = {
           name: string
           price_clp: number
           sessions_quantity: number
+          show_in_upsell_modal: boolean | null
           updated_at: string | null
           validity_days: number
         }
@@ -684,6 +685,7 @@ export type Database = {
           name: string
           price_clp: number
           sessions_quantity: number
+          show_in_upsell_modal?: boolean | null
           updated_at?: string | null
           validity_days?: number
         }
@@ -697,6 +699,7 @@ export type Database = {
           name?: string
           price_clp?: number
           sessions_quantity?: number
+          show_in_upsell_modal?: boolean | null
           updated_at?: string | null
           validity_days?: number
         }
