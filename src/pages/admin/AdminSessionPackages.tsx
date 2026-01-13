@@ -28,6 +28,7 @@ interface SessionPackage {
   is_active: boolean;
   available_as_giftcard: boolean;
   show_in_upsell_modal: boolean;
+  show_in_criomedicina: boolean;
 }
 
 interface Service {
@@ -50,6 +51,7 @@ export default function AdminSessionPackages() {
     is_active: true,
     available_as_giftcard: false,
     show_in_upsell_modal: false,
+    show_in_criomedicina: false,
   });
 
   useEffect(() => {
@@ -142,6 +144,7 @@ export default function AdminSessionPackages() {
       is_active: pkg.is_active,
       available_as_giftcard: pkg.available_as_giftcard ?? false,
       show_in_upsell_modal: pkg.show_in_upsell_modal ?? false,
+      show_in_criomedicina: pkg.show_in_criomedicina ?? false,
     });
     setIsDialogOpen(true);
   };
@@ -158,6 +161,7 @@ export default function AdminSessionPackages() {
       is_active: true,
       available_as_giftcard: false,
       show_in_upsell_modal: false,
+      show_in_criomedicina: false,
     });
   };
 
@@ -294,6 +298,15 @@ export default function AdminSessionPackages() {
                 <Label htmlFor="show_in_upsell_modal">Mostrar en modal de upsell (agenda)</Label>
               </div>
 
+              <div className="flex items-center space-x-2">
+                <Switch
+                  id="show_in_criomedicina"
+                  checked={formData.show_in_criomedicina}
+                  onCheckedChange={(checked) => setFormData({ ...formData, show_in_criomedicina: checked })}
+                />
+                <Label htmlFor="show_in_criomedicina">Mostrar en página Criomedicina</Label>
+              </div>
+
               <Button type="submit" className="w-full">
                 {editingPackage ? "Actualizar" : "Crear"} Paquete
               </Button>
@@ -316,6 +329,7 @@ export default function AdminSessionPackages() {
                   <p><strong>Estado:</strong> {pkg.is_active ? "Activo" : "Inactivo"}</p>
                   <p><strong>Gift Card:</strong> {pkg.available_as_giftcard ? "✅ Sí" : "No"}</p>
                   <p><strong>Modal Upsell:</strong> {pkg.show_in_upsell_modal ? "✅ Sí" : "No"}</p>
+                  <p><strong>Página Criomedicina:</strong> {pkg.show_in_criomedicina ? "✅ Sí" : "No"}</p>
                 </div>
               </div>
               <div className="flex gap-2">

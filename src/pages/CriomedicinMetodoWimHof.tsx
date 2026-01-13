@@ -3,9 +3,42 @@ import { CheckoutRedirectButton } from "@/components/CheckoutRedirectButton";
 import { CoachesSection } from "@/components/CoachesSection";
 import { Footer } from "@/components/Footer";
 import { GiftCardSection } from "@/components/GiftCardSection";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { useEffect, useState } from "react";
+import { Loader2 } from "lucide-react";
+
+interface SessionPackage {
+  id: string;
+  name: string;
+  description: string | null;
+  sessions_quantity: number;
+  price_clp: number;
+  validity_days: number;
+}
+
 const CriomedicinMetodoWimHof = () => {
   const navigate = useNavigate();
+  const [packages, setPackages] = useState<SessionPackage[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const loadPackages = async () => {
+      const { data, error } = await supabase
+        .from("session_packages")
+        .select("id, name, description, sessions_quantity, price_clp, validity_days")
+        .eq("is_active", true)
+        .eq("show_in_criomedicina", true)
+        .order("sessions_quantity", { ascending: true });
+
+      if (!error && data) {
+        setPackages(data);
+      }
+      setIsLoading(false);
+    };
+
+    loadPackages();
+  }, []);
   return <div className="min-h-screen bg-background">
       <Helmet>
         <title>Criomedicina (Método Wim Hof) en Chile — Ice Bath & Breathwork | Nave Studio</title>
@@ -252,48 +285,77 @@ const CriomedicinMetodoWimHof = () => {
           </div>
         </section>
 
-        {/* Pricing Section */}
+        {/* Paquetes de Sesiones Section (Dynamic) */}
         <section id="precios-criomedicina" className="py-10 px-4 md:px-6 bg-muted/30">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-2xl md:text-3xl font-bold text-primary text-center">Precios y planes</h2>
-
-            <div className="mt-6 grid gap-4 sm:grid-cols-3">
-              {/* Single Session */}
-              <div className="rounded-2xl border bg-card p-5">
-                <h3 className="font-semibold text-primary">1 sesión — Grupal (máx 6)</h3>
-                <p className="text-4xl font-bold text-primary mt-1">$30.000 <span className="text-base text-muted-foreground">/ sesión</span></p>
-                <p className="text-sm text-muted-foreground mt-2">Breathwork Wim Hof + Ice Bath guiado (60 min).</p>
-                <button onClick={() => navigate('/agenda-nave-studio')} className="mt-4 bg-primary text-primary-foreground px-5 py-3 rounded-lg hover:bg-primary/90 w-full font-medium">
-                  Agendar 1 sesión
-                </button>
-              </div>
-
-              {/* Pack 3 Sessions */}
-              <div className="rounded-2xl border bg-card p-5">
-                <h3 className="font-semibold text-primary">Pack 3 sesiones</h3>
-                <p className="text-4xl font-bold text-primary mt-1">$59.000</p>
-                <p className="text-sm text-muted-foreground mt-2">Usa 3 sesiones en 60 días. Ideal para consolidar el hábito.</p>
-                <CheckoutRedirectButton url="https://boxmagic.cl/market/plan/bQDN8Jq4M7" plan="Criomedicina — Pack 3 sesiones" className="mt-4 bg-primary text-primary-foreground px-5 py-3 rounded-lg hover:bg-primary/90 w-full font-medium">
-                  Comprar pack
-                </CheckoutRedirectButton>
-              </div>
-
-              {/* Personal Session */}
-              <div className="rounded-2xl border bg-card p-5">
-                <h3 className="font-semibold text-primary">Personalizado (1–2)</h3>
-                <p className="text-4xl font-bold text-primary mt-1">$40.000 <span className="text-base text-muted-foreground">/ sesión</span></p>
-                <p className="text-sm text-muted-foreground mt-2">Respiración en pareja (máx 2) y entrada al hielo por separado, guiada.</p>
-                <button onClick={() => navigate('/agenda-nave-studio')} className="mt-4 bg-primary text-primary-foreground px-5 py-3 rounded-lg hover:bg-primary/90 w-full font-medium">
-                  Agendar personalizado
-                </button>
-              </div>
+            <h2 className="text-2xl md:text-3xl font-bold text-primary text-center">Paquetes de Sesiones</h2>
+            
+            {/* Info banner */}
+            <div className="mt-4 bg-primary/10 border border-primary/20 rounded-xl p-4 text-center max-w-3xl mx-auto">
+              <p className="text-sm text-foreground">
+                💡 Al comprar un paquete recibirás <strong>códigos por correo</strong> para agendar tus sesiones cuando quieras. Válidos por 1 año.
+              </p>
             </div>
 
-            {/* Memberships */}
-            <div className="mt-8 grid gap-4 sm:grid-cols-3">
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              </div>
+            ) : packages.length > 0 ? (
+              <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {packages.map((pkg) => {
+                  const pricePerSession = Math.round(pkg.price_clp / pkg.sessions_quantity);
+                  return (
+                    <div key={pkg.id} className="rounded-2xl border bg-card p-5">
+                      <h3 className="font-semibold text-primary">{pkg.name}</h3>
+                      <p className="text-4xl font-bold text-primary mt-1">
+                        ${pkg.price_clp.toLocaleString("es-CL")}
+                      </p>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        ${pricePerSession.toLocaleString("es-CL")} por sesión
+                      </p>
+                      {pkg.description && (
+                        <p className="text-sm text-muted-foreground mt-2">{pkg.description}</p>
+                      )}
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Válido por {pkg.validity_days} días
+                      </p>
+                      <Link
+                        to={`/bonos?package=${pkg.id}`}
+                        className="mt-4 bg-primary text-primary-foreground px-5 py-3 rounded-lg hover:bg-primary/90 w-full font-medium inline-flex items-center justify-center"
+                      >
+                        Comprar
+                      </Link>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <p className="text-center text-muted-foreground mt-8">
+                No hay paquetes disponibles en este momento.
+              </p>
+            )}
+
+            <p className="text-center mt-6">
+              <Link to="/bonos" className="text-primary underline hover:text-primary/80 font-medium">
+                Ver todos los paquetes disponibles →
+              </Link>
+            </p>
+          </div>
+        </section>
+
+        {/* Membresías Mensuales Section */}
+        <section className="py-10 px-4 md:px-6">
+          <div className="max-w-6xl mx-auto">
+            <h2 className="text-2xl md:text-3xl font-bold text-primary text-center">Membresías Mensuales</h2>
+            <p className="text-muted-foreground text-center mt-2">
+              Acceso recurrente con pago mensual automático. Cancela cuando quieras.
+            </p>
+
+            <div className="mt-6 grid gap-4 sm:grid-cols-3">
               <div className="rounded-2xl border bg-card p-5">
                 <h3 className="font-semibold text-primary">Universo — Ilimitado</h3>
-                <p className="text-4xl font-bold text-primary mt-1">$95.000</p>
+                <p className="text-4xl font-bold text-primary mt-1">$95.000<span className="text-base text-muted-foreground">/mes</span></p>
                 <p className="text-sm text-muted-foreground mt-2">Incluye Criomedicina, Yoga, Breathwork, Biohacking, Ice Bath.</p>
                 <p className="text-xs text-muted-foreground mt-1">30% OFF 1er mes con código <strong>1MES</strong>.</p>
                 <CheckoutRedirectButton url="https://boxmagic.cl/market/plan_subscription/j80p5OdDW6" plan="Membresía Universo" className="mt-3 bg-primary text-primary-foreground px-5 py-3 rounded-lg hover:bg-primary/90 w-full font-medium">
@@ -302,7 +364,7 @@ const CriomedicinMetodoWimHof = () => {
               </div>
               <div className="rounded-2xl border bg-card p-5">
                 <h3 className="font-semibold text-primary">Órbita — 2/sem</h3>
-                <p className="text-4xl font-bold text-primary mt-1">$79.000</p>
+                <p className="text-4xl font-bold text-primary mt-1">$79.000<span className="text-base text-muted-foreground">/mes</span></p>
                 <p className="text-sm text-muted-foreground mt-2">2 sesiones por semana en cualquier disciplina.</p>
                 <p className="text-xs text-muted-foreground mt-1">30% OFF 1er mes con código <strong>1MES</strong>.</p>
                 <CheckoutRedirectButton url="https://boxmagic.cl/market/plan_subscription/ev4VPzOD9A" plan="Membresía Órbita" className="mt-3 bg-primary text-primary-foreground px-5 py-3 rounded-lg hover:bg-primary/90 w-full font-medium">
@@ -311,7 +373,7 @@ const CriomedicinMetodoWimHof = () => {
               </div>
               <div className="rounded-2xl border bg-card p-5">
                 <h3 className="font-semibold text-primary">Eclipse — 1/sem</h3>
-                <p className="text-4xl font-bold text-primary mt-1">$49.000</p>
+                <p className="text-4xl font-bold text-primary mt-1">$49.000<span className="text-base text-muted-foreground">/mes</span></p>
                 <p className="text-sm text-muted-foreground mt-2">1 sesión semanal, elige la disciplina.</p>
                 <CheckoutRedirectButton url="https://boxmagic.cl/market/plan_subscription/VrD8wRx0Qz" plan="Membresía Eclipse" className="mt-3 bg-primary text-primary-foreground px-5 py-3 rounded-lg hover:bg-primary/90 w-full font-medium">
                   Suscribirme
