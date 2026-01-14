@@ -71,7 +71,10 @@ const handler = async (req: Request): Promise<Response> => {
     for (const booking of bookings) {
       try {
         const startDateTime = toZonedTime(new Date(booking.date_time_start), timezone);
-        const formattedDate = format(startDateTime, "d 'de' MMMM", { locale: { code: 'es' } });
+        // Use simple date formatting without locale to avoid esm.sh issues
+        const day = startDateTime.getDate();
+        const monthNames = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+        const formattedDate = `${day} de ${monthNames[startDateTime.getMonth()]}`;
 
         const emailHtml = `
           <!DOCTYPE html>
