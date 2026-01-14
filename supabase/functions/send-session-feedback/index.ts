@@ -1,7 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 import { Resend } from "npm:resend@2.0.0";
-import { subMinutes, format } from "https://esm.sh/date-fns@3.6.0";
+import { subMinutes, subDays, format } from "https://esm.sh/date-fns@3.6.0";
 import { toZonedTime } from "https://esm.sh/date-fns-tz@3.1.3";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
@@ -23,14 +23,15 @@ const handler = async (req: Request): Promise<Response> => {
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Window: sessions that ended 50-170 minutes ago (wider 2-hour window for reliability)
-    // This ensures if a cron execution is missed, the next one will catch it
+    // Search for sessions that ended at least 30 minutes ago (to give time for the session to wrap up)
+    // and up to 7 days ago (to recover any missed emails)
+    // This ensures reliability even if cron executions are missed
     const now = new Date();
-    const windowStart = subMinutes(now, 170); // ~3 hours ago
-    const windowEnd = subMinutes(now, 50);    // ~50 minutes ago
+    const minWaitTime = subMinutes(now, 30);  // Wait at least 30 min after session ends
+    const maxAge = subDays(now, 7);           // Don't send to sessions older than 7 days
 
     console.log("Session feedback job started at:", now.toISOString());
-    console.log("Looking for sessions that ended between:", windowStart.toISOString(), "and", windowEnd.toISOString());
+    console.log("Looking for sessions that ended between:", maxAge.toISOString(), "and", minWaitTime.toISOString());
 
     const { data: bookings, error: fetchError } = await supabase
       .from("bookings")
@@ -41,8 +42,10 @@ const handler = async (req: Request): Promise<Response> => {
       `)
       .eq("status", "CONFIRMED")
       .eq("feedback_email_sent", false)
-      .gte("date_time_end", windowStart.toISOString())
-      .lte("date_time_end", windowEnd.toISOString());
+      .gte("date_time_end", maxAge.toISOString())
+      .lte("date_time_end", minWaitTime.toISOString())
+      .order("date_time_end", { ascending: true })
+      .limit(50);
 
     if (fetchError) {
       console.error("Error fetching bookings:", fetchError);
