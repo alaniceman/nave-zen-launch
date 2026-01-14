@@ -189,6 +189,24 @@ const handler = async (req: Request): Promise<Response> => {
                     Cada respuesta nos ayuda a seguir mejorando para ti y toda la comunidad 💜
                   </p>
                   
+                  <div style="margin-top: 40px; padding-top: 32px; border-top: 1px solid #e0e0e0;">
+                    <p class="message" style="text-align: center;">
+                      <strong>¿Te gustó la experiencia?</strong> 🌟
+                    </p>
+                    <p class="message" style="text-align: center; color: #666;">
+                      Tu reseña en Google ayuda a que más personas descubran La Nave y se unan a esta comunidad increíble. ¡Nos encantaría leer tu experiencia!
+                    </p>
+                    <div class="cta-container">
+                      <a href="https://g.page/r/CbKj7T4h3cYeEBM/review" style="display: inline-block; background: #4285F4; color: white !important; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-size: 15px; font-weight: 600;">
+                        ⭐ Dejar reseña en Google
+                      </a>
+                    </div>
+                  </div>
+                  
+                  <p class="note" style="margin-top: 8px;">
+                    Cada respuesta nos ayuda a seguir mejorando para ti y toda la comunidad 💜
+                  </p>
+                  
                   <p class="message" style="margin-top: 32px;">
                     ¡Gracias por ser parte de La Nave!
                   </p>
