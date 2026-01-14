@@ -262,20 +262,6 @@ const CriomedicinMetodoWimHof = () => {
                 </ul>
               </div>
             </div>
-
-            {/* Account Creation CTA */}
-            <div className="mt-8 bg-gradient-to-br from-primary/10 to-primary/5 rounded-2xl p-8 border border-primary/20 text-center">
-              <h3 className="text-2xl font-bold text-primary mb-3">
-                Revisa cupos disponibles en tiempo real
-              </h3>
-              <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-                Accede al sistema de reservas en tiempo real y asegura tu horario preferido
-              </p>
-              <a href="https://boxmagic.cl/crear_cuenta/NaveStudio" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-4 rounded-xl text-lg font-semibold transition-colors">
-                Crea tu cuenta y revisa cupos disponibles
-              </a>
-            </div>
-
             <p className="text-sm text-muted-foreground text-center mt-6">
               ¿No encuentras horario? Escríbenos por <a className="underline text-primary hover:text-primary/80" href="https://wa.me/56946120426" target="_blank" rel="noopener">WhatsApp</a>.
             </p>
