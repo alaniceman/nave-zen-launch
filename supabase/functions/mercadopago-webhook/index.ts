@@ -110,7 +110,28 @@ async function handlePackageOrderPayment(
     });
   }
 
-  // Handle non-approved payments
+  // Handle pending payments (e.g., bank transfer awaiting confirmation)
+  if (payment.status === "pending") {
+    console.log(`Payment pending: ${payment.status_detail}`);
+    
+    await supabase
+      .from("package_orders")
+      .update({
+        status: "pending_payment",
+        mercado_pago_payment_id: paymentIdStr,
+        mercado_pago_status: payment.status,
+        mercado_pago_status_detail: payment.status_detail || null,
+        error_message: null, // Not an error, just pending
+      })
+      .eq("id", orderId);
+
+    return new Response(JSON.stringify({ status: "payment_pending" }), {
+      status: 200,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  // Handle non-approved payments (rejected, cancelled, etc.)
   if (payment.status !== "approved") {
     console.log(`Payment not approved: ${payment.status}, status_detail: ${payment.status_detail}`);
     
@@ -165,7 +186,7 @@ async function handlePackageOrderPayment(
       mercado_pago_status_detail: payment.status_detail || null,
     })
     .eq("id", orderId)
-    .eq("status", "created")
+    .in("status", ["created", "pending_payment"])
     .select()
     .maybeSingle();
 
