@@ -37,10 +37,21 @@ export const useFacebookPixel = () => {
     trackEvent('ViewContent', parameters);
   };
 
+  const trackPurchase = (parameters?: {
+    value?: number;
+    currency?: string;
+    content_name?: string;
+    content_type?: string;
+    content_ids?: string[];
+  }) => {
+    trackEvent('Purchase', parameters);
+  };
+
   return {
     trackEvent,
     trackLead,
     trackInitiateCheckout,
     trackViewContent,
+    trackPurchase,
   };
 };
