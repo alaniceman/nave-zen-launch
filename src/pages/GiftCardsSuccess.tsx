@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { Footer } from "@/components/Footer";
+import { useFacebookPixel } from "@/hooks/useFacebookPixel";
 
 interface OrderStatus {
   orderId: string;
@@ -25,6 +26,8 @@ export default function GiftCardsSuccess() {
   const [orderStatus, setOrderStatus] = useState<OrderStatus | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const [hasFiredPixel, setHasFiredPixel] = useState(false);
+  const { trackPurchase } = useFacebookPixel();
 
   useEffect(() => {
     if (isFree) {
@@ -89,6 +92,20 @@ export default function GiftCardsSuccess() {
 
     return () => clearInterval(interval);
   }, [orderId, isFree, orderStatus?.status]);
+
+  // Track Purchase event when payment is successful
+  useEffect(() => {
+    if (orderStatus?.statusType === "success" && !hasFiredPixel) {
+      trackPurchase({
+        value: orderStatus.finalPrice || 0,
+        currency: "CLP",
+        content_name: orderStatus.packageName || "Gift Card",
+        content_type: "product",
+        content_ids: orderId ? [orderId] : [],
+      });
+      setHasFiredPixel(true);
+    }
+  }, [orderStatus?.statusType, orderStatus?.finalPrice, orderStatus?.packageName, orderId, hasFiredPixel, trackPurchase]);
 
   return (
     <>

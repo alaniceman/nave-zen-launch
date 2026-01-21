@@ -1,11 +1,43 @@
+import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { CheckCircle2, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Footer } from "@/components/Footer";
+import { supabase } from "@/integrations/supabase/client";
+import { useFacebookPixel } from "@/hooks/useFacebookPixel";
 
 export default function BonosSuccess() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const orderId = searchParams.get("external_reference");
+  const { trackPurchase } = useFacebookPixel();
+  const [hasFiredPixel, setHasFiredPixel] = useState(false);
+
+  useEffect(() => {
+    const fetchOrderAndTrack = async () => {
+      if (!orderId || hasFiredPixel) return;
+
+      const { data: order } = await supabase
+        .from("package_orders")
+        .select("final_price, status, session_packages(name)")
+        .eq("id", orderId)
+        .maybeSingle();
+
+      if (order?.status === "paid") {
+        trackPurchase({
+          value: order.final_price,
+          currency: "CLP",
+          content_name: order.session_packages?.name || "Paquete de sesiones",
+          content_type: "product",
+          content_ids: [orderId],
+        });
+        setHasFiredPixel(true);
+      }
+    };
+
+    fetchOrderAndTrack();
+  }, [orderId, hasFiredPixel, trackPurchase]);
 
   return (
     <>
