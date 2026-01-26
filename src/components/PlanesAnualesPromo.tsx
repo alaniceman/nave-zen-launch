@@ -206,7 +206,7 @@ const PlanesAnualesPromo = () => {
               <div className="space-y-2">
                 <Button asChild className="w-full" size="sm">
                   <a
-                    href="https://boxmagic.cl/market/plan/V8dDG7ldzE"
+                    href="https://boxmagic.cl/market/plan/Vx0J5xA4vB"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
