@@ -10,6 +10,7 @@ const purchaseSchema = z.object({
   buyerPhone: z.string().min(8).max(20),
   couponCode: z.string().optional(),
   isGiftCard: z.boolean().optional().default(false),
+  promoType: z.string().optional(),
 });
 
 // Sanitize phone number - keep only digits
@@ -294,7 +295,7 @@ serve(async (req) => {
 
       // Send confirmation email
       try {
-        const giftcardLink = giftcardAccessToken ? `${siteUrl}/giftcard/${giftcardAccessToken}` : null;
+      const giftcardLink = giftcardAccessToken ? `${siteUrl}/giftcard/${giftcardAccessToken}` : null;
         
         await supabase.functions.invoke("send-session-codes-email", {
           body: {
@@ -306,6 +307,7 @@ serve(async (req) => {
             expiresAt: expiresAt.toISOString(),
             isGiftCard: validatedData.isGiftCard,
             giftcardLink: giftcardLink,
+            promoType: validatedData.promoType,
           },
         });
         console.log("Confirmation email sent for free purchase");

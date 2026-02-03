@@ -13,6 +13,11 @@ const LIGHT_NAVY = { r: 51, g: 65, b: 85 }; // #334155
 const ACCENT_BLUE = { r: 59, g: 130, b: 246 }; // #3B82F6
 const GOLD = { r: 234, g: 179, b: 8 }; // #EAB308
 
+// San Valentin colors
+const PINK = { r: 236, g: 72, b: 153 }; // #EC4899
+const ROSE = { r: 190, g: 24, b: 93 }; // #BE185D
+const LIGHT_PINK = { r: 252, g: 231, b: 243 }; // #FCE7F3
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -64,6 +69,9 @@ serve(async (req) => {
     });
     const serviceNames = services?.map(s => s.name).join(", ") || "";
 
+    // Detect San Valentin promo by package name
+    const isSanValentin = packageName.toLowerCase().includes("valentin");
+
     // Create PDF
     const doc = new jsPDF({
       orientation: "portrait",
@@ -76,12 +84,17 @@ serve(async (req) => {
     const margin = 20;
     const contentWidth = pageWidth - margin * 2;
 
-    // Navy blue header background
-    doc.setFillColor(NAVY_BLUE.r, NAVY_BLUE.g, NAVY_BLUE.b);
+    // Choose colors based on promo type
+    const headerColor = isSanValentin ? PINK : NAVY_BLUE;
+    const accentColor = isSanValentin ? ROSE : GOLD;
+    const textAccentColor = isSanValentin ? PINK : NAVY_BLUE;
+
+    // Header background
+    doc.setFillColor(headerColor.r, headerColor.g, headerColor.b);
     doc.rect(0, 0, pageWidth, 85, "F");
 
     // Decorative accent line
-    doc.setFillColor(GOLD.r, GOLD.g, GOLD.b);
+    doc.setFillColor(accentColor.r, accentColor.g, accentColor.b);
     doc.rect(0, 85, pageWidth, 3, "F");
 
     // Header text
@@ -93,12 +106,13 @@ serve(async (req) => {
     // GIFT CARD title
     doc.setFontSize(42);
     doc.setFont("helvetica", "bold");
-    doc.text("GIFT CARD", pageWidth / 2, 48, { align: "center" });
+    const giftCardTitle = isSanValentin ? "SAN VALENTIN" : "GIFT CARD";
+    doc.text(giftCardTitle, pageWidth / 2, 48, { align: "center" });
 
     // Package name
     doc.setFontSize(14);
     doc.setFont("helvetica", "normal");
-    doc.setTextColor(GOLD.r, GOLD.g, GOLD.b);
+    doc.setTextColor(accentColor.r, accentColor.g, accentColor.b);
     doc.text(packageName, pageWidth / 2, 65, { align: "center" });
 
     // Sessions count
@@ -114,8 +128,8 @@ serve(async (req) => {
     doc.setTextColor(120, 120, 120);
     doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
-    doc.text("De parte de:", margin, contentStartY);
-    doc.setTextColor(NAVY_BLUE.r, NAVY_BLUE.g, NAVY_BLUE.b);
+    doc.text(isSanValentin ? "Con amor de:" : "De parte de:", margin, contentStartY);
+    doc.setTextColor(textAccentColor.r, textAccentColor.g, textAccentColor.b);
     doc.setFontSize(16);
     doc.setFont("helvetica", "bold");
     doc.text(buyerName, margin, contentStartY + 8);
@@ -125,7 +139,7 @@ serve(async (req) => {
     doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
     doc.text("Valido hasta:", pageWidth - margin, contentStartY, { align: "right" });
-    doc.setTextColor(NAVY_BLUE.r, NAVY_BLUE.g, NAVY_BLUE.b);
+    doc.setTextColor(textAccentColor.r, textAccentColor.g, textAccentColor.b);
     doc.setFontSize(16);
     doc.setFont("helvetica", "bold");
     doc.text(expiryDate, pageWidth - margin, contentStartY + 8, { align: "right" });
@@ -137,7 +151,7 @@ serve(async (req) => {
 
     // Session codes title
     let currentY = contentStartY + 35;
-    doc.setTextColor(NAVY_BLUE.r, NAVY_BLUE.g, NAVY_BLUE.b);
+    doc.setTextColor(textAccentColor.r, textAccentColor.g, textAccentColor.b);
     doc.setFontSize(14);
     doc.setFont("helvetica", "bold");
     doc.text("Tus codigos de sesion:", margin, currentY);
@@ -148,13 +162,13 @@ serve(async (req) => {
     const availableCodes = codes.filter(c => !c.is_used);
 
     for (const codeData of availableCodes) {
-      // Code box with navy border
-      doc.setDrawColor(NAVY_BLUE.r, NAVY_BLUE.g, NAVY_BLUE.b);
+      // Code box with themed border
+      doc.setDrawColor(textAccentColor.r, textAccentColor.g, textAccentColor.b);
       doc.setLineWidth(1);
       doc.roundedRect(margin, currentY, contentWidth, 16, 4, 4, "S");
 
       // Code text
-      doc.setTextColor(NAVY_BLUE.r, NAVY_BLUE.g, NAVY_BLUE.b);
+      doc.setTextColor(textAccentColor.r, textAccentColor.g, textAccentColor.b);
       doc.setFontSize(18);
       doc.setFont("helvetica", "bold");
       doc.text(codeData.code, pageWidth / 2, currentY + 11, { align: "center" });
@@ -165,14 +179,15 @@ serve(async (req) => {
     // Services section
     if (serviceNames) {
       currentY += 5;
-      doc.setFillColor(245, 247, 250);
+      const bgColor = isSanValentin ? LIGHT_PINK : { r: 245, g: 247, b: 250 };
+      doc.setFillColor(bgColor.r, bgColor.g, bgColor.b);
       doc.roundedRect(margin, currentY, contentWidth, 22, 4, 4, "F");
 
       doc.setTextColor(120, 120, 120);
       doc.setFontSize(10);
       doc.setFont("helvetica", "normal");
       doc.text("Valido para:", margin + 8, currentY + 9);
-      doc.setTextColor(NAVY_BLUE.r, NAVY_BLUE.g, NAVY_BLUE.b);
+      doc.setTextColor(textAccentColor.r, textAccentColor.g, textAccentColor.b);
       doc.setFontSize(12);
       doc.setFont("helvetica", "bold");
       doc.text(serviceNames, margin + 8, currentY + 17);
@@ -182,7 +197,7 @@ serve(async (req) => {
 
     // Instructions
     currentY += 8;
-    doc.setTextColor(NAVY_BLUE.r, NAVY_BLUE.g, NAVY_BLUE.b);
+    doc.setTextColor(textAccentColor.r, textAccentColor.g, textAccentColor.b);
     doc.setFontSize(14);
     doc.setFont("helvetica", "bold");
     doc.text("Como usar tus codigos?", margin, currentY);
@@ -208,12 +223,12 @@ serve(async (req) => {
     const footerY = pageHeight - 30;
     
     // Footer divider
-    doc.setDrawColor(NAVY_BLUE.r, NAVY_BLUE.g, NAVY_BLUE.b);
+    doc.setDrawColor(textAccentColor.r, textAccentColor.g, textAccentColor.b);
     doc.setLineWidth(0.5);
     doc.line(margin, footerY - 10, pageWidth - margin, footerY - 10);
 
     // Footer content
-    doc.setTextColor(NAVY_BLUE.r, NAVY_BLUE.g, NAVY_BLUE.b);
+    doc.setTextColor(textAccentColor.r, textAccentColor.g, textAccentColor.b);
     doc.setFontSize(12);
     doc.setFont("helvetica", "bold");
     doc.text("Studio La Nave", pageWidth / 2, footerY, { align: "center" });

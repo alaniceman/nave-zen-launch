@@ -22,6 +22,7 @@ import BlogProtocoloSeguro from "./pages/BlogProtocoloSeguro";
 import BlogProtocolo15Minutos from "./pages/BlogProtocolo15Minutos";
 import Cyber2025 from "./pages/Cyber2025";
 import PlanAnual2026 from "./pages/PlanAnual2026";
+import SanValentin from "./pages/SanValentin";
 import Horarios from "./pages/Horarios";
 import FAQ from "./pages/FAQ";
 import ClaseDePrueba from "./pages/ClaseDePrueba";
@@ -94,6 +95,7 @@ const App = () => (
             <Route path="/blog/protocolo-15-minutos-respiracion-agua-fria" element={<BlogProtocolo15Minutos />} />
             <Route path="/cyber-2025" element={<Cyber2025 />} />
             <Route path="/anual" element={<PlanAnual2026 />} />
+            <Route path="/san-valentin" element={<SanValentin />} />
             <Route path="/horarios" element={<Horarios />} />
             <Route path="/faq" element={<FAQ />} />
             <Route path="/clase-de-prueba" element={<ClaseDePrueba />} />
