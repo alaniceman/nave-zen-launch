@@ -5,8 +5,8 @@ import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { cn } from "@/lib/utils";
 
-// San Valentín promo ends on Feb 14, 2025 at 23:59:59 Chile time
-const VALENTINE_END_DATE = new Date("2025-02-15T02:59:59Z"); // UTC equivalent
+// San Valentín promo ends on Feb 14, 2026 at 23:59:59 Chile time
+const VALENTINE_END_DATE = new Date("2026-02-15T02:59:59Z"); // UTC equivalent
 
 const HeroSlideMain = () => {
   const navigate = useNavigate();
@@ -145,7 +145,11 @@ const HeroSlideValentine = () => {
           {/* CTA */}
           <div className="space-y-4 pt-4">
             <Button 
-              onClick={() => navigate('/san-valentin')}
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate('/san-valentin');
+              }}
               className="w-full md:w-auto min-w-[320px] bg-white text-rose-600 hover:bg-white/90 font-bold text-lg py-6 px-8 rounded-xl shadow-xl hover:shadow-2xl transition-all transform hover:scale-105"
               size="xl"
             >
