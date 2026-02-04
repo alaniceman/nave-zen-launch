@@ -408,6 +408,7 @@ export type Database = {
       }
       package_orders: {
         Row: {
+          abandonment_email_sent_at: string | null
           buyer_email: string
           buyer_name: string
           buyer_phone: string | null
@@ -430,6 +431,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          abandonment_email_sent_at?: string | null
           buyer_email: string
           buyer_name: string
           buyer_phone?: string | null
@@ -452,6 +454,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          abandonment_email_sent_at?: string | null
           buyer_email?: string
           buyer_name?: string
           buyer_phone?: string | null

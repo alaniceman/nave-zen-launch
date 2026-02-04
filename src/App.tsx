@@ -61,6 +61,7 @@ import AdminSessionPackages from "./pages/admin/AdminSessionPackages";
 import AdminSessionCodes from "./pages/admin/AdminSessionCodes";
 import AdminBranches from "./pages/admin/AdminBranches";
 import AdminPackageOrders from "./pages/admin/AdminPackageOrders";
+import AdminAbandonedCarts from "./pages/admin/AdminAbandonedCarts";
 
 const queryClient = new QueryClient();
 
@@ -122,6 +123,7 @@ const App = () => (
             <Route path="/admin" element={<ProtectedRoute requireAdmin><AdminLayout /></ProtectedRoute>}>
               <Route path="agenda" element={<AdminBookings />} />
               <Route path="ordenes" element={<AdminPackageOrders />} />
+              <Route path="carros-abandonados" element={<AdminAbandonedCarts />} />
               <Route path="sucursales" element={<AdminBranches />} />
               <Route path="profesionales" element={<AdminProfessionals />} />
               <Route path="servicios" element={<AdminServices />} />
