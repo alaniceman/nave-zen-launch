@@ -217,10 +217,10 @@ export default function AdminDashboard() {
       const totalRedeemedValue = calculateRedeemedValue(usedCodesWithDate, packagesDataMap);
 
       // Revenue by month
-      const revenueByMonth = getRevenueByMonth(bookings, orders, monthsAgo);
+      const revenueByMonth = getRevenueByMonth(bookings, orders, startDate, endDate);
 
       // Redeemed value by month (income vs redeemed comparison)
-      const redeemedValueByMonth = getRedeemedValueByMonth(orders, usedCodesWithDate, packagesDataMap, monthsAgo);
+      const redeemedValueByMonth = getRedeemedValueByMonth(orders, usedCodesWithDate, packagesDataMap, startDate, endDate);
 
       // Bookings by service
       const bookingsByService = getBookingsByService(confirmedBookings, servicesMap);
@@ -229,7 +229,7 @@ export default function AdminDashboard() {
       const ordersByPackage = getOrdersByPackage(completedOrders, packagesMap);
 
       // Coupon usage by month (from bookings and orders with coupon)
-      const couponUsageByMonth = getCouponUsageByMonth(bookings, orders, monthsAgo);
+      const couponUsageByMonth = getCouponUsageByMonth(bookings, orders, startDate, endDate);
 
       setData({
         totalBookings: bookings.length,
@@ -641,15 +641,18 @@ function DashboardSkeleton() {
 function getRevenueByMonth(
   bookings: any[],
   orders: any[],
-  monthsAgo: number
+  startDate: Date,
+  endDate: Date
 ): { month: string; bookings: number; orders: number; total: number }[] {
   const result: Map<string, { bookings: number; orders: number }> = new Map();
 
-  // Initialize months
-  for (let i = monthsAgo - 1; i >= 0; i--) {
-    const date = subMonths(new Date(), i);
-    const key = format(date, "MMM yy", { locale: es });
+  // Initialize months between startDate and endDate
+  let current = startOfMonth(startDate);
+  const end = startOfMonth(endDate);
+  while (current <= end) {
+    const key = format(current, "MMM yy", { locale: es });
     result.set(key, { bookings: 0, orders: 0 });
+    current = addMonths(current, 1);
   }
 
   // Add confirmed bookings revenue
@@ -657,9 +660,9 @@ function getRevenueByMonth(
     .filter(b => b.status === "CONFIRMED")
     .forEach(b => {
       const key = format(parseISO(b.created_at), "MMM yy", { locale: es });
-      const current = result.get(key);
-      if (current) {
-        current.bookings += b.final_price || 0;
+      const currentData = result.get(key);
+      if (currentData) {
+        currentData.bookings += b.final_price || 0;
       }
     });
 
@@ -668,9 +671,9 @@ function getRevenueByMonth(
     .filter(o => o.status === "paid")
     .forEach(o => {
       const key = format(parseISO(o.created_at), "MMM yy", { locale: es });
-      const current = result.get(key);
-      if (current) {
-        current.orders += o.final_price || 0;
+      const currentData = result.get(key);
+      if (currentData) {
+        currentData.orders += o.final_price || 0;
       }
     });
 
@@ -720,15 +723,18 @@ function getOrdersByPackage(
 function getCouponUsageByMonth(
   bookings: any[],
   orders: any[],
-  monthsAgo: number
+  startDate: Date,
+  endDate: Date
 ): { month: string; uses: number }[] {
   const result = new Map<string, number>();
 
-  // Initialize months
-  for (let i = monthsAgo - 1; i >= 0; i--) {
-    const date = subMonths(new Date(), i);
-    const key = format(date, "MMM yy", { locale: es });
+  // Initialize months between startDate and endDate
+  let current = startOfMonth(startDate);
+  const end = startOfMonth(endDate);
+  while (current <= end) {
+    const key = format(current, "MMM yy", { locale: es });
     result.set(key, 0);
+    current = addMonths(current, 1);
   }
 
   // Count bookings with coupons
@@ -736,9 +742,9 @@ function getCouponUsageByMonth(
     .filter(b => b.coupon_id)
     .forEach(b => {
       const key = format(parseISO(b.created_at), "MMM yy", { locale: es });
-      const current = result.get(key);
-      if (current !== undefined) {
-        result.set(key, current + 1);
+      const currentVal = result.get(key);
+      if (currentVal !== undefined) {
+        result.set(key, currentVal + 1);
       }
     });
 
@@ -747,9 +753,9 @@ function getCouponUsageByMonth(
     .filter(o => o.coupon_id)
     .forEach(o => {
       const key = format(parseISO(o.created_at), "MMM yy", { locale: es });
-      const current = result.get(key);
-      if (current !== undefined) {
-        result.set(key, current + 1);
+      const currentVal = result.get(key);
+      if (currentVal !== undefined) {
+        result.set(key, currentVal + 1);
       }
     });
 
@@ -774,15 +780,18 @@ function getRedeemedValueByMonth(
   orders: any[],
   usedCodes: { used_at: string | null; package_id: string | null }[],
   packagesDataMap: Map<string, { price: number; sessions: number }>,
-  monthsAgo: number
+  startDate: Date,
+  endDate: Date
 ): { month: string; income: number; redeemed: number }[] {
   const result: Map<string, { income: number; redeemed: number }> = new Map();
 
-  // Initialize months
-  for (let i = monthsAgo - 1; i >= 0; i--) {
-    const date = subMonths(new Date(), i);
-    const key = format(date, "MMM yy", { locale: es });
+  // Initialize months between startDate and endDate
+  let current = startOfMonth(startDate);
+  const end = startOfMonth(endDate);
+  while (current <= end) {
+    const key = format(current, "MMM yy", { locale: es });
     result.set(key, { income: 0, redeemed: 0 });
+    current = addMonths(current, 1);
   }
 
   // Add completed orders revenue (income from package sales)
@@ -790,9 +799,9 @@ function getRedeemedValueByMonth(
     .filter(o => o.status === "paid")
     .forEach(o => {
       const key = format(parseISO(o.created_at), "MMM yy", { locale: es });
-      const current = result.get(key);
-      if (current) {
-        current.income += o.final_price || 0;
+      const currentData = result.get(key);
+      if (currentData) {
+        currentData.income += o.final_price || 0;
       }
     });
 
@@ -804,9 +813,9 @@ function getRedeemedValueByMonth(
     
     const codeValue = pkg.price / pkg.sessions;
     const key = format(parseISO(code.used_at), "MMM yy", { locale: es });
-    const current = result.get(key);
-    if (current) {
-      current.redeemed += codeValue;
+    const currentData = result.get(key);
+    if (currentData) {
+      currentData.redeemed += codeValue;
     }
   });
 
