@@ -1,196 +1,115 @@
 
 
-## Página Promoción San Valentín - 2 Sesiones Criomedicina
+# Plan: Mejorar Dashboard con Métricas de Valor Canjeado
 
-### Resumen
+## Problema Identificado
 
-Crear una página especial de San Valentín para vender 2 sesiones de Criomedicina / Método Wim Hof a **$40.000 CLP** (precio normal $60.000), incluyendo:
-- Pago vía Mercado Pago
-- Envío de 2 códigos de sesión por email
-- Gift Card temática de San Valentín descargable en PDF
+El dashboard actual mezcla conceptos que deberían estar separados:
 
-### Arquitectura del flujo
+1. **Ingresos reales (flujo de caja)**: Dinero que entra cuando se compra un paquete
+2. **Valor canjeado**: Valor prepagado que se "consume" cuando el cliente usa un código de sesión
+
+## Cambios Propuestos
+
+### 1. Arreglar visualización del menú Dashboard
+- Verificar que el ítem "Dashboard" aparezca visible en el sidebar
+- Si el sidebar está en modo colapsado, asegurar que al expandirlo se vea correctamente
+
+### 2. Agregar nuevas métricas de "Valor Canjeado"
+
+Se modificará el dashboard para incluir:
+
+**Nueva tarjeta KPI:**
+- **Valor Canjeado (mes actual)**: Suma del valor de los códigos de sesión usados este mes
+
+**Nuevo gráfico:**
+- **Ingresos vs Valor Canjeado por Mes**: Gráfico de barras comparativo que muestre:
+  - Barras azules: Ingresos reales (compras de paquetes)
+  - Barras verdes: Valor canjeado (códigos usados)
+
+### 3. Cálculo del Valor por Código
+
+Para cada código de sesión usado, se calculará su valor unitario:
+```
+valor_codigo = precio_paquete / cantidad_sesiones_paquete
+```
+
+Por ejemplo:
+- Paquete de 5 sesiones a $100.000 → cada código vale $20.000
+- Si en enero se usaron 8 códigos → Valor canjeado = $160.000
+
+### 4. Consultas de Datos Adicionales
+
+Se modificará `loadDashboardData()` para:
+1. Obtener session_codes con `used_at` (fecha de uso)
+2. Relacionar con session_packages para obtener precio y cantidad de sesiones
+3. Calcular valor canjeado agrupado por mes
+
+## Secciones del Dashboard Mejorado
 
 ```text
-┌─────────────────────────────────────────────────────────────────────┐
-│                     /san-valentin                                   │
-├─────────────────────────────────────────────────────────────────────┤
-│  1. Usuario ve landing de San Valentín con la promo                 │
-│  2. Llena formulario (nombre, email, teléfono)                      │
-│  3. Clic en "Comprar" → llama edge function                         │
-│  4. Redirige a Mercado Pago ($40.000)                               │
-│  5. Pago exitoso → webhook genera 2 códigos + email con Gift Card   │
-│  6. Email incluye link a /giftcard/{token} con diseño San Valentín  │
-└─────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│  DASHBOARD                                    [Período ▼]   │
+├─────────────────────────────────────────────────────────────┤
+│  KPIs Principales (4 tarjetas)                              │
+│  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐        │
+│  │Ingresos │  │ Valor   │  │Reservas │  │ Cupones │        │
+│  │ Reales  │  │Canjeado │  │Confirm. │  │  Usados │        │
+│  └─────────┘  └─────────┘  └─────────┘  └─────────┘        │
+├─────────────────────────────────────────────────────────────┤
+│  Códigos de Sesión (4 tarjetas pequeñas)                    │
+│  ┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐            │
+│  │Generados│  │ Usados │  │Disponib│  │Expirados│          │
+│  └────────┘  └────────┘  └────────┘  └────────┘            │
+├─────────────────────────────────────────────────────────────┤
+│  Gráficos                                                   │
+│  ┌─────────────────────┐  ┌─────────────────────┐          │
+│  │ Ingresos vs Valor   │  │  Uso de Cupones     │          │
+│  │ Canjeado por Mes    │  │    por Mes          │          │
+│  └─────────────────────┘  └─────────────────────┘          │
+│                                                             │
+│  ┌─────────────────────┐  ┌─────────────────────┐          │
+│  │ Reservas por        │  │  Ventas por         │          │
+│  │   Servicio          │  │   Bono/Paquete      │          │
+│  └─────────────────────┘  └─────────────────────┘          │
+└─────────────────────────────────────────────────────────────┘
 ```
 
----
+## Archivos a Modificar
 
-### Cambios a realizar
+1. **`src/pages/admin/AdminDashboard.tsx`**
+   - Agregar consulta de session_packages con precios
+   - Agregar cálculo de valor canjeado por mes
+   - Agregar nueva KPI "Valor Canjeado"
+   - Modificar gráfico de ingresos para mostrar comparativa
 
-#### 1. Base de datos: Crear paquete especial San Valentín
+## Detalles Técnicos
 
-Crear un nuevo paquete de sesiones con las características de la promo:
+### Nueva consulta de datos:
+```typescript
+// Obtener session_codes con fecha de uso
+const codesWithUsage = await supabase
+  .from("session_codes")
+  .select("id, is_used, used_at, package_id")
+  .eq("is_used", true)
+  .gte("used_at", startDate.toISOString())
 
-| Campo | Valor |
-|-------|-------|
-| `name` | Promo San Valentín - 2 Sesiones |
-| `description` | 2 sesiones de Criomedicina / Método Wim Hof para compartir en pareja o regalar a alguien especial |
-| `sessions_quantity` | 2 |
-| `price_clp` | 40000 |
-| `validity_days` | 180 (6 meses) |
-| `applicable_service_ids` | IDs de Criomedicina/Wim Hof |
-| `is_active` | true |
-| `available_as_giftcard` | true |
-| `promo_type` | "san_valentin" (nuevo campo opcional) |
-
----
-
-#### 2. Nueva página: `/san-valentin`
-
-**Archivo:** `src/pages/SanValentin.tsx`
-
-**Estructura de la página:**
-
-```text
-┌─────────────────────────────────────────────────────────────────────┐
-│                    💕 HERO SECTION 💕                               │
-│  "Regala una experiencia transformadora este San Valentín"         │
-│  Imagen temática con corazones / pareja en ice bath                 │
-├─────────────────────────────────────────────────────────────────────┤
-│                    PROMO CARD                                       │
-│  ┌─────────────────────────────────────────────────────────────┐   │
-│  │  🧊 2 Sesiones Método Wim Hof / Criomedicina               │   │
-│  │                                                             │   │
-│  │  Precio normal: $60.000 (tachado)                           │   │
-│  │  Precio San Valentín: $40.000                               │   │
-│  │  ¡Ahorra $20.000!                                           │   │
-│  │                                                             │   │
-│  │  ✓ 2 códigos de sesión para usar cuando quieran            │   │
-│  │  ✓ Válido por 6 meses                                       │   │
-│  │  ✓ Gift Card descargable con diseño San Valentín            │   │
-│  └─────────────────────────────────────────────────────────────┘   │
-├─────────────────────────────────────────────────────────────────────┤
-│                    FORMULARIO DE COMPRA                             │
-│  - Nombre completo                                                  │
-│  - Email (recibirá la Gift Card)                                    │
-│  - Celular                                                          │
-│  - [Botón: Comprar Gift Card - $40.000]                             │
-├─────────────────────────────────────────────────────────────────────┤
-│                    BENEFICIOS                                       │
-│  💪 Fortalece el sistema inmune                                     │
-│  🧠 Reduce el estrés y la ansiedad                                  │
-│  ❄️ Mejora la circulación                                          │
-│  💕 Experiencia para compartir en pareja                            │
-├─────────────────────────────────────────────────────────────────────┤
-│                    FAQ San Valentín                                 │
-├─────────────────────────────────────────────────────────────────────┤
-│                    FOOTER                                           │
-└─────────────────────────────────────────────────────────────────────┘
+// Obtener paquetes con precio y cantidad
+const packages = await supabase
+  .from("session_packages")
+  .select("id, name, price_clp, sessions_quantity")
 ```
 
-**Funcionalidades:**
-- Formulario integrado (sin selección de paquete, es fijo)
-- Llamada a `purchase-session-package` con `isGiftCard: true`
-- Meta Pixel tracking (ViewContent, InitiateCheckout, Purchase)
-- SEO optimizado para San Valentín
-
----
-
-#### 3. Ruta en App.tsx
-
-Agregar la nueva ruta:
-
-```tsx
-<Route path="/san-valentin" element={<SanValentin />} />
+### Cálculo de valor canjeado:
+```typescript
+// Para cada código usado, calcular su valor
+const valorCodigo = package.price_clp / package.sessions_quantity
 ```
 
----
+## Resultado Esperado
 
-#### 4. Edge function: Email y PDF con diseño San Valentín
-
-**Modificar:** `supabase/functions/send-session-codes-email/index.ts`
-
-Agregar parámetro `promoType` para detectar San Valentín y personalizar:
-- Subject: "💕 Tu Gift Card de San Valentín está lista"
-- Diseño del email con colores rosados/rojos
-- Corazones y emojis temáticos
-
-**Modificar:** `supabase/functions/generate-giftcard-pdf/index.ts`
-
-Agregar lógica para detectar promo San Valentín y generar PDF con:
-- Colores rosados/rojos en vez de azul marino
-- Corazones decorativos
-- Texto temático de San Valentín
-
----
-
-#### 5. Flujo de compra
-
-El flujo usa el mismo backend existente (`purchase-session-package`):
-
-1. Usuario llena formulario en `/san-valentin`
-2. Frontend llama `purchase-session-package` con:
-   - `packageId`: ID del paquete San Valentín
-   - `isGiftCard: true`
-   - `promoType: "san_valentin"` (nuevo campo)
-3. Backend crea orden y redirige a Mercado Pago
-4. Webhook procesa pago y genera códigos
-5. Email enviado con diseño San Valentín
-
----
-
-### Archivos a crear/modificar
-
-| Archivo | Acción | Descripción |
-|---------|--------|-------------|
-| `src/pages/SanValentin.tsx` | **Crear** | Landing page de la promoción |
-| `src/App.tsx` | Modificar | Agregar ruta `/san-valentin` |
-| `supabase/functions/send-session-codes-email/index.ts` | Modificar | Template de email San Valentín |
-| `supabase/functions/generate-giftcard-pdf/index.ts` | Modificar | Diseño PDF San Valentín |
-| `supabase/functions/purchase-session-package/index.ts` | Modificar | Pasar promoType a las funciones de email |
-| Migración SQL | **Crear** | Paquete especial San Valentín en BD |
-
----
-
-### Diseño visual de la página
-
-**Paleta de colores San Valentín:**
-- Rosa principal: `#EC4899` (pink-500)
-- Rosa claro: `#FCE7F3` (pink-100)
-- Rojo acento: `#E11D48` (rose-600)
-- Gradientes suaves rosados
-
-**Elementos visuales:**
-- Corazones decorativos
-- Iconos temáticos (💕❄️🧊💝)
-- Badge de "Oferta Especial" o "Solo por San Valentín"
-- Contador de urgencia opcional
-
----
-
-### Detalles técnicos
-
-**Paquete San Valentín (migración SQL):**
-```sql
-INSERT INTO session_packages (
-  name, description, sessions_quantity, price_clp, 
-  validity_days, applicable_service_ids, is_active, 
-  available_as_giftcard
-) VALUES (
-  'Promo San Valentín - 2 Sesiones',
-  '2 sesiones de Criomedicina / Método Wim Hof para compartir en pareja',
-  2,
-  40000,
-  180,
-  ARRAY['ced4be53-8e5c-4d34-8370-0784f8d7a4b1', '4597bac7-b438-48b7-ba9c-e6c5dcac8df5']::uuid[],
-  true,
-  true
-);
-```
-
-**Comparación de precios:**
-- Precio normal: 2 × $30.000 = $60.000
-- Precio promo: $40.000
-- Ahorro: $20.000 (33% off)
+El dashboard mostrará claramente:
+- **Cuánto dinero entró** (ventas de paquetes/gift cards)
+- **Cuánto valor prepagado se canjeó** (códigos usados)
+- Comparativa mensual de ambas métricas
 
