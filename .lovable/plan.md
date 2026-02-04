@@ -1,115 +1,89 @@
 
 
-# Plan: Mejorar Dashboard con Métricas de Valor Canjeado
+# Plan: Corregir Cálculo de Ingresos Totales en Dashboard
 
 ## Problema Identificado
 
-El dashboard actual mezcla conceptos que deberían estar separados:
+El dashboard está mostrando ingresos incorrectos porque:
 
-1. **Ingresos reales (flujo de caja)**: Dinero que entra cuando se compra un paquete
-2. **Valor canjeado**: Valor prepagado que se "consume" cuando el cliente usa un código de sesión
+1. **Bug crítico**: El código filtra `package_orders` por `status === "completed"`, pero el estado correcto en la base de datos es `status === "paid"`
+2. **Resultado**: Los ingresos de bonos, paquetes y gift cards se muestran como $0
 
-## Cambios Propuestos
+### Datos Reales de Enero 2026:
+| Fuente | Total | Cantidad |
+|--------|-------|----------|
+| Bookings directos (pagados) | $210,000 | 7 |
+| Órdenes de paquetes/giftcards (paid) | $262,700 | 8 |
+| **Total real** | **$472,700** | 15 |
 
-### 1. Arreglar visualización del menú Dashboard
-- Verificar que el ítem "Dashboard" aparezca visible en el sidebar
-- Si el sidebar está en modo colapsado, asegurar que al expandirlo se vea correctamente
+El dashboard probablemente solo mostraba ~$210,000 porque ignoraba los $262,700 de órdenes de paquetes.
 
-### 2. Agregar nuevas métricas de "Valor Canjeado"
+## Cambios a Realizar
 
-Se modificará el dashboard para incluir:
+### 1. Corregir el filtro de status en `package_orders`
 
-**Nueva tarjeta KPI:**
-- **Valor Canjeado (mes actual)**: Suma del valor de los códigos de sesión usados este mes
-
-**Nuevo gráfico:**
-- **Ingresos vs Valor Canjeado por Mes**: Gráfico de barras comparativo que muestre:
-  - Barras azules: Ingresos reales (compras de paquetes)
-  - Barras verdes: Valor canjeado (códigos usados)
-
-### 3. Cálculo del Valor por Código
-
-Para cada código de sesión usado, se calculará su valor unitario:
-```
-valor_codigo = precio_paquete / cantidad_sesiones_paquete
-```
-
-Por ejemplo:
-- Paquete de 5 sesiones a $100.000 → cada código vale $20.000
-- Si en enero se usaron 8 códigos → Valor canjeado = $160.000
-
-### 4. Consultas de Datos Adicionales
-
-Se modificará `loadDashboardData()` para:
-1. Obtener session_codes con `used_at` (fecha de uso)
-2. Relacionar con session_packages para obtener precio y cantidad de sesiones
-3. Calcular valor canjeado agrupado por mes
-
-## Secciones del Dashboard Mejorado
+Cambiar todas las referencias de `status === "completed"` a `status === "paid"`:
 
 ```text
-┌─────────────────────────────────────────────────────────────┐
-│  DASHBOARD                                    [Período ▼]   │
-├─────────────────────────────────────────────────────────────┤
-│  KPIs Principales (4 tarjetas)                              │
-│  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐        │
-│  │Ingresos │  │ Valor   │  │Reservas │  │ Cupones │        │
-│  │ Reales  │  │Canjeado │  │Confirm. │  │  Usados │        │
-│  └─────────┘  └─────────┘  └─────────┘  └─────────┘        │
-├─────────────────────────────────────────────────────────────┤
-│  Códigos de Sesión (4 tarjetas pequeñas)                    │
-│  ┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐            │
-│  │Generados│  │ Usados │  │Disponib│  │Expirados│          │
-│  └────────┘  └────────┘  └────────┘  └────────┘            │
-├─────────────────────────────────────────────────────────────┤
-│  Gráficos                                                   │
-│  ┌─────────────────────┐  ┌─────────────────────┐          │
-│  │ Ingresos vs Valor   │  │  Uso de Cupones     │          │
-│  │ Canjeado por Mes    │  │    por Mes          │          │
-│  └─────────────────────┘  └─────────────────────┘          │
-│                                                             │
-│  ┌─────────────────────┐  ┌─────────────────────┐          │
-│  │ Reservas por        │  │  Ventas por         │          │
-│  │   Servicio          │  │   Bono/Paquete      │          │
-│  └─────────────────────┘  └─────────────────────┘          │
-└─────────────────────────────────────────────────────────────┘
+Archivo: src/pages/admin/AdminDashboard.tsx
+
+Línea 171: 
+ANTES: const completedOrders = orders.filter(o => o.status === "completed");
+DESPUÉS: const completedOrders = orders.filter(o => o.status === "paid");
+
+Línea 609:
+ANTES: .filter(o => o.status === "completed")
+DESPUÉS: .filter(o => o.status === "paid")
+
+Línea 731:
+ANTES: .filter(o => o.status === "completed")
+DESPUÉS: .filter(o => o.status === "paid")
 ```
 
-## Archivos a Modificar
+### 2. Actualizar etiquetas del gráfico para claridad
 
-1. **`src/pages/admin/AdminDashboard.tsx`**
-   - Agregar consulta de session_packages con precios
-   - Agregar cálculo de valor canjeado por mes
-   - Agregar nueva KPI "Valor Canjeado"
-   - Modificar gráfico de ingresos para mostrar comparativa
-
-## Detalles Técnicos
-
-### Nueva consulta de datos:
-```typescript
-// Obtener session_codes con fecha de uso
-const codesWithUsage = await supabase
-  .from("session_codes")
-  .select("id, is_used, used_at, package_id")
-  .eq("is_used", true)
-  .gte("used_at", startDate.toISOString())
-
-// Obtener paquetes con precio y cantidad
-const packages = await supabase
-  .from("session_packages")
-  .select("id, name, price_clp, sessions_quantity")
-```
-
-### Cálculo de valor canjeado:
-```typescript
-// Para cada código usado, calcular su valor
-const valorCodigo = package.price_clp / package.sessions_quantity
-```
+Cambiar las etiquetas para que reflejen mejor las fuentes de ingresos:
+- "Reservas" → "Sesiones Directas" (bookings pagados directamente)
+- "Bonos" → "Bonos/GiftCards" (órdenes de paquetes)
 
 ## Resultado Esperado
 
-El dashboard mostrará claramente:
-- **Cuánto dinero entró** (ventas de paquetes/gift cards)
-- **Cuánto valor prepagado se canjeó** (códigos usados)
-- Comparativa mensual de ambas métricas
+Después de la corrección:
+
+```text
+┌─────────────────────────────────────────┐
+│  Ingresos Totales por Mes - Enero 2026  │
+│  ┌──────────────────────────────────┐   │
+│  │  ████  Sesiones: $210,000        │   │
+│  │  ████  Bonos/GiftCards: $262,700 │   │
+│  │  Total: $472,700                 │   │
+│  └──────────────────────────────────┘   │
+└─────────────────────────────────────────┘
+```
+
+## Archivo a Modificar
+
+- `src/pages/admin/AdminDashboard.tsx`
+  - Línea 171: Cambiar filtro de status
+  - Línea 609: Cambiar filtro en `getRevenueByMonth()`
+  - Línea 731: Cambiar filtro en `getRedeemedValueByMonth()`
+  - Líneas 391-392: Actualizar etiquetas de leyenda del gráfico
+
+## Detalles Técnicos
+
+La corrección es simple pero crítica:
+
+```typescript
+// ANTES (incorrecto):
+const completedOrders = orders.filter(o => o.status === "completed");
+
+// DESPUÉS (correcto):
+const completedOrders = orders.filter(o => o.status === "paid");
+```
+
+Este cambio afecta:
+- KPI de "Ingresos Reales"
+- Gráfico "Ingresos vs Valor Canjeado por Mes"  
+- Gráfico "Ingresos Totales por Mes"
+- Tabla "Top Bonos/Paquetes por Ingresos"
 
