@@ -29,3 +29,9 @@ verify_jwt = false
 
 [functions.send-session-feedback]
 verify_jwt = false
+
+[functions.send-abandonment-email]
+verify_jwt = false
+
+[functions.facebook-conversions]
+verify_jwt = false
