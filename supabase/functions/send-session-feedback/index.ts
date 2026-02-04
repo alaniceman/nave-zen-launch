@@ -191,6 +191,20 @@ const handler = async (req: Request): Promise<Response> => {
                   
                   <div style="margin-top: 40px; padding-top: 32px; border-top: 1px solid #e0e0e0;">
                     <p class="message" style="text-align: center;">
+                      <strong>🧊 ¡Únete a los Crionautas!</strong>
+                    </p>
+                    <p class="message" style="text-align: center; color: #666;">
+                      Nuestra comunidad de WhatsApp donde compartimos tips, experiencias y nos motivamos mutuamente en el camino del hielo.
+                    </p>
+                    <div class="cta-container">
+                      <a href="https://chat.whatsapp.com/HdTFY3RryAMA5e7GAleMHq?mode=gi_t" style="display: inline-block; background: #25D366; color: white !important; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-size: 15px; font-weight: 600;">
+                        💬 Unirme a los Crionautas
+                      </a>
+                    </div>
+                  </div>
+                  
+                  <div style="margin-top: 32px; padding-top: 32px; border-top: 1px solid #e0e0e0;">
+                    <p class="message" style="text-align: center;">
                       <strong>¿Te gustó la experiencia?</strong> 🌟
                     </p>
                     <p class="message" style="text-align: center; color: #666;">
