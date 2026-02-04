@@ -4,14 +4,28 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Clock, Loader2, XCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useFacebookPixel } from "@/hooks/useFacebookPixel";
+import { useFacebookConversionsAPI } from "@/hooks/useFacebookConversionsAPI";
 
 type BookingStatus = "CONFIRMED" | "PENDING_PAYMENT" | "CANCELLED" | null;
+
+interface BookingData {
+  status: string;
+  customer_email: string;
+  customer_name: string;
+  customer_phone: string;
+  final_price: number | null;
+  services: { name: string } | null;
+}
 
 export default function AgendaSuccess() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [bookingStatus, setBookingStatus] = useState<BookingStatus>(null);
   const [loading, setLoading] = useState(true);
+  const [hasFiredPixel, setHasFiredPixel] = useState(false);
+  const { trackPurchase } = useFacebookPixel();
+  const { trackPurchase: trackServerPurchase } = useFacebookConversionsAPI();
 
   useEffect(() => {
     const checkBookingStatus = async () => {
@@ -21,12 +35,41 @@ export default function AgendaSuccess() {
       if (externalReference) {
         const { data, error } = await supabase
           .from("bookings")
-          .select("status")
+          .select("status, customer_email, customer_name, customer_phone, final_price, services(name)")
           .eq("id", externalReference)
           .maybeSingle();
 
         if (data) {
           setBookingStatus(data.status as BookingStatus);
+          
+          // Track purchase if confirmed and not already tracked
+          if (data.status === "CONFIRMED" && !hasFiredPixel) {
+            const bookingData = data as unknown as BookingData;
+            const serviceName = bookingData.services?.name || "Sesión";
+            const price = bookingData.final_price || 0;
+            
+            // Client-side pixel
+            trackPurchase({
+              value: price,
+              currency: "CLP",
+              content_name: serviceName,
+              content_type: "product",
+              content_ids: [externalReference],
+            });
+            
+            // Server-side Conversions API
+            trackServerPurchase({
+              userEmail: bookingData.customer_email,
+              userName: bookingData.customer_name,
+              userPhone: bookingData.customer_phone || undefined,
+              value: price,
+              currency: "CLP",
+              contentName: serviceName,
+              orderId: externalReference,
+            });
+            
+            setHasFiredPixel(true);
+          }
         } else {
           // If no booking found, assume pending (could be processing)
           setBookingStatus("PENDING_PAYMENT");
@@ -39,7 +82,7 @@ export default function AgendaSuccess() {
     };
 
     checkBookingStatus();
-  }, [searchParams]);
+  }, [searchParams, hasFiredPixel, trackPurchase, trackServerPurchase]);
 
   if (loading) {
     return (
