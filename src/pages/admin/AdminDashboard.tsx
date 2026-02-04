@@ -72,8 +72,12 @@ interface DashboardData {
   expiredCodes: number;
   availableCodes: number;
   
+  // Redeemed value stats
+  totalRedeemedValue: number;
+  
   // Charts data
   revenueByMonth: { month: string; bookings: number; orders: number; total: number }[];
+  redeemedValueByMonth: { month: string; income: number; redeemed: number }[];
   bookingsByService: { name: string; count: number }[];
   ordersByPackage: { name: string; count: number; revenue: number }[];
   couponUsageByMonth: { month: string; uses: number }[];
@@ -112,6 +116,7 @@ export default function AdminDashboard() {
         ordersResult,
         couponsResult,
         codesResult,
+        usedCodesResult,
         servicesResult,
         packagesResult,
       ] = await Promise.all([
@@ -132,20 +137,29 @@ export default function AdminDashboard() {
           .from("session_codes")
           .select("id, is_used, expires_at, purchased_at")
           .gte("purchased_at", startDate.toISOString()),
+        // Fetch used codes with used_at date for redeemed value calculation
+        supabase
+          .from("session_codes")
+          .select("id, is_used, used_at, package_id")
+          .eq("is_used", true)
+          .gte("used_at", startDate.toISOString())
+          .lte("used_at", endDate.toISOString()),
         supabase.from("services").select("id, name"),
-        supabase.from("session_packages").select("id, name"),
+        supabase.from("session_packages").select("id, name, price_clp, sessions_quantity"),
       ]);
 
       const bookings = bookingsResult.data || [];
       const orders = ordersResult.data || [];
       const coupons = couponsResult.data || [];
       const codes = codesResult.data || [];
+      const usedCodesWithDate = usedCodesResult.data || [];
       const services = servicesResult.data || [];
       const packages = packagesResult.data || [];
 
       // Create lookup maps
       const servicesMap = new Map(services.map(s => [s.id, s.name]));
       const packagesMap = new Map(packages.map(p => [p.id, p.name]));
+      const packagesDataMap = new Map(packages.map(p => [p.id, { price: p.price_clp, sessions: p.sessions_quantity }]));
 
       // Calculate booking stats
       const confirmedBookings = bookings.filter(b => b.status === "CONFIRMED");
@@ -169,8 +183,14 @@ export default function AdminDashboard() {
       const expiredCodes = codes.filter(c => !c.is_used && new Date(c.expires_at) < now);
       const availableCodes = codes.filter(c => !c.is_used && new Date(c.expires_at) >= now);
 
+      // Calculate redeemed value (value of used session codes)
+      const totalRedeemedValue = calculateRedeemedValue(usedCodesWithDate, packagesDataMap);
+
       // Revenue by month
       const revenueByMonth = getRevenueByMonth(bookings, orders, monthsAgo);
+
+      // Redeemed value by month (income vs redeemed comparison)
+      const redeemedValueByMonth = getRedeemedValueByMonth(orders, usedCodesWithDate, packagesDataMap, monthsAgo);
 
       // Bookings by service
       const bookingsByService = getBookingsByService(confirmedBookings, servicesMap);
@@ -199,7 +219,9 @@ export default function AdminDashboard() {
         usedCodes: usedCodes.length,
         expiredCodes: expiredCodes.length,
         availableCodes: availableCodes.length,
+        totalRedeemedValue,
         revenueByMonth,
+        redeemedValueByMonth,
         bookingsByService,
         ordersByPackage,
         couponUsageByMonth,
@@ -245,22 +267,24 @@ export default function AdminDashboard() {
       {/* KPI Cards */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <KPICard
-          title="Ingresos Totales"
+          title="Ingresos Reales"
           value={formatCurrency(totalRevenue)}
           icon={DollarSign}
           description={`Reservas: ${formatCurrency(data.bookingsRevenue)} | Bonos: ${formatCurrency(data.ordersRevenue)}`}
+          highlight
+        />
+        <KPICard
+          title="Valor Canjeado"
+          value={formatCurrency(data.totalRedeemedValue)}
+          icon={Key}
+          description="Valor de códigos usados en el período"
+          variant="secondary"
         />
         <KPICard
           title="Reservas Confirmadas"
           value={data.confirmedBookings.toString()}
           icon={Calendar}
           description={`${data.pendingBookings} pendientes, ${data.cancelledBookings} canceladas`}
-        />
-        <KPICard
-          title="Órdenes Completadas"
-          value={data.completedOrders.toString()}
-          icon={ShoppingCart}
-          description={`${data.pendingOrders} pendientes, ${data.failedOrders} fallidas`}
         />
         <KPICard
           title="Uso de Cupones"
@@ -289,7 +313,7 @@ export default function AdminDashboard() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">{data.usedCodes}</div>
+            <div className="text-2xl font-bold" style={{ color: 'hsl(160, 84%, 39%)' }}>{data.usedCodes}</div>
           </CardContent>
         </Card>
         <Card>
@@ -299,7 +323,7 @@ export default function AdminDashboard() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-600">{data.availableCodes}</div>
+            <div className="text-2xl font-bold" style={{ color: 'hsl(200, 98%, 39%)' }}>{data.availableCodes}</div>
           </CardContent>
         </Card>
         <Card>
@@ -309,19 +333,47 @@ export default function AdminDashboard() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600">{data.expiredCodes}</div>
+            <div className="text-2xl font-bold text-destructive">{data.expiredCodes}</div>
           </CardContent>
         </Card>
       </div>
 
       {/* Charts Row 1 */}
       <div className="grid gap-6 lg:grid-cols-2">
-        {/* Revenue by Month */}
+        {/* Income vs Redeemed Value by Month */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <TrendingUp className="h-5 w-5" />
-              Ingresos por Mes
+              Ingresos vs Valor Canjeado por Mes
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="h-[300px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={data.redeemedValueByMonth}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="month" />
+                  <YAxis tickFormatter={(v) => `$${(v / 1000).toFixed(0)}k`} />
+                  <Tooltip 
+                    formatter={(value: number) => formatCurrency(value)}
+                    labelFormatter={(label) => `Mes: ${label}`}
+                  />
+                  <Legend />
+                  <Bar dataKey="income" name="Ingresos (Bonos)" fill="#0088FE" />
+                  <Bar dataKey="redeemed" name="Valor Canjeado" fill="#FF8042" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Revenue by Month (Bookings + Orders) */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <DollarSign className="h-5 w-5" />
+              Ingresos Totales por Mes
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -343,39 +395,9 @@ export default function AdminDashboard() {
             </div>
           </CardContent>
         </Card>
-
-        {/* Coupon Usage by Month */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Ticket className="h-5 w-5" />
-              Uso de Cupones por Mes
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="h-[300px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={data.couponUsageByMonth}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Line 
-                    type="monotone" 
-                    dataKey="uses" 
-                    name="Cupones usados"
-                    stroke="#8884d8" 
-                    strokeWidth={2}
-                    dot={{ fill: "#8884d8" }}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-          </CardContent>
-        </Card>
       </div>
 
-      {/* Charts Row 2 */}
+      {/* Charts Row 3 */}
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Bookings by Service */}
         <Card>
@@ -419,7 +441,7 @@ export default function AdminDashboard() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Key className="h-5 w-5" />
+              <ShoppingCart className="h-5 w-5" />
               Ventas por Bono/Paquete
             </CardTitle>
           </CardHeader>
@@ -493,20 +515,24 @@ function KPICard({
   value,
   icon: Icon,
   description,
+  highlight,
+  variant,
 }: {
   title: string;
   value: string;
   icon: React.ComponentType<{ className?: string }>;
   description?: string;
+  highlight?: boolean;
+  variant?: "secondary";
 }) {
   return (
-    <Card>
+    <Card className={highlight ? "border-primary/50 bg-primary/5" : variant === "secondary" ? "border-orange-200 bg-orange-50" : ""}>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">{title}</CardTitle>
-        <Icon className="h-4 w-4 text-muted-foreground" />
+        <Icon className={`h-4 w-4 ${highlight ? "text-primary" : variant === "secondary" ? "text-orange-600" : "text-muted-foreground"}`} />
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold">{value}</div>
+        <div className={`text-2xl font-bold ${highlight ? "text-primary" : variant === "secondary" ? "text-orange-700" : ""}`}>{value}</div>
         {description && (
           <p className="text-xs text-muted-foreground mt-1">{description}</p>
         )}
@@ -669,4 +695,65 @@ function getCouponUsageByMonth(
     });
 
   return Array.from(result.entries()).map(([month, uses]) => ({ month, uses }));
+}
+
+// Calculate total redeemed value from used session codes
+function calculateRedeemedValue(
+  usedCodes: { package_id: string | null }[],
+  packagesDataMap: Map<string, { price: number; sessions: number }>
+): number {
+  return usedCodes.reduce((sum, code) => {
+    if (!code.package_id) return sum;
+    const pkg = packagesDataMap.get(code.package_id);
+    if (!pkg || pkg.sessions === 0) return sum;
+    return sum + (pkg.price / pkg.sessions);
+  }, 0);
+}
+
+// Get redeemed value by month (income from package sales vs redeemed value)
+function getRedeemedValueByMonth(
+  orders: any[],
+  usedCodes: { used_at: string | null; package_id: string | null }[],
+  packagesDataMap: Map<string, { price: number; sessions: number }>,
+  monthsAgo: number
+): { month: string; income: number; redeemed: number }[] {
+  const result: Map<string, { income: number; redeemed: number }> = new Map();
+
+  // Initialize months
+  for (let i = monthsAgo - 1; i >= 0; i--) {
+    const date = subMonths(new Date(), i);
+    const key = format(date, "MMM yy", { locale: es });
+    result.set(key, { income: 0, redeemed: 0 });
+  }
+
+  // Add completed orders revenue (income from package sales)
+  orders
+    .filter(o => o.status === "completed")
+    .forEach(o => {
+      const key = format(parseISO(o.created_at), "MMM yy", { locale: es });
+      const current = result.get(key);
+      if (current) {
+        current.income += o.final_price || 0;
+      }
+    });
+
+  // Add redeemed value from used session codes
+  usedCodes.forEach(code => {
+    if (!code.used_at || !code.package_id) return;
+    const pkg = packagesDataMap.get(code.package_id);
+    if (!pkg || pkg.sessions === 0) return;
+    
+    const codeValue = pkg.price / pkg.sessions;
+    const key = format(parseISO(code.used_at), "MMM yy", { locale: es });
+    const current = result.get(key);
+    if (current) {
+      current.redeemed += codeValue;
+    }
+  });
+
+  return Array.from(result.entries()).map(([month, data]) => ({
+    month,
+    income: data.income,
+    redeemed: Math.round(data.redeemed),
+  }));
 }
