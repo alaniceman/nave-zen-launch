@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { Footer } from "@/components/Footer";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
+import { useFacebookConversionsAPI } from "@/hooks/useFacebookConversionsAPI";
 
 interface OrderStatus {
   orderId: string;
@@ -28,6 +29,7 @@ export default function GiftCardsSuccess() {
   const [error, setError] = useState("");
   const [hasFiredPixel, setHasFiredPixel] = useState(false);
   const { trackPurchase } = useFacebookPixel();
+  const { trackPurchase: trackServerPurchase } = useFacebookConversionsAPI();
 
   useEffect(() => {
     if (isFree) {
@@ -95,17 +97,43 @@ export default function GiftCardsSuccess() {
 
   // Track Purchase event when payment is successful
   useEffect(() => {
-    if (orderStatus?.statusType === "success" && !hasFiredPixel) {
-      trackPurchase({
-        value: orderStatus.finalPrice || 0,
-        currency: "CLP",
-        content_name: orderStatus.packageName || "Gift Card",
-        content_type: "product",
-        content_ids: orderId ? [orderId] : [],
-      });
-      setHasFiredPixel(true);
-    }
-  }, [orderStatus?.statusType, orderStatus?.finalPrice, orderStatus?.packageName, orderId, hasFiredPixel, trackPurchase]);
+    const trackConversion = async () => {
+      if (orderStatus?.statusType === "success" && !hasFiredPixel && orderId) {
+        // Client-side pixel
+        trackPurchase({
+          value: orderStatus.finalPrice || 0,
+          currency: "CLP",
+          content_name: orderStatus.packageName || "Gift Card",
+          content_type: "product",
+          content_ids: [orderId],
+        });
+
+        // Fetch order details for server-side tracking
+        const { data: order } = await supabase
+          .from("package_orders")
+          .select("buyer_email, buyer_name, buyer_phone")
+          .eq("id", orderId)
+          .maybeSingle();
+
+        if (order) {
+          // Server-side Conversions API
+          trackServerPurchase({
+            userEmail: order.buyer_email,
+            userName: order.buyer_name,
+            userPhone: order.buyer_phone || undefined,
+            value: orderStatus.finalPrice || 0,
+            currency: "CLP",
+            contentName: orderStatus.packageName || "Gift Card",
+            orderId: orderId,
+          });
+        }
+
+        setHasFiredPixel(true);
+      }
+    };
+
+    trackConversion();
+  }, [orderStatus?.statusType, orderStatus?.finalPrice, orderStatus?.packageName, orderId, hasFiredPixel, trackPurchase, trackServerPurchase]);
 
   return (
     <>

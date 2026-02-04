@@ -6,12 +6,14 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { Footer } from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
+import { useFacebookConversionsAPI } from "@/hooks/useFacebookConversionsAPI";
 
 export default function BonosSuccess() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const orderId = searchParams.get("external_reference");
   const { trackPurchase } = useFacebookPixel();
+  const { trackPurchase: trackServerPurchase } = useFacebookConversionsAPI();
   const [hasFiredPixel, setHasFiredPixel] = useState(false);
 
   useEffect(() => {
@@ -20,24 +22,39 @@ export default function BonosSuccess() {
 
       const { data: order } = await supabase
         .from("package_orders")
-        .select("final_price, status, session_packages(name)")
+        .select("final_price, status, buyer_email, buyer_name, buyer_phone, session_packages(name)")
         .eq("id", orderId)
         .maybeSingle();
 
       if (order?.status === "paid") {
+        const packageName = order.session_packages?.name || "Paquete de sesiones";
+        
+        // Client-side pixel
         trackPurchase({
           value: order.final_price,
           currency: "CLP",
-          content_name: order.session_packages?.name || "Paquete de sesiones",
+          content_name: packageName,
           content_type: "product",
           content_ids: [orderId],
         });
+        
+        // Server-side Conversions API
+        trackServerPurchase({
+          userEmail: order.buyer_email,
+          userName: order.buyer_name,
+          userPhone: order.buyer_phone || undefined,
+          value: order.final_price,
+          currency: "CLP",
+          contentName: packageName,
+          orderId: orderId,
+        });
+        
         setHasFiredPixel(true);
       }
     };
 
     fetchOrderAndTrack();
-  }, [orderId, hasFiredPixel, trackPurchase]);
+  }, [orderId, hasFiredPixel, trackPurchase, trackServerPurchase]);
 
   return (
     <>
