@@ -1,4 +1,4 @@
-import { Calendar, Users, Package, Clock, User, LogOut, Ticket, Gift, Key, MapPin, ShoppingCart, AlertCircle } from 'lucide-react';
+import { Calendar, Users, Package, Clock, User, LogOut, Ticket, Gift, Key, MapPin, ShoppingCart, AlertCircle, LayoutDashboard } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import {
@@ -17,6 +17,7 @@ import {
 import { Button } from '@/components/ui/button';
 
 const menuItems = [
+  { title: 'Dashboard', url: '/admin/dashboard', icon: LayoutDashboard },
   { title: 'Reservas', url: '/admin/agenda', icon: Calendar },
   { title: 'Órdenes de Compra', url: '/admin/ordenes', icon: ShoppingCart },
   { title: 'Carros Abandonados', url: '/admin/carros-abandonados', icon: AlertCircle },
