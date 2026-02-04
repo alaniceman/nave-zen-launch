@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
-import { format, startOfMonth, endOfMonth, subMonths, parseISO } from "date-fns";
+import { format, startOfMonth, endOfMonth, subMonths, parseISO, addMonths } from "date-fns";
 import { es } from "date-fns/locale";
 import {
   Select,
@@ -93,21 +93,51 @@ function formatCurrency(value: number): string {
   }).format(value);
 }
 
+// Generate last 12 months for selector
+function generateMonthOptions() {
+  const options = [];
+  const now = new Date();
+  for (let i = 0; i < 12; i++) {
+    const date = subMonths(now, i);
+    const value = format(date, "yyyy-MM");
+    const label = format(date, "MMMM yyyy", { locale: es });
+    options.push({ value, label: label.charAt(0).toUpperCase() + label.slice(1) });
+  }
+  return options;
+}
+
+const MONTH_OPTIONS = generateMonthOptions();
+
 export default function AdminDashboard() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [filterType, setFilterType] = useState<"period" | "month">("period");
   const [period, setPeriod] = useState("6"); // months
+  const [selectedMonth, setSelectedMonth] = useState(MONTH_OPTIONS[0].value); // current month
 
   useEffect(() => {
     loadDashboardData();
-  }, [period]);
+  }, [period, filterType, selectedMonth]);
 
   const loadDashboardData = async () => {
     setIsLoading(true);
     
-    const monthsAgo = parseInt(period);
-    const startDate = startOfMonth(subMonths(new Date(), monthsAgo - 1));
-    const endDate = endOfMonth(new Date());
+    let startDate: Date;
+    let endDate: Date;
+    let monthsAgo: number;
+    
+    if (filterType === "month") {
+      // Specific month selected
+      const [year, month] = selectedMonth.split("-").map(Number);
+      startDate = startOfMonth(new Date(year, month - 1));
+      endDate = endOfMonth(new Date(year, month - 1));
+      monthsAgo = 1;
+    } else {
+      // Period range
+      monthsAgo = parseInt(period);
+      startDate = startOfMonth(subMonths(new Date(), monthsAgo - 1));
+      endDate = endOfMonth(new Date());
+    }
     
     try {
       // Fetch all data in parallel
@@ -249,19 +279,48 @@ export default function AdminDashboard() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h1 className="text-3xl font-bold">Dashboard</h1>
-        <Select value={period} onValueChange={setPeriod}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Período" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="1">Último mes</SelectItem>
-            <SelectItem value="3">Últimos 3 meses</SelectItem>
-            <SelectItem value="6">Últimos 6 meses</SelectItem>
-            <SelectItem value="12">Último año</SelectItem>
-          </SelectContent>
-        </Select>
+        <div className="flex items-center gap-2 flex-wrap">
+          {/* Filter Type Toggle */}
+          <Select value={filterType} onValueChange={(v) => setFilterType(v as "period" | "month")}>
+            <SelectTrigger className="w-[140px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="period">Por período</SelectItem>
+              <SelectItem value="month">Por mes</SelectItem>
+            </SelectContent>
+          </Select>
+          
+          {/* Conditional selector based on filter type */}
+          {filterType === "period" ? (
+            <Select value={period} onValueChange={setPeriod}>
+              <SelectTrigger className="w-[160px]">
+                <SelectValue placeholder="Período" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="1">Último mes</SelectItem>
+                <SelectItem value="3">Últimos 3 meses</SelectItem>
+                <SelectItem value="6">Últimos 6 meses</SelectItem>
+                <SelectItem value="12">Último año</SelectItem>
+              </SelectContent>
+            </Select>
+          ) : (
+            <Select value={selectedMonth} onValueChange={setSelectedMonth}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Seleccionar mes" />
+              </SelectTrigger>
+              <SelectContent>
+                {MONTH_OPTIONS.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+        </div>
       </div>
 
       {/* KPI Cards */}
