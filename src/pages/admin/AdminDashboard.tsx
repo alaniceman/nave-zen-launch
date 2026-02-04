@@ -168,7 +168,7 @@ export default function AdminDashboard() {
       const bookingsRevenue = confirmedBookings.reduce((sum, b) => sum + (b.final_price || 0), 0);
 
       // Calculate order stats
-      const completedOrders = orders.filter(o => o.status === "completed");
+      const completedOrders = orders.filter(o => o.status === "paid");
       const pendingOrders = orders.filter(o => ["created", "pending_payment"].includes(o.status));
       const failedOrders = orders.filter(o => o.status === "failed");
       const ordersRevenue = completedOrders.reduce((sum, o) => sum + (o.final_price || 0), 0);
@@ -388,8 +388,8 @@ export default function AdminDashboard() {
                     labelFormatter={(label) => `Mes: ${label}`}
                   />
                   <Legend />
-                  <Bar dataKey="bookings" name="Reservas" fill="#0088FE" stackId="a" />
-                  <Bar dataKey="orders" name="Bonos" fill="#00C49F" stackId="a" />
+                  <Bar dataKey="bookings" name="Sesiones Directas" fill="#0088FE" stackId="a" />
+                  <Bar dataKey="orders" name="Bonos/GiftCards" fill="#00C49F" stackId="a" />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -606,7 +606,7 @@ function getRevenueByMonth(
 
   // Add completed orders revenue
   orders
-    .filter(o => o.status === "completed")
+    .filter(o => o.status === "paid")
     .forEach(o => {
       const key = format(parseISO(o.created_at), "MMM yy", { locale: es });
       const current = result.get(key);
@@ -728,7 +728,7 @@ function getRedeemedValueByMonth(
 
   // Add completed orders revenue (income from package sales)
   orders
-    .filter(o => o.status === "completed")
+    .filter(o => o.status === "paid")
     .forEach(o => {
       const key = format(parseISO(o.created_at), "MMM yy", { locale: es });
       const current = result.get(key);
