@@ -237,7 +237,7 @@
              <Button
                size="lg"
                variant="outline"
-               className="border-white text-white hover:bg-white/10 font-semibold text-lg px-8 py-6"
+             className="border-white text-white bg-transparent hover:bg-white/10 font-semibold text-lg px-8 py-6"
                onClick={() => scrollToSection("horarios")}
              >
                <Clock className="w-5 h-5 mr-2" />
