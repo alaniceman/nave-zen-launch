@@ -63,7 +63,7 @@ const HeroSlideMain = () => {
                 variant="outline" 
                 size="lg" 
                 className="w-full md:w-auto min-w-[280px] border-2 border-white/80 bg-white/10 text-white hover:bg-white hover:text-primary transition-colors backdrop-blur-sm" 
-                onClick={() => navigate('/agenda-nave-studio')}
+                onClick={() => navigate('/criomedicina-metodo-wim-hof-las-condes')}
               >
                 Agenda tu sesión de Criomedicina →
               </Button>
