@@ -522,6 +522,55 @@ import { Link, useNavigate } from "react-router-dom";
          </div>
        </section>
  
+       {/* Membresías */}
+       <section className="py-16 bg-primary/5">
+         <div className="container mx-auto px-6">
+           <div className="max-w-4xl mx-auto text-center">
+             <h2 className="text-3xl md:text-4xl font-bold font-space text-primary mb-4">
+               ¿Quieres venir todas las semanas?
+             </h2>
+             <p className="text-lg font-inter text-foreground/70 mb-6 max-w-2xl mx-auto">
+               Con nuestras membresías mensuales tienes acceso ilimitado a todas las experiencias de Nave Studio: 
+               clases de yoga, breathwork, agua fría, sauna y más.
+             </p>
+             <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-muted mb-8">
+               <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                 <div className="text-left">
+                   <h3 className="text-xl font-bold font-space text-primary mb-2">
+                     Membresía Nave
+                   </h3>
+                   <ul className="space-y-2 text-foreground/70 font-inter">
+                     <li className="flex items-center gap-2">
+                       <CheckCircle2 className="w-4 h-4 text-secondary flex-shrink-0" />
+                       Acceso ilimitado a todas las clases grupales
+                     </li>
+                     <li className="flex items-center gap-2">
+                       <CheckCircle2 className="w-4 h-4 text-secondary flex-shrink-0" />
+                       Yoga, breathwork, agua fría, sauna
+                     </li>
+                     <li className="flex items-center gap-2">
+                       <CheckCircle2 className="w-4 h-4 text-secondary flex-shrink-0" />
+                       30% dcto en tu primer mes con código 1MES
+                     </li>
+                   </ul>
+                 </div>
+                 <div className="flex-shrink-0">
+                   <Link to="/planes#habito-semanal">
+                     <Button size="lg" className="bg-secondary hover:bg-secondary/90 text-white font-semibold px-8">
+                       Ver membresías
+                       <ArrowRight className="w-4 h-4 ml-2" />
+                     </Button>
+                   </Link>
+                 </div>
+               </div>
+             </div>
+             <p className="text-sm text-foreground/60 font-inter">
+               Ideal si quieres crear un hábito constante y aprovechar todas las experiencias.
+             </p>
+           </div>
+         </div>
+       </section>
+
        {/* Horarios */}
        <section id="horarios" className="py-16 bg-background">
          <div className="container mx-auto px-6">
