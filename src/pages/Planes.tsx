@@ -307,7 +307,7 @@ const Planes = () => {
                     <p className="text-sm text-muted-foreground">por sesión</p>
                   </div>
                   <Button asChild className="w-full bg-accent hover:bg-primary text-white">
-                    <a href="/criomedicina-metodo-wim-hof-las-condes">
+                    <a href="/agenda-nave-studio">
                       Agendar sesión
                     </a>
                   </Button>
@@ -336,7 +336,7 @@ const Planes = () => {
                     <p className="text-sm text-muted-foreground">válido 90 días</p>
                   </div>
                   <Button asChild className="w-full bg-warm hover:bg-primary text-white">
-                    <a href="/criomedicina-metodo-wim-hof-las-condes#paquetes">
+                    <a href="/bonos">
                       Comprar paquete
                     </a>
                   </Button>
@@ -362,7 +362,7 @@ const Planes = () => {
                     <p className="text-sm text-muted-foreground">válido 180 días</p>
                   </div>
                   <Button asChild className="w-full bg-accent hover:bg-primary text-white">
-                    <a href="/criomedicina-metodo-wim-hof-las-condes#paquetes">
+                    <a href="/bonos">
                       Comprar paquete
                     </a>
                   </Button>
