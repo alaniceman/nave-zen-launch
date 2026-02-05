@@ -1,6 +1,6 @@
  import { useEffect, useState } from "react";
  import { Helmet } from "react-helmet-async";
- import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
  import { Button } from "@/components/ui/button";
  import { Card, CardContent } from "@/components/ui/card";
  import {
@@ -52,6 +52,7 @@
    const [packages, setPackages] = useState<SessionPackage[]>([]);
    const [loading, setLoading] = useState(true);
    const isMobile = useIsMobile();
+  const navigate = useNavigate();
  
    useEffect(() => {
      const fetchPackages = async () => {
@@ -229,7 +230,7 @@
              <Button
                size="lg"
                className="bg-accent hover:bg-accent/90 text-white font-semibold text-lg px-8 py-6"
-               onClick={() => scrollToSection("agenda")}
+               onClick={() => navigate("/agenda-nave-studio")}
              >
                <Calendar className="w-5 h-5 mr-2" />
                Agendar sesión
@@ -699,7 +700,7 @@
          <div className="fixed bottom-0 left-0 right-0 p-4 bg-background/95 backdrop-blur-sm border-t border-muted z-50">
            <Button
              className="w-full bg-secondary hover:bg-secondary/90 text-white font-semibold py-6"
-             onClick={() => scrollToSection("agenda")}
+             onClick={() => navigate("/agenda-nave-studio")}
            >
              <Calendar className="w-5 h-5 mr-2" />
              Agendar sesión
