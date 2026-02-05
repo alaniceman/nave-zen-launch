@@ -129,8 +129,91 @@ Deno.serve(async (req) => {
 
     // Handle PATCH - Update booking status
     if (req.method === 'PATCH' || req.method === 'POST') {
-      const { id, status: newStatus } = await req.json();
+      const body = await req.json();
+      const { id, status: newStatus, action } = body;
 
+      // Handle cancel_and_release action
+      if (action === 'cancel_and_release') {
+        if (!id) {
+          return new Response(
+            JSON.stringify({ error: 'Missing booking id' }),
+            { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
+          );
+        }
+
+        console.log('Cancel and release action for booking:', id);
+
+        // First get the booking to check if it has a session_code_id
+        const { data: booking, error: fetchError } = await supabase
+          .from('bookings')
+          .select('id, session_code_id, status')
+          .eq('id', id)
+          .single();
+
+        if (fetchError || !booking) {
+          console.error('Error fetching booking:', fetchError);
+          return new Response(
+            JSON.stringify({ error: 'Booking not found' }),
+            { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 404 }
+          );
+        }
+
+        // Update booking status to CANCELLED
+        const { error: updateError } = await supabase
+          .from('bookings')
+          .update({ status: 'CANCELLED' })
+          .eq('id', id);
+
+        if (updateError) {
+          console.error('Error cancelling booking:', updateError);
+          return new Response(
+            JSON.stringify({ error: updateError.message }),
+            { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
+          );
+        }
+
+        let codeReleased = null;
+
+        // If booking has a session_code_id, release the code
+        if (booking.session_code_id) {
+          console.log('Releasing session code:', booking.session_code_id);
+          
+          // Get the code before updating
+          const { data: sessionCode } = await supabase
+            .from('session_codes')
+            .select('code')
+            .eq('id', booking.session_code_id)
+            .single();
+
+          const { error: releaseError } = await supabase
+            .from('session_codes')
+            .update({
+              is_used: false,
+              used_at: null,
+              used_in_booking_id: null
+            })
+            .eq('id', booking.session_code_id);
+
+          if (releaseError) {
+            console.error('Error releasing session code:', releaseError);
+            // Booking was cancelled but code release failed - log but don't fail the request
+          } else {
+            codeReleased = sessionCode?.code || booking.session_code_id;
+            console.log('Session code released successfully:', codeReleased);
+          }
+        }
+
+        return new Response(
+          JSON.stringify({ 
+            success: true, 
+            booking_cancelled: true,
+            code_released: codeReleased
+          }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+
+      // Regular status update
       if (!id || !newStatus) {
         return new Response(
           JSON.stringify({ error: 'Missing id or status' }),
