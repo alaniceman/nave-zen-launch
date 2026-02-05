@@ -508,12 +508,12 @@
  
            <div className="flex flex-col sm:flex-row gap-4 justify-center">
              <Link to="/bonos">
-               <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-white">
+               <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-white w-full sm:w-auto">
                  Ver todos los paquetes
                </Button>
              </Link>
              <Link to="/giftcards">
-               <Button variant="outline" className="border-secondary text-secondary hover:bg-secondary hover:text-white">
+               <Button variant="outline" className="border-secondary text-secondary hover:bg-secondary hover:text-white w-full sm:w-auto">
                  🎁 Regalar una sesión
                </Button>
              </Link>
