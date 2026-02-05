@@ -23,8 +23,19 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2, Search, ChevronLeft, ChevronRight, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { Loader2, Search, ChevronLeft, ChevronRight, ArrowUpDown, ArrowUp, ArrowDown, XCircle } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 
 const statusColors = {
   PENDING_PAYMENT: 'bg-yellow-500',
@@ -143,6 +154,35 @@ export default function AdminBookings() {
     onError: (error: any) => {
       console.error('Mutation error:', error);
       toast.error(`Error al confirmar: ${error.message}`);
+    }
+  });
+
+  const cancelAndReleaseMutation = useMutation({
+    mutationFn: async (bookingId: string) => {
+      console.log('Cancel and release for booking:', bookingId);
+      
+      const { data, error } = await supabase.functions.invoke('admin-bookings', {
+        body: { id: bookingId, action: 'cancel_and_release' },
+      });
+      
+      if (error) {
+        console.error('Function invoke error:', error);
+        throw new Error(error.message || 'Error al cancelar reserva');
+      }
+      return data;
+    },
+    onSuccess: (data) => {
+      console.log('Cancel and release successful:', data);
+      queryClient.invalidateQueries({ queryKey: ['admin-bookings'] });
+      if (data.code_released) {
+        toast.success(`Reserva cancelada y código ${data.code_released} liberado`);
+      } else {
+        toast.success('Reserva cancelada exitosamente');
+      }
+    },
+    onError: (error: any) => {
+      console.error('Mutation error:', error);
+      toast.error(`Error al cancelar: ${error.message}`);
     }
   });
 
@@ -327,23 +367,77 @@ export default function AdminBookings() {
                           )}
                         </TableCell>
                         <TableCell>
-                          {booking.status === 'PENDING_PAYMENT' && (
-                            <Button
-                              size="sm"
-                              variant="default"
-                              onClick={() => confirmBookingMutation.mutate(booking.id)}
-                              disabled={confirmBookingMutation.isPending}
-                            >
-                              {confirmBookingMutation.isPending ? (
-                                <>
-                                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                                  Confirmando...
-                                </>
-                              ) : (
-                                'Confirmar Manualmente'
-                              )}
-                            </Button>
-                          )}
+                          <div className="flex flex-col gap-2">
+                            {booking.status === 'PENDING_PAYMENT' && (
+                              <Button
+                                size="sm"
+                                variant="default"
+                                onClick={() => confirmBookingMutation.mutate(booking.id)}
+                                disabled={confirmBookingMutation.isPending}
+                              >
+                                {confirmBookingMutation.isPending ? (
+                                  <>
+                                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                    Confirmando...
+                                  </>
+                                ) : (
+                                  'Confirmar Manualmente'
+                                )}
+                              </Button>
+                            )}
+                            
+                            {(booking.status === 'CONFIRMED' || booking.status === 'PENDING_PAYMENT') && (
+                              <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                  <Button
+                                    size="sm"
+                                    variant="destructive"
+                                    disabled={cancelAndReleaseMutation.isPending}
+                                  >
+                                    {cancelAndReleaseMutation.isPending ? (
+                                      <>
+                                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                        Cancelando...
+                                      </>
+                                    ) : (
+                                      <>
+                                        <XCircle className="h-4 w-4 mr-1" />
+                                        {booking.session_codes ? 'Cancelar y Liberar Código' : 'Cancelar Reserva'}
+                                      </>
+                                    )}
+                                  </Button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                  <AlertDialogHeader>
+                                    <AlertDialogTitle>¿Cancelar esta reserva?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                      {booking.session_codes ? (
+                                        <>
+                                          Esta acción cancelará la reserva de <strong>{booking.customer_name}</strong> y 
+                                          liberará el código <strong className="font-mono">{booking.session_codes.code}</strong> para 
+                                          que pueda ser utilizado nuevamente.
+                                        </>
+                                      ) : (
+                                        <>
+                                          Esta acción cancelará la reserva de <strong>{booking.customer_name}</strong>.
+                                          Esta acción no se puede deshacer.
+                                        </>
+                                      )}
+                                    </AlertDialogDescription>
+                                  </AlertDialogHeader>
+                                  <AlertDialogFooter>
+                                    <AlertDialogCancel>No, mantener reserva</AlertDialogCancel>
+                                    <AlertDialogAction
+                                      onClick={() => cancelAndReleaseMutation.mutate(booking.id)}
+                                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                    >
+                                      Sí, cancelar{booking.session_codes ? ' y liberar código' : ''}
+                                    </AlertDialogAction>
+                                  </AlertDialogFooter>
+                                </AlertDialogContent>
+                              </AlertDialog>
+                            )}
+                          </div>
                         </TableCell>
                       </TableRow>
                     ))
