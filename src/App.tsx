@@ -48,6 +48,7 @@ import { TrialDelegationHandler } from "@/components/TrialDelegationHandler";
 import FacebookPixelRouterTracker from "@/components/FacebookPixelRouterTracker";
 import { WhatsAppWidget } from "@/components/WhatsAppWidget";
 import { AuthProvider } from "@/context/AuthContext";
+import { ScrollToTop } from "@/components/ScrollToTop";
 import { ProtectedRoute } from "@/components/admin/ProtectedRoute";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import AdminLogin from "./pages/admin/Login";
@@ -78,6 +79,7 @@ const App = () => (
               <CheckoutRedirectManager />
               <BrowserRouter>
               <EmailCaptureModalProvider>
+             <ScrollToTop />
               <SEOHead />
               <FacebookPixelRouterTracker />
               <TrialDelegationHandler />
