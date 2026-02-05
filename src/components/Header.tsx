@@ -45,7 +45,7 @@ export const Header = () => {
 
   const navigationLinks = [
     { label: "Experiencias", href: "/experiencias", isExternal: true },
-   { label: "Criomedicina", href: "/criomedicina-metodo-wim-hof-las-condes#membresias", isExternal: true },
+    { label: "Criomedicina", href: "/criomedicina-metodo-wim-hof", isExternal: true },
     { label: "Horarios", href: "/horarios", isExternal: true },
     { label: "Planes & Precios", href: "/planes-precios", isExternal: true },
     { label: "Gift Cards", href: "/giftcards", isExternal: true },
