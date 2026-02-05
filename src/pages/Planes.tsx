@@ -83,7 +83,7 @@ const Planes = () => {
         <div className="max-w-6xl mx-auto px-4 md:px-6">
           <h1 className="text-3xl md:text-4xl font-bold text-primary text-center font-space">Elige cómo quieres empezar</h1>
           <p className="text-muted-foreground text-center mt-2 font-inter">Selecciona tu objetivo y te mostramos el plan ideal.</p>
-          <div className="grid gap-4 mt-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 mt-8 grid-cols-1 sm:grid-cols-3">
             {/* Hábito Semanal */}
             <a href="#habito-semanal" className="group rounded-2xl p-6 bg-white hover:bg-gradient-to-br hover:from-white hover:to-neutral-50 hover:shadow-lg transition-all duration-300 border border-neutral-200 hover:border-accent">
               <h3 className="font-semibold text-primary font-space text-lg">Mantener mi hábito semanal</h3>
@@ -91,18 +91,11 @@ const Planes = () => {
               <span className="inline-block mt-4 text-accent group-hover:underline font-medium">Ver membresías →</span>
             </a>
             
-            {/* Personalizado */}
-            <a href="#personalizado" className="group rounded-2xl p-6 bg-white hover:bg-gradient-to-br hover:from-white hover:to-neutral-50 hover:shadow-lg transition-all duration-300 border border-neutral-200 hover:border-accent">
-              <h3 className="font-semibold text-primary font-space text-lg">Sesión personalizada 1:1 / 1:2</h3>
-              <p className="text-sm text-muted-foreground mt-2 font-inter">Quiero una guía privada para avanzar más rápido.</p>
-              <span className="inline-block mt-4 text-accent group-hover:underline font-medium">Ver personalizado →</span>
-            </a>
-            
-            {/* Sesión Única */}
-            <a href="#sesion-unica" className="group rounded-2xl p-6 bg-white hover:bg-gradient-to-br hover:from-white hover:to-neutral-50 hover:shadow-lg transition-all duration-300 border border-neutral-200 hover:border-accent">
-              <h3 className="font-semibold text-primary font-space text-lg">Probar el Ice Bath una sola vez</h3>
-              <p className="text-sm text-muted-foreground mt-2 font-inter">Quiero vivir la experiencia de hielo + respiración.</p>
-              <span className="inline-block mt-4 text-accent group-hover:underline font-medium">Ver sesión única →</span>
+            {/* Paquetes Criomedicina */}
+            <a href="#paquetes-criomedicina" className="group rounded-2xl p-6 bg-white hover:bg-gradient-to-br hover:from-white hover:to-neutral-50 hover:shadow-lg transition-all duration-300 border border-neutral-200 hover:border-accent">
+              <h3 className="font-semibold text-primary font-space text-lg">Paquetes de Criomedicina</h3>
+              <p className="text-sm text-muted-foreground mt-2 font-inter">Sesiones de Método Wim Hof con descuento.</p>
+              <span className="inline-block mt-4 text-accent group-hover:underline font-medium">Ver paquetes →</span>
             </a>
             
             {/* Solo Yoga */}
@@ -292,79 +285,97 @@ const Planes = () => {
             </div>
           </section>
 
-          {/* PERSONALIZADO - Sesión privada */}
-          <section id="personalizado" className="mb-24">
+          {/* PAQUETES CRIOMEDICINA */}
+          <section id="paquetes-criomedicina" className="mb-24">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-primary font-space">Sesión personalizada 1:1 / 1:2</h2>
-              <p className="text-muted-foreground mt-2 font-inter text-lg">Sesión privada con acompañamiento experto.</p>
+              <h2 className="text-3xl md:text-4xl font-bold text-primary font-space">Paquetes de Criomedicina</h2>
+              <p className="text-muted-foreground mt-2 font-inter text-lg">Sesiones de Método Wim Hof (Breathwork + Ice Bath) con descuento.</p>
             </div>
-            <div className="max-w-md mx-auto">
-              <Card className="relative border-2 border-accent hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[16px] bg-white">
-                <CardHeader className="text-center">
-                  <CardTitle className="text-xl font-bold text-primary font-space">Personalizado Método Wim Hof</CardTitle>
-                  <Badge className="bg-warm text-white mx-auto">máx 2 personas · inmersión individual</Badge>
-                </CardHeader>
-                <CardContent className="text-center space-y-4">
-                  <p className="text-muted-foreground font-inter text-sm">
-                    Respiración en pareja (máx 2) y entrada al hielo por separado, guiada y sostenida acorde a tu objetivo.
-                  </p>
-                  <div className="mt-4">
-                    <p className="text-4xl font-bold text-primary">$40.000</p>
-                    <p className="text-sm text-muted-foreground">/ sesión por persona</p>
-                  </div>
-                  <a className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground hover:bg-secondary/80 h-10 px-4 py-2 w-full font-inter font-medium" href="https://boxmagic.cl/market/plan/j80pKrK4W6" data-checkout-url="https://boxmagic.cl/market/plan/j80pKrK4W6" data-plan="Wim Hof (Personalizado) — 1 sesión" aria-label="Comprar 1 sesión Wim Hof personalizada">
-                    Comprar 1 sesión
-                  </a>
-                </CardContent>
-              </Card>
-            </div>
-          </section>
-
-          {/* SESIÓN ÚNICA - Probar Ice Bath */}
-          <section id="sesion-unica" className="mb-24">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-primary font-space">Probar el Ice Bath una o más veces</h2>
-              <p className="text-muted-foreground mt-2 font-inter text-lg">Vive la experiencia completa de hielo + respiración.</p>
-            </div>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+              {/* 1 Sesión */}
               <Card className="relative border hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[16px] bg-white">
                 <CardHeader className="text-center">
-                  <CardTitle className="text-lg font-bold text-primary font-space">1 Sesión Método Wim Hof (Grupal)</CardTitle>
-                  <Badge className="bg-warm text-white mx-auto">Breathwork + Ice Bath guiado · 60 min</Badge>
+                  <CardTitle className="text-lg font-bold text-primary font-space">1 Sesión</CardTitle>
+                  <Badge className="bg-accent text-white mx-auto">Prueba la experiencia</Badge>
                 </CardHeader>
                 <CardContent className="text-center space-y-4">
                   <p className="text-muted-foreground font-inter text-sm">
-                    Breathwork Wim Hof + Ice Bath guiado y sostenido. Ideal para quienes quieren vivir un baño de hielo con acompañamiento experto.
+                    Breathwork Wim Hof + Ice Bath guiado. Ideal para tu primera experiencia.
                   </p>
                   <div className="mt-4">
                     <p className="text-4xl font-bold text-primary">$30.000</p>
-                    <p className="text-sm text-muted-foreground">/ sesión por persona</p>
+                    <p className="text-sm text-muted-foreground">por sesión</p>
                   </div>
-                  <a className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground hover:bg-secondary/80 h-10 px-4 py-2 w-full font-inter font-medium" href="https://boxmagic.link/checkout/wimhof-grupal" data-checkout-url="https://boxmagic.cl/market/plan/RZ0vlQyLQ6" data-plan="Wim Hof (Grupal) — 1 sesión" aria-label="Comprar 1 sesión Wim Hof grupal">
-                    Comprar 1 sesión
-                  </a>
-                  <p className="text-xs text-muted-foreground mt-2 font-inter">
-                    Incluye Breathwork Wim Hof + 1 inmersión guiada (60 min). No es una membresía.
+                  <Button asChild className="w-full bg-accent hover:bg-primary text-white">
+                    <a href="/criomedicina-metodo-wim-hof-las-condes">
+                      Agendar sesión
+                    </a>
+                  </Button>
+                  <p className="text-xs text-muted-foreground font-inter">
+                    60 min · Breathwork + Ice Bath guiado
                   </p>
                 </CardContent>
               </Card>
 
-              <Card className="border hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[16px]">
+              {/* 3 Sesiones */}
+              <Card className="relative border-2 border-warm hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[16px] bg-white">
+                <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-warm text-white">
+                  Más popular
+                </Badge>
                 <CardHeader className="text-center">
-                  <CardTitle className="text-lg font-bold text-primary font-space">Drop-In Discovery</CardTitle>
-                  <Badge className="bg-accent text-white mx-auto">3 sesiones en 60 días</Badge>
+                  <CardTitle className="text-lg font-bold text-primary font-space">3 Sesiones</CardTitle>
+                  <Badge className="bg-primary/10 text-primary mx-auto">Ahorra $11.000</Badge>
                 </CardHeader>
                 <CardContent className="text-center space-y-4">
-                  <p className="text-muted-foreground font-inter text-sm">Elige la disciplina que quieras (Método Wim Hof, Ice Bath, Yoga, Breathwork, Biohacking) y descubre tu fórmula.</p>
-                  <div className="text-3xl font-bold text-foreground">$59.000</div>
-                  <Button variant="secondary" className="w-full font-inter font-medium" data-checkout-url="https://boxmagic.cl/market/plan/bQDN8Jq4M7" data-plan="Drop-In Discovery">
-                    Descubrir
+                  <p className="text-muted-foreground font-inter text-sm">
+                    Pack de 3 sesiones para profundizar en la práctica.
+                  </p>
+                  <div className="mt-4">
+                    <p className="text-lg line-through text-muted-foreground">$90.000</p>
+                    <p className="text-4xl font-bold text-primary">$79.000</p>
+                    <p className="text-sm text-muted-foreground">válido 90 días</p>
+                  </div>
+                  <Button asChild className="w-full bg-warm hover:bg-primary text-white">
+                    <a href="/criomedicina-metodo-wim-hof-las-condes#paquetes">
+                      Comprar paquete
+                    </a>
                   </Button>
+                  <p className="text-xs text-muted-foreground font-inter">
+                    $26.333 por sesión
+                  </p>
+                </CardContent>
+              </Card>
+
+              {/* 5 Sesiones */}
+              <Card className="relative border hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[16px] bg-white">
+                <CardHeader className="text-center">
+                  <CardTitle className="text-lg font-bold text-primary font-space">5 Sesiones</CardTitle>
+                  <Badge className="bg-primary/10 text-primary mx-auto">Ahorra $51.000</Badge>
+                </CardHeader>
+                <CardContent className="text-center space-y-4">
+                  <p className="text-muted-foreground font-inter text-sm">
+                    El mejor valor para practicantes comprometidos.
+                  </p>
+                  <div className="mt-4">
+                    <p className="text-lg line-through text-muted-foreground">$150.000</p>
+                    <p className="text-4xl font-bold text-primary">$99.000</p>
+                    <p className="text-sm text-muted-foreground">válido 180 días</p>
+                  </div>
+                  <Button asChild className="w-full bg-accent hover:bg-primary text-white">
+                    <a href="/criomedicina-metodo-wim-hof-las-condes#paquetes">
+                      Comprar paquete
+                    </a>
+                  </Button>
+                  <p className="text-xs text-muted-foreground font-inter">
+                    $19.800 por sesión
+                  </p>
                 </CardContent>
               </Card>
             </div>
-            <p className="text-center text-sm text-muted-foreground mt-6 font-inter">
-              Completa esta sesión guiada para habilitar tu ingreso al Ice Bath post-yoga.
+            <p className="text-center text-sm text-muted-foreground mt-8 font-inter">
+              <a href="/criomedicina-metodo-wim-hof-las-condes" className="text-accent hover:text-primary underline">
+                Ver todos los paquetes y agendar →
+              </a>
             </p>
           </section>
 
