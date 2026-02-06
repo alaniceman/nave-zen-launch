@@ -406,6 +406,75 @@ export type Database = {
           },
         ]
       }
+      integrations_mailerlite: {
+        Row: {
+          created_at: string
+          currency: string
+          id: string
+          is_active: boolean
+          mailerlite_account_id: string | null
+          mailerlite_shop_id: string | null
+          shop_name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          currency?: string
+          id?: string
+          is_active?: boolean
+          mailerlite_account_id?: string | null
+          mailerlite_shop_id?: string | null
+          shop_name?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          currency?: string
+          id?: string
+          is_active?: boolean
+          mailerlite_account_id?: string | null
+          mailerlite_shop_id?: string | null
+          shop_name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      orders_sync_log: {
+        Row: {
+          created_at: string
+          error_message: string | null
+          http_status: number | null
+          id: string
+          order_id: string
+          order_type: string
+          request_body: Json | null
+          response_body: Json | null
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          error_message?: string | null
+          http_status?: number | null
+          id?: string
+          order_id: string
+          order_type?: string
+          request_body?: Json | null
+          response_body?: Json | null
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          error_message?: string | null
+          http_status?: number | null
+          id?: string
+          order_id?: string
+          order_type?: string
+          request_body?: Json | null
+          response_body?: Json | null
+          status?: string
+        }
+        Relationships: []
+      }
       package_orders: {
         Row: {
           abandonment_email_sent_at: string | null

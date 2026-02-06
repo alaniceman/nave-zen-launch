@@ -65,6 +65,8 @@ import AdminBranches from "./pages/admin/AdminBranches";
 import AdminPackageOrders from "./pages/admin/AdminPackageOrders";
 import AdminAbandonedCarts from "./pages/admin/AdminAbandonedCarts";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminMailerLite from "./pages/admin/AdminMailerLite";
+import { MailerLiteUniversal } from "@/components/MailerLiteUniversal";
 
 const queryClient = new QueryClient();
 
@@ -82,6 +84,7 @@ const App = () => (
              <ScrollToTop />
               <SEOHead />
               <FacebookPixelRouterTracker />
+              <MailerLiteUniversal />
               <TrialDelegationHandler />
               <Header />
             <Routes>
@@ -140,6 +143,7 @@ const App = () => (
               <Route path="capacidad" element={<AdminCapacityOverrides />} />
               <Route path="paquetes-sesiones" element={<AdminSessionPackages />} />
               <Route path="codigos-sesiones" element={<AdminSessionCodes />} />
+              <Route path="mailerlite" element={<AdminMailerLite />} />
             </Route>
             
             {/* Redirect legacy routes */}

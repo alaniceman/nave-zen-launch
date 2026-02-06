@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 import { getCorsHeaders } from "../_shared/cors.ts";
+import { syncOrderToMailerLite } from "../_shared/mailerlite.ts";
 
 // Helper function to verify Mercado Pago webhook signature
 async function verifyMercadoPagoSignature(
@@ -331,6 +332,27 @@ async function handlePackageOrderPayment(
     console.error("Failed to invoke send-session-codes-email:", emailError);
   }
 
+  // Sync order to MailerLite for campaign attribution
+  try {
+    await syncOrderToMailerLite(supabase, {
+      order_id: orderId,
+      order_type: isGiftCard ? "giftcard" : "package_order",
+      total: order.final_price,
+      subtotal: order.original_price,
+      customer_email: order.buyer_email,
+      customer_name: order.buyer_name,
+      items: [{
+        product_id: package_.id,
+        name: package_.name,
+        quantity: package_.sessions_quantity,
+        price: order.final_price,
+      }],
+    });
+    console.log("MailerLite order synced for package order:", orderId);
+  } catch (mlError) {
+    console.error("Failed to sync to MailerLite (non-blocking):", mlError);
+  }
+
   return new Response(JSON.stringify({ status: "codes_generated", count: codes.length }), {
     status: 200,
     headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -450,6 +472,27 @@ async function handleBookingPayment(
       console.log("Confirmation email sent");
     } catch (emailError) {
       console.error("Failed to send email:", emailError);
+    }
+
+    // Sync booking to MailerLite for campaign attribution
+    try {
+      await syncOrderToMailerLite(supabase, {
+        order_id: bookingId,
+        order_type: "booking",
+        total: booking.final_price || booking.services.price_clp,
+        subtotal: booking.original_price || booking.services.price_clp,
+        customer_email: booking.customer_email,
+        customer_name: booking.customer_name,
+        items: [{
+          product_id: booking.service_id,
+          name: booking.services.name,
+          quantity: 1,
+          price: booking.final_price || booking.services.price_clp,
+        }],
+      });
+      console.log("MailerLite order synced for booking:", bookingId);
+    } catch (mlError) {
+      console.error("Failed to sync to MailerLite (non-blocking):", mlError);
     }
 
     return new Response(JSON.stringify({ status: "confirmed" }), {
