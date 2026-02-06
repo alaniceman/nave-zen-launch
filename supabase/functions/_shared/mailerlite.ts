@@ -62,9 +62,10 @@ export async function getOrCreateShop(
   // 2. Create new shop (NEVER list or reuse existing shops)
   console.log("Creating new MailerLite shop...");
   const shopPayload = {
-    name: config?.shop_name || "Nave Studio CLP 2026",
+    name: config?.shop_name || "Nave Studio",
     currency: config?.currency || "CLP",
     url: "https://studiolanave.com/",
+    enabled: true,
   };
 
   const response = await fetch(`${MAILERLITE_API_URL}/ecommerce/shops`, {
@@ -98,7 +99,7 @@ export async function getOrCreateShop(
   } else {
     await supabase.from("integrations_mailerlite").insert({
       mailerlite_shop_id: shopId,
-      shop_name: "Nave Studio CLP 2026",
+      shop_name: "Nave Studio",
       currency: "CLP",
     });
   }
