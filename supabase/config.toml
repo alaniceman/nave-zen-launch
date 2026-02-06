@@ -35,3 +35,9 @@ verify_jwt = false
 
 [functions.facebook-conversions]
 verify_jwt = false
+
+[functions.mailerlite-init-shop]
+verify_jwt = false
+
+[functions.mailerlite-sync-order]
+verify_jwt = false

@@ -1,4 +1,4 @@
-import { Calendar, Users, Package, Clock, User, LogOut, Ticket, Gift, Key, MapPin, ShoppingCart, AlertCircle, LayoutDashboard } from 'lucide-react';
+import { Calendar, Users, Package, Clock, User, LogOut, Ticket, Gift, Key, MapPin, ShoppingCart, AlertCircle, LayoutDashboard, Mail } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import {
@@ -29,6 +29,7 @@ const menuItems = [
   { title: 'Cupones', url: '/admin/cupones', icon: Ticket },
   { title: 'Disponibilidad', url: '/admin/disponibilidad', icon: Clock },
   { title: 'Agendas Futuras', url: '/admin/agendas-futuras', icon: Calendar },
+  { title: 'MailerLite', url: '/admin/mailerlite', icon: Mail },
 ];
 
 export function AdminSidebar() {
