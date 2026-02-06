@@ -1,8 +1,8 @@
 const MAILERLITE_API_URL = "https://connect.mailerlite.com/api";
 
 function getApiHeaders(): Record<string, string> {
-  const apiKey = Deno.env.get("MAILERLITE_API_KEY");
-  if (!apiKey) throw new Error("MAILERLITE_API_KEY not configured");
+  const apiKey = Deno.env.get("MAILERLITE_ECOMMERCE_API_KEY");
+  if (!apiKey) throw new Error("MAILERLITE_ECOMMERCE_API_KEY not configured");
   return {
     Authorization: `Bearer ${apiKey}`,
     Accept: "application/json",
