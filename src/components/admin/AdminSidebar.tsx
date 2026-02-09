@@ -27,6 +27,7 @@ const menuItems = [
   { title: 'Bonos', url: '/admin/paquetes-sesiones', icon: Gift },
   { title: 'Códigos de Sesión', url: '/admin/codigos-sesiones', icon: Key },
   { title: 'Cupones', url: '/admin/cupones', icon: Ticket },
+  { title: 'Clases de Prueba', url: '/admin/clases-prueba', icon: User },
   { title: 'Horarios', url: '/admin/horarios', icon: Clock },
   { title: 'Disponibilidad', url: '/admin/disponibilidad', icon: Clock },
   { title: 'Agendas Futuras', url: '/admin/agendas-futuras', icon: Calendar },
