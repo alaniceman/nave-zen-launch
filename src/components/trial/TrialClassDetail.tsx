@@ -1,9 +1,10 @@
 import { useMemo } from "react";
 import { ArrowLeft, Calendar, Clock, MapPin } from "lucide-react";
-import { dayNames, scheduleData, CL_TZ, type ClassItem } from "@/data/schedule";
+import { dayNames, CL_TZ } from "@/data/schedule";
+import type { ScheduleClassItem } from "@/hooks/useScheduleEntries";
 
 interface TrialClassDetailProps {
-  classItem: ClassItem;
+  classItem: ScheduleClassItem;
   dayKey: string;
   selectedDate: string | null;
   onSelectDate: (date: string) => void;

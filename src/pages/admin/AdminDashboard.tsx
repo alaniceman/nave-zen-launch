@@ -43,8 +43,18 @@ import {
   Users,
   Key,
   ShoppingCart,
+  GraduationCap,
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+
+interface TrialBooking {
+  id: string;
+  customer_name: string;
+  customer_email: string;
+  class_title: string;
+  scheduled_date: string;
+  status: string;
+}
 
 interface DashboardData {
   // Booking stats
@@ -74,6 +84,10 @@ interface DashboardData {
   
   // Redeemed value stats
   totalRedeemedValue: number;
+
+  // Trial bookings
+  trialBookingsCount: number;
+  recentTrialBookings: TrialBooking[];
   
   // Charts data
   revenueByMonth: { month: string; bookings: number; orders: number; total: number }[];
@@ -149,6 +163,7 @@ export default function AdminDashboard() {
         usedCodesResult,
         servicesResult,
         packagesResult,
+        trialResult,
       ] = await Promise.all([
         supabase
           .from("bookings")
@@ -167,7 +182,6 @@ export default function AdminDashboard() {
           .from("session_codes")
           .select("id, is_used, expires_at, purchased_at")
           .gte("purchased_at", startDate.toISOString()),
-        // Fetch used codes with used_at date for redeemed value calculation
         supabase
           .from("session_codes")
           .select("id, is_used, used_at, package_id")
@@ -176,6 +190,12 @@ export default function AdminDashboard() {
           .lte("used_at", endDate.toISOString()),
         supabase.from("services").select("id, name"),
         supabase.from("session_packages").select("id, name, price_clp, sessions_quantity"),
+        supabase
+          .from("trial_bookings")
+          .select("id, customer_name, customer_email, class_title, scheduled_date, status")
+          .gte("created_at", startDate.toISOString())
+          .lte("created_at", endDate.toISOString())
+          .order("created_at", { ascending: false }),
       ]);
 
       const bookings = bookingsResult.data || [];
@@ -185,6 +205,7 @@ export default function AdminDashboard() {
       const usedCodesWithDate = usedCodesResult.data || [];
       const services = servicesResult.data || [];
       const packages = packagesResult.data || [];
+      const trialBookings = trialResult.data || [];
 
       // Create lookup maps
       const servicesMap = new Map(services.map(s => [s.id, s.name]));
@@ -255,6 +276,8 @@ export default function AdminDashboard() {
         bookingsByService,
         ordersByPackage,
         couponUsageByMonth,
+        trialBookingsCount: trialBookings.length,
+        recentTrialBookings: trialBookings.slice(0, 5),
       });
     } catch (error) {
       console.error("Error loading dashboard data:", error);
@@ -344,6 +367,12 @@ export default function AdminDashboard() {
           value={data.confirmedBookings.toString()}
           icon={Calendar}
           description={`${data.pendingBookings} pendientes, ${data.cancelledBookings} canceladas`}
+        />
+        <KPICard
+          title="Clases de Prueba"
+          value={data.trialBookingsCount.toString()}
+          icon={GraduationCap}
+          description="Agendadas en el período"
         />
         <KPICard
           title="Uso de Cupones"
@@ -558,6 +587,46 @@ export default function AdminDashboard() {
                       </TableCell>
                     </TableRow>
                   ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Trial Bookings Table */}
+      {data.recentTrialBookings.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <GraduationCap className="h-5 w-5" />
+              Últimas Clases de Prueba
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Nombre</TableHead>
+                  <TableHead>Email</TableHead>
+                  <TableHead>Clase</TableHead>
+                  <TableHead>Fecha</TableHead>
+                  <TableHead>Estado</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {data.recentTrialBookings.map((tb) => (
+                  <TableRow key={tb.id}>
+                    <TableCell className="font-medium">{tb.customer_name}</TableCell>
+                    <TableCell className="text-muted-foreground">{tb.customer_email}</TableCell>
+                    <TableCell>{tb.class_title}</TableCell>
+                    <TableCell>{tb.scheduled_date}</TableCell>
+                    <TableCell>
+                      <Badge variant={tb.status === 'attended' ? 'default' : tb.status === 'booked' ? 'secondary' : 'outline'}>
+                        {tb.status}
+                      </Badge>
+                    </TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
             </Table>
           </CardContent>

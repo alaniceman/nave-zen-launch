@@ -67,6 +67,7 @@ import AdminPackageOrders from "./pages/admin/AdminPackageOrders";
 import AdminAbandonedCarts from "./pages/admin/AdminAbandonedCarts";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminMailerLite from "./pages/admin/AdminMailerLite";
+import AdminScheduleEntries from "./pages/admin/AdminScheduleEntries";
 import { MailerLiteUniversal } from "@/components/MailerLiteUniversal";
 
 const queryClient = new QueryClient();
@@ -145,6 +146,7 @@ const App = () => (
               <Route path="capacidad" element={<AdminCapacityOverrides />} />
               <Route path="paquetes-sesiones" element={<AdminSessionPackages />} />
               <Route path="codigos-sesiones" element={<AdminSessionCodes />} />
+              <Route path="horarios" element={<AdminScheduleEntries />} />
               <Route path="mailerlite" element={<AdminMailerLite />} />
             </Route>
             

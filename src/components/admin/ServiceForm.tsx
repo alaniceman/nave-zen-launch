@@ -26,15 +26,27 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
+const COLOR_TAG_OPTIONS = [
+  { value: 'yoga', label: 'Yoga' },
+  { value: 'wim-hof', label: 'Método Wim Hof' },
+  { value: 'hiit', label: 'HIIT / Biohacking' },
+  { value: 'breathwork', label: 'Breathwork' },
+  { value: 'personalizado', label: 'Personalizado' },
+  { value: 'default', label: 'Default' },
+];
+
 const serviceSchema = z.object({
   name: z.string().min(2, 'El nombre debe tener al menos 2 caracteres'),
   description: z.string().optional(),
   branchId: z.string().min(1, 'Selecciona una sucursal'),
   durationMinutes: z.number().min(15, 'Mínimo 15 minutos').max(480, 'Máximo 480 minutos'),
-  priceClp: z.number().min(1000, 'El precio mínimo es $1.000'),
+  priceClp: z.number().min(0, 'El precio mínimo es $0'),
   maxCapacity: z.number().min(1, 'Mínimo 1 cupo').max(100, 'Máximo 100 cupos'),
   sortOrder: z.number().min(0, 'Mínimo 0').default(0),
   isActive: z.boolean().default(true),
+  isTrialEnabled: z.boolean().default(false),
+  showInAgenda: z.boolean().default(true),
+  colorTag: z.string().default('default'),
 });
 
 type ServiceFormData = z.infer<typeof serviceSchema>;
@@ -72,6 +84,9 @@ export function ServiceForm({ open, onClose, service }: ServiceFormProps) {
       maxCapacity: 6,
       sortOrder: 0,
       isActive: true,
+      isTrialEnabled: false,
+      showInAgenda: true,
+      colorTag: 'default',
     },
   });
 
@@ -86,9 +101,11 @@ export function ServiceForm({ open, onClose, service }: ServiceFormProps) {
         maxCapacity: service.max_capacity,
         sortOrder: service.sort_order ?? 0,
         isActive: service.is_active,
+        isTrialEnabled: service.is_trial_enabled ?? false,
+        showInAgenda: service.show_in_agenda ?? true,
+        colorTag: service.color_tag || 'default',
       });
     } else {
-      // Set default branch when creating new service
       const defaultBranch = branches?.find(b => b.is_default);
       form.reset({
         name: '',
@@ -99,6 +116,9 @@ export function ServiceForm({ open, onClose, service }: ServiceFormProps) {
         maxCapacity: 6,
         sortOrder: 0,
         isActive: true,
+        isTrialEnabled: false,
+        showInAgenda: true,
+        colorTag: 'default',
       });
     }
   }, [service, form, branches]);
@@ -114,6 +134,9 @@ export function ServiceForm({ open, onClose, service }: ServiceFormProps) {
         max_capacity: data.maxCapacity,
         sort_order: data.sortOrder,
         is_active: data.isActive,
+        is_trial_enabled: data.isTrialEnabled,
+        show_in_agenda: data.showInAgenda,
+        color_tag: data.colorTag,
       };
 
       if (isEditing) {
@@ -145,7 +168,7 @@ export function ServiceForm({ open, onClose, service }: ServiceFormProps) {
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
             {isEditing ? 'Editar Servicio' : 'Nuevo Servicio'}
@@ -207,94 +230,131 @@ export function ServiceForm({ open, onClose, service }: ServiceFormProps) {
               )}
             />
 
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="durationMinutes"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Duración (min)</FormLabel>
+                    <FormControl>
+                      <Input {...field} type="number" onChange={(e) => field.onChange(parseInt(e.target.value))} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="priceClp"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Precio (CLP)</FormLabel>
+                    <FormControl>
+                      <Input {...field} type="number" onChange={(e) => field.onChange(parseInt(e.target.value))} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="maxCapacity"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Cupos</FormLabel>
+                    <FormControl>
+                      <Input {...field} type="number" onChange={(e) => field.onChange(parseInt(e.target.value))} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="sortOrder"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Orden</FormLabel>
+                    <FormControl>
+                      <Input {...field} type="number" onChange={(e) => field.onChange(parseInt(e.target.value) || 0)} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
             <FormField
               control={form.control}
-              name="durationMinutes"
+              name="colorTag"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Duración (minutos)</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      type="number"
-                      onChange={(e) => field.onChange(parseInt(e.target.value))}
-                    />
-                  </FormControl>
+                  <FormLabel>Categoría de color</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {COLOR_TAG_OPTIONS.map((opt) => (
+                        <SelectItem key={opt.value} value={opt.value}>
+                          {opt.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="priceClp"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Precio (CLP)</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      type="number"
-                      onChange={(e) => field.onChange(parseInt(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="space-y-3 pt-2">
+              <FormField
+                control={form.control}
+                name="isActive"
+                render={({ field }) => (
+                  <FormItem className="flex items-center space-x-2">
+                    <FormControl>
+                      <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                    </FormControl>
+                    <FormLabel className="!mt-0">Activo</FormLabel>
+                  </FormItem>
+                )}
+              />
 
-            <FormField
-              control={form.control}
-              name="maxCapacity"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Cupos por Horario</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      type="number"
-                      onChange={(e) => field.onChange(parseInt(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="isTrialEnabled"
+                render={({ field }) => (
+                  <FormItem className="flex items-center space-x-2">
+                    <FormControl>
+                      <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                    </FormControl>
+                    <FormLabel className="!mt-0">Disponible como clase de prueba</FormLabel>
+                  </FormItem>
+                )}
+              />
 
-            <FormField
-              control={form.control}
-              name="sortOrder"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Orden de visualización</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      type="number"
-                      onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
-                      placeholder="0 = primero"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="isActive"
-              render={({ field }) => (
-                <FormItem className="flex items-center space-x-2">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <FormLabel className="!mt-0">Activo</FormLabel>
-                </FormItem>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="showInAgenda"
+                render={({ field }) => (
+                  <FormItem className="flex items-center space-x-2">
+                    <FormControl>
+                      <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                    </FormControl>
+                    <FormLabel className="!mt-0">Mostrar en calendario de agenda</FormLabel>
+                  </FormItem>
+                )}
+              />
+            </div>
 
             <div className="flex gap-2 justify-end">
               <Button type="button" variant="outline" onClick={onClose}>

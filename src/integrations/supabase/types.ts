@@ -613,43 +613,109 @@ export type Database = {
         }
         Relationships: []
       }
+      schedule_entries: {
+        Row: {
+          badges: string[]
+          created_at: string
+          day_of_week: number
+          display_name: string | null
+          id: string
+          is_active: boolean
+          professional_id: string | null
+          service_id: string
+          sort_order: number
+          start_time: string
+          updated_at: string
+        }
+        Insert: {
+          badges?: string[]
+          created_at?: string
+          day_of_week: number
+          display_name?: string | null
+          id?: string
+          is_active?: boolean
+          professional_id?: string | null
+          service_id: string
+          sort_order?: number
+          start_time: string
+          updated_at?: string
+        }
+        Update: {
+          badges?: string[]
+          created_at?: string
+          day_of_week?: number
+          display_name?: string | null
+          id?: string
+          is_active?: boolean
+          professional_id?: string | null
+          service_id?: string
+          sort_order?: number
+          start_time?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "schedule_entries_professional_id_fkey"
+            columns: ["professional_id"]
+            isOneToOne: false
+            referencedRelation: "professionals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "schedule_entries_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       services: {
         Row: {
           branch_id: string | null
+          color_tag: string
           created_at: string
           description: string | null
           duration_minutes: number
           id: string
           is_active: boolean
+          is_trial_enabled: boolean
           max_capacity: number
           name: string
           price_clp: number
+          show_in_agenda: boolean
           sort_order: number | null
           updated_at: string
         }
         Insert: {
           branch_id?: string | null
+          color_tag?: string
           created_at?: string
           description?: string | null
           duration_minutes: number
           id?: string
           is_active?: boolean
+          is_trial_enabled?: boolean
           max_capacity?: number
           name: string
           price_clp: number
+          show_in_agenda?: boolean
           sort_order?: number | null
           updated_at?: string
         }
         Update: {
           branch_id?: string | null
+          color_tag?: string
           created_at?: string
           description?: string | null
           duration_minutes?: number
           id?: string
           is_active?: boolean
+          is_trial_enabled?: boolean
           max_capacity?: number
           name?: string
           price_clp?: number
+          show_in_agenda?: boolean
           sort_order?: number | null
           updated_at?: string
         }

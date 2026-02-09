@@ -6,7 +6,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
-import { type ClassItem, dayNames } from "@/data/schedule";
+import { dayNames } from "@/data/schedule";
+import type { ScheduleClassItem } from "@/hooks/useScheduleEntries";
 
 const formSchema = z.object({
   name: z.string().trim().min(2, "Ingresa tu nombre").max(100),
@@ -17,7 +18,7 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 interface TrialBookingFormProps {
-  classItem: ClassItem;
+  classItem: ScheduleClassItem;
   dayKey: string;
   selectedDate: string;
   onBack: () => void;

@@ -4,26 +4,15 @@ import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
+  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from '@/components/ui/table';
-import { Loader2, Plus, Pencil, Trash2 } from 'lucide-react';
+import { Loader2, Plus, Pencil, Trash2, Check, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { ServiceForm } from '@/components/admin/ServiceForm';
 import { Switch } from '@/components/ui/switch';
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 
 export default function AdminServices() {
@@ -46,48 +35,27 @@ export default function AdminServices() {
 
   const toggleActiveMutation = useMutation({
     mutationFn: async ({ id, isActive }: { id: string; isActive: boolean }) => {
-      const { error } = await supabase
-        .from('services')
-        .update({ is_active: isActive })
-        .eq('id', id);
+      const { error } = await supabase.from('services').update({ is_active: isActive }).eq('id', id);
       if (error) throw error;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['services-admin'] });
-      toast.success('Estado actualizado');
-    },
-    onError: () => {
-      toast.error('Error al actualizar estado');
-    },
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['services-admin'] }); toast.success('Estado actualizado'); },
+    onError: () => { toast.error('Error al actualizar estado'); },
   });
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase
-        .from('services')
-        .delete()
-        .eq('id', id);
+      const { error } = await supabase.from('services').delete().eq('id', id);
       if (error) throw error;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['services-admin'] });
-      toast.success('Servicio eliminado');
-      setDeletingId(null);
-    },
-    onError: () => {
-      toast.error('Error al eliminar servicio');
-    },
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['services-admin'] }); toast.success('Servicio eliminado'); setDeletingId(null); },
+    onError: () => { toast.error('Error al eliminar servicio'); },
   });
 
-  const handleEdit = (service: any) => {
-    setEditingService(service);
-    setIsFormOpen(true);
-  };
+  const handleEdit = (service: any) => { setEditingService(service); setIsFormOpen(true); };
+  const handleCloseForm = () => { setIsFormOpen(false); setEditingService(null); };
 
-  const handleCloseForm = () => {
-    setIsFormOpen(false);
-    setEditingService(null);
-  };
+  const BoolIcon = ({ value }: { value: boolean }) =>
+    value ? <Check className="h-4 w-4 text-emerald-600" /> : <X className="h-4 w-4 text-muted-foreground" />;
 
   return (
     <div className="p-6 space-y-6">
@@ -107,71 +75,59 @@ export default function AdminServices() {
         <Card>
           <CardContent className="p-0">
             <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Orden</TableHead>
-                <TableHead>Nombre</TableHead>
-                <TableHead>Sucursal</TableHead>
-                <TableHead>Duración</TableHead>
-                <TableHead>Precio</TableHead>
-                <TableHead>Cupos</TableHead>
-                <TableHead>Activo</TableHead>
-                <TableHead className="text-right">Acciones</TableHead>
-              </TableRow>
-            </TableHeader>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-14">#</TableHead>
+                  <TableHead>Nombre</TableHead>
+                  <TableHead>Sucursal</TableHead>
+                  <TableHead className="w-20">Duración</TableHead>
+                  <TableHead className="w-24">Precio</TableHead>
+                  <TableHead className="w-16 text-center">Prueba</TableHead>
+                  <TableHead className="w-16 text-center">Agenda</TableHead>
+                  <TableHead className="w-16 text-center">Activo</TableHead>
+                  <TableHead className="text-right w-24">Acciones</TableHead>
+                </TableRow>
+              </TableHeader>
               <TableBody>
                 {services?.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
+                    <TableCell colSpan={9} className="text-center py-8 text-muted-foreground">
                       No hay servicios registrados
                     </TableCell>
                   </TableRow>
                 ) : (
                   services?.map((service) => (
                     <TableRow key={service.id}>
-                      <TableCell className="text-foreground font-medium w-16">
-                        {service.sort_order ?? 0}
-                      </TableCell>
+                      <TableCell className="text-foreground font-medium">{service.sort_order ?? 0}</TableCell>
                       <TableCell>
-                        <div>
-                          <div className="font-medium text-foreground">{service.name}</div>
-                          {service.description && (
-                            <div className="text-sm text-muted-foreground line-clamp-1">
-                              {service.description}
-                            </div>
-                          )}
-                        </div>
+                        <div className="font-medium text-foreground">{service.name}</div>
+                        {service.description && (
+                          <div className="text-sm text-muted-foreground line-clamp-1">{service.description}</div>
+                        )}
                       </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {(service as any).branches?.name || '-'}
-                      </TableCell>
+                      <TableCell className="text-muted-foreground">{(service as any).branches?.name || '-'}</TableCell>
                       <TableCell className="text-foreground">{service.duration_minutes} min</TableCell>
                       <TableCell className="text-foreground font-medium">
                         ${service.price_clp.toLocaleString('es-CL')}
                       </TableCell>
-                      <TableCell className="text-foreground">{service.max_capacity} cupos</TableCell>
-                      <TableCell>
+                      <TableCell className="text-center">
+                        <BoolIcon value={(service as any).is_trial_enabled} />
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <BoolIcon value={(service as any).show_in_agenda} />
+                      </TableCell>
+                      <TableCell className="text-center">
                         <Switch
                           checked={service.is_active}
-                          onCheckedChange={(checked) =>
-                            toggleActiveMutation.mutate({ id: service.id, isActive: checked })
-                          }
+                          onCheckedChange={(checked) => toggleActiveMutation.mutate({ id: service.id, isActive: checked })}
                         />
                       </TableCell>
                       <TableCell className="text-right">
-                        <div className="flex justify-end gap-2">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleEdit(service)}
-                          >
+                        <div className="flex justify-end gap-1">
+                          <Button variant="ghost" size="sm" onClick={() => handleEdit(service)}>
                             <Pencil className="h-4 w-4" />
                           </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => setDeletingId(service.id)}
-                          >
+                          <Button variant="ghost" size="sm" onClick={() => setDeletingId(service.id)}>
                             <Trash2 className="h-4 w-4 text-destructive" />
                           </Button>
                         </div>
@@ -185,11 +141,7 @@ export default function AdminServices() {
         </Card>
       )}
 
-      <ServiceForm
-        open={isFormOpen}
-        onClose={handleCloseForm}
-        service={editingService}
-      />
+      <ServiceForm open={isFormOpen} onClose={handleCloseForm} service={editingService} />
 
       <AlertDialog open={!!deletingId} onOpenChange={() => setDeletingId(null)}>
         <AlertDialogContent>
