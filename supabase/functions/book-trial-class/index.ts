@@ -51,9 +51,9 @@ serve(async (req) => {
     // 1. Eligibility check
     const { data: existing } = await supabase
       .from("trial_bookings")
-      .select("id")
+      .select("id, status")
       .eq("customer_email", data.customerEmail.toLowerCase())
-      .eq("status", "attended")
+      .in("status", ["booked", "attended"])
       .limit(1);
 
     if (existing && existing.length > 0) {
