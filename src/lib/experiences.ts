@@ -32,9 +32,9 @@ export const EXPERIENCE_CATALOG = [
   },
   {
     slug: "biohacking",
-    label: "Biohacking (Breathwork + HIIT + Ice Bath)",
-    labelShort: "Biohacking",
-    match: (item: ScheduleItem) => /biohacking/i.test(item.title),
+    label: "HIIT + Ice Bath",
+    labelShort: "HIIT",
+    match: (item: ScheduleItem) => /biohacking|hiit\s*\+?\s*ice\s*bath/i.test(item.title),
     metaNote: null,
   },
   {

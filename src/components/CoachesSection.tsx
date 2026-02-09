@@ -25,13 +25,6 @@ const coaches: Coach[] = [{
   purpose: "Guío prácticas que cultivan fuerza y flexibilidad sin perder el equilibrio interno.",
   image: "/lovable-uploads/30549bc9-e0a1-4084-927b-f3eadfec8372.png"
 }, {
-  id: "gaston",
-  name: "Gastón Serrano Horton",
-  role: "Coach de Hábitos Saludables y Movimiento Consciente",
-  credentials: "Crioguía de Biohacking: Respiración + HIIT + Chi Kung + Agua Fría",
-  purpose: "Impulso tu vitalidad con hábitos simples y poderosos, para que vivas en plena coherencia física, mental y emocional.",
-  image: "/lovable-uploads/3c50219e-f0ad-4310-b333-f50970387dad.png"
-}, {
   id: "sol",
   name: "Sol Evans",
   role: "Instructora de Ice Yoga · Reikista",

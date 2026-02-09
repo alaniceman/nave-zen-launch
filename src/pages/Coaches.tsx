@@ -59,15 +59,6 @@ const Coaches = () => {
       tags: ["Movimiento", "Terapia"]
     },
     {
-      id: 3,
-      name: "Gastón Serrano",
-      title: "Coach de Hábitos Saludables y Movimiento Consciente",
-      credentials: "Crioguía de Biohacking, HIIT y Movimiento Funcional · Entrenador Funcional Cert.",
-      description: "Te ayudo a diseñar hábitos sostenibles que potencian tu rendimiento sin descuidar tu bienestar.",
-      image: "/lovable-uploads/3c50219e-f0ad-4310-b333-f50970387dad.png",
-      tags: ["Movimiento", "Mindset"]
-    },
-    {
       id: 4,
       name: "Sol Evans",
       title: "Instructora de Ice Yoga · Reikista · Terapeuta Holística",

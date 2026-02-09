@@ -73,13 +73,6 @@ export const scheduleData: Record<string, ClassItem[]> = {
       duration: 60
     },
     {
-      time: "13:00",
-      title: "Biohacking: Breathwork + HIIT + Ice Bath",
-      tags: ["Biohacking"],
-      badges: ["Respiración + HIIT + Hielo"],
-      duration: 60
-    },
-    {
       time: "19:15",
       title: "Método Wim Hof (Breathwork + Ice Bath)",
       tags: ["Método Wim Hof"],
@@ -105,9 +98,9 @@ export const scheduleData: Record<string, ClassItem[]> = {
     },
     {
       time: "08:00",
-      title: "Biohacking: Breathwork + HIIT + Ice Bath",
-      tags: ["Biohacking"],
-      badges: ["Respiración + HIIT + Hielo"],
+      title: "HIIT + Ice Bath",
+      tags: ["HIIT"],
+      badges: [],
       duration: 60,
       instructor: "Maral Hekmat"
     },
@@ -156,13 +149,6 @@ export const scheduleData: Record<string, ClassItem[]> = {
       title: "Método Wim Hof (Breathwork + Ice Bath)",
       tags: ["Método Wim Hof"],
       badges: [],
-      duration: 60
-    },
-    {
-      time: "13:00",
-      title: "Biohacking: Breathwork + HIIT + Ice Bath",
-      tags: ["Biohacking"],
-      badges: ["Respiración + HIIT + Hielo"],
       duration: 60
     },
     {
