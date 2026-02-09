@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { type ClassItem } from "@/data/schedule";
+import { type ScheduleClassItem } from "@/hooks/useScheduleEntries";
 import TrialScheduleCards from "@/components/trial/TrialScheduleCards";
 import TrialClassDetail from "@/components/trial/TrialClassDetail";
 import TrialBookingForm from "@/components/trial/TrialBookingForm";
@@ -13,11 +13,11 @@ type Step = "calendar" | "detail" | "form" | "blocked" | "success";
 export default function TrialClassSchedule() {
   const navigate = useNavigate();
   const [step, setStep] = useState<Step>("calendar");
-  const [selectedClass, setSelectedClass] = useState<ClassItem | null>(null);
+  const [selectedClass, setSelectedClass] = useState<ScheduleClassItem | null>(null);
   const [selectedDay, setSelectedDay] = useState<string>("");
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
-  const handleSelectClass = (classItem: ClassItem, dayKey: string) => {
+  const handleSelectClass = (classItem: ScheduleClassItem, dayKey: string) => {
     setSelectedClass(classItem);
     setSelectedDay(dayKey);
     setSelectedDate(null);

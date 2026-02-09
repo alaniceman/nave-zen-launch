@@ -72,7 +72,7 @@ export default function AgendaNaveStudio() {
         const [branchesResult, profsResult, servicesResult] = await Promise.all([
           supabase.from("branches").select("*").eq("is_active", true).order("sort_order", { ascending: true }),
           supabase.rpc("get_active_professionals"),
-          supabase.from("services").select("*").eq("is_active", true).order("sort_order", { ascending: true })
+          supabase.from("services").select("*").eq("is_active", true).eq("show_in_agenda", true).order("sort_order", { ascending: true })
         ]);
         if (branchesResult.error) throw branchesResult.error;
         if (profsResult.error) throw profsResult.error;
