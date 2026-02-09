@@ -1,149 +1,185 @@
 
 
-# Calendario de Clases de Prueba -- /clase-de-prueba/agendar
+# Horarios Configurables desde el Admin
 
 ## Resumen
 
-Crear un sistema completo de agendamiento de clases de prueba con 3 pantallas (calendario, detalle con fechas, formulario), validacion backend de elegibilidad, emails transaccionales, integracion con MailerLite, y un campo `is_trial_enabled` en el schedule para distinguir sesiones que permiten prueba.
+Migrar los horarios de un archivo hardcoded (`schedule.ts`) a la base de datos, gestionados desde el admin. Agregar campos de visibilidad a los servicios (`is_trial_enabled`, `show_in_agenda`). Mostrar clases de prueba en el dashboard. Crear todas las clases faltantes como servicios.
 
 ---
 
-## Pantalla 1: Calendario con cards (ruta: /clase-de-prueba/agendar)
+## 1. Cambios en la base de datos
 
-Reutiliza el look & feel de `/horarios` (mismo componente `ScheduleDayCards` como base):
+### 1a. Nuevas columnas en `services`
 
-- Toggle "Por Dia" / "Por Experiencia" + selector de dia de semana
-- Cada card de sesion muestra hora, titulo, descripcion breve, instructor
-- Nuevo campo `is_trial_enabled` en cada `ClassItem` de `schedule.ts`:
-  - **true** (Yoga, HIIT, Breathwork sin ice bath): tag verde "Clase de prueba disponible" + boton "Agendar clase de prueba"
-  - **false** (Metodo Wim Hof completo, Personalizados): tag gris "No permite clase de prueba" + boton "Agendar" que redirige a `/agenda-nave-studio`
-- Breve descripcion por tipo de clase (1--2 lineas, hardcoded en schedule data o en un mapa de descripciones por tag)
+| Columna | Tipo | Default | Descripcion |
+|---|---|---|---|
+| `is_trial_enabled` | boolean | false | Permite agendar clase de prueba |
+| `show_in_agenda` | boolean | true | Aparece en el calendario de `/agenda-nave-studio` |
+| `color_tag` | text | 'default' | Categoria de color para las cards del horario (yoga, wim-hof, hiit, breathwork, personalizado) |
 
-## Pantalla 2: Detalle + seleccion de fecha
+### 1b. Nueva tabla: `schedule_entries`
 
-Al hacer click en "Agendar clase de prueba":
-
-- Boton "Volver" arriba para regresar a Pantalla 1
-- Titulo de la experiencia seleccionada (ej: "Yin Yoga + Ice Bath (opcional)")
-- Bloque con titulo, dia de semana, horario, descripcion breve
-- Lista de fechas concretas para esa clase, maximo 14 dias hacia adelante:
-  - Ej: si selecciono Yin Yoga lunes 18:30, muestra: "Lunes 10 Feb", "Lunes 17 Feb", "Lunes 24 Feb" (cap 14 dias)
-  - Cada fecha es un boton seleccionable
-- Boton "Ver dia siguiente" para ver la misma clase en otros dias si aplica
-- CTA: "Continuar" (habilitado al seleccionar fecha)
-
-## Pantalla 3: Formulario
-
-- Campos: Nombre, Email, Celular (todos obligatorios, validados con zod)
-- CTA: "Confirmar clase de prueba"
-- Al confirmar, llama a una nueva edge function `book-trial-class`
-
----
-
-## Backend: Edge Function `book-trial-class`
-
-### Logica:
-
-1. **Validar input** (nombre, email, celular, classTitle, dayKey, time, selectedDate)
-2. **Chequeo de elegibilidad**: Buscar en tabla `trial_bookings` si existe un registro con ese email y status `attended`
-   - Si ya asistio: devolver `{ alreadyAttended: true }` -> frontend muestra pantalla de bloqueo
-   - Si no: continuar
-3. **Normalizar telefono** a formato E.164 (+56...)
-4. **Crear registro** en nueva tabla `trial_bookings` con status `booked`
-5. **Upsert lead** en `email_subscribers` (por email, actualizar celular si cambio)
-6. **Sync a MailerLite**: agregar suscriptor al grupo de clase de prueba (usando `MAILERLITE_API_KEY`)
-7. **Enviar email al usuario** via Resend con:
-   - Fecha, hora, clase, direccion (Antares 259, Las Condes)
-   - Link a Google Maps
-   - Link clickeable a WhatsApp de Nave (+56 9 4612 0426)
-8. **Enviar email interno** a `lanave@alaniceman.com` con:
-   - Nombre, email (mailto:), celular (link WhatsApp), clase, fecha/hora
-9. **Devolver** `{ success: true, bookingId }`
-
-### Pantalla de bloqueo (si ya asistio):
-
-- Mensaje: "Veo que ya hiciste tu clase de prueba"
-- CTA 1: "Ver planes" -> `/planes-precios`
-- CTA 2: "Agendar sesion normal" -> `/agenda-nave-studio`
-
----
-
-## Base de datos
-
-### Nueva tabla: `trial_bookings`
+Reemplaza `scheduleData` de `schedule.ts`. Cada fila es un horario recurrente semanal.
 
 | Columna | Tipo | Default |
 |---|---|---|
-| id | uuid | gen_random_uuid() |
-| customer_name | text | NOT NULL |
-| customer_email | text | NOT NULL |
-| customer_phone | text | NOT NULL |
-| class_title | text | NOT NULL |
-| class_day | text | NOT NULL |
-| class_time | text | NOT NULL |
-| scheduled_date | date | NOT NULL |
-| status | text | 'booked' |
-| source | text | 'web' |
-| utm_source | text | nullable |
-| utm_medium | text | nullable |
-| utm_campaign | text | nullable |
-| mailerlite_synced | boolean | false |
-| created_at | timestamptz | now() |
-| updated_at | timestamptz | now() |
+| `id` | uuid | gen_random_uuid() |
+| `service_id` | uuid FK -> services | NOT NULL |
+| `professional_id` | uuid FK -> professionals | nullable |
+| `day_of_week` | integer (0=lunes...6=domingo) | NOT NULL |
+| `start_time` | time | NOT NULL |
+| `display_name` | text | nullable (override del nombre del servicio para mostrar en horario) |
+| `badges` | text[] | '{}' |
+| `is_active` | boolean | true |
+| `sort_order` | integer | 0 |
+| `created_at` | timestamptz | now() |
+| `updated_at` | timestamptz | now() |
 
-### RLS:
-- SELECT: admins only
-- INSERT: service role (via edge function)
-- UPDATE: admins + service role
+RLS:
+- SELECT: publico (is_active = true)
+- INSERT/UPDATE/DELETE: admins only
+
+### 1c. Insertar servicios faltantes
+
+Basandose en `schedule.ts`, crear los servicios que faltan en la sucursal default "Nave Studio (Santiago, Las Condes)". Servicios actuales: Sesion Criomedicina / Metodo Wim Hof, Yoga Integral, Sesion Criomedicina (Algarrobo). Faltan:
+
+- Yang Yoga + Ice Bath (opcional) -- is_trial_enabled: true, show_in_agenda: false
+- Isometrica + Flexibilidad -- is_trial_enabled: true, show_in_agenda: false
+- Yin Yoga + Ice Bath (opcional) -- is_trial_enabled: true, show_in_agenda: false
+- Vinyasa Yoga + Ice Bath (opcional) -- is_trial_enabled: true, show_in_agenda: false
+- Power Yoga + Ice Bath (opcional) -- is_trial_enabled: true, show_in_agenda: false
+- HIIT + Ice Bath -- is_trial_enabled: true, show_in_agenda: false
+- Breathwork Wim Hof -- is_trial_enabled: true, show_in_agenda: false
+- Metodo Wim Hof (Breathwork + Ice Bath) -- is_trial_enabled: false, show_in_agenda: false (ya existe pero se actualizara)
+- Personalizado Metodo Wim Hof -- is_trial_enabled: false, show_in_agenda: false
+- Yoga Integral + Ice Bath (opcional) -- is_trial_enabled: true, show_in_agenda: false (ya existe pero se renombrara/actualizara)
+
+Nota: `show_in_agenda` comienza en false para los servicios nuevos para no romper el flujo actual de `/agenda-nave-studio`. El admin los activa manualmente cuando quiera.
+
+Los servicios existentes que ya aparecen en agenda (`Sesion Criomedicina`, `Yoga Integral`) mantendran `show_in_agenda: true`.
+
+### 1d. Insertar schedule_entries
+
+Migrar cada entrada de `scheduleData` a la tabla `schedule_entries`, vinculando con el `service_id` correspondiente y el `professional_id` cuando el instructor existe en la tabla `professionals`.
 
 ---
 
-## Cambios al schedule data
+## 2. Cambios en el Admin
 
-En `src/data/schedule.ts`, agregar campo `is_trial_enabled` a `ClassItem` y a cada entrada:
+### 2a. ServiceForm -- Nuevos checkboxes
 
-- **true**: Yoga (Yin, Yang, Vinyasa, Integral, Power, Isometrica), HIIT + Ice Bath, Breathwork Wim Hof (sin ice bath)
-- **false**: Metodo Wim Hof (Breathwork + Ice Bath), Personalizado Metodo Wim Hof
+Agregar 2 checkboxes al formulario de servicios:
+- "Disponible como clase de prueba" (`is_trial_enabled`)
+- "Mostrar en calendario de agenda" (`show_in_agenda`)
 
-Tambien agregar campo `description` opcional para las clases (1--2 lineas descriptivas).
+Y un select para `color_tag` con opciones: Yoga, Metodo Wim Hof, HIIT / Biohacking, Breathwork, Personalizado, Default.
+
+### 2b. AdminServices -- Mostrar nuevas columnas
+
+En la tabla, agregar columnas visibles:
+- "Prueba" (check/x icon)
+- "Agenda" (check/x icon)
+
+### 2c. Nueva pagina: Admin Horarios (`/admin/horarios`)
+
+CRUD para `schedule_entries`:
+- Tabla con: dia, hora, servicio (nombre), profesional, badges, activo
+- Filtro por dia de la semana
+- Formulario modal para crear/editar: dia, hora, servicio (select), profesional (select, opcional), display_name (opcional), badges (input separado por comas), activo
+- Ordenable por dia + hora
+
+### 2d. Dashboard -- Seccion de Clases de Prueba
+
+Agregar al dashboard:
+- KPI card: "Clases de Prueba" con total de bookings del periodo
+- Mini tabla con las ultimas 5 clases de prueba (nombre, email, clase, fecha, status)
+
+### 2e. Sidebar -- Nuevo item
+
+Agregar "Horarios" al menu del admin (icono Clock) apuntando a `/admin/horarios`.
 
 ---
 
-## Archivos a crear
+## 3. Frontend publico -- Leer desde la BD
+
+### 3a. Nuevo hook: `useScheduleEntries`
+
+Hook con react-query que hace:
+```
+SELECT se.*, s.name as service_name, s.is_trial_enabled, s.color_tag, s.description,
+       p.name as professional_name
+FROM schedule_entries se
+JOIN services s ON se.service_id = s.id
+LEFT JOIN professionals p ON se.professional_id = p.id
+WHERE se.is_active = true AND s.is_active = true
+ORDER BY se.day_of_week, se.start_time
+```
+
+Transforma el resultado en el mismo formato `Record<string, ClassItem[]>` que usa `scheduleData` actualmente, para minimizar cambios en componentes existentes.
+
+### 3b. `ScheduleDayCards` (pagina /horarios)
+
+- Reemplazar import de `scheduleData` por el hook `useScheduleEntries`
+- Agregar estado de loading con skeleton
+- El resto del componente no cambia (misma estructura de cards)
+
+### 3c. `TrialScheduleCards` (pagina /clase-de-prueba/agendar)
+
+- Reemplazar import de `scheduleData` por `useScheduleEntries`
+- Filtrar solo clases con `is_trial_enabled = true` (ya viene del join)
+- Agregar loading state
+
+### 3d. `TrialClassDetail` y `TrialBookingForm`
+
+- Reciben `ClassItem` como prop, no cambian significativamente
+- Solo ajustar tipos si es necesario
+
+### 3e. `/agenda-nave-studio`
+
+- Filtrar servicios por `show_in_agenda = true` en la query existente (agregar `.eq('show_in_agenda', true)`)
+
+### 3f. `scheduleByExperience.ts` y `experiences.ts`
+
+- Actualizar `weeklyByExperience` para recibir datos como parametro en vez de importar `scheduleData`
+- O mantener la misma logica pero alimentada desde el hook
+
+---
+
+## 4. Archivos a crear
 
 | Archivo | Descripcion |
 |---|---|
-| `src/pages/TrialClassSchedule.tsx` | Pagina principal con las 3 pantallas (estado interno con step) |
-| `src/components/trial/TrialScheduleCards.tsx` | Calendario reutilizando estilo de ScheduleDayCards |
-| `src/components/trial/TrialClassDetail.tsx` | Pantalla 2: detalle + fechas |
-| `src/components/trial/TrialBookingForm.tsx` | Pantalla 3: formulario |
-| `src/components/trial/TrialAlreadyAttended.tsx` | Pantalla de bloqueo |
-| `supabase/functions/book-trial-class/index.ts` | Edge function para booking + emails + MailerLite |
+| `src/pages/admin/AdminScheduleEntries.tsx` | CRUD de horarios semanales |
+| `src/components/admin/ScheduleEntryForm.tsx` | Formulario modal para crear/editar entradas |
+| `src/hooks/useScheduleEntries.ts` | Hook para cargar horarios desde la BD |
 
-## Archivos a modificar
+## 5. Archivos a modificar
 
 | Archivo | Cambio |
 |---|---|
-| `src/data/schedule.ts` | Agregar `is_trial_enabled` y `description` a ClassItem e instancias |
-| `src/App.tsx` | Agregar ruta `/clase-de-prueba/agendar` |
-| `supabase/config.toml` | Agregar config para `book-trial-class` con `verify_jwt = false` |
+| `src/components/admin/ServiceForm.tsx` | Agregar checkboxes is_trial_enabled, show_in_agenda, select color_tag |
+| `src/pages/admin/AdminServices.tsx` | Columnas Prueba y Agenda en la tabla |
+| `src/components/admin/AdminSidebar.tsx` | Agregar item "Horarios" |
+| `src/App.tsx` | Agregar ruta `/admin/horarios` |
+| `src/components/ScheduleDayCards.tsx` | Usar hook en vez de import estatico |
+| `src/components/trial/TrialScheduleCards.tsx` | Usar hook en vez de import estatico |
+| `src/lib/scheduleByExperience.ts` | Recibir datos como parametro |
+| `src/pages/AgendaNaveStudio.tsx` | Filtrar por show_in_agenda |
+| `src/pages/admin/AdminDashboard.tsx` | Agregar seccion de clases de prueba |
+
+## 6. Archivos que se mantienen pero dejan de ser la fuente primaria
+
+- `src/data/schedule.ts` -- Se mantiene como fallback/referencia pero ya no se importa en componentes publicos. La fuente de verdad sera la BD.
 
 ---
 
-## Detalles tecnicos
+## Secuencia de implementacion
 
-- Timezone: America/Santiago para calculo de fechas (14 dias cap)
-- Telefono normalizado a E.164 antes de guardar
-- Validacion zod en frontend y backend
-- Emails via Resend (secret `RESEND_API_KEY` ya existe)
-- MailerLite sync usando `MAILERLITE_API_KEY` (el de suscriptores, no el de ecommerce)
-- WhatsApp links: `https://wa.me/56946120426`
-- Email interno a: `lanave@alaniceman.com`
-- Grupo MailerLite: **pendiente -- se ingresara cuando lo proveas**
-
----
-
-## Pendiente del usuario
-
-- **ID del grupo de MailerLite** para clases de prueba (se puede agregar despues como constante en la edge function)
+1. Migracion DB: columnas en services + tabla schedule_entries + seed de servicios y horarios
+2. Admin: ServiceForm con nuevos campos + AdminScheduleEntries
+3. Hook useScheduleEntries
+4. Frontend: ScheduleDayCards y TrialScheduleCards usan el hook
+5. AgendaNaveStudio filtra por show_in_agenda
+6. Dashboard con trial bookings
 
