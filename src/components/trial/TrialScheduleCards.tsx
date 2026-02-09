@@ -113,10 +113,6 @@ export default function TrialScheduleCards({ onSelectClass }: TrialScheduleCards
       <div className="flex flex-wrap items-center gap-2 mt-3">
         {classItem.is_trial_enabled ? (
           <>
-            <span className="inline-flex items-center gap-1 bg-emerald-500/30 text-white rounded-full px-3 py-1 text-xs backdrop-blur">
-              <CheckCircle className="w-3.5 h-3.5" />
-              Clase de prueba disponible
-            </span>
             <button
               onClick={() => handleClassAction(classItem, dayKey)}
               className="ml-auto bg-white text-[#2E4D3A] font-semibold text-sm px-4 py-2 rounded-full hover:bg-white/90 transition-colors"
