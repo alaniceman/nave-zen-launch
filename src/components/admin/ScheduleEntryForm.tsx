@@ -69,14 +69,14 @@ export function ScheduleEntryForm({ open, onClose, entry }: Props) {
 
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
-    defaultValues: { serviceId: '', professionalId: '', dayOfWeek: '', startTime: '', displayName: '', badges: '', isActive: true },
+    defaultValues: { serviceId: '', professionalId: '__none__', dayOfWeek: '', startTime: '', displayName: '', badges: '', isActive: true },
   });
 
   useEffect(() => {
     if (entry) {
       form.reset({
         serviceId: entry.service_id,
-        professionalId: entry.professional_id || '',
+        professionalId: entry.professional_id || '__none__',
         dayOfWeek: String(entry.day_of_week),
         startTime: entry.start_time?.slice(0, 5) || '',
         displayName: entry.display_name || '',
@@ -84,7 +84,7 @@ export function ScheduleEntryForm({ open, onClose, entry }: Props) {
         isActive: entry.is_active,
       });
     } else {
-      form.reset({ serviceId: '', professionalId: '', dayOfWeek: '', startTime: '', displayName: '', badges: '', isActive: true });
+      form.reset({ serviceId: '', professionalId: '__none__', dayOfWeek: '', startTime: '', displayName: '', badges: '', isActive: true });
     }
   }, [entry, form]);
 
@@ -93,7 +93,7 @@ export function ScheduleEntryForm({ open, onClose, entry }: Props) {
       const badgesArr = data.badges ? data.badges.split(',').map(b => b.trim()).filter(Boolean) : [];
       const payload = {
         service_id: data.serviceId,
-        professional_id: data.professionalId || null,
+        professional_id: data.professionalId === '__none__' ? null : data.professionalId || null,
         day_of_week: parseInt(data.dayOfWeek),
         start_time: data.startTime,
         display_name: data.displayName || null,
@@ -145,7 +145,7 @@ export function ScheduleEntryForm({ open, onClose, entry }: Props) {
                 <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl><SelectTrigger><SelectValue placeholder="Sin profesional" /></SelectTrigger></FormControl>
                   <SelectContent>
-                    <SelectItem value="">Sin profesional</SelectItem>
+                    <SelectItem value="__none__">Sin profesional</SelectItem>
                     {professionals?.map(p => <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>)}
                   </SelectContent>
                 </Select>
