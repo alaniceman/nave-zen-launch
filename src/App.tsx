@@ -26,6 +26,7 @@ import SanValentin from "./pages/SanValentin";
 import Horarios from "./pages/Horarios";
 import FAQ from "./pages/FAQ";
 import ClaseDePrueba from "./pages/ClaseDePrueba";
+import TrialClassSchedule from "./pages/TrialClassSchedule";
 import CriomedicinMetodoWimHof from "./pages/CriomedicinMetodoWimHof";
 import CriomedicinIceBathEnGrupo from "./pages/CriomedicinIceBathEnGrupo";
 import CriomedicinAdsLanding from "./pages/CriomedicinAdsLanding";
@@ -107,6 +108,7 @@ const App = () => (
             <Route path="/horarios" element={<Horarios />} />
             <Route path="/faq" element={<FAQ />} />
             <Route path="/clase-de-prueba" element={<ClaseDePrueba />} />
+            <Route path="/clase-de-prueba/agendar" element={<TrialClassSchedule />} />
             <Route path="/criomedicina-metodo-wim-hof" element={<CriomedicinMetodoWimHof />} />
             <Route path="/criomedicina-ice-bath-en-grupo" element={<CriomedicinIceBathEnGrupo />} />
             <Route path="/criomedicina-metodo-wim-hof-las-condes" element={<CriomedicinAdsLanding />} />

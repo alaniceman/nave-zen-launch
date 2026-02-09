@@ -41,3 +41,6 @@ verify_jwt = false
 
 [functions.mailerlite-sync-order]
 verify_jwt = false
+
+[functions.book-trial-class]
+verify_jwt = false

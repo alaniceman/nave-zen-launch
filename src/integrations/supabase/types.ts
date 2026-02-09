@@ -780,6 +780,63 @@ export type Database = {
         }
         Relationships: []
       }
+      trial_bookings: {
+        Row: {
+          class_day: string
+          class_time: string
+          class_title: string
+          created_at: string
+          customer_email: string
+          customer_name: string
+          customer_phone: string
+          id: string
+          mailerlite_synced: boolean
+          scheduled_date: string
+          source: string
+          status: string
+          updated_at: string
+          utm_campaign: string | null
+          utm_medium: string | null
+          utm_source: string | null
+        }
+        Insert: {
+          class_day: string
+          class_time: string
+          class_title: string
+          created_at?: string
+          customer_email: string
+          customer_name: string
+          customer_phone: string
+          id?: string
+          mailerlite_synced?: boolean
+          scheduled_date: string
+          source?: string
+          status?: string
+          updated_at?: string
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Update: {
+          class_day?: string
+          class_time?: string
+          class_title?: string
+          created_at?: string
+          customer_email?: string
+          customer_name?: string
+          customer_phone?: string
+          id?: string
+          mailerlite_synced?: boolean
+          scheduled_date?: string
+          source?: string
+          status?: string
+          updated_at?: string
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
