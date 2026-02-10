@@ -44,6 +44,8 @@ import {
   Key,
   ShoppingCart,
   GraduationCap,
+  Crown,
+  Contact,
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -88,6 +90,12 @@ interface DashboardData {
   // Trial bookings
   trialBookingsCount: number;
   recentTrialBookings: TrialBooking[];
+
+  // CRM metrics
+  totalCustomers: number;
+  customersByStatus: { status: string; count: number }[];
+  activeMemberships: number;
+  membershipsByPlan: { name: string; count: number }[];
   
   // Charts data
   revenueByMonth: { month: string; bookings: number; orders: number; total: number }[];
@@ -164,6 +172,9 @@ export default function AdminDashboard() {
         servicesResult,
         packagesResult,
         trialResult,
+        customersResult,
+        membershipsResult,
+        membershipPlansResult,
       ] = await Promise.all([
         supabase
           .from("bookings")
@@ -196,6 +207,16 @@ export default function AdminDashboard() {
           .gte("created_at", startDate.toISOString())
           .lte("created_at", endDate.toISOString())
           .order("created_at", { ascending: false }),
+        supabase
+          .from("customers")
+          .select("id, status"),
+        supabase
+          .from("customer_memberships")
+          .select("id, status, membership_plan_id")
+          .eq("status", "active"),
+        supabase
+          .from("membership_plans")
+          .select("id, name"),
       ]);
 
       const bookings = bookingsResult.data || [];
@@ -206,6 +227,10 @@ export default function AdminDashboard() {
       const services = servicesResult.data || [];
       const packages = packagesResult.data || [];
       const trialBookings = trialResult.data || [];
+      const allCustomers = customersResult.data || [];
+      const activeMembershipsData = membershipsResult.data || [];
+      const membershipPlansList = membershipPlansResult.data || [];
+      const membershipPlansMap = new Map(membershipPlansList.map(p => [p.id, p.name]));
 
       // Create lookup maps
       const servicesMap = new Map(services.map(s => [s.id, s.name]));
@@ -236,6 +261,10 @@ export default function AdminDashboard() {
 
       // Calculate redeemed value (value of used session codes)
       const totalRedeemedValue = calculateRedeemedValue(usedCodesWithDate, packagesDataMap);
+
+      // CRM metrics
+      const customersByStatus = getCustomersByStatus(allCustomers);
+      const membershipsByPlan = getMembershipsByPlan(activeMembershipsData, membershipPlansMap);
 
       // Revenue by month
       const revenueByMonth = getRevenueByMonth(bookings, orders, startDate, endDate);
@@ -278,6 +307,10 @@ export default function AdminDashboard() {
         couponUsageByMonth,
         trialBookingsCount: trialBookings.length,
         recentTrialBookings: trialBookings.slice(0, 5),
+        totalCustomers: allCustomers.length,
+        customersByStatus,
+        activeMemberships: activeMembershipsData.length,
+        membershipsByPlan,
       });
     } catch (error) {
       console.error("Error loading dashboard data:", error);
@@ -379,6 +412,19 @@ export default function AdminDashboard() {
           value={data.totalCouponUses.toString()}
           icon={Ticket}
           description={`${data.activeCoupons} cupones activos de ${data.totalCoupons}`}
+        />
+        <KPICard
+          title="Total Clientes"
+          value={data.totalCustomers.toString()}
+          icon={Contact}
+          description={data.customersByStatus.map(s => `${s.count} ${s.status}`).join(" · ")}
+        />
+        <KPICard
+          title="Membresías Activas"
+          value={data.activeMemberships.toString()}
+          icon={Crown}
+          description={data.membershipsByPlan.map(m => `${m.name}: ${m.count}`).join(" · ") || "Sin membresías activas"}
+          variant="secondary"
         />
       </div>
 
@@ -893,4 +939,30 @@ function getRedeemedValueByMonth(
     income: data.income,
     redeemed: Math.round(data.redeemed),
   }));
+}
+
+// CRM helper: group customers by status
+function getCustomersByStatus(customers: { status: string }[]): { status: string; count: number }[] {
+  const counts = new Map<string, number>();
+  customers.forEach(c => {
+    counts.set(c.status, (counts.get(c.status) || 0) + 1);
+  });
+  return Array.from(counts.entries())
+    .map(([status, count]) => ({ status, count }))
+    .sort((a, b) => b.count - a.count);
+}
+
+// CRM helper: group active memberships by plan name
+function getMembershipsByPlan(
+  memberships: { membership_plan_id: string }[],
+  plansMap: Map<string, string>
+): { name: string; count: number }[] {
+  const counts = new Map<string, number>();
+  memberships.forEach(m => {
+    const name = plansMap.get(m.membership_plan_id) || "Sin nombre";
+    counts.set(name, (counts.get(name) || 0) + 1);
+  });
+  return Array.from(counts.entries())
+    .map(([name, count]) => ({ name, count }))
+    .sort((a, b) => b.count - a.count);
 }
