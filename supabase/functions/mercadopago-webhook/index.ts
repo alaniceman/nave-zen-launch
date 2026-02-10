@@ -575,30 +575,30 @@ serve(async (req) => {
       throw new Error("Mercado Pago not configured");
     }
 
-    // Verify signature if secret is configured
-    if (webhookSecret) {
+    // Verify signature for webhook v2 format only.
+    // IPN notifications (topic-based) don't reliably include x-signature headers,
+    // so we skip signature verification for them. Security is maintained because
+    // we always fetch the payment directly from Mercado Pago's API using our
+    // access token, which validates the payment data independently.
+    if (webhookSecret && isWebhookFormat) {
       const xSignature = req.headers.get('x-signature');
       const xRequestId = req.headers.get('x-request-id');
       
-      let dataId: string | undefined;
-      if (isWebhookFormat && body.data?.id) {
-        dataId = String(body.data.id);
-      } else if (isIPNFormat && body.resource) {
-        const resource = String(body.resource);
-        dataId = resource.includes('/') ? resource.split('/').pop() : resource;
-      }
+      const dataId = body.data?.id ? String(body.data.id) : undefined;
       
       if (dataId) {
         const isValid = await verifyMercadoPagoSignature(xSignature, xRequestId, dataId, webhookSecret);
         if (!isValid) {
-          console.error('Invalid webhook signature');
+          console.error('Invalid webhook signature (v2 format)');
           return new Response(
             JSON.stringify({ error: 'Invalid signature' }),
             { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
           );
         }
-        console.log('Signature verified');
+        console.log('Webhook v2 signature verified');
       }
+    } else if (isIPNFormat) {
+      console.log('IPN format detected - skipping signature check (payment will be validated via API fetch)');
     }
 
     // Get payment ID
