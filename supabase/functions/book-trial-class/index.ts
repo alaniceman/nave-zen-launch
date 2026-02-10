@@ -3,6 +3,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 import { Resend } from "npm:resend@2.0.0";
 import { getCorsHeaders } from "../_shared/cors.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { upsertCustomerAndLogEvent } from "../_shared/crm.ts";
 
 const bookingSchema = z.object({
   customerName: z.string().trim().min(1).max(100),
@@ -207,6 +208,18 @@ serve(async (req) => {
         `,
       });
     }
+
+    // 9. CRM: upsert customer + log event
+    await upsertCustomerAndLogEvent(supabase, {
+      email: data.customerEmail,
+      name: data.customerName,
+      phone: phone,
+      eventType: "trial_booked",
+      eventTitle: "Agendó clase de prueba",
+      eventDescription: `${data.classTitle} — ${DAY_NAMES[data.dayKey] || data.dayKey} ${data.time}`,
+      metadata: { trial_booking_id: booking.id, scheduled_date: data.selectedDate },
+      statusIfNew: "trial_booked",
+    });
 
     return new Response(JSON.stringify({ success: true, bookingId: booking.id }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" }

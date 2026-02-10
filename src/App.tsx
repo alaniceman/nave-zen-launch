@@ -69,6 +69,9 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminMailerLite from "./pages/admin/AdminMailerLite";
 import AdminScheduleEntries from "./pages/admin/AdminScheduleEntries";
 import AdminTrialBookings from "./pages/admin/AdminTrialBookings";
+import AdminCustomers from "./pages/admin/AdminCustomers";
+import AdminCustomerDetail from "./pages/admin/AdminCustomerDetail";
+import AdminMembershipPlans from "./pages/admin/AdminMembershipPlans";
 import { MailerLiteUniversal } from "@/components/MailerLiteUniversal";
 
 const queryClient = new QueryClient();
@@ -148,6 +151,9 @@ const App = () => (
               <Route path="paquetes-sesiones" element={<AdminSessionPackages />} />
               <Route path="codigos-sesiones" element={<AdminSessionCodes />} />
               <Route path="clases-prueba" element={<AdminTrialBookings />} />
+              <Route path="clientes" element={<AdminCustomers />} />
+              <Route path="clientes/:id" element={<AdminCustomerDetail />} />
+              <Route path="membresias" element={<AdminMembershipPlans />} />
               <Route path="horarios" element={<AdminScheduleEntries />} />
               <Route path="mailerlite" element={<AdminMailerLite />} />
             </Route>

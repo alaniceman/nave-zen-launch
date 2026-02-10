@@ -265,6 +265,134 @@ export type Database = {
           },
         ]
       }
+      customer_events: {
+        Row: {
+          amount: number | null
+          created_at: string
+          customer_id: string
+          description: string | null
+          event_date: string
+          event_type: string
+          id: string
+          metadata: Json
+          title: string
+        }
+        Insert: {
+          amount?: number | null
+          created_at?: string
+          customer_id: string
+          description?: string | null
+          event_date?: string
+          event_type: string
+          id?: string
+          metadata?: Json
+          title: string
+        }
+        Update: {
+          amount?: number | null
+          created_at?: string
+          customer_id?: string
+          description?: string | null
+          event_date?: string
+          event_type?: string
+          id?: string
+          metadata?: Json
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "customer_events_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      customer_memberships: {
+        Row: {
+          created_at: string
+          customer_id: string
+          end_date: string | null
+          id: string
+          membership_plan_id: string
+          notes: string | null
+          start_date: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          customer_id: string
+          end_date?: string | null
+          id?: string
+          membership_plan_id: string
+          notes?: string | null
+          start_date?: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          customer_id?: string
+          end_date?: string | null
+          id?: string
+          membership_plan_id?: string
+          notes?: string | null
+          start_date?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "customer_memberships_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "customer_memberships_membership_plan_id_fkey"
+            columns: ["membership_plan_id"]
+            isOneToOne: false
+            referencedRelation: "membership_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      customers: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          name: string
+          notes: string | null
+          phone: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          name: string
+          notes?: string | null
+          phone?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string
+          notes?: string | null
+          phone?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       discount_coupons: {
         Row: {
           applicable_package_ids: string[] | null
@@ -435,6 +563,42 @@ export type Database = {
           mailerlite_account_id?: string | null
           mailerlite_shop_id?: string | null
           shop_name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      membership_plans: {
+        Row: {
+          classes_included: number
+          created_at: string
+          description: string | null
+          frequency: string
+          id: string
+          is_active: boolean
+          name: string
+          price_clp: number
+          updated_at: string
+        }
+        Insert: {
+          classes_included: number
+          created_at?: string
+          description?: string | null
+          frequency: string
+          id?: string
+          is_active?: boolean
+          name: string
+          price_clp: number
+          updated_at?: string
+        }
+        Update: {
+          classes_included?: number
+          created_at?: string
+          description?: string | null
+          frequency?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          price_clp?: number
           updated_at?: string
         }
         Relationships: []
