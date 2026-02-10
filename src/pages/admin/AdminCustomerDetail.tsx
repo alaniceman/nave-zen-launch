@@ -3,12 +3,15 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, MessageCircle, GraduationCap, CheckCircle, Calendar, Package, Gift, Crown, StickyNote } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { ArrowLeft, MessageCircle, GraduationCap, CheckCircle, Calendar, Package, Gift, Crown, StickyNote, Pencil, Save, X } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { useState } from "react";
 import { AssignMembershipModal } from "@/components/admin/AssignMembershipModal";
 import { AddCustomerNoteModal } from "@/components/admin/AddCustomerNoteModal";
+import { toast } from "sonner";
 
 const STATUS_LABELS: Record<string, string> = {
   new: "Nuevo", trial_booked: "Prueba agendada", trial_attended: "Prueba asistida",
@@ -38,6 +41,11 @@ export default function AdminCustomerDetail() {
   const queryClient = useQueryClient();
   const [showMembershipModal, setShowMembershipModal] = useState(false);
   const [showNoteModal, setShowNoteModal] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [editName, setEditName] = useState("");
+  const [editPhone, setEditPhone] = useState("");
+  const [editNotes, setEditNotes] = useState("");
+  const [saving, setSaving] = useState(false);
 
   const { data: customer, isLoading } = useQuery({
     queryKey: ["admin-customer", id],
@@ -93,6 +101,29 @@ export default function AdminCustomerDetail() {
     queryClient.invalidateQueries({ queryKey: ["admin-customer-membership", id] });
   };
 
+  const startEditing = () => {
+    setEditName(customer?.name || "");
+    setEditPhone(customer?.phone || "");
+    setEditNotes(customer?.notes || "");
+    setEditing(true);
+  };
+
+  const cancelEditing = () => setEditing(false);
+
+  const saveEditing = async () => {
+    if (!customer) return;
+    setSaving(true);
+    const { error } = await supabase
+      .from("customers")
+      .update({ name: editName.trim(), phone: editPhone.trim() || null, notes: editNotes.trim() || null })
+      .eq("id", customer.id);
+    setSaving(false);
+    if (error) { toast.error("Error al guardar"); return; }
+    toast.success("Cliente actualizado");
+    setEditing(false);
+    refreshAll();
+  };
+
   if (isLoading) return <div className="p-8 text-gray-500">Cargando...</div>;
   if (!customer) return <div className="p-8 text-gray-500">Cliente no encontrado</div>;
 
@@ -105,19 +136,54 @@ export default function AdminCustomerDetail() {
       {/* Profile card */}
       <div className="bg-white rounded-lg border p-6">
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-          <div className="space-y-1">
-            <h1 className="text-2xl font-bold text-gray-900">{customer.name}</h1>
-            <p className="text-gray-600">{customer.email}</p>
-            {customer.phone && (
-              <a
-                href={whatsappLink(customer.phone)!}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-green-600 hover:text-green-700"
-              >
-                <MessageCircle className="h-4 w-4" />
-                {customer.phone}
-              </a>
+          <div className="space-y-1 flex-1">
+            {editing ? (
+              <div className="space-y-3 max-w-md">
+                <div>
+                  <label className="text-xs font-medium text-gray-500">Nombre</label>
+                  <Input value={editName} onChange={(e) => setEditName(e.target.value)} />
+                </div>
+                <div>
+                  <label className="text-xs font-medium text-gray-500">Teléfono</label>
+                  <Input value={editPhone} onChange={(e) => setEditPhone(e.target.value)} placeholder="+56912345678" />
+                </div>
+                <div>
+                  <label className="text-xs font-medium text-gray-500">Notas internas</label>
+                  <Textarea value={editNotes} onChange={(e) => setEditNotes(e.target.value)} rows={3} placeholder="Notas sobre el cliente..." />
+                </div>
+                <div className="flex gap-2">
+                  <Button size="sm" onClick={saveEditing} disabled={saving || !editName.trim()}>
+                    <Save className="h-4 w-4 mr-1" /> {saving ? "Guardando..." : "Guardar"}
+                  </Button>
+                  <Button size="sm" variant="ghost" onClick={cancelEditing}>
+                    <X className="h-4 w-4 mr-1" /> Cancelar
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <>
+                <div className="flex items-center gap-2">
+                  <h1 className="text-2xl font-bold text-gray-900">{customer.name}</h1>
+                  <Button size="icon" variant="ghost" className="h-7 w-7" onClick={startEditing}>
+                    <Pencil className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
+                <p className="text-gray-600">{customer.email}</p>
+                {customer.phone && (
+                  <a
+                    href={whatsappLink(customer.phone)!}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-green-600 hover:text-green-700"
+                  >
+                    <MessageCircle className="h-4 w-4" />
+                    {customer.phone}
+                  </a>
+                )}
+                {customer.notes && (
+                  <p className="text-sm text-gray-500 mt-2 italic">📝 {customer.notes}</p>
+                )}
+              </>
             )}
           </div>
           <div className="flex flex-col items-start sm:items-end gap-2">
