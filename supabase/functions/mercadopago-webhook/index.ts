@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 import { getCorsHeaders } from "../_shared/cors.ts";
 import { syncOrderToMailerLite } from "../_shared/mailerlite.ts";
+import { upsertCustomerAndLogEvent } from "../_shared/crm.ts";
 
 // Helper function to verify Mercado Pago webhook signature
 async function verifyMercadoPagoSignature(
@@ -353,6 +354,20 @@ async function handlePackageOrderPayment(
     console.error("Failed to sync to MailerLite (non-blocking):", mlError);
   }
 
+  // CRM: upsert customer + log event
+  const isGC = order.is_giftcard === true;
+  await upsertCustomerAndLogEvent(supabase, {
+    email: order.buyer_email,
+    name: order.buyer_name,
+    phone: order.buyer_phone,
+    eventType: isGC ? "giftcard_purchased" : "package_purchased",
+    eventTitle: isGC ? "Compró Gift Card" : "Compró Pack de Sesiones",
+    eventDescription: package_.name,
+    amount: order.final_price,
+    metadata: { order_id: orderId, package_id: package_.id },
+    statusIfNew: "purchased",
+  });
+
   return new Response(JSON.stringify({ status: "codes_generated", count: codes.length }), {
     status: 200,
     headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -494,6 +509,19 @@ async function handleBookingPayment(
     } catch (mlError) {
       console.error("Failed to sync to MailerLite (non-blocking):", mlError);
     }
+
+    // CRM: upsert customer + log event for booking
+    await upsertCustomerAndLogEvent(supabase, {
+      email: booking.customer_email,
+      name: booking.customer_name,
+      phone: booking.customer_phone,
+      eventType: "booking_confirmed",
+      eventTitle: "Reserva confirmada",
+      eventDescription: booking.services?.name,
+      amount: booking.final_price || booking.services?.price_clp,
+      metadata: { booking_id: bookingId, service_id: booking.service_id },
+      statusIfNew: "purchased",
+    });
 
     return new Response(JSON.stringify({ status: "confirmed" }), {
       status: 200,

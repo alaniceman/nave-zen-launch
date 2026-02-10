@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 import { getCorsHeaders } from "../_shared/cors.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { upsertCustomerAndLogEvent } from "../_shared/crm.ts";
 
 const purchaseSchema = z.object({
   packageId: z.string().uuid(),
@@ -314,6 +315,19 @@ serve(async (req) => {
       } catch (emailError) {
         console.error("Error sending email:", emailError);
       }
+
+      // CRM: upsert customer + log event for free purchase
+      await upsertCustomerAndLogEvent(supabase, {
+        email: validatedData.buyerEmail,
+        name: validatedData.buyerName,
+        phone: validatedData.buyerPhone,
+        eventType: validatedData.isGiftCard ? "giftcard_purchased" : "package_purchased",
+        eventTitle: validatedData.isGiftCard ? "Compró Gift Card" : "Compró Pack de Sesiones",
+        eventDescription: `${package_.name} (100% descuento)`,
+        amount: 0,
+        metadata: { order_id: order.id, package_id: package_.id, free_order: true },
+        statusIfNew: "purchased",
+      });
 
       return new Response(
         JSON.stringify({
