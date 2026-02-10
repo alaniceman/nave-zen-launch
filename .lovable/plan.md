@@ -1,185 +1,207 @@
 
 
-# Horarios Configurables desde el Admin
+# CRM: Historial Unificado de Clientes
 
 ## Resumen
 
-Migrar los horarios de un archivo hardcoded (`schedule.ts`) a la base de datos, gestionados desde el admin. Agregar campos de visibilidad a los servicios (`is_trial_enabled`, `show_in_agenda`). Mostrar clases de prueba en el dashboard. Crear todas las clases faltantes como servicios.
+Crear un sistema CRM ligero que unifique la informacion de cada persona (identificada por email) en una ficha con linea de tiempo. El historial se alimenta automaticamente de las tablas existentes (trial_bookings, bookings, package_orders) y permite asignar membresías manualmente.
 
 ---
 
-## 1. Cambios en la base de datos
+## 1. Nuevas tablas en la base de datos
 
-### 1a. Nuevas columnas en `services`
+### 1a. `customers` -- Ficha del cliente/lead
 
 | Columna | Tipo | Default | Descripcion |
 |---|---|---|---|
-| `is_trial_enabled` | boolean | false | Permite agendar clase de prueba |
-| `show_in_agenda` | boolean | true | Aparece en el calendario de `/agenda-nave-studio` |
-| `color_tag` | text | 'default' | Categoria de color para las cards del horario (yoga, wim-hof, hiit, breathwork, personalizado) |
-
-### 1b. Nueva tabla: `schedule_entries`
-
-Reemplaza `scheduleData` de `schedule.ts`. Cada fila es un horario recurrente semanal.
-
-| Columna | Tipo | Default |
-|---|---|---|
-| `id` | uuid | gen_random_uuid() |
-| `service_id` | uuid FK -> services | NOT NULL |
-| `professional_id` | uuid FK -> professionals | nullable |
-| `day_of_week` | integer (0=lunes...6=domingo) | NOT NULL |
-| `start_time` | time | NOT NULL |
-| `display_name` | text | nullable (override del nombre del servicio para mostrar en horario) |
-| `badges` | text[] | '{}' |
-| `is_active` | boolean | true |
-| `sort_order` | integer | 0 |
-| `created_at` | timestamptz | now() |
-| `updated_at` | timestamptz | now() |
+| `id` | uuid | gen_random_uuid() | PK |
+| `email` | text | NOT NULL, UNIQUE | Llave principal de unificacion |
+| `name` | text | NOT NULL | Nombre del cliente |
+| `phone` | text | nullable | Celular normalizado E.164 |
+| `status` | text | 'new' | Estado del funnel: new, trial_booked, trial_attended, purchased, member |
+| `notes` | text | nullable | Notas internas libres |
+| `created_at` | timestamptz | now() | |
+| `updated_at` | timestamptz | now() | |
 
 RLS:
-- SELECT: publico (is_active = true)
-- INSERT/UPDATE/DELETE: admins only
+- SELECT / INSERT / UPDATE / DELETE: admins only
 
-### 1c. Insertar servicios faltantes
+### 1b. `customer_events` -- Linea de tiempo / historial
 
-Basandose en `schedule.ts`, crear los servicios que faltan en la sucursal default "Nave Studio (Santiago, Las Condes)". Servicios actuales: Sesion Criomedicina / Metodo Wim Hof, Yoga Integral, Sesion Criomedicina (Algarrobo). Faltan:
+| Columna | Tipo | Default | Descripcion |
+|---|---|---|---|
+| `id` | uuid | gen_random_uuid() | PK |
+| `customer_id` | uuid FK -> customers | NOT NULL | |
+| `event_type` | text | NOT NULL | trial_booked, trial_attended, trial_cancelled, booking_confirmed, package_purchased, giftcard_purchased, membership_assigned, membership_updated, note |
+| `title` | text | NOT NULL | Titulo descriptivo del evento |
+| `description` | text | nullable | Detalle extra (nombre pack, monto, clase, etc.) |
+| `amount` | integer | nullable | Monto en CLP si aplica |
+| `metadata` | jsonb | '{}' | Datos adicionales (booking_id, order_id, membership_plan_id, etc.) |
+| `event_date` | timestamptz | now() | Fecha del evento |
+| `created_at` | timestamptz | now() | |
 
-- Yang Yoga + Ice Bath (opcional) -- is_trial_enabled: true, show_in_agenda: false
-- Isometrica + Flexibilidad -- is_trial_enabled: true, show_in_agenda: false
-- Yin Yoga + Ice Bath (opcional) -- is_trial_enabled: true, show_in_agenda: false
-- Vinyasa Yoga + Ice Bath (opcional) -- is_trial_enabled: true, show_in_agenda: false
-- Power Yoga + Ice Bath (opcional) -- is_trial_enabled: true, show_in_agenda: false
-- HIIT + Ice Bath -- is_trial_enabled: true, show_in_agenda: false
-- Breathwork Wim Hof -- is_trial_enabled: true, show_in_agenda: false
-- Metodo Wim Hof (Breathwork + Ice Bath) -- is_trial_enabled: false, show_in_agenda: false (ya existe pero se actualizara)
-- Personalizado Metodo Wim Hof -- is_trial_enabled: false, show_in_agenda: false
-- Yoga Integral + Ice Bath (opcional) -- is_trial_enabled: true, show_in_agenda: false (ya existe pero se renombrara/actualizara)
+RLS:
+- SELECT / INSERT / UPDATE / DELETE: admins only
 
-Nota: `show_in_agenda` comienza en false para los servicios nuevos para no romper el flujo actual de `/agenda-nave-studio`. El admin los activa manualmente cuando quiera.
+### 1c. `membership_plans` -- Planes de membresia (definiciones)
 
-Los servicios existentes que ya aparecen en agenda (`Sesion Criomedicina`, `Yoga Integral`) mantendran `show_in_agenda: true`.
+| Columna | Tipo | Default | Descripcion |
+|---|---|---|---|
+| `id` | uuid | gen_random_uuid() | PK |
+| `name` | text | NOT NULL | Ej: Universo, Orbita, Eclipse |
+| `frequency` | text | NOT NULL | 'weekly' o 'monthly' |
+| `classes_included` | integer | NOT NULL | Cantidad de clases |
+| `price_clp` | integer | NOT NULL | Valor en CLP |
+| `description` | text | nullable | Beneficios / notas |
+| `is_active` | boolean | true | |
+| `created_at` | timestamptz | now() | |
+| `updated_at` | timestamptz | now() | |
 
-### 1d. Insertar schedule_entries
+RLS:
+- SELECT / INSERT / UPDATE / DELETE: admins only
 
-Migrar cada entrada de `scheduleData` a la tabla `schedule_entries`, vinculando con el `service_id` correspondiente y el `professional_id` cuando el instructor existe en la tabla `professionals`.
+### 1d. `customer_memberships` -- Asignacion de membresia a un cliente
 
----
+| Columna | Tipo | Default | Descripcion |
+|---|---|---|---|
+| `id` | uuid | gen_random_uuid() | PK |
+| `customer_id` | uuid FK -> customers | NOT NULL | |
+| `membership_plan_id` | uuid FK -> membership_plans | NOT NULL | |
+| `status` | text | 'active' | active, paused, cancelled |
+| `start_date` | date | CURRENT_DATE | |
+| `end_date` | date | nullable | Fecha fin si aplica |
+| `notes` | text | nullable | Notas internas |
+| `created_at` | timestamptz | now() | |
+| `updated_at` | timestamptz | now() | |
 
-## 2. Cambios en el Admin
-
-### 2a. ServiceForm -- Nuevos checkboxes
-
-Agregar 2 checkboxes al formulario de servicios:
-- "Disponible como clase de prueba" (`is_trial_enabled`)
-- "Mostrar en calendario de agenda" (`show_in_agenda`)
-
-Y un select para `color_tag` con opciones: Yoga, Metodo Wim Hof, HIIT / Biohacking, Breathwork, Personalizado, Default.
-
-### 2b. AdminServices -- Mostrar nuevas columnas
-
-En la tabla, agregar columnas visibles:
-- "Prueba" (check/x icon)
-- "Agenda" (check/x icon)
-
-### 2c. Nueva pagina: Admin Horarios (`/admin/horarios`)
-
-CRUD para `schedule_entries`:
-- Tabla con: dia, hora, servicio (nombre), profesional, badges, activo
-- Filtro por dia de la semana
-- Formulario modal para crear/editar: dia, hora, servicio (select), profesional (select, opcional), display_name (opcional), badges (input separado por comas), activo
-- Ordenable por dia + hora
-
-### 2d. Dashboard -- Seccion de Clases de Prueba
-
-Agregar al dashboard:
-- KPI card: "Clases de Prueba" con total de bookings del periodo
-- Mini tabla con las ultimas 5 clases de prueba (nombre, email, clase, fecha, status)
-
-### 2e. Sidebar -- Nuevo item
-
-Agregar "Horarios" al menu del admin (icono Clock) apuntando a `/admin/horarios`.
+RLS:
+- SELECT / INSERT / UPDATE / DELETE: admins only
 
 ---
 
-## 3. Frontend publico -- Leer desde la BD
+## 2. Sincronizacion automatica de datos existentes
 
-### 3a. Nuevo hook: `useScheduleEntries`
+### 2a. Migracion inicial: poblar `customers` desde datos existentes
 
-Hook con react-query que hace:
-```
-SELECT se.*, s.name as service_name, s.is_trial_enabled, s.color_tag, s.description,
-       p.name as professional_name
-FROM schedule_entries se
-JOIN services s ON se.service_id = s.id
-LEFT JOIN professionals p ON se.professional_id = p.id
-WHERE se.is_active = true AND s.is_active = true
-ORDER BY se.day_of_week, se.start_time
-```
+Un script SQL que:
+1. Inserta clientes unicos desde `trial_bookings` (customer_email, customer_name, customer_phone)
+2. Inserta/actualiza desde `bookings` (customer_email, customer_name, customer_phone)
+3. Inserta/actualiza desde `package_orders` (buyer_email, buyer_name, buyer_phone)
+4. Usa `ON CONFLICT (email) DO UPDATE` para unificar y tomar el nombre/telefono mas reciente
+5. Calcula el `status` inicial segun los datos (si tiene membresia = member, si compro = purchased, si asistio prueba = trial_attended, etc.)
 
-Transforma el resultado en el mismo formato `Record<string, ClassItem[]>` que usa `scheduleData` actualmente, para minimizar cambios en componentes existentes.
+### 2b. Migracion inicial: poblar `customer_events` desde datos existentes
 
-### 3b. `ScheduleDayCards` (pagina /horarios)
+Insertar eventos historicos:
+- Desde `trial_bookings`: evento por cada booking (trial_booked, trial_attended, etc.)
+- Desde `bookings` con status CONFIRMED: evento booking_confirmed
+- Desde `package_orders` con status paid: evento package_purchased o giftcard_purchased
 
-- Reemplazar import de `scheduleData` por el hook `useScheduleEntries`
-- Agregar estado de loading con skeleton
-- El resto del componente no cambia (misma estructura de cards)
+### 2c. Registro automatico en tiempo real (Edge Functions)
 
-### 3c. `TrialScheduleCards` (pagina /clase-de-prueba/agendar)
+Modificar las siguientes Edge Functions para crear/actualizar clientes y agregar eventos:
 
-- Reemplazar import de `scheduleData` por `useScheduleEntries`
-- Filtrar solo clases con `is_trial_enabled = true` (ya viene del join)
-- Agregar loading state
+**`book-trial-class`**: despues de crear el trial booking:
+- Upsert en `customers` (email, name, phone)
+- Insertar evento `trial_booked` en `customer_events`
+- Actualizar `status` del customer a `trial_booked` (si era `new`)
 
-### 3d. `TrialClassDetail` y `TrialBookingForm`
+**`mercadopago-webhook`**: al confirmar un pago:
+- En `handleBookingPayment` (pago aprobado): upsert customer + evento `booking_confirmed`
+- En `handlePackageOrderPayment` (pago aprobado): upsert customer + evento `package_purchased` o `giftcard_purchased`
+- Actualizar `status` del customer a `purchased` (si no es `member`)
 
-- Reciben `ClassItem` como prop, no cambian significativamente
-- Solo ajustar tipos si es necesario
-
-### 3e. `/agenda-nave-studio`
-
-- Filtrar servicios por `show_in_agenda = true` en la query existente (agregar `.eq('show_in_agenda', true)`)
-
-### 3f. `scheduleByExperience.ts` y `experiences.ts`
-
-- Actualizar `weeklyByExperience` para recibir datos como parametro en vez de importar `scheduleData`
-- O mantener la misma logica pero alimentada desde el hook
+**`purchase-session-package`** (caso 100% descuento): al completar compra gratis:
+- Upsert customer + evento correspondiente
 
 ---
 
-## 4. Archivos a crear
+## 3. Admin: Paginas nuevas
+
+### 3a. Lista de Clientes (`/admin/clientes`)
+
+- Tabla con: nombre, email, telefono (con link WhatsApp), estado, fecha creacion
+- Busqueda por nombre/email/telefono
+- Filtro por estado (new, trial_booked, trial_attended, purchased, member)
+- Click en fila abre la ficha del cliente
+
+### 3b. Ficha del Cliente (`/admin/clientes/:id`)
+
+Layout de ficha con dos secciones:
+
+**Panel superior**: datos basicos
+- Nombre, email, celular (con icono WhatsApp clickeable)
+- Estado (badge de color)
+- Membresia activa (si tiene): nombre del plan + estado + fecha inicio
+- Botones: "Asignar Membresia", "Agregar Nota"
+
+**Panel inferior**: linea de tiempo
+- Lista cronologica descendente de `customer_events`
+- Cada evento muestra: icono segun tipo, titulo, descripcion, monto (si aplica), fecha
+- Iconos por tipo:
+  - trial_booked: GraduationCap
+  - trial_attended: CheckCircle (verde)
+  - booking_confirmed: Calendar
+  - package_purchased: Package
+  - giftcard_purchased: Gift
+  - membership_assigned: Crown
+  - note: StickyNote
+
+### 3c. Planes de Membresia (`/admin/membresias`)
+
+- Tabla CRUD con: nombre, frecuencia, clases incluidas, precio, activo
+- Formulario modal para crear/editar plan
+
+### 3d. Asignar Membresia (modal en la ficha del cliente)
+
+- Select con planes activos
+- Fecha inicio (default hoy)
+- Notas (opcional)
+- Al guardar:
+  - Insertar en `customer_memberships`
+  - Insertar evento `membership_assigned` en `customer_events`
+  - Actualizar `status` del customer a `member`
+
+---
+
+## 4. Admin: Sidebar actualizado
+
+Nuevos items en la seccion de gestion:
+- "Clientes" (icono Users) -> `/admin/clientes`
+- "Membresías" (icono Crown) -> `/admin/membresias`
+
+---
+
+## 5. Archivos a crear
 
 | Archivo | Descripcion |
 |---|---|
-| `src/pages/admin/AdminScheduleEntries.tsx` | CRUD de horarios semanales |
-| `src/components/admin/ScheduleEntryForm.tsx` | Formulario modal para crear/editar entradas |
-| `src/hooks/useScheduleEntries.ts` | Hook para cargar horarios desde la BD |
+| `src/pages/admin/AdminCustomers.tsx` | Lista de clientes con busqueda y filtros |
+| `src/pages/admin/AdminCustomerDetail.tsx` | Ficha del cliente con timeline |
+| `src/pages/admin/AdminMembershipPlans.tsx` | CRUD de planes de membresia |
+| `src/components/admin/MembershipPlanForm.tsx` | Formulario modal para planes |
+| `src/components/admin/AssignMembershipModal.tsx` | Modal para asignar membresia a un cliente |
+| `src/components/admin/AddCustomerNoteModal.tsx` | Modal para agregar nota manual |
 
-## 5. Archivos a modificar
+## 6. Archivos a modificar
 
 | Archivo | Cambio |
 |---|---|
-| `src/components/admin/ServiceForm.tsx` | Agregar checkboxes is_trial_enabled, show_in_agenda, select color_tag |
-| `src/pages/admin/AdminServices.tsx` | Columnas Prueba y Agenda en la tabla |
-| `src/components/admin/AdminSidebar.tsx` | Agregar item "Horarios" |
-| `src/App.tsx` | Agregar ruta `/admin/horarios` |
-| `src/components/ScheduleDayCards.tsx` | Usar hook en vez de import estatico |
-| `src/components/trial/TrialScheduleCards.tsx` | Usar hook en vez de import estatico |
-| `src/lib/scheduleByExperience.ts` | Recibir datos como parametro |
-| `src/pages/AgendaNaveStudio.tsx` | Filtrar por show_in_agenda |
-| `src/pages/admin/AdminDashboard.tsx` | Agregar seccion de clases de prueba |
-
-## 6. Archivos que se mantienen pero dejan de ser la fuente primaria
-
-- `src/data/schedule.ts` -- Se mantiene como fallback/referencia pero ya no se importa en componentes publicos. La fuente de verdad sera la BD.
+| `src/App.tsx` | Agregar rutas `/admin/clientes`, `/admin/clientes/:id`, `/admin/membresias` |
+| `src/components/admin/AdminSidebar.tsx` | Agregar items "Clientes" y "Membresías" |
+| `supabase/functions/book-trial-class/index.ts` | Agregar upsert de customer + evento |
+| `supabase/functions/mercadopago-webhook/index.ts` | Agregar upsert de customer + evento al confirmar pago |
+| `supabase/functions/purchase-session-package/index.ts` | Agregar upsert de customer + evento en compra con 100% descuento |
 
 ---
 
-## Secuencia de implementacion
+## 7. Secuencia de implementacion
 
-1. Migracion DB: columnas en services + tabla schedule_entries + seed de servicios y horarios
-2. Admin: ServiceForm con nuevos campos + AdminScheduleEntries
-3. Hook useScheduleEntries
-4. Frontend: ScheduleDayCards y TrialScheduleCards usan el hook
-5. AgendaNaveStudio filtra por show_in_agenda
-6. Dashboard con trial bookings
+1. Migracion DB: crear tablas customers, customer_events, membership_plans, customer_memberships
+2. Migracion de datos: poblar customers y customer_events desde datos historicos
+3. Edge Functions: agregar logica de upsert + eventos en book-trial-class, mercadopago-webhook, purchase-session-package
+4. Admin: lista de clientes + ficha con timeline
+5. Admin: CRUD de planes de membresia
+6. Admin: asignacion de membresia + notas manuales
+7. Sidebar + rutas
 
