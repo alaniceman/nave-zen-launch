@@ -1,5 +1,5 @@
-import { useParams, useSearchParams, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useParams, useSearchParams } from "react-router-dom";
+import { useEffect, useState, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
@@ -51,7 +51,8 @@ interface TimeSlot {
 export default function AgendaNaveStudio() {
   const { professionalSlug, dateParam, timeParam } = useParams();
   const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
+  
+  const bookingFormRef = useRef<HTMLDivElement>(null);
   
   const [branches, setBranches] = useState<Branch[]>([]);
   const [selectedBranch, setSelectedBranch] = useState<string>("");
@@ -156,9 +157,9 @@ export default function AgendaNaveStudio() {
     setSelectedProfessional(value);
     const prof = professionals.find(p => p.id === value);
     if (prof) {
-      navigate(`/agenda-nave-studio/${prof.slug}`);
+      window.history.replaceState(null, '', `/agenda-nave-studio/${prof.slug}`);
     } else {
-      navigate("/agenda-nave-studio");
+      window.history.replaceState(null, '', '/agenda-nave-studio');
     }
   };
   const handleDateSelect = (date: Date | undefined) => {
@@ -168,9 +169,9 @@ export default function AgendaNaveStudio() {
       const dateStr = format(date, "yyyy-MM-dd");
       const prof = professionals.find(p => p.id === selectedProfessional);
       if (prof) {
-        navigate(`/agenda-nave-studio/${prof.slug}/${dateStr}`);
+        window.history.replaceState(null, '', `/agenda-nave-studio/${prof.slug}/${dateStr}`);
       } else {
-        navigate(`/agenda-nave-studio/any/${dateStr}`);
+        window.history.replaceState(null, '', `/agenda-nave-studio/any/${dateStr}`);
       }
     }
   };
@@ -180,8 +181,11 @@ export default function AgendaNaveStudio() {
     const dateStr = format(selectedDate!, "yyyy-MM-dd");
     const timeStr = format(parseISO(slot.dateTimeStart), "HH:mm");
     if (prof) {
-      navigate(`/agenda-nave-studio/${prof.slug}/${dateStr}/${timeStr}`);
+      window.history.replaceState(null, '', `/agenda-nave-studio/${prof.slug}/${dateStr}/${timeStr}`);
     }
+    setTimeout(() => {
+      bookingFormRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
   };
   const handleBackToSlots = () => {
     setSelectedTimeSlot(null);
@@ -189,9 +193,9 @@ export default function AgendaNaveStudio() {
       const dateStr = format(selectedDate, "yyyy-MM-dd");
       const prof = professionals.find(p => p.id === selectedProfessional);
       if (prof) {
-        navigate(`/agenda-nave-studio/${prof.slug}/${dateStr}`);
+        window.history.replaceState(null, '', `/agenda-nave-studio/${prof.slug}/${dateStr}`);
       } else {
-        navigate(`/agenda-nave-studio/any/${dateStr}`);
+        window.history.replaceState(null, '', `/agenda-nave-studio/any/${dateStr}`);
       }
     }
   };
@@ -266,7 +270,7 @@ export default function AgendaNaveStudio() {
                   </div> : <TimeSlotsList slots={filteredSlots} selectedDate={selectedDate} onSelectSlot={handleTimeSlotSelect} />}
               </Card>
             </div>
-          </div> : <div className="max-w-2xl mx-auto">
+          </div> : <div ref={bookingFormRef} className="max-w-2xl mx-auto">
             <Button variant="ghost" onClick={handleBackToSlots} className="mb-4">
               <ChevronLeft className="mr-2 h-4 w-4" />
               Volver a horarios
