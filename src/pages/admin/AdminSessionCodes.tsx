@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Search, Download } from "lucide-react";
+import { Search, Download, Ban } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { Badge } from "@/components/ui/badge";
@@ -127,6 +127,22 @@ export default function AdminSessionCodes() {
     a.click();
   };
 
+  const markAsUsed = async (code: SessionCode) => {
+    if (!confirm(`¿Marcar el código ${code.code} como usado? Esto es equivalente a que la persona asistió.`)) return;
+    
+    const { error } = await supabase
+      .from("session_codes")
+      .update({ is_used: true, used_at: new Date().toISOString() })
+      .eq("id", code.id);
+
+    if (error) {
+      toast.error("Error al desactivar el código");
+      return;
+    }
+    toast.success(`Código ${code.code} marcado como usado`);
+    loadCodes();
+  };
+
   const getStatusBadge = (code: SessionCode) => {
     if (code.is_used) {
       return <Badge variant="secondary">Usado</Badge>;
@@ -237,7 +253,15 @@ export default function AdminSessionCodes() {
                         {format(new Date(code.used_at!), "dd/MM/yyyy HH:mm", { locale: es })}
                       </p>
                     ) : (
-                      <p className="text-sm text-muted-foreground">No usado</p>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => markAsUsed(code)}
+                        className="mt-1"
+                      >
+                        <Ban className="h-3 w-3 mr-1" />
+                        Marcar usado
+                      </Button>
                     )}
                   </div>
                 </div>
