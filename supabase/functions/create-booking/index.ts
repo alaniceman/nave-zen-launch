@@ -384,6 +384,60 @@ serve(async (req) => {
         })
         .eq("id", sessionCodeId);
 
+      // Check package depletion and send alert if needed
+      try {
+        // Get the session code details we validated earlier (line ~74)
+        const { data: usedSessionCode } = await supabase
+          .from("session_codes")
+          .select("mercado_pago_payment_id, buyer_email, buyer_name, buyer_phone, code, package_id")
+          .eq("id", sessionCodeId)
+          .single();
+
+        if (usedSessionCode?.mercado_pago_payment_id) {
+          // Find all sibling codes from the same purchase
+          const { data: siblingCodes } = await supabase
+            .from("session_codes")
+            .select("id, is_used")
+            .eq("mercado_pago_payment_id", usedSessionCode.mercado_pago_payment_id);
+
+          if (siblingCodes) {
+            const totalCodes = siblingCodes.length;
+            const remainingCodes = siblingCodes.filter(c => !c.is_used).length;
+
+            console.log(`Package depletion check: ${remainingCodes}/${totalCodes} remaining`);
+
+            if (remainingCodes <= 1) {
+              // Get package name
+              let packageName = "Paquete desconocido";
+              if (usedSessionCode.package_id) {
+                const { data: pkg } = await supabase
+                  .from("session_packages")
+                  .select("name")
+                  .eq("id", usedSessionCode.package_id)
+                  .single();
+                if (pkg) packageName = pkg.name;
+              }
+
+              console.log(`Sending depletion alert for ${usedSessionCode.buyer_name}, ${remainingCodes} remaining`);
+              await supabase.functions.invoke("send-package-depletion-alert", {
+                body: {
+                  buyerName: usedSessionCode.buyer_name,
+                  buyerEmail: usedSessionCode.buyer_email,
+                  buyerPhone: usedSessionCode.buyer_phone,
+                  packageName,
+                  totalCodes,
+                  remainingCodes,
+                  usedCode: usedSessionCode.code,
+                },
+              });
+            }
+          }
+        }
+      } catch (depletionError) {
+        console.error("Error checking package depletion:", depletionError);
+        // Don't fail the booking for this
+      }
+
       // Increment confirmed bookings in slot
       if (slot) {
         await supabase

@@ -44,3 +44,6 @@ verify_jwt = false
 
 [functions.book-trial-class]
 verify_jwt = false
+
+[functions.send-package-depletion-alert]
+verify_jwt = false
