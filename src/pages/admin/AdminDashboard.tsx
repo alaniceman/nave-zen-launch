@@ -46,6 +46,7 @@ import {
   GraduationCap,
   Crown,
   Contact,
+  AlertTriangle,
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -103,6 +104,20 @@ interface DashboardData {
   bookingsByService: { name: string; count: number }[];
   ordersByPackage: { name: string; count: number; revenue: number }[];
   couponUsageByMonth: { month: string; uses: number }[];
+
+  // Package depletion data
+  depletingPackages: DepletingPackage[];
+}
+
+interface DepletingPackage {
+  buyerName: string;
+  buyerEmail: string;
+  buyerPhone: string | null;
+  packageName: string;
+  totalCodes: number;
+  usedCodes: number;
+  remainingCodes: number;
+  mercadoPagoPaymentId: string;
 }
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884d8", "#82ca9d"];
@@ -175,6 +190,7 @@ export default function AdminDashboard() {
         customersResult,
         membershipsResult,
         membershipPlansResult,
+        allCodesResult,
       ] = await Promise.all([
         supabase
           .from("bookings")
@@ -217,6 +233,10 @@ export default function AdminDashboard() {
         supabase
           .from("membership_plans")
           .select("id, name"),
+        // Fetch ALL session codes for depletion report (no date filter)
+        supabase
+          .from("session_codes")
+          .select("id, is_used, buyer_email, buyer_name, buyer_phone, mercado_pago_payment_id, package_id"),
       ]);
 
       const bookings = bookingsResult.data || [];
@@ -281,6 +301,10 @@ export default function AdminDashboard() {
       // Coupon usage by month (from bookings and orders with coupon)
       const couponUsageByMonth = getCouponUsageByMonth(bookings, orders, startDate, endDate);
 
+      // Calculate depleting packages from all codes
+      const allCodes = allCodesResult.data || [];
+      const depletingPackages = getDepletingPackages(allCodes, packagesMap);
+
       setData({
         totalBookings: bookings.length,
         confirmedBookings: confirmedBookings.length,
@@ -311,6 +335,7 @@ export default function AdminDashboard() {
         customersByStatus,
         activeMemberships: activeMembershipsData.length,
         membershipsByPlan,
+        depletingPackages,
       });
     } catch (error) {
       console.error("Error loading dashboard data:", error);
@@ -678,6 +703,54 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
       )}
+
+      {/* Depleting Packages Table */}
+      {data.depletingPackages.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <AlertTriangle className="h-5 w-5 text-orange-500" />
+              Paquetes por Agotarse
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Comprador</TableHead>
+                  <TableHead>Email</TableHead>
+                  <TableHead>Teléfono</TableHead>
+                  <TableHead>Paquete</TableHead>
+                  <TableHead className="text-center">Total</TableHead>
+                  <TableHead className="text-center">Usados</TableHead>
+                  <TableHead className="text-center">Restantes</TableHead>
+                  <TableHead>Estado</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {data.depletingPackages.map((pkg) => (
+                  <TableRow key={pkg.mercadoPagoPaymentId}>
+                    <TableCell className="font-medium">{pkg.buyerName}</TableCell>
+                    <TableCell className="text-muted-foreground">{pkg.buyerEmail}</TableCell>
+                    <TableCell className="text-muted-foreground">{pkg.buyerPhone || "—"}</TableCell>
+                    <TableCell>{pkg.packageName}</TableCell>
+                    <TableCell className="text-center">{pkg.totalCodes}</TableCell>
+                    <TableCell className="text-center">{pkg.usedCodes}</TableCell>
+                    <TableCell className="text-center font-semibold">{pkg.remainingCodes}</TableCell>
+                    <TableCell>
+                      {pkg.remainingCodes === 0 ? (
+                        <Badge variant="destructive">Agotado</Badge>
+                      ) : (
+                        <Badge className="bg-yellow-500 hover:bg-yellow-600 text-white">Último código</Badge>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
@@ -965,4 +1038,54 @@ function getMembershipsByPlan(
   return Array.from(counts.entries())
     .map(([name, count]) => ({ name, count }))
     .sort((a, b) => b.count - a.count);
+}
+
+// Calculate depleting packages grouped by buyer_email + mercado_pago_payment_id
+function getDepletingPackages(
+  allCodes: { id: string; is_used: boolean | null; buyer_email: string; buyer_name: string; buyer_phone: string | null; mercado_pago_payment_id: string | null; package_id: string | null }[],
+  packagesMap: Map<string, string>
+): DepletingPackage[] {
+  const groups = new Map<string, {
+    buyerName: string;
+    buyerEmail: string;
+    buyerPhone: string | null;
+    packageId: string | null;
+    totalCodes: number;
+    usedCodes: number;
+    mercadoPagoPaymentId: string;
+  }>();
+
+  allCodes.forEach(code => {
+    if (!code.mercado_pago_payment_id) return;
+    const key = `${code.buyer_email}__${code.mercado_pago_payment_id}`;
+    const existing = groups.get(key);
+    if (existing) {
+      existing.totalCodes++;
+      if (code.is_used) existing.usedCodes++;
+    } else {
+      groups.set(key, {
+        buyerName: code.buyer_name,
+        buyerEmail: code.buyer_email,
+        buyerPhone: code.buyer_phone,
+        packageId: code.package_id,
+        totalCodes: 1,
+        usedCodes: code.is_used ? 1 : 0,
+        mercadoPagoPaymentId: code.mercado_pago_payment_id,
+      });
+    }
+  });
+
+  return Array.from(groups.values())
+    .map(g => ({
+      buyerName: g.buyerName,
+      buyerEmail: g.buyerEmail,
+      buyerPhone: g.buyerPhone,
+      packageName: g.packageId ? (packagesMap.get(g.packageId) || "Paquete desconocido") : "Paquete desconocido",
+      totalCodes: g.totalCodes,
+      usedCodes: g.usedCodes,
+      remainingCodes: g.totalCodes - g.usedCodes,
+      mercadoPagoPaymentId: g.mercadoPagoPaymentId,
+    }))
+    .filter(p => p.remainingCodes <= 1)
+    .sort((a, b) => a.remainingCodes - b.remainingCodes);
 }
