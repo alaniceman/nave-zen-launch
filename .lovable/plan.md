@@ -1,31 +1,29 @@
 
-# Fix: Scroll en la Agenda al seleccionar fecha/horario
+# Agregar tracking "TrialClass" al flujo de clase de prueba
 
-## Problema
+## Cambios
 
-Cada vez que seleccionas una fecha o un horario en `/agenda-nave-studio`, la pagina vuelve arriba. Esto ocurre porque ambas acciones (`handleDateSelect` y `handleTimeSlotSelect`) usan `navigate()` para actualizar la URL, lo que cambia el pathname y dispara el componente `ScrollToTop`.
+Se agregara el evento personalizado `TrialClass` del Facebook Pixel cuando el formulario de clase de prueba se completa exitosamente.
 
-## Solucion
+## Detalle tecnico
 
-### 1. Evitar scroll en seleccion de fecha
+**Archivo: `src/components/trial/TrialBookingForm.tsx`**
 
-Reemplazar `navigate()` por `window.history.replaceState()` en `handleDateSelect` y `handleProfessionalChange`. Esto actualiza la URL sin disparar el scroll-to-top, ya que React Router no detecta un cambio de ruta.
+- Importar `useFacebookPixel` desde `@/hooks/useFacebookPixel`
+- En el bloque de exito del `onSubmit` (justo antes de llamar `onSuccess()`), disparar:
+  ```
+  trackEvent('TrialClass', {
+    content_name: classItem.title,
+    value: 0,
+    currency: 'CLP'
+  })
+  ```
+- Tambien se puede agregar tracking server-side con `useFacebookConversionsAPI` para deduplicacion, enviando el email y nombre del usuario
 
-### 2. Scroll suave al formulario al seleccionar horario
+**Archivo: `src/pages/TrialClassSchedule.tsx`**
 
-En `handleTimeSlotSelect`, despues de seleccionar un slot:
-- Seguir usando `window.history.replaceState()` para la URL
-- Hacer scroll suave hacia la seccion del formulario de reserva usando `scrollIntoView({ behavior: 'smooth' })`
-- Agregar un `ref` al contenedor del formulario (`BookingForm`) para poder hacer scroll hacia el
+- Opcionalmente, agregar `ViewContent` al cargar la pagina para medir cuanta gente entra al flujo vs cuanta completa
 
-### Detalle tecnico
-
-**Archivo: `src/pages/AgendaNaveStudio.tsx`**
-
-- `handleProfessionalChange`: cambiar `navigate()` por `window.history.replaceState(null, '', newPath)`
-- `handleDateSelect`: cambiar `navigate()` por `window.history.replaceState(null, '', newPath)`
-- `handleTimeSlotSelect`: cambiar `navigate()` por `window.history.replaceState()` + `setTimeout` con `ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })`
-- `handleBackToSlots`: cambiar `navigate()` por `window.history.replaceState()`
-- Agregar un `useRef` para el contenedor del formulario de booking
-
-Esto no afecta la carga inicial por URL (cuando alguien entra directamente con `/agenda-nave-studio/prof/2025-02-11/08:00` sigue funcionando porque `useParams` ya lee esos valores al montar).
+| Archivo | Accion |
+|---|---|
+| `src/components/trial/TrialBookingForm.tsx` | Agregar `useFacebookPixel` + evento `TrialClass` en exito |
