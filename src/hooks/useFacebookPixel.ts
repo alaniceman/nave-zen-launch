@@ -19,9 +19,13 @@ export const useFacebookPixel = () => {
     }
   }, [location.pathname]);
 
-  const trackEvent = (eventName: string, parameters?: any) => {
+  const trackEvent = (eventName: string, parameters?: any, eventId?: string) => {
     if (typeof window !== 'undefined' && window.fbq) {
-      window.fbq('track', eventName, parameters);
+      if (eventId) {
+        window.fbq('track', eventName, parameters, { eventID: eventId });
+      } else {
+        window.fbq('track', eventName, parameters);
+      }
     }
   };
 

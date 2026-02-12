@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { dayNames } from "@/data/schedule";
 import type { ScheduleClassItem } from "@/hooks/useScheduleEntries";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
+import { useFacebookConversionsAPI } from "@/hooks/useFacebookConversionsAPI";
 
 const formSchema = z.object({
   name: z.string().trim().min(2, "Ingresa tu nombre").max(100),
@@ -37,6 +38,7 @@ export default function TrialBookingForm({
 }: TrialBookingFormProps) {
   const [submitting, setSubmitting] = useState(false);
   const { trackEvent } = useFacebookPixel();
+  const { trackServerEvent } = useFacebookConversionsAPI();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -77,11 +79,27 @@ export default function TrialBookingForm({
         return;
       }
 
+      // Generate shared event ID for deduplication between Pixel and CAPI
+      const eventId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+      // Client-side pixel with eventID
       trackEvent('TrialClass', {
         content_name: classItem.title,
         value: 0,
         currency: 'CLP'
-      });
+      }, eventId);
+
+      // Server-side CAPI with same eventId for deduplication
+      trackServerEvent({
+        eventName: 'TrialClass',
+        eventId,
+        userEmail: values.email,
+        userName: values.name,
+        userPhone: values.phone,
+        value: 0,
+        currency: 'CLP',
+        contentName: classItem.title,
+      }).catch(() => {}); // don't block on CAPI failure
 
       onSuccess();
     } catch (err) {

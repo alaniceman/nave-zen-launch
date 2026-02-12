@@ -30,6 +30,7 @@ const generateEventId = (): string => {
 
 interface TrackEventParams {
   eventName: string;
+  eventId?: string;
   userEmail?: string;
   userPhone?: string;
   userName?: string;
@@ -44,6 +45,7 @@ interface TrackEventParams {
 export const useFacebookConversionsAPI = () => {
   const trackServerEvent = async ({
     eventName,
+    eventId: externalEventId,
     userEmail,
     userPhone,
     userName,
@@ -54,7 +56,7 @@ export const useFacebookConversionsAPI = () => {
     contentIds,
     orderId,
   }: TrackEventParams): Promise<string> => {
-    const eventId = generateEventId();
+    const eventId = externalEventId || generateEventId();
     
     try {
       const { data, error } = await supabase.functions.invoke("facebook-conversions", {
