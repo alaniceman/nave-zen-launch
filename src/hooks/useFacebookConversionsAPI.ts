@@ -98,9 +98,11 @@ export const useFacebookConversionsAPI = () => {
     currency?: string;
     contentName: string;
     orderId: string;
+    eventId?: string;
   }) => {
     return trackServerEvent({
       eventName: "Purchase",
+      eventId: params.eventId,
       userEmail: params.userEmail,
       userName: params.userName,
       userPhone: params.userPhone,

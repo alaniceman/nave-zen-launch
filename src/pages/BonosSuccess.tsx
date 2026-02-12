@@ -29,6 +29,8 @@ export default function BonosSuccess() {
       if (order?.status === "paid") {
         const packageName = order.session_packages?.name || "Paquete de sesiones";
         
+        const eventId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+        
         // Client-side pixel
         trackPurchase({
           value: order.final_price,
@@ -36,7 +38,7 @@ export default function BonosSuccess() {
           content_name: packageName,
           content_type: "product",
           content_ids: [orderId],
-        });
+        }, eventId);
         
         // Server-side Conversions API
         trackServerPurchase({
@@ -47,6 +49,7 @@ export default function BonosSuccess() {
           currency: "CLP",
           contentName: packageName,
           orderId: orderId,
+          eventId,
         });
         
         setHasFiredPixel(true);

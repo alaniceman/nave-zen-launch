@@ -99,6 +99,8 @@ export default function GiftCardsSuccess() {
   useEffect(() => {
     const trackConversion = async () => {
       if (orderStatus?.statusType === "success" && !hasFiredPixel && orderId) {
+        const eventId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+        
         // Client-side pixel
         trackPurchase({
           value: orderStatus.finalPrice || 0,
@@ -106,7 +108,7 @@ export default function GiftCardsSuccess() {
           content_name: orderStatus.packageName || "Gift Card",
           content_type: "product",
           content_ids: [orderId],
-        });
+        }, eventId);
 
         // Fetch order details for server-side tracking
         const { data: order } = await supabase
@@ -125,6 +127,7 @@ export default function GiftCardsSuccess() {
             currency: "CLP",
             contentName: orderStatus.packageName || "Gift Card",
             orderId: orderId,
+            eventId,
           });
         }
 
