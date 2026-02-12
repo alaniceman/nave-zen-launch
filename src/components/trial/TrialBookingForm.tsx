@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { dayNames } from "@/data/schedule";
 import type { ScheduleClassItem } from "@/hooks/useScheduleEntries";
+import { useFacebookPixel } from "@/hooks/useFacebookPixel";
 
 const formSchema = z.object({
   name: z.string().trim().min(2, "Ingresa tu nombre").max(100),
@@ -35,6 +36,7 @@ export default function TrialBookingForm({
   onSuccess
 }: TrialBookingFormProps) {
   const [submitting, setSubmitting] = useState(false);
+  const { trackEvent } = useFacebookPixel();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -74,6 +76,12 @@ export default function TrialBookingForm({
         onAlreadyAttended();
         return;
       }
+
+      trackEvent('TrialClass', {
+        content_name: classItem.title,
+        value: 0,
+        currency: 'CLP'
+      });
 
       onSuccess();
     } catch (err) {
