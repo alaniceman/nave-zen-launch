@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { type ScheduleClassItem } from "@/hooks/useScheduleEntries";
 import TrialScheduleCards from "@/components/trial/TrialScheduleCards";
@@ -7,15 +7,28 @@ import TrialBookingForm from "@/components/trial/TrialBookingForm";
 import TrialAlreadyAttended from "@/components/trial/TrialAlreadyAttended";
 import { CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useFacebookPixel } from "@/hooks/useFacebookPixel";
 
 type Step = "calendar" | "detail" | "form" | "blocked" | "success";
 
 export default function TrialClassSchedule() {
   const navigate = useNavigate();
+  const { trackEvent } = useFacebookPixel();
   const [step, setStep] = useState<Step>("calendar");
   const [selectedClass, setSelectedClass] = useState<ScheduleClassItem | null>(null);
   const [selectedDay, setSelectedDay] = useState<string>("");
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+
+  useEffect(() => {
+    trackEvent('ViewContent', { content_name: 'Clase de prueba', content_category: 'Trial' });
+  }, []);
+
+  const goToForm = () => {
+    if (selectedClass) {
+      trackEvent('InitiateCheckout', { content_name: selectedClass.title, currency: 'CLP', value: 0 });
+    }
+    setStep("form");
+  };
 
   const handleSelectClass = (classItem: ScheduleClassItem, dayKey: string) => {
     setSelectedClass(classItem);
@@ -89,7 +102,7 @@ export default function TrialClassSchedule() {
             selectedDate={selectedDate}
             onSelectDate={setSelectedDate}
             onBack={() => setStep("calendar")}
-            onContinue={() => setStep("form")}
+            onContinue={goToForm}
           />
         )}
 
