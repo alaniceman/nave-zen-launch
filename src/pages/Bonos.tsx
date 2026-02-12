@@ -13,6 +13,8 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Footer } from "@/components/Footer";
 import { PurchaseFAQ } from "@/components/PurchaseFAQ";
+import { useFacebookPixel } from "@/hooks/useFacebookPixel";
+import { useFacebookConversionsAPI } from "@/hooks/useFacebookConversionsAPI";
 const purchaseSchema = z.object({
   buyerName: z.string().min(2, "El nombre debe tener al menos 2 caracteres").max(100),
   buyerEmail: z.string().email("Email inválido").max(255),
@@ -35,11 +37,20 @@ interface Service {
   price_clp: number;
 }
 export default function Bonos() {
+  const { trackEvent } = useFacebookPixel();
+  const { trackServerEvent } = useFacebookConversionsAPI();
   const [packages, setPackages] = useState<SessionPackage[]>([]);
   const [services, setServices] = useState<Service[]>([]);
   const [selectedPackage, setSelectedPackage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Track ViewContent on mount
+  useEffect(() => {
+    const eventId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    trackEvent('ViewContent', { content_name: 'Bonos de Sesiones', content_category: 'Package' }, eventId);
+    trackServerEvent({ eventName: 'ViewContent', eventId, contentName: 'Bonos de Sesiones' }).catch(() => {});
+  }, []);
 
   // Coupon state
   const [couponCode, setCouponCode] = useState("");
@@ -180,6 +191,26 @@ export default function Bonos() {
       toast.error("Selecciona un paquete");
       return;
     }
+
+    // Track InitiateCheckout
+    const pkg = packages.find(p => p.id === selectedPackage);
+    const eventId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    trackEvent('InitiateCheckout', {
+      content_name: pkg?.name || 'Paquete de sesiones',
+      currency: 'CLP',
+      value: pkg?.price_clp || 0,
+    }, eventId);
+    trackServerEvent({
+      eventName: 'InitiateCheckout',
+      eventId,
+      userEmail: data.buyerEmail,
+      userName: data.buyerName,
+      userPhone: data.buyerPhone,
+      contentName: pkg?.name || 'Paquete de sesiones',
+      value: pkg?.price_clp || 0,
+      currency: 'CLP',
+    }).catch(() => {});
+
     setIsSubmitting(true);
     try {
       const {

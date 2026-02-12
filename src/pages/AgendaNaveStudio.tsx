@@ -13,6 +13,8 @@ import { BookingForm } from "@/components/agenda/BookingForm";
 import { toast } from "sonner";
 import { GiftCardSection } from "@/components/GiftCardSection";
 import { SessionPackagePromo } from "@/components/SessionPackagePromo";
+import { useFacebookPixel } from "@/hooks/useFacebookPixel";
+import { useFacebookConversionsAPI } from "@/hooks/useFacebookConversionsAPI";
 
 interface Branch {
   id: string;
@@ -51,6 +53,8 @@ interface TimeSlot {
 export default function AgendaNaveStudio() {
   const { professionalSlug, dateParam, timeParam } = useParams();
   const [searchParams] = useSearchParams();
+  const { trackEvent } = useFacebookPixel();
+  const { trackServerEvent } = useFacebookConversionsAPI();
   
   const bookingFormRef = useRef<HTMLDivElement>(null);
   
@@ -65,6 +69,13 @@ export default function AgendaNaveStudio() {
   const [availableSlots, setAvailableSlots] = useState<TimeSlot[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingSlots, setLoadingSlots] = useState(false);
+
+  // Track ViewContent on mount
+  useEffect(() => {
+    const eventId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    trackEvent('ViewContent', { content_name: 'Agenda Nave Studio', content_category: 'Booking' }, eventId);
+    trackServerEvent({ eventName: 'ViewContent', eventId, contentName: 'Agenda Nave Studio' }).catch(() => {});
+  }, []);
 
   // Load branches, professionals and services
   useEffect(() => {
@@ -177,6 +188,23 @@ export default function AgendaNaveStudio() {
   };
   const handleTimeSlotSelect = (slot: TimeSlot) => {
     setSelectedTimeSlot(slot);
+
+    // Track InitiateCheckout when user selects a time slot (enters booking form)
+    const slotService = services.find(s => s.id === slot.serviceId);
+    const eventId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    trackEvent('InitiateCheckout', {
+      content_name: slotService?.name || slot.serviceName,
+      currency: 'CLP',
+      value: slotService?.price_clp || 0,
+    }, eventId);
+    trackServerEvent({
+      eventName: 'InitiateCheckout',
+      eventId,
+      contentName: slotService?.name || slot.serviceName,
+      value: slotService?.price_clp || 0,
+      currency: 'CLP',
+    }).catch(() => {});
+
     const prof = professionals.find(p => p.id === slot.professionalId);
     const dateStr = format(selectedDate!, "yyyy-MM-dd");
     const timeStr = format(parseISO(slot.dateTimeStart), "HH:mm");

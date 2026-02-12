@@ -48,6 +48,8 @@ export default function AgendaSuccess() {
             const serviceName = bookingData.services?.name || "Sesión";
             const price = bookingData.final_price || 0;
             
+            const eventId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+            
             // Client-side pixel
             trackPurchase({
               value: price,
@@ -55,7 +57,7 @@ export default function AgendaSuccess() {
               content_name: serviceName,
               content_type: "product",
               content_ids: [externalReference],
-            });
+            }, eventId);
             
             // Server-side Conversions API
             trackServerPurchase({
@@ -66,6 +68,7 @@ export default function AgendaSuccess() {
               currency: "CLP",
               contentName: serviceName,
               orderId: externalReference,
+              eventId,
             });
             
             setHasFiredPixel(true);

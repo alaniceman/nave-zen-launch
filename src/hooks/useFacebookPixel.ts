@@ -47,8 +47,8 @@ export const useFacebookPixel = () => {
     content_name?: string;
     content_type?: string;
     content_ids?: string[];
-  }) => {
-    trackEvent('Purchase', parameters);
+  }, eventId?: string) => {
+    trackEvent('Purchase', parameters, eventId);
   };
 
   return {
