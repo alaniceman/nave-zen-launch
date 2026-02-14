@@ -24,7 +24,7 @@ export default function AgendaSuccess() {
   const [bookingStatus, setBookingStatus] = useState<BookingStatus>(null);
   const [loading, setLoading] = useState(true);
   const [hasFiredPixel, setHasFiredPixel] = useState(false);
-  const { trackPurchase } = useFacebookPixel();
+  const { trackEvent } = useFacebookPixel();
   const { trackPurchase: trackServerPurchase } = useFacebookConversionsAPI();
 
   useEffect(() => {
@@ -51,7 +51,7 @@ export default function AgendaSuccess() {
             const eventId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
             
             // Client-side pixel
-            trackPurchase({
+            trackEvent('Purchase', {
               value: price,
               currency: "CLP",
               content_name: serviceName,
@@ -85,7 +85,7 @@ export default function AgendaSuccess() {
     };
 
     checkBookingStatus();
-  }, [searchParams, hasFiredPixel, trackPurchase, trackServerPurchase]);
+  }, [searchParams, hasFiredPixel, trackEvent, trackServerPurchase]);
 
   if (loading) {
     return (

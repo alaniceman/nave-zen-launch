@@ -61,7 +61,7 @@ const PricingSection = () => {
           </p>
 
           <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
-            <div className="bg-muted rounded-lg py-3 px-4 font-inter">Membresías desde <strong>$49.000</strong></div>
+            <div className="bg-muted rounded-lg py-3 px-4 font-inter">Membresías desde <strong>$59.000</strong></div>
             <div className="bg-muted rounded-lg py-3 px-4 font-inter">Misión 90 · <strong>27 sesiones/90 días</strong></div>
             <div className="bg-muted rounded-lg py-3 px-4 font-inter">Drop-In Discovery · <strong>3 sesiones/60 días</strong></div>
           </div>
