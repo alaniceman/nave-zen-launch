@@ -361,7 +361,7 @@ const CriomedicinMetodoWimHof = () => {
                 <h3 className="font-semibold text-primary">Eclipse — 1/sem</h3>
                 <p className="text-4xl font-bold text-primary mt-1">$59.000<span className="text-base text-muted-foreground">/mes</span></p>
                 <p className="text-sm text-muted-foreground mt-2">1 sesión semanal, elige la disciplina.</p>
-                <CheckoutRedirectButton url="https://boxmagic.cl/market/plan_subscription/VrD8wRx0Qz" plan="Membresía Eclipse" className="mt-3 bg-primary text-primary-foreground px-5 py-3 rounded-lg hover:bg-primary/90 w-full font-medium">
+                <CheckoutRedirectButton url="https://boxmagic.cl/market/plan/AvLXQOM4EK" plan="Membresía Eclipse" className="mt-3 bg-primary text-primary-foreground px-5 py-3 rounded-lg hover:bg-primary/90 w-full font-medium">
                   Suscribirme
                 </CheckoutRedirectButton>
               </div>
