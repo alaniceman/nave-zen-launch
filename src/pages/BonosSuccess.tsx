@@ -12,7 +12,7 @@ export default function BonosSuccess() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const orderId = searchParams.get("external_reference");
-  const { trackPurchase } = useFacebookPixel();
+  const { trackEvent } = useFacebookPixel();
   const { trackPurchase: trackServerPurchase } = useFacebookConversionsAPI();
   const [hasFiredPixel, setHasFiredPixel] = useState(false);
 
@@ -32,7 +32,7 @@ export default function BonosSuccess() {
         const eventId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
         
         // Client-side pixel
-        trackPurchase({
+        trackEvent('Purchase', {
           value: order.final_price,
           currency: "CLP",
           content_name: packageName,
@@ -57,7 +57,7 @@ export default function BonosSuccess() {
     };
 
     fetchOrderAndTrack();
-  }, [orderId, hasFiredPixel, trackPurchase, trackServerPurchase]);
+  }, [orderId, hasFiredPixel, trackEvent, trackServerPurchase]);
 
   return (
     <>

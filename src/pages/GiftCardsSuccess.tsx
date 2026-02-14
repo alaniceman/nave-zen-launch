@@ -28,7 +28,7 @@ export default function GiftCardsSuccess() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [hasFiredPixel, setHasFiredPixel] = useState(false);
-  const { trackPurchase } = useFacebookPixel();
+  const { trackEvent } = useFacebookPixel();
   const { trackPurchase: trackServerPurchase } = useFacebookConversionsAPI();
 
   useEffect(() => {
@@ -102,7 +102,7 @@ export default function GiftCardsSuccess() {
         const eventId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
         
         // Client-side pixel
-        trackPurchase({
+        trackEvent('Purchase', {
           value: orderStatus.finalPrice || 0,
           currency: "CLP",
           content_name: orderStatus.packageName || "Gift Card",
@@ -136,7 +136,7 @@ export default function GiftCardsSuccess() {
     };
 
     trackConversion();
-  }, [orderStatus?.statusType, orderStatus?.finalPrice, orderStatus?.packageName, orderId, hasFiredPixel, trackPurchase, trackServerPurchase]);
+  }, [orderStatus?.statusType, orderStatus?.finalPrice, orderStatus?.packageName, orderId, hasFiredPixel, trackEvent, trackServerPurchase]);
 
   return (
     <>
