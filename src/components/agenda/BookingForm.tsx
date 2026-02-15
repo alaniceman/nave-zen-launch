@@ -101,48 +101,19 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
       }
 
       // 2. SEGUNDO: Intentar como cupón de descuento
-      const { data: coupon, error: couponError } = await supabase
-        .from("discount_coupons")
-        .select("*")
-        .eq("code", codeInput.toUpperCase())
-        .eq("is_active", true)
-        .maybeSingle();
-
-      if (coupon && !couponError) {
-        // Validar fecha
-        const now = new Date();
-        const validFrom = new Date(coupon.valid_from);
-        const validUntil = coupon.valid_until ? new Date(coupon.valid_until) : null;
-
-        if (now < validFrom) {
-          setCodeError("Este cupón aún no es válido");
-          setIsValidating(false);
-          return;
+      const { data: couponResult, error: couponError } = await supabase.functions.invoke(
+        "validate-coupon",
+        {
+          body: {
+            code: codeInput.toUpperCase(),
+            serviceId: service.id,
+            purchaseAmount: service.price_clp,
+          },
         }
+      );
 
-        if (validUntil && now > validUntil) {
-          setCodeError("Este cupón ha expirado");
-          setIsValidating(false);
-          return;
-        }
-
-        // Validar usos
-        if (coupon.max_uses && coupon.current_uses >= coupon.max_uses) {
-          setCodeError("Este cupón ya no tiene usos disponibles");
-          setIsValidating(false);
-          return;
-        }
-
-        // Validar monto mínimo
-        if (coupon.min_purchase_amount > service.price_clp) {
-          setCodeError(
-            `Este cupón requiere una compra mínima de $${coupon.min_purchase_amount.toLocaleString("es-CL")}`
-          );
-          setIsValidating(false);
-          return;
-        }
-
-        setAppliedCode({ type: "coupon", data: coupon });
+      if (!couponError && couponResult?.valid) {
+        setAppliedCode({ type: "coupon", data: couponResult.coupon });
         toast.success("¡Cupón de descuento aplicado!");
         setIsValidating(false);
         return;
