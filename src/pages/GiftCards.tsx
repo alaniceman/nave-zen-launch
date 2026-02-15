@@ -147,46 +147,20 @@ export default function GiftCards() {
     setAppliedCoupon(null);
 
     try {
-      const { data: couponData, error } = await supabase
-        .from("discount_coupons")
-        .select("*")
-        .eq("code", couponCode.toUpperCase())
-        .eq("is_active", true)
-        .maybeSingle();
-
-      if (error || !couponData) {
-        setCouponError("Cupón no encontrado");
-        return;
-      }
-
-      if (couponData.applicable_package_ids && 
-          !couponData.applicable_package_ids.includes(selectedPackage)) {
-        setCouponError("Este cupón no aplica a esta Gift Card");
-        return;
-      }
-
-      const now = new Date();
-      if (couponData.valid_from && new Date(couponData.valid_from) > now) {
-        setCouponError("Este cupón aún no es válido");
-        return;
-      }
-      if (couponData.valid_until && new Date(couponData.valid_until) < now) {
-        setCouponError("Este cupón ha expirado");
-        return;
-      }
-
-      if (couponData.max_uses && couponData.current_uses >= couponData.max_uses) {
-        setCouponError("Este cupón ha alcanzado su límite de usos");
-        return;
-      }
-
       const pkg = packages.find(p => p.id === selectedPackage);
-      if (pkg && couponData.min_purchase_amount && pkg.price_clp < couponData.min_purchase_amount) {
-        setCouponError(`Compra mínima requerida: $${couponData.min_purchase_amount.toLocaleString("es-CL")}`);
+      const { data: result, error } = await supabase.functions.invoke("validate-coupon", {
+        body: {
+          code: couponCode.toUpperCase(),
+          packageId: selectedPackage,
+          purchaseAmount: pkg?.price_clp,
+        },
+      });
+
+      if (error || !result?.valid) {
+        setCouponError(result?.error || "Cupón no encontrado");
         return;
       }
-
-      setAppliedCoupon(couponData);
+      setAppliedCoupon(result.coupon);
       toast.success("¡Cupón aplicado!");
     } catch (error) {
       console.error("Error validating coupon:", error);

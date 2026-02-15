@@ -47,3 +47,6 @@ verify_jwt = false
 
 [functions.send-package-depletion-alert]
 verify_jwt = false
+
+[functions.validate-coupon]
+verify_jwt = false
