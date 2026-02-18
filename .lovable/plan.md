@@ -1,93 +1,20 @@
 
-# Landing Page: Yoga en Las Condes (`/yoga-las-condes`)
+Configuraré el campo `reply-to` en todos los correos electrónicos enviados a través de Resend para que apunten a `lanave@alaniceman.com`. Esto permitirá que cuando los clientes respondan a los correos automáticos, el mensaje llegue directamente a la dirección de contacto del estudio.
 
-## Objetivo
-Crear una landing page optimizada para SEO local ("yoga las condes") que agrupe toda la informacion de yoga del estudio: estilos, instructores, horarios, membresias, ubicacion y clase de prueba gratuita.
+### Cambios a realizar:
 
-## Estructura de la pagina
+1.  **Actualización de Funciones del Backend (Edge Functions):**
+    *   **book-trial-class**: Se agregará `reply_to: "lanave@alaniceman.com"` en los correos de confirmación al usuario y notificaciones internas.
+    *   **send-booking-confirmation**: Se agregará el campo `reply_to` en el correo de confirmación de reserva.
+    *   **send-booking-reminder**: Se agregará el campo `reply_to` en el correo recordatorio de sesión.
+    *   **send-session-feedback**: Se agregará el campo `reply_to` en el correo de solicitud de feedback.
+    *   **send-session-codes-email**: Se agregará el campo `reply_to` en el correo de envío de códigos de sesión.
+    *   **send-abandonment-email**: Se agregará el campo `reply_to` en el correo de recuperación de carrito abandonado.
+    *   **send-instructor-summary**: Se agregará el campo `reply_to` en el correo de resumen para el instructor.
+    *   **send-package-depletion-alert**: Se agregará el campo `reply_to` en el correo de alerta de paquetes agotados y se corregirá un pequeño error tipográfico en la dirección de destino (`lanve` -> `lanave`).
 
-### 1. Hero Section
-- Imagen de fondo del estudio (reutilizar imagen existente del salon de yoga)
-- H1: "Yoga en Las Condes | Nave Studio"
-- Subtitulo con estilos disponibles: Yin, Yang, Vinyasa, Integral, Power
-- CTA principal: "Agenda tu clase de prueba gratis"
-- CTA secundario: "Ver horarios"
+### Detalles técnicos:
+*   Se utilizará la propiedad `reply_to` (con guion bajo) que es el estándar aceptado tanto por la librería de Resend en Node/Deno como por su API REST directamente.
+*   Esto asegura consistencia en todas las comunicaciones automáticas del estudio (confirmaciones, recordatorios, códigos y feedback).
 
-### 2. Estilos de Yoga
-- Grid de cards con los 5 estilos (Yin, Yang, Vinyasa, Integral, Power Yoga)
-- Cada card con icono, nombre, descripcion breve y beneficios
-- Se reutilizan las descripciones ya definidas en `schedule.ts`
-
-### 3. Instructores de Yoga
-- Reutilizar `CoachesSection` filtrado por instructores de yoga: Maral, Sol, Rolo, Mar, Val, Amber
-- Usando la prop `filterIds` que ya existe en el componente
-
-### 4. Horarios de Yoga
-- Tabla/cards con horarios de la semana filtrando solo clases de yoga
-- Reutilizar la logica de `weeklyByExperience("yoga")` de `scheduleByExperience.ts`
-- CTA a "/horarios" para ver todos
-
-### 5. Membresías de Yoga
-- Membresía Yin-Yang Yoga ($39.000/mes, 1 clase/sem)
-- Yoga + Ice Bath ($15.000 sesion suelta)
-- Boton de suscripcion con links a BoxMagic existentes
-- Mencion de la clase de prueba gratis
-
-### 6. Galeria de fotos
-- Grid de imagenes del estudio (reutilizar uploads existentes)
-- Aspecto visual atractivo con grid responsivo
-
-### 7. Clase de prueba gratuita
-- Reutilizar la seccion TrialYogaSection existente con CTA claro
-
-### 8. Ubicacion
-- Reutilizar LocationSection existente (mapa, direccion, contacto)
-
-### 9. Footer
-- Reutilizar Footer existente
-
-## Archivos a crear/modificar
-
-### Nuevo: `src/pages/YogaLasCondes.tsx`
-- Pagina completa con todas las secciones
-- Helmet con meta tags SEO optimizados para "yoga las condes"
-- Schema.org structured data (LocalBusiness + YogaStudio)
-- Facebook Pixel ViewContent tracking
-- Todas las imagenes con `loading="lazy"`
-
-### Modificar: `src/App.tsx`
-- Agregar lazy import: `const YogaLasCondes = lazy(() => import("./pages/YogaLasCondes"))`
-- Agregar ruta: `<Route path="/yoga-las-condes" element={<YogaLasCondes />} />`
-
-### Modificar: `src/components/SEOHead.tsx`
-- Agregar entrada SEO para `/yoga-las-condes` con:
-  - Title: "Yoga en Las Condes | Yin, Vinyasa, Power Yoga | Nave Studio"
-  - Description optimizada con keywords locales
-  - Canonical URL
-  - Open Graph tags
-
-## Detalles tecnicos
-
-### SEO
-- H1 con keyword principal "Yoga en Las Condes"
-- Meta description con keywords: yoga las condes, yin yoga, vinyasa, power yoga, santiago
-- Schema.org: SportsActivityLocation + YogaStudio con geo, horarios y ofertas
-- Canonical: `https://studiolanave.com/yoga-las-condes`
-- Alt texts descriptivos en todas las imagenes
-
-### Facebook Pixel
-- `trackViewContent` al cargar la pagina con `content_name: "Yoga Las Condes"`
-- `trackInitiateCheckout` en botones de suscripcion
-- `trackLead` en CTA de clase de prueba
-
-### Performance
-- Lazy loading de la ruta via `React.lazy()`
-- `loading="lazy"` en todas las imagenes no-hero
-- Hero image con `fetchPriority="high"`
-
-### Componentes reutilizados
-- `CoachesSection` (con `filterIds` para yoga coaches)
-- `LocationSection`
-- `Footer`
-- `TrialYogaSection`
-- Logica de `weeklyByExperience("yoga")` para horarios
+Una vez aplicados los cambios, los correos seguirán saliendo desde `agenda@studiolanave.com` (o la dirección configurada), pero cualquier respuesta manual del usuario se dirigirá a `lanave@alaniceman.com` automáticamente.
