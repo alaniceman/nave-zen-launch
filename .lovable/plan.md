@@ -1,64 +1,45 @@
 
+# Agregar 3 Membresias de Yoga
 
-# Generar codigo de sesion al cancelar reserva directa
+## Resumen
+Actualizar la seccion "Solo Yoga" en la pagina de planes y agregar una seccion equivalente en la pagina de Yoga en Las Condes con las 3 nuevas membresias de yoga.
 
-## Problema
-Cuando un cliente agenda directo (sin paquete ni gift card) y el admin cancela la reserva, no existe un codigo de sesion para reagendar. El boton "Cancelar y Liberar Codigo" solo funciona si la reserva ya tenia un `session_code_id`.
+## Cambios en detalle
 
-## Solucion
-Modificar la logica de `cancel_and_release` en la edge function `admin-bookings` para que, cuando la reserva **no tenga** `session_code_id`, se cree automaticamente un codigo de sesion nuevo y se envie al correo del cliente.
+### 1. Pagina de Planes (`src/pages/Planes.tsx`) — Seccion "Solo Yoga"
 
-## Flujo propuesto
+Reemplazar las 2 tarjetas actuales (Membresia Yin-Yang Yoga $39.000 y Yoga + Ice Bath $15.000) por 3 nuevas tarjetas:
 
-```text
-Admin presiona "Cancelar y Liberar Codigo"
-         |
-    Reserva tiene session_code_id?
-       /           \
-     SI             NO
-      |              |
-  Liberar codigo   Crear nuevo codigo
-  (flujo actual)   con el servicio de la reserva
-                     |
-                   Enviar email al cliente
-                   con el codigo nuevo
-                     |
-                   Mostrar toast con codigo generado
-```
+| Plan | Sesiones | Precio | Link BoxMagic |
+|------|----------|--------|---------------|
+| Yoga Esencial | 1/sem | $49.000 | `https://boxmagic.cl/market/plan/oGDPzoy4b5` |
+| Yoga Continuo | 2/sem | $69.000 | `https://boxmagic.cl/market/plan/XY0llrA0kV` |
+| Yoga Libre | Ilimitadas | $85.000 | `https://boxmagic.cl/market/plan/rq4mapE4JZ` |
 
-## Cambios tecnicos
+- Cambiar el grid de 2 columnas a 3 columnas (`md:grid-cols-3`)
+- Marcar "Yoga Continuo" como "Mas popular" (badge warm, borde destacado)
+- Marcar "Yoga Libre" con borde accent (similar a Universo)
+- Cada tarjeta incluye: nombre, badge con frecuencia, descripcion breve, precio, boton "Suscribirme" con `data-checkout-url` y `data-plan`
 
-### 1. Edge function `supabase/functions/admin-bookings/index.ts`
+### 2. Pagina Yoga Las Condes (`src/pages/YogaLasCondes.tsx`) — Seccion de Membresias
 
-En el bloque `cancel_and_release`, despues de cancelar la reserva:
+Agregar una nueva seccion **antes** de las membresias generales (Eclipse/Orbita/Universo) con las 3 membresias de solo yoga:
 
-- Si `booking.session_code_id` es null:
-  - Obtener datos completos de la reserva (customer_name, customer_email, customer_phone, service_id, final_price)
-  - Generar un codigo aleatorio de 8 caracteres (ej: `RECUP-XXXX`)
-  - Calcular fecha de expiracion (90 dias desde hoy)
-  - Insertar en tabla `session_codes` con:
-    - `code`: codigo generado
-    - `buyer_email`: email del cliente
-    - `buyer_name`: nombre del cliente
-    - `buyer_phone`: telefono del cliente
-    - `applicable_service_ids`: array con el service_id de la reserva original
-    - `expires_at`: 90 dias desde hoy
-    - `is_used`: false
-  - Invocar `send-session-codes-email` con el codigo generado
-  - Retornar `code_created` en la respuesta
+- Titulo: "Membresias Solo Yoga"
+- Subtitulo: "Planes exclusivos para tu practica de Yoga"
+- Mismas 3 tarjetas (Yoga Esencial, Yoga Continuo, Yoga Libre) con el mismo estilo visual de la pagina
+- Mantener la seccion existente de membresias generales debajo, con un separador tipo "Quieres acceso a todas las experiencias?" para diferenciar
 
-- Si `booking.session_code_id` existe: flujo actual sin cambios (liberar codigo)
+### Detalles tecnicos
 
-### 2. Frontend `src/pages/admin/AdminBookings.tsx`
+**Planes.tsx** (lineas 382-423):
+- Reemplazar el contenido del `section#solo-yoga` con 3 Cards en grid de 3 columnas
+- Cada Card usa `data-checkout-url` con el link de BoxMagic correspondiente
+- Cambiar `max-w-4xl` a `max-w-6xl` para acomodar 3 columnas
 
-- En el `onSuccess` de `cancelAndReleaseMutation`, manejar el nuevo campo `code_created`:
-  - Si `data.code_created`: mostrar toast "Reserva cancelada y codigo [CODIGO] creado y enviado al cliente"
-  - Si `data.code_released`: toast actual sin cambios
-  - Si ninguno: toast generico actual
+**YogaLasCondes.tsx** (lineas 52-101 y 303-388):
+- Agregar array `yogaMembershipPlans` con los 3 planes de yoga
+- Insertar nueva seccion entre horarios y membresias generales
+- Renombrar seccion de membresias generales a "Todas las experiencias" para diferenciar
 
-- Actualizar el texto del boton para reservas sin codigo de sesion: mostrar "Cancelar y Generar Codigo" en vez de "Cancelar Reserva"
-- Actualizar el texto del dialogo de confirmacion para explicar que se generara un codigo nuevo
-
-### 3. Sin cambios en base de datos
-La tabla `session_codes` ya soporta insertar codigos sin `package_id` (campo nullable) y el trigger `ensure_uppercase_code` se encargara de normalizar el codigo.
-
+No se crean archivos nuevos ni se modifican tablas de base de datos.
