@@ -1,28 +1,50 @@
 
+# Lazy Loading (Code Splitting) para las Rutas
 
-# Agregar eventos ViewContent e InitiateCheckout al flujo de clase de prueba
+## Problema
+Todas las 40+ paginas se cargan en un solo bundle JavaScript de mas de 500 kB, lo que ralentiza la carga inicial del sitio.
+
+## Solucion
+Convertir todos los imports estaticos de paginas a imports dinamicos usando `React.lazy()` + `Suspense`, para que cada pagina se cargue solo cuando el usuario la visita.
 
 ## Cambios
 
-Se agregaran dos eventos adicionales del Facebook Pixel al flujo de agendar clase de prueba:
+### Archivo: `src/App.tsx`
 
-1. **ViewContent**: se dispara al cargar la pagina `/clase-de-prueba/agendar`, para medir cuantas personas entran al flujo.
-2. **InitiateCheckout**: se dispara cuando el usuario avanza al paso del formulario de datos (step "form"), es decir, ya selecciono clase y fecha.
+1. **Agregar imports de React**: `lazy` y `Suspense` desde React.
 
-Junto con el evento `TrialClass` que ya esta implementado en el exito, esto permite medir el embudo completo:
-- ViewContent (entra al flujo) → InitiateCheckout (llega al formulario) → TrialClass (completa la reserva)
+2. **Reemplazar ~45 imports estaticos por lazy imports**:
+   ```typescript
+   // Antes:
+   import Planes from "./pages/Planes";
+   
+   // Despues:
+   const Planes = lazy(() => import("./pages/Planes"));
+   ```
 
-## Detalle tecnico
+   Se aplicara a TODAS las paginas (Index, Planes, Experiencias, Coaches, Blog, todos los BlogX, Cyber2025, PlanAnual2026, SanValentin, Horarios, FAQ, ClaseDePrueba, TrialClassSchedule, todas las Criomedicin, Terminos, Privacidad, Bonos, BonosSuccess, GiftCards, GiftCardsSuccess, GiftCardsFailure, GiftCardView, AgendaNaveStudio, AgendaSuccess, AgendaFailure, AgendaPending, NotFound, AdminLogin, AdminLayout, y todas las paginas admin).
 
-**Archivo: `src/pages/TrialClassSchedule.tsx`**
+3. **Envolver `<Routes>` con `<Suspense>`** y un fallback de carga:
+   ```typescript
+   <Suspense fallback={
+     <div className="min-h-screen flex items-center justify-center">
+       <Loader2 className="h-8 w-8 animate-spin text-primary" />
+     </div>
+   }>
+     <Routes>
+       ...
+     </Routes>
+   </Suspense>
+   ```
 
-- Importar `useFacebookPixel` desde `@/hooks/useFacebookPixel`
-- Disparar `trackEvent('ViewContent', { content_name: 'Clase de prueba', content_category: 'Trial' })` en un `useEffect` al montar el componente
-- Modificar la transicion al step `"form"` (cuando se llama `setStep("form")` desde el boton "Continuar" en `TrialClassDetail`) para disparar `trackEvent('InitiateCheckout', { content_name: classItem.title, currency: 'CLP', value: 0 })` justo antes de cambiar al paso del formulario
+4. **Importar `Loader2`** desde lucide-react para el spinner de carga.
 
-Esto se implementa creando un wrapper `goToForm` que dispara el evento y luego cambia el step, y pasandolo como `onContinue` al componente `TrialClassDetail`.
+### Que NO cambia
+- Los providers, Header, WhatsAppWidget y componentes globales siguen con import estatico (se necesitan siempre).
+- Las rutas y sus paths no cambian.
+- La funcionalidad de cada pagina permanece identica.
 
-| Archivo | Accion |
-|---|---|
-| `src/pages/TrialClassSchedule.tsx` | Importar `useFacebookPixel`, agregar `ViewContent` en mount y `InitiateCheckout` al avanzar al formulario |
-
+### Resultado esperado
+- El bundle principal se reduce significativamente (cada pagina se convierte en un chunk separado).
+- Solo se descarga el codigo de la pagina que el usuario visita.
+- Mientras carga, se muestra un spinner centrado.
