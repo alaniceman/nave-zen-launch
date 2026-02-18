@@ -190,6 +190,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     const emailResponse = await resend.emails.send({
       from: "Studio La Nave <agenda@studiolanave.com>",
+      reply_to: "lanave@alaniceman.com",
       to: [buyerEmail],
       subject: subject,
       html: emailHtml,

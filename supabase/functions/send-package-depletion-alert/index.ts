@@ -79,7 +79,8 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         from: "Nave Studio <agenda@studiolanave.com>",
-        to: ["lanve@alaniceman.com"],
+        reply_to: "lanave@alaniceman.com",
+        to: ["lanave@alaniceman.com"],
         subject,
         html,
       }),

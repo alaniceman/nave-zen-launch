@@ -131,6 +131,7 @@ serve(async (req) => {
 
     const emailResponse = await resend.emails.send({
       from: "Studio La Nave <agenda@studiolanave.com>",
+      reply_to: "lanave@alaniceman.com",
       to: [buyerEmail],
       subject: "🧊 ¡No te quedes sin tu experiencia! 10% OFF con código ICE10",
       html: emailHtml,

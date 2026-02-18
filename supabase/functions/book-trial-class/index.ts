@@ -162,6 +162,7 @@ serve(async (req) => {
 
       await resend.emails.send({
         from: "Nave Studio <no-reply@studiolanave.com>",
+        reply_to: "lanave@alaniceman.com",
         to: [data.customerEmail],
         subject: `Tu clase de prueba está confirmada — ${data.classTitle}`,
         html: `
@@ -188,6 +189,7 @@ serve(async (req) => {
       // 8. Internal notification email
       await resend.emails.send({
         from: "Nave Studio <no-reply@studiolanave.com>",
+        reply_to: "lanave@alaniceman.com",
         to: ["lanave@alaniceman.com"],
         subject: `Nueva clase de prueba: ${data.customerName} — ${data.classTitle}`,
         html: `

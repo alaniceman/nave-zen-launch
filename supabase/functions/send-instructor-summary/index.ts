@@ -361,6 +361,7 @@ const handler = async (req: Request): Promise<Response> => {
         
         const emailResult = await resend.emails.send({
           from: "Nave Studio <agenda@studiolanave.com>",
+          reply_to: "lanave@alaniceman.com",
           to: [toEmail],
           cc: ["agenda@alaniceman.com"],
           subject: `${testMode ? "[TEST] " : ""}📋 Tu sesión de ${session.service.name} en 2 horas - ${session.participants.length} participante(s)`,
