@@ -1,20 +1,88 @@
+# Reorganizacion del Menu de Navegacion
 
-Configuraré el campo `reply-to` en todos los correos electrónicos enviados a través de Resend para que apunten a `lanave@alaniceman.com`. Esto permitirá que cuando los clientes respondan a los correos automáticos, el mensaje llegue directamente a la dirección de contacto del estudio.
+## Problema actual
 
-### Cambios a realizar:
+El menu tiene 8 enlaces directos y se quiere agregar Yoga. Son demasiados items para una barra de navegacion, especialmente en pantallas medianas (tablets, laptops pequenos).
 
-1.  **Actualización de Funciones del Backend (Edge Functions):**
-    *   **book-trial-class**: Se agregará `reply_to: "lanave@alaniceman.com"` en los correos de confirmación al usuario y notificaciones internas.
-    *   **send-booking-confirmation**: Se agregará el campo `reply_to` en el correo de confirmación de reserva.
-    *   **send-booking-reminder**: Se agregará el campo `reply_to` en el correo recordatorio de sesión.
-    *   **send-session-feedback**: Se agregará el campo `reply_to` en el correo de solicitud de feedback.
-    *   **send-session-codes-email**: Se agregará el campo `reply_to` en el correo de envío de códigos de sesión.
-    *   **send-abandonment-email**: Se agregará el campo `reply_to` en el correo de recuperación de carrito abandonado.
-    *   **send-instructor-summary**: Se agregará el campo `reply_to` en el correo de resumen para el instructor.
-    *   **send-package-depletion-alert**: Se agregará el campo `reply_to` en el correo de alerta de paquetes agotados y se corregirá un pequeño error tipográfico en la dirección de destino (`lanve` -> `lanave`).
+## Propuesta de agrupacion
 
-### Detalles técnicos:
-*   Se utilizará la propiedad `reply_to` (con guion bajo) que es el estándar aceptado tanto por la librería de Resend en Node/Deno como por su API REST directamente.
-*   Esto asegura consistencia en todas las comunicaciones automáticas del estudio (confirmaciones, recordatorios, códigos y feedback).
+Reducir de 9 items sueltos a **5 items visibles** en desktop, usando 2 dropdowns para agrupar contenido relacionado:
 
-Una vez aplicados los cambios, los correos seguirán saliendo desde `agenda@studiolanave.com` (o la dirección configurada), pero cualquier respuesta manual del usuario se dirigirá a `lanave@alaniceman.com` automáticamente.
+```text
+| NAVE Studio |  Experiencias v  |  Horarios  |  Planes v  |  Blog  |  Contacto  |  [Empezar v] |
+```
+
+### Detalle de cada item:
+
+1. **Experiencias** (dropdown)
+  - Yoga (`/yoga-las-condes`)
+  - Criomedicina y Metodo Wim Hof (`/criomedicina-metodo-wim-hof-las-condes`)
+  - Todas las experiencias (`/experiencias`)
+  - Coaches (`/coaches`)
+2. **Horarios** (enlace directo a `/horarios`)
+3. **Planes** (dropdown)
+  - Membresias (`/planes-precios`)
+  - Paquete de sesiones (`/bonos`)
+  - Gift Cards (`/giftcards`)
+4. **Blog** (enlace directo a `/blog`)
+5. **Contacto** (enlace directo a `/contacto`)
+6. **Empezar** (dropdown existente, sin cambios)
+
+### Menu mobile
+
+En mobile se mantiene el drawer actual pero con las mismas agrupaciones usando secciones colapsables (acordeon):
+
+- Seccion "Experiencias" con sub-items
+- "Horarios" directo
+- Seccion "Planes" con sub-items
+- "Blog" directo
+- "Contacto" directo
+- Botones de accion al final (clase de prueba, registrarse, ingresar)
+
+## Cambios tecnicos
+
+### Archivo: `src/components/Header.tsx`
+
+- Refactorizar `navigationLinks` de array plano a estructura con grupos
+- Implementar dropdowns en desktop usando estado local (similar al dropdown "Empezar" existente)
+- En mobile, usar secciones con toggle para los grupos
+- Agregar animacion de chevron rotado en los dropdowns
+- Los dropdowns se cierran al hacer click fuera (reutilizar patron existente)
+
+### Estructura de datos propuesta:
+
+```text
+navigationLinks = [
+  {
+    label: "Experiencias",
+    type: "dropdown",
+    children: [
+      { label: "Yoga en Las Condes", href: "/yoga-las-condes" },
+      { label: "Criomedicina", href: "/criomedicina-metodo-wim-hof-las-condes" },
+      { label: "Todas las experiencias", href: "/experiencias" },
+      { label: "Coaches", href: "/coaches" },
+    ]
+  },
+  { label: "Horarios", href: "/horarios", type: "link" },
+  {
+    label: "Planes",
+    type: "dropdown",
+    children: [
+      { label: "Membresias y Precios", href: "/planes-precios" },
+      { label: "Bonos", href: "/bonos" },
+      { label: "Gift Cards", href: "/giftcards" },
+    ]
+  },
+  { label: "Blog", href: "/blog", type: "link" },
+  { label: "Contacto", href: "/contacto", type: "link" },
+]
+```
+
+### Estilo de los dropdowns
+
+- Mismo estilo visual que el dropdown "Empezar" existente (rounded-xl, shadow-lg, ring-1)
+- Hover con bg-neutral-light
+- Transicion suave de aparicion
+- Chevron que rota 180 grados al abrir
+
+No se crean archivos nuevos, solo se modifica `src/components/Header.tsx`.
