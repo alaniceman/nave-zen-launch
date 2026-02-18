@@ -240,6 +240,7 @@ const handler = async (req: Request): Promise<Response> => {
 
         await resend.emails.send({
           from: "Nave Studio <agenda@studiolanave.com>",
+          reply_to: "lanave@alaniceman.com",
           to: [booking.customer_email],
           subject: "⏰ Recordatorio: Tu sesión es mañana - Nave Studio",
           html: emailHtml,

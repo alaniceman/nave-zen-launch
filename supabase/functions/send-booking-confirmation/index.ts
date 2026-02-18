@@ -247,6 +247,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     const { error: emailError } = await resend.emails.send({
       from: "Nave Studio <agenda@studiolanave.com>",
+      reply_to: "lanave@alaniceman.com",
       to: [booking.customer_email],
       bcc: bccRecipients,
       subject: "✓ Confirmación de tu Reserva - Nave Studio",
