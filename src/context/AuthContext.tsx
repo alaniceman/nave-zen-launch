@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, useCallback, ReactNode } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -21,7 +21,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  const checkIsAdmin = async (providedSession?: Session | null): Promise<boolean> => {
+  const checkIsAdmin = useCallback(async (providedSession?: Session | null): Promise<boolean> => {
     const sessionToUse = providedSession ?? session;
     
     if (!sessionToUse) {
@@ -50,7 +50,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setIsAdmin(false);
       return false;
     }
-  };
+  }, [session]);
 
   useEffect(() => {
     // Set up auth state listener first
@@ -85,7 +85,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [checkIsAdmin]);
 
   const signIn = async (email: string, password: string) => {
     try {

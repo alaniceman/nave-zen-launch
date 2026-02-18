@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
 // Get Facebook browser ID from cookie
@@ -8,22 +9,18 @@ const getFbp = (): string | undefined => {
 
 // Get Facebook click ID from cookie or URL
 const getFbc = (): string | undefined => {
-  // First check cookie
   const cookieMatch = document.cookie.match(/_fbc=([^;]+)/);
   if (cookieMatch) return cookieMatch[1];
   
-  // Check URL for fbclid
   const urlParams = new URLSearchParams(window.location.search);
   const fbclid = urlParams.get("fbclid");
   if (fbclid) {
-    // Format: fb.1.timestamp.fbclid
     return `fb.1.${Date.now()}.${fbclid}`;
   }
   
   return undefined;
 };
 
-// Generate unique event ID for deduplication
 const generateEventId = (): string => {
   return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 };
@@ -43,7 +40,7 @@ interface TrackEventParams {
 }
 
 export const useFacebookConversionsAPI = () => {
-  const trackServerEvent = async ({
+  const trackServerEvent = useCallback(async ({
     eventName,
     eventId: externalEventId,
     userEmail,
@@ -88,9 +85,9 @@ export const useFacebookConversionsAPI = () => {
     }
 
     return eventId;
-  };
+  }, []);
 
-  const trackPurchase = async (params: {
+  const trackPurchase = useCallback(async (params: {
     userEmail: string;
     userName: string;
     userPhone?: string;
@@ -113,9 +110,9 @@ export const useFacebookConversionsAPI = () => {
       contentIds: [params.orderId],
       orderId: params.orderId,
     });
-  };
+  }, [trackServerEvent]);
 
-  const trackInitiateCheckout = async (params: {
+  const trackInitiateCheckout = useCallback(async (params: {
     userEmail?: string;
     userName?: string;
     value?: number;
@@ -128,9 +125,9 @@ export const useFacebookConversionsAPI = () => {
       value: params.value,
       contentName: params.contentName,
     });
-  };
+  }, [trackServerEvent]);
 
-  const trackLead = async (params: {
+  const trackLead = useCallback(async (params: {
     userEmail: string;
     userName?: string;
     userPhone?: string;
@@ -143,9 +140,9 @@ export const useFacebookConversionsAPI = () => {
       userPhone: params.userPhone,
       contentName: params.contentName,
     });
-  };
+  }, [trackServerEvent]);
 
-  const trackViewContent = async (params: {
+  const trackViewContent = useCallback(async (params: {
     contentName: string;
     value?: number;
   }) => {
@@ -154,7 +151,7 @@ export const useFacebookConversionsAPI = () => {
       contentName: params.contentName,
       value: params.value,
     });
-  };
+  }, [trackServerEvent]);
 
   return {
     trackServerEvent,
