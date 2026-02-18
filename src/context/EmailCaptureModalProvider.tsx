@@ -69,7 +69,7 @@ export const EmailCaptureModalProvider = ({ children }: EmailCaptureModalProvide
       document.removeEventListener('mouseleave', handleMouseLeave);
       document.removeEventListener('scroll', handleScroll);
     };
-  }, [isOpen]);
+  }, [isOpen, hasShownThisSession]);
 
   return (
     <EmailCaptureModalContext.Provider value={{ openEmailCaptureModal, closeEmailCaptureModal }}>

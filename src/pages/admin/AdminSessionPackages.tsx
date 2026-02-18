@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Plus, Pencil, Trash2 } from "lucide-react";
@@ -54,12 +54,7 @@ export default function AdminSessionPackages() {
     show_in_criomedicina: false,
   });
 
-  useEffect(() => {
-    loadPackages();
-    loadServices();
-  }, []);
-
-  const loadPackages = async () => {
+  const loadPackages = useCallback(async () => {
     const { data, error } = await supabase
       .from("session_packages")
       .select("*")
@@ -70,9 +65,9 @@ export default function AdminSessionPackages() {
       return;
     }
     setPackages(data || []);
-  };
+  }, []);
 
-  const loadServices = async () => {
+  const loadServices = useCallback(async () => {
     const { data, error } = await supabase
       .from("services")
       .select("id, name")
@@ -83,7 +78,12 @@ export default function AdminSessionPackages() {
       return;
     }
     setServices(data || []);
-  };
+  }, []);
+
+  useEffect(() => {
+    loadPackages();
+    loadServices();
+  }, [loadPackages, loadServices]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

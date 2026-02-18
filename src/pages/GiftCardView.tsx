@@ -31,41 +31,40 @@ export default function GiftCardView() {
   const [isDownloading, setIsDownloading] = useState(false);
 
   useEffect(() => {
-    if (token) {
-      loadGiftCardData();
-    }
-  }, [token]);
+    if (!token) return;
 
-  const loadGiftCardData = async () => {
-    try {
-      // Use edge function to securely fetch gift card data
-      const { data, error: fetchError } = await supabase.functions.invoke("get-giftcard-data", {
-        body: { token },
-      });
+    const loadGiftCardData = async () => {
+      try {
+        const { data, error: fetchError } = await supabase.functions.invoke("get-giftcard-data", {
+          body: { token },
+        });
 
-      if (fetchError) throw fetchError;
+        if (fetchError) throw fetchError;
 
-      if (data.error) {
-        setError(data.error);
-        return;
+        if (data.error) {
+          setError(data.error);
+          return;
+        }
+
+        setGiftCardData({
+          codes: data.codes,
+          packageName: data.packageName,
+          buyerName: data.buyerName,
+          sessionsQuantity: data.sessionsQuantity,
+          validityDays: data.validityDays,
+          expiresAt: data.expiresAt,
+          applicableServices: data.applicableServices,
+        });
+      } catch (error) {
+        console.error("Error loading gift card:", error);
+        setError("Error al cargar la Gift Card");
+      } finally {
+        setIsLoading(false);
       }
+    };
 
-      setGiftCardData({
-        codes: data.codes,
-        packageName: data.packageName,
-        buyerName: data.buyerName,
-        sessionsQuantity: data.sessionsQuantity,
-        validityDays: data.validityDays,
-        expiresAt: data.expiresAt,
-        applicableServices: data.applicableServices,
-      });
-    } catch (error) {
-      console.error("Error loading gift card:", error);
-      setError("Error al cargar la Gift Card");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    loadGiftCardData();
+  }, [token]);
 
   const copyCode = async (code: string) => {
     try {
