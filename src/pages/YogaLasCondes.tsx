@@ -43,12 +43,10 @@ const yogaStyles = [
 ];
 
 const galleryImages = [
-  { src: "/lovable-uploads/82672388-9723-4aee-a1f2-ac72618cd26a.png", alt: "Sala de yoga Nave Studio Las Condes" },
-  { src: "/lovable-uploads/30549bc9-e0a1-4084-927b-f3eadfec8372.png", alt: "Instructora de yoga en Nave Studio" },
-  { src: "/lovable-uploads/27a0352e-30dd-41fc-8a91-48b297e8615a.png", alt: "Clase de yoga guiada en Las Condes" },
-  { src: "/lovable-uploads/bb33cba0-3deb-41b3-97f1-c55d9dc169c1.png", alt: "Vinyasa yoga flow en Nave Studio" },
-  { src: "/lovable-uploads/367f27fb-5f27-4b38-bc21-af8951de42aa.png", alt: "Yoga integral en estudio Las Condes" },
-  { src: "/lovable-uploads/bab00752-1c18-40b5-bfeb-4089da69749a.png", alt: "Yin yoga relajación profunda" },
+  { src: "/lovable-uploads/yoga-sala-1.webp", alt: "Sala de yoga Nave Studio Las Condes con mats y cojines" },
+  { src: "/lovable-uploads/yoga-sala-2.webp", alt: "Vista amplia del estudio de yoga en Las Condes" },
+  { src: "/lovable-uploads/yoga-sala-3.webp", alt: "Estudio de yoga con luz natural y vista a la cordillera" },
+  { src: "/lovable-uploads/yoga-sala-4.webp", alt: "Rincón de meditación con vista a los Andes" },
 ];
 
 const membershipPlans = [
