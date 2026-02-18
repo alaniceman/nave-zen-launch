@@ -178,7 +178,7 @@ const YogaLasCondes = () => {
           <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
             <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm text-white/90 text-sm px-4 py-1.5 rounded-full mb-6 border border-white/20">
               <Sparkles className="w-4 h-4" />
-              Primera clase gratis
+              Clases de lunes a domingo · Primera clase gratis
             </div>
             <h1 className="text-5xl md:text-7xl font-bold text-white font-space mb-5 leading-tight tracking-tight">
               Yoga en<br />Las Condes
