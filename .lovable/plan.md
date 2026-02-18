@@ -1,88 +1,64 @@
-# Reorganizacion del Menu de Navegacion
 
-## Problema actual
 
-El menu tiene 8 enlaces directos y se quiere agregar Yoga. Son demasiados items para una barra de navegacion, especialmente en pantallas medianas (tablets, laptops pequenos).
+# Generar codigo de sesion al cancelar reserva directa
 
-## Propuesta de agrupacion
+## Problema
+Cuando un cliente agenda directo (sin paquete ni gift card) y el admin cancela la reserva, no existe un codigo de sesion para reagendar. El boton "Cancelar y Liberar Codigo" solo funciona si la reserva ya tenia un `session_code_id`.
 
-Reducir de 9 items sueltos a **5 items visibles** en desktop, usando 2 dropdowns para agrupar contenido relacionado:
+## Solucion
+Modificar la logica de `cancel_and_release` en la edge function `admin-bookings` para que, cuando la reserva **no tenga** `session_code_id`, se cree automaticamente un codigo de sesion nuevo y se envie al correo del cliente.
+
+## Flujo propuesto
 
 ```text
-| NAVE Studio |  Experiencias v  |  Horarios  |  Planes v  |  Blog  |  Contacto  |  [Empezar v] |
+Admin presiona "Cancelar y Liberar Codigo"
+         |
+    Reserva tiene session_code_id?
+       /           \
+     SI             NO
+      |              |
+  Liberar codigo   Crear nuevo codigo
+  (flujo actual)   con el servicio de la reserva
+                     |
+                   Enviar email al cliente
+                   con el codigo nuevo
+                     |
+                   Mostrar toast con codigo generado
 ```
-
-### Detalle de cada item:
-
-1. **Experiencias** (dropdown)
-  - Yoga (`/yoga-las-condes`)
-  - Criomedicina y Metodo Wim Hof (`/criomedicina-metodo-wim-hof-las-condes`)
-  - Todas las experiencias (`/experiencias`)
-  - Coaches (`/coaches`)
-2. **Horarios** (enlace directo a `/horarios`)
-3. **Planes** (dropdown)
-  - Membresias (`/planes-precios`)
-  - Paquete de sesiones (`/bonos`)
-  - Gift Cards (`/giftcards`)
-4. **Blog** (enlace directo a `/blog`)
-5. **Contacto** (enlace directo a `/contacto`)
-6. **Empezar** (dropdown existente, sin cambios)
-
-### Menu mobile
-
-En mobile se mantiene el drawer actual pero con las mismas agrupaciones usando secciones colapsables (acordeon):
-
-- Seccion "Experiencias" con sub-items
-- "Horarios" directo
-- Seccion "Planes" con sub-items
-- "Blog" directo
-- "Contacto" directo
-- Botones de accion al final (clase de prueba, registrarse, ingresar)
 
 ## Cambios tecnicos
 
-### Archivo: `src/components/Header.tsx`
+### 1. Edge function `supabase/functions/admin-bookings/index.ts`
 
-- Refactorizar `navigationLinks` de array plano a estructura con grupos
-- Implementar dropdowns en desktop usando estado local (similar al dropdown "Empezar" existente)
-- En mobile, usar secciones con toggle para los grupos
-- Agregar animacion de chevron rotado en los dropdowns
-- Los dropdowns se cierran al hacer click fuera (reutilizar patron existente)
+En el bloque `cancel_and_release`, despues de cancelar la reserva:
 
-### Estructura de datos propuesta:
+- Si `booking.session_code_id` es null:
+  - Obtener datos completos de la reserva (customer_name, customer_email, customer_phone, service_id, final_price)
+  - Generar un codigo aleatorio de 8 caracteres (ej: `RECUP-XXXX`)
+  - Calcular fecha de expiracion (90 dias desde hoy)
+  - Insertar en tabla `session_codes` con:
+    - `code`: codigo generado
+    - `buyer_email`: email del cliente
+    - `buyer_name`: nombre del cliente
+    - `buyer_phone`: telefono del cliente
+    - `applicable_service_ids`: array con el service_id de la reserva original
+    - `expires_at`: 90 dias desde hoy
+    - `is_used`: false
+  - Invocar `send-session-codes-email` con el codigo generado
+  - Retornar `code_created` en la respuesta
 
-```text
-navigationLinks = [
-  {
-    label: "Experiencias",
-    type: "dropdown",
-    children: [
-      { label: "Yoga en Las Condes", href: "/yoga-las-condes" },
-      { label: "Criomedicina", href: "/criomedicina-metodo-wim-hof-las-condes" },
-      { label: "Todas las experiencias", href: "/experiencias" },
-      { label: "Coaches", href: "/coaches" },
-    ]
-  },
-  { label: "Horarios", href: "/horarios", type: "link" },
-  {
-    label: "Planes",
-    type: "dropdown",
-    children: [
-      { label: "Membresias y Precios", href: "/planes-precios" },
-      { label: "Bonos", href: "/bonos" },
-      { label: "Gift Cards", href: "/giftcards" },
-    ]
-  },
-  { label: "Blog", href: "/blog", type: "link" },
-  { label: "Contacto", href: "/contacto", type: "link" },
-]
-```
+- Si `booking.session_code_id` existe: flujo actual sin cambios (liberar codigo)
 
-### Estilo de los dropdowns
+### 2. Frontend `src/pages/admin/AdminBookings.tsx`
 
-- Mismo estilo visual que el dropdown "Empezar" existente (rounded-xl, shadow-lg, ring-1)
-- Hover con bg-neutral-light
-- Transicion suave de aparicion
-- Chevron que rota 180 grados al abrir
+- En el `onSuccess` de `cancelAndReleaseMutation`, manejar el nuevo campo `code_created`:
+  - Si `data.code_created`: mostrar toast "Reserva cancelada y codigo [CODIGO] creado y enviado al cliente"
+  - Si `data.code_released`: toast actual sin cambios
+  - Si ninguno: toast generico actual
 
-No se crean archivos nuevos, solo se modifica `src/components/Header.tsx`.
+- Actualizar el texto del boton para reservas sin codigo de sesion: mostrar "Cancelar y Generar Codigo" en vez de "Cancelar Reserva"
+- Actualizar el texto del dialogo de confirmacion para explicar que se generara un codigo nuevo
+
+### 3. Sin cambios en base de datos
+La tabla `session_codes` ya soporta insertar codigos sin `package_id` (campo nullable) y el trigger `ensure_uppercase_code` se encargara de normalizar el codigo.
+
