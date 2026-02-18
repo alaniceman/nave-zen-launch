@@ -174,7 +174,9 @@ export default function AdminBookings() {
     onSuccess: (data) => {
       console.log('Cancel and release successful:', data);
       queryClient.invalidateQueries({ queryKey: ['admin-bookings'] });
-      if (data.code_released) {
+      if (data.code_created) {
+        toast.success(`Reserva cancelada y código ${data.code_created} creado y enviado al cliente`);
+      } else if (data.code_released) {
         toast.success(`Reserva cancelada y código ${data.code_released} liberado`);
       } else {
         toast.success('Reserva cancelada exitosamente');
@@ -402,7 +404,7 @@ export default function AdminBookings() {
                                     ) : (
                                       <>
                                         <XCircle className="h-4 w-4 mr-1" />
-                                        {booking.session_codes ? 'Cancelar y Liberar Código' : 'Cancelar Reserva'}
+                                        {booking.session_codes ? 'Cancelar y Liberar Código' : 'Cancelar y Generar Código'}
                                       </>
                                     )}
                                   </Button>
@@ -419,8 +421,8 @@ export default function AdminBookings() {
                                         </>
                                       ) : (
                                         <>
-                                          Esta acción cancelará la reserva de <strong>{booking.customer_name}</strong>.
-                                          Esta acción no se puede deshacer.
+                                          Esta acción cancelará la reserva de <strong>{booking.customer_name}</strong> y 
+                                          generará un código de sesión de recuperación que será enviado a su correo (<strong>{booking.customer_email}</strong>).
                                         </>
                                       )}
                                     </AlertDialogDescription>
@@ -431,7 +433,7 @@ export default function AdminBookings() {
                                       onClick={() => cancelAndReleaseMutation.mutate(booking.id)}
                                       className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                                     >
-                                      Sí, cancelar{booking.session_codes ? ' y liberar código' : ''}
+                                      Sí, cancelar{booking.session_codes ? ' y liberar código' : ' y generar código'}
                                     </AlertDialogAction>
                                   </AlertDialogFooter>
                                 </AlertDialogContent>
