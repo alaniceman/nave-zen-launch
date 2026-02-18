@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -7,42 +8,6 @@ import { HelmetProvider } from "react-helmet-async";
 import { TrialModalProvider } from "@/context/TrialModalProvider";
 import { EmailCaptureModalProvider } from "@/context/EmailCaptureModalProvider";
 import { Header } from "@/components/Header";
-import Index from "./pages/Index";
-import Planes from "./pages/Planes";
-import Experiencias from "./pages/Experiencias";
-import Coaches from "./pages/Coaches";
-import Contacto from "./pages/Contacto";
-import Blog from "./pages/Blog";
-import BlogWimHof from "./pages/BlogWimHof";
-import BlogBiohacking from "./pages/BlogBiohacking";
-import BlogYinVinyasa from "./pages/BlogYinVinyasa";
-import BlogHabitosDisciplina from "./pages/BlogHabitosDisciplina";
-import BlogAguaFriaGuiado from "./pages/BlogAguaFriaGuiado";
-import BlogProtocoloSeguro from "./pages/BlogProtocoloSeguro";
-import BlogProtocolo15Minutos from "./pages/BlogProtocolo15Minutos";
-import Cyber2025 from "./pages/Cyber2025";
-import PlanAnual2026 from "./pages/PlanAnual2026";
-import SanValentin from "./pages/SanValentin";
-import Horarios from "./pages/Horarios";
-import FAQ from "./pages/FAQ";
-import ClaseDePrueba from "./pages/ClaseDePrueba";
-import TrialClassSchedule from "./pages/TrialClassSchedule";
-import CriomedicinMetodoWimHof from "./pages/CriomedicinMetodoWimHof";
-import CriomedicinIceBathEnGrupo from "./pages/CriomedicinIceBathEnGrupo";
-import CriomedicinAdsLanding from "./pages/CriomedicinAdsLanding";
-import Terminos from "./pages/Terminos";
-import Privacidad from "./pages/Privacidad";
-import NotFound from "./pages/NotFound";
-import Bonos from "./pages/Bonos";
-import BonosSuccess from "./pages/BonosSuccess";
-import GiftCards from "./pages/GiftCards";
-import GiftCardsSuccess from "./pages/GiftCardsSuccess";
-import GiftCardsFailure from "./pages/GiftCardsFailure";
-import GiftCardView from "./pages/GiftCardView";
-import AgendaNaveStudio from "./pages/AgendaNaveStudio";
-import AgendaSuccess from "./pages/AgendaSuccess";
-import AgendaFailure from "./pages/AgendaFailure";
-import AgendaPending from "./pages/AgendaPending";
 import { CheckoutRedirectManager } from "@/components/CheckoutRedirectManager";
 import { SEOHead } from "@/components/SEOHead";
 import { TrialDelegationHandler } from "@/components/TrialDelegationHandler";
@@ -51,30 +16,77 @@ import { WhatsAppWidget } from "@/components/WhatsAppWidget";
 import { AuthProvider } from "@/context/AuthContext";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { ProtectedRoute } from "@/components/admin/ProtectedRoute";
-import { AdminLayout } from "@/components/admin/AdminLayout";
-import AdminLogin from "./pages/admin/Login";
-import AdminBookings from "./pages/admin/AdminBookings";
-import AdminProfessionals from "./pages/admin/AdminProfessionals";
-import AdminServices from "./pages/admin/AdminServices";
-import AdminAvailability from "./pages/admin/AdminAvailability";
-import AdminFutureSlots from "./pages/admin/AdminFutureSlots";
-import AdminCoupons from "./pages/admin/AdminCoupons";
-import AdminCapacityOverrides from "./pages/admin/AdminCapacityOverrides";
-import AdminSessionPackages from "./pages/admin/AdminSessionPackages";
-import AdminSessionCodes from "./pages/admin/AdminSessionCodes";
-import AdminBranches from "./pages/admin/AdminBranches";
-import AdminPackageOrders from "./pages/admin/AdminPackageOrders";
-import AdminAbandonedCarts from "./pages/admin/AdminAbandonedCarts";
-import AdminDashboard from "./pages/admin/AdminDashboard";
-import AdminMailerLite from "./pages/admin/AdminMailerLite";
-import AdminScheduleEntries from "./pages/admin/AdminScheduleEntries";
-import AdminTrialBookings from "./pages/admin/AdminTrialBookings";
-import AdminCustomers from "./pages/admin/AdminCustomers";
-import AdminCustomerDetail from "./pages/admin/AdminCustomerDetail";
-import AdminMembershipPlans from "./pages/admin/AdminMembershipPlans";
 import { MailerLiteUniversal } from "@/components/MailerLiteUniversal";
+import { Loader2 } from "lucide-react";
+
+// Lazy-loaded pages
+const Index = lazy(() => import("./pages/Index"));
+const Planes = lazy(() => import("./pages/Planes"));
+const Experiencias = lazy(() => import("./pages/Experiencias"));
+const Coaches = lazy(() => import("./pages/Coaches"));
+const Contacto = lazy(() => import("./pages/Contacto"));
+const Blog = lazy(() => import("./pages/Blog"));
+const BlogWimHof = lazy(() => import("./pages/BlogWimHof"));
+const BlogBiohacking = lazy(() => import("./pages/BlogBiohacking"));
+const BlogYinVinyasa = lazy(() => import("./pages/BlogYinVinyasa"));
+const BlogHabitosDisciplina = lazy(() => import("./pages/BlogHabitosDisciplina"));
+const BlogAguaFriaGuiado = lazy(() => import("./pages/BlogAguaFriaGuiado"));
+const BlogProtocoloSeguro = lazy(() => import("./pages/BlogProtocoloSeguro"));
+const BlogProtocolo15Minutos = lazy(() => import("./pages/BlogProtocolo15Minutos"));
+const Cyber2025 = lazy(() => import("./pages/Cyber2025"));
+const PlanAnual2026 = lazy(() => import("./pages/PlanAnual2026"));
+const SanValentin = lazy(() => import("./pages/SanValentin"));
+const Horarios = lazy(() => import("./pages/Horarios"));
+const FAQ = lazy(() => import("./pages/FAQ"));
+const ClaseDePrueba = lazy(() => import("./pages/ClaseDePrueba"));
+const TrialClassSchedule = lazy(() => import("./pages/TrialClassSchedule"));
+const CriomedicinMetodoWimHof = lazy(() => import("./pages/CriomedicinMetodoWimHof"));
+const CriomedicinIceBathEnGrupo = lazy(() => import("./pages/CriomedicinIceBathEnGrupo"));
+const CriomedicinAdsLanding = lazy(() => import("./pages/CriomedicinAdsLanding"));
+const Terminos = lazy(() => import("./pages/Terminos"));
+const Privacidad = lazy(() => import("./pages/Privacidad"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const Bonos = lazy(() => import("./pages/Bonos"));
+const BonosSuccess = lazy(() => import("./pages/BonosSuccess"));
+const GiftCards = lazy(() => import("./pages/GiftCards"));
+const GiftCardsSuccess = lazy(() => import("./pages/GiftCardsSuccess"));
+const GiftCardsFailure = lazy(() => import("./pages/GiftCardsFailure"));
+const GiftCardView = lazy(() => import("./pages/GiftCardView"));
+const AgendaNaveStudio = lazy(() => import("./pages/AgendaNaveStudio"));
+const AgendaSuccess = lazy(() => import("./pages/AgendaSuccess"));
+const AgendaFailure = lazy(() => import("./pages/AgendaFailure"));
+const AgendaPending = lazy(() => import("./pages/AgendaPending"));
+
+// Lazy-loaded admin pages
+const AdminLogin = lazy(() => import("./pages/admin/Login"));
+const AdminLayout = lazy(() => import("./components/admin/AdminLayout").then(m => ({ default: m.AdminLayout })));
+const AdminBookings = lazy(() => import("./pages/admin/AdminBookings"));
+const AdminProfessionals = lazy(() => import("./pages/admin/AdminProfessionals"));
+const AdminServices = lazy(() => import("./pages/admin/AdminServices"));
+const AdminAvailability = lazy(() => import("./pages/admin/AdminAvailability"));
+const AdminFutureSlots = lazy(() => import("./pages/admin/AdminFutureSlots"));
+const AdminCoupons = lazy(() => import("./pages/admin/AdminCoupons"));
+const AdminCapacityOverrides = lazy(() => import("./pages/admin/AdminCapacityOverrides"));
+const AdminSessionPackages = lazy(() => import("./pages/admin/AdminSessionPackages"));
+const AdminSessionCodes = lazy(() => import("./pages/admin/AdminSessionCodes"));
+const AdminBranches = lazy(() => import("./pages/admin/AdminBranches"));
+const AdminPackageOrders = lazy(() => import("./pages/admin/AdminPackageOrders"));
+const AdminAbandonedCarts = lazy(() => import("./pages/admin/AdminAbandonedCarts"));
+const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
+const AdminMailerLite = lazy(() => import("./pages/admin/AdminMailerLite"));
+const AdminScheduleEntries = lazy(() => import("./pages/admin/AdminScheduleEntries"));
+const AdminTrialBookings = lazy(() => import("./pages/admin/AdminTrialBookings"));
+const AdminCustomers = lazy(() => import("./pages/admin/AdminCustomers"));
+const AdminCustomerDetail = lazy(() => import("./pages/admin/AdminCustomerDetail"));
+const AdminMembershipPlans = lazy(() => import("./pages/admin/AdminMembershipPlans"));
 
 const queryClient = new QueryClient();
+
+const LoadingSpinner = () => (
+  <div className="min-h-screen flex items-center justify-center">
+    <Loader2 className="h-8 w-8 animate-spin text-primary" />
+  </div>
+);
 
 const App = () => (
   <HelmetProvider>
@@ -93,6 +105,7 @@ const App = () => (
               <MailerLiteUniversal />
               <TrialDelegationHandler />
               <Header />
+            <Suspense fallback={<LoadingSpinner />}>
             <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/planes-precios" element={<Planes />} />
@@ -163,6 +176,7 @@ const App = () => (
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
+          </Suspense>
           <WhatsAppWidget />
           </EmailCaptureModalProvider>
         </BrowserRouter>
