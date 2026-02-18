@@ -11,7 +11,7 @@ const navigationItems: NavItem[] = [
     label: "Experiencias",
     type: "dropdown",
     children: [
-      { label: "Yoga en Las Condes", href: "/yoga-las-condes" },
+      { label: "Yoga", href: "/yoga-las-condes" },
       { label: "Criomedicina y Método Wim Hof", href: "/criomedicina-metodo-wim-hof-las-condes" },
       { label: "Todas las experiencias", href: "/experiencias" },
       { label: "Coaches", href: "/coaches" },
