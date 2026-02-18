@@ -101,6 +101,15 @@ const seoData = {
     ogImage: "https://studiolanave.com/og-image.png",
     ogType: "website"
   },
+  "/yoga-las-condes": {
+    title: "Yoga en Las Condes | Yin, Vinyasa, Power Yoga | Nave Studio",
+    description: "Clases de Yoga en Las Condes, Santiago. Yin, Vinyasa, Power e Integral Yoga con instructores certificados. Primera clase gratis. Antares 259.",
+    canonical: "https://studiolanave.com/yoga-las-condes",
+    ogTitle: "Yoga en Las Condes | Yin, Vinyasa, Power Yoga | Nave Studio",
+    ogDescription: "Clases de Yoga en Las Condes. Prueba Yin, Vinyasa, Power e Integral Yoga. Primera clase gratis en Antares 259.",
+    ogImage: "https://studiolanave.com/lovable-uploads/82672388-9723-4aee-a1f2-ac72618cd26a.png",
+    ogType: "website"
+  },
   "/cyber-2025": {
     title: "Cyber La Nave 2025 — 80% OFF en Nave Studio Santiago",
     description: "Vive el poder del Método Wim Hof, Yoga y Biohacking con 80% de descuento por 2 meses. Solo del 6 al 8 de octubre en Nave Studio, Las Condes.",
