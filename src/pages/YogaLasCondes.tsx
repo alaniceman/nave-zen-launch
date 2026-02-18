@@ -300,13 +300,134 @@ const YogaLasCondes = () => {
           </div>
         </section>
 
-        {/* Membresías — Eclipse, Órbita, Universo */}
+        {/* Membresías Solo Yoga */}
         <section className="py-20 md:py-28 bg-background">
           <div className="container mx-auto px-6 max-w-6xl">
             <div className="text-center mb-16">
-              <p className="text-accent font-medium font-inter text-sm uppercase tracking-widest mb-3">Planes mensuales</p>
+              <p className="text-accent font-medium font-inter text-sm uppercase tracking-widest mb-3">Planes exclusivos de Yoga</p>
               <h2 className="text-3xl md:text-5xl font-bold text-primary font-space mb-5">
-                Membresías
+                Membresías Solo Yoga
+              </h2>
+              <p className="text-muted-foreground font-inter text-lg max-w-2xl mx-auto">
+                Planes diseñados para tu práctica de Yoga, sin compromiso con otras experiencias.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Yoga Esencial */}
+              <div className="bg-card rounded-2xl p-7 border-2 border-border/50 hover:border-accent/30 hover:shadow-xl transition-all duration-300 group">
+                <h3 className="text-2xl font-bold text-primary font-space mb-1">Yoga Esencial</h3>
+                <p className="text-sm text-muted-foreground font-inter mb-5">1 clase por semana</p>
+                <div className="mb-6">
+                  <span className="text-4xl font-bold text-foreground">$49.000</span>
+                  <span className="text-muted-foreground text-sm">/mes</span>
+                </div>
+                <ul className="space-y-3 mb-8">
+                  <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">
+                    <Check className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                    Yoga (Yin · Yang · Integral · Vinyasa · Power)
+                  </li>
+                  <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">
+                    <Check className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                    Ideal para mantener tu práctica semanal
+                  </li>
+                </ul>
+                <a
+                  href="https://boxmagic.cl/market/plan/oGDPzoy4b5"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => handleMembershipClick("Yoga Esencial $49.000")}
+                  className="block w-full text-center rounded-full px-6 py-3.5 font-semibold transition-all duration-300 hover:scale-105 font-inter bg-accent hover:bg-primary text-white"
+                >
+                  Suscribirme
+                </a>
+              </div>
+
+              {/* Yoga Continuo */}
+              <div className="relative bg-card rounded-2xl p-7 border-2 border-warm shadow-lg scale-[1.02] hover:shadow-xl transition-all duration-300 group">
+                <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-warm text-white px-4 py-1 text-xs shadow-md">
+                  <Star className="w-3 h-3 mr-1" />
+                  Más popular
+                </Badge>
+                <div className="pt-2">
+                  <h3 className="text-2xl font-bold text-primary font-space mb-1">Yoga Continuo</h3>
+                  <p className="text-sm text-muted-foreground font-inter mb-5">2 clases por semana</p>
+                  <div className="mb-6">
+                    <span className="text-4xl font-bold text-foreground">$69.000</span>
+                    <span className="text-muted-foreground text-sm">/mes</span>
+                  </div>
+                  <ul className="space-y-3 mb-8">
+                    <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">
+                      <Check className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                      Yoga (Yin · Yang · Integral · Vinyasa · Power)
+                    </li>
+                    <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">
+                      <Check className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                      Profundiza tu práctica con más frecuencia
+                    </li>
+                  </ul>
+                  <a
+                    href="https://boxmagic.cl/market/plan/XY0llrA0kV"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => handleMembershipClick("Yoga Continuo $69.000")}
+                    className="block w-full text-center rounded-full px-6 py-3.5 font-semibold transition-all duration-300 hover:scale-105 font-inter bg-warm hover:bg-warm/90 text-white shadow-md"
+                  >
+                    Suscribirme
+                  </a>
+                </div>
+              </div>
+
+              {/* Yoga Libre */}
+              <div className="bg-card rounded-2xl p-7 border-2 border-accent/50 hover:shadow-xl transition-all duration-300 group">
+                <h3 className="text-2xl font-bold text-primary font-space mb-1">Yoga Libre</h3>
+                <p className="text-sm text-muted-foreground font-inter mb-5">Clases ilimitadas</p>
+                <div className="mb-6">
+                  <span className="text-4xl font-bold text-foreground">$85.000</span>
+                  <span className="text-muted-foreground text-sm">/mes</span>
+                </div>
+                <ul className="space-y-3 mb-8">
+                  <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">
+                    <Check className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                    Yoga (Yin · Yang · Integral · Vinyasa · Power)
+                  </li>
+                  <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">
+                    <Check className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                    Sin límites, practica todos los días
+                  </li>
+                </ul>
+                <a
+                  href="https://boxmagic.cl/market/plan/rq4mapE4JZ"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => handleMembershipClick("Yoga Libre $85.000")}
+                  className="block w-full text-center rounded-full px-6 py-3.5 font-semibold transition-all duration-300 hover:scale-105 font-inter bg-accent hover:bg-primary text-white"
+                >
+                  Suscribirme
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Separador hacia membresías generales */}
+        <section className="py-12 bg-muted">
+          <div className="container mx-auto px-6 text-center max-w-3xl">
+            <p className="text-lg md:text-xl font-inter text-muted-foreground">
+              ¿Quieres acceso a <strong className="text-primary">todas las experiencias</strong>?
+            </p>
+            <p className="text-sm text-muted-foreground font-inter mt-2">
+              Yoga + Método Wim Hof + Breathwork + Biohacking + Comunidad
+            </p>
+          </div>
+        </section>
+
+        {/* Membresías completas — Eclipse, Órbita, Universo */}
+        <section className="py-20 md:py-28 bg-background">
+          <div className="container mx-auto px-6 max-w-6xl">
+            <div className="text-center mb-16">
+              <p className="text-accent font-medium font-inter text-sm uppercase tracking-widest mb-3">Todas las experiencias</p>
+              <h2 className="text-3xl md:text-5xl font-bold text-primary font-space mb-5">
+                Membresías Completas
               </h2>
               <p className="text-muted-foreground font-inter text-lg max-w-2xl mx-auto">
                 Accede a Yoga y todas las experiencias de Nave Studio con planes flexibles.

@@ -383,41 +383,60 @@ const Planes = () => {
           <section id="solo-yoga" className="mb-24">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold text-primary font-space">Solo Yoga</h2>
-              <p className="text-muted-foreground mt-2 font-inter text-lg">Planes de Yoga sin compromiso.</p>
+              <p className="text-muted-foreground mt-2 font-inter text-lg">Planes exclusivos para tu práctica de Yoga.</p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+              {/* Yoga Esencial */}
               <Card className="border hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[16px]">
                 <CardHeader className="text-center">
-                  <CardTitle className="text-lg font-bold text-primary font-space">Membresía Yin-Yang Yoga</CardTitle>
-                  <Badge className="bg-accent text-white mx-auto">1 clase/sem</Badge>
+                  <CardTitle className="text-lg font-bold text-primary font-space">Yoga Esencial</CardTitle>
+                  <Badge className="bg-accent text-white mx-auto">1 clase / sem</Badge>
                 </CardHeader>
                 <CardContent className="text-center space-y-4">
                   <p className="text-muted-foreground font-inter text-sm">
-                    1 clase semanal de Yoga (Yin, Yang o Integral). Sin inmersión obligatoria.
+                    1 clase semanal de Yoga (Yin · Yang · Vinyasa · Integral · Power). Ideal para mantener tu práctica.
                   </p>
-                  <div className="text-3xl font-bold text-foreground">$39.000</div>
-                  <Button variant="secondary" className="w-full font-inter font-medium" data-checkout-url="https://boxmagic.cl/market/plan_subscription/95DrVeqDpY" data-plan="Membresía Yin-Yang Yoga">
+                  <div className="text-3xl font-bold text-foreground">$49.000</div>
+                  <Button className="w-full bg-accent hover:bg-primary text-white font-inter font-medium" data-checkout-url="https://boxmagic.cl/market/plan/oGDPzoy4b5" data-plan="Yoga Esencial">
                     Suscribirme
                   </Button>
                 </CardContent>
               </Card>
 
-              <Card className="border hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[16px]">
-                <CardHeader className="text-center">
-                  <CardTitle className="text-lg font-bold text-primary font-space">Yoga + Ice Bath</CardTitle>
-                  <Badge className="bg-warm text-white mx-auto">1 sesión con opción Ice Bath</Badge>
+              {/* Yoga Continuo */}
+              <Card className="relative border-2 border-warm hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[16px]">
+                <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-warm text-white">
+                  Más popular
+                </Badge>
+                <CardHeader className="text-center pt-8">
+                  <CardTitle className="text-lg font-bold text-primary font-space">Yoga Continuo</CardTitle>
+                  <Badge className="bg-accent text-white mx-auto">2 clases / sem</Badge>
                 </CardHeader>
                 <CardContent className="text-center space-y-4">
                   <p className="text-muted-foreground font-inter text-sm">
-                    1 sesión de Yoga con opción de Ice Bath al final.
+                    2 clases semanales para profundizar tu práctica y ver resultados reales.
                   </p>
-                  <div className="text-3xl font-bold text-foreground">$15.000</div>
-                  <Button variant="secondary" className="w-full font-inter font-medium" data-checkout-url="https://boxmagic.cl/market/plan/jwDyZPALqv" data-plan="Yoga + Ice Bath">
-                    Reservar
+                  <div className="text-3xl font-bold text-foreground">$69.000</div>
+                  <Button className="w-full bg-accent hover:bg-primary text-white font-inter font-medium" data-checkout-url="https://boxmagic.cl/market/plan/XY0llrA0kV" data-plan="Yoga Continuo">
+                    Suscribirme
                   </Button>
-                  <p className="text-xs text-muted-foreground mt-2 font-inter">
-                    Para ingresar al <strong>Ice Bath</strong> después de Yoga debes haber completado previamente una sesión guiada del <strong>Método Wim Hof</strong>.
+                </CardContent>
+              </Card>
+
+              {/* Yoga Libre */}
+              <Card className="border-2 border-accent hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[16px]">
+                <CardHeader className="text-center">
+                  <CardTitle className="text-lg font-bold text-primary font-space">Yoga Libre</CardTitle>
+                  <Badge className="bg-accent text-white mx-auto">Ilimitadas</Badge>
+                </CardHeader>
+                <CardContent className="text-center space-y-4">
+                  <p className="text-muted-foreground font-inter text-sm">
+                    Clases ilimitadas de Yoga. Practica todos los días que quieras, sin restricciones.
                   </p>
+                  <div className="text-3xl font-bold text-foreground">$85.000</div>
+                  <Button className="w-full bg-accent hover:bg-primary text-white font-inter font-medium" data-checkout-url="https://boxmagic.cl/market/plan/rq4mapE4JZ" data-plan="Yoga Libre">
+                    Suscribirme
+                  </Button>
                 </CardContent>
               </Card>
             </div>
