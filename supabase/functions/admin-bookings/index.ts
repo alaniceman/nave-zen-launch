@@ -143,10 +143,10 @@ Deno.serve(async (req) => {
 
         console.log('Cancel and release action for booking:', id);
 
-        // First get the booking to check if it has a session_code_id
+        // First get the booking with full details
         const { data: booking, error: fetchError } = await supabase
           .from('bookings')
-          .select('id, session_code_id, status')
+          .select('id, session_code_id, status, customer_name, customer_email, customer_phone, service_id')
           .eq('id', id)
           .single();
 
@@ -173,12 +173,12 @@ Deno.serve(async (req) => {
         }
 
         let codeReleased = null;
+        let codeCreated = null;
 
-        // If booking has a session_code_id, release the code
         if (booking.session_code_id) {
+          // Existing flow: release the session code
           console.log('Releasing session code:', booking.session_code_id);
           
-          // Get the code before updating
           const { data: sessionCode } = await supabase
             .from('session_codes')
             .select('code')
@@ -196,10 +196,57 @@ Deno.serve(async (req) => {
 
           if (releaseError) {
             console.error('Error releasing session code:', releaseError);
-            // Booking was cancelled but code release failed - log but don't fail the request
           } else {
             codeReleased = sessionCode?.code || booking.session_code_id;
             console.log('Session code released successfully:', codeReleased);
+          }
+        } else {
+          // New flow: create a recovery session code for direct bookings
+          console.log('Creating recovery session code for direct booking:', id);
+
+          const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+          let randomPart = '';
+          for (let i = 0; i < 4; i++) {
+            randomPart += chars.charAt(Math.floor(Math.random() * chars.length));
+          }
+          const recoveryCode = `RECUP-${randomPart}`;
+
+          const expiresAt = new Date();
+          expiresAt.setDate(expiresAt.getDate() + 90);
+
+          const { error: insertError } = await supabase
+            .from('session_codes')
+            .insert({
+              code: recoveryCode,
+              buyer_email: booking.customer_email,
+              buyer_name: booking.customer_name,
+              buyer_phone: booking.customer_phone,
+              applicable_service_ids: [booking.service_id],
+              expires_at: expiresAt.toISOString(),
+              is_used: false,
+            });
+
+          if (insertError) {
+            console.error('Error creating recovery code:', insertError);
+          } else {
+            codeCreated = recoveryCode;
+            console.log('Recovery code created:', codeCreated);
+
+            // Send email with the new code
+            try {
+              await supabase.functions.invoke('send-session-codes-email', {
+                body: {
+                  buyerEmail: booking.customer_email,
+                  buyerName: booking.customer_name,
+                  packageName: 'Código de Recuperación',
+                  codes: [recoveryCode],
+                  expiresAt: expiresAt.toISOString(),
+                },
+              });
+              console.log('Recovery code email sent to:', booking.customer_email);
+            } catch (emailErr) {
+              console.error('Failed to send recovery code email:', emailErr);
+            }
           }
         }
 
@@ -207,7 +254,8 @@ Deno.serve(async (req) => {
           JSON.stringify({ 
             success: true, 
             booking_cancelled: true,
-            code_released: codeReleased
+            code_released: codeReleased,
+            code_created: codeCreated,
           }),
           { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
