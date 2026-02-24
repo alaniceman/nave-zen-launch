@@ -216,17 +216,8 @@ serve(async (req) => {
       couponId = coupon.id;
 
       console.log(`Coupon applied: ${coupon.code}, discount: ${discountAmount}, final price: ${finalPrice}`);
-
-      // Increment coupon usage
-      const { error: updateCouponError } = await supabase
-        .from("discount_coupons")
-        .update({ current_uses: coupon.current_uses + 1 })
-        .eq("id", coupon.id);
-
-      if (updateCouponError) {
-        console.error("Error updating coupon usage:", updateCouponError);
-        // Don't fail the booking, but log the error
-      }
+      // IMPORTANT: coupon usage is consumed only when booking is actually confirmed.
+      // This avoids burning coupons on abandoned or failed checkout attempts.
     }
 
     // Find or create the generated slot for this booking
@@ -477,9 +468,71 @@ serve(async (req) => {
       );
     }
 
-    // If final price is 0 (100% discount via coupon), confirm booking directly without payment
-    if (finalPrice === 0 && !isPrepaid) {
-      console.log("Final price is 0 (100% coupon discount), confirming booking directly");
+    // If final price is 0 (or less) via coupon, confirm booking directly without payment
+    if (finalPrice <= 0 && !isPrepaid) {
+      console.log("Final price is 0 or less (coupon discount), confirming booking directly");
+
+      // Consume coupon usage only at confirmation time
+      if (couponId) {
+        const { data: currentCoupon, error: couponFetchError } = await supabase
+          .from("discount_coupons")
+          .select("id, current_uses, max_uses")
+          .eq("id", couponId)
+          .maybeSingle();
+
+        if (couponFetchError || !currentCoupon) {
+          console.error("Error fetching coupon usage before confirmation:", couponFetchError);
+          await supabase
+            .from("bookings")
+            .update({ status: "CANCELLED" })
+            .eq("id", booking.id);
+
+          return new Response(
+            JSON.stringify({ error: "No pudimos validar el cupón al confirmar la reserva" }),
+            {
+              status: 409,
+              headers: { ...corsHeaders, "Content-Type": "application/json" },
+            }
+          );
+        }
+
+        const currentUses = currentCoupon.current_uses ?? 0;
+        if (currentCoupon.max_uses && currentUses >= currentCoupon.max_uses) {
+          await supabase
+            .from("bookings")
+            .update({ status: "CANCELLED" })
+            .eq("id", booking.id);
+
+          return new Response(
+            JSON.stringify({ error: "Este cupón ya no tiene usos disponibles" }),
+            {
+              status: 409,
+              headers: { ...corsHeaders, "Content-Type": "application/json" },
+            }
+          );
+        }
+
+        const { error: couponUpdateError } = await supabase
+          .from("discount_coupons")
+          .update({ current_uses: currentUses + 1 })
+          .eq("id", couponId);
+
+        if (couponUpdateError) {
+          console.error("Error consuming coupon usage:", couponUpdateError);
+          await supabase
+            .from("bookings")
+            .update({ status: "CANCELLED" })
+            .eq("id", booking.id);
+
+          return new Response(
+            JSON.stringify({ error: "No pudimos aplicar el cupón. Intenta nuevamente" }),
+            {
+              status: 409,
+              headers: { ...corsHeaders, "Content-Type": "application/json" },
+            }
+          );
+        }
+      }
 
       // Update booking status to CONFIRMED
       await supabase
@@ -518,7 +571,7 @@ serve(async (req) => {
         JSON.stringify({
           bookingId: booking.id,
           confirmed: true,
-          message: "Sesión confirmada con cupón de descuento 100%",
+          message: "Sesión confirmada con cupón de descuento",
         }),
         {
           status: 200,

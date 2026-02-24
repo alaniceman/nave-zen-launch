@@ -178,7 +178,19 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
       });
 
       if (error) {
-        throw new Error(error.message || "Error al crear la reserva");
+        let backendErrorMessage = error.message || "Error al crear la reserva";
+
+        try {
+          const errorContext = (error as any)?.context;
+          if (errorContext && typeof errorContext.json === "function") {
+            const payload = await errorContext.json();
+            backendErrorMessage = payload?.error || payload?.message || backendErrorMessage;
+          }
+        } catch (parseError) {
+          console.error("Could not parse booking error response:", parseError);
+        }
+
+        throw new Error(backendErrorMessage);
       }
 
       // If confirmed (prepaid with session code), redirect to success page
