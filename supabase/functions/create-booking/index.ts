@@ -477,7 +477,57 @@ serve(async (req) => {
       );
     }
 
-    // Create Mercado Pago preference
+    // If final price is 0 (100% discount via coupon), confirm booking directly without payment
+    if (finalPrice === 0 && !isPrepaid) {
+      console.log("Final price is 0 (100% coupon discount), confirming booking directly");
+
+      // Update booking status to CONFIRMED
+      await supabase
+        .from("bookings")
+        .update({ 
+          status: "CONFIRMED",
+          mercado_pago_payment_id: `FREE_COUPON_${booking.id}`,
+        })
+        .eq("id", booking.id);
+
+      // Increment confirmed bookings in slot
+      if (slot) {
+        await supabase
+          .from("generated_slots")
+          .update({
+            confirmed_bookings: slot.confirmed_bookings + 1,
+          })
+          .eq("id", slot.id);
+      }
+
+      // Send confirmation email
+      try {
+        const emailResponse = await supabase.functions.invoke("send-booking-confirmation", {
+          body: { bookingId: booking.id },
+        });
+        if (emailResponse.error) {
+          console.error("Error sending confirmation email:", emailResponse.error);
+        } else {
+          console.log("Confirmation email sent for free coupon booking");
+        }
+      } catch (emailError) {
+        console.error("Failed to invoke send-booking-confirmation:", emailError);
+      }
+
+      return new Response(
+        JSON.stringify({
+          bookingId: booking.id,
+          confirmed: true,
+          message: "Sesión confirmada con cupón de descuento 100%",
+        }),
+        {
+          status: 200,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    // Create Mercado Pago preference (only for paid bookings)
     const mercadoPagoAccessToken = Deno.env.get("MERCADO_PAGO_ACCESS_TOKEN");
     if (!mercadoPagoAccessToken) {
       throw new Error("Mercado Pago not configured");
