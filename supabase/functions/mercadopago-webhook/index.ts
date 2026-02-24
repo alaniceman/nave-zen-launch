@@ -477,6 +477,31 @@ async function handleBookingPayment(
       .update({ confirmed_bookings: slot.confirmed_bookings + 1 })
       .eq("id", slot.id);
 
+    // Consume coupon usage only after successful payment confirmation
+    if (booking.coupon_id) {
+      try {
+        const { data: coupon } = await supabase
+          .from("discount_coupons")
+          .select("id, current_uses")
+          .eq("id", booking.coupon_id)
+          .maybeSingle();
+
+        if (coupon) {
+          const currentUses = coupon.current_uses ?? 0;
+          const { error: couponUpdateError } = await supabase
+            .from("discount_coupons")
+            .update({ current_uses: currentUses + 1 })
+            .eq("id", coupon.id);
+
+          if (couponUpdateError) {
+            console.error("Error incrementing coupon usage for booking:", couponUpdateError);
+          }
+        }
+      } catch (couponError) {
+        console.error("Failed to consume coupon usage for booking:", couponError);
+      }
+    }
+
     console.log(`Booking confirmed: ${bookingId}`);
 
     // Send confirmation email
