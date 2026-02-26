@@ -253,8 +253,8 @@ const YogaLasCondes = () => {
           </div>
         </section>
 
-        {/* Instructores — solo Maral, Val, Mar */}
-        <CoachesSection filterIds={["maral", "val", "mar"]} />
+        {/* Instructores — solo Maral, Amanda, Mar */}
+        <CoachesSection filterIds={["maral", "amanda", "mar"]} />
 
         {/* Horarios */}
         <section id="horarios-yoga" className="py-20 md:py-28 bg-muted">
