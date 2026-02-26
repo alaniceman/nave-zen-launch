@@ -46,12 +46,12 @@ const coaches: Coach[] = [{
   purpose: "Guío secuencias fluidas que despiertan tu creatividad, presencia corporal y conexión interior, para habitarte con más amor, libertad y conciencia.",
   image: "/lovable-uploads/bb33cba0-3deb-41b3-97f1-c55d9dc169c1.png"
 }, {
-  id: "val",
-  name: "Val Medina",
-  role: "Instructora de Yin Yoga · Actriz",
-  credentials: "Facilitadora de Meditación y Mindfulness · Exploradora del movimiento lento y la introspección",
-  purpose: "Te invito a habitar tu cuerpo con suavidad y consciencia profunda.",
-  image: "/lovable-uploads/bab00752-1c18-40b5-bfeb-4089da69749a.png"
+  id: "amanda",
+  name: "Amanda Moutel",
+  role: "Bailarina y Profesora de Yoga y Danza",
+  credentials: "Facilitadora de Breathwork y Prácticas Somáticas · Terapeuta de Respiración Consciente Informada en Trauma",
+  purpose: "Te acompaño a que conectes con tu soberanía interior; con paciencia, compasión, cuidado y amor.",
+  image: "/lovable-uploads/amanda-moutel.webp"
 }, {
   id: "amber",
   name: "Ámbar Vidal",
