@@ -1,26 +1,30 @@
-import { useState, useEffect } from "react"
+import { useEffect, useRef } from "react"
+import { Link } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Footer } from "@/components/Footer"
+import { TrialMiniBar } from "@/components/TrialMiniBar"
+import { useTrialModal } from "@/hooks/useTrialModal"
 import { useFacebookPixel } from "@/hooks/useFacebookPixel"
+import { Snowflake, Wind, Dumbbell, Brain, Flame } from "lucide-react"
 
 const Experiencias = () => {
-  const [activeCard, setActiveCard] = useState<number | null>(null)
+  const { openTrialModal } = useTrialModal()
   const { trackViewContent } = useFacebookPixel()
+  const cardsRef = useRef<HTMLDivElement>(null)
 
-  // Track ViewContent event for experiences page
   useEffect(() => {
     trackViewContent({
       content_name: 'Experiences Overview',
       content_category: 'Service Catalog',
-      content_ids: ['wim-hof', 'yoga', 'breathwork', 'biohacking'],
+      content_ids: ['wim-hof', 'yoga', 'breathwork', 'biohacking', 'isometrica'],
       content_type: 'service_group',
     });
   }, [trackViewContent]);
 
-  // Scroll reveal animation
+  // Scroll reveal
   useEffect(() => {
-    const cards = document.querySelectorAll('.method-card')
+    const cards = document.querySelectorAll('.exp-card')
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -31,275 +35,247 @@ const Experiencias = () => {
       },
       { threshold: 0.1 }
     )
-
     cards.forEach((card) => observer.observe(card))
     return () => observer.disconnect()
   }, [])
 
-  const methods = [
+  const experiences: Array<{
+    id: string; title: string; subtitle: string; duration: string; image: string;
+    icon: typeof Snowflake; description: string; benefits: string[];
+    note?: string; cta: string; href?: string; ctaAction?: "trial";
+  }> = [
     {
-      id: 1,
+      id: "wim-hof",
       title: "Método Wim Hof",
-      subtitle: "1 h Breathwork + Ice Bath (3 °C) guiado y sostenido.",
+      subtitle: "Breathwork + Ice Bath (3 °C)",
+      duration: "60 min",
       image: "/lovable-uploads/0ead276d-928f-4395-b552-f0bebcc62ede.png",
+      icon: Snowflake,
+      description: "Sesión guiada de respiración Wim Hof seguida de inmersión en agua fría a 3 °C. Fortalece tu sistema nervioso y despierta tu resiliencia interior.",
       benefits: [
-        "↓ inflamación y dolor",
-        "↑ energía y claridad mental", 
+        "↓ Inflamación y dolor crónico",
+        "↑ Energía y claridad mental",
         "Entrenas resiliencia del sistema nervioso"
       ],
       cta: "Agendar sesión",
-      href: "#planes"
+      href: "/agenda-nave-studio",
     },
     {
-      id: 2,
-      title: "Yoga (Yin · Yang · Integral)",
-      subtitle: "Secuencias para fuerza, flexibilidad y equilibrio interno. Ice Bath opcional al final.",
+      id: "yoga",
+      title: "Yoga (Yin · Yang · Vinyasa · Integral)",
+      subtitle: "Ice Bath opcional al final",
+      duration: "60 min",
       image: "/lovable-uploads/3649b4d9-a5b6-40c3-a674-5ce8da8b13e4.png",
-      note: "Para sumergirte necesitas haber completado Método Wim Hof.",
+      icon: Wind,
+      description: "Secuencias para fuerza, flexibilidad y equilibrio interno. Puedes complementar con inmersión en agua fría al final de la clase.",
       benefits: [
         "Desarrolla fuerza y flexibilidad",
         "Mejora el equilibrio mental",
-        "Reduce el estrés y ansiedad"
+        "Reduce estrés y ansiedad"
       ],
-      cta: "Ver horarios",
-      href: "#planes"
+      note: "Para sumergirte necesitas haber completado una sesión de Método Wim Hof.",
+      cta: "Clase de prueba GRATIS",
+      ctaAction: "trial",
     },
     {
-      id: 3,
+      id: "breathwork",
       title: "Breathwork & Meditación",
-      subtitle: "Técnicas WHM, respiración consciente y mindfulness para regular el estrés.",
+      subtitle: "Técnicas WHM sin inmersión",
+      duration: "60 min",
       image: "/lovable-uploads/ae8dc267-b3c4-4b99-aedd-4e39f167b9cb.png",
+      icon: Brain,
+      description: "Técnicas de respiración Wim Hof, respiración consciente y mindfulness para regular tu sistema nervioso sin necesidad de hielo.",
       benefits: [
         "Regula el sistema nervioso",
-        "Mejora la concentración",
+        "Mejora concentración y foco",
         "Reduce niveles de cortisol"
       ],
-      cta: "Probar una sesión",
-      href: "#planes"
+      cta: "Ver horarios",
+      href: "/horarios",
     },
     {
-      id: 4,
-      title: "Biohacking (Breathwork + HIIT + Ice Bath)",
-      subtitle: "Explosión metabólica: 15 min respiración, circuito HIIT y baño de hielo.",
+      id: "biohacking",
+      title: "HIIT + Ice Bath",
+      subtitle: "Breathwork + circuito HIIT + baño de hielo",
+      duration: "60 min",
       image: "/lovable-uploads/4483c652-df99-4b53-9841-a5b5b2ff21c4.png",
+      icon: Flame,
+      description: "Explosión metabólica: respiración activante, circuito HIIT de alta intensidad y cierre con inmersión en agua fría para máxima recuperación.",
       benefits: [
         "Acelera el metabolismo",
-        "Optimiza la recuperación",
+        "Optimiza la recuperación muscular",
         "Maximiza la quema de grasa"
       ],
-      cta: "Reservar tu spot",
-      href: "#planes"
+      cta: "Reservar spot",
+      href: "/agenda-nave-studio",
+    },
+    {
+      id: "isometrica",
+      title: "Isométrica + Flexibilidad",
+      subtitle: "Fuerza profunda y movilidad",
+      duration: "60 min",
+      image: "/lovable-uploads/a3fa415f-0bc3-425d-b80a-6be9b04df24c.png",
+      icon: Dumbbell,
+      description: "Ejercicios isométricos que desarrollan fuerza y estabilidad profunda, combinados con trabajo de flexibilidad funcional.",
+      benefits: [
+        "Desarrolla fuerza sin impacto",
+        "Mejora estabilidad articular",
+        "Aumenta rango de movimiento"
+      ],
+      cta: "Ver horarios",
+      href: "/horarios",
     }
   ]
 
   const stats = [
-    { number: "9.9/10", caption: "satisfacción" },
+    { number: "9.9/10", caption: "satisfacción promedio" },
     { number: "97%", caption: "reportaron menos estrés" },
     { number: "+2,000", caption: "participantes guiados" }
   ]
 
-  const scrollToSection = (href: string) => {
-    if (href.startsWith('#')) {
-      const element = document.querySelector(href)
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' })
-      }
-    }
-  }
-
   return (
     <main className="min-h-screen" id="experiencias">
-      {/* Hero Section */}
-      <section 
-        className="relative h-[70vh] flex flex-col items-center justify-center text-center px-6 bg-cover bg-center"
+      <TrialMiniBar />
+
+      {/* Hero */}
+      <section
+        className="relative h-[75vh] flex flex-col items-center justify-center text-center px-6 bg-cover bg-center"
         style={{
           backgroundImage: `var(--hero-overlay), url('/lovable-uploads/01b95c7e-fe23-45a2-8548-05d7d0734fab.png')`,
         }}
       >
-        <h1 className="text-4xl md:text-5xl font-heading text-white mb-4 animate-fade-in">
-          Explora nuestras experiencias
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading text-white mb-4 animate-fade-in max-w-3xl">
+          Experiencias que transforman
         </h1>
-        <p className="text-lg md:text-xl text-white/90 max-w-xl animate-fade-in">
+        <p className="text-lg md:text-xl text-white/90 max-w-2xl animate-fade-in mb-8">
           Frío, respiración, movimiento y ciencia para que estés sano, fuerte y feliz.
         </p>
-        <Button
-          onClick={() => scrollToSection('#grid-experiencias')}
-          className="mt-8 bg-secondary hover:bg-primary text-white py-3 px-8 rounded-[10px] transition-all duration-200 hover:scale-105 animate-fade-in"
-        >
-          Ver experiencias
-        </Button>
+        <div className="flex flex-col sm:flex-row gap-4 animate-fade-in">
+          <Button
+            onClick={openTrialModal}
+            size="lg"
+            className="bg-accent hover:bg-accent/90 text-white py-3 px-8 rounded-[10px] transition-all duration-200 hover:scale-105 text-base"
+          >
+            Prueba una clase gratis
+          </Button>
+          <Button
+            asChild
+            variant="outline"
+            size="lg"
+            className="border-2 border-white text-white hover:bg-white/20 py-3 px-8 rounded-[10px] transition-all duration-200 hover:scale-105 text-base bg-transparent"
+          >
+            <Link to="/planes-precios">Ver planes y precios</Link>
+          </Button>
+        </div>
       </section>
 
-      {/* Grid Experiencias */}
-      <section id="grid-experiencias" className="py-16 px-6 max-w-7xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-heading text-primary mb-4">
-            Nuestras Metodologías
-          </h2>
-          <p className="text-lg text-neutral-mid max-w-2xl mx-auto">
-            Cada experiencia está diseñada para transformar tu bienestar físico y mental
-          </p>
-        </div>
+      {/* Experiences Grid */}
+      <section id="grid-experiencias" className="py-16 md:py-24 px-6 bg-background">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-14">
+            <h2 className="text-3xl md:text-4xl font-heading text-primary mb-4">
+              Nuestras Experiencias
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Cada sesión está diseñada para transformar tu bienestar físico y mental
+            </p>
+          </div>
 
-        {/* Desktop: Grid 2 columns alternating */}
-        <div className="hidden lg:block space-y-16">
-          {methods.map((method, index) => (
-            <div
-              key={method.id}
-              className={`method-card grid grid-cols-2 gap-12 items-center opacity-0 translate-y-5 transition-all duration-500 ${
-                index % 2 === 1 ? 'direction-rtl' : ''
-              }`}
-            >
-              <div className={`${index % 2 === 1 ? 'order-2' : 'order-1'}`}>
-                <img
-                  src={method.image}
-                  alt={method.title}
-                  className="w-full h-64 object-cover rounded-xl shadow-lg"
-                />
-              </div>
-              <div className={`${index % 2 === 1 ? 'order-1' : 'order-2'}`}>
-                <h3 className="text-2xl font-heading text-primary mb-2">
-                  {method.title}
-                </h3>
-                <span className="text-sm font-medium text-accent bg-accent/10 px-3 py-1 rounded-full mb-3 inline-block">
-                  Sesión de 1 hora
-                </span>
-                <p className="text-neutral-mid mb-4 leading-relaxed">
-                  {method.subtitle}
-                </p>
-                {method.note && (
-                  <div className="bg-warm/20 text-warm p-3 rounded-lg mb-4 text-sm">
-                    {method.note}
-                  </div>
-                )}
-                <ul className="space-y-2 mb-6">
-                  {method.benefits.map((benefit, i) => (
-                    <li key={i} className="text-neutral-dark flex items-center">
-                      <span className="text-secondary mr-2">•</span>
-                      {benefit}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Tablet: Single column with image on top */}
-        <div className="hidden md:block lg:hidden space-y-12">
-          {methods.map((method) => (
-            <div key={method.id} className="method-card opacity-0 translate-y-5 transition-all duration-500">
-              <img
-                src={method.image}
-                alt={method.title}
-                className="w-full h-64 object-cover rounded-xl shadow-lg mb-6"
-              />
-              <h3 className="text-2xl font-heading text-primary mb-2">
-                {method.title}
-              </h3>
-              <span className="text-sm font-medium text-accent bg-accent/10 px-3 py-1 rounded-full mb-3 inline-block">
-                Sesión de 1 hora
-              </span>
-              <p className="text-neutral-mid mb-4 leading-relaxed">
-                {method.subtitle}
-              </p>
-              {method.note && (
-                <div className="bg-warm/20 text-warm p-3 rounded-lg mb-4 text-sm">
-                  {method.note}
-                </div>
-              )}
-              <ul className="space-y-2 mb-6">
-                {method.benefits.map((benefit, i) => (
-                  <li key={i} className="text-neutral-dark flex items-center">
-                    <span className="text-secondary mr-2">•</span>
-                    {benefit}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-
-        {/* Mobile: Slider with sneak preview */}
-        <div className="block md:hidden">
-          <div className="relative">
-            <div 
-              className="flex overflow-x-auto gap-3 pb-6 snap-x snap-mandatory scrollbar-hide"
-              style={{ paddingLeft: '1.5rem', paddingRight: '6rem' }}
-              onScroll={(e) => {
-                const container = e.target as HTMLElement
-                const cardWidth = 320 + 12 // w-80 + gap
-                const scrollLeft = container.scrollLeft
-                const activeIndex = Math.round(scrollLeft / cardWidth)
-                setActiveCard(activeIndex)
-              }}
-            >
-              {methods.map((method, index) => (
+          <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {experiences.map((exp, index) => {
+              const Icon = exp.icon
+              return (
                 <div
-                  key={method.id}
-                  className="method-card flex-none w-80 bg-white rounded-xl shadow-lg p-6 snap-start opacity-0 translate-y-5 transition-all duration-500"
-                >
-                  <img
-                    src={method.image}
-                    alt={method.title}
-                    loading={index <= 1 ? "eager" : "lazy"}
-                    className="w-full h-48 object-cover rounded-xl mb-4"
-                  />
-                  <h3 className="text-xl font-heading text-primary mb-2">
-                    {method.title}
-                  </h3>
-                  <span className="text-xs font-medium text-accent bg-accent/10 px-2 py-1 rounded-full mb-3 inline-block">
-                    Sesión de 1 hora
-                  </span>
-                  <p className="text-neutral-mid mb-3 text-sm leading-relaxed">
-                    {method.subtitle}
-                  </p>
-                  {method.note && (
-                    <div className="bg-warm/20 text-warm p-2 rounded-lg mb-3 text-xs">
-                      {method.note}
-                    </div>
-                  )}
-                  <ul className="space-y-1 mb-4">
-                    {method.benefits.map((benefit, i) => (
-                      <li key={i} className="text-neutral-dark text-sm flex items-center">
-                        <span className="text-secondary mr-2">•</span>
-                        {benefit}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-            
-            {/* Dots indicator */}
-            <div className="flex justify-center space-x-2 mt-4">
-              {methods.map((_, index) => (
-                <div
-                  key={index}
-                  className={`w-2 h-2 rounded-full transition-all duration-200 ${
-                    activeCard === index ? 'bg-secondary' : 'bg-neutral-light'
+                  key={exp.id}
+                  className={`exp-card opacity-0 translate-y-5 transition-all duration-500 bg-card rounded-2xl shadow-lg overflow-hidden hover:shadow-xl group ${
+                    index === experiences.length - 1 && experiences.length % 2 !== 0
+                      ? 'md:col-span-2 md:max-w-lg md:mx-auto'
+                      : ''
                   }`}
-                />
-              ))}
-            </div>
+                  style={{ animationDelay: `${index * 80}ms` }}
+                >
+                  <div className="relative h-52 overflow-hidden">
+                    <img
+                      src={exp.image}
+                      alt={exp.title}
+                      loading={index <= 1 ? "eager" : "lazy"}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute top-4 left-4">
+                      <Badge className="bg-primary/90 text-primary-foreground backdrop-blur-sm text-xs">
+                        <Icon className="w-3 h-3 mr-1" />
+                        {exp.duration}
+                      </Badge>
+                    </div>
+                  </div>
+
+                  <div className="p-6">
+                    <h3 className="text-xl font-heading text-primary mb-1">
+                      {exp.title}
+                    </h3>
+                    <p className="text-sm text-accent font-medium mb-3">
+                      {exp.subtitle}
+                    </p>
+                    <p className="text-muted-foreground mb-4 text-sm leading-relaxed">
+                      {exp.description}
+                    </p>
+
+                    {exp.note && (
+                      <div className="bg-warm/10 border border-warm/20 text-foreground p-3 rounded-lg mb-4 text-sm">
+                        ⚠️ {exp.note}
+                      </div>
+                    )}
+
+                    <ul className="space-y-2 mb-6">
+                      {exp.benefits.map((benefit, i) => (
+                        <li key={i} className="text-foreground text-sm flex items-start">
+                          <span className="text-secondary mr-2 mt-0.5">✓</span>
+                          {benefit}
+                        </li>
+                      ))}
+                    </ul>
+
+                    {exp.ctaAction === "trial" ? (
+                      <Button
+                        onClick={openTrialModal}
+                        className="w-full bg-accent hover:bg-accent/90 text-white rounded-[10px] transition-all duration-200 hover:scale-[1.02]"
+                      >
+                        {exp.cta}
+                      </Button>
+                    ) : (
+                      <Button
+                        asChild
+                        className="w-full bg-secondary hover:bg-secondary/90 text-white rounded-[10px] transition-all duration-200 hover:scale-[1.02]"
+                      >
+                        <Link to={exp.href || "/horarios"}>{exp.cta}</Link>
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              )
+            })}
           </div>
         </div>
       </section>
 
-      {/* Banner Requisito Ice Bath */}
+      {/* Ice Bath Prerequisite */}
       <section className="py-8 px-6">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-warm/20 text-primary py-6 px-6 text-center rounded-lg">
-            <p className="text-lg leading-relaxed">
-              Para entrar al <strong>Ice Bath</strong> después de cualquier clase de Yoga debes completar primero 
-              la sesión guiada del <strong>Método Wim Hof</strong>.
+          <div className="bg-primary/5 border border-primary/10 py-6 px-8 rounded-2xl flex items-start gap-4">
+            <Snowflake className="w-6 h-6 text-primary flex-shrink-0 mt-0.5" />
+            <p className="text-foreground leading-relaxed">
+              Para entrar al <strong className="text-primary">Ice Bath</strong> después de cualquier clase de Yoga debes completar primero
+              la sesión guiada del <strong className="text-primary">Método Wim Hof</strong>.{" "}
+              <Link to="/agenda-nave-studio" className="text-accent hover:underline font-medium">
+                Agenda tu primera sesión →
+              </Link>
             </p>
           </div>
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-16 px-6 bg-neutral-light">
+      {/* Stats */}
+      <section className="py-16 px-6 bg-muted">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             {stats.map((stat, index) => (
@@ -307,7 +283,7 @@ const Experiencias = () => {
                 <div className="text-4xl md:text-5xl font-heading text-secondary mb-2">
                   {stat.number}
                 </div>
-                <div className="text-neutral-mid font-medium">
+                <div className="text-muted-foreground font-medium">
                   {stat.caption}
                 </div>
               </div>
@@ -316,29 +292,41 @@ const Experiencias = () => {
         </div>
       </section>
 
-      {/* CTA Final */}
-      <section className="py-16 px-6 text-center bg-white">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-heading text-primary mb-4">
+      {/* Final CTA */}
+      <section className="py-20 px-6 text-center bg-background">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-2xl md:text-4xl font-heading text-primary mb-4">
             ¿Listo para vivir tu primera experiencia?
           </h2>
-          <p className="text-neutral-mid mb-8 max-w-lg mx-auto leading-relaxed">
-            Reserva ahora o explora nuestros planes para comenzar tu viaje en la Nave.
+          <p className="text-muted-foreground mb-10 max-w-lg mx-auto leading-relaxed text-lg">
+            Comienza con una clase de prueba gratuita o explora nuestros planes.
           </p>
-          <div className="flex flex-col md:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
-              onClick={() => window.location.href = '/planes-precios'}
-              className="bg-secondary hover:bg-primary text-white py-3 px-8 rounded-[10px] transition-all duration-200 hover:scale-105"
+              onClick={openTrialModal}
+              size="lg"
+              className="bg-accent hover:bg-accent/90 text-white py-3 px-8 rounded-[10px] transition-all duration-200 hover:scale-105 text-base"
             >
-              Ver planes
+              Clase de prueba gratis
             </Button>
             <Button
-              onClick={() => window.location.href = '/coaches'}
+              asChild
               variant="outline"
-              className="border-2 border-secondary text-secondary hover:bg-secondary hover:text-white py-3 px-8 rounded-[10px] transition-all duration-200 hover:scale-105"
+              size="lg"
+              className="border-2 border-secondary text-secondary hover:bg-secondary hover:text-white py-3 px-8 rounded-[10px] transition-all duration-200 hover:scale-105 text-base"
             >
-              Conocer a los coaches
+              <Link to="/planes-precios">Ver planes desde $39.990/mes</Link>
             </Button>
+          </div>
+          <div className="mt-6">
+            <a
+              href="https://wa.me/56946120426?text=Hola%21%20quiero%20saber%20más%20sobre%20las%20experiencias%20de%20Nave%20Studio"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-muted-foreground hover:text-primary underline-offset-4 hover:underline transition-colors"
+            >
+              ¿Dudas? Hablar por WhatsApp →
+            </a>
           </div>
         </div>
       </section>
