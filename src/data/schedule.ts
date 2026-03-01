@@ -90,7 +90,7 @@ export const scheduleData: Record<string, ClassItem[]> = {
       tags: ["Yoga"],
       badges: ["Ice Bath opcional"],
       duration: 60,
-      instructor: "Val Medina"
+      instructor: "Amanda Moutel"
     })
   ],
   martes: [
@@ -218,7 +218,7 @@ export const scheduleData: Record<string, ClassItem[]> = {
       tags: ["Yoga"],
       badges: ["Ice Bath opcional"],
       duration: 60,
-      instructor: "Val Medina"
+      instructor: "Amanda Moutel"
     }),
     c({
       time: "15:00",

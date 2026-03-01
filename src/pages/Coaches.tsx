@@ -87,12 +87,12 @@ const Coaches = () => {
     },
     {
       id: 6,
-      name: "Val Medina",
-      title: "Instructora de Yin Yoga · Facilitadora de Meditación y Mindfulness",
-      credentials: "Certificada en Mindfulness y Meditación",
-      description: "Te invito a habitar tu cuerpo con suavidad y consciencia profunda.",
-      image: "/lovable-uploads/bab00752-1c18-40b5-bfeb-4089da69749a.png",
-      tags: ["Mindset", "Terapia"]
+      name: "Amanda Moutel",
+      title: "Bailarina y Profesora de Yoga y Danza",
+      credentials: "Facilitadora de Breathwork y Prácticas Somáticas · Terapeuta de Respiración Consciente Informada en Trauma",
+      description: "Te acompaño a que conectes con tu soberanía interior; con paciencia, compasión, cuidado y amor.",
+      image: "/lovable-uploads/amanda-moutel.webp",
+      tags: ["Movimiento", "Breathwork"]
     },
     {
       id: 7,
