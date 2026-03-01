@@ -114,7 +114,7 @@ const Experiencias = () => {
       title: "Isométrica + Flexibilidad",
       subtitle: "Fuerza profunda y movilidad",
       duration: "60 min",
-      image: "/lovable-uploads/a3fa415f-0bc3-425d-b80a-6be9b04df24c.png",
+      image: "/lovable-uploads/b009e7fc-5c3e-4b38-99e1-a3cc58605206.png",
       icon: Dumbbell,
       description: "Ejercicios isométricos que desarrollan fuerza y estabilidad profunda, combinados con trabajo de flexibilidad funcional.",
       benefits: [
