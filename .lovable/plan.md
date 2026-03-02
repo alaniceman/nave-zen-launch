@@ -1,24 +1,56 @@
 
 
-## Plan: Fix package validity display across all pages
+## Problem
 
-### Problem
-The "Paquetes de Criomedicina" section in `/planes-precios` shows hardcoded validity text that doesn't match the database:
-- **3 Sesiones** shows "válido 90 días" but DB has **365 días**
-- **5 Sesiones** shows "válido 180 días" but DB has **360 días**
+The MailerLite eCommerce API is returning a **422 error** with three validation issues:
 
-Additionally, `MarzoReset.tsx` hardcodes "Válido por 6 meses" instead of reading from DB.
+1. **`status: "paid"` is invalid** -- MailerLite expects `"complete"` (not `"paid"`)
+2. **`cart` object is missing** -- the API requires a `cart` wrapper around the items
+3. **`cart.items` format is wrong** -- items must be nested inside `cart.items`, not top-level `items`
 
-### Changes
+The current payload in `supabase/functions/_shared/mailerlite.ts` (line 142-158) builds:
+```json
+{ "order_id": "...", "status": "paid", "items": [...] }
+```
 
-#### 1. `src/pages/Planes.tsx` -- Fix hardcoded validity in Criomedicina section
-- Line 336: Change `válido 90 días` to `válido 365 días` (matching DB for 3-session package)
-- Line 362: Change `válido 180 días` to `válido 360 días` (matching DB for 5-session package)
+But MailerLite expects:
+```json
+{ "order_id": "...", "status": "complete", "cart": { "items": [...], "total": 40000 } }
+```
 
-#### 2. `src/pages/MarzoReset.tsx` -- Make validity dynamic
-- Line 270: Change hardcoded "Válido por 6 meses desde la compra" to show the actual validity from the selected package. Since this page uses hardcoded package data (not fetched from DB), update the hardcoded values from `180` days to `365` days equivalent, or fetch `validity_days` from DB.
+## Fix: `supabase/functions/_shared/mailerlite.ts`
 
-#### 3. Update DB: Set Marzo Reset packages to 365 days
-- Update `session_packages` where id in (`448c825b-...`, `c89ccd95-...`) to `validity_days = 365`
-- This ensures Bonos, GiftCards, CriomedicinMetodoWimHof, and CriomedicinAdsLanding pages (which already read `validity_days` dynamically) show the correct value automatically.
+Update the payload construction (lines ~142-158) to:
+
+1. Change `status` from `"paid"` to `"complete"`
+2. Wrap `items` inside a `cart` object with `total` and `currency`
+3. Remove top-level `items` (move them into `cart.items`)
+
+The corrected payload structure:
+```typescript
+const payload = {
+  order_id: orderData.order_id,
+  currency: "CLP",
+  total: orderData.total,
+  subtotal: orderData.subtotal || orderData.total,
+  status: "complete",
+  customer: {
+    email: orderData.customer_email,
+    first_name,
+    last_name,
+  },
+  cart: {
+    items: orderData.items.map((item) => ({
+      product_id: item.product_id,
+      name: item.name,
+      quantity: item.quantity,
+      price: item.price,
+    })),
+    total: orderData.total,
+    currency: "CLP",
+  },
+};
+```
+
+This is a single-file fix in the shared helper. All callers (mercadopago-webhook, mailerlite-sync-order) will automatically use the corrected payload.
 
