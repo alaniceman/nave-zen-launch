@@ -17,7 +17,15 @@ const navigationItems: NavItem[] = [
       { label: "Coaches", href: "/coaches" },
     ],
   },
-  { label: "Horarios", href: "/horarios", type: "link" },
+  {
+    label: "Agenda",
+    type: "dropdown",
+    children: [
+      { label: "Agenda Criomedicina", href: "/agenda-nave-studio" },
+      { label: "Clase de Prueba", href: "/clase-de-prueba" },
+      { label: "Horarios", href: "/horarios" },
+    ],
+  },
   {
     label: "Planes",
     type: "dropdown",
