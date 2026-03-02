@@ -210,7 +210,7 @@ export default function MarzoReset() {
                     </div>
 
                     <p className="text-sm text-muted-foreground">
-                      ${Math.round(pkg.perSession).toLocaleString("es-CL")} por sesión · Válido 6 meses
+                      ${Math.round(pkg.perSession).toLocaleString("es-CL")} por sesión · Válido 365 días
                     </p>
 
                     {/* Selection indicator */}
@@ -267,7 +267,7 @@ export default function MarzoReset() {
 
                     <div className="flex items-center gap-2 text-muted-foreground bg-muted p-3 rounded-lg">
                       <Clock className="w-4 h-4 flex-shrink-0" />
-                      <span className="text-sm">Válido por 6 meses desde la compra</span>
+                      <span className="text-sm">Válido por 365 días desde la compra</span>
                     </div>
 
                     <p className="text-xs text-muted-foreground text-center">
@@ -333,7 +333,7 @@ export default function MarzoReset() {
               <div className="bg-card rounded-xl p-6 shadow-md border border-cyan-100">
                 <h3 className="font-semibold text-foreground mb-2">¿Cuánto tiempo tengo para usarlos?</h3>
                 <p className="text-muted-foreground">
-                  Los códigos son válidos por 6 meses desde la fecha de compra.
+                  Los códigos son válidos por 365 días desde la fecha de compra.
                 </p>
               </div>
             </div>
