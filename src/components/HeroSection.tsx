@@ -5,8 +5,8 @@ import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { cn } from "@/lib/utils";
 
-// San Valentín promo ends on Feb 14, 2026 at 23:59:59 Chile time
-const VALENTINE_END_DATE = new Date("2026-02-15T02:59:59Z"); // UTC equivalent
+// Marzo Reset promo ends on March 31, 2026 at 23:59:59 Chile time
+const MARZO_RESET_END_DATE = new Date("2026-04-01T02:59:59Z"); // UTC equivalent
 
 const HeroSlideMain = () => {
   const navigate = useNavigate();
@@ -79,22 +79,20 @@ const HeroSlideMain = () => {
   );
 };
 
-const HeroSlideValentine = () => {
+const HeroSlideMarzoReset = () => {
   const navigate = useNavigate();
 
   return (
     <div className="relative min-h-screen flex items-start md:items-center justify-center pt-20 md:pt-0">
-      {/* Background with gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-rose-600 via-pink-500 to-rose-400" />
+      {/* Background with cool gradient */}
+      <div className="absolute inset-0 bg-gradient-to-br from-cyan-700 via-sky-600 to-cyan-500" />
       
-      {/* Decorative hearts */}
+      {/* Decorative snowflakes */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 text-6xl md:text-8xl opacity-20 animate-pulse">💕</div>
-        <div className="absolute top-40 right-20 text-5xl md:text-7xl opacity-15 animate-pulse" style={{ animationDelay: '0.5s' }}>❤️</div>
-        <div className="absolute bottom-40 left-20 text-4xl md:text-6xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }}>💝</div>
-        <div className="absolute bottom-20 right-10 text-5xl md:text-7xl opacity-15 animate-pulse" style={{ animationDelay: '1.5s' }}>💕</div>
-        <div className="absolute top-1/3 left-1/4 text-3xl md:text-5xl opacity-10 animate-pulse" style={{ animationDelay: '0.3s' }}>❤️</div>
-        <div className="absolute top-1/2 right-1/4 text-4xl md:text-6xl opacity-10 animate-pulse" style={{ animationDelay: '0.8s' }}>💝</div>
+        <div className="absolute top-20 left-10 text-6xl md:text-8xl opacity-20 animate-pulse">❄️</div>
+        <div className="absolute top-40 right-20 text-5xl md:text-7xl opacity-15 animate-pulse" style={{ animationDelay: '0.5s' }}>🧊</div>
+        <div className="absolute bottom-40 left-20 text-4xl md:text-6xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }}>❄️</div>
+        <div className="absolute bottom-20 right-10 text-5xl md:text-7xl opacity-15 animate-pulse" style={{ animationDelay: '1.5s' }}>🧊</div>
       </div>
       
       {/* Content */}
@@ -103,42 +101,45 @@ const HeroSlideValentine = () => {
           {/* Badge */}
           <div className="inline-block">
             <span className="bg-white/20 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm md:text-base font-medium border border-white/30">
-              💕 Oferta Especial San Valentín 💕
+              ❄️ Promo Marzo Reset ❄️
             </span>
           </div>
           
           {/* Main Heading */}
           <h1 className="font-space-grotesk font-bold text-3xl md:text-5xl lg:text-6xl leading-tight">
-            Regala una experiencia <br className="hidden md:block" />
-            transformadora
+            Baja el estrés <br className="hidden md:block" />
+            de marzo
           </h1>
           
           {/* Subheading */}
           <div className="space-y-3">
             <h2 className="font-inter font-medium text-xl md:text-2xl lg:text-3xl text-white/95 leading-relaxed">
-              2 Sesiones de Criomedicina / Método Wim Hof
+              Sesiones de Criomedicina / Método Wim Hof
             </h2>
             
-            {/* Price */}
-            <div className="flex items-center justify-center gap-4 flex-wrap">
-              <span className="text-xl md:text-2xl text-white/60 line-through">$60.000</span>
-              <span className="text-4xl md:text-5xl font-bold text-white">$40.000</span>
-              <span className="bg-yellow-400 text-yellow-900 px-3 py-1 rounded-full text-sm font-bold">
-                ¡Ahorra $20.000!
-              </span>
+            {/* Prices */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8">
+              <div className="flex items-center gap-3">
+                <span className="text-lg text-white/60 line-through">$60.000</span>
+                <span className="text-3xl md:text-4xl font-bold text-white">2 x $40.000</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="text-lg text-white/60 line-through">$90.000</span>
+                <span className="text-3xl md:text-4xl font-bold text-white">3 x $50.000</span>
+              </div>
             </div>
           </div>
           
           {/* Benefits */}
           <div className="flex flex-wrap justify-center gap-4 text-white/90 text-sm md:text-base">
             <span className="flex items-center gap-2">
-              <span className="text-lg">✓</span> 2 códigos de sesión
+              <span className="text-lg">✓</span> Gift Card descargable
             </span>
             <span className="flex items-center gap-2">
               <span className="text-lg">✓</span> Válido 6 meses
             </span>
             <span className="flex items-center gap-2">
-              <span className="text-lg">✓</span> Gift Card descargable
+              <span className="text-lg">✓</span> Desde $16.667/sesión
             </span>
           </div>
           
@@ -148,16 +149,16 @@ const HeroSlideValentine = () => {
               type="button"
               onClick={(e) => {
                 e.stopPropagation();
-                navigate('/san-valentin');
+                navigate('/marzo-reset');
               }}
-              className="w-full md:w-auto min-w-[320px] bg-white text-rose-600 hover:bg-white/90 font-bold text-lg py-6 px-8 rounded-xl shadow-xl hover:shadow-2xl transition-all transform hover:scale-105"
+              className="w-full md:w-auto min-w-[320px] bg-white text-cyan-600 hover:bg-white/90 font-bold text-lg py-6 px-8 rounded-xl shadow-xl hover:shadow-2xl transition-all transform hover:scale-105"
               size="xl"
             >
-              💝 Comprar Gift Card de San Valentín
+              ❄️ Comprar Marzo Reset
             </Button>
             
             <p className="font-inter text-sm text-white/80">
-              Válido hasta el 14 de febrero
+              Válido solo en marzo 2026
             </p>
           </div>
         </div>
@@ -167,13 +168,13 @@ const HeroSlideValentine = () => {
 };
 
 export const HeroSection = () => {
-  const [showValentine, setShowValentine] = useState(false);
+  const [showPromo, setShowPromo] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   
-  // Check if we should show Valentine's promo
+  // Check if we should show Marzo Reset promo
   useEffect(() => {
     const now = new Date();
-    setShowValentine(now < VALENTINE_END_DATE);
+    setShowPromo(now < MARZO_RESET_END_DATE);
   }, []);
 
   const autoplayPlugin = Autoplay({
@@ -209,7 +210,7 @@ export const HeroSection = () => {
   }, [emblaApi, onSelect]);
 
   // If no Valentine promo, just show main hero without carousel
-  if (!showValentine) {
+  if (!showPromo) {
     return (
       <section className="relative min-h-screen overflow-hidden">
         <HeroSlideMain />
@@ -218,7 +219,7 @@ export const HeroSection = () => {
   }
 
   const slides = [
-    { id: 'valentine', component: <HeroSlideValentine /> },
+    { id: 'marzo-reset', component: <HeroSlideMarzoReset /> },
     { id: 'main', component: <HeroSlideMain /> },
   ];
 
