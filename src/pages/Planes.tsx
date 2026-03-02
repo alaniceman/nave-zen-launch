@@ -333,7 +333,7 @@ const Planes = () => {
                   <div className="mt-4">
                     <p className="text-lg line-through text-muted-foreground">$90.000</p>
                     <p className="text-4xl font-bold text-primary">$79.000</p>
-                    <p className="text-sm text-muted-foreground">válido 90 días</p>
+                    <p className="text-sm text-muted-foreground">válido 365 días</p>
                   </div>
                   <Button asChild className="w-full bg-warm hover:bg-primary text-white">
                     <a href="/bonos">
@@ -359,7 +359,7 @@ const Planes = () => {
                   <div className="mt-4">
                     <p className="text-lg line-through text-muted-foreground">$150.000</p>
                     <p className="text-4xl font-bold text-primary">$99.000</p>
-                    <p className="text-sm text-muted-foreground">válido 180 días</p>
+                    <p className="text-sm text-muted-foreground">válido 365 días</p>
                   </div>
                   <Button asChild className="w-full bg-accent hover:bg-primary text-white">
                     <a href="/bonos">
