@@ -229,6 +229,52 @@ export async function syncOrderToMailerLite(
 }
 
 /**
+ * Adds a subscriber to one or more MailerLite groups.
+ * Uses MAILERLITE_API_KEY (subscriber API), not the ecommerce key.
+ * Non-blocking: logs errors but never throws.
+ */
+export async function addSubscriberToGroups(
+  email: string,
+  name: string,
+  groupIds: string[]
+): Promise<void> {
+  try {
+    const apiKey = Deno.env.get("MAILERLITE_API_KEY");
+    if (!apiKey) {
+      console.warn("MAILERLITE_API_KEY not set — skipping group assignment");
+      return;
+    }
+
+    const { first_name, last_name } = splitName(name);
+
+    const payload = {
+      email,
+      fields: { name: first_name, last_name },
+      groups: groupIds,
+    };
+
+    const res = await fetch(`${MAILERLITE_API_URL}/subscribers`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!res.ok) {
+      const body = await res.text();
+      console.error(`MailerLite addSubscriberToGroups failed [${res.status}]: ${body}`);
+    } else {
+      console.log(`MailerLite: ${email} added to ${groupIds.length} group(s)`);
+    }
+  } catch (err: any) {
+    console.error("MailerLite addSubscriberToGroups error (non-blocking):", err.message);
+  }
+}
+
+/**
  * Health check: tests MailerLite API connectivity.
  */
 export async function mailerliteHealthCheck(): Promise<{
