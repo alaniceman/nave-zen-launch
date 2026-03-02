@@ -3,6 +3,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 import { getCorsHeaders } from "../_shared/cors.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { upsertCustomerAndLogEvent } from "../_shared/crm.ts";
+import { addSubscriberToGroups } from "../_shared/mailerlite.ts";
 
 const purchaseSchema = z.object({
   packageId: z.string().uuid(),
@@ -328,6 +329,12 @@ serve(async (req) => {
         metadata: { order_id: order.id, package_id: package_.id, free_order: true },
         statusIfNew: "purchased",
       });
+
+      // Add buyer to MailerLite groups (non-blocking)
+      await addSubscriberToGroups(validatedData.buyerEmail, validatedData.buyerName, [
+        "168517368312498017",
+        "180841311274796302",
+      ]);
 
       return new Response(
         JSON.stringify({

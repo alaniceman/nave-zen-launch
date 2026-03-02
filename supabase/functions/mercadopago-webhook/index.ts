@@ -1,7 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 import { getCorsHeaders } from "../_shared/cors.ts";
-import { syncOrderToMailerLite } from "../_shared/mailerlite.ts";
+import { syncOrderToMailerLite, addSubscriberToGroups } from "../_shared/mailerlite.ts";
 import { upsertCustomerAndLogEvent } from "../_shared/crm.ts";
 
 // Helper function to verify Mercado Pago webhook signature
@@ -368,6 +368,12 @@ async function handlePackageOrderPayment(
     statusIfNew: "purchased",
   });
 
+  // Add buyer to MailerLite groups (non-blocking)
+  await addSubscriberToGroups(order.buyer_email, order.buyer_name, [
+    "168517368312498017",
+    "180841311274796302",
+  ]);
+
   return new Response(JSON.stringify({ status: "codes_generated", count: codes.length }), {
     status: 200,
     headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -547,6 +553,12 @@ async function handleBookingPayment(
       metadata: { booking_id: bookingId, service_id: booking.service_id },
       statusIfNew: "purchased",
     });
+
+    // Add buyer to MailerLite groups (non-blocking)
+    await addSubscriberToGroups(booking.customer_email, booking.customer_name, [
+      "168517368312498017",
+      "180841311274796302",
+    ]);
 
     return new Response(JSON.stringify({ status: "confirmed" }), {
       status: 200,
