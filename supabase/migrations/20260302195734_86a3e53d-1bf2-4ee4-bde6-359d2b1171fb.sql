@@ -1,0 +1,1 @@
+UPDATE orders_sync_log SET status = 'retry_pending' WHERE id = 'a15c550a-f193-4384-994e-3d39fe3034c6';
