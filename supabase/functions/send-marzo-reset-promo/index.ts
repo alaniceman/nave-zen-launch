@@ -182,8 +182,8 @@ serve(async (req) => {
           errors.push(`${buyer.email}: ${err}`);
         }
 
-        // Rate limit: 100ms between emails
-        await new Promise(r => setTimeout(r, 100));
+        // Rate limit: 600ms between emails to stay under Resend's 2/s limit
+        await new Promise(r => setTimeout(r, 600));
       } catch (e: any) {
         errors.push(`${buyer.email}: ${e.message}`);
       }
