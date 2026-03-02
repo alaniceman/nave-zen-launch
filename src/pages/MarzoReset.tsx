@@ -315,7 +315,9 @@ export default function MarzoReset() {
               <div className="bg-card rounded-xl p-6 shadow-md border border-cyan-100">
                 <h3 className="font-semibold text-foreground mb-2">¿Cómo funciona?</h3>
                 <p className="text-muted-foreground">
-                  Al comprar, recibirás un email con tus códigos de sesión y un link para descargar tu Gift Card en PDF. Luego agenda tus sesiones en studiolanave.com/agenda-nave-studio ingresando tu código.
+                  Al comprar, recibirás un email con tus códigos de sesión y un link para descargar tu Gift Card en PDF. Luego agenda tus sesiones en{" "}
+                  <a href="/agenda-nave-studio" className="text-cyan-600 hover:underline font-medium">studiolanave.com/agenda-nave-studio</a>{" "}
+                  ingresando tu código.
                 </p>
               </div>
               <div className="bg-card rounded-xl p-6 shadow-md border border-cyan-100">
