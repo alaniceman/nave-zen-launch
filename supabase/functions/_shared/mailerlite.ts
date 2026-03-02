@@ -144,18 +144,22 @@ export async function syncOrderToMailerLite(
     currency: "CLP",
     total: orderData.total,
     subtotal: orderData.subtotal || orderData.total,
-    status: "paid",
+    status: "complete",
     customer: {
       email: orderData.customer_email,
       first_name,
       last_name,
     },
-    items: orderData.items.map((item) => ({
-      product_id: item.product_id,
-      name: item.name,
-      quantity: item.quantity,
-      price: item.price,
-    })),
+    cart: {
+      items: orderData.items.map((item) => ({
+        product_id: item.product_id,
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price,
+      })),
+      total: orderData.total,
+      currency: "CLP",
+    },
   };
 
   // 4. Create pending log entry
