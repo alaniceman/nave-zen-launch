@@ -152,7 +152,7 @@ export async function syncOrderToMailerLite(
     },
     cart: {
       items: orderData.items.map((item) => ({
-        product_id: item.product_id,
+        ecommerce_product_id: item.product_id,
         name: item.name,
         quantity: item.quantity,
         price: item.price,
