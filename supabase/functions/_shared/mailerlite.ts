@@ -139,27 +139,27 @@ export async function syncOrderToMailerLite(
 
   // 3. Build MailerLite order payload
   const { first_name, last_name } = splitName(orderData.customer_name);
+  const customerResourceId = `customer-${orderData.customer_email.toLowerCase().replace(/[^a-z0-9]/g, "-")}`;
   const payload = {
-    order_id: orderData.order_id,
-    currency: "CLP",
-    total: orderData.total,
-    subtotal: orderData.subtotal || orderData.total,
-    status: "complete",
+    resource_id: orderData.order_id,
     customer: {
+      resource_id: customerResourceId,
       email: orderData.customer_email,
-      first_name,
-      last_name,
+      create_subscriber: true,
+      accepts_marketing: true,
     },
     cart: {
-      items: orderData.items.map((item) => ({
+      resource_id: `cart-${orderData.order_id}`,
+      items: orderData.items.map((item, idx) => ({
+        resource_id: `item-${orderData.order_id}-${idx + 1}`,
         product_resource_id: item.product_id,
-        name: item.name,
+        title: item.name,
         quantity: item.quantity,
         price: item.price,
       })),
-      total: orderData.total,
-      currency: "CLP",
     },
+    status: "complete",
+    total_price: orderData.total,
   };
 
   // 4. Create pending log entry
