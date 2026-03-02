@@ -50,3 +50,6 @@ verify_jwt = false
 
 [functions.validate-coupon]
 verify_jwt = false
+
+[functions.send-marzo-reset-promo]
+verify_jwt = false
