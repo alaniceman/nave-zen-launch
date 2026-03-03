@@ -18,7 +18,7 @@ const navigationItems: NavItem[] = [
     ],
   },
   {
-    label: "Agenda",
+    label: "Agenda y Horarios",
     type: "dropdown",
     children: [
       { label: "Agenda Criomedicina", href: "/agenda-nave-studio" },
