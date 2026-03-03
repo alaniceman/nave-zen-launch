@@ -1,29 +1,46 @@
 
 
-## Plan: Create 6 gift session codes for Marcos (no metric pollution)
+## Plan: Add buyers to MailerLite groups on purchase
 
-### What will be done
+### Problem
+When a customer completes a purchase, they are not being added to the specified MailerLite subscriber groups.
 
-1. **Insert 6 session codes directly** into `session_codes` table via SQL INSERT (no `package_orders` row created):
-   - Buyer: Marcos (`Marcosmarcialg@gmail.com`)
-   - Service: Sesión Criomedicina / Método Wim Hof (`ced4be53-8e5c-4d34-8370-0784f8d7a4b1`)
-   - Expiration: 2026-04-18T23:59:59 (Chile time)
-   - `mercado_pago_payment_id`: `GIFT_MARCOS` to identify as manual gift
-   - 6 unique random 8-char uppercase codes
+### Approach
 
-2. **Send email** via `send-session-codes-email` edge function with the 6 codes
+**1. Add a shared helper function in `supabase/functions/_shared/mailerlite.ts`**
 
-3. **No `package_orders` row** -- this is the key to avoiding dashboard pollution since `AdminDashboard` calculates revenue from `package_orders` with status `paid`
+Add a new `addSubscriberToGroups` function that:
+- Takes buyer email, name, and an array of group IDs
+- Calls the MailerLite API `POST /api/subscribers` with the groups array
+- Uses the existing `MAILERLITE_API_KEY` secret (same one used by `subscribe-mailerlite` function)
+- Non-blocking: errors are logged but don't break the purchase flow
 
-4. **No MailerLite ecommerce sync** -- keeps revenue stats clean there too
+**2. Call the helper after successful purchases in `mercadopago-webhook/index.ts`**
 
-5. **CRM upsert** with $0 amount just to have a record of the gift in customer history (optional, non-revenue event)
+Add a call to `addSubscriberToGroups` in two places:
+- `handlePackageOrderPayment` (line ~355, after MailerLite order sync) for package/giftcard purchases
+- `handleBookingPayment` (line ~535, after MailerLite order sync) for booking purchases
 
-### Why this won't pollute metrics
-- Dashboard "Ingresos Reales" sums `final_price` from `package_orders` where `status = 'paid'` -- no row = no impact
-- Dashboard "Bonos por Ingresos" also queries `package_orders` -- same
-- No MailerLite order sync = no revenue impact there
+Both will pass the buyer's email, name, and the two group IDs:
+- `168517368312498017`
+- `180841311274796302`
+
+**3. Call the helper for free (100% discount) orders in `purchase-session-package/index.ts`**
+
+Add the same call after the CRM event log (line ~330) for orders completed without Mercado Pago.
+
+### Technical details
+
+The MailerLite subscriber API (`POST /subscribers`) is idempotent -- if the subscriber already exists, it updates their groups. The `MAILERLITE_API_KEY` secret is already configured.
+
+```text
+Purchase flow:
+  Payment approved (webhook) ──► codes generated ──► email sent ──► MailerLite order sync ──► [NEW] add to groups
+  Free order (purchase fn)   ──► codes generated ──► email sent ──► CRM log ──► [NEW] add to groups
+```
 
 ### Files to modify
-None -- purely operational (DB insert + edge function call)
+- `supabase/functions/_shared/mailerlite.ts` -- add `addSubscriberToGroups` helper
+- `supabase/functions/mercadopago-webhook/index.ts` -- call helper in both payment handlers
+- `supabase/functions/purchase-session-package/index.ts` -- call helper for free orders
 
