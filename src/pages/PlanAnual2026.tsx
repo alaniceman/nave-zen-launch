@@ -107,95 +107,6 @@ const PlanAnual2026 = () => {
           </div>
         </section>
 
-        {/* POR QUÉ ANUAL */}
-        <section className="py-20 bg-muted">
-          <div className="container mx-auto px-4 max-w-3xl text-center">
-            <h2 className="font-space text-3xl md:text-4xl font-bold mb-6 text-foreground">
-              El cambio real no ocurre en una sesión
-            </h2>
-            <p className="font-inter text-lg md:text-xl text-muted-foreground mb-10">
-              Ocurre cuando te comprometes con el proceso.
-              <br />
-              El Plan Anual 2026 es tu sistema para sostener constancia:
-              entrenas tu respiración, tu relación con el frío y tu disciplina,
-              con una comunidad que te acompaña.
-            </p>
-
-            <div className="bg-primary/10 border border-primary/20 rounded-2xl p-8 mb-10">
-              <p className="font-space text-xl md:text-2xl font-semibold text-primary leading-relaxed">
-                No es motivación.
-                <br />
-                Es sistema.
-                <br />
-                Es hábito.
-                <br />
-                Es comunidad.
-              </p>
-            </div>
-
-            <Button size="lg" onClick={scrollToPlans}>
-              Quiero asegurar mi plan
-            </Button>
-          </div>
-        </section>
-
-        {/* NOVEDADES 2026 */}
-        <section className="py-20 bg-background">
-          <div className="container mx-auto px-4 max-w-3xl text-center">
-            <h2 className="font-space text-3xl md:text-4xl font-bold mb-6 text-foreground">
-              El 2026 viene con Novedades en Nave Studio ❄️
-            </h2>
-            <p className="font-inter text-lg md:text-xl text-muted-foreground mb-10">
-              Este 2026 se viene con todo.
-              <br />
-              Se sumarán nuevas disciplinas, un evento exclusivo de la comunidad
-              y más beneficios para miembros anuales.
-            </p>
-
-            <div className="flex flex-col items-center gap-4 mb-10 text-left max-w-md mx-auto">
-              <div className="flex items-center gap-3 w-full">
-                <Sparkles className="w-5 h-5 text-primary flex-shrink-0" />
-                <span>Nuevas disciplinas y experiencias (próximamente)</span>
-              </div>
-              <div className="flex items-center gap-3 w-full">
-                <Users className="w-5 h-5 text-primary flex-shrink-0" />
-                <span>Evento de la comunidad (exclusivo miembros)</span>
-              </div>
-              <div className="flex items-center gap-3 w-full">
-                <Gift className="w-5 h-5 text-primary flex-shrink-0" />
-                <span>Beneficios y sorpresas durante el año</span>
-              </div>
-              <div className="flex items-center gap-3 w-full">
-                <Calendar className="w-5 h-5 text-primary flex-shrink-0" />
-                <span>Acceso y prioridad en experiencias seleccionadas</span>
-              </div>
-            </div>
-
-            <Button size="lg" onClick={scrollToPlans}>
-              Ver planes anuales
-            </Button>
-          </div>
-        </section>
-
-        {/* MENSAJE DEL EQUIPO */}
-        <section className="py-20 bg-warm/10">
-          <div className="container mx-auto px-4 max-w-3xl text-center">
-            <Heart className="w-12 h-12 text-warm mx-auto mb-6" />
-            <h2 className="font-space text-3xl md:text-4xl font-bold mb-6 text-foreground">
-              Gracias por ser parte de esto
-            </h2>
-            <p className="font-inter text-lg md:text-xl text-muted-foreground leading-relaxed">
-              Llevamos 4 meses y estamos muy felices de lo que hemos creado.
-              <br />
-              Muchas gracias por la confianza, por su buena onda y entrega.
-              <br />
-              <span className="font-semibold text-foreground">
-                El equipo de Nave Studio les da las gracias y un feliz año 2026.
-              </span>
-            </p>
-          </div>
-        </section>
-
         {/* PLANES ANUALES */}
         <section id="planes" className="py-20 bg-muted">
           <div className="container mx-auto px-4">
@@ -461,6 +372,95 @@ const PlanAnual2026 = () => {
                 </CardContent>
               </Card>
             </div>
+          </div>
+        </section>
+
+        {/* POR QUÉ ANUAL */}
+        <section className="py-20 bg-background">
+          <div className="container mx-auto px-4 max-w-3xl text-center">
+            <h2 className="font-space text-3xl md:text-4xl font-bold mb-6 text-foreground">
+              El cambio real no ocurre en una sesión
+            </h2>
+            <p className="font-inter text-lg md:text-xl text-muted-foreground mb-10">
+              Ocurre cuando te comprometes con el proceso.
+              <br />
+              El Plan Anual 2026 es tu sistema para sostener constancia:
+              entrenas tu respiración, tu relación con el frío y tu disciplina,
+              con una comunidad que te acompaña.
+            </p>
+
+            <div className="bg-primary/10 border border-primary/20 rounded-2xl p-8 mb-10">
+              <p className="font-space text-xl md:text-2xl font-semibold text-primary leading-relaxed">
+                No es motivación.
+                <br />
+                Es sistema.
+                <br />
+                Es hábito.
+                <br />
+                Es comunidad.
+              </p>
+            </div>
+
+            <Button size="lg" onClick={scrollToPlans}>
+              Quiero asegurar mi plan
+            </Button>
+          </div>
+        </section>
+
+        {/* NOVEDADES 2026 */}
+        <section className="py-20 bg-muted">
+          <div className="container mx-auto px-4 max-w-3xl text-center">
+            <h2 className="font-space text-3xl md:text-4xl font-bold mb-6 text-foreground">
+              El 2026 viene con Novedades en Nave Studio ❄️
+            </h2>
+            <p className="font-inter text-lg md:text-xl text-muted-foreground mb-10">
+              Este 2026 se viene con todo.
+              <br />
+              Se sumarán nuevas disciplinas, un evento exclusivo de la comunidad
+              y más beneficios para miembros anuales.
+            </p>
+
+            <div className="flex flex-col items-center gap-4 mb-10 text-left max-w-md mx-auto">
+              <div className="flex items-center gap-3 w-full">
+                <Sparkles className="w-5 h-5 text-primary flex-shrink-0" />
+                <span>Nuevas disciplinas y experiencias (próximamente)</span>
+              </div>
+              <div className="flex items-center gap-3 w-full">
+                <Users className="w-5 h-5 text-primary flex-shrink-0" />
+                <span>Evento de la comunidad (exclusivo miembros)</span>
+              </div>
+              <div className="flex items-center gap-3 w-full">
+                <Gift className="w-5 h-5 text-primary flex-shrink-0" />
+                <span>Beneficios y sorpresas durante el año</span>
+              </div>
+              <div className="flex items-center gap-3 w-full">
+                <Calendar className="w-5 h-5 text-primary flex-shrink-0" />
+                <span>Acceso y prioridad en experiencias seleccionadas</span>
+              </div>
+            </div>
+
+            <Button size="lg" onClick={scrollToPlans}>
+              Ver planes anuales
+            </Button>
+          </div>
+        </section>
+
+        {/* MENSAJE DEL EQUIPO */}
+        <section className="py-20 bg-warm/10">
+          <div className="container mx-auto px-4 max-w-3xl text-center">
+            <Heart className="w-12 h-12 text-warm mx-auto mb-6" />
+            <h2 className="font-space text-3xl md:text-4xl font-bold mb-6 text-foreground">
+              Gracias por ser parte de esto
+            </h2>
+            <p className="font-inter text-lg md:text-xl text-muted-foreground leading-relaxed">
+              Llevamos 4 meses y estamos muy felices de lo que hemos creado.
+              <br />
+              Muchas gracias por la confianza, por su buena onda y entrega.
+              <br />
+              <span className="font-semibold text-foreground">
+                El equipo de Nave Studio les da las gracias y un feliz año 2026.
+              </span>
+            </p>
           </div>
         </section>
 
