@@ -1,18 +1,25 @@
- import { Button } from "@/components/ui/button";
- import { Badge } from "@/components/ui/badge";
- import { ArrowRight, Calendar, Gift, Snowflake } from "lucide-react";
- import { Link } from "react-router-dom";
- 
- const PlanesAnualesPromo = () => {
-   return (
-     <section className="py-12 bg-gradient-to-b from-warm/10 to-background">
-       <div className="container mx-auto px-4 max-w-4xl">
-         <div className="bg-card border border-warm/30 rounded-2xl p-6 md:p-8 shadow-sm">
-           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-             <div className="space-y-3">
-               <Badge className="bg-warm text-white px-3 py-1">
-                 🔥 Oferta solo por FEBRERO
-               </Badge>
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { ArrowRight, Calendar, Gift, Snowflake } from "lucide-react";
+import { Link } from "react-router-dom";
+
+const MONTH_NAMES = [
+  "ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO",
+  "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"
+];
+
+const PlanesAnualesPromo = () => {
+  const currentMonth = MONTH_NAMES[new Date().getMonth()];
+
+  return (
+    <section className="py-12 bg-gradient-to-b from-warm/10 to-background">
+      <div className="container mx-auto px-4 max-w-4xl">
+        <div className="bg-card border border-warm/30 rounded-2xl p-6 md:p-8 shadow-sm">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div className="space-y-3">
+              <Badge className="bg-warm text-white px-3 py-1">
+                🔥 Oferta solo por {currentMonth}
+              </Badge>
                <h2 className="font-space text-2xl md:text-3xl font-bold text-primary">
                  Planes Anuales 2026
                </h2>
