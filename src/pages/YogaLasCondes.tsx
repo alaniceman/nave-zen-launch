@@ -1,7 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { Helmet } from "react-helmet-async";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
-import { weeklyByExperience } from "@/lib/scheduleByExperience";
+import { useScheduleEntries } from "@/hooks/useScheduleEntries";
+import { Skeleton } from "@/components/ui/skeleton";
 import { CoachesSection } from "@/components/CoachesSection";
 import { LocationSection } from "@/components/LocationSection";
 import { TrialYogaSection } from "@/components/TrialYogaSection";
@@ -101,7 +102,11 @@ const membershipPlans = [
   },
 ];
 
-const yogaSchedule = weeklyByExperience("yoga");
+const DAY_KEYS_YOGA = ['lunes','martes','miercoles','jueves','viernes','sabado','domingo'] as const;
+const DAY_NAMES_YOGA: Record<string, string> = {
+  lunes: 'Lunes', martes: 'Martes', miercoles: 'Miércoles',
+  jueves: 'Jueves', viernes: 'Viernes', sabado: 'Sábado', domingo: 'Domingo',
+};
 
 const structuredDataYoga = {
   "@context": "https://schema.org",
@@ -138,6 +143,21 @@ const structuredDataYoga = {
 
 const YogaLasCondes = () => {
   const { trackViewContent, trackLead, trackInitiateCheckout } = useFacebookPixel();
+  const { data: scheduleData, isLoading: isScheduleLoading } = useScheduleEntries();
+
+  const yogaSchedule = useMemo(() => {
+    if (!scheduleData) return [];
+    return DAY_KEYS_YOGA.map((dayKey) => {
+      const items = (scheduleData.scheduleData[dayKey] || [])
+        .filter(item =>
+          item.color_tag === 'yoga' ||
+          /isom[eé]trica/i.test(item.title)
+        )
+        .sort((a, b) => a.time.localeCompare(b.time));
+      if (items.length === 0) return null;
+      return { day: dayKey, dayName: DAY_NAMES_YOGA[dayKey], items };
+    }).filter(Boolean) as { day: string; dayName: string; items: typeof scheduleData.scheduleData[string] }[];
+  }, [scheduleData]);
 
   useEffect(() => {
     trackViewContent({ content_name: "Yoga Las Condes", content_category: "landing_page" });
@@ -267,26 +287,30 @@ const YogaLasCondes = () => {
               <p className="text-muted-foreground font-inter text-lg">Clases de lunes a domingo en Las Condes</p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-              {yogaSchedule.map((block) => (
-                <div key={block.day} className="bg-card rounded-2xl p-6 border border-border/50 hover:shadow-lg transition-all duration-300">
-                  <h3 className="text-lg font-bold text-primary font-space mb-4 capitalize pb-3 border-b border-border/50">
-                    {block.dayName}
-                  </h3>
-                  <ul className="space-y-3">
-                    {block.items.map((item, i) => (
-                      <li key={i} className="text-sm font-inter flex items-start gap-3">
-                        <span className="font-bold text-accent min-w-[48px]">{item.time}</span>
-                        <div>
-                          <span className="text-foreground font-medium">{item.title}</span>
-                          {item.instructor && (
-                            <span className="text-muted-foreground text-xs block mt-0.5">{item.instructor}</span>
-                          )}
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+            {isScheduleLoading ? (
+              <div className="col-span-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-48 w-full rounded-2xl" />)}
+              </div>
+            ) : yogaSchedule.map((block) => (
+              <div key={block.day} className="bg-card rounded-2xl p-6 border border-border/50 hover:shadow-lg transition-all duration-300">
+                <h3 className="text-lg font-bold text-primary font-space mb-4 capitalize pb-3 border-b border-border/50">
+                  {block.dayName}
+                </h3>
+                <ul className="space-y-3">
+                  {block.items.map((item, i) => (
+                    <li key={i} className="text-sm font-inter flex items-start gap-3">
+                      <span className="font-bold text-accent min-w-[48px]">{item.time}</span>
+                      <div>
+                        <span className="text-foreground font-medium">{item.title}</span>
+                        {item.instructor && (
+                          <span className="text-muted-foreground text-xs block mt-0.5">{item.instructor}</span>
+                        )}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
             </div>
             <div className="text-center mt-10">
               <a
