@@ -1,46 +1,30 @@
 
 
-## Plan: Add buyers to MailerLite groups on purchase
+## Plan: Fix webhook to allow failed→paid transitions
 
 ### Problem
-When a customer completes a purchase, they are not being added to the specified MailerLite subscriber groups.
+When a customer retries payment after an initial rejection, Mercado Pago sends a new `approved` webhook. However, the atomic update on line 191 only allows transitions from `created` or `pending_payment` to `paid`:
 
-### Approach
-
-**1. Add a shared helper function in `supabase/functions/_shared/mailerlite.ts`**
-
-Add a new `addSubscriberToGroups` function that:
-- Takes buyer email, name, and an array of group IDs
-- Calls the MailerLite API `POST /api/subscribers` with the groups array
-- Uses the existing `MAILERLITE_API_KEY` secret (same one used by `subscribe-mailerlite` function)
-- Non-blocking: errors are logged but don't break the purchase flow
-
-**2. Call the helper after successful purchases in `mercadopago-webhook/index.ts`**
-
-Add a call to `addSubscriberToGroups` in two places:
-- `handlePackageOrderPayment` (line ~355, after MailerLite order sync) for package/giftcard purchases
-- `handleBookingPayment` (line ~535, after MailerLite order sync) for booking purchases
-
-Both will pass the buyer's email, name, and the two group IDs:
-- `168517368312498017`
-- `180841311274796302`
-
-**3. Call the helper for free (100% discount) orders in `purchase-session-package/index.ts`**
-
-Add the same call after the CRM event log (line ~330) for orders completed without Mercado Pago.
-
-### Technical details
-
-The MailerLite subscriber API (`POST /subscribers`) is idempotent -- if the subscriber already exists, it updates their groups. The `MAILERLITE_API_KEY` secret is already configured.
-
-```text
-Purchase flow:
-  Payment approved (webhook) ──► codes generated ──► email sent ──► MailerLite order sync ──► [NEW] add to groups
-  Free order (purchase fn)   ──► codes generated ──► email sent ──► CRM log ──► [NEW] add to groups
+```typescript
+.in("status", ["created", "pending_payment"])
 ```
 
+Since the first rejected webhook already set status to `failed`, the approved webhook finds no matching row and returns `already_processed` — silently dropping the successful payment.
+
+### Fix
+In `supabase/functions/mercadopago-webhook/index.ts`, add `"failed"` to the allowed statuses on line 191:
+
+```typescript
+.in("status", ["created", "pending_payment", "failed"])
+```
+
+This single change allows orders that were previously marked as `failed` (due to rejected card, bad CVV, etc.) to be correctly updated to `paid` when a subsequent approved payment arrives.
+
+### Why this is safe
+- The idempotency check on line 98 (`order.status === "paid"`) still prevents double-processing
+- The payment ID check on line 107 prevents reprocessing the same payment
+- Amount verification on line 162 still validates the correct amount was charged
+
 ### Files to modify
-- `supabase/functions/_shared/mailerlite.ts` -- add `addSubscriberToGroups` helper
-- `supabase/functions/mercadopago-webhook/index.ts` -- call helper in both payment handlers
-- `supabase/functions/purchase-session-package/index.ts` -- call helper for free orders
+- `supabase/functions/mercadopago-webhook/index.ts` — line 191: add `"failed"` to status filter
 
