@@ -1,7 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { Helmet } from "react-helmet-async";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
-import { weeklyByExperience } from "@/lib/scheduleByExperience";
+import { useScheduleEntries } from "@/hooks/useScheduleEntries";
+import { Skeleton } from "@/components/ui/skeleton";
 import { CoachesSection } from "@/components/CoachesSection";
 import { LocationSection } from "@/components/LocationSection";
 import { TrialYogaSection } from "@/components/TrialYogaSection";
