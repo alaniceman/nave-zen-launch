@@ -188,7 +188,7 @@ async function handlePackageOrderPayment(
       mercado_pago_status_detail: payment.status_detail || null,
     })
     .eq("id", orderId)
-    .in("status", ["created", "pending_payment"])
+    .in("status", ["created", "pending_payment", "failed"])
     .select()
     .maybeSingle();
 
