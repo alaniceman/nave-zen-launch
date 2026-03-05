@@ -287,26 +287,30 @@ const YogaLasCondes = () => {
               <p className="text-muted-foreground font-inter text-lg">Clases de lunes a domingo en Las Condes</p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-              {yogaSchedule.map((block) => (
-                <div key={block.day} className="bg-card rounded-2xl p-6 border border-border/50 hover:shadow-lg transition-all duration-300">
-                  <h3 className="text-lg font-bold text-primary font-space mb-4 capitalize pb-3 border-b border-border/50">
-                    {block.dayName}
-                  </h3>
-                  <ul className="space-y-3">
-                    {block.items.map((item, i) => (
-                      <li key={i} className="text-sm font-inter flex items-start gap-3">
-                        <span className="font-bold text-accent min-w-[48px]">{item.time}</span>
-                        <div>
-                          <span className="text-foreground font-medium">{item.title}</span>
-                          {item.instructor && (
-                            <span className="text-muted-foreground text-xs block mt-0.5">{item.instructor}</span>
-                          )}
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+            {isScheduleLoading ? (
+              <div className="col-span-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-48 w-full rounded-2xl" />)}
+              </div>
+            ) : yogaSchedule.map((block) => (
+              <div key={block.day} className="bg-card rounded-2xl p-6 border border-border/50 hover:shadow-lg transition-all duration-300">
+                <h3 className="text-lg font-bold text-primary font-space mb-4 capitalize pb-3 border-b border-border/50">
+                  {block.dayName}
+                </h3>
+                <ul className="space-y-3">
+                  {block.items.map((item, i) => (
+                    <li key={i} className="text-sm font-inter flex items-start gap-3">
+                      <span className="font-bold text-accent min-w-[48px]">{item.time}</span>
+                      <div>
+                        <span className="text-foreground font-medium">{item.title}</span>
+                        {item.instructor && (
+                          <span className="text-muted-foreground text-xs block mt-0.5">{item.instructor}</span>
+                        )}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
             </div>
             <div className="text-center mt-10">
               <a
