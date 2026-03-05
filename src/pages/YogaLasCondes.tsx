@@ -143,6 +143,21 @@ const structuredDataYoga = {
 
 const YogaLasCondes = () => {
   const { trackViewContent, trackLead, trackInitiateCheckout } = useFacebookPixel();
+  const { data: scheduleData, isLoading: isScheduleLoading } = useScheduleEntries();
+
+  const yogaSchedule = useMemo(() => {
+    if (!scheduleData) return [];
+    return DAY_KEYS_YOGA.map((dayKey) => {
+      const items = (scheduleData.scheduleData[dayKey] || [])
+        .filter(item =>
+          item.color_tag === 'yoga' ||
+          /isom[eé]trica/i.test(item.title)
+        )
+        .sort((a, b) => a.time.localeCompare(b.time));
+      if (items.length === 0) return null;
+      return { day: dayKey, dayName: DAY_NAMES_YOGA[dayKey], items };
+    }).filter(Boolean) as { day: string; dayName: string; items: typeof scheduleData.scheduleData[string] }[];
+  }, [scheduleData]);
 
   useEffect(() => {
     trackViewContent({ content_name: "Yoga Las Condes", content_category: "landing_page" });
