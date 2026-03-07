@@ -247,7 +247,32 @@ import { Link, useNavigate } from "react-router-dom";
            </div>
          </div>
        </section>
- 
+
+      {/* Promo Marzo Reset — auto-hide after March 31 2026 */}
+      {new Date() <= new Date('2026-04-01T02:59:59Z') && (
+        <section className="py-8 bg-gradient-to-r from-cyan-600 to-sky-500 text-white">
+          <div className="container mx-auto px-6 max-w-4xl text-center space-y-4">
+            <p className="text-sm font-medium tracking-wider uppercase opacity-90">❄️ Solo en Marzo</p>
+            <h2 className="font-space-grotesk font-bold text-2xl md:text-3xl">Promo Marzo Reset</h2>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+              <div>
+                <span className="text-white/60 line-through text-sm">$60.000</span>
+                <p className="text-xl font-bold">2 sesiones × $40.000</p>
+              </div>
+              <div>
+                <span className="text-white/60 line-through text-sm">$90.000</span>
+                <p className="text-xl font-bold">3 sesiones × $50.000</p>
+              </div>
+            </div>
+            <Link to="/marzo-reset">
+              <Button className="mt-2 bg-white text-cyan-600 hover:bg-white/90 font-bold px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all">
+                Ver promo Marzo Reset →
+              </Button>
+            </Link>
+          </div>
+        </section>
+      )}
+
        {/* Qué es Criomedicina */}
        <section className="py-16 bg-background">
          <div className="container mx-auto px-6 max-w-4xl">
