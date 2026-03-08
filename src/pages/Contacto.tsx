@@ -269,6 +269,7 @@ Mensaje: ${formData.message}`
       
       <Footer />
     </main>
+    </>
   )
 }
 

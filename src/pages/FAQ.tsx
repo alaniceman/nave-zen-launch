@@ -167,6 +167,7 @@ const FAQ = () => {
 
       <Footer />
     </main>
+    </>
   );
 };
 
