@@ -96,11 +96,11 @@ const App = () => (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <AuthProvider>
-          <TrialModalProvider>
+          <BrowserRouter>
+            <TrialModalProvider>
               <Toaster />
               <Sonner />
               <CheckoutRedirectManager />
-              <BrowserRouter>
               <EmailCaptureModalProvider>
              <ScrollToTop />
               <SEOHead />
@@ -186,8 +186,8 @@ const App = () => (
           </Suspense>
           <WhatsAppWidget />
           </EmailCaptureModalProvider>
-        </BrowserRouter>
-        </TrialModalProvider>
+            </TrialModalProvider>
+          </BrowserRouter>
         </AuthProvider>
       </TooltipProvider>
     </QueryClientProvider>
