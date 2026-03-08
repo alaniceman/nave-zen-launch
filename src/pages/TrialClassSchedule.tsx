@@ -5,7 +5,7 @@ import TrialScheduleCards from "@/components/trial/TrialScheduleCards";
 import TrialClassDetail from "@/components/trial/TrialClassDetail";
 import TrialBookingForm from "@/components/trial/TrialBookingForm";
 import TrialAlreadyAttended from "@/components/trial/TrialAlreadyAttended";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, Calendar, Clock, MapPin, Instagram } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
 import { useFacebookConversionsAPI } from "@/hooks/useFacebookConversionsAPI";
