@@ -191,6 +191,7 @@ export default function AdminDashboard() {
         membershipsResult,
         membershipPlansResult,
         allCodesResult,
+        allPaidOrdersResult,
       ] = await Promise.all([
         supabase
           .from("bookings")
@@ -211,7 +212,7 @@ export default function AdminDashboard() {
           .gte("purchased_at", startDate.toISOString()),
         supabase
           .from("session_codes")
-          .select("id, is_used, used_at, package_id")
+          .select("id, is_used, used_at, package_id, mercado_pago_payment_id")
           .eq("is_used", true)
           .gte("used_at", startDate.toISOString())
           .lte("used_at", endDate.toISOString()),
@@ -237,6 +238,11 @@ export default function AdminDashboard() {
         supabase
           .from("session_codes")
           .select("id, is_used, buyer_email, buyer_name, buyer_phone, mercado_pago_payment_id, package_id"),
+        // Fetch ALL paid orders to map real final_price per code for redeemed value
+        supabase
+          .from("package_orders")
+          .select("id, package_id, final_price, mercado_pago_payment_id, status")
+          .eq("status", "paid"),
       ]);
 
       const bookings = bookingsResult.data || [];
@@ -256,6 +262,18 @@ export default function AdminDashboard() {
       const servicesMap = new Map(services.map(s => [s.id, s.name]));
       const packagesMap = new Map(packages.map(p => [p.id, p.name]));
       const packagesDataMap = new Map(packages.map(p => [p.id, { price: p.price_clp, sessions: p.sessions_quantity }]));
+
+      // Build a lookup from mercado_pago_payment_id → order for redeemed value calculation
+      const allPaidOrders = allPaidOrdersResult.data || [];
+      const paidOrdersByPaymentId = new Map<string, { final_price: number; package_id: string }>();
+      allPaidOrders.forEach(o => {
+        if (o.mercado_pago_payment_id) {
+          paidOrdersByPaymentId.set(o.mercado_pago_payment_id, {
+            final_price: o.final_price,
+            package_id: o.package_id,
+          });
+        }
+      });
 
       // Calculate booking stats
       const confirmedBookings = bookings.filter(b => b.status === "CONFIRMED");
@@ -279,8 +297,8 @@ export default function AdminDashboard() {
       const expiredCodes = codes.filter(c => !c.is_used && new Date(c.expires_at) < now);
       const availableCodes = codes.filter(c => !c.is_used && new Date(c.expires_at) >= now);
 
-      // Calculate redeemed value (value of used session codes)
-      const totalRedeemedValue = calculateRedeemedValue(usedCodesWithDate, packagesDataMap);
+      // Calculate redeemed value (value of used session codes based on actual order price)
+      const totalRedeemedValue = calculateRedeemedValue(usedCodesWithDate, packagesDataMap, paidOrdersByPaymentId);
 
       // CRM metrics
       const customersByStatus = getCustomersByStatus(allCustomers);
@@ -290,7 +308,7 @@ export default function AdminDashboard() {
       const revenueByMonth = getRevenueByMonth(bookings, orders, startDate, endDate);
 
       // Redeemed value by month (income vs redeemed comparison)
-      const redeemedValueByMonth = getRedeemedValueByMonth(orders, usedCodesWithDate, packagesDataMap, startDate, endDate);
+      const redeemedValueByMonth = getRedeemedValueByMonth(orders, usedCodesWithDate, packagesDataMap, paidOrdersByPaymentId, startDate, endDate);
 
       // Bookings by service
       const bookingsByService = getBookingsByService(confirmedBookings, servicesMap);
@@ -950,24 +968,45 @@ function getCouponUsageByMonth(
   return Array.from(result.entries()).map(([month, uses]) => ({ month, uses }));
 }
 
-// Calculate total redeemed value from used session codes
-function calculateRedeemedValue(
-  usedCodes: { package_id: string | null }[],
-  packagesDataMap: Map<string, { price: number; sessions: number }>
+// Helper: get per-session value for a code using actual order price, fallback to catalog
+function getCodeValue(
+  code: { package_id: string | null; mercado_pago_payment_id?: string | null },
+  packagesDataMap: Map<string, { price: number; sessions: number }>,
+  paidOrdersByPaymentId: Map<string, { final_price: number; package_id: string }>
 ): number {
-  return usedCodes.reduce((sum, code) => {
-    if (!code.package_id) return sum;
-    const pkg = packagesDataMap.get(code.package_id);
-    if (!pkg || pkg.sessions === 0) return sum;
-    return sum + (pkg.price / pkg.sessions);
-  }, 0);
+  if (!code.package_id) return 0;
+  const pkg = packagesDataMap.get(code.package_id);
+  if (!pkg || pkg.sessions === 0) return 0;
+
+  // Try to find the actual order to use real paid price
+  if (code.mercado_pago_payment_id) {
+    const order = paidOrdersByPaymentId.get(code.mercado_pago_payment_id);
+    if (order) {
+      return order.final_price / pkg.sessions;
+    }
+  }
+
+  // Fallback: use catalog price (for codes without payment ID, e.g. free orders)
+  return pkg.price / pkg.sessions;
+}
+
+// Calculate total redeemed value from used session codes (using actual order price)
+function calculateRedeemedValue(
+  usedCodes: { package_id: string | null; mercado_pago_payment_id?: string | null }[],
+  packagesDataMap: Map<string, { price: number; sessions: number }>,
+  paidOrdersByPaymentId: Map<string, { final_price: number; package_id: string }>
+): number {
+  return Math.round(usedCodes.reduce((sum, code) => {
+    return sum + getCodeValue(code, packagesDataMap, paidOrdersByPaymentId);
+  }, 0));
 }
 
 // Get redeemed value by month (income from package sales vs redeemed value)
 function getRedeemedValueByMonth(
   orders: any[],
-  usedCodes: { used_at: string | null; package_id: string | null }[],
+  usedCodes: { used_at: string | null; package_id: string | null; mercado_pago_payment_id?: string | null }[],
   packagesDataMap: Map<string, { price: number; sessions: number }>,
+  paidOrdersByPaymentId: Map<string, { final_price: number; package_id: string }>,
   startDate: Date,
   endDate: Date
 ): { month: string; income: number; redeemed: number }[] {
@@ -993,13 +1032,11 @@ function getRedeemedValueByMonth(
       }
     });
 
-  // Add redeemed value from used session codes
+  // Add redeemed value from used session codes (using actual order price)
   usedCodes.forEach(code => {
     if (!code.used_at || !code.package_id) return;
-    const pkg = packagesDataMap.get(code.package_id);
-    if (!pkg || pkg.sessions === 0) return;
     
-    const codeValue = pkg.price / pkg.sessions;
+    const codeValue = getCodeValue(code, packagesDataMap, paidOrdersByPaymentId);
     const key = format(parseISO(code.used_at), "MMM yy", { locale: es });
     const currentData = result.get(key);
     if (currentData) {
