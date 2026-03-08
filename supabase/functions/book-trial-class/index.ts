@@ -36,6 +36,66 @@ const DAY_NAMES: Record<string, string> = {
   jueves: "Jueves", viernes: "Viernes", sabado: "Sábado", domingo: "Domingo"
 };
 
+interface TrialEmailParams {
+  name: string;
+  classTitle: string;
+  formattedDate: string;
+  time: string;
+  mapsLink: string;
+  naveWhatsapp: string;
+  preheader: string;
+  introText: string;
+}
+
+function buildTrialEmailHtml(p: TrialEmailParams): string {
+  return `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<style>body{margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f5f5f5}
+.wrap{max-width:560px;margin:0 auto;background:#fff;border-radius:12px;overflow:hidden}
+.hdr{background:#2E4D3A;padding:32px 24px;text-align:center}
+.hdr h1{margin:0;color:#fff;font-size:22px;font-weight:600}
+.body{padding:28px 24px}
+.card{background:#F8F9FA;border-radius:10px;padding:20px;margin:20px 0}
+.card p{margin:0 0 8px;color:#333;font-size:15px;line-height:1.5}
+.card p:last-child{margin-bottom:0}
+.directions{background:#FFF8E1;border-left:4px solid #FFC107;padding:16px 20px;margin:20px 0;border-radius:0 8px 8px 0}
+.directions p{margin:0;color:#333;font-size:14px;line-height:1.6}
+.bring{background:#F0F7FF;border-left:4px solid #2E4D3A;padding:16px 20px;margin:20px 0;border-radius:0 8px 8px 0}
+.bring p{margin:0;color:#333;font-size:14px;line-height:1.6}
+.btn{display:inline-block;padding:14px 28px;border-radius:8px;font-size:15px;font-weight:600;text-decoration:none;text-align:center;margin:6px 8px 6px 0}
+.btn-green{background:#2E4D3A;color:#fff!important}
+.btn-outline{background:#fff;color:#2E4D3A!important;border:2px solid #2E4D3A}
+.footer{padding:24px;text-align:center;color:#999;font-size:13px;border-top:1px solid #eee}
+</style></head><body>
+<span style="display:none;max-height:0;overflow:hidden">${p.preheader}</span>
+<div class="wrap">
+  <div class="hdr"><h1>Nave Studio</h1></div>
+  <div class="body">
+    <p style="font-size:16px;color:#333;margin-top:0">Hola <strong>${p.name}</strong>!</p>
+    <p style="font-size:15px;color:#555;line-height:1.6">${p.introText}</p>
+    <div class="card">
+      <p><strong>Clase:</strong> ${p.classTitle}</p>
+      <p><strong>Fecha:</strong> <span style="text-transform:capitalize">${p.formattedDate}</span></p>
+      <p><strong>Hora:</strong> ${p.time} hrs</p>
+      <p><strong>Dirección:</strong> Antares 259, Las Condes</p>
+    </div>
+    <div class="directions">
+      <p><strong>🗺️ Cómo llegar (importante):</strong></p>
+      <p>Es el portón negro a mano derecha de donde sale la numeración. Van a ver un pequeño platillo volador. El portón se corre manual y luego subes al segundo piso.</p>
+    </div>
+    <div class="bring">
+      <p><strong>🎒 Qué llevar:</strong></p>
+      <p><strong>Yoga:</strong> ropa cómoda. Los implementos están acá (mats y todo).</p>
+    </div>
+    <div style="text-align:center;margin:28px 0">
+      <a href="${p.mapsLink}" class="btn btn-green">📍 Abrir en Google Maps</a>
+      <a href="${p.naveWhatsapp}" class="btn btn-outline">💬 WhatsApp directo</a>
+    </div>
+    <p style="font-size:15px;color:#555;margin-top:24px">Nos vemos pronto!<br><strong>Alan y equipo — Nave Studio</strong></p>
+  </div>
+  <div class="footer">Nave Studio · Antares 259, Las Condes</div>
+</div></body></html>`;
+}
+
 serve(async (req) => {
   const corsHeaders = getCorsHeaders(req);
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
