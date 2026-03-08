@@ -13,6 +13,7 @@ export default function AdminMembershipPlans() {
   const queryClient = useQueryClient();
   const [editingPlan, setEditingPlan] = useState<any>(null);
   const [showForm, setShowForm] = useState(false);
+  const [deletingPlan, setDeletingPlan] = useState<any>(null);
 
   const { data: plans = [], isLoading } = useQuery({
     queryKey: ["admin-membership-plans"],
