@@ -524,7 +524,7 @@ const YogaLasCondes = () => {
             </div>
             <p className="text-center text-sm text-muted-foreground font-inter mt-8">
               ¿Primera vez? Tu{" "}
-              <a href="#" data-open-trial="true" onClick={handleTrialClick} className="text-accent underline font-semibold hover:text-primary transition-colors">
+              <a href="/clase-de-prueba/agendar" className="text-accent underline font-semibold hover:text-primary transition-colors">
                 clase de prueba es gratis
               </a>
               .
