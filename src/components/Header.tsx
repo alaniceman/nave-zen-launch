@@ -174,7 +174,7 @@ export const Header = () => {
                 aria-label="Opciones de empezar"
                 className="absolute right-0 mt-2 w-56 rounded-xl bg-background shadow-lg ring-1 ring-black/5 overflow-hidden z-50"
               >
-                <a role="menuitem" href="/clase-de-prueba" className="block px-4 py-3 text-foreground hover:bg-neutral-light transition-all duration-200">Clase de prueba</a>
+                <a role="menuitem" href="/clase-de-prueba/agendar" className="block px-4 py-3 text-foreground hover:bg-neutral-light transition-all duration-200">Clase de prueba</a>
                 <a role="menuitem" href="https://boxmagic.cl/crear_cuenta/NaveStudio" className="block px-4 py-3 text-foreground hover:bg-neutral-light transition-all duration-200">Registrarse</a>
                 <a role="menuitem" href="https://members.boxmagic.app/a/g/Kp0MWKaL8x" className="block px-4 py-3 text-foreground hover:bg-neutral-light transition-all duration-200">Ingresar a la app</a>
               </div>
