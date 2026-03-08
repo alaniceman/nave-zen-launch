@@ -1,5 +1,5 @@
-import { Waves, Wind, Heart, Zap } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Waves, Wind, Heart } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export const MethodologiesSection = () => {
   const methodologies = [
