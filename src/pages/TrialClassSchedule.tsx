@@ -65,6 +65,15 @@ export default function TrialClassSchedule() {
   }
 
   if (step === "success") {
+    const formattedDate = selectedDate
+      ? new Date(selectedDate + "T12:00:00").toLocaleDateString("es-CL", {
+          weekday: "long",
+          day: "numeric",
+          month: "long",
+          timeZone: "America/Santiago",
+        })
+      : "";
+
     return (
       <>
         <Helmet>
@@ -76,18 +85,65 @@ export default function TrialClassSchedule() {
           </div>
           <h2 className="text-2xl font-bold text-[#2E4D3A] mb-3">¡Clase de prueba agendada!</h2>
           <p className="text-[#575757] mb-2">Te enviamos un email con todos los detalles.</p>
-          <p className="text-[#575757] mb-8">
+
+          {/* Class details card */}
+          {selectedClass && (
+            <div className="bg-white rounded-2xl p-5 shadow-sm border border-[#E2E8F0] text-left my-6">
+              <h3 className="font-bold text-[#2E4D3A] text-lg mb-3">{selectedClass.title}</h3>
+              <div className="space-y-2 text-sm text-[#575757]">
+                <div className="flex items-center gap-2">
+                  <Calendar className="w-4 h-4 text-[#2E4D3A] shrink-0" />
+                  <span className="capitalize">{formattedDate}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Clock className="w-4 h-4 text-[#2E4D3A] shrink-0" />
+                  <span>{selectedClass.time} hrs</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-4 h-4 text-[#2E4D3A] shrink-0" />
+                  <a
+                    href="https://maps.app.goo.gl/YGMv9VjfZM6HPxEy8"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline hover:text-[#2E4D3A]"
+                  >
+                    Antares 259, Las Condes
+                  </a>
+                </div>
+                {selectedClass.instructor && (
+                  <div className="flex items-center gap-2">
+                    <span className="w-4 h-4 shrink-0 text-center text-[#2E4D3A] font-bold text-xs">👤</span>
+                    <span>con {selectedClass.instructor}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          <p className="text-[#575757] mb-6">
             ¿Alguna duda?{" "}
             <a href="https://wa.me/56946120426" target="_blank" rel="noopener noreferrer" className="text-[#2E4D3A] font-semibold underline">
               Escríbenos por WhatsApp
             </a>
           </p>
-          <button
-            onClick={() => navigate("/")}
-            className="bg-[#2E4D3A] text-white font-semibold py-3 px-8 rounded-xl hover:bg-[#2E4D3A]/90 transition-colors"
-          >
-            Volver al inicio
-          </button>
+
+          <div className="space-y-3">
+            <a
+              href="https://instagram.com/nave.icestudio"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-[#833AB4] via-[#E1306C] to-[#F77737] text-white font-semibold py-3 px-8 rounded-xl hover:opacity-90 transition-opacity"
+            >
+              <Instagram className="w-5 h-5" />
+              Síguenos en Instagram
+            </a>
+            <button
+              onClick={() => navigate("/")}
+              className="w-full bg-[#2E4D3A] text-white font-semibold py-3 px-8 rounded-xl hover:bg-[#2E4D3A]/90 transition-colors"
+            >
+              Volver al inicio
+            </button>
+          </div>
         </div>
       </>
     );
