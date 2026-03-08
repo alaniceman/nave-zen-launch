@@ -6,6 +6,7 @@ import { Footer } from "@/components/Footer"
 import { TrialMiniBar } from "@/components/TrialMiniBar"
 import { useTrialModal } from "@/hooks/useTrialModal"
 import { useFacebookPixel } from "@/hooks/useFacebookPixel"
+import { StickyMobileCTA } from "@/components/StickyMobileCTA"
 import { Snowflake, Wind, Dumbbell, Brain, Flame } from "lucide-react"
 
 const Experiencias = () => {
