@@ -8,8 +8,7 @@ export const PricingTrialMiniBar = () => {
           <p className="text-primary text-sm md:text-base">
             ¿Primera vez en la Nave? Clase de prueba <strong className="text-accent font-semibold">GRATIS</strong> de Yoga (Yin · Yang · Integral).{" "}
             <a 
-              href="#" 
-              data-open-trial="true"
+              href="/clase-de-prueba/agendar"
               className="ml-2 inline-flex items-center text-accent hover:text-primary underline-offset-4 hover:underline transition-colors"
             >
               Agendar ahora →
