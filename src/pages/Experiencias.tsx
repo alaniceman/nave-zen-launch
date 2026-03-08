@@ -136,7 +136,18 @@ const Experiencias = () => {
   ]
 
   return (
-    <main className="min-h-screen" id="experiencias">
+    <>
+      <Helmet>
+        <title>Experiencias: Ice Bath, Breathwork y Yoga | Nave Studio</title>
+        <meta name="description" content="Explora nuestras sesiones guiadas: baño de hielo, respiración Wim Hof y Yoga. Resultados visibles desde la primera sesión." />
+        <link rel="canonical" href="https://studiolanave.com/experiencias" />
+        <meta property="og:title" content="Ice Bath, Breathwork Wim Hof y Yoga | Nave Studio" />
+        <meta property="og:description" content="Sesiones guiadas de inmersión en frío, respiración consciente y yoga. Resultados desde la primera clase." />
+        <meta property="og:image" content="https://studiolanave.com/og-image.png" />
+        <meta property="og:url" content="https://studiolanave.com/experiencias" />
+        <meta property="og:type" content="website" />
+      </Helmet>
+      <main className="min-h-screen" id="experiencias">
       <TrialMiniBar />
 
       {/* Hero */}
