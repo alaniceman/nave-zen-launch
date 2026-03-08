@@ -14,7 +14,6 @@ export const MethodologiesSection = () => {
         "Aumento de energía y enfoque al activar opioides y cannabinoides endógenos",
         "Refuerzo del sistema inmune y equilibrio simpático-parasimpático"
       ],
-      ctaText: "Reservar Ice Bath"
     },
     {
       icon: Wind,
@@ -27,12 +26,11 @@ export const MethodologiesSection = () => {
         "Alcaliniza la sangre y neutraliza la acidez metabólica",
         "Libera la ansiedad al regular hormonas y bioquímica cerebral"
       ],
-      ctaText: "Aprender Técnica"
     },
     {
       icon: Heart,
-      title: "Yoga Integral",
-      description: "Flujo consciente que une posturas, respiración y mindfulness para alinear cuerpo-mente y devolverte ligereza física y claridad mental en una sola sesión",
+      title: "Yoga",
+      description: "Flujo consciente que une posturas, respiración y mindfulness para alinear cuerpo-mente. Estilos: Yin, Yang, Vinyasa, Integral y Power Yoga.",
       benefits: "Qué notarás en los primeros 20 min",
       benefitsList: [
         "Mejora flexibilidad y equilibrio corporal en pocas semanas",
@@ -40,21 +38,7 @@ export const MethodologiesSection = () => {
         "Equilibra emociones al aumentar el tono vagal y la autorregulación",
         "Fortalece el core y la estabilidad postural mediante asanas específicas"
       ],
-      ctaText: "Unirse a Clase"
     },
-    {
-      icon: Zap,
-      title: "Biohacking Session",
-      description: "Breathwork · HIIT · Ice Bath en ese orden\nProtocolo triple que alterna sprints metabólicos, 3 rondas de respiración Wim Hof y un plunge a 3 °C. El combo dispara tu dopamina y noradrenalina, estimula la biogénesis mitocondrial y deja tu cuerpo en \"modo super-recuperación\".",
-      benefits: "Qué sucede en 45 min",
-      benefitsList: [
-        "+10 % VO₂ max y capacidad cardiovascular en 4 semanas",
-        "Triplica dopamina/noradrenalina → foco y motivación instantáneos",
-        "Activa genes de mitocondrias y quema grasa incluso en reposo",
-        "Acelera recuperación muscular y reduce inflamación post-entreno"
-      ],
-      ctaText: "Agendar Sesión"
-    }
   ];
 
   return (
