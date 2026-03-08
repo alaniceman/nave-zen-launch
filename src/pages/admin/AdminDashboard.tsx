@@ -263,6 +263,18 @@ export default function AdminDashboard() {
       const packagesMap = new Map(packages.map(p => [p.id, p.name]));
       const packagesDataMap = new Map(packages.map(p => [p.id, { price: p.price_clp, sessions: p.sessions_quantity }]));
 
+      // Build a lookup from mercado_pago_payment_id → order for redeemed value calculation
+      const allPaidOrders = allPaidOrdersResult.data || [];
+      const paidOrdersByPaymentId = new Map<string, { final_price: number; package_id: string }>();
+      allPaidOrders.forEach(o => {
+        if (o.mercado_pago_payment_id) {
+          paidOrdersByPaymentId.set(o.mercado_pago_payment_id, {
+            final_price: o.final_price,
+            package_id: o.package_id,
+          });
+        }
+      });
+
       // Calculate booking stats
       const confirmedBookings = bookings.filter(b => b.status === "CONFIRMED");
       const pendingBookings = bookings.filter(b => b.status === "PENDING_PAYMENT");
