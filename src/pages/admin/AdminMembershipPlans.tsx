@@ -41,6 +41,31 @@ export default function AdminMembershipPlans() {
     },
   });
 
+  const deletePlan = useMutation({
+    mutationFn: async (id: string) => {
+      // Check if any customer has this plan assigned
+      const { count, error: countError } = await supabase
+        .from("customer_memberships")
+        .select("*", { count: "exact", head: true })
+        .eq("membership_plan_id", id);
+      if (countError) throw countError;
+      if (count && count > 0) {
+        throw new Error(`No se puede eliminar: ${count} cliente(s) tienen esta membresía asignada.`);
+      }
+      const { error } = await supabase.from("membership_plans").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin-membership-plans"] });
+      toast.success("Plan eliminado");
+      setDeletingPlan(null);
+    },
+    onError: (err: any) => {
+      toast.error(err.message || "Error al eliminar");
+      setDeletingPlan(null);
+    },
+  });
+
   const FREQ_LABELS: Record<string, string> = { weekly: "Semanal", monthly: "Mensual" };
 
   return (
