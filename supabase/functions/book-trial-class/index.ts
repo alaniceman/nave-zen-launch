@@ -164,26 +164,17 @@ serve(async (req) => {
         from: "Nave Studio <no-reply@studiolanave.com>",
         reply_to: "lanave@alaniceman.com",
         to: [data.customerEmail],
-        subject: `Tu clase de prueba está confirmada — ${data.classTitle}`,
-        html: `
-          <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 560px; margin: 0 auto; padding: 24px;">
-            <h1 style="color: #2E4D3A; font-size: 24px;">¡Clase de prueba confirmada!</h1>
-            <p style="color: #575757;">Hola ${data.customerName}, tu clase de prueba ha sido agendada.</p>
-            
-            <div style="background: #F8F9FA; border-radius: 12px; padding: 20px; margin: 24px 0;">
-              <p style="margin: 0 0 8px; font-weight: 600; color: #2E4D3A;">${data.classTitle}</p>
-              <p style="margin: 0 0 4px; color: #575757;">📅 <span style="text-transform: capitalize;">${formattedDate}</span></p>
-              <p style="margin: 0 0 4px; color: #575757;">🕐 ${data.time} hrs</p>
-              <p style="margin: 0; color: #575757;">📍 <a href="${mapsLink}" style="color: #2E4D3A;">Antares 259, Las Condes</a></p>
-            </div>
-
-            <p style="color: #575757; font-size: 14px;">
-              ¿Alguna duda? <a href="${naveWhatsapp}" style="color: #2E4D3A; font-weight: 600;">Escríbenos por WhatsApp</a>
-            </p>
-
-            <p style="color: #999; font-size: 12px; margin-top: 32px;">Nave Studio · Antares 259, Las Condes</p>
-          </div>
-        `,
+        subject: `Confirmación — tu clase de prueba en Nave Studio`,
+        html: buildTrialEmailHtml({
+          name: data.customerName,
+          classTitle: data.classTitle,
+          formattedDate,
+          time: data.time,
+          mapsLink,
+          naveWhatsapp,
+          preheader: "Listo, tu clase de prueba quedó agendada.",
+          introText: "Listo, tu clase de prueba quedó agendada:",
+        }),
       });
 
       // 8. Internal notification email
