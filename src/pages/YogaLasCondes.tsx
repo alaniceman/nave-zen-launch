@@ -572,6 +572,7 @@ const YogaLasCondes = () => {
       </main>
 
       <Footer />
+      <StickyMobileCTA />
     </>
   );
 };

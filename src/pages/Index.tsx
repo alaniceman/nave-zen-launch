@@ -25,6 +25,8 @@ const Index = () => {
       <LocationSection />
       <GiftCardSection />
       <Footer />
+      <StickyMobileCTA />
+      </main>
       </main>
   );
 };
