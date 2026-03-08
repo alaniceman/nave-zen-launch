@@ -103,7 +103,7 @@ export const Header = () => {
         <div className="container mx-auto px-6 h-full flex items-center justify-between">
           {/* Logo */}
           <button
-            onClick={() => (window.location.href = '/')}
+            onClick={() => navigate('/')}
             className="font-space-grotesk font-bold text-xl md:text-2xl text-primary hover:text-warm transition-colors duration-200 focus:outline-dashed focus:outline-2 focus:outline-secondary"
             aria-label="Ir al inicio"
           >

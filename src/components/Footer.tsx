@@ -132,7 +132,7 @@ const Footer = () => {
 
         {/* Bottom bar */}
         <div className="border-t border-white/20 mt-10 pt-6 text-xs text-center font-inter">
-          © 2025 Nave Studio. Todos los derechos reservados ·{" "}
+          © {new Date().getFullYear()} Nave Studio. Todos los derechos reservados ·{" "}
           <a 
             href="/terminos" 
             className="text-accent hover:text-warm transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
