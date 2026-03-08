@@ -9,6 +9,7 @@ import { Footer } from "@/components/Footer"
 import { TrialMiniBar } from "@/components/TrialMiniBar"
 import { TrialYogaSection } from "@/components/TrialYogaSection"
 import { GiftCardSection } from "@/components/GiftCardSection"
+import { StickyMobileCTA } from "@/components/StickyMobileCTA"
 
 const Index = () => {
   return (
