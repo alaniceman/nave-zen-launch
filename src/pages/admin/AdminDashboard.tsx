@@ -191,6 +191,7 @@ export default function AdminDashboard() {
         membershipsResult,
         membershipPlansResult,
         allCodesResult,
+        allPaidOrdersResult,
       ] = await Promise.all([
         supabase
           .from("bookings")
@@ -211,7 +212,7 @@ export default function AdminDashboard() {
           .gte("purchased_at", startDate.toISOString()),
         supabase
           .from("session_codes")
-          .select("id, is_used, used_at, package_id")
+          .select("id, is_used, used_at, package_id, mercado_pago_payment_id")
           .eq("is_used", true)
           .gte("used_at", startDate.toISOString())
           .lte("used_at", endDate.toISOString()),
@@ -237,6 +238,11 @@ export default function AdminDashboard() {
         supabase
           .from("session_codes")
           .select("id, is_used, buyer_email, buyer_name, buyer_phone, mercado_pago_payment_id, package_id"),
+        // Fetch ALL paid orders to map real final_price per code for redeemed value
+        supabase
+          .from("package_orders")
+          .select("id, package_id, final_price, mercado_pago_payment_id, status")
+          .eq("status", "paid"),
       ]);
 
       const bookings = bookingsResult.data || [];
