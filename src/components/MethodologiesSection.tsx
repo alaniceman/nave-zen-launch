@@ -1,5 +1,5 @@
-import { Waves, Wind, Heart, Zap } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Waves, Wind, Heart } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export const MethodologiesSection = () => {
   const methodologies = [
@@ -14,7 +14,6 @@ export const MethodologiesSection = () => {
         "Aumento de energía y enfoque al activar opioides y cannabinoides endógenos",
         "Refuerzo del sistema inmune y equilibrio simpático-parasimpático"
       ],
-      ctaText: "Reservar Ice Bath"
     },
     {
       icon: Wind,
@@ -27,12 +26,11 @@ export const MethodologiesSection = () => {
         "Alcaliniza la sangre y neutraliza la acidez metabólica",
         "Libera la ansiedad al regular hormonas y bioquímica cerebral"
       ],
-      ctaText: "Aprender Técnica"
     },
     {
       icon: Heart,
-      title: "Yoga Integral",
-      description: "Flujo consciente que une posturas, respiración y mindfulness para alinear cuerpo-mente y devolverte ligereza física y claridad mental en una sola sesión",
+      title: "Yoga",
+      description: "Flujo consciente que une posturas, respiración y mindfulness para alinear cuerpo-mente. Estilos: Yin, Yang, Vinyasa, Integral y Power Yoga.",
       benefits: "Qué notarás en los primeros 20 min",
       benefitsList: [
         "Mejora flexibilidad y equilibrio corporal en pocas semanas",
@@ -40,21 +38,7 @@ export const MethodologiesSection = () => {
         "Equilibra emociones al aumentar el tono vagal y la autorregulación",
         "Fortalece el core y la estabilidad postural mediante asanas específicas"
       ],
-      ctaText: "Unirse a Clase"
     },
-    {
-      icon: Zap,
-      title: "Biohacking Session",
-      description: "Breathwork · HIIT · Ice Bath en ese orden\nProtocolo triple que alterna sprints metabólicos, 3 rondas de respiración Wim Hof y un plunge a 3 °C. El combo dispara tu dopamina y noradrenalina, estimula la biogénesis mitocondrial y deja tu cuerpo en \"modo super-recuperación\".",
-      benefits: "Qué sucede en 45 min",
-      benefitsList: [
-        "+10 % VO₂ max y capacidad cardiovascular en 4 semanas",
-        "Triplica dopamina/noradrenalina → foco y motivación instantáneos",
-        "Activa genes de mitocondrias y quema grasa incluso en reposo",
-        "Acelera recuperación muscular y reduce inflamación post-entreno"
-      ],
-      ctaText: "Agendar Sesión"
-    }
   ];
 
   return (
@@ -72,7 +56,7 @@ export const MethodologiesSection = () => {
         </div>
 
         {/* Methodologies Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-16">
           {methodologies.map((method, index) => {
             const IconComponent = method.icon;
             return (
@@ -124,18 +108,16 @@ export const MethodologiesSection = () => {
         </div>
 
         {/* Section CTA */}
-        <div className="text-center">
+        <div className="text-center space-y-4">
           <p className="font-inter text-lg text-neutral-mid">
-            ¿Listo para transformar tu bienestar? {" "}
-            <a 
-              href="https://wa.link/wh4f79" 
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary font-medium hover:text-primary/80 transition-colors duration-200 underline underline-offset-4"
-            >
-              Agenda tu llamada de descubrimiento gratuita
-            </a>
+            ¿Primera vez en la Nave?
           </p>
+          <Link
+            to="/clase-de-prueba/agendar"
+            className="inline-block bg-accent text-white font-medium py-3 px-8 rounded-lg hover:bg-primary transition-colors duration-200 font-inter"
+          >
+            Agenda tu clase de prueba gratis →
+          </Link>
         </div>
       </div>
 

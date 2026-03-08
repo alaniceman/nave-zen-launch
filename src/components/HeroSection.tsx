@@ -43,7 +43,7 @@ const HeroSlideMain = () => {
               Para sentirte sano, fuerte y feliz.
             </h2>
             <div className="font-inter font-medium text-lg md:text-xl text-white/80 tracking-wide">
-              Ice Bath · Breathwork · Yoga · Biohacking
+              Ice Bath · Método Wim Hof · Yoga · Breathwork
             </div>
           </div>
           
