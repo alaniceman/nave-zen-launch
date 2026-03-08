@@ -108,18 +108,16 @@ export const MethodologiesSection = () => {
         </div>
 
         {/* Section CTA */}
-        <div className="text-center">
+        <div className="text-center space-y-4">
           <p className="font-inter text-lg text-neutral-mid">
-            ¿Listo para transformar tu bienestar? {" "}
-            <a 
-              href="https://wa.link/wh4f79" 
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary font-medium hover:text-primary/80 transition-colors duration-200 underline underline-offset-4"
-            >
-              Agenda tu llamada de descubrimiento gratuita
-            </a>
+            ¿Primera vez en la Nave?
           </p>
+          <Link
+            to="/clase-de-prueba/agendar"
+            className="inline-block bg-accent text-white font-medium py-3 px-8 rounded-lg hover:bg-primary transition-colors duration-200 font-inter"
+          >
+            Agenda tu clase de prueba gratis →
+          </Link>
         </div>
       </div>
 

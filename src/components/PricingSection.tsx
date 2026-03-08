@@ -41,11 +41,11 @@ const PricingSection = () => {
             </a>
 
             {/* 4. Solo Yoga */}
-            <a href="/planes-precios#solo-yoga"
+            <a href="/yoga-las-condes"
                className="group rounded-2xl p-5 bg-muted hover:bg-card hover:shadow-lg transition"
-               aria-label="Ver planes para practicar solo Yoga">
+               aria-label="Ver planes y clases de Yoga">
               <h3 className="font-semibold text-primary font-space">Solo Yoga</h3>
-              <p className="text-sm text-muted-foreground mt-1 font-inter">Practica Yin, Yang o Integral sin compromiso.</p>
+              <p className="text-sm text-muted-foreground mt-1 font-inter">Practica Yin, Yang, Vinyasa o Integral. Primera clase gratis.</p>
               <span className="inline-block mt-3 text-secondary group-hover:underline font-inter">Ver Yoga →</span>
             </a>
           </div>
