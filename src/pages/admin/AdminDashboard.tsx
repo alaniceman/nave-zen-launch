@@ -297,8 +297,8 @@ export default function AdminDashboard() {
       const expiredCodes = codes.filter(c => !c.is_used && new Date(c.expires_at) < now);
       const availableCodes = codes.filter(c => !c.is_used && new Date(c.expires_at) >= now);
 
-      // Calculate redeemed value (value of used session codes)
-      const totalRedeemedValue = calculateRedeemedValue(usedCodesWithDate, packagesDataMap);
+      // Calculate redeemed value (value of used session codes based on actual order price)
+      const totalRedeemedValue = calculateRedeemedValue(usedCodesWithDate, packagesDataMap, paidOrdersByPaymentId);
 
       // CRM metrics
       const customersByStatus = getCustomersByStatus(allCustomers);
@@ -308,7 +308,7 @@ export default function AdminDashboard() {
       const revenueByMonth = getRevenueByMonth(bookings, orders, startDate, endDate);
 
       // Redeemed value by month (income vs redeemed comparison)
-      const redeemedValueByMonth = getRedeemedValueByMonth(orders, usedCodesWithDate, packagesDataMap, startDate, endDate);
+      const redeemedValueByMonth = getRedeemedValueByMonth(orders, usedCodesWithDate, packagesDataMap, paidOrdersByPaymentId, startDate, endDate);
 
       // Bookings by service
       const bookingsByService = getBookingsByService(confirmedBookings, servicesMap);
