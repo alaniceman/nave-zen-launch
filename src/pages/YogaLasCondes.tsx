@@ -212,9 +212,7 @@ const YogaLasCondes = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="#"
-                data-open-trial="true"
-                onClick={handleTrialClick}
+                href="/clase-de-prueba/agendar"
                 className="bg-accent hover:bg-accent/90 text-white rounded-full px-10 py-4 font-semibold transition-all duration-300 hover:scale-105 hover:shadow-xl shadow-lg font-inter inline-flex items-center justify-center text-lg"
               >
                 Agenda tu clase gratis
