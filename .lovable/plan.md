@@ -1,46 +1,54 @@
 
 
-## Plan: Add buyers to MailerLite groups on purchase
+## Plan: Bugs, SEO, Header SPA nav y CTA sticky mobile
 
-### Problem
-When a customer completes a purchase, they are not being added to the specified MailerLite subscriber groups.
+### 1. Corregir bugs
 
-### Approach
+**Footer.tsx**
+- Cambiar `© 2025` a `© {new Date().getFullYear()}` (dinámico)
+- Cambiar link `/planes` a `/planes-precios`
 
-**1. Add a shared helper function in `supabase/functions/_shared/mailerlite.ts`**
+**ClaseDePrueba.tsx**
+- Corregir canonical de `navestudio.cl` a `studiolanave.com`
 
-Add a new `addSubscriberToGroups` function that:
-- Takes buyer email, name, and an array of group IDs
-- Calls the MailerLite API `POST /api/subscribers` with the groups array
-- Uses the existing `MAILERLITE_API_KEY` secret (same one used by `subscribe-mailerlite` function)
-- Non-blocking: errors are logged but don't break the purchase flow
+**NotFound.tsx**
+- Traducir a español con branding Nave Studio (colores, tipografía consistente)
 
-**2. Call the helper after successful purchases in `mercadopago-webhook/index.ts`**
+**App.css**
+- Vaciar el archivo (son estilos legacy de Vite que no se usan)
 
-Add a call to `addSubscriberToGroups` in two places:
-- `handlePackageOrderPayment` (line ~355, after MailerLite order sync) for package/giftcard purchases
-- `handleBookingPayment` (line ~535, after MailerLite order sync) for booking purchases
+### 2. CTA sticky en mobile
 
-Both will pass the buyer's email, name, and the two group IDs:
-- `168517368312498017`
-- `180841311274796302`
+Crear un nuevo componente `StickyMobileCTA.tsx`:
+- Botón fijo en la parte inferior de la pantalla, solo visible en mobile (`md:hidden`)
+- Texto: "Clase de prueba gratis" con link a `/clase-de-prueba/agendar`
+- Se oculta cuando el usuario está cerca del footer (con IntersectionObserver)
+- Se usa en páginas largas: `Experiencias`, `Planes`, `CriomedicinAdsLanding`, `Index`, `YogaLasCondes`
 
-**3. Call the helper for free (100% discount) orders in `purchase-session-package/index.ts`**
+### 3. SEO — ya cubierto por SEOHead.tsx
 
-Add the same call after the CRM event log (line ~330) for orders completed without Mercado Pago.
+`SEOHead.tsx` ya maneja meta tags dinámicos para `/`, `/experiencias`, `/contacto`, `/faq` y más. No se necesitan `<Helmet>` adicionales en esas páginas. La única corrección SEO pendiente es el canonical de `ClaseDePrueba.tsx` (incluido en punto 1).
 
-### Technical details
+### 4. Header: migrar a React Router
 
-The MailerLite subscriber API (`POST /subscribers`) is idempotent -- if the subscriber already exists, it updates their groups. The `MAILERLITE_API_KEY` secret is already configured.
+**Header.tsx**
+- Importar `useNavigate` de `react-router-dom`
+- Reemplazar `window.location.href = href` por `navigate(href)` en la función `navigateTo`
+- Reemplazar `window.location.href = '/'` del logo por `navigate('/')`
+- Los links externos (`boxmagic.cl`, `members.boxmagic.app`) se mantienen como `<a>` con `target="_blank"`
 
-```text
-Purchase flow:
-  Payment approved (webhook) ──► codes generated ──► email sent ──► MailerLite order sync ──► [NEW] add to groups
-  Free order (purchase fn)   ──► codes generated ──► email sent ──► CRM log ──► [NEW] add to groups
-```
+### Archivos a modificar
 
-### Files to modify
-- `supabase/functions/_shared/mailerlite.ts` -- add `addSubscriberToGroups` helper
-- `supabase/functions/mercadopago-webhook/index.ts` -- call helper in both payment handlers
-- `supabase/functions/purchase-session-package/index.ts` -- call helper for free orders
+| Archivo | Cambio |
+|---------|--------|
+| `src/components/Footer.tsx` | Año dinámico + fix link `/planes-precios` |
+| `src/pages/ClaseDePrueba.tsx` | Canonical → studiolanave.com |
+| `src/pages/NotFound.tsx` | Traducir a español + branding |
+| `src/App.css` | Vaciar contenido legacy |
+| `src/components/Header.tsx` | `useNavigate` en vez de `window.location.href` |
+| `src/components/StickyMobileCTA.tsx` | **Nuevo** — botón sticky mobile |
+| `src/pages/Index.tsx` | Agregar StickyMobileCTA |
+| `src/pages/Experiencias.tsx` | Agregar StickyMobileCTA |
+| `src/pages/CriomedicinAdsLanding.tsx` | Agregar StickyMobileCTA |
+| `src/pages/YogaLasCondes.tsx` | Agregar StickyMobileCTA |
 
