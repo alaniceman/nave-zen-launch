@@ -81,6 +81,7 @@ const AdminTrialBookings = lazy(() => import("./pages/admin/AdminTrialBookings")
 const AdminCustomers = lazy(() => import("./pages/admin/AdminCustomers"));
 const AdminCustomerDetail = lazy(() => import("./pages/admin/AdminCustomerDetail"));
 const AdminMembershipPlans = lazy(() => import("./pages/admin/AdminMembershipPlans"));
+const AdminEmailTemplates = lazy(() => import("./pages/admin/AdminEmailTemplates"));
 
 const queryClient = new QueryClient();
 
@@ -174,6 +175,7 @@ const App = () => (
               <Route path="membresias" element={<AdminMembershipPlans />} />
               <Route path="horarios" element={<AdminScheduleEntries />} />
               <Route path="mailerlite" element={<AdminMailerLite />} />
+              <Route path="emails" element={<AdminEmailTemplates />} />
             </Route>
             
             {/* Redirect legacy routes */}
