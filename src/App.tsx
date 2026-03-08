@@ -175,6 +175,7 @@ const App = () => (
               <Route path="membresias" element={<AdminMembershipPlans />} />
               <Route path="horarios" element={<AdminScheduleEntries />} />
               <Route path="mailerlite" element={<AdminMailerLite />} />
+              <Route path="emails" element={<AdminEmailTemplates />} />
             </Route>
             
             {/* Redirect legacy routes */}

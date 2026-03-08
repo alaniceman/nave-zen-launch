@@ -34,6 +34,7 @@ const menuItems = [
   { title: 'Disponibilidad', url: '/admin/disponibilidad', icon: Clock },
   { title: 'Agendas Futuras', url: '/admin/agendas-futuras', icon: Calendar },
   { title: 'MailerLite', url: '/admin/mailerlite', icon: Mail },
+  { title: 'Plantillas Email', url: '/admin/emails', icon: Mail },
 ];
 
 export function AdminSidebar() {
