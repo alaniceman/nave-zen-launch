@@ -102,24 +102,53 @@ export default function TrialScheduleCards({ onSelectClass }: TrialScheduleCards
   const renderCard = (classItem: ScheduleClassItem, dayKey: string, index: number, showDayAbbr = false) => (
     <div
       key={`${dayKey}-${index}`}
-      className={`${getCardBgColor(classItem.color_tag)} text-white rounded-2xl px-4 py-4 md:px-5 md:py-5 shadow-sm relative`}
+      className={`${getCardBgColor(classItem.color_tag)} text-white rounded-2xl px-5 py-5 shadow-sm relative`}
     >
       {showDayAbbr && (
         <div className="lg:hidden absolute top-3 right-3 text-xs font-medium text-white/80 bg-black/20 px-2 py-1 rounded backdrop-blur">
           {dayNames[dayKey]?.slice(0, 3).toUpperCase()}
         </div>
       )}
-      <div className="flex items-center gap-2 text-white/90 text-xl md:text-2xl font-semibold mb-2 pr-12 lg:pr-0">
-        <Clock className="w-5 h-5 md:w-6 md:h-6" />
-        {classItem.time}
-        {classItem.instructor && <span className="text-sm font-normal text-white/70 ml-2">con {classItem.instructor}</span>}
-      </div>
-      <h3 className="text-white font-semibold text-lg md:text-xl leading-tight line-clamp-2 mb-2">{classItem.title}</h3>
-      {classItem.description && <p className="text-white/80 text-sm mb-3 line-clamp-2">{classItem.description}</p>}
 
-      <div className="flex flex-wrap items-center gap-2 mt-3">
+      {/* Time + Instructor */}
+      <div className="flex items-center gap-2 text-white/90 text-lg md:text-xl font-semibold mb-1.5 pr-12 lg:pr-0">
+        <Clock className="w-4.5 h-4.5 md:w-5 md:h-5 shrink-0" />
+        {classItem.time} hrs
+      </div>
+
+      {/* Title */}
+      <h3 className="text-white font-bold text-xl md:text-2xl leading-tight line-clamp-2 mb-1">
+        {classItem.title}
+      </h3>
+
+      {/* Instructor */}
+      {classItem.instructor && (
+        <p className="text-white/70 text-sm mb-2">con {classItem.instructor}</p>
+      )}
+
+      {/* Description */}
+      {classItem.description && (
+        <p className="text-white/75 text-sm mb-3 line-clamp-2">{classItem.description}</p>
+      )}
+
+      {/* Badges */}
+      {classItem.badges.length > 0 && (
+        <div className="flex flex-wrap gap-1.5 mb-3">
+          {classItem.badges.map((badge, i) => (
+            <span key={i} className="bg-white/15 text-white rounded-full px-3 py-0.5 text-xs backdrop-blur inline-flex">
+              {badge}
+            </span>
+          ))}
+        </div>
+      )}
+
+      {/* CTA */}
+      <div className="flex flex-col items-center gap-2 mt-4">
         {classItem.is_trial_enabled ? (
-          <button onClick={() => handleClassAction(classItem, dayKey)} className="ml-auto bg-white text-[#2E4D3A] font-semibold text-sm px-4 py-2 rounded-full hover:bg-white/90 transition-colors">
+          <button
+            onClick={() => handleClassAction(classItem, dayKey)}
+            className="w-full sm:w-auto bg-white text-[#2E4D3A] font-semibold text-sm px-6 py-2.5 rounded-full hover:bg-white/90 transition-colors shadow-sm"
+          >
             Agendar clase de prueba
           </button>
         ) : (
@@ -127,37 +156,47 @@ export default function TrialScheduleCards({ onSelectClass }: TrialScheduleCards
             <span className="inline-flex items-center gap-1 bg-white/20 text-white/80 rounded-full px-3 py-1 text-xs backdrop-blur">
               <XCircle className="w-3.5 h-3.5" /> No permite clase de prueba
             </span>
-            <button onClick={() => handleClassAction(classItem, dayKey)} className="ml-auto bg-white/20 text-white font-medium text-sm px-4 py-2 rounded-full hover:bg-white/30 transition-colors backdrop-blur">
-              Agendar
+            <button
+              onClick={() => handleClassAction(classItem, dayKey)}
+              className="w-full sm:w-auto bg-white/20 text-white font-medium text-sm px-5 py-2 rounded-full hover:bg-white/30 transition-colors backdrop-blur"
+            >
+              Agendar sesión
             </button>
           </>
         )}
       </div>
-
-      {classItem.badges.length > 0 && (
-        <div className="flex flex-wrap gap-2 mt-2">
-          {classItem.badges.map((badge, i) => (
-            <span key={i} className="bg-white/20 text-white rounded-full px-3 py-1 text-sm backdrop-blur inline-flex">{badge}</span>
-          ))}
-        </div>
-      )}
     </div>
   );
 
   return (
     <section className="py-4 md:py-8">
       <div className="max-w-6xl mx-auto px-4 md:px-6">
-        <div className="flex flex-wrap items-center gap-3 mb-6 md:mb-8">
-          <button className={`px-5 py-3 rounded-full font-medium text-sm transition-all ${viewMode === "day" ? "bg-[#2E4D3A] text-white shadow-sm" : "bg-white text-[#2E4D3A] border border-[#E2E8F0] hover:border-[#2E4D3A]/40 hover:bg-[#F8F9FA]"}`} onClick={() => setViewMode("day")}>📅 Por Día</button>
-          <button className={`px-5 py-3 rounded-full font-medium text-sm transition-all ${viewMode === "exp" ? "bg-[#2E4D3A] text-white shadow-sm" : "bg-white text-[#2E4D3A] border border-[#E2E8F0] hover:border-[#2E4D3A]/40 hover:bg-[#F8F9FA]"}`} onClick={() => setViewMode("exp")}>🎯 Por Experiencia</button>
+        {/* View toggle */}
+        <div className="flex items-center justify-center gap-2 mb-6 md:mb-8">
+          <button
+            className={`px-5 py-2.5 rounded-full font-medium text-sm transition-all ${viewMode === "day" ? "bg-[#2E4D3A] text-white shadow-sm" : "bg-white text-[#2E4D3A] border border-[#E2E8F0] hover:border-[#2E4D3A]/40 hover:bg-[#F8F9FA]"}`}
+            onClick={() => setViewMode("day")}
+          >
+            📅 Por Día
+          </button>
+          <button
+            className={`px-5 py-2.5 rounded-full font-medium text-sm transition-all ${viewMode === "exp" ? "bg-[#2E4D3A] text-white shadow-sm" : "bg-white text-[#2E4D3A] border border-[#E2E8F0] hover:border-[#2E4D3A]/40 hover:bg-[#F8F9FA]"}`}
+            onClick={() => setViewMode("exp")}
+          >
+            🎯 Por Experiencia
+          </button>
         </div>
 
         {viewMode === "exp" && (
           <div className="mb-6 md:mb-8">
-            <div className="text-sm font-medium text-[#575757] mb-3">Selecciona una experiencia:</div>
-            <div className="flex gap-2 md:gap-3 overflow-x-auto pb-2 -mx-1 px-1 [&::-webkit-scrollbar]:hidden">
+            <div className="text-sm font-medium text-[#575757] mb-3 text-center">Selecciona una experiencia:</div>
+            <div className="flex gap-2 md:gap-3 overflow-x-auto pb-2 justify-center flex-wrap">
               {EXPERIENCE_CATALOG.map(exp => (
-                <button key={exp.slug} onClick={() => setExpSlug(exp.slug)} className={`shrink-0 whitespace-nowrap rounded-full px-4 py-2.5 border transition-all text-sm font-medium ${expSlug === exp.slug ? "bg-[#2E4D3A] text-white border-[#2E4D3A] shadow-sm" : "bg-white text-[#2E4D3A] border-[#E2E8F0] hover:border-[#2E4D3A]/40 hover:bg-[#F8F9FA]"}`}>
+                <button
+                  key={exp.slug}
+                  onClick={() => setExpSlug(exp.slug)}
+                  className={`shrink-0 whitespace-nowrap rounded-full px-4 py-2 border transition-all text-sm font-medium ${expSlug === exp.slug ? "bg-[#2E4D3A] text-white border-[#2E4D3A] shadow-sm" : "bg-white text-[#2E4D3A] border-[#E2E8F0] hover:border-[#2E4D3A]/40 hover:bg-[#F8F9FA]"}`}
+                >
                   {exp.labelShort ?? exp.label}
                 </button>
               ))}
@@ -167,49 +206,89 @@ export default function TrialScheduleCards({ onSelectClass }: TrialScheduleCards
 
         {viewMode === "day" ? (
           <>
-            <div className="flex gap-2 overflow-x-auto px-0 pb-2 mb-4" role="tablist">
+            {/* Day tabs — centered on mobile */}
+            <div className="flex gap-1.5 overflow-x-auto px-0 pb-2 mb-5 justify-center" role="tablist">
               {dayTabs.map(tab => (
-                <button key={tab.key} role="tab" aria-selected={selectedDay === tab.key} onClick={() => setSelectedDay(tab.key)} className={`rounded-xl px-4 py-2.5 font-medium text-sm whitespace-nowrap transition-all ${selectedDay === tab.key ? "bg-[#2E4D3A] text-white shadow-sm" : "bg-white text-[#2E4D3A] border border-[#E2E8F0] hover:bg-[#F8F9FA]"}`}>{tab.label}</button>
+                <button
+                  key={tab.key}
+                  role="tab"
+                  aria-selected={selectedDay === tab.key}
+                  onClick={() => setSelectedDay(tab.key)}
+                  className={`rounded-full px-3.5 py-2 font-medium text-sm whitespace-nowrap transition-all ${selectedDay === tab.key ? "bg-[#2E4D3A] text-white shadow-sm" : "bg-white text-[#2E4D3A] border border-[#E2E8F0] hover:bg-[#F8F9FA]"}`}
+                >
+                  {tab.label}
+                </button>
               ))}
             </div>
 
-            <h2 className="text-xl md:text-2xl font-bold text-[#2E4D3A] mb-4 flex items-center gap-2">
+            {/* Day title */}
+            <h2 className="text-xl md:text-2xl font-bold text-[#2E4D3A] mb-4 text-center md:text-left flex items-center justify-center md:justify-start gap-2">
               {currentDayName}
-              {selectedDay === todayKey && <span className="bg-[#2E4D3A] text-white rounded-full text-sm px-3 py-1">Hoy</span>}
+              {selectedDay === todayKey && <span className="bg-[#2E4D3A] text-white rounded-full text-xs px-2.5 py-0.5">Hoy</span>}
             </h2>
 
-            <div className="space-y-4 md:space-y-5 animate-fade-in" onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
+            <div
+              className="space-y-4 animate-fade-in"
+              onTouchStart={onTouchStart}
+              onTouchMove={onTouchMove}
+              onTouchEnd={onTouchEnd}
+            >
+              {currentDayClasses.length === 0 && (
+                <div className="text-center py-12 text-[#575757]">
+                  <p>No hay clases programadas este día.</p>
+                </div>
+              )}
               {currentDayClasses.map((c, i) => renderCard(c, getActiveDay(), i, true))}
+
+              {/* Next day */}
               <div className="mt-6 text-center">
-                <button onClick={() => { const idx = DAY_ORDER.indexOf(selectedDay as any); setSelectedDay(DAY_ORDER[(idx + 1) % DAY_ORDER.length]); }} className="bg-[#2E4D3A] text-white px-6 py-3 rounded-lg font-medium hover:bg-[#2E4D3A]/90 transition-colors">Ver día siguiente</button>
+                <button
+                  onClick={() => {
+                    const idx = DAY_ORDER.indexOf(selectedDay as any);
+                    setSelectedDay(DAY_ORDER[(idx + 1) % DAY_ORDER.length]);
+                  }}
+                  className="text-[#2E4D3A] font-medium text-sm underline underline-offset-4 hover:no-underline transition-all"
+                >
+                  Ver día siguiente →
+                </button>
               </div>
             </div>
           </>
         ) : (
-          <div className="space-y-8">
+          <div className="space-y-6">
             {experienceWeekData.map(({ day, dayName, items }) => (
-              <div key={day} className="bg-white rounded-2xl p-6 shadow-sm">
-                <h3 className="text-xl font-bold text-[#2E4D3A] mb-4">{dayName}</h3>
+              <div key={day} className="bg-white rounded-2xl p-5 shadow-sm border border-[#E2E8F0]">
+                <h3 className="text-lg font-bold text-[#2E4D3A] mb-3">{dayName}</h3>
                 <ul className="space-y-3">
                   {items.map((item, idx) => (
-                    <li key={idx} className="flex flex-col gap-2 p-3 bg-[#F8F9FA] rounded-lg">
+                    <li key={idx} className="flex flex-col gap-2 p-3 bg-[#F8F9FA] rounded-xl">
                       <div className="flex items-center gap-3">
-                        <div className="flex items-center gap-2 text-[#2E4D3A]">
+                        <div className="flex items-center gap-1.5 text-[#2E4D3A]">
                           <Clock className="w-4 h-4" />
-                          <time className="font-semibold min-w-[56px]">{item.time}</time>
+                          <time className="font-semibold min-w-[52px]">{item.time}</time>
                         </div>
-                        <span className="text-[#2F2F2F] font-medium">{item.title}</span>
+                        <span className="text-[#2F2F2F] font-medium text-sm">{item.title}</span>
                       </div>
-                      {item.description && <p className="text-sm text-[#575757] ml-9">{item.description}</p>}
-                      <div className="flex items-center gap-2 ml-9 mt-1">
+                      {item.description && <p className="text-xs text-[#575757] ml-8">{item.description}</p>}
+                      <div className="flex items-center justify-center gap-2 mt-1">
                         {item.is_trial_enabled ? (
-                          <button onClick={() => onSelectClass(item, day)} className="text-sm font-semibold text-[#2E4D3A] underline hover:no-underline">Agendar prueba</button>
+                          <button
+                            onClick={() => onSelectClass(item, day)}
+                            className="text-sm font-semibold text-white bg-[#2E4D3A] px-4 py-1.5 rounded-full hover:bg-[#2E4D3A]/90 transition-colors"
+                          >
+                            Agendar prueba
+                          </button>
                         ) : (
                           <>
                             <span className="inline-flex items-center gap-1 bg-gray-100 text-gray-500 rounded-full px-2.5 py-0.5 text-xs">
                               <XCircle className="w-3 h-3" /> No permite prueba
                             </span>
-                            <button onClick={() => navigate("/agenda-nave-studio")} className="text-sm font-medium text-[#575757] underline hover:no-underline">Agendar</button>
+                            <button
+                              onClick={() => navigate("/agenda-nave-studio")}
+                              className="text-sm font-medium text-[#575757] underline hover:no-underline"
+                            >
+                              Agendar
+                            </button>
                           </>
                         )}
                       </div>
@@ -219,7 +298,9 @@ export default function TrialScheduleCards({ onSelectClass }: TrialScheduleCards
               </div>
             ))}
             {experienceWeekData.length === 0 && (
-              <div className="text-center py-12 text-[#575757]"><p>No hay clases programadas para esta experiencia.</p></div>
+              <div className="text-center py-12 text-[#575757]">
+                <p>No hay clases programadas para esta experiencia.</p>
+              </div>
             )}
           </div>
         )}
