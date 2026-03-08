@@ -31,8 +31,7 @@ export const TrialYogaSection = () => {
 
             <div className="space-y-4 mb-6">
               <a
-                href="#"
-                data-open-trial="true"
+                href="/clase-de-prueba/agendar"
                 className="w-full sm:w-auto bg-accent hover:bg-primary text-white rounded-[10px] px-6 py-3 font-medium transition-transform duration-200 hover:scale-105 focus-visible:outline-2 focus-visible:outline-dashed focus-visible:outline-accent font-inter inline-flex items-center justify-center"
                 aria-label="Agendar clase de prueba"
               >
