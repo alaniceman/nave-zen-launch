@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { Footer } from "@/components/Footer";
 
