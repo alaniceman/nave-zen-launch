@@ -5,7 +5,7 @@ export type ScheduleItem = ClassItem;
 
 export const EXPERIENCE_CATALOG = [
   {
-    slug: "wim-hof-group",
+    slug: "agua-fria",
     label: "Método Wim Hof (Breathwork + Ice Bath)",
     labelShort: "Agua Fría",
     match: (item: ScheduleItem) =>
@@ -31,7 +31,7 @@ export const EXPERIENCE_CATALOG = [
     metaNote: "Máx 1–2 personas",
   },
   {
-    slug: "biohacking",
+    slug: "hiit",
     label: "HIIT + Ice Bath",
     labelShort: "HIIT",
     match: (item: ScheduleItem) => /biohacking|hiit\s*\+?\s*ice\s*bath/i.test(item.title),
