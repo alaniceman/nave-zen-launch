@@ -139,6 +139,27 @@ export default function AdminMembershipPlans() {
           }}
         />
       )}
+      {deletingPlan && (
+        <AlertDialog open onOpenChange={() => setDeletingPlan(null)}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>¿Eliminar "{deletingPlan.name}"?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Si algún cliente tiene esta membresía asignada, no se podrá eliminar. Esta acción no se puede deshacer.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancelar</AlertDialogCancel>
+              <AlertDialogAction
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                onClick={() => deletePlan.mutate(deletingPlan.id)}
+              >
+                {deletePlan.isPending ? "Eliminando..." : "Eliminar"}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      )}
     </div>
   );
 }
