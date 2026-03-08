@@ -1021,6 +1021,7 @@ export type Database = {
           customer_phone: string
           id: string
           mailerlite_synced: boolean
+          reminder_sent: string[]
           scheduled_date: string
           source: string
           status: string
@@ -1039,6 +1040,7 @@ export type Database = {
           customer_phone: string
           id?: string
           mailerlite_synced?: boolean
+          reminder_sent?: string[]
           scheduled_date: string
           source?: string
           status?: string
@@ -1057,6 +1059,7 @@ export type Database = {
           customer_phone?: string
           id?: string
           mailerlite_synced?: boolean
+          reminder_sent?: string[]
           scheduled_date?: string
           source?: string
           status?: string

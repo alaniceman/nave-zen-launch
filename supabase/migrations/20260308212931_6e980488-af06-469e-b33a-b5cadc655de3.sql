@@ -1,0 +1,1 @@
+ALTER TABLE public.trial_bookings ADD COLUMN reminder_sent text[] NOT NULL DEFAULT '{}';
