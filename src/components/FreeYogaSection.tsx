@@ -15,7 +15,7 @@ const FreeYogaSection = () => {
           asChild
           className="bg-accent text-white font-medium py-3 px-8 rounded-lg hover:bg-primary transition-colors duration-300 font-inter"
         >
-          <a href="#reserva-gratis">
+          <a href="/clase-de-prueba/agendar">
             Agenda tu clase de prueba
           </a>
         </Button>
