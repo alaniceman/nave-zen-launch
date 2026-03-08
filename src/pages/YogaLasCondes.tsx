@@ -5,6 +5,7 @@ import { useScheduleEntries } from "@/hooks/useScheduleEntries";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CoachesSection } from "@/components/CoachesSection";
 import { LocationSection } from "@/components/LocationSection";
+import { StickyMobileCTA } from "@/components/StickyMobileCTA";
 import { TrialYogaSection } from "@/components/TrialYogaSection";
 import { Footer } from "@/components/Footer";
 import { Badge } from "@/components/ui/badge";
