@@ -186,8 +186,8 @@ const App = () => (
           </Suspense>
           <WhatsAppWidget />
           </EmailCaptureModalProvider>
-        </BrowserRouter>
-        </TrialModalProvider>
+            </TrialModalProvider>
+          </BrowserRouter>
         </AuthProvider>
       </TooltipProvider>
     </QueryClientProvider>
