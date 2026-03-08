@@ -167,9 +167,10 @@ serve(async (req) => {
 
     if (!fbResponse.ok) {
       console.error("Facebook API error:", fbResult);
+      // Return 200 to client anyway — tracking failures should not break the UI
       return new Response(
-        JSON.stringify({ error: "Facebook API error", details: fbResult }),
-        { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
+        JSON.stringify({ success: false, warning: "Facebook API rejected event", details: fbResult }),
+        { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
       );
     }
 
