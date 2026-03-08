@@ -257,7 +257,7 @@ export const Header = () => {
 
               {/* Action buttons */}
               <div className="mt-6 px-6 space-y-2.5">
-                <a href="/clase-de-prueba" className="block w-full bg-warm hover:bg-forest text-white font-inter font-medium py-2.5 rounded-[10px] transition-all duration-200 text-center text-sm">Clase de prueba</a>
+                <a href="/clase-de-prueba/agendar" className="block w-full bg-warm hover:bg-forest text-white font-inter font-medium py-2.5 rounded-[10px] transition-all duration-200 text-center text-sm">Clase de prueba</a>
                 <a href="https://boxmagic.cl/crear_cuenta/NaveStudio" className="block w-full bg-primary hover:bg-secondary text-white font-inter font-medium py-2.5 rounded-[10px] transition-all duration-200 text-center text-sm">Registrarse</a>
                 <a href="https://members.boxmagic.app/a/g/Kp0MWKaL8x" className="block w-full bg-secondary hover:bg-primary text-white font-inter font-medium py-2.5 rounded-[10px] transition-all duration-200 text-center text-sm">Ingresar a la app</a>
               </div>

@@ -1,5 +1,5 @@
-import { createContext, useState, ReactNode } from "react";
-import { TrialClassModal } from "@/components/TrialClassModal";
+import { createContext, ReactNode, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface TrialModalContextType {
   openTrialModal: () => void;
@@ -8,20 +8,20 @@ interface TrialModalContextType {
 
 export const TrialModalContext = createContext<TrialModalContextType | undefined>(undefined);
 
-interface TrialModalProviderProps {
-  children: ReactNode;
-}
+export const TrialModalProvider = ({ children }: { children: ReactNode }) => {
+  const navigate = useNavigate();
 
-export const TrialModalProvider = ({ children }: TrialModalProviderProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const openTrialModal = useCallback(() => {
+    navigate("/clase-de-prueba/agendar");
+  }, [navigate]);
 
-  const openTrialModal = () => setIsOpen(true);
-  const closeTrialModal = () => setIsOpen(false);
+  const closeTrialModal = useCallback(() => {
+    // No-op — kept for interface compatibility
+  }, []);
 
   return (
     <TrialModalContext.Provider value={{ openTrialModal, closeTrialModal }}>
       {children}
-      <TrialClassModal isOpen={isOpen} onClose={closeTrialModal} />
     </TrialModalContext.Provider>
   );
 };
