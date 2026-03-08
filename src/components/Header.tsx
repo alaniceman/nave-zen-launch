@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 import { Menu, X, ChevronDown } from "lucide-react"
 
 type NavLink = { label: string; href: string }
