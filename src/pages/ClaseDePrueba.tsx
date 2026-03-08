@@ -33,7 +33,7 @@ const ClaseDePrueba = () => {
         <meta property="og:title" content="Clase de prueba — Nave Studio" />
         <meta property="og:description" content="Agenda tu clase de prueba de Yoga o Respiración Wim Hof. Descubre la Nave y conoce al equipo." />
         <meta property="og:image" content="/og/try-class.jpg" />
-        <link rel="canonical" href="https://navestudio.cl/clase-de-prueba" />
+        <link rel="canonical" href="https://studiolanave.com/clase-de-prueba" />
         <style>{`
           /* Contenedor flexible para permitir alturas mayores */
           #trial-embed .iframe-shell { min-height: 1000px; }

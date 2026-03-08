@@ -12,6 +12,7 @@ import { Link, useNavigate } from "react-router-dom";
  import { Footer } from "@/components/Footer";
  import { CoachesSection } from "@/components/CoachesSection";
  import { GiftCardSection } from "@/components/GiftCardSection";
+ import { StickyMobileCTA } from "@/components/StickyMobileCTA";
  import { supabase } from "@/integrations/supabase/client";
  import { scheduleData, dayNames, type ClassItem } from "@/data/schedule";
  import { useIsMobile } from "@/hooks/use-mobile";
@@ -783,6 +784,7 @@ import { Link, useNavigate } from "react-router-dom";
        )}
  
        <Footer />
+       <StickyMobileCTA />
      </>
    );
  };

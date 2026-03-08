@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 import { Menu, X, ChevronDown } from "lucide-react"
 
 type NavLink = { label: string; href: string }
@@ -71,8 +72,14 @@ export const Header = () => {
     return () => document.removeEventListener('click', handleDocumentClick)
   }, [])
 
+  const navigate = useNavigate()
+
   const navigateTo = (href: string) => {
-    window.location.href = href
+    if (href.startsWith("http")) {
+      window.location.href = href
+    } else {
+      navigate(href)
+    }
     setIsMobileMenuOpen(false)
     setOpenDropdown(null)
   }
@@ -96,7 +103,7 @@ export const Header = () => {
         <div className="container mx-auto px-6 h-full flex items-center justify-between">
           {/* Logo */}
           <button
-            onClick={() => (window.location.href = '/')}
+            onClick={() => navigate('/')}
             className="font-space-grotesk font-bold text-xl md:text-2xl text-primary hover:text-warm transition-colors duration-200 focus:outline-dashed focus:outline-2 focus:outline-secondary"
             aria-label="Ir al inicio"
           >
