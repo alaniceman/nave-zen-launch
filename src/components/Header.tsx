@@ -72,8 +72,14 @@ export const Header = () => {
     return () => document.removeEventListener('click', handleDocumentClick)
   }, [])
 
+  const navigate = useNavigate()
+
   const navigateTo = (href: string) => {
-    window.location.href = href
+    if (href.startsWith("http")) {
+      window.location.href = href
+    } else {
+      navigate(href)
+    }
     setIsMobileMenuOpen(false)
     setOpenDropdown(null)
   }
