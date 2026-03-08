@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async"
 import { HeroSection } from "@/components/HeroSection"
 import { SocialProofSection } from "@/components/SocialProofSection"
 import { MethodologiesSection } from "@/components/MethodologiesSection"
@@ -13,7 +14,18 @@ import { StickyMobileCTA } from "@/components/StickyMobileCTA"
 
 const Index = () => {
   return (
-    <main className="overflow-x-hidden" id="home">
+    <>
+      <Helmet>
+        <title>Nave Studio | Centro de bienestar basado en ciencia en Las Condes</title>
+        <meta name="description" content="Ice Bath, Breathwork Wim Hof, Yoga y biohacking. Reserva tu clase en Las Condes y regula tu sistema nervioso." />
+        <link rel="canonical" href="https://studiolanave.com/" />
+        <meta property="og:title" content="Nave Studio | Ice Bath, Breathwork y Yoga en Las Condes" />
+        <meta property="og:description" content="Centro de bienestar basado en ciencia. Regula tu sistema nervioso con Método Wim Hof, baños de hielo y yoga. Primera clase gratis." />
+        <meta property="og:image" content="https://studiolanave.com/og-image.png" />
+        <meta property="og:url" content="https://studiolanave.com/" />
+        <meta property="og:type" content="website" />
+      </Helmet>
+      <main className="overflow-x-hidden" id="home">
       <HeroSection />
       <TrialMiniBar />
       <SocialProofSection />
@@ -27,6 +39,7 @@ const Index = () => {
       <Footer />
       <StickyMobileCTA />
     </main>
+    </>
   );
 };
 

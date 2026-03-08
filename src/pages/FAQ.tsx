@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { Footer } from "@/components/Footer";
 
@@ -65,7 +66,18 @@ const FAQ = () => {
   ];
 
   return (
-    <main className="min-h-screen">
+    <>
+      <Helmet>
+        <title>Preguntas frecuentes | Nave Studio</title>
+        <meta name="description" content="Resolvemos dudas sobre clases, hielo, breathwork, seguridad y reservas en Nave Studio." />
+        <link rel="canonical" href="https://studiolanave.com/faq" />
+        <meta property="og:title" content="Preguntas frecuentes sobre Ice Bath y Wim Hof | Nave Studio" />
+        <meta property="og:description" content="Resolvemos tus dudas sobre inmersión en frío, breathwork, seguridad y reservas. Todo lo que necesitas saber." />
+        <meta property="og:image" content="https://studiolanave.com/og-image.png" />
+        <meta property="og:url" content="https://studiolanave.com/faq" />
+        <meta property="og:type" content="website" />
+      </Helmet>
+      <main className="min-h-screen">
       {/* Hero Section */}
       <section className="relative py-20 bg-gradient-to-br from-primary/5 to-secondary/5">
         <div className="container mx-auto px-6">
@@ -155,6 +167,7 @@ const FAQ = () => {
 
       <Footer />
     </main>
+    </>
   );
 };
 

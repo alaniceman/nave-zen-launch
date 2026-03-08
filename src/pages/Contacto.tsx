@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { Helmet } from "react-helmet-async"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -52,7 +53,18 @@ Mensaje: ${formData.message}`
   }
 
   return (
-    <main className="min-h-screen" id="contacto">
+    <>
+      <Helmet>
+        <title>Contacto y ubicación | Nave Studio Las Condes</title>
+        <meta name="description" content="Escríbenos por WhatsApp y visita nuestro estudio en Antares 259, Las Condes. Agenda tu clase hoy." />
+        <link rel="canonical" href="https://studiolanave.com/contacto" />
+        <meta property="og:title" content="Contacto | Nave Studio en Antares 259, Las Condes" />
+        <meta property="og:description" content="Escríbenos por WhatsApp o visítanos. Estamos en Antares 259, Las Condes. Agenda tu clase hoy." />
+        <meta property="og:image" content="https://studiolanave.com/og-image.png" />
+        <meta property="og:url" content="https://studiolanave.com/contacto" />
+        <meta property="og:type" content="website" />
+      </Helmet>
+      <main className="min-h-screen" id="contacto">
       {/* Hero Section */}
       <section 
         className="relative h-[60vh] flex flex-col items-center justify-center text-center px-6 bg-cover bg-center"
@@ -257,6 +269,7 @@ Mensaje: ${formData.message}`
       
       <Footer />
     </main>
+    </>
   )
 }
 
