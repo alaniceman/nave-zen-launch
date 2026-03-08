@@ -1,46 +1,51 @@
 
 
-## Plan: Add buyers to MailerLite groups on purchase
+## Plan: Emails de clase de prueba (confirmación + 3 recordatorios)
 
-### Problem
-When a customer completes a purchase, they are not being added to the specified MailerLite subscriber groups.
+### Diagnóstico actual
 
-### Approach
+- **Confirmación**: `book-trial-class` envía un email básico sin instrucciones de llegada, qué llevar, ni botones de mapa/WhatsApp.
+- **Recordatorios**: No existen. `send-booking-reminder` solo cubre sesiones pagadas (`bookings` table), no clases de prueba (`trial_bookings` table).
 
-**1. Add a shared helper function in `supabase/functions/_shared/mailerlite.ts`**
+### Cambios
 
-Add a new `addSubscriberToGroups` function that:
-- Takes buyer email, name, and an array of group IDs
-- Calls the MailerLite API `POST /api/subscribers` with the groups array
-- Uses the existing `MAILERLITE_API_KEY` secret (same one used by `subscribe-mailerlite` function)
-- Non-blocking: errors are logged but don't break the purchase flow
+**1. Mejorar email de confirmación en `book-trial-class/index.ts`**
 
-**2. Call the helper after successful purchases in `mercadopago-webhook/index.ts`**
+Reemplazar el HTML actual (líneas 168-186) con el template completo que proporcionaste: instrucciones de llegada (portón negro, platillo volador, segundo piso), qué llevar según la clase, botones de "Abrir mapa" y "WhatsApp", firma de Alan y equipo.
 
-Add a call to `addSubscriberToGroups` in two places:
-- `handlePackageOrderPayment` (line ~355, after MailerLite order sync) for package/giftcard purchases
-- `handleBookingPayment` (line ~535, after MailerLite order sync) for booking purchases
+**2. Crear `send-trial-reminder/index.ts`** (nueva edge function)
 
-Both will pass the buyer's email, name, and the two group IDs:
-- `168517368312498017`
-- `180841311274796302`
+Una sola función que maneja los 3 tipos de recordatorio. Se ejecuta cada hora vía pg_cron y busca trial bookings con `status = 'booked'` cuya `scheduled_date + class_time` cae en las ventanas:
+- **3 días antes** (71-73h): "En 3 días es tu clase..."
+- **1 día antes** (23-25h): "Mañana es tu clase..."
+- **3 horas antes** (2.5-3.5h): "Hoy a las {{hora}}..."
 
-**3. Call the helper for free (100% discount) orders in `purchase-session-package/index.ts`**
+Cada tipo usa el template correspondiente con HTML con botones (mapa + WhatsApp). Se marca con un campo `reminder_sent` (nuevo campo en `trial_bookings`) para no enviar duplicados. El campo será un array de text: `'{}'::text[]` y se le appendea `'3d'`, `'1d'`, `'3h'` según corresponda.
 
-Add the same call after the CRM event log (line ~330) for orders completed without Mercado Pago.
+**3. Migración de base de datos**
 
-### Technical details
+Agregar columna `reminder_sent text[] NOT NULL DEFAULT '{}'` a `trial_bookings` para trackear qué recordatorios ya se enviaron.
 
-The MailerLite subscriber API (`POST /subscribers`) is idempotent -- if the subscriber already exists, it updates their groups. The `MAILERLITE_API_KEY` secret is already configured.
+**4. Configuración**
 
-```text
-Purchase flow:
-  Payment approved (webhook) ──► codes generated ──► email sent ──► MailerLite order sync ──► [NEW] add to groups
-  Free order (purchase fn)   ──► codes generated ──► email sent ──► CRM log ──► [NEW] add to groups
-```
+- Agregar `[functions.send-trial-reminder] verify_jwt = false` en config.toml
+- Crear pg_cron job que ejecute la función cada hora
 
-### Files to modify
-- `supabase/functions/_shared/mailerlite.ts` -- add `addSubscriberToGroups` helper
-- `supabase/functions/mercadopago-webhook/index.ts` -- call helper in both payment handlers
-- `supabase/functions/purchase-session-package/index.ts` -- call helper for free orders
+### Archivos
+
+| Archivo | Cambio |
+|---------|--------|
+| `supabase/functions/book-trial-class/index.ts` | Nuevo HTML de confirmación con instrucciones completas |
+| `supabase/functions/send-trial-reminder/index.ts` | **Nuevo** — 3 recordatorios |
+| `supabase/config.toml` | Agregar entry para nueva función |
+| DB migration | Agregar `reminder_sent` a `trial_bookings` + pg_cron |
+
+### Templates HTML
+
+Los 4 emails tendrán diseño consistente con botones verdes (#2E4D3A), usando el contenido exacto que proporcionaste. Incluirán:
+- Botón "Abrir en Google Maps" 
+- Botón "WhatsApp directo"
+- Sección "Cómo llegar" con las instrucciones del portón
+- Sección "Qué llevar" según la clase
+- Firma "Alan y equipo — Nave Studio"
 
