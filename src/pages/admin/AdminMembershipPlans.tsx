@@ -4,14 +4,16 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Plus, Pencil } from "lucide-react";
+import { Plus, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { MembershipPlanForm } from "@/components/admin/MembershipPlanForm";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 
 export default function AdminMembershipPlans() {
   const queryClient = useQueryClient();
   const [editingPlan, setEditingPlan] = useState<any>(null);
   const [showForm, setShowForm] = useState(false);
+  const [deletingPlan, setDeletingPlan] = useState<any>(null);
 
   const { data: plans = [], isLoading } = useQuery({
     queryKey: ["admin-membership-plans"],
@@ -36,6 +38,31 @@ export default function AdminMembershipPlans() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-membership-plans"] });
       toast.success("Plan actualizado");
+    },
+  });
+
+  const deletePlan = useMutation({
+    mutationFn: async (id: string) => {
+      // Check if any customer has this plan assigned
+      const { count, error: countError } = await supabase
+        .from("customer_memberships")
+        .select("*", { count: "exact", head: true })
+        .eq("membership_plan_id", id);
+      if (countError) throw countError;
+      if (count && count > 0) {
+        throw new Error(`No se puede eliminar: ${count} cliente(s) tienen esta membresía asignada.`);
+      }
+      const { error } = await supabase.from("membership_plans").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin-membership-plans"] });
+      toast.success("Plan eliminado");
+      setDeletingPlan(null);
+    },
+    onError: (err: any) => {
+      toast.error(err.message || "Error al eliminar");
+      setDeletingPlan(null);
     },
   });
 
@@ -87,9 +114,12 @@ export default function AdminMembershipPlans() {
                       {p.is_active ? "Activo" : "Inactivo"}
                     </Badge>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="flex gap-1">
                     <Button size="icon" variant="ghost" onClick={() => { setEditingPlan(p); setShowForm(true); }}>
                       <Pencil className="h-4 w-4" />
+                    </Button>
+                    <Button size="icon" variant="ghost" className="text-destructive hover:text-destructive" onClick={() => setDeletingPlan(p)}>
+                      <Trash2 className="h-4 w-4" />
                     </Button>
                   </TableCell>
                 </TableRow>
@@ -108,6 +138,27 @@ export default function AdminMembershipPlans() {
             queryClient.invalidateQueries({ queryKey: ["admin-membership-plans"] });
           }}
         />
+      )}
+      {deletingPlan && (
+        <AlertDialog open onOpenChange={() => setDeletingPlan(null)}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>¿Eliminar "{deletingPlan.name}"?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Si algún cliente tiene esta membresía asignada, no se podrá eliminar. Esta acción no se puede deshacer.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancelar</AlertDialogCancel>
+              <AlertDialogAction
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                onClick={() => deletePlan.mutate(deletingPlan.id)}
+              >
+                {deletePlan.isPending ? "Eliminando..." : "Eliminar"}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       )}
     </div>
   );
