@@ -114,9 +114,12 @@ export default function AdminMembershipPlans() {
                       {p.is_active ? "Activo" : "Inactivo"}
                     </Badge>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="flex gap-1">
                     <Button size="icon" variant="ghost" onClick={() => { setEditingPlan(p); setShowForm(true); }}>
                       <Pencil className="h-4 w-4" />
+                    </Button>
+                    <Button size="icon" variant="ghost" className="text-destructive hover:text-destructive" onClick={() => setDeletingPlan(p)}>
+                      <Trash2 className="h-4 w-4" />
                     </Button>
                   </TableCell>
                 </TableRow>
