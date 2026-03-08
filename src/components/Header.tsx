@@ -23,7 +23,7 @@ const navigationItems: NavItem[] = [
     type: "dropdown",
     children: [
       { label: "Agenda Criomedicina", href: "/agenda-nave-studio" },
-      { label: "Clase de Prueba", href: "/clase-de-prueba" },
+      { label: "Clase de Prueba", href: "/clase-de-prueba/agendar" },
       { label: "Horarios", href: "/horarios" },
     ],
   },
@@ -174,7 +174,7 @@ export const Header = () => {
                 aria-label="Opciones de empezar"
                 className="absolute right-0 mt-2 w-56 rounded-xl bg-background shadow-lg ring-1 ring-black/5 overflow-hidden z-50"
               >
-                <a role="menuitem" href="/clase-de-prueba" className="block px-4 py-3 text-foreground hover:bg-neutral-light transition-all duration-200">Clase de prueba</a>
+                <a role="menuitem" href="/clase-de-prueba/agendar" className="block px-4 py-3 text-foreground hover:bg-neutral-light transition-all duration-200">Clase de prueba</a>
                 <a role="menuitem" href="https://boxmagic.cl/crear_cuenta/NaveStudio" className="block px-4 py-3 text-foreground hover:bg-neutral-light transition-all duration-200">Registrarse</a>
                 <a role="menuitem" href="https://members.boxmagic.app/a/g/Kp0MWKaL8x" className="block px-4 py-3 text-foreground hover:bg-neutral-light transition-all duration-200">Ingresar a la app</a>
               </div>
@@ -257,7 +257,7 @@ export const Header = () => {
 
               {/* Action buttons */}
               <div className="mt-6 px-6 space-y-2.5">
-                <a href="/clase-de-prueba" className="block w-full bg-warm hover:bg-forest text-white font-inter font-medium py-2.5 rounded-[10px] transition-all duration-200 text-center text-sm">Clase de prueba</a>
+                <a href="/clase-de-prueba/agendar" className="block w-full bg-warm hover:bg-forest text-white font-inter font-medium py-2.5 rounded-[10px] transition-all duration-200 text-center text-sm">Clase de prueba</a>
                 <a href="https://boxmagic.cl/crear_cuenta/NaveStudio" className="block w-full bg-primary hover:bg-secondary text-white font-inter font-medium py-2.5 rounded-[10px] transition-all duration-200 text-center text-sm">Registrarse</a>
                 <a href="https://members.boxmagic.app/a/g/Kp0MWKaL8x" className="block w-full bg-secondary hover:bg-primary text-white font-inter font-medium py-2.5 rounded-[10px] transition-all duration-200 text-center text-sm">Ingresar a la app</a>
               </div>

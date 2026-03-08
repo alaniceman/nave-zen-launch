@@ -224,6 +224,7 @@ serve(async (req) => {
         from: "Nave Studio <no-reply@studiolanave.com>",
         reply_to: "lanave@alaniceman.com",
         to: [data.customerEmail],
+        bcc: ["flowithmaral@gmail.com"],
         subject: `Confirmación — tu clase de prueba en Nave Studio`,
         html: buildTrialEmailHtml({
           name: data.customerName,
