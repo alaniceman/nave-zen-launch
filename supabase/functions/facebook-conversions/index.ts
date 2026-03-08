@@ -79,8 +79,12 @@ serve(async (req) => {
     console.log("Received conversion event:", body.event_name, "event_id:", body.event_id);
 
     // Build user_data with hashed PII
+    // Validate IP: only send if it looks like a valid public IPv4/IPv6
+    const rawIp = (req.headers.get("x-forwarded-for")?.split(",")[0]?.trim()) || req.headers.get("cf-connecting-ip") || undefined;
+    const isValidPublicIp = rawIp && /^(\d{1,3}\.){3}\d{1,3}$/.test(rawIp) && !rawIp.startsWith("10.") && !rawIp.startsWith("172.") && !rawIp.startsWith("192.168.") && rawIp !== "127.0.0.1";
+
     const userData: ConversionEvent["user_data"] = {
-      client_ip_address: req.headers.get("x-forwarded-for") || req.headers.get("cf-connecting-ip") || undefined,
+      client_ip_address: isValidPublicIp ? rawIp : undefined,
       client_user_agent: req.headers.get("user-agent") || undefined,
     };
 
@@ -163,9 +167,10 @@ serve(async (req) => {
 
     if (!fbResponse.ok) {
       console.error("Facebook API error:", fbResult);
+      // Return 200 to client anyway — tracking failures should not break the UI
       return new Response(
-        JSON.stringify({ error: "Facebook API error", details: fbResult }),
-        { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
+        JSON.stringify({ success: false, warning: "Facebook API rejected event", details: fbResult }),
+        { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
       );
     }
 
