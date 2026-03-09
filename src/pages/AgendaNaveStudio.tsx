@@ -1,13 +1,13 @@
 import { useParams, useSearchParams } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { format, addMonths, startOfMonth, endOfMonth, addDays, isSameDay, parseISO } from "date-fns";
+import { format, addMonths, startOfMonth, endOfMonth, addDays, isSameDay, parseISO, startOfToday } from "date-fns";
 import { es } from "date-fns/locale";
 import { Loader2, ChevronLeft, User } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { WeeklyCalendar } from "@/components/agenda/WeeklyCalendar";
 import { TimeSlotsList } from "@/components/agenda/TimeSlotsList";
 import { BookingForm } from "@/components/agenda/BookingForm";
 import { toast } from "sonner";
