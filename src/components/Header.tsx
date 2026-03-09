@@ -157,29 +157,76 @@ export const Header = () => {
             )}
           </nav>
 
-          {/* Desktop CTA – Empezar dropdown (unchanged) */}
-          <div className="relative hidden md:block" data-nav-dropdown>
-            <button
-              type="button"
-              className="inline-flex items-center gap-2 bg-secondary hover:bg-primary text-white font-inter font-medium px-6 py-2.5 rounded-[10px] transition-all duration-200 hover:scale-105 focus:outline-dashed focus:outline-2 focus:outline-secondary"
-              aria-haspopup="menu"
-              aria-expanded={openDropdown === "empezar" ? "true" : "false"}
-              onClick={() => toggleDropdown("empezar")}
-            >
-              Empezar
-              <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${openDropdown === "empezar" ? "rotate-180" : ""}`} />
-            </button>
-            {openDropdown === "empezar" && (
-              <div
-                data-nav-menu
-                role="menu"
-                aria-label="Opciones de empezar"
-                className="absolute right-0 mt-2 w-56 rounded-xl bg-background shadow-lg ring-1 ring-black/5 overflow-hidden z-50"
-              >
-                <a role="menuitem" href="/clase-de-prueba/agendar" className="block px-4 py-3 text-foreground hover:bg-neutral-light transition-all duration-200">Clase de prueba</a>
-                <a role="menuitem" href="https://boxmagic.cl/crear_cuenta/NaveStudio" className="block px-4 py-3 text-foreground hover:bg-neutral-light transition-all duration-200">Registrarse</a>
-                <a role="menuitem" href="https://members.boxmagic.app/a/g/Kp0MWKaL8x" className="block px-4 py-3 text-foreground hover:bg-neutral-light transition-all duration-200">Ingresar a la app</a>
+          {/* Desktop CTA area */}
+          <div className="hidden md:flex items-center gap-3">
+            {/* User menu when authenticated */}
+            {user ? (
+              <div className="relative" data-nav-dropdown>
+                <button
+                  type="button"
+                  className="inline-flex items-center gap-2 text-foreground hover:text-primary font-inter font-medium px-4 py-2.5 rounded-[10px] transition-all duration-200 hover:bg-neutral-light focus:outline-dashed focus:outline-2 focus:outline-secondary"
+                  aria-haspopup="menu"
+                  aria-expanded={openDropdown === "user" ? "true" : "false"}
+                  onClick={() => toggleDropdown("user")}
+                >
+                  <UserCircle className="w-5 h-5" />
+                  {profile?.full_name?.split(' ')[0] ?? 'Mi cuenta'}
+                  <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${openDropdown === "user" ? "rotate-180" : ""}`} />
+                </button>
+                {openDropdown === "user" && (
+                  <div
+                    data-nav-menu
+                    role="menu"
+                    aria-label="Opciones de usuario"
+                    className="absolute right-0 mt-2 w-56 rounded-xl bg-background shadow-lg ring-1 ring-black/5 overflow-hidden z-50"
+                  >
+                    <a role="menuitem" href="/dashboard" onClick={(e) => { e.preventDefault(); navigateTo('/dashboard') }} className="block px-4 py-3 text-foreground hover:bg-neutral-light transition-all duration-200">Mi cuenta</a>
+                    <a role="menuitem" href="/agenda-nave-studio" onClick={(e) => { e.preventDefault(); navigateTo('/agenda-nave-studio') }} className="block px-4 py-3 text-foreground hover:bg-neutral-light transition-all duration-200">Agendar sesión</a>
+                    <button
+                      role="menuitem"
+                      onClick={() => { void signOut(); setOpenDropdown(null) }}
+                      className="flex w-full items-center gap-2 px-4 py-3 text-foreground hover:bg-neutral-light transition-all duration-200"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      Cerrar sesión
+                    </button>
+                  </div>
+                )}
               </div>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  className="text-sm font-inter text-neutral-mid hover:text-primary transition-colors duration-200"
+                  onClick={() => navigateTo('/login')}
+                >
+                  Iniciar sesión
+                </button>
+                <div className="relative" data-nav-dropdown>
+                  <button
+                    type="button"
+                    className="inline-flex items-center gap-2 bg-secondary hover:bg-primary text-white font-inter font-medium px-6 py-2.5 rounded-[10px] transition-all duration-200 hover:scale-105 focus:outline-dashed focus:outline-2 focus:outline-secondary"
+                    aria-haspopup="menu"
+                    aria-expanded={openDropdown === "empezar" ? "true" : "false"}
+                    onClick={() => toggleDropdown("empezar")}
+                  >
+                    Empezar
+                    <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${openDropdown === "empezar" ? "rotate-180" : ""}`} />
+                  </button>
+                  {openDropdown === "empezar" && (
+                    <div
+                      data-nav-menu
+                      role="menu"
+                      aria-label="Opciones de empezar"
+                      className="absolute right-0 mt-2 w-56 rounded-xl bg-background shadow-lg ring-1 ring-black/5 overflow-hidden z-50"
+                    >
+                      <a role="menuitem" href="/clase-de-prueba/agendar" className="block px-4 py-3 text-foreground hover:bg-neutral-light transition-all duration-200">Clase de prueba</a>
+                      <a role="menuitem" href="/signup" onClick={(e) => { e.preventDefault(); navigateTo('/signup') }} className="block px-4 py-3 text-foreground hover:bg-neutral-light transition-all duration-200">Crear cuenta</a>
+                      <a role="menuitem" href="https://members.boxmagic.app/a/g/Kp0MWKaL8x" className="block px-4 py-3 text-foreground hover:bg-neutral-light transition-all duration-200">Ingresar a la app</a>
+                    </div>
+                  )}
+                </div>
+              </>
             )}
           </div>
 

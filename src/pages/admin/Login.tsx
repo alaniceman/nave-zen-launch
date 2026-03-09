@@ -42,7 +42,7 @@ export default function AdminLogin() {
     setIsSubmitting(true);
     
     try {
-      const { error } = await signIn(data.email, data.password);
+      const { error } = await signInAdmin(data.email, data.password);
       
       if (error) {
         toast.error(error.message || 'Error al iniciar sesión');
