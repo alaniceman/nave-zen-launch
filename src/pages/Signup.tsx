@@ -92,7 +92,7 @@ export default function Signup() {
     setIsSubmitting(true);
 
     try {
-      const { error } = await signUp(values.email, values.password, values.fullName);
+      const { error } = await signUp(values.email, values.password, values.fullName, values.phone);
       if (error) {
         toast.error(error.message || 'No se pudo crear tu cuenta');
         return;
