@@ -53,10 +53,10 @@ export function TimeSlotsList({ slots, selectedDate, onSelectSlot }: TimeSlotsLi
       <div className="max-h-[400px] overflow-y-auto space-y-4 pr-2">
         {sortedServiceGroups.map(([serviceName, { slots: serviceSlots }]) => (
           <div key={serviceName} className="space-y-3">
-            <h4 className="font-semibold text-base text-primary border-b pb-2">
+            <h4 className="font-medium text-sm text-muted-foreground uppercase tracking-wide">
               {serviceName}
             </h4>
-            <div className="space-y-2">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
               {serviceSlots.map((slot, index) => (
                 <Button
                   key={index}
