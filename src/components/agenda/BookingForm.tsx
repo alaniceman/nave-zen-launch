@@ -378,6 +378,17 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
         )}
       </div>
 
+      {/* Auth prompt for guests */}
+      {!user && (
+        <div className="rounded-lg border border-border bg-muted/50 p-3 mb-4 text-sm text-muted-foreground">
+          ¿Ya tienes cuenta?{" "}
+          <Link to="/login" className="text-primary underline hover:no-underline">
+            Inicia sesión
+          </Link>{" "}
+          para auto-completar tus datos.
+        </div>
+      )}
+
       <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
         <div>
           <Label htmlFor="customerName">Nombre completo *</Label>
