@@ -55,6 +55,7 @@ interface BookingFormProps {
 }
 
 export function BookingForm({ timeSlot, professional, service, onBack }: BookingFormProps) {
+  const { user, profile, customer } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showUpsellModal, setShowUpsellModal] = useState(false);
   const [pendingFormData, setPendingFormData] = useState<BookingFormData | null>(null);
@@ -68,14 +69,31 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
     data: any;
   } | null>(null);
 
+  // Determine autofill values from auth
+  const autofillName = profile?.full_name ?? customer?.name ?? "";
+  const autofillEmail = user?.email ?? "";
+  const autofillPhone = profile?.phone ?? customer?.phone ?? "";
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     getValues,
+    setValue,
   } = useForm<BookingFormData>({
     resolver: zodResolver(bookingSchema),
+    defaultValues: {
+      customerName: autofillName,
+      customerEmail: autofillEmail,
+      customerPhone: autofillPhone,
+    },
   });
+
+  useEffect(() => {
+    if (autofillName) setValue("customerName", autofillName);
+    if (autofillEmail) setValue("customerEmail", autofillEmail);
+    if (autofillPhone) setValue("customerPhone", autofillPhone);
+  }, [autofillName, autofillEmail, autofillPhone, setValue]);
 
   const validateCode = async () => {
     if (!codeInput.trim()) {
