@@ -14,7 +14,7 @@ export function WeeklyCalendar({ selectedDate, onDateSelect, disabled }: WeeklyC
   const [weekOffset, setWeekOffset] = useState(0);
   const today = startOfToday();
   
-  // Generate 14 days starting from today + weekOffset
+  // Generate 7 days starting from today + weekOffset
   const startDate = addDays(today, weekOffset * 7);
   const dates = Array.from({ length: 7 }, (_, i) => addDays(startDate, i));
   
