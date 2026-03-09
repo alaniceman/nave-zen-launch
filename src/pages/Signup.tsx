@@ -16,6 +16,7 @@ const signupSchema = z
   .object({
     fullName: z.string().min(2, 'Ingresa tu nombre completo').max(120),
     email: z.string().email('Email inválido'),
+    phone: z.string().trim().regex(/^\+?[0-9]{8,15}$/, 'Número inválido (ej: 912345678)'),
     password: z.string().min(8, 'La contraseña debe tener al menos 8 caracteres'),
     confirmPassword: z.string().min(8, 'Confirma tu contraseña'),
   })
