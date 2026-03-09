@@ -49,39 +49,33 @@ export function TimeSlotsList({ slots, selectedDate, onSelectSlot }: TimeSlotsLi
   );
 
   return (
-    <div className="space-y-6">
-      <h3 className="font-semibold text-lg mb-4">
-        {format(selectedDate, "EEEE d 'de' MMMM", { locale: es })}
-      </h3>
-      <div className="max-h-[500px] overflow-y-auto space-y-6 pr-2">
+    <div className="space-y-4">
+      <div className="max-h-[400px] overflow-y-auto space-y-4 pr-2">
         {sortedServiceGroups.map(([serviceName, { slots: serviceSlots }]) => (
           <div key={serviceName} className="space-y-3">
-            <h4 className="font-semibold text-base text-primary border-b pb-2">
+            <h4 className="font-medium text-sm text-muted-foreground uppercase tracking-wide">
               {serviceName}
             </h4>
-            <div className="space-y-2">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
               {serviceSlots.map((slot, index) => (
                 <Button
                   key={index}
                   variant="outline"
-                  className="w-full justify-start text-left h-auto py-3"
+                  className="flex flex-col items-center justify-center h-20 text-center p-3 hover:bg-primary hover:text-primary-foreground transition-colors"
                   onClick={() => onSelectSlot(slot)}
                 >
-                  <div className="flex items-center gap-3 w-full">
-                    <Clock className="h-4 w-4 text-muted-foreground" />
-                    <span className="font-semibold">
-                      {formatInTimeZone(parseISO(slot.dateTimeStart), "America/Santiago", "HH:mm")}
-                    </span>
-                    {slot.availableCapacity && slot.availableCapacity > 0 && (
-                      <span className="text-xs text-muted-foreground">
-                        ({slot.availableCapacity} cupos)
-                      </span>
-                    )}
-                    <div className="flex items-center gap-2 ml-auto text-sm text-muted-foreground">
-                      <User className="h-3 w-3" />
-                      {slot.professionalName}
-                    </div>
+                  <span className="font-bold text-lg">
+                    {formatInTimeZone(parseISO(slot.dateTimeStart), "America/Santiago", "HH:mm")}
+                  </span>
+                  <div className="flex items-center gap-1 text-xs mt-1">
+                    <User className="h-3 w-3" />
+                    <span className="truncate">{slot.professionalName}</span>
                   </div>
+                  {slot.availableCapacity && slot.availableCapacity > 0 && (
+                    <span className="text-xs opacity-70 mt-1">
+                      {slot.availableCapacity} cupos
+                    </span>
+                  )}
                 </Button>
               ))}
             </div>
