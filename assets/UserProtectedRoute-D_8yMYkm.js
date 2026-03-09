@@ -1,1 +1,0 @@
-import{a1 as a,j as e,g as i,ah as n}from"./index-ClgyJEsg.js";function c({children:r}){const{user:t,isLoading:s}=a();return s?e.jsx("div",{className:"flex min-h-screen items-center justify-center",children:e.jsx(i,{className:"h-8 w-8 animate-spin text-primary"})}):t?e.jsx(e.Fragment,{children:r}):e.jsx(n,{to:"/login",replace:!0})}export{c as UserProtectedRoute};
