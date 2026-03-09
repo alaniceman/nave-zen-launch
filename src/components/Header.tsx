@@ -306,9 +306,21 @@ export const Header = () => {
 
               {/* Action buttons */}
               <div className="mt-6 px-6 space-y-2.5">
-                <a href="/clase-de-prueba/agendar" className="block w-full bg-warm hover:bg-forest text-white font-inter font-medium py-2.5 rounded-[10px] transition-all duration-200 text-center text-sm">Clase de prueba</a>
-                <a href="https://boxmagic.cl/crear_cuenta/NaveStudio" className="block w-full bg-primary hover:bg-secondary text-white font-inter font-medium py-2.5 rounded-[10px] transition-all duration-200 text-center text-sm">Registrarse</a>
-                <a href="https://members.boxmagic.app/a/g/Kp0MWKaL8x" className="block w-full bg-secondary hover:bg-primary text-white font-inter font-medium py-2.5 rounded-[10px] transition-all duration-200 text-center text-sm">Ingresar a la app</a>
+                {user ? (
+                  <>
+                    <button onClick={() => navigateTo('/dashboard')} className="block w-full bg-primary hover:bg-secondary text-white font-inter font-medium py-2.5 rounded-[10px] transition-all duration-200 text-center text-sm">Mi cuenta</button>
+                    <button onClick={() => { void signOut(); setIsMobileMenuOpen(false) }} className="flex w-full items-center justify-center gap-2 bg-muted hover:bg-neutral-light text-foreground font-inter font-medium py-2.5 rounded-[10px] transition-all duration-200 text-center text-sm">
+                      <LogOut className="w-4 h-4" />
+                      Cerrar sesión
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <a href="/clase-de-prueba/agendar" className="block w-full bg-warm hover:bg-forest text-white font-inter font-medium py-2.5 rounded-[10px] transition-all duration-200 text-center text-sm">Clase de prueba</a>
+                    <button onClick={() => navigateTo('/signup')} className="block w-full bg-primary hover:bg-secondary text-white font-inter font-medium py-2.5 rounded-[10px] transition-all duration-200 text-center text-sm">Crear cuenta</button>
+                    <button onClick={() => navigateTo('/login')} className="block w-full border border-primary text-primary hover:bg-primary hover:text-white font-inter font-medium py-2.5 rounded-[10px] transition-all duration-200 text-center text-sm">Iniciar sesión</button>
+                  </>
+                )}
               </div>
             </nav>
           </div>
