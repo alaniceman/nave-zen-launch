@@ -258,13 +258,13 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
             <DollarSign className="h-5 w-5 text-muted-foreground" />
             <span className="text-lg font-semibold">
               {appliedCode?.type === "session" ? (
-                <span className="text-green-600 font-bold">PREPAGADO ✓</span>
+                <span className="text-primary font-bold">PREPAGADO ✓</span>
               ) : appliedCode?.type === "coupon" ? (
                 <>
                   <span className="text-muted-foreground line-through mr-2">
                     ${service.price_clp.toLocaleString("es-CL")}
                   </span>
-                  <span className="text-green-600">
+                  <span className="text-primary">
                     ${finalPrice.toLocaleString("es-CL")} CLP
                   </span>
                 </>
@@ -274,11 +274,11 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
             </span>
           </div>
           {appliedCode?.type === "session" ? (
-            <p className="text-sm text-green-600 ml-7">
+            <p className="text-sm text-primary ml-7">
               Código de sesión aplicado
             </p>
           ) : appliedCode?.type === "coupon" ? (
-            <p className="text-sm text-green-600 ml-7">
+            <p className="text-sm text-primary ml-7">
               Ahorro: ${calculateDiscount().toLocaleString("es-CL")}
             </p>
           ) : null}
