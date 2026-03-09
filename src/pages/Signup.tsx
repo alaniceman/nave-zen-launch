@@ -44,6 +44,7 @@ export default function Signup() {
     defaultValues: {
       fullName: '',
       email: '',
+      phone: '',
       password: '',
       confirmPassword: '',
     },
