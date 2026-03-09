@@ -313,14 +313,14 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
         </Label>
         
         {appliedCode ? (
-          <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-lg p-3">
+          <div className="flex items-center justify-between bg-primary/10 border border-primary/20 rounded-lg p-3">
             <div className="flex items-center gap-2">
-              <Check className="h-5 w-5 text-green-600" />
+              <Check className="h-5 w-5 text-primary" />
               <div>
-                <span className="font-mono font-bold text-green-700">
+                <span className="font-mono font-bold text-foreground">
                   {appliedCode.type === "session" ? appliedCode.data.code : appliedCode.data.code}
                 </span>
-                <p className="text-sm text-green-600">
+                <p className="text-sm text-primary">
                   {appliedCode.type === "session" 
                     ? "Sesión prepagada - No requiere pago adicional"
                     : appliedCode.data.discount_type === "percentage"
