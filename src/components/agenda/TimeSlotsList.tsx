@@ -49,11 +49,8 @@ export function TimeSlotsList({ slots, selectedDate, onSelectSlot }: TimeSlotsLi
   );
 
   return (
-    <div className="space-y-6">
-      <h3 className="font-semibold text-lg mb-4">
-        {format(selectedDate, "EEEE d 'de' MMMM", { locale: es })}
-      </h3>
-      <div className="max-h-[500px] overflow-y-auto space-y-6 pr-2">
+    <div className="space-y-4">
+      <div className="max-h-[400px] overflow-y-auto space-y-4 pr-2">
         {sortedServiceGroups.map(([serviceName, { slots: serviceSlots }]) => (
           <div key={serviceName} className="space-y-3">
             <h4 className="font-semibold text-base text-primary border-b pb-2">
