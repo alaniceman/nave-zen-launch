@@ -2,31 +2,36 @@ import { format, addDays, isSameDay, startOfToday } from "date-fns";
 import { es } from "date-fns/locale";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 interface WeeklyCalendarProps {
   selectedDate: Date | undefined;
   onDateSelect: (date: Date | undefined) => void;
+  onVisibleDatesChange?: (dates: Date[]) => void;
   disabled?: (date: Date) => boolean;
 }
 
-export function WeeklyCalendar({ selectedDate, onDateSelect, disabled }: WeeklyCalendarProps) {
+export function WeeklyCalendar({ selectedDate, onDateSelect, onVisibleDatesChange, disabled }: WeeklyCalendarProps) {
   const [weekOffset, setWeekOffset] = useState(0);
   const today = startOfToday();
-  
+
   // Generate 7 days starting from today + weekOffset
-  const startDate = addDays(today, weekOffset * 7);
-  const dates = Array.from({ length: 7 }, (_, i) => addDays(startDate, i));
-  
+  const startDate = useMemo(() => addDays(today, weekOffset * 7), [today, weekOffset]);
+  const dates = useMemo(() => Array.from({ length: 7 }, (_, i) => addDays(startDate, i)), [startDate]);
+
+  useEffect(() => {
+    onVisibleDatesChange?.(dates);
+  }, [dates, onVisibleDatesChange]);
+
   const canGoPrevious = weekOffset > 0;
   const canGoNext = weekOffset < 3; // Max 4 weeks ahead
-  
+
   const handlePrevious = () => {
     if (canGoPrevious) {
       setWeekOffset(weekOffset - 1);
     }
   };
-  
+
   const handleNext = () => {
     if (canGoNext) {
       setWeekOffset(weekOffset + 1);
@@ -47,9 +52,7 @@ export function WeeklyCalendar({ selectedDate, onDateSelect, disabled }: WeeklyC
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
-          <span className="text-sm font-medium px-2">
-            {format(startDate, "MMMM yyyy", { locale: es })}
-          </span>
+          <span className="text-sm font-medium px-2">{format(startDate, "MMMM yyyy", { locale: es })}</span>
           <Button
             variant="ghost"
             size="sm"
@@ -61,13 +64,13 @@ export function WeeklyCalendar({ selectedDate, onDateSelect, disabled }: WeeklyC
           </Button>
         </div>
       </div>
-      
+
       <div className="flex gap-2 overflow-x-auto pb-2">
         {dates.map((date) => {
           const isSelected = selectedDate && isSameDay(date, selectedDate);
           const isDisabled = disabled?.(date) ?? false;
           const isPast = date < today;
-          
+
           return (
             <Button
               key={date.toISOString()}
@@ -75,19 +78,15 @@ export function WeeklyCalendar({ selectedDate, onDateSelect, disabled }: WeeklyC
               onClick={() => onDateSelect(date)}
               disabled={isDisabled || isPast}
               className={`min-w-[80px] flex-shrink-0 flex flex-col py-3 h-auto ${
-                isSelected 
-                  ? "bg-primary text-primary-foreground" 
-                  : isPast 
-                  ? "opacity-40 cursor-not-allowed" 
-                  : "bg-background hover:bg-muted"
+                isSelected
+                  ? "bg-primary text-primary-foreground"
+                  : isPast
+                    ? "opacity-40 cursor-not-allowed"
+                    : "bg-background hover:bg-muted"
               }`}
             >
-              <span className="text-xs font-medium uppercase">
-                {format(date, "EEE", { locale: es })}
-              </span>
-              <span className="text-lg font-bold">
-                {format(date, "dd")}
-              </span>
+              <span className="text-xs font-medium uppercase">{format(date, "EEE", { locale: es })}</span>
+              <span className="text-lg font-bold">{format(date, "dd")}</span>
             </Button>
           );
         })}
