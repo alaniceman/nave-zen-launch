@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import { Menu, X, ChevronDown } from "lucide-react"
+import { Menu, X, ChevronDown, UserCircle, LogOut } from "lucide-react"
+import { useAuth } from "@/context/AuthContext"
 
 type NavLink = { label: string; href: string }
 type NavDropdown = { label: string; type: "dropdown"; children: NavLink[] }
