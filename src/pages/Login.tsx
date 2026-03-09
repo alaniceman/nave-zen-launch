@@ -1,16 +1,15 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/context/AuthContext';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2 } from 'lucide-react';
-import { toast } from 'sonner';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
+import { useAuth } from '@/context/AuthContext';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 
 const loginSchema = z.object({
   email: z.string().email('Email inválido'),
@@ -19,9 +18,9 @@ const loginSchema = z.object({
 
 type LoginFormData = z.infer<typeof loginSchema>;
 
-export default function AdminLogin() {
+export default function Login() {
   const navigate = useNavigate();
-  const { user, isAdmin, signInAdmin } = useAuth();
+  const { user, signIn } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<LoginFormData>({
@@ -33,40 +32,41 @@ export default function AdminLogin() {
   });
 
   useEffect(() => {
-    if (user && isAdmin) {
-      navigate('/admin/agenda', { replace: true });
-    }
-  }, [user, isAdmin, navigate]);
+    document.title = 'Iniciar sesión | Nave Studio';
+  }, []);
 
-  const onSubmit = async (data: LoginFormData) => {
+  useEffect(() => {
+    if (user) {
+      navigate('/dashboard', { replace: true });
+    }
+  }, [user, navigate]);
+
+  const onSubmit = async (values: LoginFormData) => {
     setIsSubmitting(true);
-    
+
     try {
-      const { error } = await signInAdmin(data.email, data.password);
-      
+      const { error } = await signIn(values.email, values.password);
       if (error) {
-        toast.error(error.message || 'Error al iniciar sesión');
+        toast.error(error.message || 'No se pudo iniciar sesión');
         return;
       }
 
-      toast.success('¡Bienvenido!');
-      navigate('/admin/agenda', { replace: true });
+      toast.success('Sesión iniciada correctamente');
+      navigate('/dashboard', { replace: true });
     } catch (error) {
       console.error('Login error:', error);
-      toast.error('Error inesperado al iniciar sesión');
+      toast.error('Ocurrió un error inesperado');
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-background">
+    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-8">
       <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">Panel de Administración</CardTitle>
-          <CardDescription className="text-center">
-            Ingresa tus credenciales para acceder
-          </CardDescription>
+        <CardHeader>
+          <CardTitle>Iniciar sesión</CardTitle>
+          <CardDescription>Accede a tu cuenta para ver tu historial y gestionar tus reservas.</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -78,12 +78,7 @@ export default function AdminLogin() {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input
-                        type="email"
-                        placeholder="admin@navestudio.cl"
-                        {...field}
-                        disabled={isSubmitting}
-                      />
+                      <Input type="email" placeholder="tu@email.com" disabled={isSubmitting} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -97,12 +92,7 @@ export default function AdminLogin() {
                   <FormItem>
                     <FormLabel>Contraseña</FormLabel>
                     <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="••••••••"
-                        {...field}
-                        disabled={isSubmitting}
-                      />
+                      <Input type="password" placeholder="••••••••" disabled={isSubmitting} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -113,14 +103,28 @@ export default function AdminLogin() {
                 {isSubmitting ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Iniciando sesión...
+                    Iniciando...
                   </>
                 ) : (
-                  'Iniciar Sesión'
+                  'Iniciar sesión'
                 )}
               </Button>
             </form>
           </Form>
+
+          <div className="mt-4 space-y-2 text-sm text-muted-foreground">
+            <p>
+              ¿No tienes cuenta?{' '}
+              <Link to="/signup" className="text-primary hover:underline">
+                Crear cuenta
+              </Link>
+            </p>
+            <p>
+              <Link to="/forgot-password" className="text-primary hover:underline">
+                ¿Olvidaste tu contraseña?
+              </Link>
+            </p>
+          </div>
         </CardContent>
       </Card>
     </div>

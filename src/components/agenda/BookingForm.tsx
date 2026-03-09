@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -13,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Loader2, Calendar, Clock, User, DollarSign, Tag, Check, X } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/context/AuthContext";
 import { UpsellModal } from "./UpsellModal";
 
 const bookingSchema = z.object({
@@ -53,6 +55,7 @@ interface BookingFormProps {
 }
 
 export function BookingForm({ timeSlot, professional, service, onBack }: BookingFormProps) {
+  const { user, profile, customer } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showUpsellModal, setShowUpsellModal] = useState(false);
   const [pendingFormData, setPendingFormData] = useState<BookingFormData | null>(null);
@@ -66,14 +69,31 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
     data: any;
   } | null>(null);
 
+  // Determine autofill values from auth
+  const autofillName = profile?.full_name ?? customer?.name ?? "";
+  const autofillEmail = user?.email ?? "";
+  const autofillPhone = profile?.phone ?? customer?.phone ?? "";
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     getValues,
+    setValue,
   } = useForm<BookingFormData>({
     resolver: zodResolver(bookingSchema),
+    defaultValues: {
+      customerName: autofillName,
+      customerEmail: autofillEmail,
+      customerPhone: autofillPhone,
+    },
   });
+
+  useEffect(() => {
+    if (autofillName) setValue("customerName", autofillName);
+    if (autofillEmail) setValue("customerEmail", autofillEmail);
+    if (autofillPhone) setValue("customerPhone", autofillPhone);
+  }, [autofillName, autofillEmail, autofillPhone, setValue]);
 
   const validateCode = async () => {
     if (!codeInput.trim()) {
@@ -238,13 +258,13 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
             <DollarSign className="h-5 w-5 text-muted-foreground" />
             <span className="text-lg font-semibold">
               {appliedCode?.type === "session" ? (
-                <span className="text-green-600 font-bold">PREPAGADO ✓</span>
+                <span className="text-primary font-bold">PREPAGADO ✓</span>
               ) : appliedCode?.type === "coupon" ? (
                 <>
                   <span className="text-muted-foreground line-through mr-2">
                     ${service.price_clp.toLocaleString("es-CL")}
                   </span>
-                  <span className="text-green-600">
+                  <span className="text-primary">
                     ${finalPrice.toLocaleString("es-CL")} CLP
                   </span>
                 </>
@@ -254,11 +274,11 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
             </span>
           </div>
           {appliedCode?.type === "session" ? (
-            <p className="text-sm text-green-600 ml-7">
+            <p className="text-sm text-primary ml-7">
               Código de sesión aplicado
             </p>
           ) : appliedCode?.type === "coupon" ? (
-            <p className="text-sm text-green-600 ml-7">
+            <p className="text-sm text-primary ml-7">
               Ahorro: ${calculateDiscount().toLocaleString("es-CL")}
             </p>
           ) : null}
@@ -293,14 +313,14 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
         </Label>
         
         {appliedCode ? (
-          <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-lg p-3">
+          <div className="flex items-center justify-between bg-primary/10 border border-primary/20 rounded-lg p-3">
             <div className="flex items-center gap-2">
-              <Check className="h-5 w-5 text-green-600" />
+              <Check className="h-5 w-5 text-primary" />
               <div>
-                <span className="font-mono font-bold text-green-700">
+                <span className="font-mono font-bold text-foreground">
                   {appliedCode.type === "session" ? appliedCode.data.code : appliedCode.data.code}
                 </span>
-                <p className="text-sm text-green-600">
+                <p className="text-sm text-primary">
                   {appliedCode.type === "session" 
                     ? "Sesión prepagada - No requiere pago adicional"
                     : appliedCode.data.discount_type === "percentage"
@@ -357,6 +377,17 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
           </div>
         )}
       </div>
+
+      {/* Auth prompt for guests */}
+      {!user && (
+        <div className="rounded-lg border border-border bg-muted/50 p-3 mb-4 text-sm text-muted-foreground">
+          ¿Ya tienes cuenta?{" "}
+          <Link to="/login" className="text-primary underline hover:no-underline">
+            Inicia sesión
+          </Link>{" "}
+          para auto-completar tus datos.
+        </div>
+      )}
 
       <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
         <div>

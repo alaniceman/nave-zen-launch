@@ -58,7 +58,12 @@ const AgendaSuccess = lazy(() => import("./pages/AgendaSuccess"));
 const AgendaFailure = lazy(() => import("./pages/AgendaFailure"));
 const AgendaPending = lazy(() => import("./pages/AgendaPending"));
 const YogaLasCondes = lazy(() => import("./pages/YogaLasCondes"));
-
+const Login = lazy(() => import("./pages/Login"));
+const Signup = lazy(() => import("./pages/Signup"));
+const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
+const ResetPassword = lazy(() => import("./pages/ResetPassword"));
+const UserDashboard = lazy(() => import("./pages/UserDashboard"));
+const UserProtectedRoute = lazy(() => import("./components/UserProtectedRoute").then(m => ({ default: m.UserProtectedRoute })));
 // Lazy-loaded admin pages
 const AdminLogin = lazy(() => import("./pages/admin/Login"));
 const AdminLayout = lazy(() => import("./components/admin/AdminLayout").then(m => ({ default: m.AdminLayout })));
@@ -151,6 +156,13 @@ const App = () => (
             <Route path="/agenda-nave-studio/:professionalSlug/:dateParam/:timeParam" element={<AgendaNaveStudio />} />
             
             <Route path="/yoga-las-condes" element={<YogaLasCondes />} />
+            
+            {/* User Auth Routes */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/dashboard" element={<UserProtectedRoute><UserDashboard /></UserProtectedRoute>} />
             
             {/* Admin Routes */}
             <Route path="/admin/login" element={<AdminLogin />} />
