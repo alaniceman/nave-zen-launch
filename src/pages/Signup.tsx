@@ -16,6 +16,7 @@ const signupSchema = z
   .object({
     fullName: z.string().min(2, 'Ingresa tu nombre completo').max(120),
     email: z.string().email('Email inválido'),
+    phone: z.string().trim().regex(/^\+?[0-9]{8,15}$/, 'Número inválido (ej: 912345678)'),
     password: z.string().min(8, 'La contraseña debe tener al menos 8 caracteres'),
     confirmPassword: z.string().min(8, 'Confirma tu contraseña'),
   })
@@ -43,6 +44,7 @@ export default function Signup() {
     defaultValues: {
       fullName: '',
       email: '',
+      phone: '',
       password: '',
       confirmPassword: '',
     },
@@ -90,7 +92,7 @@ export default function Signup() {
     setIsSubmitting(true);
 
     try {
-      const { error } = await signUp(values.email, values.password, values.fullName);
+      const { error } = await signUp(values.email, values.password, values.fullName, values.phone);
       if (error) {
         toast.error(error.message || 'No se pudo crear tu cuenta');
         return;
@@ -165,6 +167,20 @@ export default function Signup() {
                   Detectamos {trialHistory.totalTrials} clase(s) de prueba con este email. Las vincularemos automáticamente a tu cuenta.
                 </p>
               )}
+
+              <FormField
+                control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Celular</FormLabel>
+                    <FormControl>
+                      <Input type="tel" placeholder="912345678" disabled={isSubmitting} {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
               <FormField
                 control={form.control}
