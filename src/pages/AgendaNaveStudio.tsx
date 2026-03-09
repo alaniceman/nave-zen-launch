@@ -242,11 +242,11 @@ export default function AgendaNaveStudio() {
 
         <SessionPackagePromo />
 
-        {!selectedTimeSlot ? <div className="grid md:grid-cols-2 gap-6">
-            {/* Left column: Branch, Professional selector and calendar */}
-            <div className="space-y-4">
+        {!selectedTimeSlot ? <div className="space-y-6">
+            {/* Top row: Branch and Professional selectors */}
+            <div className="flex flex-col sm:flex-row gap-4">
               {branches.length > 1 && (
-                <Card className="p-4">
+                <Card className="flex-1 p-4">
                   <label className="text-sm font-medium mb-2 block">Sucursal</label>
                   <Select value={selectedBranch} onValueChange={setSelectedBranch}>
                     <SelectTrigger>
@@ -263,7 +263,7 @@ export default function AgendaNaveStudio() {
                 </Card>
               )}
 
-              <Card className="p-4">
+              <Card className="flex-1 p-4">
                 <label className="text-sm font-medium mb-2 block">Instructor</label>
                 <Select value={selectedProfessional} onValueChange={handleProfessionalChange}>
                   <SelectTrigger>
@@ -277,27 +277,34 @@ export default function AgendaNaveStudio() {
                   </SelectContent>
                 </Select>
               </Card>
-
-              <Card className="p-4">
-                <Calendar mode="single" selected={selectedDate} onSelect={handleDateSelect} locale={es} className="rounded-md border-0" disabled={date => {
-              const today = new Date();
-              today.setHours(0, 0, 0, 0);
-              return date < today || date > addMonths(today, 1);
-            }} />
-              </Card>
             </div>
 
-            {/* Right column: Available time slots */}
-            <div>
-              <Card className="p-6">
-                {!selectedDate ? <div className="text-center py-12 text-muted-foreground">
-                    <User className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                    <p>Selecciona una fecha para ver horarios disponibles</p>
-                  </div> : loadingSlots ? <div className="flex justify-center py-12">
-                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                  </div> : <TimeSlotsList slots={filteredSlots} selectedDate={selectedDate} onSelectSlot={handleTimeSlotSelect} />}
-              </Card>
-            </div>
+            {/* Weekly calendar */}
+            <Card className="p-6">
+              <WeeklyCalendar 
+                selectedDate={selectedDate} 
+                onDateSelect={handleDateSelect}
+                disabled={date => {
+                  const today = startOfToday();
+                  return date < today || date > addMonths(today, 1);
+                }} 
+              />
+            </Card>
+
+            {/* Available time slots */}
+            <Card className="p-6">
+              {!selectedDate ? <div className="text-center py-12 text-muted-foreground">
+                  <User className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                  <p>Selecciona una fecha para ver horarios disponibles</p>
+                </div> : loadingSlots ? <div className="flex justify-center py-12">
+                  <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                </div> : (
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold">¿A qué hora?</h3>
+                    <TimeSlotsList slots={filteredSlots} selectedDate={selectedDate} onSelectSlot={handleTimeSlotSelect} />
+                  </div>
+                )}
+            </Card>
           </div> : <div ref={bookingFormRef} className="max-w-2xl mx-auto">
             <Button variant="ghost" onClick={handleBackToSlots} className="mb-4">
               <ChevronLeft className="mr-2 h-4 w-4" />
