@@ -759,37 +759,23 @@ export type Database = {
       profiles: {
         Row: {
           created_at: string
-          customer_id: string | null
           full_name: string | null
           id: string
-          phone: string | null
           updated_at: string
         }
         Insert: {
           created_at?: string
-          customer_id?: string | null
           full_name?: string | null
           id: string
-          phone?: string | null
           updated_at?: string
         }
         Update: {
           created_at?: string
-          customer_id?: string | null
           full_name?: string | null
           id?: string
-          phone?: string | null
           updated_at?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "profiles_customer_id_fkey"
-            columns: ["customer_id"]
-            isOneToOne: false
-            referencedRelation: "customers"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       schedule_entries: {
         Row: {
@@ -1121,7 +1107,6 @@ export type Database = {
           updated_at: string
         }[]
       }
-      get_user_customer_email: { Args: { _user_id: string }; Returns: string }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

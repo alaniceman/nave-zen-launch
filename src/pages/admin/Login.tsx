@@ -21,7 +21,7 @@ type LoginFormData = z.infer<typeof loginSchema>;
 
 export default function AdminLogin() {
   const navigate = useNavigate();
-  const { user, isAdmin, signInAdmin } = useAuth();
+  const { user, isAdmin, signIn } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<LoginFormData>({
@@ -42,7 +42,7 @@ export default function AdminLogin() {
     setIsSubmitting(true);
     
     try {
-      const { error } = await signInAdmin(data.email, data.password);
+      const { error } = await signIn(data.email, data.password);
       
       if (error) {
         toast.error(error.message || 'Error al iniciar sesión');
