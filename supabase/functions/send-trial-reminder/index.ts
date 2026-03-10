@@ -70,9 +70,13 @@ function buildReminderHtml(p: {
     : `<div style="background:#F0F7FF;border-left:4px solid #2E4D3A;padding:16px 20px;margin:20px 0;border-radius:0 8px 8px 0">
         <p style="margin:0;color:#333;font-size:14px;line-height:1.6"><strong>🎒 Qué llevar:</strong><br><strong>Yoga:</strong> ropa cómoda (mats e implementos están acá).</p>
       </div>
-      <div style="background:#FFF3E0;border-left:4px solid #E65100;padding:16px 20px;margin:20px 0;border-radius:0 8px 8px 0">
-        <p style="margin:0 0 8px;color:#333;font-size:14px;line-height:1.6"><strong>🧊 Sobre el agua fría:</strong></p>
-        <p style="margin:0;color:#333;font-size:14px;line-height:1.6">Las clases de prueba <strong>no incluyen inmersión en agua fría</strong> al finalizar, independiente de si las has realizado antes. Si te interesa el hielo, te invitamos a agendar una sesión del Método Wim Hof.</p>
+      <div style="background:#F7F9FB;border-radius:10px;padding:24px 22px;margin:24px 0;border:1px solid #E2E8F0">
+        <p style="margin:0 0 16px;color:#2E4D3A;font-size:16px;font-weight:700;line-height:1.4">🧊 Información importante sobre el uso del agua fría</p>
+        <p style="margin:0 0 14px;color:#444;font-size:15px;line-height:1.7">En Nave Studio combinamos yoga con inmersión en agua fría. Para que la experiencia sea segura y fluida para todos, te pedimos tener en cuenta lo siguiente:</p>
+        <p style="margin:0 0 6px;color:#2E4D3A;font-size:14px;font-weight:700;line-height:1.5">1. Clases de prueba de yoga</p>
+        <p style="margin:0 0 6px;color:#444;font-size:14px;line-height:1.7">Las clases de prueba <strong>no incluyen inmersión en hielo</strong> al final, independiente de si ya has hecho baños de hielo antes o no.</p>
+        <p style="margin:0 0 16px;color:#666;font-size:13px;line-height:1.6;font-style:italic">Esto es parte del proceso para que primero conozcas el espacio, la práctica y cómo trabajamos.</p>
+        <p style="margin:0 0 6px;color:#666;font-size:13px;line-height:1.6">Si te interesa el hielo, te invitamos a agendar una sesión del <strong>Método Wim Hof</strong>.</p>
       </div>`;
 
   const whatsappCta = p.isUrgent
