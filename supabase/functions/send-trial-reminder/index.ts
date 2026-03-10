@@ -69,6 +69,10 @@ function buildReminderHtml(p: {
     ? ""
     : `<div style="background:#F0F7FF;border-left:4px solid #2E4D3A;padding:16px 20px;margin:20px 0;border-radius:0 8px 8px 0">
         <p style="margin:0;color:#333;font-size:14px;line-height:1.6"><strong>🎒 Qué llevar:</strong><br><strong>Yoga:</strong> ropa cómoda (mats e implementos están acá).</p>
+      </div>
+      <div style="background:#FFF3E0;border-left:4px solid #E65100;padding:16px 20px;margin:20px 0;border-radius:0 8px 8px 0">
+        <p style="margin:0 0 8px;color:#333;font-size:14px;line-height:1.6"><strong>🧊 Sobre el agua fría:</strong></p>
+        <p style="margin:0;color:#333;font-size:14px;line-height:1.6">Las clases de prueba <strong>no incluyen inmersión en agua fría</strong> al finalizar, independiente de si las has realizado antes. Si te interesa el hielo, te invitamos a agendar una sesión del Método Wim Hof.</p>
       </div>`;
 
   const whatsappCta = p.isUrgent
