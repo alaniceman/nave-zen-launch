@@ -86,6 +86,10 @@ function buildTrialEmailHtml(p: TrialEmailParams): string {
       <p><strong>🎒 Qué llevar:</strong></p>
       <p><strong>Yoga:</strong> ropa cómoda. Los implementos están acá (mats y todo).</p>
     </div>
+    <div style="background:#FFF3E0;border-left:4px solid #E65100;padding:16px 20px;margin:20px 0;border-radius:0 8px 8px 0">
+      <p style="margin:0 0 8px;color:#333;font-size:14px;line-height:1.6"><strong>🧊 Sobre el agua fría:</strong></p>
+      <p style="margin:0;color:#333;font-size:14px;line-height:1.6">Las clases de prueba <strong>no incluyen inmersión en agua fría</strong> al finalizar, independiente de si las has realizado antes. Si te interesa el hielo, te invitamos a agendar una sesión del Método Wim Hof.</p>
+    </div>
     <div style="text-align:center;margin:28px 0">
       <a href="${p.mapsLink}" class="btn btn-green">📍 Abrir en Google Maps</a>
       <a href="${p.naveWhatsapp}" class="btn btn-outline">💬 WhatsApp directo</a>

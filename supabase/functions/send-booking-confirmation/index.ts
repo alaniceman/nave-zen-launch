@@ -47,6 +47,14 @@ function buildWhatToBringSection(serviceName: string): string {
   return `
     <div style="background:#F0F7FF;border-left:4px solid #2E4D3A;padding:16px 20px;margin:20px 0;border-radius:0 8px 8px 0">
       <p style="margin:0;color:#333;font-size:14px;line-height:1.6"><strong>🎒 Qué llevar:</strong><br><strong>Yoga:</strong> ropa cómoda. Los implementos están acá (mats y todo).</p>
+    </div>
+    <div style="background:#FFF3E0;border-left:4px solid #E65100;padding:16px 20px;margin:20px 0;border-radius:0 8px 8px 0">
+      <p style="margin:0 0 8px;color:#333;font-size:14px;line-height:1.6"><strong>🧊 Sobre la inmersión en agua fría después de Yoga:</strong></p>
+      <ul style="margin:0;padding-left:20px;color:#333;font-size:14px;line-height:1.8">
+        <li>Para entrar al agua fría tras Yoga, debes haber completado previamente una <strong>sesión guiada del Método Wim Hof</strong> en Nave Studio, independiente de si lo has hecho en otro lugar. Tu seguridad es nuestra prioridad.</li>
+        <li><strong>Máximo 2 minutos</strong> en el agua. Esto es estricto. En sesiones del Método Wim Hof puedes estar más tiempo, siempre bajo la guía de tu instructor.</li>
+        <li>Respeta el tiempo de tu instructora: la clase completa dura 1 hora, por lo que la inmersión es entrar y salir.</li>
+      </ul>
     </div>`;
 }
 
