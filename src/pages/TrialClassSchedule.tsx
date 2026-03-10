@@ -163,6 +163,19 @@ export default function TrialClassSchedule() {
           <p className="text-white/80 text-sm md:text-base">Elige una clase, selecciona fecha y reserva tu lugar</p>
         </div>
 
+        {/* Ice bath policy notice */}
+        <div className="max-w-xl mx-auto px-4 pt-6">
+          <div className="bg-white rounded-xl border border-[#E2E8F0] p-5 shadow-sm">
+            <h3 className="text-[15px] font-bold text-[#2E4D3A] mb-2">🧊 Sobre el agua fría en clases de prueba</h3>
+            <p className="text-[14px] text-[#555] leading-relaxed mb-2">
+              Las clases de prueba <strong>no incluyen inmersión en hielo</strong> al final, independiente de si ya has hecho baños de hielo antes o no.
+            </p>
+            <p className="text-[13px] text-[#888] leading-relaxed italic">
+              Esto es parte del proceso para que primero conozcas el espacio, la práctica y cómo trabajamos. Si te interesa el hielo, te invitamos a agendar una sesión del <strong>Método Wim Hof</strong>.
+            </p>
+          </div>
+        </div>
+
         {step === "calendar" && (
           <TrialScheduleCards onSelectClass={handleSelectClass} />
         )}
