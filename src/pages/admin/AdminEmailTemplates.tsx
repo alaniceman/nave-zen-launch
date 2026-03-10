@@ -71,26 +71,20 @@ function buildWhatToBringSection(serviceName: string): string {
       </div>`;
   }
 
-  // Yoga: incluye reglas de agua fría
+  // Yoga: incluye reglas de agua fría para sesiones pagadas
   return `
     <div style="background:#F0F7FF;border-left:4px solid #2E4D3A;padding:16px 20px;margin:20px 0;border-radius:0 8px 8px 0">
       <p style="margin:0;color:#333;font-size:14px;line-height:1.6"><strong>🎒 Qué llevar:</strong><br><strong>Yoga:</strong> ropa cómoda. Los implementos están acá (mats y todo).</p>
     </div>
-    <div style="background:#FFF3E0;border-left:4px solid #E65100;padding:16px 20px;margin:20px 0;border-radius:0 8px 8px 0">
-      <p style="margin:0 0 8px;color:#333;font-size:14px;line-height:1.6"><strong>🧊 Sobre la inmersión en agua fría después de Yoga:</strong></p>
-      <ul style="margin:0;padding-left:20px;color:#333;font-size:14px;line-height:1.8">
-        <li>Para entrar al agua fría tras Yoga, debes haber completado previamente una <strong>sesión guiada del Método Wim Hof</strong> en Nave Studio, independiente de si lo has hecho en otro lugar. Tu seguridad es nuestra prioridad.</li>
-        <li><strong>Máximo 2 minutos</strong> en el agua. Esto es estricto. En sesiones del Método Wim Hof puedes estar más tiempo, siempre bajo la guía de tu instructor.</li>
-        <li>Respeta el tiempo de tu instructora: la clase completa dura 1 hora, por lo que la inmersión es entrar y salir.</li>
-      </ul>
-    </div>`;
-}
-
-function buildIceBathTrialDisclaimer(): string {
-  return `
-    <div style="background:#FFF3E0;border-left:4px solid #E65100;padding:16px 20px;margin:20px 0;border-radius:0 8px 8px 0">
-      <p style="margin:0 0 8px;color:#333;font-size:14px;line-height:1.6"><strong>🧊 Sobre el agua fría:</strong></p>
-      <p style="margin:0;color:#333;font-size:14px;line-height:1.6">Las clases de prueba <strong>no incluyen inmersión en agua fría</strong> al finalizar, independiente de si las has realizado antes. Si te interesa el hielo, te invitamos a agendar una sesión del Método Wim Hof.</p>
+    <div style="background:#F7F9FB;border-radius:10px;padding:24px 22px;margin:24px 0;border:1px solid #E2E8F0">
+      <p style="margin:0 0 16px;color:#2E4D3A;font-size:16px;font-weight:700;line-height:1.4">🧊 Información importante sobre el uso del agua fría</p>
+      <p style="margin:0 0 14px;color:#444;font-size:15px;line-height:1.7">En Nave Studio combinamos yoga con inmersión en agua fría. Para que la experiencia sea segura y fluida para todos, te pedimos tener en cuenta lo siguiente:</p>
+      <p style="margin:0 0 6px;color:#2E4D3A;font-size:14px;font-weight:700;line-height:1.5">2. Clases de yoga pagadas o con membresía</p>
+      <p style="margin:0 0 14px;color:#444;font-size:14px;line-height:1.7">Para poder terminar una clase de yoga en el agua fría debes haber realizado previamente una <strong>sesión guiada del Método Wim Hof con nosotros</strong>. Esto aplica aunque ya hayas hecho baños de hielo en otro lugar, ya que necesitamos asegurarnos de que conozcas nuestra forma de trabajar y que sea una experiencia segura para ti.</p>
+      <p style="margin:0 0 6px;color:#2E4D3A;font-size:14px;font-weight:700;line-height:1.5">3. Tiempo máximo en el agua</p>
+      <p style="margin:0 0 14px;color:#444;font-size:14px;line-height:1.7">Después de yoga, el tiempo máximo de inmersión es de <strong>2 minutos</strong>. Esto es estricto. En sesiones completas del Método Wim Hof es posible permanecer más tiempo, siempre siguiendo las instrucciones del instructor.</p>
+      <p style="margin:0 0 6px;color:#2E4D3A;font-size:14px;font-weight:700;line-height:1.5">4. Respeto por el tiempo de la clase</p>
+      <p style="margin:0;color:#444;font-size:14px;line-height:1.7">Las clases de yoga duran 1 hora completa. Por eso, cuando termina la práctica y entras al agua fría, la dinámica es entrar y salir, para respetar el tiempo de la instructora y el flujo de la clase.</p>
     </div>`;
 }
 
@@ -99,7 +93,14 @@ function buildWhatToBringSectionTrial(): string {
     <div style="background:#F0F7FF;border-left:4px solid #2E4D3A;padding:16px 20px;margin:20px 0;border-radius:0 8px 8px 0">
       <p style="margin:0;color:#333;font-size:14px;line-height:1.6"><strong>🎒 Qué llevar:</strong><br><strong>Yoga:</strong> ropa cómoda. Los implementos están acá (mats y todo).</p>
     </div>
-    ${buildIceBathTrialDisclaimer()}`;
+    <div style="background:#F7F9FB;border-radius:10px;padding:24px 22px;margin:24px 0;border:1px solid #E2E8F0">
+      <p style="margin:0 0 16px;color:#2E4D3A;font-size:16px;font-weight:700;line-height:1.4">🧊 Información importante sobre el uso del agua fría</p>
+      <p style="margin:0 0 14px;color:#444;font-size:15px;line-height:1.7">En Nave Studio combinamos yoga con inmersión en agua fría. Para que la experiencia sea segura y fluida para todos, te pedimos tener en cuenta lo siguiente:</p>
+      <p style="margin:0 0 6px;color:#2E4D3A;font-size:14px;font-weight:700;line-height:1.5">1. Clases de prueba de yoga</p>
+      <p style="margin:0 0 6px;color:#444;font-size:14px;line-height:1.7">Las clases de prueba <strong>no incluyen inmersión en hielo</strong> al final, independiente de si ya has hecho baños de hielo antes o no.</p>
+      <p style="margin:0 0 16px;color:#666;font-size:13px;line-height:1.6;font-style:italic">Esto es parte del proceso para que primero conozcas el espacio, la práctica y cómo trabajamos.</p>
+      <p style="margin:0;color:#666;font-size:13px;line-height:1.6">Si te interesa el hielo, te invitamos a agendar una sesión del <strong>Método Wim Hof</strong>.</p>
+    </div>`;
 }
 
 // ── Templates ──
