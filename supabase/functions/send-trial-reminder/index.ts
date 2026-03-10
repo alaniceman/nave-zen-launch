@@ -58,25 +58,30 @@ function buildReminderHtml(p: {
   isUrgent: boolean;
 }): string {
   const urgentTip = p.isUrgent
-    ? `<div style="background:#F0F7FF;border-left:4px solid #2E4D3A;padding:16px 20px;margin:20px 0;border-radius:0 8px 8px 0">
-        <p style="margin:0;color:#333;font-size:14px;line-height:1.6"><strong>Tip para llegar en 10 segundos:</strong><br>Portón negro a la derecha de la numeración (verás un pequeño platillo volador). Se corre manual y subes al segundo piso.</p>
+    ? `<div class="info-box" style="background:#F0F7F2;border-left:4px solid #2E4D3A">
+        <p style="color:#2E4D3A"><strong>Tip para llegar en 10 segundos:</strong><br>Portón negro a la derecha de la numeración (verás un pequeño platillo volador). Se corre manual y subes al segundo piso.</p>
       </div>`
-    : `<div style="background:#FFF8E1;border-left:4px solid #FFC107;padding:16px 20px;margin:20px 0;border-radius:0 8px 8px 0">
-        <p style="margin:0;color:#333;font-size:14px;line-height:1.6"><strong>🗺️ Cómo llegar:</strong><br>Portón negro a la derecha de la numeración. Verás un pequeño platillo volador. Se corre manual y subes al segundo piso.</p>
+    : `<div class="info-box directions">
+        <p><strong>🗺️ Cómo llegar:</strong><br>Portón negro a la derecha de la numeración. Verás un pequeño platillo volador. Se corre manual y subes al segundo piso.</p>
       </div>`;
 
   const bringSection = p.isUrgent
     ? ""
-    : `<div style="background:#F0F7FF;border-left:4px solid #2E4D3A;padding:16px 20px;margin:20px 0;border-radius:0 8px 8px 0">
-        <p style="margin:0;color:#333;font-size:14px;line-height:1.6"><strong>🎒 Qué llevar:</strong><br><strong>Yoga:</strong> ropa cómoda (mats e implementos están acá).</p>
+    : `<div class="info-box bring">
+        <p><strong>🎒 Qué llevar:</strong><br><strong>Yoga:</strong> ropa cómoda (mats e implementos están acá).</p>
       </div>
-      <div style="background:#F7F9FB;border-radius:10px;padding:24px 22px;margin:24px 0;border:1px solid #E2E8F0">
-        <p style="margin:0 0 16px;color:#2E4D3A;font-size:16px;font-weight:700;line-height:1.4">🧊 Información importante sobre el uso del agua fría</p>
-        <p style="margin:0 0 14px;color:#444;font-size:15px;line-height:1.7">En Nave Studio combinamos yoga con inmersión en agua fría. Para que la experiencia sea segura y fluida para todos, te pedimos tener en cuenta lo siguiente:</p>
-        <p style="margin:0 0 6px;color:#2E4D3A;font-size:14px;font-weight:700;line-height:1.5">1. Clases de prueba de yoga</p>
-        <p style="margin:0 0 6px;color:#444;font-size:14px;line-height:1.7">Las clases de prueba <strong>no incluyen inmersión en hielo</strong> al final, independiente de si ya has hecho baños de hielo antes o no.</p>
-        <p style="margin:0 0 16px;color:#666;font-size:13px;line-height:1.6;font-style:italic">Esto es parte del proceso para que primero conozcas el espacio, la práctica y cómo trabajamos.</p>
-        <p style="margin:0 0 6px;color:#666;font-size:13px;line-height:1.6">Si te interesa el hielo, te invitamos a agendar una sesión del <strong>Método Wim Hof</strong>.</p>
+      <div class="ice-policy">
+        <p class="ice-title">🧊 Información importante sobre el uso del agua fría</p>
+        <p class="ice-intro">En Nave Studio combinamos yoga con inmersión en agua fría. Para que la experiencia sea segura y fluida para todos, te pedimos tener en cuenta lo siguiente:</p>
+        <p class="ice-heading">1. Clases de prueba de yoga</p>
+        <p class="ice-text">Las clases de prueba <strong>no incluyen inmersión en hielo</strong> al final, independiente de si ya has hecho baños de hielo antes o no.</p>
+        <p class="ice-note">Esto es parte del proceso para que primero conozcas el espacio, la práctica y cómo trabajamos.</p>
+        <p class="ice-heading">2. Clases de yoga pagadas o con membresía</p>
+        <p class="ice-text">Para poder terminar una clase de yoga en el agua fría debes haber realizado previamente una <strong>sesión guiada del Método Wim Hof con nosotros</strong>. Esto aplica aunque ya hayas hecho baños de hielo en otro lugar, ya que necesitamos asegurarnos de que conozcas nuestra forma de trabajar y que sea una experiencia segura para ti.</p>
+        <p class="ice-heading">3. Tiempo máximo en el agua</p>
+        <p class="ice-text">Después de yoga, el tiempo máximo de inmersión es de <strong>2 minutos</strong>. Esto es estricto. En sesiones completas del Método Wim Hof es posible permanecer más tiempo, siempre siguiendo las instrucciones del instructor.</p>
+        <p class="ice-heading">4. Respeto por el tiempo de la clase</p>
+        <p class="ice-text">Las clases de yoga duran 1 hora completa. Por eso, cuando termina la práctica y entras al agua fría, la dinámica es entrar y salir, para respetar el tiempo de la instructora y el flujo de la clase.</p>
       </div>`;
 
   const whatsappCta = p.isUrgent
@@ -86,24 +91,43 @@ function buildReminderHtml(p: {
   const closing = p.isUrgent ? "Nos vemos pronto!" : "Nos vemos pronto!";
 
   return `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<style>body{margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f5f5f5}
-.wrap{max-width:560px;margin:0 auto;background:#fff;border-radius:12px;overflow:hidden}
-.hdr{background:#2E4D3A;padding:32px 24px;text-align:center}
-.hdr h1{margin:0;color:#fff;font-size:22px;font-weight:600}
-.body{padding:28px 24px}
-.card{background:#F8F9FA;border-radius:10px;padding:20px;margin:20px 0}
-.card p{margin:0 0 8px;color:#333;font-size:15px;line-height:1.5}
+<style>
+body{margin:0;padding:0;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;background:#F4F4F5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:580px;margin:0 auto;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.hdr{background:#2E4D3A;padding:36px 28px;text-align:center}
+.hdr h1{margin:0;color:#ffffff;font-size:24px;font-weight:700;letter-spacing:0.3px}
+.body{padding:32px 28px}
+.greeting{font-size:17px;color:#1A1A1A;margin:0 0 6px;line-height:1.5}
+.intro{font-size:15px;color:#4A4A4A;line-height:1.7;margin:0 0 24px}
+.card{background:#F8FAFB;border-radius:12px;padding:22px 24px;margin:0 0 24px;border:1px solid #E8ECF0}
+.card p{margin:0 0 10px;color:#2A2A2A;font-size:15px;line-height:1.6}
 .card p:last-child{margin-bottom:0}
-.btn{display:inline-block;padding:14px 28px;border-radius:8px;font-size:15px;font-weight:600;text-decoration:none;text-align:center;margin:6px 8px 6px 0}
-.btn-green{background:#2E4D3A;color:#fff!important}
-.btn-outline{background:#fff;color:#2E4D3A!important;border:2px solid #2E4D3A}
-.footer{padding:24px;text-align:center;color:#999;font-size:13px;border-top:1px solid #eee}
+.card strong{color:#1A1A1A}
+.info-box{padding:18px 22px;margin:0 0 20px;border-radius:10px}
+.info-box p{margin:0;font-size:14px;line-height:1.7}
+.directions{background:#FFFBF0;border-left:4px solid #E8A800}
+.directions p{color:#5C4800}
+.bring{background:#F0F7F2;border-left:4px solid #2E4D3A}
+.bring p{color:#2E4D3A}
+.ice-policy{background:#F7F9FB;border-radius:12px;padding:26px 24px;margin:0 0 24px;border:1px solid #E2E8F0}
+.ice-title{margin:0 0 14px;color:#2E4D3A;font-size:17px;font-weight:700;line-height:1.4}
+.ice-intro{margin:0 0 20px;color:#4A4A4A;font-size:14px;line-height:1.7}
+.ice-heading{margin:0 0 8px;color:#2E4D3A;font-size:14px;font-weight:700;line-height:1.5}
+.ice-text{margin:0 0 18px;color:#4A4A4A;font-size:14px;line-height:1.7}
+.ice-text:last-child{margin-bottom:0}
+.ice-note{margin:0 0 18px;color:#6B7280;font-size:13px;line-height:1.6;font-style:italic}
+.cta-row{text-align:center;margin:28px 0}
+.btn{display:inline-block;padding:14px 28px;border-radius:10px;font-size:15px;font-weight:600;text-decoration:none;text-align:center;margin:6px 6px}
+.btn-green{background:#2E4D3A;color:#ffffff!important}
+.btn-outline{background:#ffffff;color:#2E4D3A!important;border:2px solid #2E4D3A}
+.closing{font-size:15px;color:#4A4A4A;margin:28px 0 0;line-height:1.6}
+.footer{padding:24px 28px;text-align:center;color:#9CA3AF;font-size:12px;border-top:1px solid #F0F0F0;letter-spacing:0.2px}
 </style></head><body>
 <span style="display:none;max-height:0;overflow:hidden">${p.preheader}</span>
 <div class="wrap">
   <div class="hdr"><h1>Nave Studio</h1></div>
   <div class="body">
-    <p style="font-size:16px;color:#333;margin-top:0">Hola <strong>${p.name}</strong>!</p>
+    <p class="greeting">Hola <strong>${p.name}</strong>!</p>
     ${p.introHtml}
     <div class="card">
       <p><strong>Clase:</strong> ${p.classTitle}</p>
@@ -113,12 +137,12 @@ function buildReminderHtml(p: {
     </div>
     ${urgentTip}
     ${bringSection}
-    <p style="font-size:14px;color:#555;margin-top:20px">${whatsappCta}</p>
-    <div style="text-align:center;margin:28px 0">
+    <p style="font-size:14px;color:#4A4A4A;margin:0 0 4px">${whatsappCta}</p>
+    <div class="cta-row">
       <a href="${MAPS_LINK}" class="btn btn-green">📍 Abrir en Google Maps</a>
       <a href="${NAVE_WHATSAPP}" class="btn btn-outline">💬 WhatsApp directo</a>
     </div>
-    <p style="font-size:15px;color:#555;margin-top:24px">${closing}<br><strong>Alan y equipo — Nave Studio</strong></p>
+    <p class="closing">${closing}<br><strong>Alan y equipo — Nave Studio</strong></p>
   </div>
   <div class="footer">Nave Studio · Antares 259, Las Condes</div>
 </div></body></html>`;
