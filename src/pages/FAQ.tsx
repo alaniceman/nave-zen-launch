@@ -21,11 +21,19 @@ const FAQ = () => {
     },
     {
       question: "¿Puedo tomar una clase de prueba antes de suscribirme?",
-      answer: "¡Por supuesto! Ofrecemos clases de prueba para que experimentes nuestras metodologías. Contáctanos por WhatsApp para agendar tu primera sesión con descuento especial."
+      answer: "¡Por supuesto! Ofrecemos clases de prueba gratuitas para que experimentes nuestras metodologías. Puedes agendar directamente desde nuestra web en la sección 'Clase de prueba'."
+    },
+    {
+      question: "¿La clase de prueba incluye inmersión en agua fría?",
+      answer: "No. Las clases de prueba no incluyen inmersión en hielo al final, independiente de si ya has hecho baños de hielo antes o no. Esto es parte del proceso para que primero conozcas el espacio, la práctica y cómo trabajamos. Si te interesa el hielo, te invitamos a agendar una sesión del Método Wim Hof."
+    },
+    {
+      question: "¿Puedo acceder al agua fría después de una clase de yoga pagada?",
+      answer: "Sí, pero con condiciones. Para poder terminar una clase de yoga en el agua fría debes haber realizado previamente una sesión guiada del Método Wim Hof con nosotros. Esto aplica aunque ya hayas hecho baños de hielo en otro lugar, ya que necesitamos asegurarnos de que conozcas nuestra forma de trabajar y que sea una experiencia segura para ti. El tiempo máximo de inmersión después de yoga es de 2 minutos (esto es estricto), y la dinámica es entrar y salir para respetar el tiempo de la instructora y el flujo de la clase."
     },
     {
       question: "¿Qué debo llevar a mi primera clase?",
-      answer: "Para Ice Bath: traje de baño, toalla y ropa cómoda para después. Para Yoga: ropa deportiva cómoda y botella de agua. Nosotros proporcionamos esterillas y todo el equipamiento necesario."
+      answer: "Para Ice Bath o Wim Hof: traje de baño (ojalá ya puesto), toalla, bolsa para ropa mojada y buena actitud. Para Yoga: ropa deportiva cómoda. Nosotros proporcionamos mats y todo el equipamiento necesario."
     },
     {
       question: "¿Cuánto dura cada sesión y qué incluye?",
@@ -44,8 +52,8 @@ const FAQ = () => {
       answer: "Muchas personas sienten beneficios desde la primera sesión: mayor energía, claridad mental y sensación de logro. Los beneficios a largo plazo (mejor sueño, menos estrés, mayor resistencia) se desarrollan con práctica regular."
     },
     {
-      question: "¿Puedo acceder al Ice Bath después de una clase de yoga?",
-      answer: "Sí, muchos de nuestros miembros combinan yoga con Ice Bath en la misma visita. Es una combinación poderosa: el yoga prepara tu mente y cuerpo para el frío. Consulta disponibilidad al agendar."
+      question: "¿Cuánto tiempo puedo estar en el agua fría?",
+      answer: "Depende del contexto. En sesiones completas del Método Wim Hof puedes permanecer más tiempo, siempre siguiendo las instrucciones del instructor. Después de una clase de yoga, el máximo es de 2 minutos estrictos. Para principiantes, comenzamos con exposiciones cortas y vamos progresando gradualmente."
     },
     {
       question: "¿Qué temperatura tiene el agua del Ice Bath?",
