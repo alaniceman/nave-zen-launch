@@ -1,63 +1,9 @@
 /**
  * Google Sheets API helper — append rows using a Service Account.
- * Uses djwt for RS256 JWT creation.
+ * Uses google-auth-library for reliable JWT auth.
  */
 
-import { create, getNumericDate } from "https://deno.land/x/djwt@v3.0.2/mod.ts";
-
-/** Import a PEM private key for RS256 signing */
-async function importPrivateKey(pem: string): Promise<CryptoKey> {
-  const normalizedPem = pem.replace(/\\n/g, "\n");
-  const pemBody = normalizedPem
-    .replace(/-----BEGIN PRIVATE KEY-----/, "")
-    .replace(/-----END PRIVATE KEY-----/, "")
-    .replace(/\s/g, "");
-  const binaryDer = Uint8Array.from(atob(pemBody), (c) => c.charCodeAt(0));
-  return crypto.subtle.importKey(
-    "pkcs8",
-    binaryDer.buffer,
-    { name: "RSASSA-PKCS1-v1_5", hash: "SHA-256" },
-    false,
-    ["sign"],
-  );
-}
-
-/** Exchange a signed JWT for a Google access token */
-async function getAccessToken(
-  clientEmail: string,
-  privateKey: string,
-): Promise<string> {
-  const key = await importPrivateKey(privateKey);
-
-  const jwt = await create(
-    { alg: "RS256", typ: "JWT" },
-    {
-      iss: clientEmail,
-      scope: "https://www.googleapis.com/auth/spreadsheets",
-      aud: "https://oauth2.googleapis.com/token",
-      iat: getNumericDate(0),
-      exp: getNumericDate(3600),
-    },
-    key,
-  );
-
-  const res = await fetch("https://oauth2.googleapis.com/token", {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({
-      grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
-      assertion: jwt,
-    }),
-  });
-
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`Google token error ${res.status}: ${text}`);
-  }
-
-  const data = await res.json();
-  return data.access_token as string;
-}
+import { GoogleAuth } from "npm:google-auth-library@9.14.2";
 
 /**
  * Append rows to a Google Sheet.
@@ -75,11 +21,19 @@ export async function appendToSheet(
     return;
   }
 
-  console.log("[Google Sheets] Raw secret first 20 chars:", JSON.stringify(saJson.substring(0, 20)));
-  console.log("[Google Sheets] Raw secret last 20 chars:", JSON.stringify(saJson.substring(saJson.length - 20)));
+  const credentials = JSON.parse(saJson);
+  const auth = new GoogleAuth({
+    credentials,
+    scopes: ["https://www.googleapis.com/auth/spreadsheets"],
+  });
 
-  const sa = JSON.parse(saJson);
-  const accessToken = await getAccessToken(sa.client_email, sa.private_key);
+  const client = await auth.getClient();
+  const tokenResponse = await client.getAccessToken();
+  const accessToken = tokenResponse?.token;
+
+  if (!accessToken) {
+    throw new Error("Failed to obtain Google access token");
+  }
 
   const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${encodeURIComponent(range)}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`;
 
