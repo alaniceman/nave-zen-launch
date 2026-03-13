@@ -75,6 +75,9 @@ export async function appendToSheet(
     return;
   }
 
+  console.log("[Google Sheets] Raw secret first 20 chars:", JSON.stringify(saJson.substring(0, 20)));
+  console.log("[Google Sheets] Raw secret last 20 chars:", JSON.stringify(saJson.substring(saJson.length - 20)));
+
   const sa = JSON.parse(saJson);
   const accessToken = await getAccessToken(sa.client_email, sa.private_key);
 
