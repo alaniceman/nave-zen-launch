@@ -19,7 +19,7 @@ const Experiencias = () => {
     trackViewContent({
       content_name: 'Experiences Overview',
       content_category: 'Service Catalog',
-      content_ids: ['wim-hof', 'yoga', 'breathwork', 'biohacking', 'isometrica'],
+      content_ids: ['wim-hof', 'yoga', 'breathwork', 'isometrica'],
       content_type: 'service_group',
     });
   }, [trackViewContent]);
