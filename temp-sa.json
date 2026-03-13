@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "robust-doodad-322422",
+  "private_key_id": "b6ef68b6ee4960b28c7e033b556eac0aae6d391b",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC5xw7Lfna7r5FG\n7I2BAVu32N5721fSW5Rgt2lmIT5xyxvULTe4HazHde+BWOpZ55QnmFBq9ZhQgOU0\nHzZULAFx/aLEU2vBxg0BQ++whnfUbP6CoGqI+8p/w11sVeszd07yOFvExSkNC2RC\nI5BWorOvmnCtUHnLR1+GKQUn2hx9Tft6/6qiWn0ZXjNwrB1yLTKJmx1ZpTiD2MBP\nM+20HB7WEAZdGKAoCaGcwV2NoM8R7xYsRYJr5eg8fucu0cPmcVktb4VWZnNlQOda\nQeBLbMeKcxPx/Iz4+5I+sPc2saTNl8zRLN0A508jKMWLI/vhZtfbrGkwl4EEAtvX\nbJ/NcEmPAgMBAAECggEAIa4ygvcS/JToYDTbtKMz5yFUuJy8D8GVpXErFR56zTOX\nAIEQJHuQyvqZKNifaBxBcmo9Th7nddTgePIdreXqfymOHEzJcPCAhBW2e0jtqZ/3\nBmSh2+LWRBJ9ufnbsdF0CRrpnENoXVqO2yTKcsJ9lB0KR4mbAx0V9uMx8Zcr6hVt\npSVgqpsJuMFA/ueGAs3GDjbbzi7GppS8H6Ssnfm14DFDWg9D5vQPiPmeDCqppPnm\nlV5aM60J9UEKgMtedoC1eI7GGLyaC+SbqPECzhC+3USVWUO46yg1gaE6Vx43PBwa\nqQx7R82ABZM5Dg9MoadL57J1HVxlsw2UprduqCtIQQKBgQDfO/QxuSmU8VU9JsFM\nLKEloUhKEdfqaetR9e5GXojUiwk8Y3sqw0OePLHfMlhtVx02gAkGVmaYp+7hlBip\nZkDqsMjoVw4/mFMaIPsYdqFvBv8zpmN5RbFUI5ib52PeAHWOOR+h352y+H1NAGa6\npiI316gI4Frb0ubEem3OomqIzwKBgQDVC6rq4R4ckl2UN986PLqEgpsywBeT/ThB\nmZ+18zibGpO+G2LVG4R94rZ5sk2Lzmo/GDzLrLaja7CNC/YbExC0nR2TpW2qvC8r\n3+vOwbQRE7y7VhQfb08vFLZjH6HBc2tVdjtlrW2YhhWrNlipp9yp8tZISx6TjrMw\njhYccqzjQQKBgH4UCGkE4N1EKBYvi0CQfDsaig97YGz+gW967KZFwhX4qLC4ptmS\nCuCV+wfKEXM/njonufEgXzWcsygoUn1qSQPD8NR4Ro3YZCb/tZEtfyOL2hq7wLa/\ni9WvfQOgfiDmNX6r+JeeCh0Ihww0S9Di/7R2Umsg+2/n/3m8g8QOqwi1AoGAKj5l\nBqvar6mqGpC1l7Og/FN1eKu0QSjttbxDee2fZMnxT7nYcA9Dxz5kFl9vlvA4CwjA\nTVaS5HafDGi5xQaTwmyBB9y+kSM9a0K8XEP2c4hpXPAlj1If7mL6A0+rYFOFje2i\nu3eXCq5Tr55YGFProls/eBhFGNcr2s3hvoRSmcECgYEA1Ki0yHrzdXXH+DO0Xxh5\nMJLFcCRv2TkBwSHCsNy3n5k6sxzLgE6XFn4hv1Qd/w6whcpyb2/+pu8fDgLzk7/6\n1I0nmOAVZLB9koUAJRdyuU1UjfW+R3BkYTbDwhEwQ4bPmofwlVVWx4w4SbdLD0T/\n4Z+hbwF2F28d5HWrpsK2NJI=\n-----END PRIVATE KEY-----\n",
+  "client_email": "nave-studio@robust-doodad-322422.iam.gserviceaccount.com",
+  "client_id": "111791951950995791374",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/nave-studio%40robust-doodad-322422.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

@@ -1,31 +1,46 @@
 
 
-## Plan: Sync clases de prueba a Google Sheets
+## Plan: Add buyers to MailerLite groups on purchase
 
-Ya tengo el JSON de la service account y el Spreadsheet ID. Voy a implementar la integración directa con Google Sheets API desde la edge function.
+### Problem
+When a customer completes a purchase, they are not being added to the specified MailerLite subscriber groups.
 
-### Pasos
+### Approach
 
-**1. Guardar 2 secrets**
-- `GOOGLE_SERVICE_ACCOUNT_JSON` — el JSON completo de la service account
-- `GOOGLE_SHEETS_SPREADSHEET_ID` — `1Ol06gVqipVbVkVBMVXSln-FSbVVAT1C7PSXfJOMm7w4`
+**1. Add a shared helper function in `supabase/functions/_shared/mailerlite.ts`**
 
-**2. Crear helper `supabase/functions/_shared/googleSheets.ts`**
-- Función `appendToSheet(rows: string[][])` que:
-  - Parsea el JSON de la service account
-  - Genera un JWT firmado con RS256 para `https://www.googleapis.com/auth/spreadsheets`
-  - Obtiene access token de Google OAuth
-  - Llama `POST sheets.googleapis.com/v4/spreadsheets/{id}/values/A:G:append` con los datos
+Add a new `addSubscriberToGroups` function that:
+- Takes buyer email, name, and an array of group IDs
+- Calls the MailerLite API `POST /api/subscribers` with the groups array
+- Uses the existing `MAILERLITE_API_KEY` secret (same one used by `subscribe-mailerlite` function)
+- Non-blocking: errors are logged but don't break the purchase flow
 
-**3. Modificar `supabase/functions/book-trial-class/index.ts`**
-- Después de crear el booking (paso 3), llamar `appendToSheet` con una fila:
-  `[fecha_inscripción, nombre, email, teléfono, clase, fecha_clase, hora]`
-- Non-blocking: errores se logean pero no bloquean el booking
+**2. Call the helper after successful purchases in `mercadopago-webhook/index.ts`**
 
-### Requisito previo
-Asegurar que el spreadsheet `1Ol06gVqipVbVkVBMVXSln-FSbVVAT1C7PSXfJOMm7w4` esté compartido con `nave-studio@robust-doodad-322422.iam.gserviceaccount.com` como Editor.
+Add a call to `addSubscriberToGroups` in two places:
+- `handlePackageOrderPayment` (line ~355, after MailerLite order sync) for package/giftcard purchases
+- `handleBookingPayment` (line ~535, after MailerLite order sync) for booking purchases
 
-### Archivos
-- `supabase/functions/_shared/googleSheets.ts` — nuevo helper
-- `supabase/functions/book-trial-class/index.ts` — agregar llamada al helper
+Both will pass the buyer's email, name, and the two group IDs:
+- `168517368312498017`
+- `180841311274796302`
+
+**3. Call the helper for free (100% discount) orders in `purchase-session-package/index.ts`**
+
+Add the same call after the CRM event log (line ~330) for orders completed without Mercado Pago.
+
+### Technical details
+
+The MailerLite subscriber API (`POST /subscribers`) is idempotent -- if the subscriber already exists, it updates their groups. The `MAILERLITE_API_KEY` secret is already configured.
+
+```text
+Purchase flow:
+  Payment approved (webhook) ──► codes generated ──► email sent ──► MailerLite order sync ──► [NEW] add to groups
+  Free order (purchase fn)   ──► codes generated ──► email sent ──► CRM log ──► [NEW] add to groups
+```
+
+### Files to modify
+- `supabase/functions/_shared/mailerlite.ts` -- add `addSubscriberToGroups` helper
+- `supabase/functions/mercadopago-webhook/index.ts` -- call helper in both payment handlers
+- `supabase/functions/purchase-session-package/index.ts` -- call helper for free orders
 
