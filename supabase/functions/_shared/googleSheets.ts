@@ -18,6 +18,8 @@ function str2ab(str: string): ArrayBuffer {
 
 /** Import a PEM private key for RS256 signing */
 async function importPrivateKey(pem: string): Promise<CryptoKey> {
+  // Ensure literal \n are real newlines (env vars may escape them)
+  const normalizedPem = pem.replace(/\\n/g, "\n");
   const pemBody = pem
     .replace(/-----BEGIN PRIVATE KEY-----/, "")
     .replace(/-----END PRIVATE KEY-----/, "")
