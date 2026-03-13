@@ -180,6 +180,11 @@ serve(async (req) => {
       throw new Error("Failed to create booking");
     }
 
+    // 3b. Sync to Google Sheets (non-blocking)
+    const now = new Date().toLocaleString("es-CL", { timeZone: "America/Santiago" });
+    appendToSheet([[now, data.customerName, data.customerEmail.toLowerCase(), phone, data.classTitle, data.selectedDate, data.time]])
+      .catch((err) => console.error("[Google Sheets] sync error:", err));
+
     // 4. Upsert email_subscribers
     const { data: existingSub } = await supabase
       .from("email_subscribers")
