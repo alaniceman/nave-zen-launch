@@ -4,6 +4,7 @@ import { Resend } from "npm:resend@2.0.0";
 import { getCorsHeaders } from "../_shared/cors.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { upsertCustomerAndLogEvent } from "../_shared/crm.ts";
+import { appendToSheet } from "../_shared/googleSheets.ts";
 
 const bookingSchema = z.object({
   customerName: z.string().trim().min(1).max(100),
