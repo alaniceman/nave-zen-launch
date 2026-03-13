@@ -76,7 +76,7 @@ const membershipPlans = [
       "Yoga (Yin · Yang · Integral · Vinyasa · Power)",
       "Método Wim Hof",
       "Breathwork & Meditación",
-      "Biohacking (Breathwork + HIIT + Ice Bath)",
+      "Isométrica + Flexibilidad",
       "Comunidad online + mentorías",
     ],
     excludes: [],
