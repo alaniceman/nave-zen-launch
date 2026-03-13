@@ -96,22 +96,6 @@ const Experiencias = () => {
       href: "/horarios",
     },
     {
-      id: "biohacking",
-      title: "HIIT + Ice Bath",
-      subtitle: "Breathwork + circuito HIIT + baño de hielo",
-      duration: "60 min",
-      image: "/lovable-uploads/4483c652-df99-4b53-9841-a5b5b2ff21c4.png",
-      icon: Flame,
-      description: "Explosión metabólica: respiración activante, circuito HIIT de alta intensidad y cierre con inmersión en agua fría para máxima recuperación.",
-      benefits: [
-        "Acelera el metabolismo",
-        "Optimiza la recuperación muscular",
-        "Maximiza la quema de grasa"
-      ],
-      cta: "Reservar spot",
-      href: "/agenda-nave-studio",
-    },
-    {
       id: "isometrica",
       title: "Isométrica + Flexibilidad",
       subtitle: "Fuerza profunda y movilidad",
