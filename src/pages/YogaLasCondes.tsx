@@ -439,7 +439,7 @@ const YogaLasCondes = () => {
               ¿Quieres acceso a <strong className="text-primary">todas las experiencias</strong>?
             </p>
             <p className="text-sm text-muted-foreground font-inter mt-2">
-              Yoga + Método Wim Hof + Breathwork + Biohacking + Comunidad
+              Yoga + Método Wim Hof + Breathwork + Isométrica + Comunidad
             </p>
           </div>
         </section>

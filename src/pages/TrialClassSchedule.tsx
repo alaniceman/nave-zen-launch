@@ -153,7 +153,7 @@ export default function TrialClassSchedule() {
     <>
       <Helmet>
         <title>Agendar clase de prueba | Nave Studio</title>
-        <meta name="description" content="Agenda tu clase de prueba gratis en Nave Studio. Yoga, HIIT, Breathwork y más en Las Condes." />
+        <meta name="description" content="Agenda tu clase de prueba gratis en Nave Studio. Yoga, Breathwork y más en Las Condes." />
       </Helmet>
 
       <div className="min-h-screen bg-[#FAFAFA]">
