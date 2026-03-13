@@ -64,7 +64,7 @@ const Experiencias = () => {
     },
     {
       id: "yoga",
-      title: "Yoga (Yin · Yang · Vinyasa · Integral)",
+      title: "Yoga (Yin · Yang · Vinyasa · Integral · Power)",
       subtitle: "Ice Bath opcional al final",
       duration: "60 min",
       image: "/lovable-uploads/3649b4d9-a5b6-40c3-a674-5ce8da8b13e4.png",
