@@ -18,7 +18,7 @@ export const SocialProofSection = () => {
   }, {
     name: "Dr. Rodolfo Neira",
     role: "Médico Metabólico - Cancer",
-    quote: "El frío y el HIIT rejuvenecen a las mitocondrías, lo recomiendo para tu salud",
+    quote: "El frío y el ejercicio funcional rejuvenecen a las mitocondrias, lo recomiendo para tu salud",
     image: "/lovable-uploads/cdd1290b-d682-42ab-8225-001d1c4e4306.png"
   }, {
     name: "Nico Jarry",

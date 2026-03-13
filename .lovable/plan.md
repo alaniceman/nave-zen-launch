@@ -1,30 +1,46 @@
 
 
-## Plan: Eliminar HIIT de todo el proyecto
+## Plan: Add buyers to MailerLite groups on purchase
 
-HIIT ya no tiene clases activas. Hay que removerlo del horario estático, del catálogo de experiencias, y de todas las referencias en páginas públicas.
+### Problem
+When a customer completes a purchase, they are not being added to the specified MailerLite subscriber groups.
 
-### Archivos a modificar
+### Approach
 
-**1. `src/data/schedule.ts`** — Eliminar la entrada de HIIT + Ice Bath del miércoles 08:00
+**1. Add a shared helper function in `supabase/functions/_shared/mailerlite.ts`**
 
-**2. `src/pages/Experiencias.tsx`** — Eliminar la card de "HIIT + Ice Bath" (id: "biohacking"), quitar 'biohacking' del tracking, reemplazar el bloque simple de Ice Bath Prerequisite por la política completa de agua fría (4 puntos), agregar Power Yoga al título de Yoga
+Add a new `addSubscriberToGroups` function that:
+- Takes buyer email, name, and an array of group IDs
+- Calls the MailerLite API `POST /api/subscribers` with the groups array
+- Uses the existing `MAILERLITE_API_KEY` secret (same one used by `subscribe-mailerlite` function)
+- Non-blocking: errors are logged but don't break the purchase flow
 
-**3. `src/lib/experiences.ts`** — Eliminar la entrada `slug: "hiit"` del catálogo
+**2. Call the helper after successful purchases in `mercadopago-webhook/index.ts`**
 
-**4. `src/hooks/useScheduleEntries.ts`** — Eliminar `'hiit'` del mapeo `colorTagToTags`
+Add a call to `addSubscriberToGroups` in two places:
+- `handlePackageOrderPayment` (line ~355, after MailerLite order sync) for package/giftcard purchases
+- `handleBookingPayment` (line ~535, after MailerLite order sync) for booking purchases
 
-**5. `src/components/trial/TrialScheduleCards.tsx`** — Eliminar el case `'hiit'` del color mapping
+Both will pass the buyer's email, name, and the two group IDs:
+- `168517368312498017`
+- `180841311274796302`
 
-**6. `src/pages/Planes.tsx`** — Cambiar "Biohacking (Breathwork + Hiit + Ice Bath)" por "Isométrica + Flexibilidad" en los 3 planes
+**3. Call the helper for free (100% discount) orders in `purchase-session-package/index.ts`**
 
-**7. `src/pages/YogaLasCondes.tsx`** — Cambiar "Biohacking (Breathwork + HIIT + Ice Bath)" por "Isométrica + Flexibilidad" en los 3 planes
+Add the same call after the CRM event log (line ~330) for orders completed without Mercado Pago.
 
-**8. `src/pages/Cyber2025.tsx`** — Cambiar referencia de HIIT/Biohacking
+### Technical details
 
-**9. `src/pages/CriomedicinAdsLanding.tsx`** — Cambiar menciones de "HIIT" por "isométrica" o remover
+The MailerLite subscriber API (`POST /subscribers`) is idempotent -- if the subscriber already exists, it updates their groups. The `MAILERLITE_API_KEY` secret is already configured.
 
-**10. `src/components/SocialProofSection.tsx`** — Actualizar quote del Dr. Neira: cambiar "HIIT" por algo más genérico como "el ejercicio funcional"
+```text
+Purchase flow:
+  Payment approved (webhook) ──► codes generated ──► email sent ──► MailerLite order sync ──► [NEW] add to groups
+  Free order (purchase fn)   ──► codes generated ──► email sent ──► CRM log ──► [NEW] add to groups
+```
 
-**11. Blog posts** (`BlogYinVinyasa.tsx`) — Son referencias contextuales genéricas a HIIT como tipo de ejercicio (no como clase de Nave), se dejan como están ya que hablan de HIIT en general
+### Files to modify
+- `supabase/functions/_shared/mailerlite.ts` -- add `addSubscriberToGroups` helper
+- `supabase/functions/mercadopago-webhook/index.ts` -- call helper in both payment handlers
+- `supabase/functions/purchase-session-package/index.ts` -- call helper for free orders
 

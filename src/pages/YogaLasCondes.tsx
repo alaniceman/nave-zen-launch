@@ -60,7 +60,7 @@ const membershipPlans = [
       "Yoga (Yin · Yang · Integral · Vinyasa · Power)",
       "Método Wim Hof",
       "Breathwork & Meditación",
-      "Biohacking (Breathwork + HIIT + Ice Bath)",
+      "Isométrica + Flexibilidad",
     ],
     excludes: ["Comunidad online + mentorías"],
     url: "https://boxmagic.cl/market/plan/AvLXQOM4EK",
@@ -76,7 +76,7 @@ const membershipPlans = [
       "Yoga (Yin · Yang · Integral · Vinyasa · Power)",
       "Método Wim Hof",
       "Breathwork & Meditación",
-      "Biohacking (Breathwork + HIIT + Ice Bath)",
+      "Isométrica + Flexibilidad",
       "Comunidad online + mentorías",
     ],
     excludes: [],
@@ -93,7 +93,7 @@ const membershipPlans = [
       "Yoga (Yin · Yang · Integral · Vinyasa · Power)",
       "Método Wim Hof",
       "Breathwork & Meditación",
-      "Biohacking (Breathwork + HIIT + Ice Bath)",
+      "Isométrica + Flexibilidad",
       "Comunidad online + mentorías",
     ],
     excludes: [],
@@ -439,7 +439,7 @@ const YogaLasCondes = () => {
               ¿Quieres acceso a <strong className="text-primary">todas las experiencias</strong>?
             </p>
             <p className="text-sm text-muted-foreground font-inter mt-2">
-              Yoga + Método Wim Hof + Breathwork + Biohacking + Comunidad
+              Yoga + Método Wim Hof + Breathwork + Isométrica + Comunidad
             </p>
           </div>
         </section>
