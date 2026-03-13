@@ -31,13 +31,6 @@ export const EXPERIENCE_CATALOG = [
     metaNote: "Máx 1–2 personas",
   },
   {
-    slug: "hiit",
-    label: "HIIT + Ice Bath",
-    labelShort: "HIIT",
-    match: (item: ScheduleItem) => /biohacking|hiit\s*\+?\s*ice\s*bath/i.test(item.title),
-    metaNote: null,
-  },
-  {
     slug: "breathwork",
     label: "Breathwork & Meditación",
     labelShort: "Breathwork",

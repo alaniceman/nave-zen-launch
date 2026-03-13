@@ -37,7 +37,7 @@ const DAY_KEYS = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado',
 const colorTagToTags: Record<string, string[]> = {
   'yoga': ['Yoga'],
   'wim-hof': ['Método Wim Hof'],
-  'hiit': ['HIIT'],
+  
   'breathwork': ['Breathwork & Meditación'],
   'personalizado': ['Personalizado', 'Método Wim Hof'],
   'default': [],

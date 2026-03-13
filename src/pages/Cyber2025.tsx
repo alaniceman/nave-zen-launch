@@ -221,7 +221,7 @@ const Cyber2025 = () => {
                       <ul className="space-y-2 text-neutral-mid">
                         <li>• Método Wim Hof (Breathwork + Ice Bath)</li>
                         <li>• Yoga Yin · Yang · Integral · Vinyasa</li>
-                        <li>• Biohacking (Breathwork + HIIT + Ice Bath)</li>
+                        <li>• Isométrica + Flexibilidad</li>
                         <li>• Breathwork & Meditación</li>
                       </ul>
                     </div>

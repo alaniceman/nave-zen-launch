@@ -143,8 +143,8 @@ export const scheduleData: Record<string, ClassItem[]> = {
     }),
     c({
       time: "08:00",
-      title: "HIIT + Ice Bath",
-      tags: ["HIIT"],
+      title: "Isométrica + Flexibilidad",
+      tags: ["Yoga"],
       badges: [],
       duration: 60,
       instructor: "Maral Hekmat"

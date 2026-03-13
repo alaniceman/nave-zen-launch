@@ -572,7 +572,7 @@ import { Link, useNavigate } from "react-router-dom";
                      </li>
                      <li className="flex items-center gap-2">
                        <CheckCircle2 className="w-4 h-4 text-secondary flex-shrink-0" />
-                        Yoga, breathwork, agua fría, HIIT, isométrica
+                        Yoga, breathwork, agua fría, isométrica
                      </li>
                      <li className="flex items-center gap-2">
                        <CheckCircle2 className="w-4 h-4 text-secondary flex-shrink-0" />

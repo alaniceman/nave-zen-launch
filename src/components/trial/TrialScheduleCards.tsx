@@ -12,7 +12,7 @@ const getCardBgColor = (color_tag: string) => {
   switch (color_tag) {
     case 'wim-hof': return "bg-[#35C7D2]";
     case 'yoga': return "bg-[#2E4D3A]";
-    case 'hiit': return "bg-[#C49A6C]";
+    
     case 'breathwork': return "bg-[#7AA6A0]";
     case 'personalizado': return "bg-[#8C7A6B]";
     default: return "bg-[#35C7D2]";
