@@ -4,6 +4,7 @@ import { Resend } from "npm:resend@2.0.0";
 import { getCorsHeaders } from "../_shared/cors.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { upsertCustomerAndLogEvent } from "../_shared/crm.ts";
+import { appendToSheet } from "../_shared/googleSheets.ts";
 
 const bookingSchema = z.object({
   customerName: z.string().trim().min(1).max(100),
@@ -178,6 +179,11 @@ serve(async (req) => {
       console.error("Insert error:", bookingError);
       throw new Error("Failed to create booking");
     }
+
+    // 3b. Sync to Google Sheets (non-blocking)
+    const now = new Date().toLocaleString("es-CL", { timeZone: "America/Santiago" });
+    appendToSheet([[now, data.customerName, data.customerEmail.toLowerCase(), phone, data.classTitle, data.selectedDate, data.time]])
+      .catch((err) => console.error("[Google Sheets] sync error:", err));
 
     // 4. Upsert email_subscribers
     const { data: existingSub } = await supabase
