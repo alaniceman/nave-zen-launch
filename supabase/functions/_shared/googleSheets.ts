@@ -1,24 +1,12 @@
 /**
  * Google Sheets API helper — append rows using a Service Account.
- * Uses RS256 JWT for authentication (no external libs needed in Deno).
+ * Uses djwt for RS256 JWT creation.
  */
 
-// --- crypto helpers ---
-
-function base64url(buf: ArrayBuffer): string {
-  return btoa(String.fromCharCode(...new Uint8Array(buf)))
-    .replace(/\+/g, "-")
-    .replace(/\//g, "_")
-    .replace(/=+$/, "");
-}
-
-function str2ab(str: string): ArrayBuffer {
-  return new TextEncoder().encode(str).buffer;
-}
+import { create, getNumericDate } from "https://deno.land/x/djwt@v3.0.2/mod.ts";
 
 /** Import a PEM private key for RS256 signing */
 async function importPrivateKey(pem: string): Promise<CryptoKey> {
-  // Ensure literal \n are real newlines (env vars may escape them)
   const normalizedPem = pem.replace(/\\n/g, "\n");
   const pemBody = normalizedPem
     .replace(/-----BEGIN PRIVATE KEY-----/, "")
@@ -34,47 +22,24 @@ async function importPrivateKey(pem: string): Promise<CryptoKey> {
   );
 }
 
-/** Create a signed JWT for Google OAuth2 */
-async function createJWT(
-  clientEmail: string,
-  privateKey: string,
-  scopes: string[],
-): Promise<string> {
-  const now = Math.floor(Date.now() / 1000);
-  const header = { alg: "RS256", typ: "JWT" };
-  const payload = {
-    iss: clientEmail,
-    scope: scopes.join(" "),
-    aud: "https://oauth2.googleapis.com/token",
-    iat: now,
-    exp: now + 3600,
-  };
-
-  const encodedHeader = base64url(str2ab(JSON.stringify(header)));
-  const encodedPayload = base64url(str2ab(JSON.stringify(payload)));
-  const signingInput = `${encodedHeader}.${encodedPayload}`;
-
-  console.log("[Google Sheets] JWT client_email:", clientEmail);
-  console.log("[Google Sheets] Private key starts with:", privateKey.substring(0, 40));
-  console.log("[Google Sheets] Private key length:", privateKey.length);
-  const key = await importPrivateKey(privateKey);
-  const signature = await crypto.subtle.sign(
-    "RSASSA-PKCS1-v1_5",
-    key,
-    new TextEncoder().encode(signingInput),
-  );
-
-  return `${signingInput}.${base64url(signature)}`;
-}
-
 /** Exchange a signed JWT for a Google access token */
 async function getAccessToken(
   clientEmail: string,
   privateKey: string,
 ): Promise<string> {
-  const jwt = await createJWT(clientEmail, privateKey, [
-    "https://www.googleapis.com/auth/spreadsheets",
-  ]);
+  const key = await importPrivateKey(privateKey);
+
+  const jwt = await create(
+    { alg: "RS256", typ: "JWT" },
+    {
+      iss: clientEmail,
+      scope: "https://www.googleapis.com/auth/spreadsheets",
+      aud: "https://oauth2.googleapis.com/token",
+      iat: getNumericDate(0),
+      exp: getNumericDate(3600),
+    },
+    key,
+  );
 
   const res = await fetch("https://oauth2.googleapis.com/token", {
     method: "POST",
@@ -94,14 +59,9 @@ async function getAccessToken(
   return data.access_token as string;
 }
 
-// --- public API ---
-
 /**
  * Append rows to a Google Sheet.
  * Reads `GOOGLE_SERVICE_ACCOUNT_JSON` and `GOOGLE_SHEETS_SPREADSHEET_ID` from env.
- *
- * @param rows  Array of row arrays, e.g. [["val1","val2",...]]
- * @param range Optional sheet range (default "Sheet1")
  */
 export async function appendToSheet(
   rows: string[][],
@@ -111,7 +71,7 @@ export async function appendToSheet(
   const spreadsheetId = Deno.env.get("GOOGLE_SHEETS_SPREADSHEET_ID");
 
   if (!saJson || !spreadsheetId) {
-    console.warn("[Google Sheets] Missing GOOGLE_SERVICE_ACCOUNT_JSON or GOOGLE_SHEETS_SPREADSHEET_ID — skipping sync");
+    console.warn("[Google Sheets] Missing secrets — skipping sync");
     return;
   }
 
@@ -134,6 +94,6 @@ export async function appendToSheet(
     throw new Error(`Google Sheets append error ${res.status}: ${text}`);
   }
 
-  await res.text(); // consume body
+  await res.text();
   console.log(`[Google Sheets] Appended ${rows.length} row(s)`);
 }
