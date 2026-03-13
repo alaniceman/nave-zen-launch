@@ -54,6 +54,9 @@ async function createJWT(
   const encodedPayload = base64url(str2ab(JSON.stringify(payload)));
   const signingInput = `${encodedHeader}.${encodedPayload}`;
 
+  console.log("[Google Sheets] JWT client_email:", clientEmail);
+  console.log("[Google Sheets] Private key starts with:", privateKey.substring(0, 40));
+  console.log("[Google Sheets] Private key length:", privateKey.length);
   const key = await importPrivateKey(privateKey);
   const signature = await crypto.subtle.sign(
     "RSASSA-PKCS1-v1_5",
