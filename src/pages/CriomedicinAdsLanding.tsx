@@ -557,7 +557,7 @@ import { Link, useNavigate } from "react-router-dom";
              </h2>
              <p className="text-lg font-inter text-foreground/70 mb-6 max-w-2xl mx-auto">
                Con nuestras membresías mensuales tienes acceso ilimitado a todas las experiencias de Nave Studio: 
-                clases de yoga, breathwork, agua fría, HIIT, isométrica y más.
+                clases de yoga, breathwork, agua fría, isométrica y más.
              </p>
              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-muted mb-8">
                <div className="flex flex-col md:flex-row items-center justify-between gap-6">
