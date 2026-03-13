@@ -20,7 +20,7 @@ function str2ab(str: string): ArrayBuffer {
 async function importPrivateKey(pem: string): Promise<CryptoKey> {
   // Ensure literal \n are real newlines (env vars may escape them)
   const normalizedPem = pem.replace(/\\n/g, "\n");
-  const pemBody = pem
+  const pemBody = normalizedPem
     .replace(/-----BEGIN PRIVATE KEY-----/, "")
     .replace(/-----END PRIVATE KEY-----/, "")
     .replace(/\s/g, "");
