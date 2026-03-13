@@ -144,7 +144,7 @@ const Planes = () => {
                       <span className="text-accent">✔</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-muted-foreground">Biohacking (Breathwork + Hiit + Ice Bath)</span>
+                      <span className="text-sm text-muted-foreground">Isométrica + Flexibilidad</span>
                       <span className="text-accent">✔</span>
                     </div>
                     <div className="flex justify-between items-center">
