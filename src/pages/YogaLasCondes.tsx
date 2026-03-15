@@ -63,7 +63,7 @@ const membershipPlans = [
     sessions: "1 / sem",
     price: "$59.000",
     features: [
-      "Yoga (Yin · Yang · Integral · Vinyasa · Power)",
+      "Yoga (Yin · Yang · Integral · Vinyasa · Vinyasa Somático · Power)",
       "Método Wim Hof",
       "Breathwork & Meditación",
       "Isométrica + Flexibilidad",
