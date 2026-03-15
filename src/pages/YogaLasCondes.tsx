@@ -9,7 +9,7 @@ import { StickyMobileCTA } from "@/components/StickyMobileCTA";
 import { TrialYogaSection } from "@/components/TrialYogaSection";
 import { Footer } from "@/components/Footer";
 import { Badge } from "@/components/ui/badge";
-import { Flower2, Flame, Wind, Sun, Zap, Check, Star, Sparkles } from "lucide-react";
+import { Flower2, Flame, Wind, Sun, Zap, Heart, Check, Star, Sparkles } from "lucide-react";
 
 const yogaStyles = [
   {
