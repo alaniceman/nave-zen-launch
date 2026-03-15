@@ -42,6 +42,12 @@ const yogaStyles = [
     description: "Yoga de alta intensidad enfocado en fuerza y resistencia muscular.",
     benefits: ["Alta intensidad", "Tonificación", "Desafío físico"],
   },
+  {
+    name: "Vinyasa Somático",
+    icon: Heart,
+    description: "Regulá tu sistema nervioso a través del flujo de movimiento, respiración, vibración y quietud. Una invitación a habitar tu cuerpo y soltar lo rígido.",
+    benefits: ["Regulación nerviosa", "Soltar tensión profunda", "Conexión cuerpo-mente"],
+  },
 ];
 
 const galleryImages = [

@@ -15,11 +15,12 @@ export const EXPERIENCE_CATALOG = [
   },
   {
     slug: "yoga",
-    label: "Yoga (Yin · Yang · Vinyasa · Integral · Power)",
+    label: "Yoga (Yin · Yang · Vinyasa · Vinyasa Somático · Integral · Power)",
     labelShort: "Yoga",
     match: (item: ScheduleItem) =>
       /\byoga\b/i.test(item.title) ||
-      /\b(yin|yang|vinyasa|integral|power)\b\s*yoga/i.test(item.title),
+      /\b(yin|yang|vinyasa|integral|power|som[aá]tic[oa]?)\b\s*yoga/i.test(item.title) ||
+      /vinyasa\s+som[aá]tic[oa]?/i.test(item.title),
     metaNote: null,
   },
   {
