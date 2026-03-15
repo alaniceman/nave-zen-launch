@@ -214,7 +214,7 @@ const YogaLasCondes = () => {
               Nave Studio
             </p>
             <p className="text-base md:text-lg text-white/60 font-inter mb-10 tracking-wide">
-              Yin · Yang · Vinyasa · Integral · Power Yoga
+              Yin · Yang · Vinyasa · Vinyasa Somático · Integral · Power Yoga
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
