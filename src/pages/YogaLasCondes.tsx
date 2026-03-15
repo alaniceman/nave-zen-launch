@@ -9,7 +9,7 @@ import { StickyMobileCTA } from "@/components/StickyMobileCTA";
 import { TrialYogaSection } from "@/components/TrialYogaSection";
 import { Footer } from "@/components/Footer";
 import { Badge } from "@/components/ui/badge";
-import { Flower2, Flame, Wind, Sun, Zap, Check, Star, Sparkles } from "lucide-react";
+import { Flower2, Flame, Wind, Sun, Zap, Heart, Check, Star, Sparkles } from "lucide-react";
 
 const yogaStyles = [
   {
@@ -42,6 +42,12 @@ const yogaStyles = [
     description: "Yoga de alta intensidad enfocado en fuerza y resistencia muscular.",
     benefits: ["Alta intensidad", "Tonificación", "Desafío físico"],
   },
+  {
+    name: "Vinyasa Somático",
+    icon: Heart,
+    description: "Regulá tu sistema nervioso a través del flujo de movimiento, respiración, vibración y quietud. Una invitación a habitar tu cuerpo y soltar lo rígido.",
+    benefits: ["Regulación nerviosa", "Soltar tensión profunda", "Conexión cuerpo-mente"],
+  },
 ];
 
 const galleryImages = [
@@ -57,7 +63,7 @@ const membershipPlans = [
     sessions: "1 / sem",
     price: "$59.000",
     features: [
-      "Yoga (Yin · Yang · Integral · Vinyasa · Power)",
+      "Yoga (Yin · Yang · Integral · Vinyasa · Vinyasa Somático · Power)",
       "Método Wim Hof",
       "Breathwork & Meditación",
       "Isométrica + Flexibilidad",
@@ -73,7 +79,7 @@ const membershipPlans = [
     price: "$79.000",
     promo: "30% OFF 1° mes — código 1MES",
     features: [
-      "Yoga (Yin · Yang · Integral · Vinyasa · Power)",
+      "Yoga (Yin · Yang · Integral · Vinyasa · Vinyasa Somático · Power)",
       "Método Wim Hof",
       "Breathwork & Meditación",
       "Isométrica + Flexibilidad",
@@ -90,7 +96,7 @@ const membershipPlans = [
     price: "$95.000",
     promo: "30% OFF 1° mes — código 1MES",
     features: [
-      "Yoga (Yin · Yang · Integral · Vinyasa · Power)",
+      "Yoga (Yin · Yang · Integral · Vinyasa · Vinyasa Somático · Power)",
       "Método Wim Hof",
       "Breathwork & Meditación",
       "Isométrica + Flexibilidad",
@@ -113,7 +119,7 @@ const structuredDataYoga = {
   "@context": "https://schema.org",
   "@type": "SportsActivityLocation",
   "name": "Nave Studio — Yoga en Las Condes",
-  "description": "Clases de Yoga en Las Condes: Yin, Yang, Vinyasa, Integral y Power Yoga. Primera clase de prueba gratis.",
+  "description": "Clases de Yoga en Las Condes: Yin, Yang, Vinyasa, Vinyasa Somático, Integral y Power Yoga. Primera clase de prueba gratis.",
   "url": "https://studiolanave.com/yoga-las-condes",
   "telephone": "+56946120426",
   "address": {
@@ -175,11 +181,11 @@ const YogaLasCondes = () => {
   return (
     <>
       <Helmet>
-        <title>Yoga en Las Condes | Yin, Vinyasa, Power Yoga | Nave Studio</title>
-        <meta name="description" content="Clases de Yoga en Las Condes, Santiago. Prueba Yin, Vinyasa, Power e Integral Yoga con instructores certificados. Primera clase gratis. Antares 259." />
+        <title>Yoga en Las Condes | Yin, Vinyasa, Vinyasa Somático, Power Yoga | Nave Studio</title>
+        <meta name="description" content="Clases de Yoga en Las Condes, Santiago. Prueba Yin, Vinyasa, Vinyasa Somático, Power e Integral Yoga con instructores certificados. Primera clase gratis. Antares 259." />
         <link rel="canonical" href="https://studiolanave.com/yoga-las-condes" />
-        <meta property="og:title" content="Yoga en Las Condes | Yin, Vinyasa, Power Yoga | Nave Studio" />
-        <meta property="og:description" content="Clases de Yoga en Las Condes. Yin, Vinyasa, Power e Integral con instructores certificados. Primera clase gratis." />
+        <meta property="og:title" content="Yoga en Las Condes | Yin, Vinyasa, Vinyasa Somático, Power Yoga | Nave Studio" />
+        <meta property="og:description" content="Clases de Yoga en Las Condes. Yin, Vinyasa, Vinyasa Somático, Power e Integral con instructores certificados. Primera clase gratis." />
         <meta property="og:url" content="https://studiolanave.com/yoga-las-condes" />
         <meta property="og:image" content="https://studiolanave.com/lovable-uploads/82672388-9723-4aee-a1f2-ac72618cd26a.png" />
         <meta property="og:type" content="website" />
@@ -208,7 +214,7 @@ const YogaLasCondes = () => {
               Nave Studio
             </p>
             <p className="text-base md:text-lg text-white/60 font-inter mb-10 tracking-wide">
-              Yin · Yang · Vinyasa · Integral · Power Yoga
+              Yin · Yang · Vinyasa · Vinyasa Somático · Integral · Power Yoga
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a

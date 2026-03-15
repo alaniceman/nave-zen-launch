@@ -30,7 +30,7 @@ export const MethodologiesSection = () => {
     {
       icon: Heart,
       title: "Yoga",
-      description: "Flujo consciente que une posturas, respiración y mindfulness para alinear cuerpo-mente. Estilos: Yin, Yang, Vinyasa, Integral y Power Yoga.",
+      description: "Flujo consciente que une posturas, respiración y mindfulness para alinear cuerpo-mente. Estilos: Yin, Yang, Vinyasa, Vinyasa Somático, Integral y Power Yoga.",
       benefits: "Qué notarás en los primeros 20 min",
       benefitsList: [
         "Mejora flexibilidad y equilibrio corporal en pocas semanas",
