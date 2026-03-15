@@ -119,7 +119,7 @@ const structuredDataYoga = {
   "@context": "https://schema.org",
   "@type": "SportsActivityLocation",
   "name": "Nave Studio — Yoga en Las Condes",
-  "description": "Clases de Yoga en Las Condes: Yin, Yang, Vinyasa, Integral y Power Yoga. Primera clase de prueba gratis.",
+  "description": "Clases de Yoga en Las Condes: Yin, Yang, Vinyasa, Vinyasa Somático, Integral y Power Yoga. Primera clase de prueba gratis.",
   "url": "https://studiolanave.com/yoga-las-condes",
   "telephone": "+56946120426",
   "address": {
