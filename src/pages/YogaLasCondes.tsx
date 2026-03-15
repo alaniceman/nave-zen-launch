@@ -79,7 +79,7 @@ const membershipPlans = [
     price: "$79.000",
     promo: "30% OFF 1° mes — código 1MES",
     features: [
-      "Yoga (Yin · Yang · Integral · Vinyasa · Power)",
+      "Yoga (Yin · Yang · Integral · Vinyasa · Vinyasa Somático · Power)",
       "Método Wim Hof",
       "Breathwork & Meditación",
       "Isométrica + Flexibilidad",
