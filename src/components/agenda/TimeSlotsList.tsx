@@ -1,7 +1,5 @@
-import { format, parseISO } from "date-fns";
+import { parseISO } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
-import { es } from "date-fns/locale";
-import { Button } from "@/components/ui/button";
 import { Clock, User } from "lucide-react";
 
 interface TimeSlot {
