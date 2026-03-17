@@ -1,7 +1,5 @@
-import { format, parseISO } from "date-fns";
+import { parseISO } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
-import { es } from "date-fns/locale";
-import { Button } from "@/components/ui/button";
 import { Clock, User } from "lucide-react";
 
 interface TimeSlot {
@@ -49,34 +47,33 @@ export function TimeSlotsList({ slots, selectedDate, onSelectSlot }: TimeSlotsLi
   );
 
   return (
-    <div className="space-y-4">
-      <div className="max-h-[400px] overflow-y-auto space-y-4 pr-2">
+    <div className="space-y-6">
+      <div className="max-h-[480px] overflow-y-auto space-y-6 pr-1">
         {sortedServiceGroups.map(([serviceName, { slots: serviceSlots }]) => (
           <div key={serviceName} className="space-y-3">
-            <h4 className="font-medium text-sm text-muted-foreground uppercase tracking-wide">
+            <h4 className="font-semibold text-xs text-muted-foreground uppercase tracking-widest">
               {serviceName}
             </h4>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
               {serviceSlots.map((slot, index) => (
-                <Button
+                <button
                   key={index}
-                  variant="outline"
-                  className="flex flex-col items-center justify-center h-20 text-center p-3 hover:bg-primary hover:text-primary-foreground transition-colors"
+                  className="group flex flex-col items-center justify-center rounded-2xl border border-border bg-card px-4 py-5 text-center shadow-sm transition-all hover:border-primary/40 hover:shadow-md hover:scale-[1.02] active:scale-[0.98]"
                   onClick={() => onSelectSlot(slot)}
                 >
-                  <span className="font-bold text-lg">
+                  <span className="font-bold text-2xl tracking-tight text-foreground group-hover:text-primary transition-colors">
                     {formatInTimeZone(parseISO(slot.dateTimeStart), "America/Santiago", "HH:mm")}
                   </span>
-                  <div className="flex items-center gap-1 text-xs mt-1">
-                    <User className="h-3 w-3" />
-                    <span className="truncate">{slot.professionalName}</span>
+                  <div className="flex items-center gap-1.5 text-xs text-muted-foreground mt-2">
+                    <User className="h-3.5 w-3.5 shrink-0" />
+                    <span className="truncate max-w-[120px]">{slot.professionalName}</span>
                   </div>
-                  {slot.availableCapacity && slot.availableCapacity > 0 && (
-                    <span className="text-xs opacity-70 mt-1">
-                      {slot.availableCapacity} cupos
+                  {slot.availableCapacity != null && slot.availableCapacity > 0 && (
+                    <span className="text-[11px] text-muted-foreground/70 mt-1.5">
+                      {slot.availableCapacity} {slot.availableCapacity === 1 ? "cupo" : "cupos"}
                     </span>
                   )}
-                </Button>
+                </button>
               ))}
             </div>
           </div>
