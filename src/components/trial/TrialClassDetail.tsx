@@ -97,7 +97,7 @@ export default function TrialClassDetail({
         <div className="flex items-center gap-1.5 mt-3 text-sm text-[#575757]">
           <MapPin className="w-4 h-4 text-[#2E4D3A]" />
           <a
-            href="https://maps.app.goo.gl/YGMv9VjfZM6HPxEy8"
+            href="https://maps.app.goo.gl/32Pp7nxM8XiohAna8"
             target="_blank"
             rel="noopener noreferrer"
             className="underline hover:text-[#2E4D3A]"
