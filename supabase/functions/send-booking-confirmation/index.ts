@@ -12,7 +12,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-const MAPS_LINK = "https://maps.app.goo.gl/oW6G58gLd5oYWmGn8";
+const MAPS_LINK = "https://maps.app.goo.gl/32Pp7nxM8XiohAna8";
 const NAVE_WHATSAPP = "https://wa.me/56946120426";
 
 /** Detect if service is Wim Hof based on name */

@@ -392,7 +392,7 @@ const CriomedicinMetodoWimHof = () => {
             <h3 className="text-xl font-bold text-primary">Estamos en Las Condes, Santiago</h3>
             <p className="text-muted-foreground mt-1">Antares 259, Las Condes</p>
             <div className="mt-3 flex flex-wrap gap-3">
-              <a href="https://maps.app.goo.gl/oW6G58gLd5oYWmGn8" target="_blank" rel="noopener" className="inline-block border-2 border-primary text-primary rounded-lg px-4 py-2 hover:bg-primary hover:text-primary-foreground transition">Ver mapa</a>
+              <a href="https://maps.app.goo.gl/32Pp7nxM8XiohAna8" target="_blank" rel="noopener" className="inline-block border-2 border-primary text-primary rounded-lg px-4 py-2 hover:bg-primary hover:text-primary-foreground transition">Ver mapa</a>
               <a href="/horarios#hoy" className="inline-block bg-primary text-primary-foreground rounded-lg px-4 py-2 hover:bg-primary/90 transition">Ver horarios</a>
             </div>
           </div>

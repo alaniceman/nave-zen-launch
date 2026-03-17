@@ -247,7 +247,7 @@ serve(async (req) => {
     const dayName = DAY_NAMES[data.dayKey] || data.dayKey;
     const whatsappLink = `https://wa.me/${phone.replace("+", "")}`;
     const naveWhatsapp = "https://wa.me/56946120426";
-    const mapsLink = "https://maps.app.goo.gl/YGMv9VjfZM6HPxEy8";
+    const mapsLink = "https://maps.app.goo.gl/32Pp7nxM8XiohAna8";
 
     // 7. Send confirmation email to user
     const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");

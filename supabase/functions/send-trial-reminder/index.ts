@@ -3,7 +3,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 import { Resend } from "npm:resend@2.0.0";
 import { getCorsHeaders } from "../_shared/cors.ts";
 
-const MAPS_LINK = "https://maps.app.goo.gl/oW6G58gLd5oYWmGn8";
+const MAPS_LINK = "https://maps.app.goo.gl/32Pp7nxM8XiohAna8";
 const NAVE_WHATSAPP = "https://wa.me/56946120426";
 const TIMEZONE = "America/Santiago";
 
