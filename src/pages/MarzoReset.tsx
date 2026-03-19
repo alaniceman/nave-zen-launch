@@ -15,27 +15,27 @@ const PACKAGE_2_ID = "448c825b-575e-4e37-84b6-0dfea116ac3e";
 const PACKAGE_3_ID = "c89ccd95-1aea-4e94-977e-0b48ea307ef8";
 
 const packages = [
-  {
-    id: PACKAGE_2_ID,
-    sessions: 2,
-    price: 40000,
-    originalPrice: 60000,
-    perSession: 20000,
-    savings: 20000,
-    discount: "33%",
-    popular: false,
-  },
-  {
-    id: PACKAGE_3_ID,
-    sessions: 3,
-    price: 50000,
-    originalPrice: 90000,
-    perSession: 16667,
-    savings: 40000,
-    discount: "44%",
-    popular: true,
-  },
-];
+{
+  id: PACKAGE_2_ID,
+  sessions: 2,
+  price: 40000,
+  originalPrice: 60000,
+  perSession: 20000,
+  savings: 20000,
+  discount: "33%",
+  popular: false
+},
+{
+  id: PACKAGE_3_ID,
+  sessions: 3,
+  price: 50000,
+  originalPrice: 90000,
+  perSession: 16667,
+  savings: 40000,
+  discount: "44%",
+  popular: true
+}];
+
 
 export default function MarzoReset() {
   const { trackViewContent, trackInitiateCheckout } = useFacebookPixel();
@@ -48,7 +48,7 @@ export default function MarzoReset() {
       content_name: "Promo Marzo Reset",
       content_type: "product",
       content_ids: [PACKAGE_2_ID, PACKAGE_3_ID],
-      currency: "CLP",
+      currency: "CLP"
     });
   }, []);
 
@@ -71,7 +71,7 @@ export default function MarzoReset() {
       content_name: `Marzo Reset - ${pkg.sessions} Sesiones`,
       content_type: "product",
       value: pkg.price,
-      currency: "CLP",
+      currency: "CLP"
     });
 
     try {
@@ -82,8 +82,8 @@ export default function MarzoReset() {
           buyerEmail: formData.email,
           buyerPhone: formData.phone,
           isGiftCard: true,
-          promoType: "marzo_reset",
-        },
+          promoType: "marzo_reset"
+        }
       });
 
       if (error) throw new Error(error.message);
@@ -106,11 +106,11 @@ export default function MarzoReset() {
   };
 
   const benefits = [
-    { icon: Brain, text: "Reduce el estrés y la ansiedad", desc: "El agua fría activa el sistema nervioso parasimpático" },
-    { icon: Zap, text: "Recarga tu energía", desc: "Libera dopamina y norepinefrina naturalmente" },
-    { icon: ShieldCheck, text: "Fortalece tu sistema inmune", desc: "Aumenta la producción de glóbulos blancos" },
-    { icon: Heart, text: "Mejora tu sueño", desc: "Regula el cortisol y mejora la calidad del descanso" },
-  ];
+  { icon: Brain, text: "Reduce el estrés y la ansiedad", desc: "El agua fría activa el sistema nervioso parasimpático" },
+  { icon: Zap, text: "Recarga tu energía", desc: "Libera dopamina y norepinefrina naturalmente" },
+  { icon: ShieldCheck, text: "Fortalece tu sistema inmune", desc: "Aumenta la producción de glóbulos blancos" },
+  { icon: Heart, text: "Mejora tu sueño", desc: "Regula el cortisol y mejora la calidad del descanso" }];
+
 
   return (
     <>
@@ -118,8 +118,8 @@ export default function MarzoReset() {
         <title>Marzo Reset — Baja el estrés con Criomedicina | Nave Studio</title>
         <meta
           name="description"
-          content="Promo Marzo Reset: 2 sesiones de Criomedicina desde $40.000 o 3 sesiones por $50.000. Baja el estrés de marzo con agua fría guiada y respiración Wim Hof."
-        />
+          content="Promo Marzo Reset: 2 sesiones de Criomedicina desde $40.000 o 3 sesiones por $50.000. Baja el estrés de marzo con agua fría guiada y respiración Wim Hof." />
+        
         <meta property="og:title" content="Marzo Reset — Criomedicina desde $40.000" />
         <meta property="og:description" content="Baja el estrés de marzo. 2 o 3 sesiones de Criomedicina / Método Wim Hof desde $40.000." />
         <link rel="canonical" href="https://nave-zen-launch.lovable.app/marzo-reset" />
@@ -155,7 +155,7 @@ export default function MarzoReset() {
               </p>
 
               <p className="text-lg text-muted-foreground max-w-xl mx-auto">
-                Sesiones de Criomedicina / Método Wim Hof desde <strong className="text-foreground">$20.000 por sesión</strong>. Respira, sumérgete y resetea tu cuerpo y mente.
+                Sesiones de Criomedicina / Método Wim Hof desde <strong className="text-foreground">$16.667 por sesión</strong>. Respira, sumérgete y resetea tu cuerpo y mente.
               </p>
             </div>
           </div>
@@ -167,23 +167,23 @@ export default function MarzoReset() {
             <div className="max-w-5xl mx-auto">
               {/* Package Cards */}
               <div className="grid sm:grid-cols-2 gap-6 mb-10 max-w-3xl mx-auto">
-                {packages.map((pkg) => (
-                  <button
-                    key={pkg.id}
-                    type="button"
-                    onClick={() => setSelectedPackage(pkg.id)}
-                    className={cn(
-                      "relative text-left rounded-2xl border-2 p-6 transition-all duration-200",
-                      selectedPackage === pkg.id
-                        ? "border-cyan-500 bg-white shadow-xl ring-2 ring-cyan-200 scale-[1.02]"
-                        : "border-muted bg-card hover:border-cyan-300 hover:shadow-md"
-                    )}
-                  >
-                    {pkg.popular && (
-                      <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-cyan-500 to-sky-500 text-white px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+                {packages.map((pkg) =>
+                <button
+                  key={pkg.id}
+                  type="button"
+                  onClick={() => setSelectedPackage(pkg.id)}
+                  className={cn(
+                    "relative text-left rounded-2xl border-2 p-6 transition-all duration-200",
+                    selectedPackage === pkg.id ?
+                    "border-cyan-500 bg-white shadow-xl ring-2 ring-cyan-200 scale-[1.02]" :
+                    "border-muted bg-card hover:border-cyan-300 hover:shadow-md"
+                  )}>
+                  
+                    {pkg.popular &&
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-cyan-500 to-sky-500 text-white px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
                         Más popular
                       </div>
-                    )}
+                  }
 
                     <div className="flex items-center gap-3 mb-3">
                       <div className="p-2.5 bg-gradient-to-br from-cyan-500 to-sky-500 rounded-xl text-white">
@@ -215,13 +215,13 @@ export default function MarzoReset() {
 
                     {/* Selection indicator */}
                     <div className={cn(
-                      "absolute top-4 right-4 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors",
-                      selectedPackage === pkg.id ? "border-cyan-500 bg-cyan-500" : "border-muted-foreground/30"
-                    )}>
+                    "absolute top-4 right-4 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors",
+                    selectedPackage === pkg.id ? "border-cyan-500 bg-cyan-500" : "border-muted-foreground/30"
+                  )}>
                       {selectedPackage === pkg.id && <Check className="w-4 h-4 text-white" />}
                     </div>
                   </button>
-                ))}
+                )}
               </div>
 
               {/* Purchase Form */}
@@ -253,16 +253,16 @@ export default function MarzoReset() {
                     <Button
                       type="submit"
                       disabled={!!isLoading}
-                      className="w-full bg-gradient-to-r from-cyan-500 to-sky-600 hover:from-cyan-600 hover:to-sky-700 text-white font-semibold py-6 text-lg shadow-lg"
-                    >
-                      {isLoading ? (
-                        <><Loader2 className="w-5 h-5 animate-spin mr-2" />Procesando...</>
-                      ) : (
-                        <>
+                      className="w-full bg-gradient-to-r from-cyan-500 to-sky-600 hover:from-cyan-600 hover:to-sky-700 text-white font-semibold py-6 text-lg shadow-lg">
+                      
+                      {isLoading ?
+                      <><Loader2 className="w-5 h-5 animate-spin mr-2" />Procesando...</> :
+
+                      <>
                           <Snowflake className="w-5 h-5 mr-2" />
-                          Comprar {packages.find(p => p.id === selectedPackage)?.sessions} Sesiones — ${packages.find(p => p.id === selectedPackage)?.price.toLocaleString("es-CL")}
+                          Comprar {packages.find((p) => p.id === selectedPackage)?.sessions} Sesiones — ${packages.find((p) => p.id === selectedPackage)?.price.toLocaleString("es-CL")}
                         </>
-                      )}
+                      }
                     </Button>
 
                     <div className="flex items-center gap-2 text-muted-foreground bg-muted p-3 rounded-lg">
@@ -291,15 +291,15 @@ export default function MarzoReset() {
             </p>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
-              {benefits.map((benefit, index) => (
-                <div key={index} className="bg-card rounded-xl p-6 text-center shadow-md hover:shadow-lg transition-shadow">
+              {benefits.map((benefit, index) =>
+              <div key={index} className="bg-card rounded-xl p-6 text-center shadow-md hover:shadow-lg transition-shadow">
                   <div className="inline-flex p-3 bg-gradient-to-br from-cyan-500 to-sky-500 rounded-full text-white mb-4">
                     <benefit.icon className="w-6 h-6" />
                   </div>
                   <p className="text-foreground font-semibold mb-1">{benefit.text}</p>
                   <p className="text-sm text-muted-foreground">{benefit.desc}</p>
                 </div>
-              ))}
+              )}
             </div>
           </div>
         </section>
@@ -354,8 +354,8 @@ export default function MarzoReset() {
             <Button
               onClick={() => document.getElementById("name")?.focus()}
               size="lg"
-              className="bg-white text-cyan-600 hover:bg-white/90 font-bold text-lg py-6 px-8 rounded-xl shadow-xl hover:scale-105 transition-all"
-            >
+              className="bg-white text-cyan-600 hover:bg-white/90 font-bold text-lg py-6 px-8 rounded-xl shadow-xl hover:scale-105 transition-all">
+              
               <Snowflake className="w-5 h-5 mr-2" />
               Comprar Marzo Reset
             </Button>
@@ -364,6 +364,6 @@ export default function MarzoReset() {
 
         <Footer />
       </main>
-    </>
-  );
+    </>);
+
 }
