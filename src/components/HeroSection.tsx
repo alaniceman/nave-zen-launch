@@ -84,81 +84,76 @@ const HeroSlideMarzoReset = () => {
 
   return (
     <div className="relative min-h-screen flex items-start md:items-center justify-center pt-20 md:pt-0">
-      {/* Background with cool gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-cyan-700 via-sky-600 to-cyan-500" />
+      {/* Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-cyan-800 via-cyan-700 to-sky-600" />
       
-      {/* Decorative snowflakes */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 text-6xl md:text-8xl opacity-20 animate-pulse">❄️</div>
-        <div className="absolute top-40 right-20 text-5xl md:text-7xl opacity-15 animate-pulse" style={{ animationDelay: '0.5s' }}>🧊</div>
-        <div className="absolute bottom-40 left-20 text-4xl md:text-6xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }}>❄️</div>
-        <div className="absolute bottom-20 right-10 text-5xl md:text-7xl opacity-15 animate-pulse" style={{ animationDelay: '1.5s' }}>🧊</div>
-      </div>
+      {/* Subtle ice texture overlay */}
+      <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 20% 30%, rgba(255,255,255,0.3) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(255,255,255,0.2) 0%, transparent 40%)' }} />
       
       {/* Content */}
       <div className="relative z-10 container mx-auto px-6 text-center text-white">
-        <div className="max-w-4xl mx-auto space-y-6 md:space-y-8">
-          {/* Badge */}
-          <div className="inline-block">
-            <span className="bg-white/20 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm md:text-base font-medium border border-white/30">
-              ❄️ Promo Marzo Reset ❄️
+        <div className="max-w-4xl mx-auto space-y-5 md:space-y-7">
+          {/* Urgency badge */}
+          <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md text-white px-5 py-2.5 rounded-full text-sm md:text-base font-semibold border border-white/25 shadow-lg">
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-400"></span>
             </span>
+            Solo hasta el 31 de marzo
           </div>
           
           {/* Main Heading */}
-          <h1 className="font-space-grotesk font-bold text-3xl md:text-5xl lg:text-6xl leading-tight">
-            Baja el estrés <br className="hidden md:block" />
-            de marzo
+          <h1 className="font-space-grotesk font-bold text-4xl md:text-6xl lg:text-7xl leading-[1.1]">
+            Marzo Reset
+            <span className="block text-2xl md:text-3xl lg:text-4xl font-medium text-white/90 mt-2">
+              Packs de Criomedicina a precio especial
+            </span>
           </h1>
           
-          {/* Subheading */}
-          <div className="space-y-3">
-            <h2 className="font-inter font-medium text-xl md:text-2xl lg:text-3xl text-white/95 leading-relaxed">
-              Sesiones de Criomedicina / Método Wim Hof
-            </h2>
-            
-            {/* Prices */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8">
-              <div className="flex items-center gap-3">
-                <span className="text-lg text-white/60 line-through">$60.000</span>
-                <span className="text-3xl md:text-4xl font-bold text-white">2 x $40.000</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="text-lg text-white/60 line-through">$90.000</span>
-                <span className="text-3xl md:text-4xl font-bold text-white">3 x $50.000</span>
-              </div>
+          {/* Price cards */}
+          <div className="flex flex-col sm:flex-row items-stretch justify-center gap-4 max-w-lg mx-auto">
+            <div className="flex-1 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-5 text-center">
+              <p className="text-sm uppercase tracking-wider text-white/70 font-medium mb-1">2 Sesiones</p>
+              <p className="text-sm text-white/50 line-through">$60.000</p>
+              <p className="text-3xl md:text-4xl font-bold">$40.000</p>
+            </div>
+            <div className="flex-1 bg-white/20 backdrop-blur-sm border-2 border-white/40 rounded-2xl p-5 text-center relative overflow-hidden shadow-lg">
+              <div className="absolute top-0 right-0 bg-accent text-white text-[10px] font-bold px-3 py-0.5 rounded-bl-lg">MEJOR PRECIO</div>
+              <p className="text-sm uppercase tracking-wider text-white/70 font-medium mb-1">3 Sesiones</p>
+              <p className="text-sm text-white/50 line-through">$90.000</p>
+              <p className="text-3xl md:text-4xl font-bold">$50.000</p>
             </div>
           </div>
           
-          {/* Benefits */}
-          <div className="flex flex-wrap justify-center gap-4 text-white/90 text-sm md:text-base">
-            <span className="flex items-center gap-2">
-              <span className="text-lg">✓</span> Gift Card descargable
+          {/* Key benefits */}
+          <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-6 text-white/90 text-sm md:text-base">
+            <span className="flex items-center justify-center gap-2">
+              🎁 <strong>Compártelas</strong> con quien quieras
             </span>
-            <span className="flex items-center gap-2">
-              <span className="text-lg">✓</span> Válido 6 meses
+            <span className="flex items-center justify-center gap-2">
+              📅 <strong>6 meses</strong> para usarlas
             </span>
-            <span className="flex items-center gap-2">
-              <span className="text-lg">✓</span> Desde $16.667/sesión
+            <span className="flex items-center justify-center gap-2">
+              🧊 Sesiones guiadas de <strong>Criomedicina</strong>
             </span>
           </div>
           
           {/* CTA */}
-          <div className="space-y-4 pt-4">
+          <div className="space-y-3 pt-2">
             <Button 
               type="button"
               onClick={(e) => {
                 e.stopPropagation();
                 navigate('/marzo-reset');
               }}
-              className="w-full md:w-auto min-w-[320px] bg-white text-cyan-600 hover:bg-white/90 font-bold text-lg py-6 px-8 rounded-xl shadow-xl hover:shadow-2xl transition-all transform hover:scale-105"
+              className="w-full md:w-auto min-w-[320px] bg-white text-cyan-700 hover:bg-white/90 font-bold text-lg py-6 px-10 rounded-xl shadow-xl hover:shadow-2xl transition-all transform hover:scale-105"
               size="xl"
             >
-              ❄️ Comprar Marzo Reset
+              Comprar Marzo Reset →
             </Button>
             
-            <p className="font-inter text-sm text-white/80">
-              Válido solo en marzo 2026
+            <p className="font-inter text-xs text-white/60">
+              Promo válida solo en marzo 2026. No reembolsable.
             </p>
           </div>
         </div>
