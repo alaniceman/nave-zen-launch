@@ -58,6 +58,7 @@ const AgendaSuccess = lazy(() => import("./pages/AgendaSuccess"));
 const AgendaFailure = lazy(() => import("./pages/AgendaFailure"));
 const AgendaPending = lazy(() => import("./pages/AgendaPending"));
 const YogaLasCondes = lazy(() => import("./pages/YogaLasCondes"));
+const Icefest = lazy(() => import("./pages/Icefest"));
 
 // Lazy-loaded admin pages
 const AdminLogin = lazy(() => import("./pages/admin/Login"));
