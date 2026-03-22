@@ -58,6 +58,7 @@ const AgendaSuccess = lazy(() => import("./pages/AgendaSuccess"));
 const AgendaFailure = lazy(() => import("./pages/AgendaFailure"));
 const AgendaPending = lazy(() => import("./pages/AgendaPending"));
 const YogaLasCondes = lazy(() => import("./pages/YogaLasCondes"));
+const Icefest = lazy(() => import("./pages/Icefest"));
 
 // Lazy-loaded admin pages
 const AdminLogin = lazy(() => import("./pages/admin/Login"));
@@ -151,6 +152,7 @@ const App = () => (
             <Route path="/agenda-nave-studio/:professionalSlug/:dateParam/:timeParam" element={<AgendaNaveStudio />} />
             
             <Route path="/yoga-las-condes" element={<YogaLasCondes />} />
+            <Route path="/icefest" element={<Icefest />} />
             
             {/* Admin Routes */}
             <Route path="/admin/login" element={<AdminLogin />} />
