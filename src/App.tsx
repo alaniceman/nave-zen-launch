@@ -152,6 +152,7 @@ const App = () => (
             <Route path="/agenda-nave-studio/:professionalSlug/:dateParam/:timeParam" element={<AgendaNaveStudio />} />
             
             <Route path="/yoga-las-condes" element={<YogaLasCondes />} />
+            <Route path="/icefest" element={<Icefest />} />
             
             {/* Admin Routes */}
             <Route path="/admin/login" element={<AdminLogin />} />
