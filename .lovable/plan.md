@@ -1,46 +1,32 @@
 
 
-## Plan: Add buyers to MailerLite groups on purchase
+## Plan: Promo Icefest ❄️
 
-### Problem
-When a customer completes a purchase, they are not being added to the specified MailerLite subscriber groups.
+### Resumen
+Crear una promoción "Icefest" de 6 sesiones de Criomedicina por $60.000, compartibles, válida por 10 días, con landing page propia en `/icefest`.
 
-### Approach
+### Pasos
 
-**1. Add a shared helper function in `supabase/functions/_shared/mailerlite.ts`**
+**1. Crear el paquete en la base de datos**
+- Insertar un nuevo `session_package` con: name "Icefest — 6 Sesiones", 6 sesiones, $60.000, validity_days 180 (6 meses para usarlas), `is_active = true`, `show_in_criomedicina = false`, `available_as_giftcard = true`.
 
-Add a new `addSubscriberToGroups` function that:
-- Takes buyer email, name, and an array of group IDs
-- Calls the MailerLite API `POST /api/subscribers` with the groups array
-- Uses the existing `MAILERLITE_API_KEY` secret (same one used by `subscribe-mailerlite` function)
-- Non-blocking: errors are logged but don't break the purchase flow
+**2. Crear la landing page `src/pages/Icefest.tsx`**
+- Basada en el patrón de `MarzoReset.tsx`: hero con estética ice/frost, formulario de compra, beneficios de Criomedicina.
+- Datos clave: 6 sesiones por $60.000 ($10.000/sesión), compartibles, 6 meses de validez.
+- Badge de urgencia: "Solo por 10 días" con fecha de expiración automática.
+- SEO con Helmet.
+- Checkout vía `purchase-session-package` edge function con `isGiftCard: true`.
 
-**2. Call the helper after successful purchases in `mercadopago-webhook/index.ts`**
+**3. Registrar la ruta en `src/App.tsx`**
+- Lazy import de `Icefest` y ruta `/icefest`.
 
-Add a call to `addSubscriberToGroups` in two places:
-- `handlePackageOrderPayment` (line ~355, after MailerLite order sync) for package/giftcard purchases
-- `handleBookingPayment` (line ~535, after MailerLite order sync) for booking purchases
+### Archivos
+- `src/pages/Icefest.tsx` — nueva landing
+- `src/App.tsx` — agregar ruta
+- Base de datos — insertar paquete en `session_packages`
 
-Both will pass the buyer's email, name, and the two group IDs:
-- `168517368312498017`
-- `180841311274796302`
-
-**3. Call the helper for free (100% discount) orders in `purchase-session-package/index.ts`**
-
-Add the same call after the CRM event log (line ~330) for orders completed without Mercado Pago.
-
-### Technical details
-
-The MailerLite subscriber API (`POST /subscribers`) is idempotent -- if the subscriber already exists, it updates their groups. The `MAILERLITE_API_KEY` secret is already configured.
-
-```text
-Purchase flow:
-  Payment approved (webhook) ──► codes generated ──► email sent ──► MailerLite order sync ──► [NEW] add to groups
-  Free order (purchase fn)   ──► codes generated ──► email sent ──► CRM log ──► [NEW] add to groups
-```
-
-### Files to modify
-- `supabase/functions/_shared/mailerlite.ts` -- add `addSubscriberToGroups` helper
-- `supabase/functions/mercadopago-webhook/index.ts` -- call helper in both payment handlers
-- `supabase/functions/purchase-session-package/index.ts` -- call helper for free orders
+### Detalle técnico
+- La expiración de 10 días se calcula desde la fecha de deploy (hoy 22 marzo → expira 1 abril 2026).
+- La página muestra un countdown o se auto-oculta después de la fecha límite, redirigiendo a `/bonos`.
+- Precio por sesión: $10.000 vs precio normal ~$30.000 (67% descuento).
 
