@@ -5,7 +5,7 @@ import { coaches as allCoaches, type Coach } from "@/data/coaches";
 
 export const CoachesSection = ({ filterIds }: { filterIds?: string[] } = {}) => {
   // Filter coaches if filterIds is provided
-  const displayedCoaches = filterIds ? coaches.filter(coach => filterIds.includes(coach.id)) : coaches;
+  const displayedCoaches = filterIds ? allCoaches.filter(coach => filterIds.includes(coach.id)) : allCoaches;
   
   const [currentCoachIndex, setCurrentCoachIndex] = useState(0);
   const sliderRef = useRef<HTMLDivElement | null>(null);

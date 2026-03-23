@@ -154,6 +154,7 @@ const App = () => (
             
             <Route path="/yoga-las-condes" element={<YogaLasCondes />} />
             <Route path="/icefest" element={<Icefest />} />
+            <Route path="/instructor/:slug" element={<InstructorProfile />} />
             
             {/* Admin Routes */}
             <Route path="/admin/login" element={<AdminLogin />} />
