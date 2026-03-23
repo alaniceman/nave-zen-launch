@@ -118,7 +118,7 @@ const CoachCard = ({
         <p className="text-sm text-neutral-dark font-inter mb-6 italic leading-relaxed">
           "{coach.purpose}"
         </p>
-      </div>
+      </Link>
       
       {/* CTA Button */}
       <div className="text-center">
