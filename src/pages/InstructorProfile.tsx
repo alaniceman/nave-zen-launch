@@ -6,9 +6,20 @@ import { getCoachBySlug, BOOKABLE_SLUGS } from "@/data/coaches";
 import { Award, Heart, MessageCircle, Calendar, Clock } from "lucide-react";
 import { useScheduleEntries } from "@/hooks/useScheduleEntries";
 
+const DAY_LABELS: Record<string, string> = {
+  lunes: "Lunes",
+  martes: "Martes",
+  miercoles: "Miércoles",
+  jueves: "Jueves",
+  viernes: "Viernes",
+  sabado: "Sábado",
+  domingo: "Domingo",
+};
+
 const InstructorProfile = () => {
   const { slug } = useParams<{ slug: string }>();
   const coach = slug ? getCoachBySlug(slug) : undefined;
+  const { data: scheduleData } = useScheduleEntries();
 
   if (!coach) {
     return <Navigate to="/coaches" replace />;
@@ -19,6 +30,22 @@ const InstructorProfile = () => {
   const whatsappUrl = `https://wa.me/56946120426?text=Hola%21%20quiero%20reservar%20con%20${encodeURIComponent(coach.name)}%20en%20Nave%20Studio`;
   const ctaUrl = isBookable ? bookingUrl : whatsappUrl;
   const firstName = coach.name.split(" ")[0];
+
+  // Filter schedule entries for this instructor
+  const instructorSchedule: { day: string; time: string; title: string }[] = [];
+  if (scheduleData?.scheduleData) {
+    for (const [dayKey, classes] of Object.entries(scheduleData.scheduleData)) {
+      for (const cls of classes) {
+        if (cls.instructor?.toLowerCase().includes(firstName.toLowerCase())) {
+          instructorSchedule.push({
+            day: DAY_LABELS[dayKey] || dayKey,
+            time: cls.time,
+            title: cls.title,
+          });
+        }
+      }
+    }
+  }
 
   return (
     <>
