@@ -169,7 +169,7 @@ const InstructorProfile = () => {
                 </a>
               )}
               <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
-                <Button variant="outline" className="border-2 border-white text-white hover:bg-white/10 py-3 px-8 rounded-[10px] text-lg transition-all duration-200 gap-2">
+                <Button variant="outline" className="border-2 border-white text-white bg-transparent hover:bg-white/10 py-3 px-8 rounded-[10px] text-lg transition-all duration-200 gap-2">
                   <MessageCircle className="w-5 h-5" />
                   Consultar por WhatsApp
                 </Button>
