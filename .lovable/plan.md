@@ -1,32 +1,44 @@
 
 
-## Plan: Promo Icefest ❄️
+## Plan: Landing por Instructor `/instructor/:slug`
 
 ### Resumen
-Crear una promoción "Icefest" de 6 sesiones de Criomedicina por $60.000, compartibles, válida por 10 días, con landing page propia en `/icefest`.
+Crear una página dinámica que muestre el perfil completo de cada instructor, usando los datos hardcodeados de coaches (foto, rol, credenciales, frase) más el slug de la tabla `professionals` para resolver la URL y el link a la agenda.
 
-### Pasos
+### Estructura de la página
 
-**1. Crear el paquete en la base de datos**
-- Insertar un nuevo `session_package` con: name "Icefest — 6 Sesiones", 6 sesiones, $60.000, validity_days 180 (6 meses para usarlas), `is_active = true`, `show_in_criomedicina = false`, `available_as_giftcard = true`.
+1. **Hero** — Foto grande del instructor (la misma de CoachesSection) con nombre, rol y badge de fundador si aplica
+2. **Botón CTA** — "Agendar con [nombre]" → lleva a `/agenda-nave-studio/{slug}`
+3. **Sección Bio** — Frase/propósito, credenciales, descripción extendida
+4. **Galería de fotos** — Sección con fotos del coach en acción (placeholder por ahora, se pueden agregar después)
+5. **CTA final** — Repetir botón de agendar + link a WhatsApp
 
-**2. Crear la landing page `src/pages/Icefest.tsx`**
-- Basada en el patrón de `MarzoReset.tsx`: hero con estética ice/frost, formulario de compra, beneficios de Criomedicina.
-- Datos clave: 6 sesiones por $60.000 ($10.000/sesión), compartibles, 6 meses de validez.
-- Badge de urgencia: "Solo por 10 días" con fecha de expiración automática.
-- SEO con Helmet.
-- Checkout vía `purchase-session-package` edge function con `isGiftCard: true`.
+### Archivos a crear/modificar
 
-**3. Registrar la ruta en `src/App.tsx`**
-- Lazy import de `Icefest` y ruta `/icefest`.
+1. **`src/data/coaches.ts`** — Extraer los datos de coaches a un archivo compartido (evitar duplicación entre CoachesSection, Coaches page e InstructorProfile)
+2. **`src/pages/InstructorProfile.tsx`** — Nueva página dinámica que recibe `:slug` por params, busca el coach por slug, y renderiza el perfil completo
+3. **`src/App.tsx`** — Agregar ruta `/instructor/:slug` con lazy loading
+4. **`src/components/CoachesSection.tsx`** — Importar coaches desde `src/data/coaches.ts`
+5. **`src/pages/Coaches.tsx`** — Importar coaches desde `src/data/coaches.ts`
 
-### Archivos
-- `src/pages/Icefest.tsx` — nueva landing
-- `src/App.tsx` — agregar ruta
-- Base de datos — insertar paquete en `session_packages`
+### Mapeo slug → coach
+
+Los slugs de la tabla `professionals` (alan no está en la tabla, pero sí en los coaches hardcodeados) se mapean así:
+- `sol` → Sol Evans
+- `maral` → Maral Hekmat  
+- `rolo` → Rolo Varela
+- `mar` → Mar Carrasco (slug: mar, db name: Mariela Carrasco)
+- `amanda` → Amanda Moutel
+- `amber` → Ámbar Vidal (no está en professionals)
+- `alan` → Alan Iceman Earle (no está en professionals, pero existe como id en coaches)
+
+Se usará el `id` del array de coaches como slug para la URL. El botón "Agendar" apuntará a `/agenda-nave-studio/{slug}` solo si el profesional existe en la DB; sino, a WhatsApp.
 
 ### Detalle técnico
-- La expiración de 10 días se calcula desde la fecha de deploy (hoy 22 marzo → expira 1 abril 2026).
-- La página muestra un countdown o se auto-oculta después de la fecha límite, redirigiendo a `/bonos`.
-- Precio por sesión: $10.000 vs precio normal ~$30.000 (67% descuento).
+
+- La página hace un query simple a `professionals` para verificar que el slug existe y obtener datos reales
+- Los datos extendidos (bio, fotos, credenciales) vienen del archivo `coaches.ts` hardcodeado
+- SEO con Helmet dinámico por instructor
+- Responsive: hero full-width en mobile, layout de 2 columnas en desktop
+- La galería de fotos quedará con placeholders que se pueden reemplazar con fotos reales después
 
