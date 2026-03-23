@@ -3,7 +3,8 @@ import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import { Footer } from "@/components/Footer";
 import { getCoachBySlug, BOOKABLE_SLUGS } from "@/data/coaches";
-import { Award, Heart, MessageCircle, Calendar } from "lucide-react";
+import { Award, Heart, MessageCircle, Calendar, Clock } from "lucide-react";
+import { useScheduleEntries } from "@/hooks/useScheduleEntries";
 
 const InstructorProfile = () => {
   const { slug } = useParams<{ slug: string }>();
