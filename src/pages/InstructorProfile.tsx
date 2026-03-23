@@ -3,11 +3,23 @@ import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import { Footer } from "@/components/Footer";
 import { getCoachBySlug, BOOKABLE_SLUGS } from "@/data/coaches";
-import { Award, Heart, MessageCircle, Calendar } from "lucide-react";
+import { Award, Heart, MessageCircle, Calendar, Clock } from "lucide-react";
+import { useScheduleEntries } from "@/hooks/useScheduleEntries";
+
+const DAY_LABELS: Record<string, string> = {
+  lunes: "Lunes",
+  martes: "Martes",
+  miercoles: "Miércoles",
+  jueves: "Jueves",
+  viernes: "Viernes",
+  sabado: "Sábado",
+  domingo: "Domingo",
+};
 
 const InstructorProfile = () => {
   const { slug } = useParams<{ slug: string }>();
   const coach = slug ? getCoachBySlug(slug) : undefined;
+  const { data: scheduleData } = useScheduleEntries();
 
   if (!coach) {
     return <Navigate to="/coaches" replace />;
@@ -18,6 +30,22 @@ const InstructorProfile = () => {
   const whatsappUrl = `https://wa.me/56946120426?text=Hola%21%20quiero%20reservar%20con%20${encodeURIComponent(coach.name)}%20en%20Nave%20Studio`;
   const ctaUrl = isBookable ? bookingUrl : whatsappUrl;
   const firstName = coach.name.split(" ")[0];
+
+  // Filter schedule entries for this instructor
+  const instructorSchedule: { day: string; time: string; title: string }[] = [];
+  if (scheduleData?.scheduleData) {
+    for (const [dayKey, classes] of Object.entries(scheduleData.scheduleData)) {
+      for (const cls of classes) {
+        if (cls.instructor?.toLowerCase().includes(firstName.toLowerCase())) {
+          instructorSchedule.push({
+            day: DAY_LABELS[dayKey] || dayKey,
+            time: cls.time,
+            title: cls.title,
+          });
+        }
+      }
+    }
+  }
 
   return (
     <>
@@ -121,6 +149,35 @@ const InstructorProfile = () => {
           </div>
         </section>
 
+        {/* Schedule */}
+        {instructorSchedule.length > 0 && (
+          <section className="py-16 px-6">
+            <div className="container mx-auto max-w-3xl">
+              <div className="flex items-center gap-3 mb-8">
+                <Clock className="w-6 h-6 text-secondary" />
+                <h2 className="text-2xl md:text-3xl font-heading text-primary">
+                  Horarios de {firstName}
+                </h2>
+              </div>
+              <div className="grid gap-3">
+                {instructorSchedule.map((entry, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center gap-4 bg-muted/50 rounded-lg p-4 shadow-sm"
+                  >
+                    <div className="min-w-[100px]">
+                      <span className="font-semibold text-primary">{entry.day}</span>
+                    </div>
+                    <div className="min-w-[60px]">
+                      <span className="text-secondary font-medium">{entry.time}</span>
+                    </div>
+                    <span className="text-neutral-dark">{entry.title}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
         {/* Gallery placeholder */}
         {coach.galleryImages.length > 0 && (
           <section className="py-16 px-6">
