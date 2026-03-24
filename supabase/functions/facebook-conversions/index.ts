@@ -79,9 +79,16 @@ serve(async (req) => {
     console.log("Received conversion event:", body.event_name, "event_id:", body.event_id);
 
     // Build user_data with hashed PII
-    // Validate IP: only send if it looks like a valid public IPv4/IPv6
+    // Validate IP: accept valid public IPv4 or IPv6 (prefer IPv6 per Meta docs)
     const rawIp = (req.headers.get("x-forwarded-for")?.split(",")[0]?.trim()) || req.headers.get("cf-connecting-ip") || undefined;
-    const isValidPublicIp = rawIp && /^(\d{1,3}\.){3}\d{1,3}$/.test(rawIp) && !rawIp.startsWith("10.") && !rawIp.startsWith("172.") && !rawIp.startsWith("192.168.") && rawIp !== "127.0.0.1";
+    const isIPv4 = (ip: string) => /^(\d{1,3}\.){3}\d{1,3}$/.test(ip);
+    const isIPv6 = (ip: string) => /^[0-9a-fA-F:]+$/.test(ip) && ip.includes(":");
+    const isPrivateIPv4 = (ip: string) => ip.startsWith("10.") || ip.startsWith("172.") || ip.startsWith("192.168.") || ip === "127.0.0.1";
+    const isPrivateIPv6 = (ip: string) => ip === "::1" || ip.toLowerCase().startsWith("fe80") || ip.toLowerCase().startsWith("fc") || ip.toLowerCase().startsWith("fd");
+    const isValidPublicIp = rawIp && (
+      (isIPv4(rawIp) && !isPrivateIPv4(rawIp)) ||
+      (isIPv6(rawIp) && !isPrivateIPv6(rawIp))
+    );
 
     const userData: ConversionEvent["user_data"] = {
       client_ip_address: isValidPublicIp ? rawIp : undefined,
