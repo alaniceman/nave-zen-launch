@@ -120,8 +120,11 @@ const CoachCard = ({
         </p>
       </Link>
       
-      {/* CTA Button */}
-      <div className="text-center">
+      {/* CTA Buttons */}
+      <div className="flex items-center justify-center gap-3">
+        <Link to={`/instructor/${coach.slug}`} className="text-secondary font-medium font-inter text-sm underline underline-offset-2 hover:text-primary transition-colors duration-300">
+          Ver perfil →
+        </Link>
         <a 
           href={`https://wa.me/56946120426?text=Hola%21%20quiero%20reservar%20con%20${encodeURIComponent(coach.name)}%20en%20Nave%20Studio`}
           target="_blank"
