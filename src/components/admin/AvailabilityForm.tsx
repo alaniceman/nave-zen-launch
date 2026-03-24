@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { type FieldErrors, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -33,28 +33,38 @@ import { Label } from '@/components/ui/label';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
+const timeSchema = z
+  .string()
+  .regex(/^([01]\d|2[0-3]):[0-5]\d(?::[0-5]\d)?$/, 'Formato HH:MM');
+
 const availabilitySchema = z.object({
   professionalId: z.string().min(1, 'Selecciona un profesional'),
   serviceId: z.string().optional(),
   recurrenceType: z.enum(['weekly', 'specific_date']),
-  dayOfWeek: z.number().min(0).max(6).optional(),
+  dayOfWeek: z.coerce.number().min(0).max(6).optional(),
   specificDate: z.string().optional(),
-  startTime: z.string().regex(/^\d{2}:\d{2}$/, 'Formato HH:MM'),
-  endTime: z.string().regex(/^\d{2}:\d{2}$/, 'Formato HH:MM'),
-  durationMinutes: z.number().min(15).max(480),
-  maxDaysInFuture: z.number().min(1).max(365),
-  minHoursBeforeBooking: z.number().min(0).max(168),
+  startTime: timeSchema,
+  endTime: timeSchema,
+  durationMinutes: z.coerce.number().min(15).max(480),
+  maxDaysInFuture: z.coerce.number().min(1).max(365),
+  minHoursBeforeBooking: z.coerce.number().min(0).max(168),
   isActive: z.boolean().default(true),
-}).refine((data) => {
-  if (data.recurrenceType === 'weekly' && data.dayOfWeek === undefined) {
-    return false;
+}).superRefine((data, ctx) => {
+  if (data.recurrenceType === 'weekly' && (data.dayOfWeek === undefined || Number.isNaN(data.dayOfWeek))) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ['dayOfWeek'],
+      message: 'Debes seleccionar un día de la semana',
+    });
   }
+
   if (data.recurrenceType === 'specific_date' && !data.specificDate) {
-    return false;
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ['specificDate'],
+      message: 'Debes seleccionar una fecha específica',
+    });
   }
-  return true;
-}, {
-  message: 'Debes especificar el día de la semana o la fecha específica',
 });
 
 type AvailabilityFormData = z.infer<typeof availabilitySchema>;
@@ -78,6 +88,8 @@ const DAYS_OF_WEEK = [
 export function AvailabilityForm({ open, onClose, rule }: AvailabilityFormProps) {
   const queryClient = useQueryClient();
   const isEditing = !!rule;
+
+  const normalizeTime = (value?: string | null) => (value ? value.slice(0, 5) : '');
 
   const { data: professionals } = useQuery({
     queryKey: ['professionals-active'],
@@ -127,10 +139,10 @@ export function AvailabilityForm({ open, onClose, rule }: AvailabilityFormProps)
         professionalId: rule.professional_id,
         serviceId: rule.service_id || undefined,
         recurrenceType: recurrenceTypeForm,
-        dayOfWeek: rule.day_of_week,
-        specificDate: rule.specific_date,
-        startTime: rule.start_time?.slice(0, 5),
-        endTime: rule.end_time?.slice(0, 5),
+        dayOfWeek: rule.day_of_week ?? undefined,
+        specificDate: rule.specific_date || undefined,
+        startTime: normalizeTime(rule.start_time),
+        endTime: normalizeTime(rule.end_time),
         durationMinutes: rule.duration_minutes,
         maxDaysInFuture: rule.max_days_in_future,
         minHoursBeforeBooking: rule.min_hours_before_booking,
@@ -150,8 +162,8 @@ export function AvailabilityForm({ open, onClose, rule }: AvailabilityFormProps)
         recurrence_type: recurrenceTypeDB,
         day_of_week: data.recurrenceType === 'weekly' ? data.dayOfWeek : null,
         specific_date: data.recurrenceType === 'specific_date' ? data.specificDate : null,
-        start_time: data.startTime,
-        end_time: data.endTime,
+        start_time: normalizeTime(data.startTime),
+        end_time: normalizeTime(data.endTime),
         duration_minutes: data.durationMinutes,
         max_days_in_future: data.maxDaysInFuture,
         min_hours_before_booking: data.minHoursBeforeBooking,
@@ -185,6 +197,11 @@ export function AvailabilityForm({ open, onClose, rule }: AvailabilityFormProps)
     mutation.mutate(data);
   };
 
+  const onInvalid = (errors: FieldErrors<AvailabilityFormData>) => {
+    const firstError = Object.values(errors).find((error) => error?.message)?.message;
+    toast.error(firstError || 'Revisa los campos del formulario antes de actualizar');
+  };
+
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
@@ -195,7 +212,7 @@ export function AvailabilityForm({ open, onClose, rule }: AvailabilityFormProps)
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={form.handleSubmit(onSubmit, onInvalid)} className="space-y-4">
             <FormField
               control={form.control}
               name="professionalId"
