@@ -43,7 +43,7 @@ export const coaches: Coach[] = [
     slug: "sol",
     name: "Sol Evans",
     role: "Instructora de Ice Yoga · Reikista",
-    credentials: "Crioguía de Inmersiones y Breathwork · Terapeuta Holística – Reiki Master",
+    credentials: "Ice Yoga Method · Terapeuta Holística – Reiki Master",
     purpose: "Te acompaño a encontrar calma y fortaleza a través del frío, la respiración y la energía.",
     image: "/lovable-uploads/27a0352e-30dd-41fc-8a91-48b297e8615a.png",
     tags: ["Energía", "Terapia"],
