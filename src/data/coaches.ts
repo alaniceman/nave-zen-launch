@@ -31,7 +31,7 @@ export const coaches: Coach[] = [
     slug: "maral",
     name: "Maral Hekmat",
     role: "Instructora de Yoga y Movimiento Consciente – Kinesióloga en formación",
-    credentials: "Crioguía de Inmersiones, Power Yoga e Yoga Integral · Biomecánica & prevención de lesiones",
+    credentials: "Yoga – Federación Internacional de Yoga · Kinesióloga en formación – Universidad Finis Terrae",
     purpose: "Guío prácticas que cultivan fuerza y flexibilidad sin perder el equilibrio interno.",
     image: "/lovable-uploads/30549bc9-e0a1-4084-927b-f3eadfec8372.png",
     tags: ["Movimiento", "Terapia"],
