@@ -53,3 +53,6 @@ verify_jwt = false
 
 [functions.send-marzo-reset-promo]
 verify_jwt = false
+
+[functions.send-icefest-promo]
+verify_jwt = false
