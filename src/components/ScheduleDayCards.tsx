@@ -74,7 +74,7 @@ export default function ScheduleDayCards() {
           if (exp.slug === 'wim-hof-personalizado') return item.color_tag === 'personalizado';
           if (exp.slug === 'yoga') return item.color_tag === 'yoga';
           if (exp.slug === 'breathwork') return item.color_tag === 'breathwork';
-          return exp.match(item as any);
+          return false;
         })
         .sort((a, b) => a.time.localeCompare(b.time));
       return { day, dayName: dayNames[day as keyof typeof dayNames], items };
