@@ -240,7 +240,7 @@ export default function AdminFutureSlots() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
               <Label>Profesional</Label>
-              <Select value={selectedProfessional} onValueChange={setSelectedProfessional}>
+              <Select value={selectedProfessional} onValueChange={(v) => { setSelectedProfessional(v); setCurrentPage(0); }}>
                 <SelectTrigger>
                   <SelectValue placeholder="Todos" />
                 </SelectTrigger>
@@ -257,7 +257,7 @@ export default function AdminFutureSlots() {
 
             <div>
               <Label>Servicio</Label>
-              <Select value={selectedService} onValueChange={setSelectedService}>
+              <Select value={selectedService} onValueChange={(v) => { setSelectedService(v); setCurrentPage(0); }}>
                 <SelectTrigger>
                   <SelectValue placeholder="Todos" />
                 </SelectTrigger>
@@ -277,7 +277,7 @@ export default function AdminFutureSlots() {
               <Input
                 type="date"
                 value={dateFrom}
-                onChange={(e) => setDateFrom(e.target.value)}
+                onChange={(e) => { setDateFrom(e.target.value); setCurrentPage(0); }}
               />
             </div>
 
@@ -286,7 +286,7 @@ export default function AdminFutureSlots() {
               <Input
                 type="date"
                 value={dateTo}
-                onChange={(e) => setDateTo(e.target.value)}
+                onChange={(e) => { setDateTo(e.target.value); setCurrentPage(0); }}
               />
             </div>
           </div>
