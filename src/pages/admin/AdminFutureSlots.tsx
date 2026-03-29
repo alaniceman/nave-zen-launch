@@ -423,7 +423,6 @@ export default function AdminFutureSlots() {
                 <p className="text-sm text-muted-foreground mb-2">
                   {formatInTimeZone(editingSlot.date_time_start, CHILE_TZ, "EEEE d MMMM yyyy 'a las' HH:mm", { locale: es })}
                 </p>
-                </p>
                 <p className="text-sm">
                   <strong>Profesional:</strong> {editingSlot.professionals?.name}
                 </p>
