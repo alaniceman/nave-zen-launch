@@ -113,18 +113,16 @@ serve(async (req) => {
     }
 
     // Check which slots already exist to avoid duplicates
-    // Use explicit UTC date range to ensure correct comparison regardless of timezone
-    const existingSlots = new Set();
+    // Paginate in blocks of 1000 to avoid Supabase default row limit
+    const existingSlots = new Set<string>();
     
     // Calculate the full UTC range for the date period
-    // For Chile (UTC-3), a date like 2025-12-25 00:00 Chile = 2025-12-25 03:00 UTC
-    // So we need to search from start of first day to end of last day in UTC
     const startUtc = new Date(startDate);
     startUtc.setHours(0, 0, 0, 0);
     const endUtc = new Date(endDate);
     endUtc.setHours(23, 59, 59, 999);
     
-    // Expand range by 1 day on each side to catch any timezone edge cases
+    // Expand range by 1 day on each side to catch timezone edge cases
     const searchStart = new Date(startUtc);
     searchStart.setDate(searchStart.getDate() - 1);
     const searchEnd = new Date(endUtc);
@@ -132,18 +130,31 @@ serve(async (req) => {
     
     console.log(`Checking existing slots from ${searchStart.toISOString()} to ${searchEnd.toISOString()}`);
     
-    const { data: existing } = await supabase
-      .from("generated_slots")
-      .select("professional_id, service_id, date_time_start")
-      .gte("date_time_start", searchStart.toISOString())
-      .lte("date_time_start", searchEnd.toISOString());
+    const PAGE_SIZE = 1000;
+    let offset = 0;
+    let hasMore = true;
+    
+    while (hasMore) {
+      const { data: existing } = await supabase
+        .from("generated_slots")
+        .select("professional_id, service_id, date_time_start")
+        .gte("date_time_start", searchStart.toISOString())
+        .lte("date_time_start", searchEnd.toISOString())
+        .range(offset, offset + PAGE_SIZE - 1);
 
-    if (existing) {
-      for (const slot of existing) {
-        const key = `${slot.professional_id}_${slot.service_id}_${slot.date_time_start}`;
-        existingSlots.add(key);
+      if (existing && existing.length > 0) {
+        for (const slot of existing) {
+          const key = `${slot.professional_id}_${slot.service_id}_${slot.date_time_start}`;
+          existingSlots.add(key);
+        }
+        offset += existing.length;
+        hasMore = existing.length === PAGE_SIZE;
+      } else {
+        hasMore = false;
       }
     }
+    
+    console.log(`Found ${existingSlots.size} existing slots across ${Math.ceil(offset / PAGE_SIZE) || 1} pages`);
 
     // Filter out existing slots
     const newSlots = slotsToInsert.filter(slot => {

@@ -27,9 +27,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { format, parseISO, addDays } from "date-fns";
+import { format, addDays, parseISO } from "date-fns";
+import { formatInTimeZone } from "date-fns-tz";
 import { es } from "date-fns/locale";
-import { Loader2, RefreshCw, Edit, Calendar } from "lucide-react";
+import { Loader2, RefreshCw, Edit, Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function AdminFutureSlots() {
@@ -41,6 +42,9 @@ export default function AdminFutureSlots() {
   const [editingSlot, setEditingSlot] = useState<any>(null);
   const [editMaxCapacity, setEditMaxCapacity] = useState<number>(1);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+  const PAGE_SIZE = 50;
+  const CHILE_TZ = "America/Santiago";
 
   // Fetch professionals
   const { data: professionals } = useQuery({
@@ -70,9 +74,28 @@ export default function AdminFutureSlots() {
     },
   });
 
-  // Fetch generated slots with filters
+  // Fetch total count for pagination
+  const { data: totalCount } = useQuery({
+    queryKey: ["generated-slots-count", selectedProfessional, selectedService, dateFrom, dateTo],
+    queryFn: async () => {
+      let query = supabase
+        .from("generated_slots")
+        .select("id", { count: "exact", head: true })
+        .gte("date_time_start", `${dateFrom}T00:00:00`)
+        .lte("date_time_start", `${dateTo}T23:59:59`);
+
+      if (selectedProfessional !== "all") query = query.eq("professional_id", selectedProfessional);
+      if (selectedService !== "all") query = query.eq("service_id", selectedService);
+
+      const { count, error } = await query;
+      if (error) throw error;
+      return count || 0;
+    },
+  });
+
+  // Fetch generated slots with filters and pagination
   const { data: slots, isLoading } = useQuery({
-    queryKey: ["generated-slots", selectedProfessional, selectedService, dateFrom, dateTo],
+    queryKey: ["generated-slots", selectedProfessional, selectedService, dateFrom, dateTo, currentPage],
     queryFn: async () => {
       let query = supabase
         .from("generated_slots")
@@ -83,15 +106,11 @@ export default function AdminFutureSlots() {
         `)
         .gte("date_time_start", `${dateFrom}T00:00:00`)
         .lte("date_time_start", `${dateTo}T23:59:59`)
-        .order("date_time_start", { ascending: true });
+        .order("date_time_start", { ascending: true })
+        .range(currentPage * PAGE_SIZE, (currentPage + 1) * PAGE_SIZE - 1);
 
-      if (selectedProfessional !== "all") {
-        query = query.eq("professional_id", selectedProfessional);
-      }
-
-      if (selectedService !== "all") {
-        query = query.eq("service_id", selectedService);
-      }
+      if (selectedProfessional !== "all") query = query.eq("professional_id", selectedProfessional);
+      if (selectedService !== "all") query = query.eq("service_id", selectedService);
 
       const { data, error } = await query;
       if (error) throw error;
@@ -221,7 +240,7 @@ export default function AdminFutureSlots() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
               <Label>Profesional</Label>
-              <Select value={selectedProfessional} onValueChange={setSelectedProfessional}>
+              <Select value={selectedProfessional} onValueChange={(v) => { setSelectedProfessional(v); setCurrentPage(0); }}>
                 <SelectTrigger>
                   <SelectValue placeholder="Todos" />
                 </SelectTrigger>
@@ -238,7 +257,7 @@ export default function AdminFutureSlots() {
 
             <div>
               <Label>Servicio</Label>
-              <Select value={selectedService} onValueChange={setSelectedService}>
+              <Select value={selectedService} onValueChange={(v) => { setSelectedService(v); setCurrentPage(0); }}>
                 <SelectTrigger>
                   <SelectValue placeholder="Todos" />
                 </SelectTrigger>
@@ -258,7 +277,7 @@ export default function AdminFutureSlots() {
               <Input
                 type="date"
                 value={dateFrom}
-                onChange={(e) => setDateFrom(e.target.value)}
+                onChange={(e) => { setDateFrom(e.target.value); setCurrentPage(0); }}
               />
             </div>
 
@@ -267,7 +286,7 @@ export default function AdminFutureSlots() {
               <Input
                 type="date"
                 value={dateTo}
-                onChange={(e) => setDateTo(e.target.value)}
+                onChange={(e) => { setDateTo(e.target.value); setCurrentPage(0); }}
               />
             </div>
           </div>
@@ -276,7 +295,7 @@ export default function AdminFutureSlots() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Slots Generados ({slots?.length || 0})</CardTitle>
+          <CardTitle>Slots Generados ({totalCount || 0})</CardTitle>
         </CardHeader>
         <CardContent>
           {isLoading ? (
@@ -289,78 +308,105 @@ export default function AdminFutureSlots() {
               <p>No se encontraron slots con estos filtros</p>
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Fecha</TableHead>
-                    <TableHead>Hora</TableHead>
-                    <TableHead>Profesional</TableHead>
-                    <TableHead>Servicio</TableHead>
-                    <TableHead>Cupos Máx</TableHead>
-                    <TableHead>Reservados</TableHead>
-                    <TableHead>Disponibles</TableHead>
-                    <TableHead>Estado</TableHead>
-                    <TableHead>Acciones</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {slots.map((slot) => {
-                    const available = slot.max_capacity - slot.confirmed_bookings;
-                    return (
-                      <TableRow key={slot.id} className={!slot.is_active ? "opacity-50" : ""}>
-                        <TableCell>
-                          {format(parseISO(slot.date_time_start), "EEEE d MMM yyyy", {
-                            locale: es,
-                          })}
-                        </TableCell>
-                        <TableCell>
-                          {format(parseISO(slot.date_time_start), "HH:mm")}
-                        </TableCell>
-                        <TableCell>{slot.professionals?.name}</TableCell>
-                        <TableCell>{slot.services?.name}</TableCell>
-                        <TableCell>{slot.max_capacity}</TableCell>
-                        <TableCell>{slot.confirmed_bookings}</TableCell>
-                        <TableCell>
-                          <span className={available <= 0 ? "text-destructive font-bold" : ""}>
-                            {available}
-                          </span>
-                        </TableCell>
-                        <TableCell>
-                          <span
-                            className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                              slot.is_active
-                                ? "bg-green-100 text-green-800"
-                                : "bg-gray-100 text-gray-800"
-                            }`}
-                          >
-                            {slot.is_active ? "Activo" : "Inactivo"}
-                          </span>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex gap-2">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => handleEditSlot(slot)}
+            <>
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Fecha</TableHead>
+                      <TableHead>Hora</TableHead>
+                      <TableHead>Profesional</TableHead>
+                      <TableHead>Servicio</TableHead>
+                      <TableHead>Cupos Máx</TableHead>
+                      <TableHead>Reservados</TableHead>
+                      <TableHead>Disponibles</TableHead>
+                      <TableHead>Estado</TableHead>
+                      <TableHead>Acciones</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {slots.map((slot) => {
+                      const available = slot.max_capacity - slot.confirmed_bookings;
+                      return (
+                        <TableRow key={slot.id} className={!slot.is_active ? "opacity-50" : ""}>
+                          <TableCell>
+                            {formatInTimeZone(slot.date_time_start, CHILE_TZ, "EEEE d MMM yyyy", { locale: es })}
+                          </TableCell>
+                          <TableCell>
+                            {formatInTimeZone(slot.date_time_start, CHILE_TZ, "HH:mm")}
+                          </TableCell>
+                          <TableCell>{slot.professionals?.name}</TableCell>
+                          <TableCell>{slot.services?.name}</TableCell>
+                          <TableCell>{slot.max_capacity}</TableCell>
+                          <TableCell>{slot.confirmed_bookings}</TableCell>
+                          <TableCell>
+                            <span className={available <= 0 ? "text-destructive font-bold" : ""}>
+                              {available}
+                            </span>
+                          </TableCell>
+                          <TableCell>
+                            <span
+                              className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                                slot.is_active
+                                  ? "bg-green-100 text-green-800"
+                                  : "bg-gray-100 text-gray-800"
+                              }`}
                             >
-                              <Edit className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              variant={slot.is_active ? "destructive" : "default"}
-                              size="sm"
-                              onClick={() => handleToggleActive(slot)}
-                            >
-                              {slot.is_active ? "Desactivar" : "Activar"}
-                            </Button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </div>
+                              {slot.is_active ? "Activo" : "Inactivo"}
+                            </span>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex gap-2">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handleEditSlot(slot)}
+                              >
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant={slot.is_active ? "destructive" : "default"}
+                                size="sm"
+                                onClick={() => handleToggleActive(slot)}
+                              >
+                                {slot.is_active ? "Desactivar" : "Activar"}
+                              </Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </div>
+              
+              {/* Pagination */}
+              {(totalCount || 0) > PAGE_SIZE && (
+                <div className="flex items-center justify-between mt-4">
+                  <p className="text-sm text-muted-foreground">
+                    Mostrando {currentPage * PAGE_SIZE + 1}–{Math.min((currentPage + 1) * PAGE_SIZE, totalCount || 0)} de {totalCount}
+                  </p>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      disabled={currentPage === 0}
+                      onClick={() => setCurrentPage(p => p - 1)}
+                    >
+                      <ChevronLeft className="h-4 w-4 mr-1" /> Anterior
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      disabled={(currentPage + 1) * PAGE_SIZE >= (totalCount || 0)}
+                      onClick={() => setCurrentPage(p => p + 1)}
+                    >
+                      Siguiente <ChevronRight className="h-4 w-4 ml-1" />
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </>
           )}
         </CardContent>
       </Card>
@@ -375,9 +421,7 @@ export default function AdminFutureSlots() {
             <div className="space-y-4">
               <div>
                 <p className="text-sm text-muted-foreground mb-2">
-                  {format(parseISO(editingSlot.date_time_start), "EEEE d MMMM yyyy 'a las' HH:mm", {
-                    locale: es,
-                  })}
+                  {formatInTimeZone(editingSlot.date_time_start, CHILE_TZ, "EEEE d MMMM yyyy 'a las' HH:mm", { locale: es })}
                 </p>
                 <p className="text-sm">
                   <strong>Profesional:</strong> {editingSlot.professionals?.name}
