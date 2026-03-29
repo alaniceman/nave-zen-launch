@@ -69,11 +69,8 @@ export default function ScheduleDayCards() {
       const daySchedule = scheduleData[day] || [];
       const items = daySchedule
         .filter(item => {
-          // Match by color_tag first (DB-driven), fallback to regex title match
           if (exp.slug === 'agua-fria') return item.color_tag === 'wim-hof';
-          if (exp.slug === 'wim-hof-personalizado') return item.color_tag === 'personalizado';
           if (exp.slug === 'yoga') return item.color_tag === 'yoga';
-          if (exp.slug === 'breathwork') return item.color_tag === 'breathwork';
           return false;
         })
         .sort((a, b) => a.time.localeCompare(b.time));
