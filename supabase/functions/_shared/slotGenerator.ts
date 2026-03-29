@@ -27,6 +27,35 @@ export interface GeneratedSlot {
 }
 
 /**
+ * Get Chile's UTC offset in hours for a specific date and time.
+ * Chile uses CLST (UTC-3) in summer and CLT (UTC-4) in winter.
+ * Returns negative hours (e.g. -3 or -4).
+ */
+function getChileOffsetMinutes(year: number, month: number, day: number, hour: number): number {
+  // Use Intl.DateTimeFormat to determine the actual offset
+  const formatter = new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Santiago",
+    timeZoneName: "shortOffset",
+  });
+  
+  // Create a UTC date and format it in Chile timezone to detect the offset
+  const testDate = new Date(Date.UTC(year, month - 1, day, hour + 4, 0, 0));
+  const parts = formatter.formatToParts(testDate);
+  const tzPart = parts.find(p => p.type === "timeZoneName");
+  
+  if (tzPart) {
+    // Format is like "GMT-3" or "GMT-4"
+    const match = tzPart.value.match(/GMT([+-]?\d+)/);
+    if (match) {
+      return parseInt(match[1], 10);
+    }
+  }
+  
+  // Default to -3 (Chile summer time) if detection fails
+  return -3;
+}
+
+
  * Generates slots from availability rules for a specific date
  * @param date - Date string in YYYY-MM-DD format (in Chile timezone)
  * @param rules - Active availability rules

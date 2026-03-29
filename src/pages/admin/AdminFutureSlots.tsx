@@ -27,9 +27,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { format, parseISO, addDays } from "date-fns";
+import { format, addDays, parseISO } from "date-fns";
+import { formatInTimeZone } from "date-fns-tz";
 import { es } from "date-fns/locale";
-import { Loader2, RefreshCw, Edit, Calendar } from "lucide-react";
+import { Loader2, RefreshCw, Edit, Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function AdminFutureSlots() {
