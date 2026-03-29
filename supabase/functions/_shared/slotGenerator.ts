@@ -92,12 +92,20 @@ export function generateSlotsFromRules(
     const [endHour, endMinute] = rule.end_time.split(":").map(Number);
 
     // Create start and end times in Chile timezone, then convert to UTC
-    // Chile is GMT-3, so we add 3 hours to convert to UTC
+    // Dynamically determine Chile's UTC offset for this specific date
     const [year, month, day] = date.split("-").map(Number);
     
-    // Create UTC time by adding 3 hours to Chile time
-    let currentSlotStartUTC = new Date(Date.UTC(year, month - 1, day, startHour + 3, startMinute, 0, 0));
-    const ruleEndTimeUTC = new Date(Date.UTC(year, month - 1, day, endHour + 3, endMinute, 0, 0));
+    // Build a Date in Chile local time to detect DST
+    // Chile uses CLST (UTC-3) in summer and CLT (UTC-4) in winter
+    // We create a temp date and check its actual offset
+    const tempChileDate = new Date(`${date}T${rule.start_time}:00`);
+    // Use Intl to get the actual offset for this date in Chile
+    const chileOffsetMinutes = getChileOffsetMinutes(year, month, day, startHour);
+    const offsetHours = chileOffsetMinutes / 60;
+    
+    // Create UTC time by subtracting the offset (offset is negative, e.g. -180 for UTC-3)
+    let currentSlotStartUTC = new Date(Date.UTC(year, month - 1, day, startHour - offsetHours, startMinute, 0, 0));
+    const ruleEndTimeUTC = new Date(Date.UTC(year, month - 1, day, endHour - offsetHours, endMinute, 0, 0));
 
     console.log(`Creating slots from ${currentSlotStartUTC.toISOString()} to ${ruleEndTimeUTC.toISOString()}`);
 
