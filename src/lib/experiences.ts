@@ -23,23 +23,7 @@ export const EXPERIENCE_CATALOG = [
       /vinyasa\s+som[aá]tic[oa]?/i.test(item.title),
     metaNote: null,
   },
-  {
-    slug: "wim-hof-personalizado",
-    label: "Personalizado Método Wim Hof",
-    labelShort: "WHM Perso.",
-    match: (item: ScheduleItem) =>
-      /personalizad/i.test(item.title) && /wim\s*hof/i.test(item.title),
-    metaNote: "Máx 1–2 personas",
-  },
-  {
-    slug: "breathwork",
-    label: "Breathwork & Meditación",
-    labelShort: "Breathwork",
-    match: (item: ScheduleItem) =>
-      /breathwork|meditaci(ó|o)n/i.test(item.title) &&
-      !/wim\s*hof.*ice\s*bath/i.test(item.title),
-    metaNote: null,
-  },
+  // "wim-hof-personalizado" and "breathwork" hidden until they have scheduled classes
 ] as const;
 
 export function ensureYangHasIceOptional(item: ScheduleItem): ScheduleItem {
