@@ -152,6 +152,25 @@ serve(async (req) => {
       });
     }
 
+    // 1b. Capacity check (max 3 Mon-Fri, max 2 Sat-Sun)
+    const dateObj2 = new Date(data.selectedDate + "T12:00:00");
+    const dayOfWeek = dateObj2.getDay(); // 0=Sun, 6=Sat
+    const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+    const maxTrialCapacity = isWeekend ? 2 : 3;
+
+    const { count: currentBookings } = await supabase
+      .from("trial_bookings")
+      .select("id", { count: "exact", head: true })
+      .eq("scheduled_date", data.selectedDate)
+      .eq("class_time", data.time)
+      .eq("status", "booked");
+
+    if (currentBookings !== null && currentBookings >= maxTrialCapacity) {
+      return new Response(JSON.stringify({ capacityFull: true }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" }
+      });
+    }
+
     // 2. Normalize phone
     const phone = normalizePhone(data.customerPhone);
 

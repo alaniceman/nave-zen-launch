@@ -79,6 +79,11 @@ export default function TrialBookingForm({
         return;
       }
 
+      if (data?.capacityFull) {
+        form.setError("root", { message: "Esta clase ya está llena. Por favor elige otro horario." });
+        return;
+      }
+
       // Generate shared event ID for deduplication between Pixel and CAPI
       const eventId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
