@@ -56,6 +56,7 @@ function getChileOffsetMinutes(year: number, month: number, day: number, hour: n
 }
 
 
+/**
  * Generates slots from availability rules for a specific date
  * @param date - Date string in YYYY-MM-DD format (in Chile timezone)
  * @param rules - Active availability rules
