@@ -42,6 +42,9 @@ export default function AdminFutureSlots() {
   const [editingSlot, setEditingSlot] = useState<any>(null);
   const [editMaxCapacity, setEditMaxCapacity] = useState<number>(1);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+  const PAGE_SIZE = 50;
+  const CHILE_TZ = "America/Santiago";
 
   // Fetch professionals
   const { data: professionals } = useQuery({
@@ -71,9 +74,28 @@ export default function AdminFutureSlots() {
     },
   });
 
-  // Fetch generated slots with filters
+  // Fetch total count for pagination
+  const { data: totalCount } = useQuery({
+    queryKey: ["generated-slots-count", selectedProfessional, selectedService, dateFrom, dateTo],
+    queryFn: async () => {
+      let query = supabase
+        .from("generated_slots")
+        .select("id", { count: "exact", head: true })
+        .gte("date_time_start", `${dateFrom}T00:00:00`)
+        .lte("date_time_start", `${dateTo}T23:59:59`);
+
+      if (selectedProfessional !== "all") query = query.eq("professional_id", selectedProfessional);
+      if (selectedService !== "all") query = query.eq("service_id", selectedService);
+
+      const { count, error } = await query;
+      if (error) throw error;
+      return count || 0;
+    },
+  });
+
+  // Fetch generated slots with filters and pagination
   const { data: slots, isLoading } = useQuery({
-    queryKey: ["generated-slots", selectedProfessional, selectedService, dateFrom, dateTo],
+    queryKey: ["generated-slots", selectedProfessional, selectedService, dateFrom, dateTo, currentPage],
     queryFn: async () => {
       let query = supabase
         .from("generated_slots")
@@ -84,15 +106,11 @@ export default function AdminFutureSlots() {
         `)
         .gte("date_time_start", `${dateFrom}T00:00:00`)
         .lte("date_time_start", `${dateTo}T23:59:59`)
-        .order("date_time_start", { ascending: true });
+        .order("date_time_start", { ascending: true })
+        .range(currentPage * PAGE_SIZE, (currentPage + 1) * PAGE_SIZE - 1);
 
-      if (selectedProfessional !== "all") {
-        query = query.eq("professional_id", selectedProfessional);
-      }
-
-      if (selectedService !== "all") {
-        query = query.eq("service_id", selectedService);
-      }
+      if (selectedProfessional !== "all") query = query.eq("professional_id", selectedProfessional);
+      if (selectedService !== "all") query = query.eq("service_id", selectedService);
 
       const { data, error } = await query;
       if (error) throw error;
