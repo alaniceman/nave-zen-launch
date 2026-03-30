@@ -31,7 +31,7 @@ export interface GeneratedSlot {
  * Chile uses CLST (UTC-3) in summer and CLT (UTC-4) in winter.
  * Returns negative hours (e.g. -3 or -4).
  */
-function getChileOffsetMinutes(year: number, month: number, day: number, hour: number): number {
+function getChileOffsetHours(year: number, month: number, day: number, hour: number): number {
   // Use Intl.DateTimeFormat to determine the actual offset
   const formatter = new Intl.DateTimeFormat("en-US", {
     timeZone: "America/Santiago",
@@ -130,8 +130,7 @@ export function generateSlotsFromRules(
     // We create a temp date and check its actual offset
     const tempChileDate = new Date(`${date}T${rule.start_time}:00`);
     // Use Intl to get the actual offset for this date in Chile
-    const chileOffsetMinutes = getChileOffsetMinutes(year, month, day, startHour);
-    const offsetHours = chileOffsetMinutes / 60;
+    const offsetHours = getChileOffsetHours(year, month, day, startHour);
     
     // Create UTC time by subtracting the offset (offset is negative, e.g. -180 for UTC-3)
     let currentSlotStartUTC = new Date(Date.UTC(year, month - 1, day, startHour - offsetHours, startMinute, 0, 0));

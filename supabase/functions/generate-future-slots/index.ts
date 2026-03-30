@@ -179,7 +179,7 @@ serve(async (req) => {
       const batch = newSlots.slice(i, i + batchSize);
       const { error: insertError } = await supabase
         .from("generated_slots")
-        .insert(batch);
+        .upsert(batch, { onConflict: "professional_id,service_id,date_time_start", ignoreDuplicates: true });
 
       if (insertError) {
         console.error(`Error inserting batch ${i / batchSize + 1}:`, insertError);
