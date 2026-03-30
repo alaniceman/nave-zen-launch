@@ -1,25 +1,31 @@
 
 
-## Plan: Limitar capacidad de clases de prueba (3 L-V, 2 S-D)
+## Plan: Corregir slots con horario incorrecto y fix del bug de timezone
 
-### Resumen
-Agregar validacion de capacidad maxima por sesion en la edge function `book-trial-class`. Maximo 3 personas en clases de prueba de lunes a viernes, maximo 2 sabado y domingo.
+### Problema
+El `slotGenerator.ts` tiene un bug: la función `getChileOffsetMinutes` retorna horas (ej: -3) pero el código lo divide por 60 como si fueran minutos (`offsetHours = chileOffsetMinutes / 60` = -0.05). Esto hace que los slots se guarden practicamente sin conversión a UTC, quedando 3 horas antes del horario real de Chile.
 
-### Cambios
+### Datos del problema
+- **12 slots incorrectos** creados el 29/Mar 18:45 UTC y 30/Mar 20:52-20:54 UTC
+- **8 sin reservas** → se eliminan
+- **4 con `confirmed_bookings > 0`**, pero solo **1 reserva real confirmada** (Quirino Ríos, Apr 3 15:00 UTC). Las otras 3 son de Jens Meyer con status CANCELLED.
 
-**1. Modificar `supabase/functions/book-trial-class/index.ts`**
+### Pasos
 
-Despues del check de elegibilidad (linea 142-153), agregar un segundo check:
+**1. Fix del bug en `slotGenerator.ts`**
+- Cambiar `const offsetHours = chileOffsetMinutes / 60` a `const offsetHours = chileOffsetMinutes` (ya retorna horas, no minutos)
+- Renombrar la función a `getChileOffsetHours` para claridad
 
-- Contar cuantas `trial_bookings` existen con el mismo `scheduled_date`, `class_time` y `status = 'booked'`
-- Determinar el dia de la semana del `selectedDate`: si es lunes-viernes → max 3, sabado-domingo → max 2
-- Si el conteo >= max, retornar error `{ capacityFull: true }` con mensaje "Esta clase ya esta llena"
+**2. Eliminar los 12 slots incorrectos**
+- DELETE de `generated_slots` donde el id está en la lista de los 12 slots identificados
 
-**2. Actualizar el frontend `src/components/trial/TrialBookingForm.tsx`**
+**3. Corregir la reserva confirmada de Quirino Ríos**
+- UPDATE booking `8a39426a`: date_time_start de `15:00 UTC` → `18:00 UTC`, date_time_end de `16:00 UTC` → `19:00 UTC`
 
-- Manejar la respuesta `capacityFull: true` mostrando un toast de error indicando que la clase esta llena
+**4. Re-deploy y regenerar slots correctos**
+- Deploy de `generate-future-slots` con el fix
+- Invocar la función para regenerar los slots con horarios correctos
 
-### Archivos
-- `supabase/functions/book-trial-class/index.ts` — agregar check de capacidad
-- `src/components/trial/TrialBookingForm.tsx` — manejar respuesta de capacidad llena
+### Archivos a modificar
+- `supabase/functions/_shared/slotGenerator.ts` — fix division bug
 
