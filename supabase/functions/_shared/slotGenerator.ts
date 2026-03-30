@@ -31,7 +31,7 @@ export interface GeneratedSlot {
  * Chile uses CLST (UTC-3) in summer and CLT (UTC-4) in winter.
  * Returns negative hours (e.g. -3 or -4).
  */
-function getChileOffsetMinutes(year: number, month: number, day: number, hour: number): number {
+function getChileOffsetHours(year: number, month: number, day: number, hour: number): number {
   // Use Intl.DateTimeFormat to determine the actual offset
   const formatter = new Intl.DateTimeFormat("en-US", {
     timeZone: "America/Santiago",
