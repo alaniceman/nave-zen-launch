@@ -130,8 +130,7 @@ export function generateSlotsFromRules(
     // We create a temp date and check its actual offset
     const tempChileDate = new Date(`${date}T${rule.start_time}:00`);
     // Use Intl to get the actual offset for this date in Chile
-    const chileOffsetMinutes = getChileOffsetMinutes(year, month, day, startHour);
-    const offsetHours = chileOffsetMinutes / 60;
+    const offsetHours = getChileOffsetHours(year, month, day, startHour);
     
     // Create UTC time by subtracting the offset (offset is negative, e.g. -180 for UTC-3)
     let currentSlotStartUTC = new Date(Date.UTC(year, month - 1, day, startHour - offsetHours, startMinute, 0, 0));
