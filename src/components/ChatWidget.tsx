@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, forwardRef, useImperativeHandle } from "react";
 import { MessageCircle, X, Send, Loader2 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 
@@ -12,6 +12,12 @@ const INITIAL_MSG: Msg = {
   content:
     "¡Hola! 👋 Soy el asistente de **Nave Studio**. Pregúntame sobre horarios, experiencias, planes, precios o reservas.",
 };
+
+export interface ChatWidgetHandle {
+  open: () => void;
+  close: () => void;
+  isOpen: boolean;
+}
 
 export function ChatWidget() {
   const [open, setOpen] = useState(false);
