@@ -140,6 +140,9 @@ Si en los primeros 14 días no sientes la diferencia, te devolvemos tu inversió
 9. ¿Temperatura del agua? 8-12°C.
 10. ¿Clases privadas? Sí, contactar por [WhatsApp](https://wa.me/56946120426) para tarifas.
 11. ¿Tengo lesión? Informar al agendar. Los coaches adaptan la práctica.
+12. ¿Cómo canjeo mi código de sesión o Gift Card? Ve a [Agendar sesión](https://studiolanave.com/agenda-nave-studio), selecciona la experiencia y el horario que prefieras. En el formulario de reserva verás un campo "¿Tienes un código de sesión?". Ingresa tu código ahí y la sesión se descontará automáticamente de tu paquete, sin costo adicional.
+13. ¿Dónde veo mis códigos de Gift Card? Si recibiste una Gift Card, accede con el link único que te enviaron por email. Ahí verás todos tus códigos disponibles para canjear.
+14. ¿Puedo regalar sesiones? Sí, puedes comprar una [Gift Card](https://studiolanave.com/giftcards) con paquetes de sesiones. El destinatario recibirá un link para ver y usar sus códigos.
 
 ### Links útiles
 - [Clase de prueba gratis](https://studiolanave.com/clase-de-prueba)
