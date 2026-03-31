@@ -10,7 +10,7 @@ const SESSION_LIMIT = 15;
 const INITIAL_MSG: Msg = {
   role: "assistant",
   content:
-    "¡Hola! 👋 Soy el asistente de **Nave Studio**. Pregúntame sobre horarios, experiencias, precios o reservas.",
+    "¡Hola! 👋 Soy el asistente de **Nave Studio**. Pregúntame sobre horarios, experiencias, planes, precios o reservas.",
 };
 
 export function ChatWidget() {
@@ -189,8 +189,18 @@ export function ChatWidget() {
                   }`}
                 >
                   {msg.role === "assistant" ? (
-                    <div className="prose prose-sm max-w-none [&_p]:m-0 [&_ul]:my-1 [&_ol]:my-1 [&_li]:my-0 [&_a]:text-primary [&_a]:underline">
-                      <ReactMarkdown>{msg.content}</ReactMarkdown>
+                    <div className="prose prose-sm max-w-none [&_p]:m-0 [&_ul]:my-1 [&_ol]:my-1 [&_li]:my-0 [&_a]:text-primary [&_a]:underline [&_a]:cursor-pointer">
+                      <ReactMarkdown
+                        components={{
+                          a: ({ href, children }) => (
+                            <a href={href} target="_blank" rel="noopener noreferrer" className="text-primary underline hover:text-primary/80">
+                              {children}
+                            </a>
+                          ),
+                        }}
+                      >
+                        {msg.content}
+                      </ReactMarkdown>
                     </div>
                   ) : (
                     msg.content
