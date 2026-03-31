@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -14,30 +15,30 @@ function checkRateLimit(ip: string): boolean {
   const now = Date.now();
   let entry = ipHits.get(ip);
   if (!entry || now > entry.resetAt) {
-    entry = { count: 0, resetAt: now + 3600_000 }; // 1 h window
+    entry = { count: 0, resetAt: now + 3600_000 };
     ipHits.set(ip, entry);
   }
   entry.count++;
-  return entry.count <= 30; // max 30 msgs / hour / IP
+  return entry.count <= 30;
 }
 
 /* ── Promotions with expiration dates (Chile timezone) ── */
 interface Promo {
   id: string;
-  expiresAt: string; // ISO date, end of day Chile time (inclusive)
+  expiresAt: string;
   content: string;
 }
 
 const PROMOS: Promo[] = [
   {
     id: "icefest",
-    expiresAt: "2026-04-01", // Válida hasta 31 de marzo inclusive
+    expiresAt: "2026-04-01",
     content: `### Promo actual: Icefest 🧊
 6 sesiones de Criomedicina por $60.000 ($10.000/sesión). Válido por tiempo limitado. Info en [Icefest](https://studiolanave.com/icefest)`,
   },
   {
     id: "marzo-reset",
-    expiresAt: "2026-04-01", // Válida hasta 31 de marzo inclusive
+    expiresAt: "2026-04-01",
     content: `### Promo Marzo Reset
 - 2 sesiones de Criomedicina: $40.000
 - 3 sesiones de Criomedicina: $50.000
@@ -45,7 +46,7 @@ Válido 6 meses, compartible. Solo hasta el 31 de marzo. Info en [Bonos](https:/
   },
   {
     id: "planes-anuales-2026",
-    expiresAt: "2026-04-01", // Oferta de marzo
+    expiresAt: "2026-04-01",
     content: `### Planes Anuales 2026 (oferta de marzo)
 - Compromiso anual con hasta 2 meses gratis
 - Entradas Icefest incluidas
@@ -55,15 +56,12 @@ Info en: [Ver planes anuales](https://studiolanave.com/anual)`,
 ];
 
 function getActivePromos(): string {
-  // Get current date in Chile timezone
   const now = new Date();
   const chileDate = new Date(now.toLocaleString("en-US", { timeZone: "America/Santiago" }));
-
   const active = PROMOS.filter((p) => {
     const expires = new Date(p.expiresAt + "T00:00:00");
     return chileDate < expires;
   });
-
   if (active.length === 0) return "";
   return "\n\n" + active.map((p) => p.content).join("\n\n");
 }
@@ -160,6 +158,50 @@ REGLAS ESTRICTAS:
 - Si alguien pregunta por una promoción que NO aparece en este prompt, di que actualmente no hay esa promo vigente y redirige a [planes y precios](https://studiolanave.com/planes-precios).`;
 }
 
+/* ── Save conversation to DB ── */
+async function saveConversation(
+  sessionId: string,
+  messages: Array<{ role: string; content: string }>,
+  assistantContent: string,
+  ip: string
+) {
+  try {
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const supabase = createClient(supabaseUrl, serviceRoleKey);
+
+    const userMsg = messages[messages.length - 1];
+    const allMsgs = [...messages, { role: "assistant", content: assistantContent }];
+
+    const { data: existing } = await supabase
+      .from("chat_conversations")
+      .select("id")
+      .eq("session_id", sessionId)
+      .maybeSingle();
+
+    if (existing) {
+      await supabase
+        .from("chat_conversations")
+        .update({
+          messages: allMsgs,
+          message_count: allMsgs.length,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("session_id", sessionId);
+    } else {
+      await supabase.from("chat_conversations").insert({
+        session_id: sessionId,
+        messages: allMsgs,
+        ip_address: ip,
+        message_count: allMsgs.length,
+        first_user_message: userMsg?.content?.slice(0, 200) || null,
+      });
+    }
+  } catch (e) {
+    console.error("Failed to save conversation:", e);
+  }
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -181,7 +223,7 @@ serve(async (req) => {
       );
     }
 
-    const { messages, sessionMsgCount } = await req.json();
+    const { messages, sessionMsgCount, sessionId } = await req.json();
 
     if (!Array.isArray(messages) || messages.length === 0) {
       return new Response(JSON.stringify({ error: "messages is required" }), {
@@ -190,7 +232,6 @@ serve(async (req) => {
       });
     }
 
-    // Session limit
     if (typeof sessionMsgCount === "number" && sessionMsgCount >= SESSION_LIMIT) {
       return new Response(
         JSON.stringify({
@@ -206,7 +247,6 @@ serve(async (req) => {
       throw new Error("LOVABLE_API_KEY is not configured");
     }
 
-    // Keep only last 6 messages for context
     const trimmedMessages = messages.slice(-6);
 
     const response = await fetch(
@@ -250,7 +290,48 @@ serve(async (req) => {
       );
     }
 
-    return new Response(response.body, {
+    // We need to collect the full response to save it, while still streaming to the client
+    const [streamForClient, streamForSave] = response.body!.tee();
+
+    // Save conversation in background (don't block the response)
+    if (sessionId) {
+      const reader = streamForSave.getReader();
+      const decoder = new TextDecoder();
+      let fullContent = "";
+
+      (async () => {
+        try {
+          let buf = "";
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            buf += decoder.decode(value, { stream: true });
+            let nl: number;
+            while ((nl = buf.indexOf("\n")) !== -1) {
+              let line = buf.slice(0, nl);
+              buf = buf.slice(nl + 1);
+              if (line.endsWith("\r")) line = line.slice(0, -1);
+              if (!line.startsWith("data: ")) continue;
+              const jsonStr = line.slice(6).trim();
+              if (jsonStr === "[DONE]") continue;
+              try {
+                const parsed = JSON.parse(jsonStr);
+                const c = parsed.choices?.[0]?.delta?.content;
+                if (c) fullContent += c;
+              } catch { /* skip */ }
+            }
+          }
+          await saveConversation(sessionId, messages, fullContent, ip);
+        } catch (e) {
+          console.error("Error saving conversation stream:", e);
+        }
+      })();
+    } else {
+      // If no sessionId, just cancel the save stream
+      streamForSave.cancel();
+    }
+
+    return new Response(streamForClient, {
       headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
     });
   } catch (e) {

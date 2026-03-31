@@ -25,6 +25,7 @@ export const ChatWidget = forwardRef<ChatWidgetHandle>(function ChatWidget(_prop
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [sessionCount, setSessionCount] = useState(0);
+  const [sessionId] = useState(() => crypto.randomUUID());
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useImperativeHandle(ref, () => ({
@@ -62,6 +63,7 @@ export const ChatWidget = forwardRef<ChatWidgetHandle>(function ChatWidget(_prop
         body: JSON.stringify({
           messages: allMessages.map((m) => ({ role: m.role, content: m.content })),
           sessionMsgCount: sessionCount,
+          sessionId,
         }),
       });
 
