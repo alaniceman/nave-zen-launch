@@ -265,6 +265,39 @@ export type Database = {
           },
         ]
       }
+      chat_conversations: {
+        Row: {
+          created_at: string
+          first_user_message: string | null
+          id: string
+          ip_address: string | null
+          message_count: number
+          messages: Json
+          session_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          first_user_message?: string | null
+          id?: string
+          ip_address?: string | null
+          message_count?: number
+          messages?: Json
+          session_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          first_user_message?: string | null
+          id?: string
+          ip_address?: string | null
+          message_count?: number
+          messages?: Json
+          session_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       customer_events: {
         Row: {
           amount: number | null
