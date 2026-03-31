@@ -1,68 +1,38 @@
 
 
-## Plan: Chatbot IA para Studio La Nave
+## Plan: Guardar conversaciones del chat de Nave AI
 
 ### Resumen
-Crear un chatbot flotante en la web que use Lovable AI para responder preguntas de clientes sobre horarios, experiencias, precios, reservas y FAQ. El bot tendrá un system prompt estricto que lo limita solo a temas de La Nave, evitando uso como "ChatGPT gratis".
-
-### Protecciones contra abuso
-
-1. **System prompt restrictivo**: El bot solo responde sobre La Nave (horarios, precios, experiencias, reservas, FAQ). Cualquier pregunta fuera de tema recibe una respuesta corta redirigiendo a WhatsApp.
-2. **Rate limiting por IP/sesión**: Maximo 15 mensajes por sesión y 30 por hora por IP en la edge function. Evita que alguien lo use como chatbot general ilimitado.
-3. **Limite de tokens**: `max_tokens: 300` por respuesta para mantener respuestas cortas y reducir costos.
-4. **Sin historial largo**: Maximo 6 mensajes de contexto para evitar conversaciones infinitas.
-
-### Arquitectura
-
-```text
-[Widget flotante React]
-       │
-       ▼
-[Edge function: chat-nave]
-  - Valida rate limit (in-memory)
-  - Inyecta system prompt con datos de La Nave
-  - Llama a Lovable AI Gateway (gemini-3-flash-preview)
-  - Streaming SSE al frontend
-       │
-       ▼
-[Lovable AI Gateway]
-```
+Crear una tabla para almacenar cada conversación del chatbot y una página en el admin para revisarlas. Cada vez que un usuario envía un mensaje al chat, la edge function guarda la conversación completa.
 
 ### Pasos
 
-**1. Crear edge function `chat-nave`**
-- System prompt con: FAQ completo, horarios, precios de paquetes, info de experiencias, ubicacion, contacto WhatsApp
-- Rate limit in-memory: 15 msg/sesion, 30/hora por IP
-- `max_tokens: 300`, modelo `google/gemini-3-flash-preview`
-- Streaming SSE
-- Instrucciones estrictas: "Solo responde sobre Studio La Nave. Si la pregunta no es sobre La Nave, responde: 'Solo puedo ayudarte con temas de Studio La Nave. Escríbenos por WhatsApp al +56 9 xxxx xxxx'"
+**1. Crear tabla `chat_conversations`**
+- Migración SQL con columnas: `id`, `messages` (jsonb array con role/content), `ip_address`, `message_count`, `created_at`, `updated_at`
+- RLS: solo admins pueden SELECT; INSERT/UPDATE abierto para service role
 
-**2. Crear componente `ChatWidget.tsx`**
-- Boton flotante en esquina inferior izquierda (el WhatsApp ya está a la derecha)
-- Modal de chat con historial de mensajes
-- Input de texto + boton enviar
-- Streaming token-by-token con markdown rendering
-- Limite visual de 15 mensajes por sesion, despues sugiere WhatsApp
-- Mensaje inicial automatico: "Hola! Soy el asistente de La Nave. Pregúntame sobre horarios, experiencias, precios o reservas."
+**2. Modificar edge function `chat-nave`**
+- Al recibir un mensaje, hacer upsert en `chat_conversations`:
+  - Primera interacción: INSERT con session ID (generado en frontend y enviado como parámetro)
+  - Mensajes siguientes: UPDATE agregando al array de messages
+- Usar Supabase client con service role key para escribir
+- Guardar IP del usuario para contexto
 
-**3. Integrar en `App.tsx`**
-- Agregar el widget globalmente como el WhatsAppWidget
+**3. Modificar `ChatWidget.tsx`**
+- Generar un `sessionId` (UUID) al abrir el chat
+- Enviarlo en cada request al endpoint `chat-nave`
 
-### Datos incluidos en el system prompt
-- Todas las FAQ (12 preguntas/respuestas)
-- Experiencias: Yoga (Yin, Yang, Vinyasa, Integral, Power), Método Wim Hof, Ice Bath, Breathwork
-- Precios de paquetes de sesiones (consulta DB o hardcoded)
-- Horarios principales
-- Ubicacion: Las Condes, Santiago
-- Links: clase de prueba → /clase-de-prueba, agenda → /agenda, icefest → /icefest
-- Contacto WhatsApp
+**4. Crear página admin `AdminChatLogs.tsx`**
+- Listar conversaciones ordenadas por fecha (más recientes primero)
+- Mostrar: fecha, IP, cantidad de mensajes, preview del primer mensaje del usuario
+- Click para expandir y ver la conversación completa con formato user/assistant
+- Agregar ruta `/admin/chat-logs` y link en el sidebar
 
 ### Archivos
-- `supabase/functions/chat-nave/index.ts` — edge function con AI + rate limiting
-- `src/components/ChatWidget.tsx` — widget flotante de chat
-- `src/App.tsx` — integrar widget
-
-### Costos estimados
-- Modelo `gemini-3-flash-preview`: muy economico (~$0.001 por respuesta corta)
-- Con rate limiting de 15 msg/sesion, el abuso es minimo
+- Nueva migración SQL — tabla `chat_conversations`
+- `supabase/functions/chat-nave/index.ts` — guardar mensajes
+- `src/components/ChatWidget.tsx` — enviar sessionId
+- `src/pages/admin/AdminChatLogs.tsx` — nueva página
+- `src/components/admin/AdminSidebar.tsx` — agregar link
+- `src/App.tsx` — agregar ruta
 
