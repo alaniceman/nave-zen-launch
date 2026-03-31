@@ -21,8 +21,58 @@ function checkRateLimit(ip: string): boolean {
   return entry.count <= 30; // max 30 msgs / hour / IP
 }
 
+/* ── Promotions with expiration dates (Chile timezone) ── */
+interface Promo {
+  id: string;
+  expiresAt: string; // ISO date, end of day Chile time (inclusive)
+  content: string;
+}
+
+const PROMOS: Promo[] = [
+  {
+    id: "icefest",
+    expiresAt: "2026-04-01", // Válida hasta 31 de marzo inclusive
+    content: `### Promo actual: Icefest 🧊
+6 sesiones de Criomedicina por $60.000 ($10.000/sesión). Válido por tiempo limitado. Info en [Icefest](https://studiolanave.com/icefest)`,
+  },
+  {
+    id: "marzo-reset",
+    expiresAt: "2026-04-01", // Válida hasta 31 de marzo inclusive
+    content: `### Promo Marzo Reset
+- 2 sesiones de Criomedicina: $40.000
+- 3 sesiones de Criomedicina: $50.000
+Válido 6 meses, compartible. Solo hasta el 31 de marzo. Info en [Bonos](https://studiolanave.com/bonos)`,
+  },
+  {
+    id: "planes-anuales-2026",
+    expiresAt: "2026-04-01", // Oferta de marzo
+    content: `### Planes Anuales 2026 (oferta de marzo)
+- Compromiso anual con hasta 2 meses gratis
+- Entradas Icefest incluidas
+- 12 cuotas sin interés
+Info en: [Ver planes anuales](https://studiolanave.com/anual)`,
+  },
+];
+
+function getActivePromos(): string {
+  // Get current date in Chile timezone
+  const now = new Date();
+  const chileDate = new Date(now.toLocaleString("en-US", { timeZone: "America/Santiago" }));
+
+  const active = PROMOS.filter((p) => {
+    const expires = new Date(p.expiresAt + "T00:00:00");
+    return chileDate < expires;
+  });
+
+  if (active.length === 0) return "";
+  return "\n\n" + active.map((p) => p.content).join("\n\n");
+}
+
 /* ── System prompt ── */
-const SYSTEM_PROMPT = `Eres el asistente virtual de **Nave Studio**, un centro de bienestar en Las Condes, Santiago de Chile.
+function buildSystemPrompt(): string {
+  const activePromos = getActivePromos();
+
+  return `Eres el asistente virtual de **Nave Studio**, un centro de bienestar en Las Condes, Santiago de Chile.
 Tu nombre es "Nave AI". Responde SOLO preguntas relacionadas con Nave Studio: horarios, experiencias, precios, planes, reservas, ubicación y FAQ.
 Si alguien pregunta algo que NO tenga que ver con Nave Studio (programación, recetas, política, etc.), responde EXACTAMENTE:
 "Solo puedo ayudarte con temas de Nave Studio 🧘 Si necesitas algo más, escríbenos por [WhatsApp](https://wa.me/56946120426)."
@@ -70,20 +120,12 @@ Suscribirse en: [Ver planes de Yoga](https://studiolanave.com/planes-precios)
 - **3 Sesiones**: $79.000 (antes $90.000, ahorras $11.000) — válido 365 días. $26.333/sesión ⭐ Más popular
 - **5 Sesiones**: $99.000 (antes $150.000, ahorras $51.000) — válido 365 días. $19.800/sesión
 Comprar paquetes en: [Ver paquetes](https://studiolanave.com/bonos)
-
-### Planes Anuales 2026 (oferta de marzo)
-- Compromiso anual con hasta 2 meses gratis
-- Entradas Icefest incluidas
-- 12 cuotas sin interés
-Info en: [Ver planes anuales](https://studiolanave.com/anual)
+${activePromos}
 
 ### Clase de prueba GRATIS
 - Solo 1 por persona. Yoga (Yin, Yang o Integral). NO incluye agua fría.
 - Duración 60 min, nivel principiante bienvenido.
 - [Agendar clase de prueba](https://studiolanave.com/clase-de-prueba)
-
-### Promo actual: Icefest 🧊
-6 sesiones de Criomedicina por $60.000. Info en [Icefest](https://studiolanave.com/icefest)
 
 ### Garantía Nave
 Si en los primeros 14 días no sientes la diferencia, te devolvemos tu inversión.
@@ -106,7 +148,6 @@ Si en los primeros 14 días no sientes la diferencia, te devolvemos tu inversió
 - [Horarios](https://studiolanave.com/horarios)
 - [Planes y precios](https://studiolanave.com/planes-precios)
 - [Paquetes/Bonos](https://studiolanave.com/bonos)
-- [Icefest promo](https://studiolanave.com/icefest)
 - [Agendar sesión](https://studiolanave.com/agenda-nave-studio)
 - [WhatsApp](https://wa.me/56946120426)
 
@@ -115,7 +156,9 @@ REGLAS ESTRICTAS:
 - NUNCA inventes precios que no estén en este prompt. Si no sabes el precio exacto, redirige a [planes y precios](https://studiolanave.com/planes-precios) o [WhatsApp](https://wa.me/56946120426).
 - NUNCA des consejos médicos específicos.
 - Mantén respuestas cortas (máx 3-4 párrafos).
-- SIEMPRE usa links markdown con URLs completas (https://...).`;
+- SIEMPRE usa links markdown con URLs completas (https://...).
+- Si alguien pregunta por una promoción que NO aparece en este prompt, di que actualmente no hay esa promo vigente y redirige a [planes y precios](https://studiolanave.com/planes-precios).`;
+}
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -177,7 +220,7 @@ serve(async (req) => {
         body: JSON.stringify({
           model: "google/gemini-3-flash-preview",
           messages: [
-            { role: "system", content: SYSTEM_PROMPT },
+            { role: "system", content: buildSystemPrompt() },
             ...trimmedMessages,
           ],
           stream: true,
