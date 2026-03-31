@@ -260,7 +260,6 @@ export const ChatWidget = forwardRef<ChatWidgetHandle>(function ChatWidget(_prop
               </form>
             )}
           </div>
-        </div>
-      </div>
+    </div>
   );
 });
