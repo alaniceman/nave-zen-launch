@@ -10,7 +10,7 @@ const SESSION_LIMIT = 15;
 const INITIAL_MSG: Msg = {
   role: "assistant",
   content:
-    "¡Hola! 👋 Soy el asistente de **Nave Studio**. Pregúntame sobre horarios, experiencias, precios o reservas.",
+    "¡Hola! 👋 Soy el asistente de **Nave Studio**. Pregúntame sobre horarios, experiencias, planes, precios o reservas.",
 };
 
 export function ChatWidget() {
