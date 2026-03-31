@@ -27,6 +27,12 @@ export const ChatWidget = forwardRef<ChatWidgetHandle>(function ChatWidget(_prop
   const [sessionCount, setSessionCount] = useState(0);
   const bottomRef = useRef<HTMLDivElement>(null);
 
+  useImperativeHandle(ref, () => ({
+    open: () => setOpen(true),
+    close: () => setOpen(false),
+    get isOpen() { return open; },
+  }), [open]);
+
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, open]);
