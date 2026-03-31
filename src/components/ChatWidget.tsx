@@ -63,6 +63,7 @@ export const ChatWidget = forwardRef<ChatWidgetHandle>(function ChatWidget(_prop
         body: JSON.stringify({
           messages: allMessages.map((m) => ({ role: m.role, content: m.content })),
           sessionMsgCount: sessionCount,
+          sessionId,
         }),
       });
 
