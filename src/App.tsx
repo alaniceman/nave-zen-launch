@@ -201,6 +201,7 @@ const App = () => {
     </QueryClientProvider>
   </HelmetProvider>
   );
+};
 
 
 export default App;
