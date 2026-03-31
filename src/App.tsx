@@ -94,7 +94,9 @@ const LoadingSpinner = () => (
   </div>
 );
 
-const App = () => (
+const App = () => {
+  const chatRef = useRef<ChatWidgetHandle>(null);
+  return (
   <HelmetProvider>
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
