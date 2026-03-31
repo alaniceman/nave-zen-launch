@@ -158,7 +158,7 @@ export const ChatWidget = forwardRef<ChatWidgetHandle>(function ChatWidget(_prop
   if (!open) return null;
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 w-[360px] max-w-[calc(100vw-2rem)] h-[520px] max-h-[calc(100vh-6rem)] bg-background border border-border rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+    <div className="fixed z-50 bottom-20 right-4 left-4 w-auto sm:left-auto sm:w-[380px] sm:max-w-[calc(100vw-2rem)] flex flex-col h-[70vh] max-h-[600px] sm:h-[520px] bg-background border border-border rounded-2xl shadow-2xl overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 bg-primary text-primary-foreground">
         <div className="flex items-center gap-2">
