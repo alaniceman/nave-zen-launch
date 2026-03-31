@@ -259,8 +259,8 @@ export const ChatWidget = forwardRef<ChatWidgetHandle>(function ChatWidget(_prop
                 </button>
               </form>
             )}
+          </div>
         </div>
       </div>
-    </div>
   );
 });
