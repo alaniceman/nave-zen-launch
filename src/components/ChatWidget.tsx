@@ -19,7 +19,7 @@ export interface ChatWidgetHandle {
   isOpen: boolean;
 }
 
-export function ChatWidget() {
+export const ChatWidget = forwardRef<ChatWidgetHandle>(function ChatWidget(_props, ref) {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Msg[]>([INITIAL_MSG]);
   const [input, setInput] = useState("");
