@@ -190,6 +190,7 @@ const App = () => (
           </Routes>
           </Suspense>
           <WhatsAppWidget />
+          <ChatWidget />
           </EmailCaptureModalProvider>
             </TrialModalProvider>
           </BrowserRouter>
