@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useRef } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -13,7 +13,7 @@ import { SEOHead } from "@/components/SEOHead";
 import { TrialDelegationHandler } from "@/components/TrialDelegationHandler";
 import FacebookPixelRouterTracker from "@/components/FacebookPixelRouterTracker";
 import { WhatsAppWidget } from "@/components/WhatsAppWidget";
-import { ChatWidget } from "@/components/ChatWidget";
+import { ChatWidget, ChatWidgetHandle } from "@/components/ChatWidget";
 import { AuthProvider } from "@/context/AuthContext";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { ProtectedRoute } from "@/components/admin/ProtectedRoute";
@@ -94,7 +94,9 @@ const LoadingSpinner = () => (
   </div>
 );
 
-const App = () => (
+const App = () => {
+  const chatRef = useRef<ChatWidgetHandle>(null);
+  return (
   <HelmetProvider>
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
@@ -189,8 +191,8 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
           </Suspense>
-          <WhatsAppWidget />
-          <ChatWidget />
+          <WhatsAppWidget onOpenChat={() => chatRef.current?.open()} />
+          <ChatWidget ref={chatRef} />
           </EmailCaptureModalProvider>
             </TrialModalProvider>
           </BrowserRouter>
@@ -199,6 +201,7 @@ const App = () => (
     </QueryClientProvider>
   </HelmetProvider>
   );
+};
 
 
 export default App;

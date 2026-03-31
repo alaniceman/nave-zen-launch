@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, forwardRef, useImperativeHandle } from "react";
 import { MessageCircle, X, Send, Loader2 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 
@@ -13,13 +13,25 @@ const INITIAL_MSG: Msg = {
     "¡Hola! 👋 Soy el asistente de **Nave Studio**. Pregúntame sobre horarios, experiencias, planes, precios o reservas.",
 };
 
-export function ChatWidget() {
+export interface ChatWidgetHandle {
+  open: () => void;
+  close: () => void;
+  isOpen: boolean;
+}
+
+export const ChatWidget = forwardRef<ChatWidgetHandle>(function ChatWidget(_props, ref) {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Msg[]>([INITIAL_MSG]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [sessionCount, setSessionCount] = useState(0);
   const bottomRef = useRef<HTMLDivElement>(null);
+
+  useImperativeHandle(ref, () => ({
+    open: () => setOpen(true),
+    close: () => setOpen(false),
+    get isOpen() { return open; },
+  }), [open]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -143,36 +155,24 @@ export function ChatWidget() {
 
   const limitReached = sessionCount >= SESSION_LIMIT;
 
-  return (
-    <>
-      {/* Floating button – bottom left */}
-      {!open && (
-        <button
-          onClick={() => setOpen(true)}
-          className="fixed bottom-6 left-6 z-50 bg-primary hover:bg-primary/90 text-primary-foreground p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-4 focus:ring-primary/30"
-          aria-label="Abrir chat"
-        >
-          <MessageCircle className="w-6 h-6 md:w-7 md:h-7" />
-        </button>
-      )}
+  if (!open) return null;
 
-      {/* Chat panel */}
-      {open && (
-        <div className="fixed bottom-4 left-4 z-50 w-[360px] max-w-[calc(100vw-2rem)] h-[520px] max-h-[calc(100vh-6rem)] bg-background border border-border rounded-2xl shadow-2xl flex flex-col overflow-hidden">
-          {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 bg-primary text-primary-foreground">
-            <div className="flex items-center gap-2">
-              <MessageCircle className="w-5 h-5" />
-              <span className="font-semibold text-sm">Nave AI</span>
-            </div>
-            <button
-              onClick={() => setOpen(false)}
-              className="hover:bg-white/20 rounded-full p-1 transition-colors"
-              aria-label="Cerrar chat"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
+  return (
+    <div className="fixed bottom-4 right-4 z-50 w-[360px] max-w-[calc(100vw-2rem)] h-[520px] max-h-[calc(100vh-6rem)] bg-background border border-border rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+      {/* Header */}
+      <div className="flex items-center justify-between px-4 py-3 bg-primary text-primary-foreground">
+        <div className="flex items-center gap-2">
+          <MessageCircle className="w-5 h-5" />
+          <span className="font-semibold text-sm">Nave AI</span>
+        </div>
+        <button
+          onClick={() => setOpen(false)}
+          className="hover:bg-white/20 rounded-full p-1 transition-colors"
+          aria-label="Cerrar chat"
+        >
+          <X className="w-5 h-5" />
+        </button>
+      </div>
 
           {/* Messages */}
           <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
@@ -260,8 +260,6 @@ export function ChatWidget() {
               </form>
             )}
           </div>
-        </div>
-      )}
-    </>
+    </div>
   );
-}
+});
