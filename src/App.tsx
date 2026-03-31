@@ -13,6 +13,7 @@ import { SEOHead } from "@/components/SEOHead";
 import { TrialDelegationHandler } from "@/components/TrialDelegationHandler";
 import FacebookPixelRouterTracker from "@/components/FacebookPixelRouterTracker";
 import { WhatsAppWidget } from "@/components/WhatsAppWidget";
+import { ChatWidget } from "@/components/ChatWidget";
 import { AuthProvider } from "@/context/AuthContext";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { ProtectedRoute } from "@/components/admin/ProtectedRoute";
