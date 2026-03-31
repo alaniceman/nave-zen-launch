@@ -1,4 +1,4 @@
-import { Calendar, Users, Package, Clock, User, LogOut, Ticket, Gift, Key, MapPin, ShoppingCart, AlertCircle, LayoutDashboard, Mail, Crown, Contact } from 'lucide-react';
+import { Calendar, Users, Package, Clock, User, LogOut, Ticket, Gift, Key, MapPin, ShoppingCart, AlertCircle, LayoutDashboard, Mail, Crown, Contact, MessageCircle } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import {
