@@ -161,20 +161,13 @@ export default function AdminBookings() {
 
   const cancelAndReleaseMutation = useMutation({
     mutationFn: async (bookingId: string) => {
-      console.log('Cancel and release for booking:', bookingId);
-      
       const { data, error } = await supabase.functions.invoke('admin-bookings', {
         body: { id: bookingId, action: 'cancel_and_release' },
       });
-      
-      if (error) {
-        console.error('Function invoke error:', error);
-        throw new Error(error.message || 'Error al cancelar reserva');
-      }
+      if (error) throw new Error(error.message || 'Error al cancelar reserva');
       return data;
     },
     onSuccess: (data) => {
-      console.log('Cancel and release successful:', data);
       queryClient.invalidateQueries({ queryKey: ['admin-bookings'] });
       if (data.code_created) {
         toast.success(`Reserva cancelada y código ${data.code_created} creado y enviado al cliente`);
@@ -185,8 +178,24 @@ export default function AdminBookings() {
       }
     },
     onError: (error: any) => {
-      console.error('Mutation error:', error);
       toast.error(`Error al cancelar: ${error.message}`);
+    }
+  });
+
+  const refundMutation = useMutation({
+    mutationFn: async (bookingId: string) => {
+      const { data, error } = await supabase.functions.invoke('admin-bookings', {
+        body: { id: bookingId, action: 'refund' },
+      });
+      if (error) throw new Error(error.message || 'Error al procesar devolución');
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin-bookings'] });
+      toast.success('Devolución registrada — esta reserva ya no se contabiliza como ingreso');
+    },
+    onError: (error: any) => {
+      toast.error(`Error en devolución: ${error.message}`);
     }
   });
 
