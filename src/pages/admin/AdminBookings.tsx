@@ -268,6 +268,7 @@ export default function AdminBookings() {
                 <SelectItem value="CONFIRMED">Confirmada</SelectItem>
                 <SelectItem value="CANCELLED">Cancelada</SelectItem>
                 <SelectItem value="COMPLETED">Completada</SelectItem>
+                <SelectItem value="REFUNDED">Devuelta</SelectItem>
               </SelectContent>
             </Select>
           </div>

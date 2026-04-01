@@ -313,7 +313,7 @@ export default function AdminDashboard() {
       const redeemedValueByMonth = getRedeemedValueByMonth(orders, usedCodesWithDate, packagesDataMap, paidOrdersByPaymentId, startDate, endDate);
 
       // Bookings by service
-      const bookingsByService = getBookingsByService(confirmedBookings, servicesMap);
+      const bookingsByService = getBookingsByService(paidBookings, servicesMap);
 
       // Orders by package
       const ordersByPackage = getOrdersByPackage(completedOrders, packagesMap);
