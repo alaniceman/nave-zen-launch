@@ -135,7 +135,7 @@ const App = () => {
             <Route path="/marzo-reset" element={<MarzoReset />} />
             <Route path="/horarios" element={<Horarios />} />
             <Route path="/faq" element={<FAQ />} />
-            <Route path="/clase-de-prueba" element={<ClaseDePrueba />} />
+            <Route path="/clase-de-prueba" element={<Navigate to="/clase-de-prueba/agendar" replace />} />
             <Route path="/clase-de-prueba/agendar" element={<TrialClassSchedule />} />
             <Route path="/criomedicina-metodo-wim-hof" element={<CriomedicinMetodoWimHof />} />
             <Route path="/criomedicina-ice-bath-en-grupo" element={<CriomedicinIceBathEnGrupo />} />
