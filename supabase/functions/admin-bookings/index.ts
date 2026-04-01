@@ -132,6 +132,57 @@ Deno.serve(async (req) => {
       const body = await req.json();
       const { id, status: newStatus, action } = body;
 
+      // Handle refund action
+      if (action === 'refund') {
+        if (!id) {
+          return new Response(
+            JSON.stringify({ error: 'Missing booking id' }),
+            { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
+          );
+        }
+
+        console.log('Refund action for booking:', id);
+
+        const { data: booking, error: fetchError } = await supabase
+          .from('bookings')
+          .select('id, session_code_id, status')
+          .eq('id', id)
+          .single();
+
+        if (fetchError || !booking) {
+          return new Response(
+            JSON.stringify({ error: 'Booking not found' }),
+            { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 404 }
+          );
+        }
+
+        // Update booking status to REFUNDED
+        const { error: updateError } = await supabase
+          .from('bookings')
+          .update({ status: 'REFUNDED' })
+          .eq('id', id);
+
+        if (updateError) {
+          return new Response(
+            JSON.stringify({ error: updateError.message }),
+            { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
+          );
+        }
+
+        // Release session code if exists (no recovery code generated)
+        if (booking.session_code_id) {
+          await supabase
+            .from('session_codes')
+            .update({ is_used: false, used_at: null, used_in_booking_id: null })
+            .eq('id', booking.session_code_id);
+        }
+
+        return new Response(
+          JSON.stringify({ success: true, refunded: true }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+
       // Handle cancel_and_release action
       if (action === 'cancel_and_release') {
         if (!id) {

@@ -279,7 +279,9 @@ export default function AdminDashboard() {
       const confirmedBookings = bookings.filter(b => b.status === "CONFIRMED");
       const pendingBookings = bookings.filter(b => b.status === "PENDING_PAYMENT");
       const cancelledBookings = bookings.filter(b => b.status === "CANCELLED");
-      const bookingsRevenue = confirmedBookings.reduce((sum, b) => sum + (b.final_price || 0), 0);
+      const refundedBookings = bookings.filter(b => b.status === "REFUNDED");
+      const paidBookings = bookings.filter(b => ['CONFIRMED', 'CANCELLED'].includes(b.status));
+      const bookingsRevenue = paidBookings.reduce((sum, b) => sum + (b.final_price || 0), 0);
 
       // Calculate order stats
       const completedOrders = orders.filter(o => o.status === "paid");
@@ -311,7 +313,7 @@ export default function AdminDashboard() {
       const redeemedValueByMonth = getRedeemedValueByMonth(orders, usedCodesWithDate, packagesDataMap, paidOrdersByPaymentId, startDate, endDate);
 
       // Bookings by service
-      const bookingsByService = getBookingsByService(confirmedBookings, servicesMap);
+      const bookingsByService = getBookingsByService(paidBookings, servicesMap);
 
       // Orders by package
       const ordersByPackage = getOrdersByPackage(completedOrders, packagesMap);
