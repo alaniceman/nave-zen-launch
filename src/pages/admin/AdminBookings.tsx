@@ -451,6 +451,52 @@ export default function AdminBookings() {
                                 </AlertDialogContent>
                               </AlertDialog>
                             )}
+
+                            {(booking.status === 'CONFIRMED' || booking.status === 'CANCELLED') && (
+                              <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    className="border-purple-500 text-purple-600 hover:bg-purple-50"
+                                    disabled={refundMutation.isPending}
+                                  >
+                                    {refundMutation.isPending ? (
+                                      <>
+                                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                        Procesando...
+                                      </>
+                                    ) : (
+                                      <>
+                                        <Undo2 className="h-4 w-4 mr-1" />
+                                        Devolución
+                                      </>
+                                    )}
+                                  </Button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                  <AlertDialogHeader>
+                                    <AlertDialogTitle>¿Registrar devolución?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                      Esta acción marcará la reserva de <strong>{booking.customer_name}</strong> como devuelta.
+                                      El monto de <strong>${booking.final_price?.toLocaleString('es-CL')}</strong> ya no se contabilizará como ingreso en el dashboard.
+                                      {booking.session_code_id && (
+                                        <> El código de sesión asociado será liberado.</>
+                                      )}
+                                    </AlertDialogDescription>
+                                  </AlertDialogHeader>
+                                  <AlertDialogFooter>
+                                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                    <AlertDialogAction
+                                      onClick={() => refundMutation.mutate(booking.id)}
+                                      className="bg-purple-600 text-white hover:bg-purple-700"
+                                    >
+                                      Sí, registrar devolución
+                                    </AlertDialogAction>
+                                  </AlertDialogFooter>
+                                </AlertDialogContent>
+                              </AlertDialog>
+                            )}
                           </div>
                         </TableCell>
                       </TableRow>
