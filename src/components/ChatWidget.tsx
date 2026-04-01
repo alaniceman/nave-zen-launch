@@ -27,12 +27,20 @@ export const ChatWidget = forwardRef<ChatWidgetHandle>(function ChatWidget(_prop
   const [sessionCount, setSessionCount] = useState(0);
   const [sessionId] = useState(() => crypto.randomUUID());
   const bottomRef = useRef<HTMLDivElement>(null);
+  const abortRef = useRef<AbortController | null>(null);
 
   useImperativeHandle(ref, () => ({
     open: () => setOpen(true),
     close: () => setOpen(false),
     get isOpen() { return open; },
   }), [open]);
+
+  // Cancel active stream on unmount or close
+  useEffect(() => {
+    return () => {
+      abortRef.current?.abort();
+    };
+  }, []);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -42,6 +50,11 @@ export const ChatWidget = forwardRef<ChatWidgetHandle>(function ChatWidget(_prop
     const text = input.trim();
     if (!text || isLoading) return;
     if (sessionCount >= SESSION_LIMIT) return;
+
+    // Abort any previous stream
+    abortRef.current?.abort();
+    const controller = new AbortController();
+    abortRef.current = controller;
 
     const userMsg: Msg = { role: "user", content: text };
     setInput("");
@@ -65,6 +78,7 @@ export const ChatWidget = forwardRef<ChatWidgetHandle>(function ChatWidget(_prop
           sessionMsgCount: sessionCount,
           sessionId,
         }),
+        signal: controller.signal,
       });
 
       if (!resp.ok) {
@@ -142,6 +156,7 @@ export const ChatWidget = forwardRef<ChatWidgetHandle>(function ChatWidget(_prop
         }
       }
     } catch (e) {
+      if (e instanceof DOMException && e.name === "AbortError") return;
       console.error("Chat error:", e);
       setMessages((prev) => [
         ...prev,
@@ -154,6 +169,11 @@ export const ChatWidget = forwardRef<ChatWidgetHandle>(function ChatWidget(_prop
       setIsLoading(false);
     }
   }, [input, isLoading, messages, sessionCount]);
+
+  const handleClose = useCallback(() => {
+    abortRef.current?.abort();
+    setOpen(false);
+  }, []);
 
   const limitReached = sessionCount >= SESSION_LIMIT;
 
@@ -168,7 +188,7 @@ export const ChatWidget = forwardRef<ChatWidgetHandle>(function ChatWidget(_prop
           <span className="font-semibold text-sm">Nave AI</span>
         </div>
         <button
-          onClick={() => setOpen(false)}
+          onClick={handleClose}
           className="hover:bg-white/20 rounded-full p-1 transition-colors"
           aria-label="Cerrar chat"
         >

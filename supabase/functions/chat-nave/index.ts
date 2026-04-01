@@ -8,6 +8,12 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+/* ── Singleton Supabase client ── */
+const supabase = createClient(
+  Deno.env.get("SUPABASE_URL")!,
+  Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+);
+
 /* ── Rate limiting (in-memory, resets on cold start) ── */
 const ipHits = new Map<string, { count: number; resetAt: number }>();
 const SESSION_LIMIT = 15;
@@ -23,7 +29,7 @@ function checkRateLimit(ip: string): boolean {
   return entry.count <= 30;
 }
 
-/* ── Save conversation to DB ── */
+/* ── Save conversation via UPSERT ── */
 async function saveConversation(
   sessionId: string,
   messages: Array<{ role: string; content: string }>,
@@ -31,37 +37,22 @@ async function saveConversation(
   ip: string
 ) {
   try {
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const supabase = createClient(supabaseUrl, serviceRoleKey);
-
     const userMsg = messages[messages.length - 1];
     const allMsgs = [...messages, { role: "assistant", content: assistantContent }];
 
-    const { data: existing } = await supabase
+    await supabase
       .from("chat_conversations")
-      .select("id")
-      .eq("session_id", sessionId)
-      .maybeSingle();
-
-    if (existing) {
-      await supabase
-        .from("chat_conversations")
-        .update({
+      .upsert(
+        {
+          session_id: sessionId,
           messages: allMsgs,
           message_count: allMsgs.length,
+          ip_address: ip,
+          first_user_message: userMsg?.content?.slice(0, 200) || null,
           updated_at: new Date().toISOString(),
-        })
-        .eq("session_id", sessionId);
-    } else {
-      await supabase.from("chat_conversations").insert({
-        session_id: sessionId,
-        messages: allMsgs,
-        ip_address: ip,
-        message_count: allMsgs.length,
-        first_user_message: userMsg?.content?.slice(0, 200) || null,
-      });
-    }
+        },
+        { onConflict: "session_id" }
+      );
   } catch (e) {
     console.error("Failed to save conversation:", e);
   }
@@ -112,7 +103,7 @@ serve(async (req) => {
       throw new Error("LOVABLE_API_KEY is not configured");
     }
 
-    const trimmedMessages = messages.slice(-6);
+    const trimmedMessages = messages.slice(-10);
 
     const response = await fetch(
       "https://ai.gateway.lovable.dev/v1/chat/completions",
@@ -123,13 +114,13 @@ serve(async (req) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "google/gemini-3-flash-preview",
+          model: "google/gemini-2.5-flash",
           messages: [
             { role: "system", content: buildSystemPrompt() },
             ...trimmedMessages,
           ],
           stream: true,
-          max_tokens: 300,
+          max_tokens: 500,
         }),
       }
     );

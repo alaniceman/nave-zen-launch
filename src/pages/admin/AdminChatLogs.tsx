@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { MessageCircle, ChevronDown, ChevronUp, RefreshCw } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { MessageCircle, ChevronDown, ChevronUp, RefreshCw, Search } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
+import ReactMarkdown from "react-markdown";
 
 interface ChatMessage {
   role: string;
@@ -26,6 +28,7 @@ interface ChatConversation {
 
 export default function AdminChatLogs() {
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
 
   const { data: conversations, isLoading, refetch } = useQuery({
     queryKey: ["chat-conversations"],
@@ -38,6 +41,13 @@ export default function AdminChatLogs() {
       if (error) throw error;
       return data as unknown as ChatConversation[];
     },
+  });
+
+  const filtered = conversations?.filter((c) => {
+    if (!search.trim()) return true;
+    const q = search.toLowerCase();
+    if (c.first_user_message?.toLowerCase().includes(q)) return true;
+    return c.messages?.some((m) => m.content?.toLowerCase().includes(q));
   });
 
   return (
@@ -55,13 +65,25 @@ export default function AdminChatLogs() {
         </Button>
       </div>
 
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <Input
+          placeholder="Buscar en conversaciones..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="pl-9"
+        />
+      </div>
+
       {isLoading ? (
         <p className="text-muted-foreground">Cargando...</p>
-      ) : !conversations?.length ? (
-        <p className="text-muted-foreground">No hay conversaciones aún.</p>
+      ) : !filtered?.length ? (
+        <p className="text-muted-foreground">
+          {search ? "No se encontraron conversaciones." : "No hay conversaciones aún."}
+        </p>
       ) : (
         <div className="space-y-3">
-          {conversations.map((conv) => {
+          {filtered.map((conv) => {
             const isExpanded = expandedId === conv.id;
             const userMessages = conv.messages?.filter((m) => m.role === "user") || [];
             return (
@@ -110,7 +132,23 @@ export default function AdminChatLogs() {
                           <span className="font-semibold text-xs uppercase text-muted-foreground">
                             {msg.role === "user" ? "Usuario" : "Nave AI"}
                           </span>
-                          <p className="mt-1 whitespace-pre-wrap">{msg.content}</p>
+                          {msg.role === "assistant" ? (
+                            <div className="mt-1 prose prose-sm max-w-none [&_p]:m-0 [&_ul]:my-1 [&_li]:my-0 [&_a]:text-primary [&_a]:underline">
+                              <ReactMarkdown
+                                components={{
+                                  a: ({ href, children }) => (
+                                    <a href={href} target="_blank" rel="noopener noreferrer" className="text-primary underline">
+                                      {children}
+                                    </a>
+                                  ),
+                                }}
+                              >
+                                {msg.content}
+                              </ReactMarkdown>
+                            </div>
+                          ) : (
+                            <p className="mt-1 whitespace-pre-wrap">{msg.content}</p>
+                          )}
                         </div>
                       ))}
                     </div>
