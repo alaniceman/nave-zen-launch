@@ -37,18 +37,20 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 
-const statusColors = {
+const statusColors: Record<string, string> = {
   PENDING_PAYMENT: 'bg-yellow-500',
   CONFIRMED: 'bg-green-500',
   CANCELLED: 'bg-red-500',
   COMPLETED: 'bg-blue-500',
+  REFUNDED: 'bg-purple-500',
 };
 
-const statusLabels = {
+const statusLabels: Record<string, string> = {
   PENDING_PAYMENT: 'Pendiente Pago',
   CONFIRMED: 'Confirmada',
   CANCELLED: 'Cancelada',
   COMPLETED: 'Completada',
+  REFUNDED: 'Devuelta',
 };
 
 export default function AdminBookings() {
