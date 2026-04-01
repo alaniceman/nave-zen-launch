@@ -1,41 +1,47 @@
 
 
-## Plan: Optimizar el chatbot Nave AI
+## Plan: Contar canceladas como venta + botón de Devolución
 
-### Problemas actuales identificados
+### Resumen
+Dos cambios: (1) las reservas CANCELLED cuentan como ingreso en el dashboard (ya aprobado), y (2) agregar un nuevo status `REFUNDED` con un botón "Devolución" en la gestión de reservas. Las reservas con status REFUNDED NO se contabilizan como ingreso.
 
-1. **Modelo basico** — Usa `gemini-3-flash-preview` (rapido pero menos preciso). Para un chatbot de atencion al cliente, un modelo mas inteligente dara mejores respuestas.
-2. **Contexto limitado** — Solo envia los ultimos 6 mensajes al modelo, puede perder contexto de la conversacion.
-3. **max_tokens bajo** — 300 tokens limita respuestas que necesitan mas detalle (ej: listar horarios completos).
-4. **saveConversation ineficiente** — Hace SELECT + INSERT/UPDATE (2 queries). Deberia usar UPSERT con ON CONFLICT.
-5. **Supabase client se crea en cada save** — Deberia reutilizarse como singleton.
-6. **Rate limit por IP se pierde en cold starts** — No es critico pero vale documentar.
-7. **Frontend no tiene AbortController** — Si el usuario cierra el chat o envia otro mensaje, el stream previo sigue corriendo.
-8. **Admin Chat Logs basico** — No tiene busqueda, no renderiza markdown en las respuestas.
+### Paso 1 — Dashboard: incluir CANCELLED como venta
 
-### Cambios
+**`src/pages/admin/AdminDashboard.tsx`**
+- Línea 282: cambiar `confirmedBookings` por filtro que incluya CONFIRMED + CANCELLED
+- Excluir explícitamente REFUNDED del cálculo de ingresos
+- Actualizar `bookingsByService` para incluir CONFIRMED + CANCELLED (no REFUNDED)
 
-**1. Edge function `chat-nave/index.ts`**
-- Cambiar modelo a `google/gemini-2.5-flash` (mejor razonamiento, sigue siendo rapido y economico para alto volumen)
-- Subir `max_tokens` de 300 a 500
-- Subir contexto de 6 a 10 mensajes
-- Crear Supabase client como singleton (fuera del handler)
-- Reemplazar SELECT+INSERT/UPDATE por UPSERT con `ON CONFLICT(session_id)`
+### Paso 2 — Agregar status REFUNDED al sistema
 
-**2. Migracion SQL**
-- Agregar constraint UNIQUE en `chat_conversations.session_id` si no existe (necesario para UPSERT)
+**`src/pages/admin/AdminBookings.tsx`**
+- Agregar a `statusColors`: `REFUNDED: 'bg-purple-500'`
+- Agregar a `statusLabels`: `REFUNDED: 'Devuelta'`
+- Agregar opción "Devuelta" en el filtro de estados
+- Agregar botón "Devolución" (con AlertDialog de confirmación) para reservas CONFIRMED o CANCELLED
+- Nueva mutation que llama a `admin-bookings` con `action: 'refund'`
 
-**3. `ChatWidget.tsx`**
-- Agregar AbortController para cancelar streams previos al enviar un nuevo mensaje o cerrar el chat
-- Limpiar el controller en cleanup del componente
+### Paso 3 — Edge function: manejar acción refund
 
-**4. `AdminChatLogs.tsx`**
-- Agregar campo de busqueda para filtrar conversaciones por texto del primer mensaje
-- Renderizar markdown en las respuestas del asistente (consistencia con el widget)
+**`supabase/functions/admin-bookings/index.ts`**
+- Agregar handler para `action === 'refund'`:
+  - Cambiar status de la reserva a `REFUNDED`
+  - Si tenía session_code_id, liberar el código (igual que cancel)
+  - No generar código de recuperación (es una devolución real)
+
+### Lógica de negocio
+
+```text
+Estado         | ¿Cuenta como ingreso? | ¿Genera código?
+───────────────┼───────────────────────┼────────────────
+CONFIRMED      | Sí                    | N/A
+CANCELLED      | Sí (no hay devolución)| Sí (recuperación)
+REFUNDED       | No                    | No
+PENDING_PAYMENT| No                    | N/A
+```
 
 ### Archivos a modificar
-- `supabase/functions/chat-nave/index.ts` — modelo, tokens, singleton, upsert
-- `src/components/ChatWidget.tsx` — AbortController
-- `src/pages/admin/AdminChatLogs.tsx` — busqueda + markdown
-- Nueva migracion SQL — UNIQUE constraint en session_id
+- `src/pages/admin/AdminDashboard.tsx` — incluir CANCELLED en revenue, excluir REFUNDED
+- `src/pages/admin/AdminBookings.tsx` — nuevo status, botón devolución
+- `supabase/functions/admin-bookings/index.ts` — handler refund
 
