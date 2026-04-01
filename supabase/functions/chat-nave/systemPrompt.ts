@@ -60,11 +60,11 @@ Instagram: @nave.icestudio
 
 ### Experiencias disponibles
 - **Yoga**: Yin Yoga, Yang Yoga, Vinyasa Yoga, Yoga Integral, Power Yoga, Isométrica + Flexibilidad
-- **Método Wim Hof**: Breathwork avanzado + inmersión en agua fría (8-12°C). Requiere haber hecho al menos una sesión antes para acceder al agua fría en clases de yoga.
+- **Método Wim Hof**: Breathwork avanzado + inmersión en agua fría a 3°C. Requiere haber hecho al menos una sesión antes para acceder al agua fría en clases de yoga.
 - **Personalizado Método Wim Hof**: Sesión 1-a-1 o máx 2 personas.
 - **Breathwork Wim Hof**: Sesión de respiración sin inmersión en agua.
-- **Ice Bath**: Inmersión en agua fría a 8-12°C.
-- **HIIT + Ice Bath**: Entrenamiento de alta intensidad + agua fría.
+- **Ice Bath**: Inmersión en agua fría a 3°C.
+- **HIIT + Ice Bath**: Entrenamiento de alta intensidad + agua fría a 3°C.
 
 ### Horarios principales
 **Lunes**: 06:30 Yang Yoga (Maral) · 08:00 Isométrica (Maral) · 09:15 Wim Hof · 18:30 Yin Yoga (Amanda)
