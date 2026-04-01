@@ -1,38 +1,41 @@
 
 
-## Plan: Guardar conversaciones del chat de Nave AI
+## Plan: Optimizar el chatbot Nave AI
 
-### Resumen
-Crear una tabla para almacenar cada conversación del chatbot y una página en el admin para revisarlas. Cada vez que un usuario envía un mensaje al chat, la edge function guarda la conversación completa.
+### Problemas actuales identificados
 
-### Pasos
+1. **Modelo basico** — Usa `gemini-3-flash-preview` (rapido pero menos preciso). Para un chatbot de atencion al cliente, un modelo mas inteligente dara mejores respuestas.
+2. **Contexto limitado** — Solo envia los ultimos 6 mensajes al modelo, puede perder contexto de la conversacion.
+3. **max_tokens bajo** — 300 tokens limita respuestas que necesitan mas detalle (ej: listar horarios completos).
+4. **saveConversation ineficiente** — Hace SELECT + INSERT/UPDATE (2 queries). Deberia usar UPSERT con ON CONFLICT.
+5. **Supabase client se crea en cada save** — Deberia reutilizarse como singleton.
+6. **Rate limit por IP se pierde en cold starts** — No es critico pero vale documentar.
+7. **Frontend no tiene AbortController** — Si el usuario cierra el chat o envia otro mensaje, el stream previo sigue corriendo.
+8. **Admin Chat Logs basico** — No tiene busqueda, no renderiza markdown en las respuestas.
 
-**1. Crear tabla `chat_conversations`**
-- Migración SQL con columnas: `id`, `messages` (jsonb array con role/content), `ip_address`, `message_count`, `created_at`, `updated_at`
-- RLS: solo admins pueden SELECT; INSERT/UPDATE abierto para service role
+### Cambios
 
-**2. Modificar edge function `chat-nave`**
-- Al recibir un mensaje, hacer upsert en `chat_conversations`:
-  - Primera interacción: INSERT con session ID (generado en frontend y enviado como parámetro)
-  - Mensajes siguientes: UPDATE agregando al array de messages
-- Usar Supabase client con service role key para escribir
-- Guardar IP del usuario para contexto
+**1. Edge function `chat-nave/index.ts`**
+- Cambiar modelo a `google/gemini-2.5-flash` (mejor razonamiento, sigue siendo rapido y economico para alto volumen)
+- Subir `max_tokens` de 300 a 500
+- Subir contexto de 6 a 10 mensajes
+- Crear Supabase client como singleton (fuera del handler)
+- Reemplazar SELECT+INSERT/UPDATE por UPSERT con `ON CONFLICT(session_id)`
 
-**3. Modificar `ChatWidget.tsx`**
-- Generar un `sessionId` (UUID) al abrir el chat
-- Enviarlo en cada request al endpoint `chat-nave`
+**2. Migracion SQL**
+- Agregar constraint UNIQUE en `chat_conversations.session_id` si no existe (necesario para UPSERT)
 
-**4. Crear página admin `AdminChatLogs.tsx`**
-- Listar conversaciones ordenadas por fecha (más recientes primero)
-- Mostrar: fecha, IP, cantidad de mensajes, preview del primer mensaje del usuario
-- Click para expandir y ver la conversación completa con formato user/assistant
-- Agregar ruta `/admin/chat-logs` y link en el sidebar
+**3. `ChatWidget.tsx`**
+- Agregar AbortController para cancelar streams previos al enviar un nuevo mensaje o cerrar el chat
+- Limpiar el controller en cleanup del componente
 
-### Archivos
-- Nueva migración SQL — tabla `chat_conversations`
-- `supabase/functions/chat-nave/index.ts` — guardar mensajes
-- `src/components/ChatWidget.tsx` — enviar sessionId
-- `src/pages/admin/AdminChatLogs.tsx` — nueva página
-- `src/components/admin/AdminSidebar.tsx` — agregar link
-- `src/App.tsx` — agregar ruta
+**4. `AdminChatLogs.tsx`**
+- Agregar campo de busqueda para filtrar conversaciones por texto del primer mensaje
+- Renderizar markdown en las respuestas del asistente (consistencia con el widget)
+
+### Archivos a modificar
+- `supabase/functions/chat-nave/index.ts` — modelo, tokens, singleton, upsert
+- `src/components/ChatWidget.tsx` — AbortController
+- `src/pages/admin/AdminChatLogs.tsx` — busqueda + markdown
+- Nueva migracion SQL — UNIQUE constraint en session_id
 
