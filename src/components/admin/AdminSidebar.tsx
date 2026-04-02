@@ -36,6 +36,7 @@ const menuItems = [
   { title: 'MailerLite', url: '/admin/mailerlite', icon: Mail },
   { title: 'Plantillas Email', url: '/admin/emails', icon: Mail },
   { title: 'Chat Logs', url: '/admin/chat-logs', icon: MessageCircle },
+  { title: 'Nave Brain', url: '/admin/brain', icon: Brain },
 ];
 
 export function AdminSidebar() {

@@ -186,6 +186,7 @@ const App = () => {
               <Route path="mailerlite" element={<AdminMailerLite />} />
               <Route path="emails" element={<AdminEmailTemplates />} />
               <Route path="chat-logs" element={<AdminChatLogs />} />
+              <Route path="brain" element={<AdminBrain />} />
             </Route>
             
             {/* Redirect legacy routes */}
