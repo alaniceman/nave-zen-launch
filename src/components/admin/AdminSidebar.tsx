@@ -1,4 +1,4 @@
-import { Calendar, Users, Package, Clock, User, LogOut, Ticket, Gift, Key, MapPin, ShoppingCart, AlertCircle, LayoutDashboard, Mail, Crown, Contact, MessageCircle } from 'lucide-react';
+import { Calendar, Users, Package, Clock, User, LogOut, Ticket, Gift, Key, MapPin, ShoppingCart, AlertCircle, LayoutDashboard, Mail, Crown, Contact, MessageCircle, Brain } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import {
@@ -36,6 +36,7 @@ const menuItems = [
   { title: 'MailerLite', url: '/admin/mailerlite', icon: Mail },
   { title: 'Plantillas Email', url: '/admin/emails', icon: Mail },
   { title: 'Chat Logs', url: '/admin/chat-logs', icon: MessageCircle },
+  { title: 'Nave Brain', url: '/admin/brain', icon: Brain },
 ];
 
 export function AdminSidebar() {
