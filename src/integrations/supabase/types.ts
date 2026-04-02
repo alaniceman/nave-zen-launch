@@ -1143,6 +1143,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      execute_readonly_query: { Args: { query_text: string }; Returns: Json }
       get_active_professionals: {
         Args: never
         Returns: {
