@@ -44,12 +44,10 @@ async function verifyAdmin(req: Request) {
     { global: { headers: { Authorization: authHeader } } }
   );
 
-  const { data, error } = await supabase.auth.getClaims(
-    authHeader.replace("Bearer ", "")
-  );
-  if (error || !data?.claims?.sub) return null;
+  const { data: { user }, error } = await supabase.auth.getUser();
+  if (error || !user) return null;
 
-  const userId = data.claims.sub;
+  const userId = user.id;
   const { data: roleData } = await supabase
     .from("user_roles")
     .select("role")
