@@ -1,47 +1,83 @@
 
 
-## Plan: Contar canceladas como venta + botón de Devolución
+## Plan: Chatbot BI Admin — "Nave Brain"
 
 ### Resumen
-Dos cambios: (1) las reservas CANCELLED cuentan como ingreso en el dashboard (ya aprobado), y (2) agregar un nuevo status `REFUNDED` con un botón "Devolución" en la gestión de reservas. Las reservas con status REFUNDED NO se contabilizan como ingreso.
+Crear un chatbot de inteligencia de negocios exclusivo para administradores dentro del panel admin. Este bot puede consultar la base de datos en tiempo real para responder preguntas sobre clientes, ventas, reservas, paquetes, membresías y estadísticas del negocio.
 
-### Paso 1 — Dashboard: incluir CANCELLED como venta
-
-**`src/pages/admin/AdminDashboard.tsx`**
-- Línea 282: cambiar `confirmedBookings` por filtro que incluya CONFIRMED + CANCELLED
-- Excluir explícitamente REFUNDED del cálculo de ingresos
-- Actualizar `bookingsByService` para incluir CONFIRMED + CANCELLED (no REFUNDED)
-
-### Paso 2 — Agregar status REFUNDED al sistema
-
-**`src/pages/admin/AdminBookings.tsx`**
-- Agregar a `statusColors`: `REFUNDED: 'bg-purple-500'`
-- Agregar a `statusLabels`: `REFUNDED: 'Devuelta'`
-- Agregar opción "Devuelta" en el filtro de estados
-- Agregar botón "Devolución" (con AlertDialog de confirmación) para reservas CONFIRMED o CANCELLED
-- Nueva mutation que llama a `admin-bookings` con `action: 'refund'`
-
-### Paso 3 — Edge function: manejar acción refund
-
-**`supabase/functions/admin-bookings/index.ts`**
-- Agregar handler para `action === 'refund'`:
-  - Cambiar status de la reserva a `REFUNDED`
-  - Si tenía session_code_id, liberar el código (igual que cancel)
-  - No generar código de recuperación (es una devolución real)
-
-### Lógica de negocio
+### Arquitectura
 
 ```text
-Estado         | ¿Cuenta como ingreso? | ¿Genera código?
-───────────────┼───────────────────────┼────────────────
-CONFIRMED      | Sí                    | N/A
-CANCELLED      | Sí (no hay devolución)| Sí (recuperación)
-REFUNDED       | No                    | No
-PENDING_PAYMENT| No                    | N/A
+Admin Panel (React)          Edge Function              Base de Datos
+┌─────────────────┐    ┌─────────────────────┐    ┌──────────────┐
+│ AdminBrain.tsx   │───▶│ admin-brain/        │───▶│ SQL queries  │
+│ Chat UI          │    │ 1. Valida JWT+admin │    │ via service  │
+│ (streaming)      │◀───│ 2. Genera SQL con AI│◀───│ role key     │
+│                  │    │ 3. Ejecuta query    │    └──────────────┘
+│                  │    │ 4. AI interpreta    │
+└─────────────────┘    │    resultados        │
+                       └─────────────────────┘
 ```
 
-### Archivos a modificar
-- `src/pages/admin/AdminDashboard.tsx` — incluir CANCELLED en revenue, excluir REFUNDED
-- `src/pages/admin/AdminBookings.tsx` — nuevo status, botón devolución
-- `supabase/functions/admin-bookings/index.ts` — handler refund
+### Funcionamiento (2-step AI)
+
+1. El admin hace una pregunta en lenguaje natural (ej: "¿cuántas personas compraron paquetes en marzo?")
+2. La edge function usa AI para generar una query SQL SELECT (solo lectura)
+3. Ejecuta la query contra la base de datos con el service role key
+4. Envía los resultados de vuelta al AI para que los interprete y responda en lenguaje natural
+5. Streamed response al admin
+
+### Protecciones de seguridad
+
+- Solo usuarios con rol admin pueden acceder (JWT + verificación de rol en edge function)
+- Solo queries SELECT permitidas (validación estricta, no INSERT/UPDATE/DELETE/DROP)
+- El AI recibe el schema de las tablas como contexto para generar queries correctas
+- Límite de filas en queries (LIMIT 500)
+- Sin acceso a tablas de auth/storage/system
+
+### Paso 1 — Edge function `admin-brain`
+
+**`supabase/functions/admin-brain/index.ts`**
+- Validar JWT y verificar rol admin via `user_roles`
+- System prompt con el schema completo de todas las tablas del proyecto
+- Flujo de 2 pasos:
+  - Paso A: AI genera query SQL basada en la pregunta
+  - Paso B: Ejecuta query, AI interpreta resultados y responde
+- Streaming de la respuesta final
+- Manejo de errores 429/402
+
+**`supabase/functions/admin-brain/schema.ts`**
+- Schema de todas las tablas exportado como string para el system prompt
+- Incluye descripciones de columnas y relaciones lógicas entre tablas
+
+### Paso 2 — Página admin
+
+**`src/pages/admin/AdminBrain.tsx`**
+- Chat UI completo con historial de mensajes
+- Input para preguntas en lenguaje natural
+- Streaming de respuestas con markdown
+- Sugerencias de preguntas frecuentes (chips clickeables):
+  - "¿Cuántas reservas hubo este mes?"
+  - "¿Quiénes son los clientes más activos?"
+  - "¿Cuánto se vendió en paquetes esta semana?"
+  - "¿Qué servicios son los más populares?"
+  - "¿Cuántas clases de prueba se agendaron este mes?"
+
+### Paso 3 — Integración en admin
+
+- Agregar ruta `/admin/brain` en `App.tsx` (protegida con `requireAdmin`)
+- Agregar item "Nave Brain" con icono `Brain` en `AdminSidebar.tsx`
+
+### Tablas accesibles al bot
+El bot podrá consultar: `bookings`, `package_orders`, `session_codes`, `customers`, `customer_events`, `customer_memberships`, `membership_plans`, `trial_bookings`, `services`, `session_packages`, `professionals`, `branches`, `schedule_entries`, `generated_slots`, `discount_coupons`, `email_subscribers`, `chat_conversations`
+
+### Archivos
+- `supabase/functions/admin-brain/index.ts` — edge function principal
+- `supabase/functions/admin-brain/schema.ts` — schema de tablas
+- `src/pages/admin/AdminBrain.tsx` — página de chat admin
+- `src/components/admin/AdminSidebar.tsx` — agregar link
+- `src/App.tsx` — agregar ruta
+
+### Modelo AI
+`google/gemini-2.5-flash` — buen balance entre precisión SQL y velocidad de respuesta
 
