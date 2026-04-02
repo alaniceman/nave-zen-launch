@@ -86,6 +86,7 @@ const AdminCustomerDetail = lazy(() => import("./pages/admin/AdminCustomerDetail
 const AdminMembershipPlans = lazy(() => import("./pages/admin/AdminMembershipPlans"));
 const AdminEmailTemplates = lazy(() => import("./pages/admin/AdminEmailTemplates"));
 const AdminChatLogs = lazy(() => import("./pages/admin/AdminChatLogs"));
+const AdminBrain = lazy(() => import("./pages/admin/AdminBrain"));
 
 const queryClient = new QueryClient();
 
