@@ -8,8 +8,16 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
-const SYSTEM_PROMPT = `Eres "Nave Brain", el asistente de inteligencia de negocios de Nave Studio.
+function getSystemPrompt() {
+  const now = new Date();
+  const santiagoDate = now.toLocaleDateString('es-CL', { timeZone: 'America/Santiago', year: 'numeric', month: 'long', day: 'numeric' });
+  const santiagoYear = now.toLocaleDateString('es-CL', { timeZone: 'America/Santiago', year: 'numeric' }).match(/\d{4}/)?.[0] || now.getFullYear().toString();
+  
+  return `Eres "Nave Brain", el asistente de inteligencia de negocios de Nave Studio.
 Tu rol es responder preguntas sobre el negocio consultando la base de datos.
+
+## Fecha actual
+Hoy es ${santiagoDate}. El año actual es ${santiagoYear}. Usa SIEMPRE el año correcto en las queries.
 
 ## Schema de la base de datos
 ${DB_SCHEMA}
@@ -26,13 +34,15 @@ Cuando el usuario haga una pregunta sobre datos del negocio:
 7. Para ingresos de bookings: incluye status IN ('CONFIRMED', 'CANCELLED'), excluye 'REFUNDED'.
 8. Para ingresos de package_orders: usa status = 'approved'.
 9. Responde SIEMPRE en español.
+10. Para unir bookings con customers, usa el email: bookings.customer_email = customers.email (NO uses customer_id ni customer_phone).
 
 ## Formato de respuesta SQL
-Cuando necesites hacer una query, responde EXACTAMENTE con este formato (sin markdown, sin explicación):
+Cuando necesites hacer una query, responde EXACTAMENTE con este formato (sin markdown, sin explicación, sin backticks):
 SQL_QUERY: <tu query aquí>
 
 Si la pregunta no requiere consultar datos (es una pregunta general), responde directamente sin SQL.
 Si no puedes responder con los datos disponibles, explica por qué.`;
+}
 
 async function verifyAdmin(req: Request) {
   const authHeader = req.headers.get("Authorization");
@@ -90,9 +100,11 @@ function validateSQL(sql: string): boolean {
 }
 
 function ensureLimit(sql: string): string {
-  const upper = sql.toUpperCase().trim();
+  // Remove trailing semicolons
+  sql = sql.replace(/;\s*$/, "").trim();
+  const upper = sql.toUpperCase();
   if (!upper.includes("LIMIT")) {
-    return sql.replace(/;?\s*$/, " LIMIT 500;");
+    return sql + " LIMIT 500";
   }
   return sql;
 }
@@ -155,9 +167,11 @@ serve(async (req) => {
       });
     }
 
+    const systemPrompt = getSystemPrompt();
+
     // Step 1: Ask AI to generate SQL (non-streaming)
     const step1Messages = [
-      { role: "system", content: SYSTEM_PROMPT },
+      { role: "system", content: systemPrompt },
       ...chatHistory,
     ];
 
@@ -177,27 +191,18 @@ serve(async (req) => {
     const aiResponse =
       step1Json.choices?.[0]?.message?.content || "";
 
+    console.log("Step 1 AI response:", aiResponse.substring(0, 200));
+
     // Check if AI wants to run a SQL query
     const sqlMatch = aiResponse.match(/SQL_QUERY:\s*(.+)/s);
     if (!sqlMatch) {
-      // No SQL needed, stream the response directly
-      const streamRes = await callAI(
-        [
-          { role: "system", content: SYSTEM_PROMPT },
-          ...chatHistory,
-        ],
-        true
-      );
-      if (streamRes.error) {
-        return new Response(
-          JSON.stringify({ error: "AI error" }),
-          {
-            status: streamRes.error,
-            headers: { ...corsHeaders, "Content-Type": "application/json" },
-          }
-        );
-      }
-      return new Response(streamRes.body!.body, {
+      // No SQL needed — return step1 content directly as SSE
+      const sseData = `data: ${JSON.stringify({
+        id: "direct",
+        object: "chat.completion.chunk",
+        choices: [{ index: 0, delta: { content: aiResponse, role: "assistant" }, finish_reason: "stop" }],
+      })}\n\ndata: [DONE]\n\n`;
+      return new Response(sseData, {
         headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
       });
     }
