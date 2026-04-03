@@ -32,7 +32,7 @@ Cuando el usuario haga una pregunta sobre datos del negocio:
 5. Para fechas, usa timezone 'America/Santiago'.
 6. Para el mes actual: date_trunc('month', now() AT TIME ZONE 'America/Santiago')
 7. Para ingresos de bookings: incluye status IN ('CONFIRMED', 'CANCELLED'), excluye 'REFUNDED'.
-8. Para ingresos de package_orders: usa status = 'approved'.
+8. Para ingresos de package_orders: usa status = 'paid'.
 9. Responde SIEMPRE en español.
 10. Para unir bookings con customers, usa el email: bookings.customer_email = customers.email (NO uses customer_id ni customer_phone).
 
