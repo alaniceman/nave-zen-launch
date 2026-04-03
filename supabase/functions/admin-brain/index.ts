@@ -100,9 +100,11 @@ function validateSQL(sql: string): boolean {
 }
 
 function ensureLimit(sql: string): string {
-  const upper = sql.toUpperCase().trim();
+  // Remove trailing semicolons
+  sql = sql.replace(/;\s*$/, "").trim();
+  const upper = sql.toUpperCase();
   if (!upper.includes("LIMIT")) {
-    return sql.replace(/;?\s*$/, " LIMIT 500;");
+    return sql + " LIMIT 500";
   }
   return sql;
 }
