@@ -165,9 +165,11 @@ serve(async (req) => {
       });
     }
 
+    const systemPrompt = getSystemPrompt();
+
     // Step 1: Ask AI to generate SQL (non-streaming)
     const step1Messages = [
-      { role: "system", content: SYSTEM_PROMPT },
+      { role: "system", content: systemPrompt },
       ...chatHistory,
     ];
 
@@ -187,27 +189,18 @@ serve(async (req) => {
     const aiResponse =
       step1Json.choices?.[0]?.message?.content || "";
 
+    console.log("Step 1 AI response:", aiResponse.substring(0, 200));
+
     // Check if AI wants to run a SQL query
     const sqlMatch = aiResponse.match(/SQL_QUERY:\s*(.+)/s);
     if (!sqlMatch) {
-      // No SQL needed, stream the response directly
-      const streamRes = await callAI(
-        [
-          { role: "system", content: SYSTEM_PROMPT },
-          ...chatHistory,
-        ],
-        true
-      );
-      if (streamRes.error) {
-        return new Response(
-          JSON.stringify({ error: "AI error" }),
-          {
-            status: streamRes.error,
-            headers: { ...corsHeaders, "Content-Type": "application/json" },
-          }
-        );
-      }
-      return new Response(streamRes.body!.body, {
+      // No SQL needed — return step1 content directly as SSE
+      const sseData = `data: ${JSON.stringify({
+        id: "direct",
+        object: "chat.completion.chunk",
+        choices: [{ index: 0, delta: { content: aiResponse, role: "assistant" }, finish_reason: "stop" }],
+      })}\n\ndata: [DONE]\n\n`;
+      return new Response(sseData, {
         headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
       });
     }
