@@ -125,6 +125,16 @@ body{margin:0;padding:0;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
       <p style="margin-top:8px">Es el portón negro a mano derecha de donde sale la numeración. Van a ver un pequeño platillo volador. El portón se corre manual y luego subes al segundo piso.</p>
     </div>
     ${whatToBring}
+    <div class="info-box" style="background:#FFF5F5;border-left:4px solid #C53030;margin:0 0 20px;padding:18px 22px;border-radius:10px">
+      <p style="margin:0 0 10px;font-size:15px;font-weight:700;color:#C53030">📋 Condiciones de cancelación</p>
+      <p style="margin:0 0 10px;font-size:14px;line-height:1.7;color:#4A4A4A">Te pedimos cancelar o reagendar tu sesión con al menos <strong>24 horas de anticipación</strong>.</p>
+      <p style="margin:0 0 6px;font-size:14px;line-height:1.7;color:#4A4A4A">En caso de no asistir o cancelar fuera de ese plazo:</p>
+      <ul style="margin:4px 0 10px;padding-left:20px;font-size:14px;line-height:1.8;color:#4A4A4A">
+        <li>La clase se considera realizada y se pierde</li>
+        <li>Podrás agendar una nueva sesión con un <strong>50% de descuento</strong></li>
+      </ul>
+      <p style="margin:0;font-size:13px;line-height:1.6;color:#6B7280;font-style:italic">Esta política existe para cuidar la organización de nuestras instructoras, quienes reservan su tiempo especialmente para cada clase.</p>
+    </div>
     <div class="cta-row">
       <a href="${MAPS_LINK}" class="btn btn-green">📍 Abrir en Google Maps</a>
       <a href="${NAVE_WHATSAPP}" class="btn btn-outline">💬 WhatsApp directo</a>
