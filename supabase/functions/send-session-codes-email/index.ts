@@ -37,11 +37,15 @@ const handler = async (req: Request): Promise<Response> => {
     // Detect San Valentín promo by promoType or package name
     const isSanValentin = promoType === "san_valentin" || packageName.toLowerCase().includes("valentin");
 
-    const expiryDate = new Date(expiresAt).toLocaleDateString('es-CL', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    });
+    let expiryDate: string;
+    try {
+      const d = new Date(expiresAt);
+      expiryDate = isNaN(d.getTime()) 
+        ? expiresAt 
+        : d.toLocaleDateString('es-CL', { day: 'numeric', month: 'long', year: 'numeric' });
+    } catch {
+      expiryDate = expiresAt;
+    }
 
     // Generate HTML based on whether it's a gift card or regular purchase
     let emailHtml: string;
