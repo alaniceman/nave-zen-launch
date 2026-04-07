@@ -325,7 +325,7 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
             <div className="flex gap-2">
               <Input
                 value={codeInput}
-                onChange={(e) => setCodeInput(e.target.value.toUpperCase())}
+                onChange={(e) => setCodeInput(e.target.value.toUpperCase().replace(/\s/g, ""))}
                 placeholder="CODIGO"
                 disabled={isSubmitting || isValidating}
                 className="font-mono uppercase"
