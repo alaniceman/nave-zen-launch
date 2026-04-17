@@ -39,6 +39,7 @@ const PlanAnual2026 = lazy(() => import("./pages/PlanAnual2026"));
 const SanValentin = lazy(() => import("./pages/SanValentin"));
 const MarzoReset = lazy(() => import("./pages/MarzoReset"));
 const Horarios = lazy(() => import("./pages/Horarios"));
+const ConoceElLugar = lazy(() => import("./pages/ConoceElLugar"));
 const FAQ = lazy(() => import("./pages/FAQ"));
 const ClaseDePrueba = lazy(() => import("./pages/ClaseDePrueba"));
 const TrialClassSchedule = lazy(() => import("./pages/TrialClassSchedule"));
@@ -135,6 +136,7 @@ const App = () => {
             <Route path="/san-valentin" element={<SanValentin />} />
             <Route path="/marzo-reset" element={<MarzoReset />} />
             <Route path="/horarios" element={<Horarios />} />
+            <Route path="/conoce-el-lugar" element={<ConoceElLugar />} />
             <Route path="/faq" element={<FAQ />} />
             <Route path="/clase-de-prueba" element={<Navigate to="/clase-de-prueba/agendar" replace />} />
             <Route path="/clase-de-prueba/agendar" element={<TrialClassSchedule />} />
