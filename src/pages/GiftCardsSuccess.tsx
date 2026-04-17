@@ -4,10 +4,8 @@ import { Helmet } from "react-helmet-async";
 import { CheckCircle2, Loader2, AlertCircle, Gift } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { supabase } from "@/integrations/supabase/client";
 import { Footer } from "@/components/Footer";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
-import { useFacebookConversionsAPI } from "@/hooks/useFacebookConversionsAPI";
 
 interface OrderStatus {
   orderId: string;
@@ -29,7 +27,6 @@ export default function GiftCardsSuccess() {
   const [error, setError] = useState("");
   const [hasFiredPixel, setHasFiredPixel] = useState(false);
   const { trackEvent } = useFacebookPixel();
-  const { trackPurchase: trackServerPurchase } = useFacebookConversionsAPI();
 
   useEffect(() => {
     if (isFree) {
@@ -54,12 +51,6 @@ export default function GiftCardsSuccess() {
 
     const checkStatus = async () => {
       try {
-        const { data, error } = await supabase.functions.invoke("get-order-status", {
-          body: null,
-          headers: { "Content-Type": "application/json" },
-        });
-
-        // Use query params instead
         const response = await fetch(
           `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/get-order-status?orderId=${orderId}`,
           {
@@ -95,48 +86,22 @@ export default function GiftCardsSuccess() {
     return () => clearInterval(interval);
   }, [orderId, isFree, orderStatus?.status]);
 
-  // Track Purchase event when payment is successful
+  // Track Purchase event client-side when payment is successful.
+  // The server-side Conversions API event is fired by the mercadopago-webhook
+  // edge function, so the client no longer needs to read PII from package_orders.
   useEffect(() => {
-    const trackConversion = async () => {
-      if (orderStatus?.statusType === "success" && !hasFiredPixel && orderId) {
-        const eventId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-        
-        // Client-side pixel
-        trackEvent('Purchase', {
-          value: orderStatus.finalPrice || 0,
-          currency: "CLP",
-          content_name: orderStatus.packageName || "Gift Card",
-          content_type: "product",
-          content_ids: [orderId],
-        }, eventId);
-
-        // Fetch order details for server-side tracking
-        const { data: order } = await supabase
-          .from("package_orders")
-          .select("buyer_email, buyer_name, buyer_phone")
-          .eq("id", orderId)
-          .maybeSingle();
-
-        if (order) {
-          // Server-side Conversions API
-          trackServerPurchase({
-            userEmail: order.buyer_email,
-            userName: order.buyer_name,
-            userPhone: order.buyer_phone || undefined,
-            value: orderStatus.finalPrice || 0,
-            currency: "CLP",
-            contentName: orderStatus.packageName || "Gift Card",
-            orderId: orderId,
-            eventId,
-          });
-        }
-
-        setHasFiredPixel(true);
-      }
-    };
-
-    trackConversion();
-  }, [orderStatus?.statusType, orderStatus?.finalPrice, orderStatus?.packageName, orderId, hasFiredPixel, trackEvent, trackServerPurchase]);
+    if (orderStatus?.statusType === "success" && !hasFiredPixel && orderId) {
+      const eventId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      trackEvent('Purchase', {
+        value: orderStatus.finalPrice || 0,
+        currency: "CLP",
+        content_name: orderStatus.packageName || "Gift Card",
+        content_type: "product",
+        content_ids: [orderId],
+      }, eventId);
+      setHasFiredPixel(true);
+    }
+  }, [orderStatus?.statusType, orderStatus?.finalPrice, orderStatus?.packageName, orderId, hasFiredPixel, trackEvent]);
 
   return (
     <>
