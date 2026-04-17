@@ -48,7 +48,8 @@ export default function AgendaSuccess() {
             const serviceName = bookingData.services?.name || "Sesión";
             const price = bookingData.final_price || 0;
             
-            const eventId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+            // Deterministic event_id shared with server-side CAPI for Meta deduplication
+            const eventId = `purchase-${externalReference}`;
             
             // Client-side pixel
             trackEvent('Purchase', {
