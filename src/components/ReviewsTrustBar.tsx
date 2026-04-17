@@ -115,12 +115,9 @@ export const ReviewsTrustBar = () => {
       <style>{`.reviews-strip::-webkit-scrollbar{display:none}.reviews-strip{scrollbar-width:none}`}</style>
 
       <div className="text-center mb-8">
-        <h3 className="font-space-grotesk font-bold text-2xl md:text-3xl text-neutral-dark mb-2">
+        <h3 className="font-space-grotesk font-bold text-2xl md:text-3xl text-neutral-dark">
           Lo que dice la comunidad
         </h3>
-        <p className="font-inter text-base text-neutral-mid">
-          +{reviews.length} reseñas reales de quienes ya vinieron
-        </p>
       </div>
 
       <div className="relative">
