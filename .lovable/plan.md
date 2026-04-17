@@ -1,83 +1,45 @@
 
 
-## Plan: Chatbot BI Admin — "Nave Brain"
+## Plan: Fix critical security findings
 
-### Resumen
-Crear un chatbot de inteligencia de negocios exclusivo para administradores dentro del panel admin. Este bot puede consultar la base de datos en tiempo real para responder preguntas sobre clientes, ventas, reservas, paquetes, membresías y estadísticas del negocio.
+Three findings to address:
 
-### Arquitectura
+### 1. `package_orders` — public SELECT exposes 90 rows of PII (ERROR)
 
-```text
-Admin Panel (React)          Edge Function              Base de Datos
-┌─────────────────┐    ┌─────────────────────┐    ┌──────────────┐
-│ AdminBrain.tsx   │───▶│ admin-brain/        │───▶│ SQL queries  │
-│ Chat UI          │    │ 1. Valida JWT+admin │    │ via service  │
-│ (streaming)      │◀───│ 2. Genera SQL con AI│◀───│ role key     │
-│                  │    │ 3. Ejecuta query    │    └──────────────┘
-│                  │    │ 4. AI interpreta    │
-└─────────────────┘    │    resultados        │
-                       └─────────────────────┘
-```
+**Current**: Policy `Anyone can view orders by id USING (true)` lets any visitor list all orders with names, emails, phones, payment IDs.
 
-### Funcionamiento (2-step AI)
+**Fix**: Drop the `Anyone can view orders by id` policy entirely. Admins + service role still have full access via existing policies.
 
-1. El admin hace una pregunta en lenguaje natural (ej: "¿cuántas personas compraron paquetes en marzo?")
-2. La edge function usa AI para generar una query SQL SELECT (solo lectura)
-3. Ejecuta la query contra la base de datos con el service role key
-4. Envía los resultados de vuelta al AI para que los interprete y responda en lenguaje natural
-5. Streamed response al admin
+**Code impact** (only 2 client-side reads remain after the policy is removed):
+- `src/pages/BonosSuccess.tsx` — fetches `final_price, status, buyer_email, buyer_name, buyer_phone, session_packages(name)` to fire Facebook Purchase event client-side + server-side (Conversions API).
+- `src/pages/GiftCardsSuccess.tsx` — fetches `buyer_email, buyer_name, buyer_phone` for the same reason.
 
-### Protecciones de seguridad
+**Replacement**: Move the server-side Conversions API call into the `mercadopago-webhook` edge function (it already runs when payment status becomes `paid` and has full buyer data via service role). The success pages then only fire the client-side pixel using data already returned by `get-order-status` (price, package name) — no need to read PII from the browser at all.
 
-- Solo usuarios con rol admin pueden acceder (JWT + verificación de rol en edge function)
-- Solo queries SELECT permitidas (validación estricta, no INSERT/UPDATE/DELETE/DROP)
-- El AI recibe el schema de las tablas como contexto para generar queries correctas
-- Límite de filas en queries (LIMIT 500)
-- Sin acceso a tablas de auth/storage/system
+Other uses (`AdminAbandonedCarts`, `AdminPackageOrders`, `AdminDashboard`) are admin-only and continue to work via the existing admin policy.
 
-### Paso 1 — Edge function `admin-brain`
+### 2. `professionals` — emails publicly readable (WARN)
 
-**`supabase/functions/admin-brain/index.ts`**
-- Validar JWT y verificar rol admin via `user_roles`
-- System prompt con el schema completo de todas las tablas del proyecto
-- Flujo de 2 pasos:
-  - Paso A: AI genera query SQL basada en la pregunta
-  - Paso B: Ejecuta query, AI interpreta resultados y responde
-- Streaming de la respuesta final
-- Manejo de errores 429/402
+**Current**: Policy `Anyone can view active professionals USING (is_active = true)` exposes the `email` column to anonymous users.
 
-**`supabase/functions/admin-brain/schema.ts`**
-- Schema de todas las tablas exportado como string para el system prompt
-- Incluye descripciones de columnas y relaciones lógicas entre tablas
+**Fix**: Drop the public-SELECT policy. Public reads should go through the existing `get_active_professionals()` security-definer function (which already returns only `id, name, slug, is_active, created_at, updated_at` — no email). The public agenda page (`AgendaNaveStudio.tsx`) already uses this RPC. Admin pages will continue to read directly via the admin policy.
 
-### Paso 2 — Página admin
+Remaining authenticated admin reads (`AdminBookings`, `AdminFutureSlots`, `AdminCapacityOverrides`, `AdminProfessionals`, `AvailabilityForm`, `ScheduleEntryForm`) are protected by `ProtectedRoute` and the admin policy still allows them.
 
-**`src/pages/admin/AdminBrain.tsx`**
-- Chat UI completo con historial de mensajes
-- Input para preguntas en lenguaje natural
-- Streaming de respuestas con markdown
-- Sugerencias de preguntas frecuentes (chips clickeables):
-  - "¿Cuántas reservas hubo este mes?"
-  - "¿Quiénes son los clientes más activos?"
-  - "¿Cuánto se vendió en paquetes esta semana?"
-  - "¿Qué servicios son los más populares?"
-  - "¿Cuántas clases de prueba se agendaron este mes?"
+The implicit foreign-key joins like `professionals:professional_id(name)` used in admin pages require a SELECT policy; the admin policy covers that.
 
-### Paso 3 — Integración en admin
+### 3. Extension in `public` schema (WARN)
 
-- Agregar ruta `/admin/brain` en `App.tsx` (protegida con `requireAdmin`)
-- Agregar item "Nave Brain" con icono `Brain` en `AdminSidebar.tsx`
+Move any extensions installed in `public` to a dedicated `extensions` schema per Supabase guidance. Will run a migration that uses `ALTER EXTENSION ... SET SCHEMA extensions` for each detected extension (typically `pg_net`, `pgcrypto`, `pg_graphql`, etc., depending on what's there). Some Supabase-managed extensions can't be moved — those will be skipped with a NOTICE.
 
-### Tablas accesibles al bot
-El bot podrá consultar: `bookings`, `package_orders`, `session_codes`, `customers`, `customer_events`, `customer_memberships`, `membership_plans`, `trial_bookings`, `services`, `session_packages`, `professionals`, `branches`, `schedule_entries`, `generated_slots`, `discount_coupons`, `email_subscribers`, `chat_conversations`
+### Files changed
 
-### Archivos
-- `supabase/functions/admin-brain/index.ts` — edge function principal
-- `supabase/functions/admin-brain/schema.ts` — schema de tablas
-- `src/pages/admin/AdminBrain.tsx` — página de chat admin
-- `src/components/admin/AdminSidebar.tsx` — agregar link
-- `src/App.tsx` — agregar ruta
+- **Migration**: drop two RLS policies; move extensions out of public.
+- `supabase/functions/mercadopago-webhook/index.ts` — fire Facebook Conversions API Purchase event when order transitions to `paid`.
+- `src/pages/BonosSuccess.tsx` — remove the `package_orders` query; keep client-side pixel using data from `get-order-status`.
+- `src/pages/GiftCardsSuccess.tsx` — remove the `package_orders` query; keep client-side pixel using `orderStatus` data.
 
-### Modelo AI
-`google/gemini-2.5-flash` — buen balance entre precisión SQL y velocidad de respuesta
+### Out of scope (other findings shown in security view)
+
+The other findings (chat_conversations RLS, gift card token enumeration, leaked-password protection, redundant mailerlite policies) are not in this request and will be left alone unless you ask.
 
