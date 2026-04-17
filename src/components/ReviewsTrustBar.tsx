@@ -156,30 +156,32 @@ export const ReviewsTrustBar = ({
 
       <div className="text-center mb-6">
         <h3 className="font-space-grotesk font-bold text-2xl md:text-3xl text-neutral-dark">
-          Lo que dice la comunidad
+          {title}
         </h3>
       </div>
 
-      <div className="flex flex-wrap items-center justify-center gap-2 mb-6 px-4" role="tablist" aria-label="Filtrar reseñas por categoría">
-        {FILTERS.map((f) => {
-          const isActive = activeFilter === f.value;
-          return (
-            <button
-              key={f.value}
-              role="tab"
-              aria-selected={isActive}
-              onClick={() => setActiveFilter(f.value)}
-              className={`px-4 py-1.5 rounded-full text-sm font-inter font-medium transition-all duration-200 border focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
-                isActive
-                  ? "bg-primary text-primary-foreground border-primary shadow-light"
-                  : "bg-background text-neutral-dark border-primary/15 hover:border-primary/30 hover:bg-primary/5"
-              }`}
-            >
-              {f.label}
-            </button>
-          );
-        })}
-      </div>
+      {showFilters && (
+        <div className="flex flex-wrap items-center justify-center gap-2 mb-6 px-4" role="tablist" aria-label="Filtrar reseñas por categoría">
+          {ALL_FILTERS.map((f) => {
+            const isActive = activeFilter === f.value;
+            return (
+              <button
+                key={f.value}
+                role="tab"
+                aria-selected={isActive}
+                onClick={() => setActiveFilter(f.value)}
+                className={`px-4 py-1.5 rounded-full text-sm font-inter font-medium transition-all duration-200 border focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
+                  isActive
+                    ? "bg-primary text-primary-foreground border-primary shadow-light"
+                    : "bg-background text-neutral-dark border-primary/15 hover:border-primary/30 hover:bg-primary/5"
+                }`}
+              >
+                {f.label}
+              </button>
+            );
+          })}
+        </div>
+      )}
 
       <div className="relative">
         {/* Edge fades */}
