@@ -12,18 +12,32 @@ import iceSmile from "@/assets/space/ice-bath-smile.webp";
 import meditationAurora from "@/assets/space/meditation-aurora-ceiling.webp";
 import yinRelax from "@/assets/space/yin-relaxation.webp";
 import savasanaRest from "@/assets/space/savasana-rest.webp";
+import meditationGroupCandle from "@/assets/space/meditation-group-candle.webp";
+import soundJourneyAuroraWide from "@/assets/space/sound-journey-aurora-wide.webp";
+import respiraSkylight from "@/assets/space/respira-skylight-circle.webp";
+import savasanaDog from "@/assets/space/savasana-dog-cuddle.webp";
+import iceBathGolden from "@/assets/space/ice-bath-golden-smile.webp";
+import iceBathResilencia from "@/assets/space/ice-bath-resilencia.webp";
+import soundJourneyCircle from "@/assets/space/sound-journey-circle-aurora.webp";
 
 type GalleryImage = { src: string; alt: string };
 
 const gallery: GalleryImage[] = [
   { src: meditationAurora, alt: "Meditación guiada con luces aurora en Nave Studio" },
   { src: iceSmile, alt: "Mujer sonriendo dentro del ice bath en Nave Studio" },
+  { src: meditationGroupCandle, alt: "Meditación grupal con vela en Nave Studio" },
   { src: bowlsCircle, alt: "Círculo de cuencos de cuarzo durante una sesión de sonido" },
+  { src: soundJourneyCircle, alt: "Sound journey grupal con proyecciones aurora en el techo" },
   { src: soundAurora, alt: "Sound journey con proyecciones aurora en el techo" },
+  { src: respiraSkylight, alt: "Sesión de breathwork bajo el tragaluz Respira" },
   { src: yogaPurple, alt: "Clase de yoga con luz púrpura vista desde arriba" },
   { src: yinRelax, alt: "Sesión de Yin Yoga y relajación profunda" },
+  { src: iceBathGolden, alt: "Mujer disfrutando ice bath con luz dorada" },
+  { src: iceBathResilencia, alt: "Ice bath bajo el cartel Resiliencia en Nave Studio" },
   { src: bowlsPink, alt: "Cuencos de cuarzo iluminados con luz rosa" },
   { src: bowlsGreen, alt: "Cuencos de cuarzo con luz verde durante meditación" },
+  { src: soundJourneyAuroraWide, alt: "Sound journey amplio con cielo aurora proyectado" },
+  { src: savasanaDog, alt: "Savasana acompañada por perrito en Nave Studio" },
   { src: savasanaRest, alt: "Savasana y descanso final en clase de yoga" },
   { src: maralPortrait, alt: "Maral, instructora de Nave Studio" },
 ];
