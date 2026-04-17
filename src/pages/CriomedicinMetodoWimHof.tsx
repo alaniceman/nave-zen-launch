@@ -3,6 +3,7 @@ import { CheckoutRedirectButton } from "@/components/CheckoutRedirectButton";
 import { CoachesSection } from "@/components/CoachesSection";
 import { Footer } from "@/components/Footer";
 import { GiftCardSection } from "@/components/GiftCardSection";
+import { ReviewsTrustBar } from "@/components/ReviewsTrustBar";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
@@ -191,6 +192,13 @@ const CriomedicinMetodoWimHof = () => {
                 </p>
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* Reseñas reales de Ice Bath */}
+        <section className="py-12 md:py-16 bg-neutral-light">
+          <div className="container mx-auto px-6">
+            <ReviewsTrustBar category="Ice Bath" title="Lo que dicen quienes ya entraron al hielo" />
           </div>
         </section>
 

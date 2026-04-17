@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Star, Quote, ChevronLeft, ChevronRight } from "lucide-react"
 import { Footer } from "@/components/Footer"
+import { ReviewsTrustBar } from "@/components/ReviewsTrustBar"
 
 const Coaches = () => {
   const [activeFilter, setActiveFilter] = useState<string | null>(null)
@@ -190,6 +191,12 @@ const Coaches = () => {
         </Button>
       </section>
 
+      {/* Reseñas reales sobre los coaches */}
+      <section className="py-12 md:py-16 bg-neutral-light">
+        <div className="container mx-auto px-6">
+          <ReviewsTrustBar coachesOnly title="Lo que dicen sobre nuestros coaches" />
+        </div>
+      </section>
 
       {/* Grid Coaches */}
       <section id="grid-coaches" className="py-16 px-6">

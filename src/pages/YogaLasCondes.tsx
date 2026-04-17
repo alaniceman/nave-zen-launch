@@ -8,6 +8,7 @@ import { LocationSection } from "@/components/LocationSection";
 import { StickyMobileCTA } from "@/components/StickyMobileCTA";
 import { TrialYogaSection } from "@/components/TrialYogaSection";
 import { Footer } from "@/components/Footer";
+import { ReviewsTrustBar } from "@/components/ReviewsTrustBar";
 import { Badge } from "@/components/ui/badge";
 import { Flower2, Flame, Wind, Sun, Zap, Heart, Check, Star, Sparkles } from "lucide-react";
 
@@ -233,6 +234,13 @@ const YogaLasCondes = () => {
           </div>
           {/* Bottom fade */}
           <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background to-transparent" />
+        </section>
+
+        {/* Reseñas reales de Yoga */}
+        <section className="py-12 md:py-16 bg-neutral-light">
+          <div className="container mx-auto px-6">
+            <ReviewsTrustBar category="Yoga" title="Lo que dicen nuestras alumnas de Yoga" />
+          </div>
         </section>
 
         {/* Estilos de Yoga */}

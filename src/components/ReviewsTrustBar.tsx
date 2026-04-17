@@ -30,19 +30,42 @@ const CategoryChip = ({ category }: { category: Review["category"] }) => (
   </span>
 );
 
-const FILTERS: Array<{ label: string; value: "Todas" | Review["category"] }> = [
+const ALL_FILTERS: Array<{ label: string; value: "Todas" | Review["category"] }> = [
   { label: "Todas", value: "Todas" },
   { label: "Yoga", value: "Yoga" },
   { label: "Ice Bath", value: "Ice Bath" },
   { label: "Experiencia", value: "Experiencia" },
 ];
 
-export const ReviewsTrustBar = () => {
-  const allReviews = useMemo(() => shuffleArray(sourceReviews), []);
+type ReviewsTrustBarProps = {
+  /** Restringe las reseñas a una sola categoría y oculta el filtro */
+  category?: Review["category"];
+  /** Muestra solo las reseñas que mencionan a un instructor ("Alumno/a de ...") */
+  coachesOnly?: boolean;
+  /** Título personalizado de la sección */
+  title?: string;
+  /** Oculta los chips de filtro (útil cuando se fija una categoría) */
+  hideFilters?: boolean;
+};
+
+export const ReviewsTrustBar = ({
+  category,
+  coachesOnly = false,
+  title = "Lo que dice la comunidad",
+  hideFilters = false,
+}: ReviewsTrustBarProps = {}) => {
+  const baseReviews = useMemo(() => {
+    let list = sourceReviews;
+    if (category) list = list.filter((r) => r.category === category);
+    if (coachesOnly) list = list.filter((r) => /^Alumn[oa] de /i.test(r.author));
+    return shuffleArray(list);
+  }, [category, coachesOnly]);
+
+  const showFilters = !hideFilters && !category && !coachesOnly;
   const [activeFilter, setActiveFilter] = useState<"Todas" | Review["category"]>("Todas");
   const reviews = useMemo(
-    () => (activeFilter === "Todas" ? allReviews : allReviews.filter((r) => r.category === activeFilter)),
-    [activeFilter, allReviews]
+    () => (!showFilters || activeFilter === "Todas" ? baseReviews : baseReviews.filter((r) => r.category === activeFilter)),
+    [activeFilter, baseReviews, showFilters]
   );
   const scrollRef = useRef<HTMLDivElement>(null);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -133,30 +156,32 @@ export const ReviewsTrustBar = () => {
 
       <div className="text-center mb-6">
         <h3 className="font-space-grotesk font-bold text-2xl md:text-3xl text-neutral-dark">
-          Lo que dice la comunidad
+          {title}
         </h3>
       </div>
 
-      <div className="flex flex-wrap items-center justify-center gap-2 mb-6 px-4" role="tablist" aria-label="Filtrar reseñas por categoría">
-        {FILTERS.map((f) => {
-          const isActive = activeFilter === f.value;
-          return (
-            <button
-              key={f.value}
-              role="tab"
-              aria-selected={isActive}
-              onClick={() => setActiveFilter(f.value)}
-              className={`px-4 py-1.5 rounded-full text-sm font-inter font-medium transition-all duration-200 border focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
-                isActive
-                  ? "bg-primary text-primary-foreground border-primary shadow-light"
-                  : "bg-background text-neutral-dark border-primary/15 hover:border-primary/30 hover:bg-primary/5"
-              }`}
-            >
-              {f.label}
-            </button>
-          );
-        })}
-      </div>
+      {showFilters && (
+        <div className="flex flex-wrap items-center justify-center gap-2 mb-6 px-4" role="tablist" aria-label="Filtrar reseñas por categoría">
+          {ALL_FILTERS.map((f) => {
+            const isActive = activeFilter === f.value;
+            return (
+              <button
+                key={f.value}
+                role="tab"
+                aria-selected={isActive}
+                onClick={() => setActiveFilter(f.value)}
+                className={`px-4 py-1.5 rounded-full text-sm font-inter font-medium transition-all duration-200 border focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
+                  isActive
+                    ? "bg-primary text-primary-foreground border-primary shadow-light"
+                    : "bg-background text-neutral-dark border-primary/15 hover:border-primary/30 hover:bg-primary/5"
+                }`}
+              >
+                {f.label}
+              </button>
+            );
+          })}
+        </div>
+      )}
 
       <div className="relative">
         {/* Edge fades */}

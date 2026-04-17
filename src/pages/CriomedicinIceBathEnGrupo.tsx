@@ -1,6 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import { CheckoutRedirectButton } from "@/components/CheckoutRedirectButton";
 import { Footer } from "@/components/Footer";
+import { ReviewsTrustBar } from "@/components/ReviewsTrustBar";
 import { weeklyByExperience } from "@/lib/scheduleByExperience";
 
 const CriomedicinIceBathEnGrupo = () => {
@@ -86,6 +87,13 @@ const CriomedicinIceBathEnGrupo = () => {
           <p className="text-lg md:text-xl text-muted-foreground mt-4 max-w-3xl mx-auto">
             ¿Quieres venir en grupo al agua fría? Tenemos paquetes con descuento para ti y tu equipo.
           </p>
+        </section>
+
+        {/* Reseñas reales de Ice Bath */}
+        <section className="py-10 md:py-14 bg-neutral-light">
+          <div className="container mx-auto px-6">
+            <ReviewsTrustBar category="Ice Bath" title="Lo que dicen quienes ya entraron al hielo" />
+          </div>
         </section>
 
         {/* Step by Step Process */}

@@ -15,7 +15,7 @@ export const SocialProofSection = () => {
         {/* Hook métrico */}
         <div className="text-center mb-16">
           <h2 className="font-space-grotesk font-bold text-3xl md:text-4xl text-neutral-dark mb-4">
-            +2,000 personas han regulado su sistema nervioso con nosotros
+            +2.000 participantes guiados
           </h2>
         </div>
 
