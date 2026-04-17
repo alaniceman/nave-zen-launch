@@ -1,111 +1,40 @@
-## Plan: Reemplazar testimoniales celebrity por `ReviewsTrustBar`
 
-### Qué se reemplaza exactamente
 
-Dentro de `SocialProofSection.tsx` se elimina:
+## Plan
 
-- El array `testimonials` (Kika, Pancho, Dr. Neira, Nico).
-- El grid desktop (líneas 46-63).
-- El slider mobile (líneas 66-93).
+Three small changes, no redesign.
 
-Se mantiene intacto: título "+2,000 personas…", certificaciones (Wim Hof / Yoga Alliance); y las dos tarjetas de métricas (9.8/10 y 97%) cambiar por (5.0 ⭐⭐⭐⭐⭐ +200 reseñas)
+### 1. Orden aleatorio (recomendación: por sesión)
 
-En su lugar se monta `<ReviewsTrustBar />`.
+Opciones evaluadas:
+- **Cada carga de página**: muy fresco pero puede sentirse inestable si el usuario navega y vuelve.
+- **Una vez al día (seed por fecha)**: estable durante el día, gratis, sin servidor. Bueno pero todos ven el mismo orden.
+- **Por sesión del navegador (recomendado)**: shuffle al montar el componente con `useMemo`. Cero costo de servidor, cero peticiones, el orden se mantiene mientras el usuario navega entre secciones, y cada visitante ve un orden distinto. Es lo más liviano y lo que mejor cumple "que no se sienta repetitivo".
 
-### Archivos nuevos
+Implementación: Fisher–Yates dentro de un `useMemo(() => shuffle(reviews), [])` en `ReviewsTrustBar.tsx`. El array fuente queda intacto; el shuffle solo afecta el render. La navegación prev/next del modal usa el array ya barajado para mantener consistencia.
 
-**1. `src/data/reviews.ts**` — array tipado con las 34 reviews. Estructura:
+Si más adelante prefieres "una vez al día", se puede cambiar trivialmente usando `new Date().toDateString()` como seed.
 
-```ts
-export type Review = { id: number; text: string; author: string; category?: "Yoga" | "Método Wim Hof" | "Ice Bath" }
-```
+### 2. Eliminar subtítulo
 
-Autores: cuando la review menciona explícitamente al instructor (Maral, Amanda, Sol, Val, Mariela, Gastón) se atribuye a "Alumna/o de [instructor]"; si no, "Comunidad Nave". Categoría se infiere por contenido (yoga / agua fría / experiencia general).
+En `ReviewsTrustBar.tsx`, quitar el `<p>` con `+{reviews.length} reseñas reales de quienes ya vinieron`. Mantener el `<h3>` "Lo que dice la comunidad".
 
-**2. `src/components/ReviewsTrustBar.tsx**` — componente principal.
+### 3. Agregar 43 nuevas reseñas a `src/data/reviews.ts`
 
-### Diseño (alineado al sistema existente)
-
-Reutiliza tokens ya presentes en el proyecto:
-
-- Card: `bg-background rounded-[var(--radius)] shadow-light border border-primary/10` (mismo lenguaje que las cards de métricas).
-- Tipografía: `font-space-grotesk` para nombre, `font-inter` para texto e itálica para la cita (como los testimoniales actuales).
-- Color de acento para estrellas: `text-warm` (Cedar Wood #C49A6C ya en theme) — funciona como dorado sin introducir paleta nueva.
-- Container: `container mx-auto px-6` consistente con el resto de la sección.
-- Edge mask: gradient suave usando `from-neutral-light` (color de fondo de la sección) para sugerir scroll horizontal.
-
-### Estructura del componente
-
-```text
-┌─ section (sin py extra: vive dentro de SocialProofSection) ─┐
-│  Título corto: "Lo que dice la comunidad" + sub: "+34 reseñas reales" │
-│                                                              │
-│  ┌─ strip horizontal con scroll-snap ──────────────────────┐ │
-│  │ [card][card][card][card]…  →                            │ │
-│  └──────────────────────────────────────────────────────────┘ │
-│  Botones prev/next (desktop, esquinas) + dots opcionales    │
-└──────────────────────────────────────────────────────────────┘
-```
-
-Cada card (mobile ~85% viewport, desktop ~320px):
-
-- 5 estrellas (`lucide-react` Star, fill warm)
-- Texto truncado a ~4 líneas con `line-clamp-4`
-- Autor + categoría chip pequeña
-- "Ver más" sutil cuando el texto excede el clamp
-- Click/tap → abre dialog/sheet
-
-### Vista expandida
-
-Reusa primitivos ya instalados:
-
-- **Mobile (<768px)**: `Sheet` con `side="bottom"` (ya en `src/components/ui/sheet.tsx`).
-- **Desktop**: `Dialog` (ya en `src/components/ui/dialog.tsx`).
-
-Usa `useIsMobile()` (ya existe) para elegir.
-
-Dentro:
-
-- Estrellas, texto completo, autor, categoría.
-- Botones Prev/Next (lucide ChevronLeft/Right) con `aria-label`.
-- Soporte teclado: ArrowLeft/Right, Escape (Escape ya lo maneja Radix).
-- Swipe horizontal: handlers `onTouchStart/Move/End` con threshold de 50px.
-
-### Comportamiento del strip
-
-- `overflow-x-auto snap-x snap-mandatory scroll-smooth`.
-- Scrollbar oculta vía utilidad inline (`scrollbar-width: none` + `::-webkit-scrollbar { display:none }` en un `<style>` scoped o clase tailwind arbitraria).
-- Cada card: `snap-start shrink-0 w-[85%] sm:w-[340px]`.
-- Edge fade: dos divs absolutos con `bg-gradient-to-r from-neutral-light` en los bordes laterales (pointer-events-none).
-- Botones prev/next desktop-only (`hidden md:flex`) que hacen `scrollBy({ left: ±340, behavior: 'smooth' })`.
-- Sin auto-scroll (manual preferido, según el brief).
-
-### Accesibilidad
-
-- Strip: `role="region"` + `aria-label="Reseñas de la comunidad Nave Studio"`.
-- Cards: `<button>` semántico (no div con onClick) → focus visible nativo del theme.
-- Botones nav: `aria-label="Reseña anterior/siguiente"`.
-- Dialog/Sheet: `DialogTitle` y `DialogDescription` (sr-only si hace falta) para Radix a11y.
-
-### Edición en `SocialProofSection.tsx`
-
-```tsx
-import { ReviewsTrustBar } from "@/components/ReviewsTrustBar";
-// elimina array testimonials, grid desktop, slider mobile
-// inserta <ReviewsTrustBar /> en su lugar (después del título, antes de certificaciones)
-```
-
-Se mantiene `mb-16` de spacing entre bloques.
-
-### Resultado
-
-- Banda horizontal compacta, premium, mobile-first.
-- 34 reseñas reales reemplazan 4 testimoniales celebrity.
-- Cero estilos nuevos: solo tokens y componentes ya existentes.
-- Lightbox con swipe + teclado + botones.
+- Append al array existente (IDs 35–77) preservando wording, emojis y "…" donde el original termina truncado.
+- Mapear `category` del input al tipo existente:
+  - `"Método Wim Hof / Ice Bath"` → `"Ice Bath"` (el tipo actual no tiene WHM separado en la categoría, e Ice Bath ya cubre el flujo de inmersión + breathwork; se mantiene la taxonomía actual sin tocar el `type ReviewCategory`).
+  - `"General"` → `"Experiencia"`.
+  - `"Yoga + Ice Bath"` → `"Ice Bath"` (la card es chip único; Ice Bath es el diferenciador más fuerte).
+- Omitir reseñas sin texto (no hay ninguna vacía en el input, todas pasan).
+- No agregar campo `rating` (el modelo actual asume 5★ por defecto y los renderiza fijos).
+- No tocar el `type ReviewCategory` ni el componente más allá del shuffle + remoción del subtítulo.
 
 ### Archivos tocados
+- `src/components/ReviewsTrustBar.tsx` — añadir `useMemo` con shuffle, eliminar subtítulo.
+- `src/data/reviews.ts` — append de 43 entradas.
 
-- `src/components/SocialProofSection.tsx` (editar)
-- `src/components/ReviewsTrustBar.tsx` (nuevo)
-- `src/data/reviews.ts` (nuevo)
+### Lo que NO se toca
+- Layout, tarjetas, modal/sheet, swipe, estilos, spacing, motion, navegación.
+- `SocialProofSection.tsx`.
+
