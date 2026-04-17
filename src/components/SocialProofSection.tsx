@@ -51,19 +51,6 @@ export const SocialProofSection = () => {
             </div>
           </div>
         </div>
-          <div className="group relative text-center p-10 bg-gradient-to-br from-background via-background to-secondary/5 rounded-[var(--radius)] shadow-light border border-secondary/10 hover:shadow-medium hover:scale-105 transition-all duration-300 hover:border-secondary/20">
-            <div className="absolute inset-0 bg-gradient-to-br from-secondary/5 to-transparent rounded-[var(--radius)] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            <div className="relative space-y-3">
-              <div className="font-space-grotesk font-bold text-5xl bg-gradient-to-r from-secondary to-secondary/80 bg-clip-text text-transparent">
-                97%
-              </div>
-              <div className="w-16 h-1 bg-gradient-to-r from-secondary to-secondary/60 mx-auto rounded-full"></div>
-              <p className="font-inter text-neutral-mid font-medium">
-                de los miembros reporta menos estrés en 30 días
-              </p>
-            </div>
-          </div>
-        </div>
       </div>
     </section>;
 };
