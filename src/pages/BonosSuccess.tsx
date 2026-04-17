@@ -4,60 +4,52 @@ import { CheckCircle2, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Footer } from "@/components/Footer";
-import { supabase } from "@/integrations/supabase/client";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
-import { useFacebookConversionsAPI } from "@/hooks/useFacebookConversionsAPI";
 
 export default function BonosSuccess() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const orderId = searchParams.get("external_reference");
+  const orderId = searchParams.get("external_reference") || searchParams.get("order");
   const { trackEvent } = useFacebookPixel();
-  const { trackPurchase: trackServerPurchase } = useFacebookConversionsAPI();
   const [hasFiredPixel, setHasFiredPixel] = useState(false);
 
   useEffect(() => {
-    const fetchOrderAndTrack = async () => {
+    const fetchAndTrack = async () => {
       if (!orderId || hasFiredPixel) return;
 
-      const { data: order } = await supabase
-        .from("package_orders")
-        .select("final_price, status, buyer_email, buyer_name, buyer_phone, session_packages(name)")
-        .eq("id", orderId)
-        .maybeSingle();
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/get-order-status?orderId=${orderId}`,
+          {
+            headers: {
+              "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+            },
+          }
+        );
 
-      if (order?.status === "paid") {
-        const packageName = order.session_packages?.name || "Paquete de sesiones";
-        
-        const eventId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-        
-        // Client-side pixel
-        trackEvent('Purchase', {
-          value: order.final_price,
-          currency: "CLP",
-          content_name: packageName,
-          content_type: "product",
-          content_ids: [orderId],
-        }, eventId);
-        
-        // Server-side Conversions API
-        trackServerPurchase({
-          userEmail: order.buyer_email,
-          userName: order.buyer_name,
-          userPhone: order.buyer_phone || undefined,
-          value: order.final_price,
-          currency: "CLP",
-          contentName: packageName,
-          orderId: orderId,
-          eventId,
-        });
-        
-        setHasFiredPixel(true);
+        if (!response.ok) return;
+        const status = await response.json();
+
+        if (status?.status === "paid") {
+          // Server-side Conversions API is fired by mercadopago-webhook.
+          // Here we only fire the client-side browser pixel (no PII needed).
+          const eventId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+          trackEvent('Purchase', {
+            value: status.finalPrice || 0,
+            currency: "CLP",
+            content_name: status.packageName || "Paquete de sesiones",
+            content_type: "product",
+            content_ids: [orderId],
+          }, eventId);
+          setHasFiredPixel(true);
+        }
+      } catch (err) {
+        console.error("Error fetching order status:", err);
       }
     };
 
-    fetchOrderAndTrack();
-  }, [orderId, hasFiredPixel, trackEvent, trackServerPurchase]);
+    fetchAndTrack();
+  }, [orderId, hasFiredPixel, trackEvent]);
 
   return (
     <>

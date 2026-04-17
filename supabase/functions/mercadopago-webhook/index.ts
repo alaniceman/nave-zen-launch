@@ -374,6 +374,33 @@ async function handlePackageOrderPayment(
     "180841311274796302",
   ]);
 
+  // Fire Facebook Conversions API Purchase event server-side (non-blocking)
+  // PII stays server-side; client pages no longer need to read package_orders.
+  try {
+    const eventId = `srv-${orderId}-${Date.now()}`;
+    const siteUrl = (Deno.env.get("SITE_URL") || "https://studiolanave.com").replace(/\/$/, "");
+    const successPath = isGiftCard ? "/giftcards/success" : "/bonos/success";
+    await supabase.functions.invoke("facebook-conversions", {
+      body: {
+        event_name: "Purchase",
+        event_id: eventId,
+        event_source_url: `${siteUrl}${successPath}?order=${orderId}`,
+        user_email: order.buyer_email,
+        user_phone: order.buyer_phone || undefined,
+        user_name: order.buyer_name,
+        value: order.final_price,
+        currency: "CLP",
+        content_name: package_.name,
+        content_type: "product",
+        content_ids: [orderId],
+        order_id: orderId,
+      },
+    });
+    console.log("Facebook Conversions API Purchase event sent server-side for order:", orderId);
+  } catch (fbError) {
+    console.error("Failed to send Facebook Conversions API event (non-blocking):", fbError);
+  }
+
   return new Response(JSON.stringify({ status: "codes_generated", count: codes.length }), {
     status: 200,
     headers: { ...corsHeaders, "Content-Type": "application/json" },
