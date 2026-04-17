@@ -14,7 +14,7 @@ const LocationSection = () => {
                 <p className="font-inter text-muted-foreground mb-2">
                   Antares 259, Las Condes
                 </p>
-                <a href="https://maps.app.goo.gl/32Pp7nxM8XiohAna8" target="_blank" rel="noopener noreferrer" aria-label="Ver ubicación en Google Maps" className="text-accent underline hover:text-primary transition-colors duration-300 font-inter font-medium">
+                <a href="https://maps.app.goo.gl/RZmsnSLuxH8XkW2K6" target="_blank" rel="noopener noreferrer" aria-label="Ver ubicación en Google Maps" className="text-accent underline hover:text-primary transition-colors duration-300 font-inter font-medium">
                   Ver mapa →
                 </a>
               </div>

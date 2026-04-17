@@ -158,7 +158,7 @@ const ClaseDePrueba = () => {
                     <div>
                       <p className="text-neutral-mid mb-2">Antares 259, Las Condes, Santiago</p>
                       <a 
-                        href="https://maps.app.goo.gl/32Pp7nxM8XiohAna8" 
+                        href="https://maps.app.goo.gl/RZmsnSLuxH8XkW2K6" 
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="text-secondary underline hover:text-primary transition-colors duration-200"

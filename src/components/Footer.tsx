@@ -79,7 +79,7 @@ const Footer = () => {
           <div className="text-sm font-inter md:col-span-2 lg:col-span-1">
             <p className="mb-2">
               <a 
-                href="https://maps.app.goo.gl/32Pp7nxM8XiohAna8"
+                href="https://maps.app.goo.gl/RZmsnSLuxH8XkW2K6"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-white hover:text-white transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
