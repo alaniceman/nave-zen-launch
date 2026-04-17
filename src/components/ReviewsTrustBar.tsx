@@ -30,12 +30,29 @@ const CategoryChip = ({ category }: { category: Review["category"] }) => (
   </span>
 );
 
+const FILTERS: Array<{ label: string; value: "Todas" | Review["category"] }> = [
+  { label: "Todas", value: "Todas" },
+  { label: "Yoga", value: "Yoga" },
+  { label: "Ice Bath", value: "Ice Bath" },
+  { label: "Experiencia", value: "Experiencia" },
+];
+
 export const ReviewsTrustBar = () => {
-  const reviews = useMemo(() => shuffleArray(sourceReviews), []);
+  const allReviews = useMemo(() => shuffleArray(sourceReviews), []);
+  const [activeFilter, setActiveFilter] = useState<"Todas" | Review["category"]>("Todas");
+  const reviews = useMemo(
+    () => (activeFilter === "Todas" ? allReviews : allReviews.filter((r) => r.category === activeFilter)),
+    [activeFilter, allReviews]
+  );
   const scrollRef = useRef<HTMLDivElement>(null);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const isMobile = useIsMobile();
   const touchStartX = useRef<number | null>(null);
+
+  // Reset scroll position when filter changes
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ left: 0, behavior: "smooth" });
+  }, [activeFilter]);
 
   const scrollBy = (dir: "prev" | "next") => {
     if (!scrollRef.current) return;
@@ -44,7 +61,7 @@ export const ReviewsTrustBar = () => {
 
   const navigate = (dir: "prev" | "next") => {
     setOpenIndex((current) => {
-      if (current === null) return current;
+      if (current === null || reviews.length === 0) return current;
       const next = dir === "next" ? (current + 1) % reviews.length : (current - 1 + reviews.length) % reviews.length;
       return next;
     });
@@ -114,10 +131,31 @@ export const ReviewsTrustBar = () => {
     <section className="mb-16" aria-label="Reseñas de la comunidad Nave Studio">
       <style>{`.reviews-strip::-webkit-scrollbar{display:none}.reviews-strip{scrollbar-width:none}`}</style>
 
-      <div className="text-center mb-8">
+      <div className="text-center mb-6">
         <h3 className="font-space-grotesk font-bold text-2xl md:text-3xl text-neutral-dark">
           Lo que dice la comunidad
         </h3>
+      </div>
+
+      <div className="flex flex-wrap items-center justify-center gap-2 mb-6 px-4" role="tablist" aria-label="Filtrar reseñas por categoría">
+        {FILTERS.map((f) => {
+          const isActive = activeFilter === f.value;
+          return (
+            <button
+              key={f.value}
+              role="tab"
+              aria-selected={isActive}
+              onClick={() => setActiveFilter(f.value)}
+              className={`px-4 py-1.5 rounded-full text-sm font-inter font-medium transition-all duration-200 border focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
+                isActive
+                  ? "bg-primary text-primary-foreground border-primary shadow-light"
+                  : "bg-background text-neutral-dark border-primary/15 hover:border-primary/30 hover:bg-primary/5"
+              }`}
+            >
+              {f.label}
+            </button>
+          );
+        })}
       </div>
 
       <div className="relative">
