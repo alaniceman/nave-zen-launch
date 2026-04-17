@@ -9,8 +9,9 @@ import { Link, useNavigate } from "react-router-dom";
    AccordionItem,
    AccordionTrigger,
  } from "@/components/ui/accordion";
- import { Footer } from "@/components/Footer";
- import { CoachesSection } from "@/components/CoachesSection";
+import { Footer } from "@/components/Footer";
+import { CoachesSection } from "@/components/CoachesSection";
+import { ReviewsTrustBar } from "@/components/ReviewsTrustBar";
  import { GiftCardSection } from "@/components/GiftCardSection";
  import { StickyMobileCTA } from "@/components/StickyMobileCTA";
  import { supabase } from "@/integrations/supabase/client";
@@ -246,8 +247,15 @@ import { Link, useNavigate } from "react-router-dom";
                Ver horarios
              </Button>
            </div>
-         </div>
-       </section>
+           </div>
+         </section>
+
+      {/* Reseñas reales de Ice Bath */}
+      <section className="py-12 md:py-16 bg-neutral-light">
+        <div className="container mx-auto px-6">
+          <ReviewsTrustBar category="Ice Bath" title="Lo que dicen quienes ya entraron al hielo" />
+        </div>
+      </section>
 
       {/* Promo Marzo Reset — auto-hide after March 31 2026 */}
       {new Date() <= new Date('2026-04-01T02:59:59Z') && (

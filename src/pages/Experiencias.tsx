@@ -114,9 +114,8 @@ const Experiencias = () => {
   ]
 
   const stats = [
-    { number: "9.9/10", caption: "satisfacción promedio" },
-    { number: "97%", caption: "reportaron menos estrés" },
-    { number: "+2,000", caption: "participantes guiados" }
+    { number: "5.0", caption: "+200 reseñas reales" },
+    { number: "+2.000", caption: "participantes guiados" }
   ]
 
   return (
@@ -163,6 +162,13 @@ const Experiencias = () => {
           >
             <Link to="/planes-precios">Ver planes y precios</Link>
           </Button>
+        </div>
+      </section>
+
+      {/* Reseñas reales */}
+      <section className="py-12 md:py-16 bg-neutral-light">
+        <div className="container mx-auto px-6">
+          <ReviewsTrustBar />
         </div>
       </section>
 
