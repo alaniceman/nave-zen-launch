@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Mail, Eye } from 'lucide-react';
 
-const MAPS_LINK = "https://maps.app.goo.gl/32Pp7nxM8XiohAna8";
+const MAPS_LINK = "https://maps.app.goo.gl/RZmsnSLuxH8XkW2K6";
 const NAVE_WHATSAPP = "https://wa.me/56946120426";
 
 const SAMPLE = {
