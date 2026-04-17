@@ -31,6 +31,7 @@ const CategoryChip = ({ category }: { category: Review["category"] }) => (
 );
 
 export const ReviewsTrustBar = () => {
+  const reviews = useMemo(() => shuffleArray(sourceReviews), []);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const isMobile = useIsMobile();
