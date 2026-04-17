@@ -8,6 +8,7 @@ import { TrialMiniBar } from "@/components/TrialMiniBar"
 import { useTrialModal } from "@/hooks/useTrialModal"
 import { useFacebookPixel } from "@/hooks/useFacebookPixel"
 import { StickyMobileCTA } from "@/components/StickyMobileCTA"
+import { ReviewsTrustBar } from "@/components/ReviewsTrustBar"
 import { Snowflake, Wind, Dumbbell, Brain } from "lucide-react"
 
 const Experiencias = () => {
