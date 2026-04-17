@@ -1,31 +1,8 @@
-import kikaImage from "@/assets/kika-silva.jpg";
-import panchoImage from "@/assets/pancho-saavedra.jpg";
-import drNeiraImage from "@/assets/dr-neira.jpg";
-import nicoImage from "@/assets/nico-jarry.jpg";
+import { Star } from "lucide-react";
+import { ReviewsTrustBar } from "@/components/ReviewsTrustBar";
 const wimHofLogo = "/lovable-uploads/4237a4a8-4b67-4133-9d1e-5a134df22d8c.png";
 const yogaAllianceLogo = "/lovable-uploads/cdad4a3b-fb0e-4d9c-8089-e085dbc1c718.png";
 export const SocialProofSection = () => {
-  const testimonials = [{
-    name: "Kika Silva",
-    role: "Influencer de Wellness",
-    quote: "Nave me recordó lo importante que es escuchar a mi cuerpo.",
-    image: "/lovable-uploads/36038e1c-8f1a-4986-b800-057928669d24.png"
-  }, {
-    name: "Pancho Saavedra",
-    role: "Conductor de TV",
-    quote: "Creí que el hielo sería imposible; ahora lo recomiendo.",
-    image: "/lovable-uploads/c85720fb-0980-440e-b669-5f9d0dab8edf.png"
-  }, {
-    name: "Dr. Rodolfo Neira",
-    role: "Médico Metabólico - Cancer",
-    quote: "El frío y el ejercicio funcional rejuvenecen a las mitocondrias, lo recomiendo para tu salud",
-    image: "/lovable-uploads/cdd1290b-d682-42ab-8225-001d1c4e4306.png"
-  }, {
-    name: "Nico Jarry",
-    role: "Tenista ATP",
-    quote: "El frío acelera mi recuperación entre torneos.",
-    image: "/lovable-uploads/ebd077e5-b969-4bfd-9fdc-2c4b51948b9b.png"
-  }];
   const certifications = [{
     name: "Wim Hof Instructor",
     logo: wimHofLogo
