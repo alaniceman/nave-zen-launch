@@ -91,7 +91,8 @@ export default function GiftCardsSuccess() {
   // edge function, so the client no longer needs to read PII from package_orders.
   useEffect(() => {
     if (orderStatus?.statusType === "success" && !hasFiredPixel && orderId) {
-      const eventId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      // Deterministic event_id shared with server-side CAPI for Meta deduplication
+      const eventId = `purchase-${orderId}`;
       trackEvent('Purchase', {
         value: orderStatus.finalPrice || 0,
         currency: "CLP",

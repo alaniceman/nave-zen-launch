@@ -33,7 +33,8 @@ export default function BonosSuccess() {
         if (status?.status === "paid") {
           // Server-side Conversions API is fired by mercadopago-webhook.
           // Here we only fire the client-side browser pixel (no PII needed).
-          const eventId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+          // Deterministic event_id shared with server-side CAPI for Meta deduplication
+          const eventId = `purchase-${orderId}`;
           trackEvent('Purchase', {
             value: status.finalPrice || 0,
             currency: "CLP",

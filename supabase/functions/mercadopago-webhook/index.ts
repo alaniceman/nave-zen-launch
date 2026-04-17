@@ -377,7 +377,8 @@ async function handlePackageOrderPayment(
   // Fire Facebook Conversions API Purchase event server-side (non-blocking)
   // PII stays server-side; client pages no longer need to read package_orders.
   try {
-    const eventId = `srv-${orderId}-${Date.now()}`;
+    // Deterministic event_id shared with client-side pixel for Meta deduplication
+    const eventId = `purchase-${orderId}`;
     const siteUrl = (Deno.env.get("SITE_URL") || "https://studiolanave.com").replace(/\/$/, "");
     const successPath = isGiftCard ? "/giftcards/success" : "/bonos/success";
     await supabase.functions.invoke("facebook-conversions", {
