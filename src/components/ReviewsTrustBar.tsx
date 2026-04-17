@@ -1,9 +1,18 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Star, ChevronLeft, ChevronRight } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Sheet, SheetContent, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { reviews, type Review } from "@/data/reviews";
+import { reviews as sourceReviews, type Review } from "@/data/reviews";
+
+const shuffleArray = <T,>(arr: T[]): T[] => {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+};
 
 const TRUNCATE_LENGTH = 140;
 
@@ -22,6 +31,7 @@ const CategoryChip = ({ category }: { category: Review["category"] }) => (
 );
 
 export const ReviewsTrustBar = () => {
+  const reviews = useMemo(() => shuffleArray(sourceReviews), []);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const isMobile = useIsMobile();
@@ -105,12 +115,9 @@ export const ReviewsTrustBar = () => {
       <style>{`.reviews-strip::-webkit-scrollbar{display:none}.reviews-strip{scrollbar-width:none}`}</style>
 
       <div className="text-center mb-8">
-        <h3 className="font-space-grotesk font-bold text-2xl md:text-3xl text-neutral-dark mb-2">
+        <h3 className="font-space-grotesk font-bold text-2xl md:text-3xl text-neutral-dark">
           Lo que dice la comunidad
         </h3>
-        <p className="font-inter text-base text-neutral-mid">
-          +{reviews.length} reseñas reales de quienes ya vinieron
-        </p>
       </div>
 
       <div className="relative">
