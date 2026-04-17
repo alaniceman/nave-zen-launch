@@ -30,12 +30,29 @@ const CategoryChip = ({ category }: { category: Review["category"] }) => (
   </span>
 );
 
+const FILTERS: Array<{ label: string; value: "Todas" | Review["category"] }> = [
+  { label: "Todas", value: "Todas" },
+  { label: "Yoga", value: "Yoga" },
+  { label: "Ice Bath", value: "Ice Bath" },
+  { label: "Experiencia", value: "Experiencia" },
+];
+
 export const ReviewsTrustBar = () => {
-  const reviews = useMemo(() => shuffleArray(sourceReviews), []);
+  const allReviews = useMemo(() => shuffleArray(sourceReviews), []);
+  const [activeFilter, setActiveFilter] = useState<"Todas" | Review["category"]>("Todas");
+  const reviews = useMemo(
+    () => (activeFilter === "Todas" ? allReviews : allReviews.filter((r) => r.category === activeFilter)),
+    [activeFilter, allReviews]
+  );
   const scrollRef = useRef<HTMLDivElement>(null);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const isMobile = useIsMobile();
   const touchStartX = useRef<number | null>(null);
+
+  // Reset scroll position when filter changes
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ left: 0, behavior: "smooth" });
+  }, [activeFilter]);
 
   const scrollBy = (dir: "prev" | "next") => {
     if (!scrollRef.current) return;
@@ -44,7 +61,7 @@ export const ReviewsTrustBar = () => {
 
   const navigate = (dir: "prev" | "next") => {
     setOpenIndex((current) => {
-      if (current === null) return current;
+      if (current === null || reviews.length === 0) return current;
       const next = dir === "next" ? (current + 1) % reviews.length : (current - 1 + reviews.length) % reviews.length;
       return next;
     });
