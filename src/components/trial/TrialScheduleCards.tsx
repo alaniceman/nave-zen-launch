@@ -57,12 +57,20 @@ export default function TrialScheduleCards({ onSelectClass }: TrialScheduleCards
   const currentDayClasses = scheduleData[getActiveDay()] || [];
   const currentDayName = dayNames[getActiveDay()] || "";
 
+  // Map experience slug -> color_tags from DB (source of truth)
+  const expSlugToColorTags: Record<string, string[]> = {
+    "agua-fria": ["wim-hof", "breathwork"],
+    "yoga": ["yoga"],
+  };
+
   const experienceWeekData = viewMode === "exp" ? (() => {
-    const exp = EXPERIENCE_CATALOG.find(e => e.slug === expSlug);
-    if (!exp) return [];
+    const allowedTags = expSlugToColorTags[expSlug];
+    if (!allowedTags) return [];
     return DAY_ORDER.map((day) => {
       const daySchedule = scheduleData[day] || [];
-      const items = daySchedule.filter(item => exp.match(item as any)).sort((a, b) => a.time.localeCompare(b.time));
+      const items = daySchedule
+        .filter(item => allowedTags.includes(item.color_tag))
+        .sort((a, b) => a.time.localeCompare(b.time));
       return { day, dayName: dayNames[day as keyof typeof dayNames], items };
     }).filter(block => block.items.length > 0);
   })() : [];
