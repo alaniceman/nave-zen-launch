@@ -280,12 +280,12 @@ const BautizoHielo = () => {
                 <Check className="w-4 h-4" /> Coach certificado
               </div>
               <div className="flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-full">
-                <Check className="w-4 h-4" /> 1 por persona
+                <Check className="w-4 h-4" /> Disponible como Gift Card
               </div>
             </div>
             <Link to={ctaHref}>
               <Button size="lg" variant="secondary" className="text-base">
-                Reservar mi bautizo · $15.000
+                Comprar mi bautizo · $15.000
                 <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
             </Link>
