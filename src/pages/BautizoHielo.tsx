@@ -130,13 +130,13 @@ const BautizoHielo = () => {
             </h2>
             <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-6">
               Lo sabemos. Por eso creamos el <strong className="text-foreground">Bautizo de Hielo</strong>:
-              una sesión introductoria pensada para que cruces la línea por primera vez,
-              sin presión, sin perfomance y con alguien que te guía paso a paso.
+              una sesión guiada y accesible, sin presión y sin perfomance,
+              donde alguien te acompaña paso a paso.
             </p>
             <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
               Vas a respirar, vas a entrar al agua, vas a salir.
               Y vas a entender —en tu propio cuerpo— por qué esto se volvió la práctica
-              favorita de quienes ya están adentro.
+              favorita de quienes ya están adentro. <strong className="text-foreground">¿Conoces a alguien que lo necesita? Regálaselo.</strong>
             </p>
           </div>
         </section>
