@@ -66,10 +66,10 @@ const BautizoHielo = () => {
 
           <div className="relative z-10 container mx-auto px-4 py-16 text-center text-primary-foreground max-w-4xl">
             <Badge className="bg-white/20 text-white border-white/30 backdrop-blur px-4 py-1.5 mb-6">
-              🧊 Solo para tu primera sesión
+              🧊 Vívelo o regálalo 🎁
             </Badge>
             <h1 className="font-space text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-              Tu primera vez al hielo,<br />sin excusas
+              Bautizo de Hielo<br />sin excusas
             </h1>
             <p className="font-inter text-lg md:text-2xl mb-4 opacity-95">
               Una sesión guiada de Criomedicina por
@@ -83,7 +83,7 @@ const BautizoHielo = () => {
             </div>
             <p className="text-base md:text-lg max-w-2xl mx-auto mb-10 opacity-90">
               Breathwork + 2 minutos en agua a <strong>3°C</strong>, guiado por un coach certificado.
-              Pensado para quienes nunca han hecho una sesión con nosotros.
+              Vívelo tú o <strong>regálalo</strong> a quien necesita el empujón.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
