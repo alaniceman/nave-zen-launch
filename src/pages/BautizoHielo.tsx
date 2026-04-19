@@ -89,7 +89,7 @@ const BautizoHielo = () => {
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link to={ctaHref}>
                 <Button size="lg" variant="secondary" className="w-full sm:w-auto text-base">
-                  Reservar mi bautizo
+                  Comprar mi bautizo
                   <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
               </Link>
