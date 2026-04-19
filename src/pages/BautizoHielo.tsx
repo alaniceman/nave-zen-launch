@@ -43,16 +43,16 @@ const BautizoHielo = () => {
   return (
     <>
       <Helmet>
-        <title>Bautizo de Hielo · Tu primera sesión por $15.000 | Nave Studio</title>
+        <title>Bautizo de Hielo · Sesión guiada por $15.000 | Nave Studio</title>
         <meta
           name="description"
-          content="Tu primera inmersión guiada al hielo en Nave Studio por $15.000 (antes $30.000). Breathwork + 2 minutos en agua a 3°C con coach certificado. Las Condes."
+          content="Una inmersión guiada al hielo en Nave Studio por $15.000 (antes $30.000). Breathwork + 2 minutos en agua a 3°C con coach certificado. Vívelo o regálalo. Las Condes."
         />
         <link rel="canonical" href="https://studiolanave.com/bautizo-hielo" />
         <meta property="og:title" content="Bautizo de Hielo · $15.000 | Nave Studio" />
         <meta
           property="og:description"
-          content="Tu primera sesión de Criomedicina (Método Wim Hof) por $15.000. 50% OFF para primera vez."
+          content="Una sesión guiada de Criomedicina (Método Wim Hof) por $15.000. Vívelo tú o regálalo como Gift Card."
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://studiolanave.com/bautizo-hielo" />
