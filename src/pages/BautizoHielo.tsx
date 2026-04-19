@@ -43,16 +43,16 @@ const BautizoHielo = () => {
   return (
     <>
       <Helmet>
-        <title>Bautizo de Hielo · Tu primera sesión por $15.000 | Nave Studio</title>
+        <title>Bautizo de Hielo · Sesión guiada por $15.000 | Nave Studio</title>
         <meta
           name="description"
-          content="Tu primera inmersión guiada al hielo en Nave Studio por $15.000 (antes $30.000). Breathwork + 2 minutos en agua a 3°C con coach certificado. Las Condes."
+          content="Una inmersión guiada al hielo en Nave Studio por $15.000 (antes $30.000). Breathwork + 2 minutos en agua a 3°C con coach certificado. Vívelo o regálalo. Las Condes."
         />
         <link rel="canonical" href="https://studiolanave.com/bautizo-hielo" />
         <meta property="og:title" content="Bautizo de Hielo · $15.000 | Nave Studio" />
         <meta
           property="og:description"
-          content="Tu primera sesión de Criomedicina (Método Wim Hof) por $15.000. 50% OFF para primera vez."
+          content="Una sesión guiada de Criomedicina (Método Wim Hof) por $15.000. Vívelo tú o regálalo como Gift Card."
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://studiolanave.com/bautizo-hielo" />
@@ -66,10 +66,10 @@ const BautizoHielo = () => {
 
           <div className="relative z-10 container mx-auto px-4 py-16 text-center text-primary-foreground max-w-4xl">
             <Badge className="bg-white/20 text-white border-white/30 backdrop-blur px-4 py-1.5 mb-6">
-              🧊 Solo para tu primera sesión
+              🧊 Vívelo o regálalo 🎁
             </Badge>
             <h1 className="font-space text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-              Tu primera vez al hielo,<br />sin excusas
+              Bautizo de Hielo<br />sin excusas
             </h1>
             <p className="font-inter text-lg md:text-2xl mb-4 opacity-95">
               Una sesión guiada de Criomedicina por
@@ -83,13 +83,13 @@ const BautizoHielo = () => {
             </div>
             <p className="text-base md:text-lg max-w-2xl mx-auto mb-10 opacity-90">
               Breathwork + 2 minutos en agua a <strong>3°C</strong>, guiado por un coach certificado.
-              Pensado para quienes nunca han hecho una sesión con nosotros.
+              Vívelo tú o <strong>regálalo</strong> a quien necesita el empujón.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link to={ctaHref}>
                 <Button size="lg" variant="secondary" className="w-full sm:w-auto text-base">
-                  Reservar mi bautizo
+                  Comprar mi bautizo
                   <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
               </Link>
@@ -130,13 +130,13 @@ const BautizoHielo = () => {
             </h2>
             <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-6">
               Lo sabemos. Por eso creamos el <strong className="text-foreground">Bautizo de Hielo</strong>:
-              una sesión introductoria pensada para que cruces la línea por primera vez,
-              sin presión, sin perfomance y con alguien que te guía paso a paso.
+              una sesión guiada y accesible, sin presión y sin perfomance,
+              donde alguien te acompaña paso a paso.
             </p>
             <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
               Vas a respirar, vas a entrar al agua, vas a salir.
               Y vas a entender —en tu propio cuerpo— por qué esto se volvió la práctica
-              favorita de quienes ya están adentro.
+              favorita de quienes ya están adentro. <strong className="text-foreground">¿Conoces a alguien que lo necesita? Regálaselo.</strong>
             </p>
           </div>
         </section>
@@ -280,12 +280,12 @@ const BautizoHielo = () => {
                 <Check className="w-4 h-4" /> Coach certificado
               </div>
               <div className="flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-full">
-                <Check className="w-4 h-4" /> 1 por persona
+                <Check className="w-4 h-4" /> Disponible como Gift Card
               </div>
             </div>
             <Link to={ctaHref}>
               <Button size="lg" variant="secondary" className="text-base">
-                Reservar mi bautizo · $15.000
+                Comprar mi bautizo · $15.000
                 <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
             </Link>

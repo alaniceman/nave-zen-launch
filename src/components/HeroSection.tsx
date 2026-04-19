@@ -100,14 +100,14 @@ const HeroSlideBautizo = () => {
           {/* Badge */}
           <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md text-white px-5 py-2.5 rounded-full text-sm md:text-base font-semibold border border-white/25 shadow-lg">
             <span className="text-base">🧊</span>
-            Tu primera vez al hielo
+            Bautizo de Hielo · también para regalar 🎁
           </div>
 
           {/* Heading */}
           <h1 className="font-space-grotesk font-bold text-3xl md:text-6xl lg:text-7xl leading-[1.1]">
             Bautizo de Hielo
             <span className="block text-xl md:text-3xl lg:text-4xl font-medium text-white/90 mt-3">
-              Tu primera sesión guiada de Criomedicina
+              Una sesión guiada de Criomedicina
             </span>
           </h1>
 
@@ -125,7 +125,7 @@ const HeroSlideBautizo = () => {
           {/* Description */}
           <p className="font-inter text-base md:text-lg text-white/85 max-w-xl mx-auto">
             Breathwork + 2 minutos en agua a <strong>3°C</strong>, guiado por un coach certificado.
-            Solo para tu primera sesión.
+            Vívelo tú o <strong>regálalo</strong> a quien necesita el empujón.
           </p>
 
           {/* CTA */}
@@ -139,11 +139,11 @@ const HeroSlideBautizo = () => {
               className="w-full md:w-auto min-w-[320px] bg-white text-primary hover:bg-white/90 font-bold text-lg py-6 px-10 rounded-xl shadow-xl hover:shadow-2xl transition-all transform hover:scale-105"
               size="xl"
             >
-              Reservar mi bautizo →
+              Reservar o regalar →
             </Button>
 
             <p className="font-inter text-xs text-white/70">
-              60 min · coach certificado · 1 por persona
+              60 min · coach certificado · disponible como Gift Card
             </p>
           </div>
         </div>

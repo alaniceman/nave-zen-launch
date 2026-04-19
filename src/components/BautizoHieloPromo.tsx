@@ -11,14 +11,14 @@ const BautizoHieloPromo = () => {
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div className="space-y-3">
               <Badge className="bg-primary text-primary-foreground px-3 py-1">
-                🧊 Nuevo · Promo bautizo
+                🧊 Promo bautizo · también para regalar 🎁
               </Badge>
               <h2 className="font-space text-2xl md:text-3xl font-bold text-primary">
-                Tu primera vez al hielo · $15.000
+                Bautizo de Hielo · $15.000
               </h2>
               <p className="text-muted-foreground text-sm md:text-base max-w-md">
                 Antes <span className="line-through">$30.000</span>. Una sesión guiada de Criomedicina
-                (Método Wim Hof) para que vivas tu primera inmersión sin excusas.
+                (Método Wim Hof). Vívela tú o regálala como Gift Card.
               </p>
 
               <div className="flex flex-wrap gap-4 text-sm text-muted-foreground pt-2">
@@ -40,7 +40,7 @@ const BautizoHieloPromo = () => {
             <div className="flex-shrink-0">
               <Link to="/bautizo-hielo">
                 <Button size="lg" className="w-full md:w-auto">
-                  Reservar mi bautizo
+                  Comprar o regalar
                   <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
               </Link>
