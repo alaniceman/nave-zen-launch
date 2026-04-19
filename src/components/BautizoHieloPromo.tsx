@@ -40,7 +40,7 @@ const BautizoHieloPromo = () => {
             <div className="flex-shrink-0">
               <Link to="/bautizo-hielo">
                 <Button size="lg" className="w-full md:w-auto">
-                  Reservar mi bautizo
+                  Comprar o regalar
                   <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
               </Link>
