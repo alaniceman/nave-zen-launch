@@ -80,6 +80,19 @@ export default function Bonos() {
     loadPackages();
     loadServices();
   }, []);
+
+  // Preselect package from URL query param (?package=ID)
+  useEffect(() => {
+    if (packages.length === 0) return;
+    const params = new URLSearchParams(window.location.search);
+    const pkgId = params.get("package");
+    if (pkgId && packages.some(p => p.id === pkgId)) {
+      setSelectedPackage(pkgId);
+      setTimeout(() => {
+        document.getElementById("purchase-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 300);
+    }
+  }, [packages]);
   const loadPackages = async () => {
     try {
       const {
