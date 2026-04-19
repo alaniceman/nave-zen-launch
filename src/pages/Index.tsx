@@ -11,6 +11,7 @@ import { TrialMiniBar } from "@/components/TrialMiniBar"
 import { TrialYogaSection } from "@/components/TrialYogaSection"
 import { GiftCardSection } from "@/components/GiftCardSection"
 import { StickyMobileCTA } from "@/components/StickyMobileCTA"
+import { BautizoHieloPromo } from "@/components/BautizoHieloPromo"
 
 const Index = () => {
   return (
@@ -29,6 +30,7 @@ const Index = () => {
       <HeroSection />
       <TrialMiniBar />
       <SocialProofSection />
+      <BautizoHieloPromo />
       <MethodologiesSection />
       <TrialYogaSection />
       <PricingSection />

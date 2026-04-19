@@ -22,12 +22,22 @@ Válido 6 meses, compartible. Solo hasta el 31 de marzo. Info en [Bonos](https:/
   },
   {
     id: "planes-anuales-2026",
-    expiresAt: "2026-04-01",
-    content: `### Planes Anuales 2026 (oferta de marzo)
+    expiresAt: "2026-05-01",
+    content: `### Planes Anuales 2026 (oferta vigente)
 - Compromiso anual con hasta 2 meses gratis
 - Entradas Icefest incluidas
 - 12 cuotas sin interés
 Info en: [Ver planes anuales](https://studiolanave.com/anual)`,
+  },
+  {
+    id: "bautizo-hielo",
+    expiresAt: "2026-06-01",
+    content: `### 🧊 Promo Bautizo de Hielo (¡NUEVO!)
+- **Tu primera sesión de Criomedicina por $15.000** (antes $30.000, 50% OFF)
+- 1 sesión guiada de Método Wim Hof: Breathwork + 2 min en agua a 3°C
+- Ideal para quienes nunca han hecho una sesión con nosotros
+- Válido 60 días, también disponible como Gift Card para regalar
+Info y compra en: [Bautizo de Hielo](https://studiolanave.com/bautizo-hielo)`,
   },
 ];
 
