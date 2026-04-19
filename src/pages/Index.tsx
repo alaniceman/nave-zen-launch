@@ -30,7 +30,6 @@ const Index = () => {
       <HeroSection />
       <TrialMiniBar />
       <SocialProofSection />
-      <BautizoHieloPromo />
       <MethodologiesSection />
       <TrialYogaSection />
       <PricingSection />
