@@ -100,14 +100,14 @@ const HeroSlideBautizo = () => {
           {/* Badge */}
           <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md text-white px-5 py-2.5 rounded-full text-sm md:text-base font-semibold border border-white/25 shadow-lg">
             <span className="text-base">🧊</span>
-            Tu primera vez al hielo
+            Bautizo de Hielo · también para regalar 🎁
           </div>
 
           {/* Heading */}
           <h1 className="font-space-grotesk font-bold text-3xl md:text-6xl lg:text-7xl leading-[1.1]">
             Bautizo de Hielo
             <span className="block text-xl md:text-3xl lg:text-4xl font-medium text-white/90 mt-3">
-              Tu primera sesión guiada de Criomedicina
+              Una sesión guiada de Criomedicina
             </span>
           </h1>
 
