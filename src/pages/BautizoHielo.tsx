@@ -82,8 +82,8 @@ const BautizoHielo = () => {
               </div>
             </div>
             <p className="text-base md:text-lg max-w-2xl mx-auto mb-10 opacity-90">
-              Breathwork + 2 minutos en agua a <strong>3°C</strong>, guiado por un coach certificado.
-              Vívelo tú o <strong>regálalo</strong> a quien necesita el empujón.
+              Breathwork + inmersión en agua a <strong>3°C</strong>, guiado por un coach certificado.
+              Vívelo tú, ven <strong>con alguien</strong> o <strong>regálalo</strong> a quien necesita el empujón.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
