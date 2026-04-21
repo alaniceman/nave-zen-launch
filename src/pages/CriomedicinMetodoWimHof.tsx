@@ -4,6 +4,7 @@ import { CoachesSection } from "@/components/CoachesSection";
 import { Footer } from "@/components/Footer";
 import { GiftCardSection } from "@/components/GiftCardSection";
 import { ReviewsTrustBar } from "@/components/ReviewsTrustBar";
+import { BautizoHieloPromo } from "@/components/BautizoHieloPromo";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
@@ -195,7 +196,9 @@ const CriomedicinMetodoWimHof = () => {
           </div>
         </section>
 
-        {/* Reseñas reales de Ice Bath */}
+        {/* Promo Bautizo de Hielo */}
+        <BautizoHieloPromo />
+
         <section className="py-12 md:py-16 bg-neutral-light">
           <div className="container mx-auto px-6">
             <ReviewsTrustBar category="Ice Bath" title="Lo que dicen quienes ya entraron al hielo" />
