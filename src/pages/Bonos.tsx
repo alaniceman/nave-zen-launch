@@ -252,20 +252,17 @@ export default function Bonos() {
             </p>
           </div>
 
-          {/* Gift Card Promo */}
-          <div className="mb-12 p-6 md:p-8 bg-[#E9F6F9] rounded-2xl text-center max-w-2xl mx-auto">
-            <div className="text-4xl mb-4">🎁❄️</div>
-            <h2 className="text-2xl md:text-3xl font-bold text-primary mb-3">
-              ¿Quieres regalar sesiones?
-            </h2>
-            <p className="text-muted-foreground mb-6">
-              Sorprende a alguien especial con una Gift Card. Recibirá un código para agendar cuando quiera.
-            </p>
+          {/* Gift Card Promo - minimal */}
+          <div className="mb-10 max-w-2xl mx-auto">
             <Link
               to="/giftcards"
-              className="inline-flex items-center justify-center gap-2 bg-accent hover:bg-primary text-white font-semibold px-6 py-3 rounded-xl transition-all duration-300 hover:scale-105"
+              className="flex items-center justify-between gap-3 px-4 py-3 bg-[#E9F6F9] hover:bg-[#dcf0f4] rounded-lg text-sm transition-colors"
             >
-              🧊 Comprar Gift Card
+              <span className="flex items-center gap-2 text-foreground">
+                <span>🎁</span>
+                <span>¿Quieres regalar sesiones? Compra una Gift Card</span>
+              </span>
+              <span className="text-primary font-medium whitespace-nowrap">Ver →</span>
             </Link>
           </div>
 
