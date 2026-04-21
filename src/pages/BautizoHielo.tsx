@@ -22,6 +22,38 @@ import {
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
 
 const BAUTIZO_PACKAGE_ID = "2c2b4d9e-2a03-4fdf-a973-ab5529458eb7";
+const BAUTIZO_DUO_ID = "8620e740-890f-42c1-9c2a-77b74ece6e6a";
+const BAUTIZO_TRIO_ID = "6f69c715-ed4d-410e-a6b0-8e4634667d98";
+
+const TIERS = [
+  {
+    id: "2c2b4d9e-2a03-4fdf-a973-ab5529458eb7",
+    name: "Solo",
+    subtitle: "Vívelo tú",
+    price: 15000,
+    perPerson: 15000,
+    people: 1,
+    badge: null as string | null,
+  },
+  {
+    id: "8620e740-890f-42c1-9c2a-77b74ece6e6a",
+    name: "Dúo",
+    subtitle: "Ven con alguien",
+    price: 30000,
+    perPerson: 15000,
+    people: 2,
+    badge: "Más elegido",
+  },
+  {
+    id: "6f69c715-ed4d-410e-a6b0-8e4634667d98",
+    name: "Trío",
+    subtitle: "Ven con tus amigos",
+    price: 45000,
+    perPerson: 15000,
+    people: 3,
+    badge: null as string | null,
+  },
+];
 
 const BautizoHielo = () => {
   const { trackEvent } = useFacebookPixel();
