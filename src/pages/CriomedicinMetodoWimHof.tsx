@@ -196,7 +196,9 @@ const CriomedicinMetodoWimHof = () => {
           </div>
         </section>
 
-        {/* Reseñas reales de Ice Bath */}
+        {/* Promo Bautizo de Hielo */}
+        <BautizoHieloPromo />
+
         <section className="py-12 md:py-16 bg-neutral-light">
           <div className="container mx-auto px-6">
             <ReviewsTrustBar category="Ice Bath" title="Lo que dicen quienes ya entraron al hielo" />
