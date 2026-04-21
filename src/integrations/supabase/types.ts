@@ -1022,6 +1022,7 @@ export type Database = {
           sessions_quantity: number
           show_in_criomedicina: boolean | null
           show_in_upsell_modal: boolean | null
+          sort_order: number
           updated_at: string | null
           validity_days: number
         }
@@ -1037,6 +1038,7 @@ export type Database = {
           sessions_quantity: number
           show_in_criomedicina?: boolean | null
           show_in_upsell_modal?: boolean | null
+          sort_order?: number
           updated_at?: string | null
           validity_days?: number
         }
@@ -1052,6 +1054,7 @@ export type Database = {
           sessions_quantity?: number
           show_in_criomedicina?: boolean | null
           show_in_upsell_modal?: boolean | null
+          sort_order?: number
           updated_at?: string | null
           validity_days?: number
         }

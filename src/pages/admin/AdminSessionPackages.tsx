@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus, Pencil, Trash2 } from "lucide-react";
+import { Plus, Pencil, Trash2, ArrowUp, ArrowDown } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import {
@@ -29,6 +29,7 @@ interface SessionPackage {
   available_as_giftcard: boolean;
   show_in_upsell_modal: boolean;
   show_in_criomedicina: boolean;
+  sort_order: number;
 }
 
 interface Service {
@@ -58,7 +59,8 @@ export default function AdminSessionPackages() {
     const { data, error } = await supabase
       .from("session_packages")
       .select("*")
-      .order("sessions_quantity");
+      .order("sort_order", { ascending: true })
+      .order("sessions_quantity", { ascending: true });
 
     if (error) {
       toast.error("Error al cargar paquetes");
@@ -66,6 +68,37 @@ export default function AdminSessionPackages() {
     }
     setPackages(data || []);
   }, []);
+
+  const movePackage = async (index: number, direction: "up" | "down") => {
+    const targetIndex = direction === "up" ? index - 1 : index + 1;
+    if (targetIndex < 0 || targetIndex >= packages.length) return;
+
+    const current = packages[index];
+    const target = packages[targetIndex];
+
+    // Optimistic update
+    const newList = [...packages];
+    newList[index] = target;
+    newList[targetIndex] = current;
+    setPackages(newList);
+
+    const { error: e1 } = await supabase
+      .from("session_packages")
+      .update({ sort_order: target.sort_order })
+      .eq("id", current.id);
+    const { error: e2 } = await supabase
+      .from("session_packages")
+      .update({ sort_order: current.sort_order })
+      .eq("id", target.id);
+
+    if (e1 || e2) {
+      toast.error("Error al reordenar");
+      loadPackages();
+      return;
+    }
+    toast.success("Orden actualizado");
+    loadPackages();
+  };
 
   const loadServices = useCallback(async () => {
     const { data, error } = await supabase
@@ -316,9 +349,32 @@ export default function AdminSessionPackages() {
       </div>
 
       <div className="grid gap-4">
-        {packages.map((pkg) => (
+        {packages.map((pkg, index) => (
           <Card key={pkg.id} className="p-6">
-            <div className="flex justify-between items-start">
+            <div className="flex justify-between items-start gap-4">
+              <div className="flex flex-col gap-1 pt-1">
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="h-7 w-7"
+                  disabled={index === 0}
+                  onClick={() => movePackage(index, "up")}
+                  title="Subir"
+                >
+                  <ArrowUp className="h-4 w-4" />
+                </Button>
+                <span className="text-xs text-muted-foreground text-center">{index + 1}</span>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="h-7 w-7"
+                  disabled={index === packages.length - 1}
+                  onClick={() => movePackage(index, "down")}
+                  title="Bajar"
+                >
+                  <ArrowDown className="h-4 w-4" />
+                </Button>
+              </div>
               <div className="flex-1">
                 <h3 className="text-xl font-bold">{pkg.name}</h3>
                 <p className="text-sm text-muted-foreground mt-1">{pkg.description}</p>
