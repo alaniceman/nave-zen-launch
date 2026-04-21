@@ -59,7 +59,8 @@ export default function AdminSessionPackages() {
     const { data, error } = await supabase
       .from("session_packages")
       .select("*")
-      .order("sessions_quantity");
+      .order("sort_order", { ascending: true })
+      .order("sessions_quantity", { ascending: true });
 
     if (error) {
       toast.error("Error al cargar paquetes");
@@ -67,6 +68,37 @@ export default function AdminSessionPackages() {
     }
     setPackages(data || []);
   }, []);
+
+  const movePackage = async (index: number, direction: "up" | "down") => {
+    const targetIndex = direction === "up" ? index - 1 : index + 1;
+    if (targetIndex < 0 || targetIndex >= packages.length) return;
+
+    const current = packages[index];
+    const target = packages[targetIndex];
+
+    // Optimistic update
+    const newList = [...packages];
+    newList[index] = target;
+    newList[targetIndex] = current;
+    setPackages(newList);
+
+    const { error: e1 } = await supabase
+      .from("session_packages")
+      .update({ sort_order: target.sort_order })
+      .eq("id", current.id);
+    const { error: e2 } = await supabase
+      .from("session_packages")
+      .update({ sort_order: current.sort_order })
+      .eq("id", target.id);
+
+    if (e1 || e2) {
+      toast.error("Error al reordenar");
+      loadPackages();
+      return;
+    }
+    toast.success("Orden actualizado");
+    loadPackages();
+  };
 
   const loadServices = useCallback(async () => {
     const { data, error } = await supabase
