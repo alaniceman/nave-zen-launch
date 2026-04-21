@@ -294,6 +294,88 @@ const BautizoHielo = () => {
           </div>
         </section>
 
+        {/* PRICING TIERS */}
+        <section className="py-20 px-4 bg-muted/30">
+          <div className="container mx-auto max-w-5xl">
+            <div className="text-center mb-12">
+              <Badge className="bg-primary/10 text-primary border-primary/20 mb-4">
+                🧊 Vívelo solo o compártelo
+              </Badge>
+              <h2 className="font-space text-3xl md:text-4xl font-bold mb-4 text-primary">
+                Elige cómo entrar al hielo
+              </h2>
+              <p className="text-muted-foreground max-w-xl mx-auto">
+                Solo, con tu pareja o con tus mejores amigos.
+                Mismo precio por persona, misma experiencia guiada.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-6">
+              {TIERS.map((tier) => (
+                <Card
+                  key={tier.id}
+                  className={`relative p-6 flex flex-col ${
+                    tier.badge ? "border-primary border-2 shadow-lg" : "border-primary/20"
+                  }`}
+                >
+                  {tier.badge && (
+                    <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground">
+                      {tier.badge}
+                    </Badge>
+                  )}
+                  <div className="text-center mb-6">
+                    <h3 className="font-space text-2xl font-bold text-primary mb-1">
+                      Bautizo {tier.name}
+                    </h3>
+                    <p className="text-sm text-muted-foreground mb-4">{tier.subtitle}</p>
+                    <div className="font-space text-4xl font-bold mb-1">
+                      ${tier.price.toLocaleString("es-CL")}
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      ${tier.perPerson.toLocaleString("es-CL")} por persona ·{" "}
+                      {tier.people} {tier.people === 1 ? "sesión" : "sesiones"}
+                    </p>
+                  </div>
+
+                  <ul className="space-y-2 text-sm mb-6 flex-1">
+                    <li className="flex items-start gap-2">
+                      <Check className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                      <span>
+                        {tier.people === 1
+                          ? "1 sesión guiada"
+                          : `${tier.people} sesiones guiadas (canjeables por separado)`}
+                      </span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <Check className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                      <span>Breathwork + inmersión a 3°C</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <Check className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                      <span>Coach certificado</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <Check className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                      <span>Válido 60 días · disponible como Gift Card</span>
+                    </li>
+                  </ul>
+
+                  <Link to={`/bonos?package=${tier.id}`} className="block">
+                    <Button className="w-full" variant={tier.badge ? "default" : "outline"}>
+                      Comprar {tier.name}
+                      <ArrowRight className="ml-2 w-4 h-4" />
+                    </Button>
+                  </Link>
+                </Card>
+              ))}
+            </div>
+
+            <p className="text-center text-xs text-muted-foreground mt-6">
+              Cada sesión se agenda por separado en nuestra app. Pueden venir el mismo día o en fechas distintas.
+            </p>
+          </div>
+        </section>
+
         {/* FINAL CTA */}
         <section className="py-20 px-4 bg-primary text-primary-foreground">
           <div className="container mx-auto max-w-3xl text-center">
@@ -301,8 +383,7 @@ const BautizoHielo = () => {
               Es solo una sesión.<br />Y puede cambiarlo todo.
             </h2>
             <p className="text-lg opacity-90 mb-8 max-w-xl mx-auto">
-              $15.000 para vivir tu primera inmersión guiada. Después decides
-              si quieres seguir.
+              Desde $15.000. Vívelo solo o tráete a quien necesita el empujón.
             </p>
             <div className="flex flex-wrap justify-center gap-3 mb-8 text-sm">
               <div className="flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-full">
@@ -317,7 +398,7 @@ const BautizoHielo = () => {
             </div>
             <Link to={ctaHref}>
               <Button size="lg" variant="secondary" className="text-base">
-                Comprar mi bautizo · $15.000
+                Empezar desde $15.000
                 <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
             </Link>
