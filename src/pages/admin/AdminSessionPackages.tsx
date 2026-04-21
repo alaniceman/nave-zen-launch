@@ -349,9 +349,32 @@ export default function AdminSessionPackages() {
       </div>
 
       <div className="grid gap-4">
-        {packages.map((pkg) => (
+        {packages.map((pkg, index) => (
           <Card key={pkg.id} className="p-6">
-            <div className="flex justify-between items-start">
+            <div className="flex justify-between items-start gap-4">
+              <div className="flex flex-col gap-1 pt-1">
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="h-7 w-7"
+                  disabled={index === 0}
+                  onClick={() => movePackage(index, "up")}
+                  title="Subir"
+                >
+                  <ArrowUp className="h-4 w-4" />
+                </Button>
+                <span className="text-xs text-muted-foreground text-center">{index + 1}</span>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="h-7 w-7"
+                  disabled={index === packages.length - 1}
+                  onClick={() => movePackage(index, "down")}
+                  title="Bajar"
+                >
+                  <ArrowDown className="h-4 w-4" />
+                </Button>
+              </div>
               <div className="flex-1">
                 <h3 className="text-xl font-bold">{pkg.name}</h3>
                 <p className="text-sm text-muted-foreground mt-1">{pkg.description}</p>
