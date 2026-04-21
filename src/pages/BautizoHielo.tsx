@@ -22,6 +22,38 @@ import {
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
 
 const BAUTIZO_PACKAGE_ID = "2c2b4d9e-2a03-4fdf-a973-ab5529458eb7";
+const BAUTIZO_DUO_ID = "8620e740-890f-42c1-9c2a-77b74ece6e6a";
+const BAUTIZO_TRIO_ID = "6f69c715-ed4d-410e-a6b0-8e4634667d98";
+
+const TIERS = [
+  {
+    id: "2c2b4d9e-2a03-4fdf-a973-ab5529458eb7",
+    name: "Solo",
+    subtitle: "Vívelo tú",
+    price: 15000,
+    perPerson: 15000,
+    people: 1,
+    badge: null as string | null,
+  },
+  {
+    id: "8620e740-890f-42c1-9c2a-77b74ece6e6a",
+    name: "Dúo",
+    subtitle: "Ven con alguien",
+    price: 30000,
+    perPerson: 15000,
+    people: 2,
+    badge: "Más elegido",
+  },
+  {
+    id: "6f69c715-ed4d-410e-a6b0-8e4634667d98",
+    name: "Trío",
+    subtitle: "Ven con tus amigos",
+    price: 45000,
+    perPerson: 15000,
+    people: 3,
+    badge: null as string | null,
+  },
+];
 
 const BautizoHielo = () => {
   const { trackEvent } = useFacebookPixel();
@@ -43,16 +75,16 @@ const BautizoHielo = () => {
   return (
     <>
       <Helmet>
-        <title>Bautizo de Hielo · Sesión guiada por $15.000 | Nave Studio</title>
+        <title>Bautizo de Hielo · desde $15.000 | Solo, Dúo o Trío | Nave Studio</title>
         <meta
           name="description"
-          content="Una inmersión guiada al hielo en Nave Studio por $15.000 (antes $30.000). Breathwork + 2 minutos en agua a 3°C con coach certificado. Vívelo o regálalo. Las Condes."
+          content="Inmersión guiada al hielo en Nave Studio. Solo $15.000, Dúo $30.000 (con alguien) o Trío $45.000 (con amigos). Breathwork + agua a 3°C con coach certificado. Vívelo o regálalo. Las Condes."
         />
         <link rel="canonical" href="https://studiolanave.com/bautizo-hielo" />
-        <meta property="og:title" content="Bautizo de Hielo · $15.000 | Nave Studio" />
+        <meta property="og:title" content="Bautizo de Hielo · desde $15.000 | Nave Studio" />
         <meta
           property="og:description"
-          content="Una sesión guiada de Criomedicina (Método Wim Hof) por $15.000. Vívelo tú o regálalo como Gift Card."
+          content="Sesión guiada de Criomedicina (Método Wim Hof). Solo, Dúo o Trío. Vívelo o regálalo como Gift Card."
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://studiolanave.com/bautizo-hielo" />
@@ -82,8 +114,8 @@ const BautizoHielo = () => {
               </div>
             </div>
             <p className="text-base md:text-lg max-w-2xl mx-auto mb-10 opacity-90">
-              Breathwork + 2 minutos en agua a <strong>3°C</strong>, guiado por un coach certificado.
-              Vívelo tú o <strong>regálalo</strong> a quien necesita el empujón.
+              Breathwork + inmersión en agua a <strong>3°C</strong>, guiado por un coach certificado.
+              Vívelo tú, ven <strong>con alguien</strong> o <strong>regálalo</strong> a quien necesita el empujón.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -166,7 +198,7 @@ const BautizoHielo = () => {
                 </div>
                 <h3 className="font-space text-xl font-bold mb-2">Inmersión a 3°C</h3>
                 <p className="text-sm text-muted-foreground">
-                  2 minutos en nuestra tina de hielo, acompañado por tu coach.
+                  En nuestra tina de hielo, acompañado por tu coach.
                   Sin heroísmos, solo presencia.
                 </p>
               </Card>
@@ -240,6 +272,88 @@ const BautizoHielo = () => {
           </div>
         </section>
 
+        {/* PRICING TIERS */}
+        <section className="py-20 px-4 bg-muted/30">
+          <div className="container mx-auto max-w-5xl">
+            <div className="text-center mb-12">
+              <Badge className="bg-primary/10 text-primary border-primary/20 mb-4">
+                🧊 Vívelo solo o compártelo
+              </Badge>
+              <h2 className="font-space text-3xl md:text-4xl font-bold mb-4 text-primary">
+                Elige cómo entrar al hielo
+              </h2>
+              <p className="text-muted-foreground max-w-xl mx-auto">
+                Solo, con tu pareja o con tus mejores amigos.
+                Mismo precio por persona, misma experiencia guiada.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-6">
+              {TIERS.map((tier) => (
+                <Card
+                  key={tier.id}
+                  className={`relative p-6 flex flex-col ${
+                    tier.badge ? "border-primary border-2 shadow-lg" : "border-primary/20"
+                  }`}
+                >
+                  {tier.badge && (
+                    <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground">
+                      {tier.badge}
+                    </Badge>
+                  )}
+                  <div className="text-center mb-6">
+                    <h3 className="font-space text-2xl font-bold text-primary mb-1">
+                      Bautizo {tier.name}
+                    </h3>
+                    <p className="text-sm text-muted-foreground mb-4">{tier.subtitle}</p>
+                    <div className="font-space text-4xl font-bold mb-1">
+                      ${tier.price.toLocaleString("es-CL")}
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      ${tier.perPerson.toLocaleString("es-CL")} por persona ·{" "}
+                      {tier.people} {tier.people === 1 ? "sesión" : "sesiones"}
+                    </p>
+                  </div>
+
+                  <ul className="space-y-2 text-sm mb-6 flex-1">
+                    <li className="flex items-start gap-2">
+                      <Check className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                      <span>
+                        {tier.people === 1
+                          ? "1 sesión guiada"
+                          : `${tier.people} sesiones guiadas (canjeables por separado)`}
+                      </span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <Check className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                      <span>Breathwork + inmersión a 3°C</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <Check className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                      <span>Coach certificado</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <Check className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                      <span>Válido 60 días · disponible como Gift Card</span>
+                    </li>
+                  </ul>
+
+                  <Link to={`/bonos?package=${tier.id}`} className="block">
+                    <Button className="w-full" variant={tier.badge ? "default" : "outline"}>
+                      Comprar {tier.name}
+                      <ArrowRight className="ml-2 w-4 h-4" />
+                    </Button>
+                  </Link>
+                </Card>
+              ))}
+            </div>
+
+            <p className="text-center text-xs text-muted-foreground mt-6">
+              Cada sesión se agenda por separado en nuestra app. Pueden venir el mismo día o en fechas distintas.
+            </p>
+          </div>
+        </section>
+
         {/* GIFT CARD */}
         <section className="py-16 px-4">
           <div className="container mx-auto max-w-3xl">
@@ -249,7 +363,7 @@ const BautizoHielo = () => {
                 ¿Conoces a alguien que necesita este empujón?
               </h2>
               <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
-                Regala el Bautizo de Hielo. Recibirá un código único por email
+                Regala el Bautizo de Hielo (Solo, Dúo o Trío). Recibirá un código único por email
                 y podrá agendar cuando se sienta listo.
               </p>
               <Link to={giftHref}>
@@ -269,8 +383,7 @@ const BautizoHielo = () => {
               Es solo una sesión.<br />Y puede cambiarlo todo.
             </h2>
             <p className="text-lg opacity-90 mb-8 max-w-xl mx-auto">
-              $15.000 para vivir tu primera inmersión guiada. Después decides
-              si quieres seguir.
+              Desde $15.000. Vívelo solo o tráete a quien necesita el empujón.
             </p>
             <div className="flex flex-wrap justify-center gap-3 mb-8 text-sm">
               <div className="flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-full">
@@ -285,7 +398,7 @@ const BautizoHielo = () => {
             </div>
             <Link to={ctaHref}>
               <Button size="lg" variant="secondary" className="text-base">
-                Comprar mi bautizo · $15.000
+                Empezar desde $15.000
                 <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
             </Link>

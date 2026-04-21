@@ -124,8 +124,9 @@ const HeroSlideBautizo = () => {
 
           {/* Description */}
           <p className="font-inter text-base md:text-lg text-white/85 max-w-xl mx-auto">
-            Breathwork + 2 minutos en agua a <strong>3°C</strong>, guiado por un coach certificado.
-            Vívelo tú o <strong>regálalo</strong> a quien necesita el empujón.
+            Breathwork + inmersión guiada en agua a <strong>3°C</strong> con coach certificado.
+            Vívelo solo, ven con alguien (Dúo $30.000) o con tus amigos (Trío $45.000).
+            También puedes <strong>regalarlo</strong>.
           </p>
 
           {/* CTA */}
