@@ -29,6 +29,7 @@ interface SessionPackage {
   available_as_giftcard: boolean;
   show_in_upsell_modal: boolean;
   show_in_criomedicina: boolean;
+  sort_order: number;
 }
 
 interface Service {
