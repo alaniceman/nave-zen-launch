@@ -4,6 +4,7 @@ import { CoachesSection } from "@/components/CoachesSection";
 import { Footer } from "@/components/Footer";
 import { GiftCardSection } from "@/components/GiftCardSection";
 import { ReviewsTrustBar } from "@/components/ReviewsTrustBar";
+import { BautizoHieloPromo } from "@/components/BautizoHieloPromo";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
