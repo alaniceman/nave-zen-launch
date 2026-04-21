@@ -272,28 +272,6 @@ const BautizoHielo = () => {
           </div>
         </section>
 
-        {/* GIFT CARD */}
-        <section className="py-16 px-4">
-          <div className="container mx-auto max-w-3xl">
-            <Card className="p-8 md:p-10 bg-gradient-to-br from-accent/10 to-primary/10 border-primary/20 text-center">
-              <Gift className="w-12 h-12 mx-auto text-primary mb-4" />
-              <h2 className="font-space text-2xl md:text-3xl font-bold mb-3 text-primary">
-                ¿Conoces a alguien que necesita este empujón?
-              </h2>
-              <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
-                Regala el Bautizo de Hielo. Recibirá un código único por email
-                y podrá agendar cuando se sienta listo.
-              </p>
-              <Link to={giftHref}>
-                <Button size="lg" variant="default">
-                  <Gift className="mr-2 w-4 h-4" />
-                  Regalar Bautizo
-                </Button>
-              </Link>
-            </Card>
-          </div>
-        </section>
-
         {/* PRICING TIERS */}
         <section className="py-20 px-4 bg-muted/30">
           <div className="container mx-auto max-w-5xl">
@@ -373,6 +351,28 @@ const BautizoHielo = () => {
             <p className="text-center text-xs text-muted-foreground mt-6">
               Cada sesión se agenda por separado en nuestra app. Pueden venir el mismo día o en fechas distintas.
             </p>
+          </div>
+        </section>
+
+        {/* GIFT CARD */}
+        <section className="py-16 px-4">
+          <div className="container mx-auto max-w-3xl">
+            <Card className="p-8 md:p-10 bg-gradient-to-br from-accent/10 to-primary/10 border-primary/20 text-center">
+              <Gift className="w-12 h-12 mx-auto text-primary mb-4" />
+              <h2 className="font-space text-2xl md:text-3xl font-bold mb-3 text-primary">
+                ¿Conoces a alguien que necesita este empujón?
+              </h2>
+              <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
+                Regala el Bautizo de Hielo (Solo, Dúo o Trío). Recibirá un código único por email
+                y podrá agendar cuando se sienta listo.
+              </p>
+              <Link to={giftHref}>
+                <Button size="lg" variant="default">
+                  <Gift className="mr-2 w-4 h-4" />
+                  Regalar Bautizo
+                </Button>
+              </Link>
+            </Card>
           </div>
         </section>
 
