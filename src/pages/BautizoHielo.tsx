@@ -166,7 +166,7 @@ const BautizoHielo = () => {
                 </div>
                 <h3 className="font-space text-xl font-bold mb-2">Inmersión a 3°C</h3>
                 <p className="text-sm text-muted-foreground">
-                  2 minutos en nuestra tina de hielo, acompañado por tu coach.
+                  En nuestra tina de hielo, acompañado por tu coach.
                   Sin heroísmos, solo presencia.
                 </p>
               </Card>
