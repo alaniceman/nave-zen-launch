@@ -1062,6 +1062,9 @@ export type Database = {
       }
       trial_bookings: {
         Row: {
+          actual_end_date: string | null
+          actual_start_date: string | null
+          admin_notes: string | null
           class_day: string
           class_time: string
           class_title: string
@@ -1071,7 +1074,12 @@ export type Database = {
           customer_phone: string
           id: string
           mailerlite_synced: boolean
+          paid_at: string | null
+          paid_marked_by: string | null
+          plan_type: string | null
+          redirected_to_boxmagic_at: string | null
           reminder_sent: string[]
+          requested_start_date: string | null
           scheduled_date: string
           source: string
           status: string
@@ -1081,6 +1089,9 @@ export type Database = {
           utm_source: string | null
         }
         Insert: {
+          actual_end_date?: string | null
+          actual_start_date?: string | null
+          admin_notes?: string | null
           class_day: string
           class_time: string
           class_title: string
@@ -1090,7 +1101,12 @@ export type Database = {
           customer_phone: string
           id?: string
           mailerlite_synced?: boolean
+          paid_at?: string | null
+          paid_marked_by?: string | null
+          plan_type?: string | null
+          redirected_to_boxmagic_at?: string | null
           reminder_sent?: string[]
+          requested_start_date?: string | null
           scheduled_date: string
           source?: string
           status?: string
@@ -1100,6 +1116,9 @@ export type Database = {
           utm_source?: string | null
         }
         Update: {
+          actual_end_date?: string | null
+          actual_start_date?: string | null
+          admin_notes?: string | null
           class_day?: string
           class_time?: string
           class_title?: string
@@ -1109,7 +1128,12 @@ export type Database = {
           customer_phone?: string
           id?: string
           mailerlite_synced?: boolean
+          paid_at?: string | null
+          paid_marked_by?: string | null
+          plan_type?: string | null
+          redirected_to_boxmagic_at?: string | null
           reminder_sent?: string[]
+          requested_start_date?: string | null
           scheduled_date?: string
           source?: string
           status?: string
