@@ -181,22 +181,7 @@ serve(async (req) => {
                 subject: "Estamos procesando tu plan de prueba en Nave Studio",
                 html: processingEmailHtml(data.name),
               });
-              await new Promise((r) => setTimeout(r, 550));
-              await resend.emails.send({
-                from: "Nave Studio <no-reply@studiolanave.com>",
-                reply_to: "lanave@alaniceman.com",
-                to: ["lanave@alaniceman.com"],
-                bcc: ["flowithmaral@gmail.com"],
-                subject: `Nuevo lead Plan de Prueba: ${data.name}`,
-                html: `<div style="font-family:Helvetica Neue,Arial,sans-serif;max-width:560px;margin:0 auto;padding:20px">
-                  <h2 style="color:#2E4D3A">Nuevo lead — Plan de Prueba</h2>
-                  <p><strong>Nombre:</strong> ${data.name}</p>
-                  <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
-                  <p><strong>WhatsApp:</strong> <a href="https://wa.me/${phone.replace("+", "")}">${phone}</a></p>
-                  ${data.utm_source ? `<p style="color:#999;font-size:12px">UTM: ${data.utm_source} / ${data.utm_medium || "-"} / ${data.utm_campaign || "-"}</p>` : ""}
-                  <p style="color:#666;font-size:13px">Aún no eligió plan ni fecha de inicio.</p>
-                </div>`,
-              });
+              // Nota: el aviso al admin con plan + fecha se envía en el paso "finalize"
             } catch (e) {
               console.error("[Resend lead]", e);
             }
@@ -253,21 +238,51 @@ serve(async (req) => {
       })
       .eq("id", data.leadId);
 
-    // CRM event for the redirect (background)
-    const crmWork = upsertCustomerAndLogEvent(supabase, {
-      email: lead.customer_email,
-      name: lead.customer_name,
-      phone: lead.customer_phone,
-      eventType: "plan_prueba_redirect",
-      eventTitle: `Redirigido a BoxMagic — ${PLAN_LABELS[data.planType]}`,
-      eventDescription: `Fecha solicitada: ${data.startDate}`,
-      metadata: { lead_id: data.leadId, plan_type: data.planType, requested_start_date: data.startDate },
-      statusIfNew: "trial_booked",
-    }).catch((e) => console.error("[CRM finalize]", e));
+    // Aviso al admin (ahora SÍ con plan y fecha) + CRM event en background
+    const finalizeBackground = async () => {
+      try {
+        const RESEND = Deno.env.get("RESEND_API_KEY");
+        if (RESEND) {
+          const resend = new Resend(RESEND);
+          const phoneClean = (lead.customer_phone || "").replace("+", "");
+          await resend.emails.send({
+            from: "Nave Studio <no-reply@studiolanave.com>",
+            reply_to: "lanave@alaniceman.com",
+            to: ["lanave@alaniceman.com"],
+            bcc: ["flowithmaral@gmail.com"],
+            subject: `Nuevo Plan de Prueba: ${lead.customer_name} — ${PLAN_LABELS[data.planType]}`,
+            html: `<div style="font-family:Helvetica Neue,Arial,sans-serif;max-width:560px;margin:0 auto;padding:20px">
+              <h2 style="color:#2E4D3A">Nuevo Plan de Prueba — Redirigido a BoxMagic</h2>
+              <p><strong>Nombre:</strong> ${lead.customer_name}</p>
+              <p><strong>Email:</strong> <a href="mailto:${lead.customer_email}">${lead.customer_email}</a></p>
+              <p><strong>WhatsApp:</strong> <a href="https://wa.me/${phoneClean}">${lead.customer_phone}</a></p>
+              <p><strong>Plan:</strong> ${PLAN_LABELS[data.planType]}</p>
+              <p><strong>Fecha de inicio solicitada:</strong> ${data.startDate}</p>
+              <p style="color:#666;font-size:13px;margin-top:18px">El cliente fue redirigido al checkout de BoxMagic. Confirmar pago y activar manualmente en la fecha indicada.</p>
+            </div>`,
+          });
+        }
+
+        await upsertCustomerAndLogEvent(supabase, {
+          email: lead.customer_email,
+          name: lead.customer_name,
+          phone: lead.customer_phone,
+          eventType: "plan_prueba_redirect",
+          eventTitle: `Redirigido a BoxMagic — ${PLAN_LABELS[data.planType]}`,
+          eventDescription: `Fecha solicitada: ${data.startDate}`,
+          metadata: { lead_id: data.leadId, plan_type: data.planType, requested_start_date: data.startDate },
+          statusIfNew: "trial_booked",
+        });
+      } catch (e) {
+        console.error("[finalize background]", e);
+      }
+    };
     // @ts-ignore
     if (typeof EdgeRuntime !== "undefined" && EdgeRuntime.waitUntil) {
       // @ts-ignore
-      EdgeRuntime.waitUntil(crmWork);
+      EdgeRuntime.waitUntil(finalizeBackground());
+    } else {
+      finalizeBackground();
     }
 
     return new Response(
