@@ -253,8 +253,8 @@ serve(async (req) => {
       })
       .eq("id", data.leadId);
 
-    // CRM event for the redirect
-    await upsertCustomerAndLogEvent(supabase, {
+    // CRM event for the redirect (background)
+    const crmWork = upsertCustomerAndLogEvent(supabase, {
       email: lead.customer_email,
       name: lead.customer_name,
       phone: lead.customer_phone,
@@ -263,7 +263,12 @@ serve(async (req) => {
       eventDescription: `Fecha solicitada: ${data.startDate}`,
       metadata: { lead_id: data.leadId, plan_type: data.planType, requested_start_date: data.startDate },
       statusIfNew: "trial_booked",
-    });
+    }).catch((e) => console.error("[CRM finalize]", e));
+    // @ts-ignore
+    if (typeof EdgeRuntime !== "undefined" && EdgeRuntime.waitUntil) {
+      // @ts-ignore
+      EdgeRuntime.waitUntil(crmWork);
+    }
 
     return new Response(
       JSON.stringify({
