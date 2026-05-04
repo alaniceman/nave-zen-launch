@@ -98,10 +98,22 @@ export const coaches: Coach[] = [
     bio: "Ámbar es instructora de Yoga Integral, Doula certificada y Reiki Master. Facilitadora de Círculos Femeninos y Ceremonias de Cacao, acompaña procesos de transformación desde una mirada holística. Como Crioguía de inmersiones, integra la exposición al frío con prácticas que honran los ciclos naturales del cuerpo y las emociones, ayudándote a transitar etapas de cambio con serenidad.",
     galleryImages: [],
   },
+  {
+    id: "vianny",
+    slug: "vianny-macero",
+    name: "Vianny Macero",
+    role: "Instructora de Vinyasa Somático y Yin Yoga · Coach Somática",
+    credentials: "Nutricionista Funcional Integrativa · Especialista en Psiconutrición y Sistema Nervioso",
+    purpose: "A través del movimiento, la regulación y la nutrición, te acompaño a volver a ti, y desde ahí, construir una vida más coherente y viva.",
+    image: "/lovable-uploads/vianny-macero.webp",
+    tags: ["Movimiento", "Terapia"],
+    bio: "Vianny es Nutricionista Funcional Integrativa, especialista en Psiconutrición y Sistema Nervioso, Coach Somática e instructora de Vinyasa Somático y Yin Yoga. Su trabajo integra el movimiento consciente, la regulación del sistema nervioso y la nutrición funcional para acompañar procesos de reconexión profunda con el cuerpo. Guía prácticas que invitan a habitarse con presencia, suavidad y coherencia, construyendo desde ahí una vida más viva y alineada.",
+    galleryImages: [],
+  },
 ];
 
 // Coaches that have a matching professional in the DB and can be booked via agenda
-export const BOOKABLE_SLUGS = ["sol", "maral", "rolo", "mar", "amanda"];
+export const BOOKABLE_SLUGS = ["sol", "maral", "rolo", "mar", "amanda", "vianny-macero"];
 
 export const getCoachBySlug = (slug: string): Coach | undefined =>
   coaches.find((c) => c.slug === slug);
