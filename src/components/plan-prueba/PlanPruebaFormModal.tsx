@@ -48,7 +48,7 @@ function getUtm() {
 }
 
 export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) {
-  const [step, setStep] = useState<1 | 2 | 3>(1);
+  const [step, setStep] = useState<1 | 2>(1);
   const [submitting, setSubmitting] = useState(false);
   const [leadId, setLeadId] = useState<string | null>(null);
   const [plan, setPlan] = useState<PlanType>(initialPlan);
@@ -123,31 +123,38 @@ export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) 
         body: { step: "finalize", leadId, planType: plan, startDate: startDateStr },
       });
       if (error || !data?.boxmagicUrl) throw new Error(data?.error || "Error al confirmar");
-      setBoxmagicUrl(data.boxmagicUrl);
-      setStep(3);
+
+      // Track redirect event
+      const redirectEventId = `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
+      trackEvent("plan_trial_redirect_payment", { plan_type: plan }, redirectEventId);
+      if (userInfo) {
+        trackServerEvent({
+          eventName: "plan_trial_redirect_payment",
+          eventId: redirectEventId,
+          userEmail: userInfo.email,
+          userName: userInfo.name,
+          userPhone: userInfo.phone,
+          contentName: PLAN_LABELS[plan],
+        }).catch(() => {});
+      }
+
+      // Close form modal and trigger global RedirectModal via delegated [data-checkout-url]
+      onOpenChange(false);
+      requestAnimationFrame(() => {
+        const trigger = document.createElement("a");
+        trigger.href = data.boxmagicUrl;
+        trigger.setAttribute("data-checkout-url", data.boxmagicUrl);
+        trigger.setAttribute("data-plan", PLAN_LABELS[plan]);
+        trigger.style.display = "none";
+        document.body.appendChild(trigger);
+        trigger.click();
+        document.body.removeChild(trigger);
+      });
     } catch (e: any) {
       setError(e.message || "Error al confirmar");
     } finally {
       setSubmitting(false);
     }
-  };
-
-  const onContinueToPayment = () => {
-    if (!boxmagicUrl) return;
-    const eventId = `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
-    trackEvent("plan_trial_redirect_payment", { plan_type: plan }, eventId);
-    if (userInfo) {
-      trackServerEvent({
-        eventName: "plan_trial_redirect_payment",
-        eventId,
-        userEmail: userInfo.email,
-        userName: userInfo.name,
-        userPhone: userInfo.phone,
-        contentName: PLAN_LABELS[plan],
-      }).catch(() => {});
-    }
-    window.open(boxmagicUrl, "_blank", "noopener,noreferrer");
-    onOpenChange(false);
   };
 
   return (
@@ -157,12 +164,10 @@ export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) 
           <DialogTitle className="font-bold text-xl text-[#2E4D3A]">
             {step === 1 && "Tus datos"}
             {step === 2 && "Plan y fecha de inicio"}
-            {step === 3 && "Estás siendo redirigido"}
           </DialogTitle>
           <DialogDescription>
             {step === 1 && "Paso 1 de 2 — completa tus datos para continuar."}
             {step === 2 && "Paso 2 de 2 — elige tu plan y fecha de inicio."}
-            {step === 3 && "Te llevamos a la plataforma de pago."}
           </DialogDescription>
         </DialogHeader>
 
@@ -267,32 +272,6 @@ export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) 
           </div>
         )}
 
-        {step === 3 && (
-          <div className="space-y-4 text-center py-2">
-            <p className="font-bold text-lg text-[#1A1A1A]">
-              Estás siendo redirigido a la plataforma de pago para activar tu prueba
-            </p>
-            <p className="text-[#4A4A4A]">
-              Una vez completado el pago, tu acceso quedará listo.
-            </p>
-            <Button
-              onClick={onContinueToPayment}
-              className="w-full bg-[#2E4D3A] hover:bg-[#2E4D3A]/90 text-white py-6 text-base"
-            >
-              Continuar al pago
-            </Button>
-            {boxmagicUrl && (
-              <a
-                href={boxmagicUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-xs text-[#2E4D3A] underline block"
-              >
-                Si no se abre, haz clic aquí
-              </a>
-            )}
-          </div>
-        )}
       </DialogContent>
     </Dialog>
   );
