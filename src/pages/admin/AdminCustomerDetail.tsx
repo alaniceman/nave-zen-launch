@@ -221,13 +221,22 @@ export default function AdminCustomerDetail() {
           </div>
         </div>
 
-        <div className="flex gap-2 mt-4">
+        <div className="flex flex-wrap gap-2 mt-4">
           <Button size="sm" onClick={() => setShowMembershipModal(true)}>
             <Crown className="h-4 w-4 mr-1" /> Asignar Membresía
           </Button>
           <Button size="sm" variant="outline" onClick={() => setShowNoteModal(true)}>
             <StickyNote className="h-4 w-4 mr-1" /> Agregar Nota
           </Button>
+          {pendingPlanPrueba && (
+            <Button
+              size="sm"
+              className="bg-emerald-600 hover:bg-emerald-700 text-white"
+              onClick={() => setPlanPruebaLead(pendingPlanPrueba)}
+            >
+              <Sparkles className="h-4 w-4 mr-1" /> Marcar pagado plan de prueba
+            </Button>
+          )}
         </div>
       </div>
 
