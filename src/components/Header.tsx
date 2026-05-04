@@ -23,7 +23,7 @@ const navigationItems: NavItem[] = [
     type: "dropdown",
     children: [
       { label: "Agenda Criomedicina", href: "/agenda-nave-studio" },
-      { label: "Clase de Prueba", href: "/clase-de-prueba/agendar" },
+      { label: "Plan de Prueba", href: "/plan-de-prueba" },
       { label: "Horarios", href: "/horarios" },
       { label: "Conoce el lugar", href: "/conoce-el-lugar" },
     ],
