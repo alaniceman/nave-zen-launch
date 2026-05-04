@@ -48,7 +48,7 @@ function getUtm() {
 }
 
 export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) {
-  const [step, setStep] = useState<1 | 2 | 3>(1);
+  const [step, setStep] = useState<1 | 2>(1);
   const [submitting, setSubmitting] = useState(false);
   const [leadId, setLeadId] = useState<string | null>(null);
   const [plan, setPlan] = useState<PlanType>(initialPlan);
