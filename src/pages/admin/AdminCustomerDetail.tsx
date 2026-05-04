@@ -92,6 +92,25 @@ export default function AdminCustomerDetail() {
     enabled: !!id,
   });
 
+  const { data: pendingPlanPrueba } = useQuery({
+    queryKey: ["admin-customer-plan-prueba", id, customer?.email],
+    queryFn: async () => {
+      if (!customer?.email) return null;
+      const { data, error } = await supabase
+        .from("trial_bookings")
+        .select("id, customer_name, customer_email, customer_phone, plan_type, requested_start_date, actual_start_date, actual_end_date, status, created_at, paid_at, utm_source")
+        .eq("customer_email", customer.email.toLowerCase())
+        .in("plan_type", ["trial_7d", "trial_15d"])
+        .not("status", "in", "(plan_prueba_activo,plan_prueba_finalizado,convertido_a_membresia)")
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (error) throw error;
+      return data as PlanPruebaLead | null;
+    },
+    enabled: !!customer?.email,
+  });
+
   const whatsappLink = (phone: string | null) => {
     if (!phone) return null;
     return `https://wa.me/${phone.replace(/[^0-9]/g, "")}`;
@@ -101,6 +120,7 @@ export default function AdminCustomerDetail() {
     queryClient.invalidateQueries({ queryKey: ["admin-customer", id] });
     queryClient.invalidateQueries({ queryKey: ["admin-customer-events", id] });
     queryClient.invalidateQueries({ queryKey: ["admin-customer-membership", id] });
+    queryClient.invalidateQueries({ queryKey: ["admin-customer-plan-prueba", id] });
   };
 
   const startEditing = () => {
