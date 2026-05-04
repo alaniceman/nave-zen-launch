@@ -42,6 +42,7 @@ export default function AdminCustomerDetail() {
   const queryClient = useQueryClient();
   const [showMembershipModal, setShowMembershipModal] = useState(false);
   const [showNoteModal, setShowNoteModal] = useState(false);
+  const [planPruebaLead, setPlanPruebaLead] = useState<PlanPruebaLead | null>(null);
   const [editing, setEditing] = useState(false);
   const [editName, setEditName] = useState("");
   const [editPhone, setEditPhone] = useState("");
