@@ -290,6 +290,11 @@ export default function AdminCustomerDetail() {
           onSaved={refreshAll}
         />
       )}
+      <MarkPaidModal
+        lead={planPruebaLead}
+        onClose={() => setPlanPruebaLead(null)}
+        onSuccess={() => { setPlanPruebaLead(null); refreshAll(); }}
+      />
     </div>
   );
 }
