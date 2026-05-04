@@ -1,4 +1,4 @@
-import { Calendar, Users, Package, Clock, User, LogOut, Ticket, Gift, Key, MapPin, ShoppingCart, AlertCircle, LayoutDashboard, Mail, Crown, Contact, MessageCircle, Brain } from 'lucide-react';
+import { Calendar, Users, Package, Clock, User, LogOut, Ticket, Gift, Key, MapPin, ShoppingCart, AlertCircle, LayoutDashboard, Mail, Crown, Contact, MessageCircle, Brain, Sparkles } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import {
@@ -30,6 +30,7 @@ const menuItems = [
   { title: 'Códigos de Sesión', url: '/admin/codigos-sesiones', icon: Key },
   { title: 'Cupones', url: '/admin/cupones', icon: Ticket },
   { title: 'Clases de Prueba', url: '/admin/clases-prueba', icon: User },
+  { title: 'Planes de Prueba', url: '/admin/planes-prueba', icon: Sparkles },
   { title: 'Horarios', url: '/admin/horarios', icon: Clock },
   { title: 'Disponibilidad', url: '/admin/disponibilidad', icon: Clock },
   { title: 'Agendas Futuras', url: '/admin/agendas-futuras', icon: Calendar },
