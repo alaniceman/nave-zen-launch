@@ -68,8 +68,8 @@ a{color:#2E4D3A}
 <p style="margin:0 0 12px"><strong>Si ya te llegó el mail de BoxMagic confirmando tu plan y quieres partir ahora, estamos listos! 🛸</strong></p>
 <p style="margin:0 0 10px">Reservamos tus clases desde la app de BoxMagic. Descárgala aquí:</p>
 <div style="margin:6px 0 12px">
-<a href="https://apps.apple.com/cl/app/boxmagic/id1163386834" style="display:inline-block;background:#2E4D3A;color:#fff;text-decoration:none;font-weight:600;padding:9px 16px;border-radius:8px;margin:0 6px 6px 0">Descargar para iPhone</a>
-<a href="https://play.google.com/store/apps/details?id=com.boxmagic.app" style="display:inline-block;background:#2E4D3A;color:#fff;text-decoration:none;font-weight:600;padding:9px 16px;border-radius:8px;margin:0 6px 6px 0">Descargar para Android</a>
+<a href="https://cualesmi.boxmagic.app/members/" style="display:inline-block;background:#2E4D3A;color:#fff;text-decoration:none;font-weight:600;padding:9px 16px;border-radius:8px;margin:0 6px 6px 0">Descargar para iPhone</a>
+<a href="https://cualesmi.boxmagic.app/members/" style="display:inline-block;background:#2E4D3A;color:#fff;text-decoration:none;font-weight:600;padding:9px 16px;border-radius:8px;margin:0 6px 6px 0">Descargar para Android</a>
 </div>
 <p style="margin:0 0 6px"><strong>Cómo entrar:</strong></p>
 <ol style="margin:0 0 6px 18px;padding:0">

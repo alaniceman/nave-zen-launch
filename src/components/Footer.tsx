@@ -4,10 +4,10 @@ const Footer = () => {
   return (
     <footer className="bg-primary text-white py-12">
       <div className="max-w-6xl mx-auto px-6">
-        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
           {/* Column 1: Brand */}
           <div className="md:col-span-2 lg:col-span-1">
-            <a href="#home" className="text-2xl font-space font-bold tracking-heading">
+            <a href="https://studiolanave.com/" className="text-2xl font-space font-bold tracking-heading">
               NAVE <span className="font-light">Studio</span>
             </a>
             <p className="mt-3 text-sm max-w-xs font-inter">
@@ -18,55 +18,55 @@ const Footer = () => {
           {/* Column 2: Navigation */}
           <nav className="text-sm flex flex-col gap-2 font-inter">
             <a 
-              href="/experiencias" 
+              href="https://studiolanave.com/experiencias" 
               className="text-accent hover:text-warm transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
             >
               Experiencias
             </a>
             <a 
-              href="/criomedicina-metodo-wim-hof" 
+              href="https://studiolanave.com/criomedicina-metodo-wim-hof" 
               className="text-accent hover:text-warm transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
             >
               Criomedicina
             </a>
             <a 
-              href="/horarios" 
+              href="https://studiolanave.com/horarios" 
               className="text-accent hover:text-warm transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
             >
               Horarios
             </a>
             <a 
-              href="/planes-precios" 
+              href="https://studiolanave.com/planes-precios" 
               className="text-accent hover:text-warm transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
             >
               Planes & Precios
             </a>
             <a 
-              href="/giftcards" 
+              href="https://studiolanave.com/giftcards" 
               className="text-accent hover:text-warm transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
             >
               Gift Cards
             </a>
             <a 
-              href="/coaches" 
+              href="https://studiolanave.com/coaches" 
               className="text-accent hover:text-warm transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
             >
               Coaches
             </a>
             <a 
-              href="/contacto" 
+              href="https://studiolanave.com/contacto" 
               className="text-accent hover:text-warm transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
             >
               Contacto y Ubicación
             </a>
             <a 
-              href="/faq" 
+              href="https://studiolanave.com/faq" 
               className="text-accent hover:text-warm transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
             >
               FAQ
             </a>
             <a 
-              href="https://cualesmi.boxmagic.app/members" 
+              href="https://cualesmi.boxmagic.app/members/" 
               target="_blank"
               rel="noopener noreferrer"
               className="text-accent hover:text-warm transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
@@ -74,6 +74,37 @@ const Footer = () => {
               Descargar App
             </a>
           </nav>
+
+          {/* Column 3: Más de la Nave */}
+          <div className="text-sm font-inter">
+            <p className="font-semibold mb-3 text-white/90">Más de la Nave</p>
+            <div className="flex flex-col gap-2">
+              <a
+                href="https://crionave.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent hover:text-warm transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
+              >
+                Compra tu bañera de hielo
+              </a>
+              <a
+                href="https://retiro.criomedicina.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent hover:text-warm transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
+              >
+                Retiro de invierno Wim Hof
+              </a>
+              <a
+                href="https://guatemala.criomedicina.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent hover:text-warm transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
+              >
+                Retiro Guatemala
+              </a>
+            </div>
+          </div>
 
           {/* Column 3: Contact */}
           <div className="text-sm font-inter md:col-span-2 lg:col-span-1">
@@ -134,14 +165,14 @@ const Footer = () => {
         <div className="border-t border-white/20 mt-10 pt-6 text-xs text-center font-inter">
           © {new Date().getFullYear()} Nave Studio. Todos los derechos reservados ·{" "}
           <a 
-            href="/terminos" 
+            href="https://studiolanave.com/terminos" 
             className="text-accent hover:text-warm transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
           >
             Términos de servicio
           </a>{" "}
           ·{" "}
           <a 
-            href="/privacidad" 
+            href="https://studiolanave.com/privacidad" 
             className="text-accent hover:text-warm transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
           >
             Política de privacidad
