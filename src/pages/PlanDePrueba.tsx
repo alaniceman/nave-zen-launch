@@ -96,11 +96,6 @@ export default function PlanDePrueba() {
               </button>
             </div>
 
-            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-[#6B7280] mt-6">
-              <span className="inline-flex items-center gap-1.5"><Calendar className="w-4 h-4" /> Tú eliges la fecha</span>
-              <span className="inline-flex items-center gap-1.5"><ShieldCheck className="w-4 h-4" /> Pago seguro</span>
-              <span className="inline-flex items-center gap-1.5"><MapPin className="w-4 h-4" /> Las Condes</span>
-            </div>
           </div>
         </div>
       </section>
