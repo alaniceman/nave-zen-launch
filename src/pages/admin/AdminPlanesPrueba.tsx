@@ -181,10 +181,24 @@ export default function AdminPlanesPrueba() {
                   </TableCell>
                   <TableCell>
                     <div className="flex gap-2">
-                      <Button asChild size="sm" variant="outline" className="h-7 text-xs">
-                        <Link to={`/admin/clientes?email=${encodeURIComponent(l.customer_email)}`}>
-                          <ExternalLink className="h-3 w-3 mr-1" />Ver
-                        </Link>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="h-7 text-xs"
+                        onClick={async () => {
+                          const { data, error } = await supabase
+                            .from("customers")
+                            .select("id")
+                            .eq("email", l.customer_email.toLowerCase().trim())
+                            .maybeSingle();
+                          if (error || !data) {
+                            toast.error("Cliente no encontrado en CRM");
+                            return;
+                          }
+                          navigate(`/admin/clientes/${data.id}`);
+                        }}
+                      >
+                        <ExternalLink className="h-3 w-3 mr-1" />Ver
                       </Button>
                       {l.status !== "plan_prueba_activo" && l.status !== "plan_prueba_finalizado" && (
                         <Button
