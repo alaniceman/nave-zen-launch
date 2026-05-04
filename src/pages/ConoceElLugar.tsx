@@ -22,22 +22,6 @@ const ConoceElLugar = () => {
       </Helmet>
 
       <main className="min-h-screen">
-        {/* Hero compacto */}
-        <section className="bg-neutral-light py-14 md:py-20">
-          <div className="container mx-auto px-6 max-w-4xl text-center animate-fade-in">
-            <p className="font-inter text-sm uppercase tracking-[0.18em] text-warm mb-3">
-              Agenda y horarios
-            </p>
-            <h1 className="font-heading text-4xl md:text-5xl text-primary mb-4">
-              Conoce el lugar
-            </h1>
-            <p className="font-inter text-base md:text-lg text-neutral-mid max-w-2xl mx-auto leading-relaxed">
-              Mira por dentro nuestro estudio en Las Condes y descubre cómo se siente
-              entrar a Nave Studio antes de tu primera visita.
-            </p>
-          </div>
-        </section>
-
         <LocationGallerySection />
 
         <Footer />
