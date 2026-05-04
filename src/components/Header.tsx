@@ -32,6 +32,7 @@ const navigationItems: NavItem[] = [
     label: "Planes",
     type: "dropdown",
     children: [
+      { label: "Plan de Prueba", href: "/plan-de-prueba" },
       { label: "Membresías", href: "/planes-precios" },
       { label: "Paquete de sesiones", href: "/bonos" },
       { label: "Gift Cards", href: "/giftcards" },
