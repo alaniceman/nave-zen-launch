@@ -94,7 +94,7 @@ const CoachCard = ({
       {/* Profile Image */}
       <Link to={`/instructor/${coach.slug}`} className="text-center mb-6 block">
         <div className={`${isMobile ? 'w-48 h-48' : 'w-40 h-40'} mx-auto mb-4 rounded-full overflow-hidden shadow-md`}>
-          <img src={coach.image} alt={`${coach.name} — ${coach.role.split(' –')[0]}`} className="w-full h-full object-cover" onError={e => {
+          <img src={coach.image} alt={`${coach.name} — ${coach.role.split(' –')[0]}`} loading="lazy" decoding="async" width={isMobile ? 192 : 160} height={isMobile ? 192 : 160} className="w-full h-full object-cover" onError={e => {
           e.currentTarget.src = 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&h=120&fit=crop&crop=face';
         }} />
         </div>
