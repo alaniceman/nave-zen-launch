@@ -5,12 +5,13 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft, MessageCircle, GraduationCap, CheckCircle, Calendar, Package, Gift, Crown, StickyNote, Pencil, Save, X } from "lucide-react";
+import { ArrowLeft, MessageCircle, GraduationCap, CheckCircle, Calendar, Package, Gift, Crown, StickyNote, Pencil, Save, X, Sparkles } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { useState } from "react";
 import { AssignMembershipModal } from "@/components/admin/AssignMembershipModal";
 import { AddCustomerNoteModal } from "@/components/admin/AddCustomerNoteModal";
+import { MarkPaidModal, type Lead as PlanPruebaLead } from "@/pages/admin/AdminPlanesPrueba";
 import { toast } from "sonner";
 
 const STATUS_LABELS: Record<string, string> = {
