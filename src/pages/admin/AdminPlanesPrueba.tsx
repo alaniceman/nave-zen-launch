@@ -13,7 +13,7 @@ import { es } from "date-fns/locale";
 import { RefreshCw, ExternalLink, MessageCircle, CheckCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
 
-type Lead = {
+export type Lead = {
   id: string;
   customer_name: string;
   customer_email: string;
