@@ -19,6 +19,12 @@ import savasanaDog from "@/assets/space/savasana-dog-cuddle.webp";
 import iceBathGolden from "@/assets/space/ice-bath-golden-smile.webp";
 import iceBathResilencia from "@/assets/space/ice-bath-resilencia.webp";
 import soundJourneyCircle from "@/assets/space/sound-journey-circle-aurora.webp";
+import yogaMeditationRow from "@/assets/space/yoga-meditation-row.webp";
+import soundBowlsInstructor from "@/assets/space/sound-bowls-instructor.webp";
+import yogaGroupWide from "@/assets/space/yoga-group-wide.webp";
+import elephantDoorMeditation from "@/assets/space/elephant-door-meditation.webp";
+import amorVidaIceman from "@/assets/space/amor-vida-iceman.webp";
+import entranceHola from "@/assets/space/entrance-hola.webp";
 
 type GalleryImage = { src: string; alt: string };
 
@@ -40,6 +46,12 @@ const gallery: GalleryImage[] = [
   { src: savasanaDog, alt: "Savasana acompañada por perrito en Nave Studio" },
   { src: savasanaRest, alt: "Savasana y descanso final en clase de yoga" },
   { src: maralPortrait, alt: "Maral, instructora de Nave Studio" },
+  { src: yogaMeditationRow, alt: "Grupo en meditación sentada durante clase de yoga" },
+  { src: soundBowlsInstructor, alt: "Instructora guiando sesión de cuencos y respiración" },
+  { src: yogaGroupWide, alt: "Vista amplia de clase grupal de yoga y meditación" },
+  { src: elephantDoorMeditation, alt: "Sala de meditación vista desde puerta con elefante mandala" },
+  { src: amorVidaIceman, alt: "Detalle decorativo Amor Vida e Ice Man en Nave Studio" },
+  { src: entranceHola, alt: "Entrada de Nave Studio con saludo Hola" },
 ];
 
 const ADDRESS = "Antares 259, Las Condes, Santiago";
