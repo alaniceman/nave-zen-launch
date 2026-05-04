@@ -164,12 +164,10 @@ export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) 
           <DialogTitle className="font-bold text-xl text-[#2E4D3A]">
             {step === 1 && "Tus datos"}
             {step === 2 && "Plan y fecha de inicio"}
-            {step === 3 && "Estás siendo redirigido"}
           </DialogTitle>
           <DialogDescription>
             {step === 1 && "Paso 1 de 2 — completa tus datos para continuar."}
             {step === 2 && "Paso 2 de 2 — elige tu plan y fecha de inicio."}
-            {step === 3 && "Te llevamos a la plataforma de pago."}
           </DialogDescription>
         </DialogHeader>
 
