@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { ArrowDown, Calendar, Check, Flame, Snowflake, Sparkles, Wind, ShieldCheck, Clock, MapPin } from "lucide-react";
+import { ArrowDown, Check, Sparkles } from "lucide-react";
 import { Footer } from "@/components/Footer";
 import { PlanPruebaFormModal } from "@/components/plan-prueba/PlanPruebaFormModal";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
@@ -50,7 +50,7 @@ export default function PlanDePrueba() {
       </Helmet>
 
       {/* HERO */}
-      <section className="relative overflow-hidden pt-28 pb-20 md:pt-36 md:pb-28">
+      <section className="relative overflow-hidden pt-16 pb-16 md:pt-24 md:pb-24">
         {/* fondo decorativo */}
         <div
           aria-hidden
@@ -73,7 +73,7 @@ export default function PlanDePrueba() {
             </div>
 
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-[#1F3A2A] mb-6 leading-[1.05] tracking-tight">
-              Vive Nave Studio<br className="hidden md:block" />
+              Vive Nave Studio<br />
               <span className="text-[#2E4D3A]">por 7 o 15 días</span>
             </h1>
             <p className="text-lg md:text-xl text-[#4A4A4A] max-w-2xl mx-auto mb-10 leading-relaxed">
