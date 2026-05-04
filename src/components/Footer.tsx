@@ -165,14 +165,14 @@ const Footer = () => {
         <div className="border-t border-white/20 mt-10 pt-6 text-xs text-center font-inter">
           © {new Date().getFullYear()} Nave Studio. Todos los derechos reservados ·{" "}
           <a 
-            href="/terminos" 
+            href="https://studiolanave.com/terminos" 
             className="text-accent hover:text-warm transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
           >
             Términos de servicio
           </a>{" "}
           ·{" "}
           <a 
-            href="/privacidad" 
+            href="https://studiolanave.com/privacidad" 
             className="text-accent hover:text-warm transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
           >
             Política de privacidad
