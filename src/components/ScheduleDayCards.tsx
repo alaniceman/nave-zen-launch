@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Clock } from "lucide-react";
+import { Clock, User } from "lucide-react";
 import { dayNames, getTodayInSantiago, CL_TZ } from "../data/schedule";
 import { EXPERIENCE_CATALOG } from "../lib/experiences";
 import { useScheduleEntries, type ScheduleClassItem } from "../hooks/useScheduleEntries";
@@ -116,9 +116,15 @@ export default function ScheduleDayCards() {
         <Clock className="w-5 h-5 md:w-6 md:h-6" />
         {classItem.time}
       </div>
-      <h3 className="text-white font-semibold text-lg md:text-xl leading-tight line-clamp-2 mb-3">
+      <h3 className="text-white font-semibold text-lg md:text-xl leading-tight line-clamp-2 mb-2">
         {classItem.title}
       </h3>
+      {classItem.instructor && (
+        <div className="flex items-center gap-1.5 text-white/85 text-sm mb-3">
+          <User className="w-4 h-4" />
+          <span>con {classItem.instructor}</span>
+        </div>
+      )}
       {classItem.badges.length > 0 && (
         <div className="flex flex-wrap gap-2">
           {classItem.badges.map((badge, badgeIndex) => (
