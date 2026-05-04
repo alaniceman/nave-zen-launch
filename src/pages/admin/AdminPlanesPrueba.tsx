@@ -213,7 +213,7 @@ export default function AdminPlanesPrueba() {
   );
 }
 
-function MarkPaidModal({ lead, onClose, onSuccess }: { lead: Lead | null; onClose: () => void; onSuccess: () => void }) {
+export function MarkPaidModal({ lead, onClose, onSuccess }: { lead: Lead | null; onClose: () => void; onSuccess: () => void }) {
   const [plan, setPlan] = useState<"trial_7d" | "trial_15d">("trial_7d");
   const [start, setStart] = useState<string>("");
   const [notes, setNotes] = useState("");
