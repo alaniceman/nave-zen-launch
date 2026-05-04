@@ -5,12 +5,13 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft, MessageCircle, GraduationCap, CheckCircle, Calendar, Package, Gift, Crown, StickyNote, Pencil, Save, X } from "lucide-react";
+import { ArrowLeft, MessageCircle, GraduationCap, CheckCircle, Calendar, Package, Gift, Crown, StickyNote, Pencil, Save, X, Sparkles } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { useState } from "react";
 import { AssignMembershipModal } from "@/components/admin/AssignMembershipModal";
 import { AddCustomerNoteModal } from "@/components/admin/AddCustomerNoteModal";
+import { MarkPaidModal, type Lead as PlanPruebaLead } from "@/pages/admin/AdminPlanesPrueba";
 import { toast } from "sonner";
 
 const STATUS_LABELS: Record<string, string> = {
@@ -41,6 +42,7 @@ export default function AdminCustomerDetail() {
   const queryClient = useQueryClient();
   const [showMembershipModal, setShowMembershipModal] = useState(false);
   const [showNoteModal, setShowNoteModal] = useState(false);
+  const [planPruebaLead, setPlanPruebaLead] = useState<PlanPruebaLead | null>(null);
   const [editing, setEditing] = useState(false);
   const [editName, setEditName] = useState("");
   const [editPhone, setEditPhone] = useState("");
@@ -90,6 +92,25 @@ export default function AdminCustomerDetail() {
     enabled: !!id,
   });
 
+  const { data: pendingPlanPrueba } = useQuery({
+    queryKey: ["admin-customer-plan-prueba", id, customer?.email],
+    queryFn: async () => {
+      if (!customer?.email) return null;
+      const { data, error } = await supabase
+        .from("trial_bookings")
+        .select("id, customer_name, customer_email, customer_phone, plan_type, requested_start_date, actual_start_date, actual_end_date, status, created_at, paid_at, utm_source")
+        .eq("customer_email", customer.email.toLowerCase())
+        .in("plan_type", ["trial_7d", "trial_15d"])
+        .not("status", "in", "(plan_prueba_activo,plan_prueba_finalizado,convertido_a_membresia)")
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (error) throw error;
+      return data as PlanPruebaLead | null;
+    },
+    enabled: !!customer?.email,
+  });
+
   const whatsappLink = (phone: string | null) => {
     if (!phone) return null;
     return `https://wa.me/${phone.replace(/[^0-9]/g, "")}`;
@@ -99,6 +120,7 @@ export default function AdminCustomerDetail() {
     queryClient.invalidateQueries({ queryKey: ["admin-customer", id] });
     queryClient.invalidateQueries({ queryKey: ["admin-customer-events", id] });
     queryClient.invalidateQueries({ queryKey: ["admin-customer-membership", id] });
+    queryClient.invalidateQueries({ queryKey: ["admin-customer-plan-prueba", id] });
   };
 
   const startEditing = () => {
@@ -199,13 +221,22 @@ export default function AdminCustomerDetail() {
           </div>
         </div>
 
-        <div className="flex gap-2 mt-4">
+        <div className="flex flex-wrap gap-2 mt-4">
           <Button size="sm" onClick={() => setShowMembershipModal(true)}>
             <Crown className="h-4 w-4 mr-1" /> Asignar Membresía
           </Button>
           <Button size="sm" variant="outline" onClick={() => setShowNoteModal(true)}>
             <StickyNote className="h-4 w-4 mr-1" /> Agregar Nota
           </Button>
+          {pendingPlanPrueba && (
+            <Button
+              size="sm"
+              className="bg-emerald-600 hover:bg-emerald-700 text-white"
+              onClick={() => setPlanPruebaLead(pendingPlanPrueba)}
+            >
+              <Sparkles className="h-4 w-4 mr-1" /> Marcar pagado plan de prueba
+            </Button>
+          )}
         </div>
       </div>
 
@@ -259,6 +290,11 @@ export default function AdminCustomerDetail() {
           onSaved={refreshAll}
         />
       )}
+      <MarkPaidModal
+        lead={planPruebaLead}
+        onClose={() => setPlanPruebaLead(null)}
+        onSuccess={() => { setPlanPruebaLead(null); refreshAll(); }}
+      />
     </div>
   );
 }

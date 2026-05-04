@@ -13,7 +13,7 @@ import { es } from "date-fns/locale";
 import { RefreshCw, ExternalLink, MessageCircle, CheckCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
 
-type Lead = {
+export type Lead = {
   id: string;
   customer_name: string;
   customer_email: string;
@@ -213,7 +213,7 @@ export default function AdminPlanesPrueba() {
   );
 }
 
-function MarkPaidModal({ lead, onClose, onSuccess }: { lead: Lead | null; onClose: () => void; onSuccess: () => void }) {
+export function MarkPaidModal({ lead, onClose, onSuccess }: { lead: Lead | null; onClose: () => void; onSuccess: () => void }) {
   const [plan, setPlan] = useState<"trial_7d" | "trial_15d">("trial_7d");
   const [start, setStart] = useState<string>("");
   const [notes, setNotes] = useState("");
