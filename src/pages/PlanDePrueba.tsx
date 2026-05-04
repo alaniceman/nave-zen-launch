@@ -102,26 +102,6 @@ export default function PlanDePrueba() {
               <span className="inline-flex items-center gap-1.5"><MapPin className="w-4 h-4" /> Las Condes</span>
             </div>
           </div>
-
-          {/* Quick value chips */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mt-14 max-w-4xl mx-auto">
-            {[
-              { icon: Wind, label: "Yoga ilimitado" },
-              { icon: Snowflake, label: "Criomedicina" },
-              { icon: Flame, label: "Método Wim Hof" },
-              { icon: Clock, label: "Empieza cuando quieras" },
-            ].map(({ icon: Icon, label }) => (
-              <div
-                key={label}
-                className="flex items-center gap-3 bg-white rounded-2xl px-4 py-3 border border-[#E8ECF0] shadow-sm"
-              >
-                <div className="w-9 h-9 rounded-xl bg-[#2E4D3A]/10 flex items-center justify-center text-[#2E4D3A]">
-                  <Icon className="w-4 h-4" />
-                </div>
-                <p className="text-sm font-medium text-[#1F3A2A]">{label}</p>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
@@ -130,49 +110,33 @@ export default function PlanDePrueba() {
         <ReviewsTrustBar />
       </Suspense>
 
-      {/* QUÉ INCLUYE */}
-      <section className="py-16 md:py-24 bg-white">
-        <div className="container mx-auto px-4 max-w-5xl">
-          <div className="text-center max-w-2xl mx-auto mb-12">
+      {/* QUÉ INCLUYE — versión simple */}
+      <section className="py-16 md:py-20 bg-white">
+        <div className="container mx-auto px-4 max-w-2xl">
+          <div className="text-center mb-8">
             <p className="text-sm font-semibold tracking-widest text-[#2E4D3A] uppercase mb-3">Qué incluye</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-[#1F3A2A] mb-4">
-              Todo lo que necesitas para sentir la Nave
+            <h2 className="text-3xl md:text-4xl font-bold text-[#1F3A2A]">
+              Simple y completo
             </h2>
-            <p className="text-[#4A4A4A] text-lg">
-              Acceso real a la experiencia completa, sin medias tintas.
-            </p>
           </div>
-
-          <div className="grid md:grid-cols-3 gap-5">
+          <ul className="space-y-4">
             {[
-              {
-                icon: Wind,
-                title: "Yoga (todos los estilos)",
-                text: "Vinyasa, Yin, Integral y más. Para moverte, soltar y conectar con tu respiración.",
-              },
-              {
-                icon: Snowflake,
-                title: "Criomedicina",
-                text: "Inmersión en hielo guiada. Regulación del sistema nervioso, recuperación y claridad mental.",
-              },
-              {
-                icon: Flame,
-                title: "Método Wim Hof",
-                text: "Respiración consciente + frío. Una práctica completa para entrenar tu sistema nervioso.",
-              },
-            ].map(({ icon: Icon, title, text }) => (
-              <div
-                key={title}
-                className="group relative rounded-2xl p-7 bg-gradient-to-br from-[#F8FAFB] to-white border border-[#E8ECF0] hover:border-[#2E4D3A]/40 hover:shadow-lg transition-all"
+              "Acceso a todas las clases disponibles durante tu período de prueba.",
+              "Yoga + Criomedicina / Método Wim Hof.",
+              "Tú eliges la fecha de inicio.",
+              "Ideal para conocer la Nave antes de elegir una membresía.",
+            ].map((t) => (
+              <li
+                key={t}
+                className="flex gap-3 items-start bg-[#F8FAFB] border border-[#E8ECF0] rounded-2xl p-4"
               >
-                <div className="w-12 h-12 rounded-xl bg-[#2E4D3A] text-white flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
-                  <Icon className="w-5 h-5" />
-                </div>
-                <h3 className="text-xl font-bold text-[#1F3A2A] mb-2">{title}</h3>
-                <p className="text-[#4A4A4A] leading-relaxed">{text}</p>
-              </div>
+                <span className="w-6 h-6 rounded-full bg-[#2E4D3A]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <Check className="w-3.5 h-3.5 text-[#2E4D3A]" />
+                </span>
+                <span className="text-[#2A2A2A] leading-relaxed">{t}</span>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       </section>
 
