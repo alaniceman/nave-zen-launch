@@ -56,3 +56,9 @@ verify_jwt = false
 
 [functions.send-icefest-promo]
 verify_jwt = false
+
+[functions.submit-plan-prueba-lead]
+verify_jwt = false
+
+[functions.send-plan-prueba-activo]
+verify_jwt = false

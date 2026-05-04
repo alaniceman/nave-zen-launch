@@ -41,8 +41,7 @@ const MarzoReset = lazy(() => import("./pages/MarzoReset"));
 const Horarios = lazy(() => import("./pages/Horarios"));
 const ConoceElLugar = lazy(() => import("./pages/ConoceElLugar"));
 const FAQ = lazy(() => import("./pages/FAQ"));
-const ClaseDePrueba = lazy(() => import("./pages/ClaseDePrueba"));
-const TrialClassSchedule = lazy(() => import("./pages/TrialClassSchedule"));
+const PlanDePrueba = lazy(() => import("./pages/PlanDePrueba"));
 const CriomedicinMetodoWimHof = lazy(() => import("./pages/CriomedicinMetodoWimHof"));
 const CriomedicinIceBathEnGrupo = lazy(() => import("./pages/CriomedicinIceBathEnGrupo"));
 const CriomedicinAdsLanding = lazy(() => import("./pages/CriomedicinAdsLanding"));
@@ -83,6 +82,7 @@ const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
 const AdminMailerLite = lazy(() => import("./pages/admin/AdminMailerLite"));
 const AdminScheduleEntries = lazy(() => import("./pages/admin/AdminScheduleEntries"));
 const AdminTrialBookings = lazy(() => import("./pages/admin/AdminTrialBookings"));
+const AdminPlanesPrueba = lazy(() => import("./pages/admin/AdminPlanesPrueba"));
 const AdminCustomers = lazy(() => import("./pages/admin/AdminCustomers"));
 const AdminCustomerDetail = lazy(() => import("./pages/admin/AdminCustomerDetail"));
 const AdminMembershipPlans = lazy(() => import("./pages/admin/AdminMembershipPlans"));
@@ -139,8 +139,10 @@ const App = () => {
             <Route path="/horarios" element={<Horarios />} />
             <Route path="/conoce-el-lugar" element={<ConoceElLugar />} />
             <Route path="/faq" element={<FAQ />} />
-            <Route path="/clase-de-prueba" element={<Navigate to="/clase-de-prueba/agendar" replace />} />
-            <Route path="/clase-de-prueba/agendar" element={<TrialClassSchedule />} />
+            <Route path="/plan-de-prueba" element={<PlanDePrueba />} />
+            <Route path="/prueba-nave-studio" element={<Navigate to="/plan-de-prueba" replace />} />
+            <Route path="/clase-de-prueba" element={<Navigate to="/plan-de-prueba" replace />} />
+            <Route path="/clase-de-prueba/agendar" element={<Navigate to="/plan-de-prueba" replace />} />
             <Route path="/criomedicina-metodo-wim-hof" element={<CriomedicinMetodoWimHof />} />
             <Route path="/criomedicina-ice-bath-en-grupo" element={<CriomedicinIceBathEnGrupo />} />
             <Route path="/criomedicina-metodo-wim-hof-las-condes" element={<CriomedicinAdsLanding />} />
@@ -183,6 +185,7 @@ const App = () => {
               <Route path="paquetes-sesiones" element={<AdminSessionPackages />} />
               <Route path="codigos-sesiones" element={<AdminSessionCodes />} />
               <Route path="clases-prueba" element={<AdminTrialBookings />} />
+              <Route path="planes-prueba" element={<AdminPlanesPrueba />} />
               <Route path="clientes" element={<AdminCustomers />} />
               <Route path="clientes/:id" element={<AdminCustomerDetail />} />
               <Route path="membresias" element={<AdminMembershipPlans />} />

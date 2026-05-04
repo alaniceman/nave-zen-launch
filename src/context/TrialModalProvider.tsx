@@ -12,7 +12,7 @@ export const TrialModalProvider = ({ children }: { children: ReactNode }) => {
   const navigate = useNavigate();
 
   const openTrialModal = useCallback(() => {
-    navigate("/clase-de-prueba/agendar");
+    navigate("/plan-de-prueba");
   }, [navigate]);
 
   const closeTrialModal = useCallback(() => {
