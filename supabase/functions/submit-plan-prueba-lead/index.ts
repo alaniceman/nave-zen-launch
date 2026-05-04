@@ -238,17 +238,45 @@ serve(async (req) => {
       })
       .eq("id", data.leadId);
 
-    // CRM event for the redirect (background)
-    const crmWork = upsertCustomerAndLogEvent(supabase, {
-      email: lead.customer_email,
-      name: lead.customer_name,
-      phone: lead.customer_phone,
-      eventType: "plan_prueba_redirect",
-      eventTitle: `Redirigido a BoxMagic — ${PLAN_LABELS[data.planType]}`,
-      eventDescription: `Fecha solicitada: ${data.startDate}`,
-      metadata: { lead_id: data.leadId, plan_type: data.planType, requested_start_date: data.startDate },
-      statusIfNew: "trial_booked",
-    }).catch((e) => console.error("[CRM finalize]", e));
+    // Aviso al admin (ahora SÍ con plan y fecha) + CRM event en background
+    const finalizeBackground = async () => {
+      try {
+        const RESEND = Deno.env.get("RESEND_API_KEY");
+        if (RESEND) {
+          const resend = new Resend(RESEND);
+          const phoneClean = (lead.customer_phone || "").replace("+", "");
+          await resend.emails.send({
+            from: "Nave Studio <no-reply@studiolanave.com>",
+            reply_to: "lanave@alaniceman.com",
+            to: ["lanave@alaniceman.com"],
+            bcc: ["flowithmaral@gmail.com"],
+            subject: `Nuevo Plan de Prueba: ${lead.customer_name} — ${PLAN_LABELS[data.planType]}`,
+            html: `<div style="font-family:Helvetica Neue,Arial,sans-serif;max-width:560px;margin:0 auto;padding:20px">
+              <h2 style="color:#2E4D3A">Nuevo Plan de Prueba — Redirigido a BoxMagic</h2>
+              <p><strong>Nombre:</strong> ${lead.customer_name}</p>
+              <p><strong>Email:</strong> <a href="mailto:${lead.customer_email}">${lead.customer_email}</a></p>
+              <p><strong>WhatsApp:</strong> <a href="https://wa.me/${phoneClean}">${lead.customer_phone}</a></p>
+              <p><strong>Plan:</strong> ${PLAN_LABELS[data.planType]}</p>
+              <p><strong>Fecha de inicio solicitada:</strong> ${data.startDate}</p>
+              <p style="color:#666;font-size:13px;margin-top:18px">El cliente fue redirigido al checkout de BoxMagic. Confirmar pago y activar manualmente en la fecha indicada.</p>
+            </div>`,
+          });
+        }
+
+        await upsertCustomerAndLogEvent(supabase, {
+          email: lead.customer_email,
+          name: lead.customer_name,
+          phone: lead.customer_phone,
+          eventType: "plan_prueba_redirect",
+          eventTitle: `Redirigido a BoxMagic — ${PLAN_LABELS[data.planType]}`,
+          eventDescription: `Fecha solicitada: ${data.startDate}`,
+          metadata: { lead_id: data.leadId, plan_type: data.planType, requested_start_date: data.startDate },
+          statusIfNew: "trial_booked",
+        });
+      } catch (e) {
+        console.error("[finalize background]", e);
+      }
+    };
     // @ts-ignore
     if (typeof EdgeRuntime !== "undefined" && EdgeRuntime.waitUntil) {
       // @ts-ignore
