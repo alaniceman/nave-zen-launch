@@ -64,7 +64,21 @@ a{color:#2E4D3A}
 <p>Gracias por elegir tu plan de prueba en Nave Studio.</p>
 <p>Maral, nuestra super profe de yoga, crioguía y asistente, está configurando tu cuenta y seteando el inicio de tu plan de prueba.</p>
 <p>Como este proceso todavía lo hacemos manualmente, te dejamos estas instrucciones:</p>
-<div class="box"><p style="margin:0">Si ya te llegó un mail de BoxMagic confirmando tu plan y quieres partir ahora, estamos listos! 🛸</p></div>
+<div class="box">
+<p style="margin:0 0 12px"><strong>Si ya te llegó el mail de BoxMagic confirmando tu plan y quieres partir ahora, estamos listos! 🛸</strong></p>
+<p style="margin:0 0 10px">Reservamos tus clases desde la app de BoxMagic. Descárgala aquí:</p>
+<div style="margin:6px 0 12px">
+<a href="https://apps.apple.com/cl/app/boxmagic/id1163386834" style="display:inline-block;background:#2E4D3A;color:#fff;text-decoration:none;font-weight:600;padding:9px 16px;border-radius:8px;margin:0 6px 6px 0">Descargar para iPhone</a>
+<a href="https://play.google.com/store/apps/details?id=com.boxmagic.app" style="display:inline-block;background:#2E4D3A;color:#fff;text-decoration:none;font-weight:600;padding:9px 16px;border-radius:8px;margin:0 6px 6px 0">Descargar para Android</a>
+</div>
+<p style="margin:0 0 6px"><strong>Cómo entrar:</strong></p>
+<ol style="margin:0 0 6px 18px;padding:0">
+<li style="margin-bottom:4px">Abre la app y elige <strong>Nave Studio</strong> como sede.</li>
+<li style="margin-bottom:4px">Ingresa con el email que registraste.</li>
+<li style="margin-bottom:4px">Tu contraseña por defecto es: <span style="display:inline-block;background:#fff;border:1px dashed #2E4D3A;color:#2E4D3A;font-weight:700;padding:2px 8px;border-radius:6px;letter-spacing:0.5px">Nave7</span></li>
+</ol>
+<p style="margin:8px 0 0;font-size:13px;color:#6B7280">Por seguridad, te recomendamos cambiar tu contraseña la primera vez que entres.</p>
+</div>
 <div class="box"><p style="margin:0">Si ya te llegó el mail de BoxMagic, pero elegiste partir más adelante, danos un par de horas para setear manualmente tu fecha de inicio. Apenas esté listo, te enviaremos un nuevo correo para que puedas agendar.</p></div>
 <div class="box"><p style="margin:0">Si todavía no te ha llegado ningún mail de BoxMagic, puede que haya ocurrido un error en el pago. Puedes intentarlo nuevamente con los botones de abajo.</p></div>
 <div class="cta-row">
