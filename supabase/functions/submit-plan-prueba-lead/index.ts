@@ -6,10 +6,9 @@ import { getCorsHeaders } from "../_shared/cors.ts";
 import { upsertCustomerAndLogEvent } from "../_shared/crm.ts";
 import { appendToSheet } from "../_shared/googleSheets.ts";
 
-// TODO: Reemplazar con las URLs reales de checkout BoxMagic cuando estén disponibles.
 const BOXMAGIC_URLS: Record<string, string> = {
-  trial_7d: "https://cualesmi.boxmagic.app/checkout/PLACEHOLDER_PLAN_7D",
-  trial_15d: "https://cualesmi.boxmagic.app/checkout/PLACEHOLDER_PLAN_15D",
+  trial_7d: "https://boxmagic.cl/market/plan/Kp0M3Z7L8x",
+  trial_15d: "https://boxmagic.cl/market/plan/XY0ljp3LkV",
 };
 
 const PLAN_LABELS: Record<string, string> = {
