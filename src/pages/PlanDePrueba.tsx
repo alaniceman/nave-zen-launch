@@ -100,11 +100,6 @@ export default function PlanDePrueba() {
         </div>
       </section>
 
-      {/* SOCIAL PROOF */}
-      <Suspense fallback={<div className="h-32" />}>
-        <ReviewsTrustBar />
-      </Suspense>
-
       {/* QUÉ INCLUYE — versión simple */}
       <section className="py-16 md:py-20 bg-white">
         <div className="container mx-auto px-4 max-w-2xl">
@@ -191,6 +186,11 @@ export default function PlanDePrueba() {
           </div>
         </div>
       </section>
+
+      {/* SOCIAL PROOF */}
+      <Suspense fallback={<div className="h-32" />}>
+        <ReviewsTrustBar />
+      </Suspense>
 
       {/* CÓMO FUNCIONA */}
       <section className="py-16 md:py-24 bg-white">
