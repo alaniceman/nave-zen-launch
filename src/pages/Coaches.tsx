@@ -46,7 +46,7 @@ const Coaches = () => {
       title: "Fundador – Crioguía de Inmersiones y Breathwork",
       credentials: "Instructor Cert. Método Wim Hof · Coach Ontológico · Ing. Civil PUC",
       description: "Ayudo a las personas a vivir con la certeza de que pueden lograr lo que se propongan, sin sacrificar su bienestar.",
-      image: "/lovable-uploads/b009e7fc-5c3e-4b38-99e1-a3cc58605206.png",
+      image: "/lovable-uploads/alan.webp",
       badge: "Fundador",
       tags: ["Mindset", "Movimiento"]
     },
@@ -74,7 +74,7 @@ const Coaches = () => {
       title: "Instructor Certificado – Ice Yoga Method",
       credentials: "Crioguía de Inmersiones y Breathwork",
       description: "Te acompaño a fortalecer cuerpo y mente con frío, respiración y movimiento, cultivando foco y resiliencia sin burnout.",
-      image: "/lovable-uploads/10cde0b9-b008-44ba-aa09-dcd13c8e2826.png",
+      image: "/lovable-uploads/rolo.webp",
       tags: ["Ice Yoga", "Breathwork", "Movimiento"]
     },
     {
@@ -83,7 +83,7 @@ const Coaches = () => {
       title: "Instructora de Vinyasa Yoga y Danza · Educadora Somática",
       credentials: "Educadora Somática Certificada",
       description: "Guío secuencias fluidas que despiertan tu creatividad y presencia corporal.",
-      image: "/lovable-uploads/bb33cba0-3deb-41b3-97f1-c55d9dc169c1.png",
+      image: "/lovable-uploads/mar.webp",
       tags: ["Movimiento", "Energía"]
     },
     {
@@ -101,7 +101,7 @@ const Coaches = () => {
       title: "Instructora de Yoga · Doula · Reikista",
       credentials: "Doula Certificada · Reiki Master",
       description: "Te acompaño a transitar etapas de cambio con serenidad, cuerpo y corazón alineados.",
-      image: "/lovable-uploads/367f27fb-5f27-4b38-bc21-af8951de42aa.png",
+      image: "/lovable-uploads/amber.webp",
       tags: ["Energía", "Terapia"]
     }
   ]
