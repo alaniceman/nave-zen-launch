@@ -274,32 +274,6 @@ export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) 
           </div>
         )}
 
-        {step === 3 && (
-          <div className="space-y-4 text-center py-2">
-            <p className="font-bold text-lg text-[#1A1A1A]">
-              Estás siendo redirigido a la plataforma de pago para activar tu prueba
-            </p>
-            <p className="text-[#4A4A4A]">
-              Una vez completado el pago, tu acceso quedará listo.
-            </p>
-            <Button
-              onClick={onContinueToPayment}
-              className="w-full bg-[#2E4D3A] hover:bg-[#2E4D3A]/90 text-white py-6 text-base"
-            >
-              Continuar al pago
-            </Button>
-            {boxmagicUrl && (
-              <a
-                href={boxmagicUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-xs text-[#2E4D3A] underline block"
-              >
-                Si no se abre, haz clic aquí
-              </a>
-            )}
-          </div>
-        )}
       </DialogContent>
     </Dialog>
   );
