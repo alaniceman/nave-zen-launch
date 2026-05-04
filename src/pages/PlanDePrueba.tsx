@@ -104,7 +104,8 @@ export default function PlanDePrueba() {
               features={[
                 "Todas las clases de Yoga",
                 "Criomedicina / Método Wim Hof",
-                "Acceso por 7 días desde tu fecha de inicio",
+                "Acceso por 7 días",
+                "Elige la fecha de inicio",
               ]}
             />
             <PlanCard
@@ -117,7 +118,8 @@ export default function PlanDePrueba() {
               features={[
                 "Todas las clases de Yoga",
                 "Criomedicina / Método Wim Hof",
-                "Acceso por 15 días desde tu fecha de inicio",
+                "Acceso por 15 días",
+                "Elige la fecha de inicio",
               ]}
             />
           </div>
