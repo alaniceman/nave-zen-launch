@@ -280,7 +280,9 @@ serve(async (req) => {
     // @ts-ignore
     if (typeof EdgeRuntime !== "undefined" && EdgeRuntime.waitUntil) {
       // @ts-ignore
-      EdgeRuntime.waitUntil(crmWork);
+      EdgeRuntime.waitUntil(finalizeBackground());
+    } else {
+      finalizeBackground();
     }
 
     return new Response(
