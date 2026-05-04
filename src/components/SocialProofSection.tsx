@@ -1,7 +1,7 @@
 import { Star } from "lucide-react";
 import { ReviewsTrustBar } from "@/components/ReviewsTrustBar";
-const wimHofLogo = "/lovable-uploads/4237a4a8-4b67-4133-9d1e-5a134df22d8c.png";
-const yogaAllianceLogo = "/lovable-uploads/cdad4a3b-fb0e-4d9c-8089-e085dbc1c718.png";
+const wimHofLogo = "/lovable-uploads/wim-hof.webp";
+const yogaAllianceLogo = "/lovable-uploads/yoga-alliance.webp";
 export const SocialProofSection = () => {
   const certifications = [{
     name: "Wim Hof Instructor",
