@@ -124,92 +124,106 @@ serve(async (req) => {
         throw new Error("Failed to create lead");
       }
 
-      // Google Sheets (non-blocking)
-      const now = new Date().toLocaleString("es-CL", { timeZone: "America/Santiago" });
-      appendToSheet([[now, data.name, email, phone, "PLAN_PRUEBA_LEAD", "", ""]])
-        .catch((err) => console.error("[Sheets]", err));
-
-      // email_subscribers upsert
-      const { data: existingSub } = await supabase
-        .from("email_subscribers")
-        .select("id")
-        .eq("email", email)
-        .limit(1);
-      if (existingSub && existingSub.length > 0) {
-        await supabase
-          .from("email_subscribers")
-          .update({ whatsapp: phone, updated_at: new Date().toISOString() })
-          .eq("id", existingSub[0].id);
-      } else {
-        await supabase.from("email_subscribers").insert({
-          email, whatsapp: phone, source: "plan-de-prueba",
-          tags: ["plan-de-prueba"], mailerlite_synced: false,
-        });
-      }
-
-      // MailerLite (non-blocking)
-      const ML = Deno.env.get("MAILERLITE_API_KEY");
-      if (ML) {
-        fetch("https://connect.mailerlite.com/api/subscribers", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${ML}`,
-            Accept: "application/json",
-          },
-          body: JSON.stringify({
-            email,
-            fields: { phone, name: data.name, source: "plan-de-prueba" },
-            tags: ["plan-de-prueba"],
-            status: "active",
-          }),
-        }).catch((e) => console.error("[ML]", e));
-      }
-
-      // Resend emails
-      const RESEND = Deno.env.get("RESEND_API_KEY");
-      if (RESEND) {
-        const resend = new Resend(RESEND);
+      // ===== Background work — do NOT block the HTTP response =====
+      const backgroundWork = async () => {
         try {
-          await resend.emails.send({
-            from: "Nave Studio <no-reply@studiolanave.com>",
-            reply_to: "lanave@alaniceman.com",
-            to: [data.email],
-            subject: "Estamos procesando tu plan de prueba en Nave Studio",
-            html: processingEmailHtml(data.name),
-          });
-          // 500ms gap to respect 2 req/sec
-          await new Promise((r) => setTimeout(r, 550));
-          await resend.emails.send({
-            from: "Nave Studio <no-reply@studiolanave.com>",
-            reply_to: "lanave@alaniceman.com",
-            to: ["lanave@alaniceman.com"],
-            bcc: ["flowithmaral@gmail.com"],
-            subject: `Nuevo lead Plan de Prueba: ${data.name}`,
-            html: `<div style="font-family:Helvetica Neue,Arial,sans-serif;max-width:560px;margin:0 auto;padding:20px">
-              <h2 style="color:#2E4D3A">Nuevo lead — Plan de Prueba</h2>
-              <p><strong>Nombre:</strong> ${data.name}</p>
-              <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
-              <p><strong>WhatsApp:</strong> <a href="https://wa.me/${phone.replace("+", "")}">${phone}</a></p>
-              ${data.utm_source ? `<p style="color:#999;font-size:12px">UTM: ${data.utm_source} / ${data.utm_medium || "-"} / ${data.utm_campaign || "-"}</p>` : ""}
-              <p style="color:#666;font-size:13px">Aún no eligió plan ni fecha de inicio.</p>
-            </div>`,
+          // Google Sheets
+          const now = new Date().toLocaleString("es-CL", { timeZone: "America/Santiago" });
+          appendToSheet([[now, data.name, email, phone, "PLAN_PRUEBA_LEAD", "", ""]])
+            .catch((err) => console.error("[Sheets]", err));
+
+          // email_subscribers upsert
+          const { data: existingSub } = await supabase
+            .from("email_subscribers")
+            .select("id")
+            .eq("email", email)
+            .limit(1);
+          if (existingSub && existingSub.length > 0) {
+            await supabase
+              .from("email_subscribers")
+              .update({ whatsapp: phone, updated_at: new Date().toISOString() })
+              .eq("id", existingSub[0].id);
+          } else {
+            await supabase.from("email_subscribers").insert({
+              email, whatsapp: phone, source: "plan-de-prueba",
+              tags: ["plan-de-prueba"], mailerlite_synced: false,
+            });
+          }
+
+          // MailerLite
+          const ML = Deno.env.get("MAILERLITE_API_KEY");
+          if (ML) {
+            fetch("https://connect.mailerlite.com/api/subscribers", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${ML}`,
+                Accept: "application/json",
+              },
+              body: JSON.stringify({
+                email,
+                fields: { phone, name: data.name, source: "plan-de-prueba" },
+                tags: ["plan-de-prueba"],
+                status: "active",
+              }),
+            }).catch((e) => console.error("[ML]", e));
+          }
+
+          // Resend emails
+          const RESEND = Deno.env.get("RESEND_API_KEY");
+          if (RESEND) {
+            const resend = new Resend(RESEND);
+            try {
+              await resend.emails.send({
+                from: "Nave Studio <no-reply@studiolanave.com>",
+                reply_to: "lanave@alaniceman.com",
+                to: [data.email],
+                subject: "Estamos procesando tu plan de prueba en Nave Studio",
+                html: processingEmailHtml(data.name),
+              });
+              await new Promise((r) => setTimeout(r, 550));
+              await resend.emails.send({
+                from: "Nave Studio <no-reply@studiolanave.com>",
+                reply_to: "lanave@alaniceman.com",
+                to: ["lanave@alaniceman.com"],
+                bcc: ["flowithmaral@gmail.com"],
+                subject: `Nuevo lead Plan de Prueba: ${data.name}`,
+                html: `<div style="font-family:Helvetica Neue,Arial,sans-serif;max-width:560px;margin:0 auto;padding:20px">
+                  <h2 style="color:#2E4D3A">Nuevo lead — Plan de Prueba</h2>
+                  <p><strong>Nombre:</strong> ${data.name}</p>
+                  <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
+                  <p><strong>WhatsApp:</strong> <a href="https://wa.me/${phone.replace("+", "")}">${phone}</a></p>
+                  ${data.utm_source ? `<p style="color:#999;font-size:12px">UTM: ${data.utm_source} / ${data.utm_medium || "-"} / ${data.utm_campaign || "-"}</p>` : ""}
+                  <p style="color:#666;font-size:13px">Aún no eligió plan ni fecha de inicio.</p>
+                </div>`,
+              });
+            } catch (e) {
+              console.error("[Resend lead]", e);
+            }
+          }
+
+          // CRM
+          await upsertCustomerAndLogEvent(supabase, {
+            email,
+            name: data.name,
+            phone,
+            eventType: "plan_prueba_lead",
+            eventTitle: "Interesado en Plan de Prueba",
+            eventDescription: "Completó paso 1 del formulario",
+            statusIfNew: "trial_booked",
           });
         } catch (e) {
-          console.error("[Resend lead]", e);
+          console.error("[plan-prueba background]", e);
         }
-      }
+      };
 
-      // CRM
-      await upsertCustomerAndLogEvent(supabase, {
-        email,
-        name: data.name,
-        phone,
-        eventType: "plan_prueba_lead",
-        eventTitle: "Interesado en Plan de Prueba",
-        eventDescription: "Completó paso 1 del formulario",
-        statusIfNew: "trial_booked",
-      });
+      // @ts-ignore — Deno EdgeRuntime keeps the function alive after the response
+      if (typeof EdgeRuntime !== "undefined" && EdgeRuntime.waitUntil) {
+        // @ts-ignore
+        EdgeRuntime.waitUntil(backgroundWork());
+      } else {
+        backgroundWork();
+      }
 
       return new Response(JSON.stringify({ success: true, leadId: lead.id }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
