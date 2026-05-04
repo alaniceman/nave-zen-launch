@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import { format, parseISO, addDays } from "date-fns";
 import { es } from "date-fns/locale";
 import { RefreshCw, ExternalLink, MessageCircle, CheckCircle2 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export type Lead = {
   id: string;
@@ -57,6 +57,7 @@ export default function AdminPlanesPrueba() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [paidModalLead, setPaidModalLead] = useState<Lead | null>(null);
+  const navigate = useNavigate();
 
   const fetch = async () => {
     setLoading(true);
@@ -181,10 +182,24 @@ export default function AdminPlanesPrueba() {
                   </TableCell>
                   <TableCell>
                     <div className="flex gap-2">
-                      <Button asChild size="sm" variant="outline" className="h-7 text-xs">
-                        <Link to={`/admin/clientes?email=${encodeURIComponent(l.customer_email)}`}>
-                          <ExternalLink className="h-3 w-3 mr-1" />Ver
-                        </Link>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="h-7 text-xs"
+                        onClick={async () => {
+                          const { data, error } = await supabase
+                            .from("customers")
+                            .select("id")
+                            .eq("email", l.customer_email.toLowerCase().trim())
+                            .maybeSingle();
+                          if (error || !data) {
+                            toast.error("Cliente no encontrado en CRM");
+                            return;
+                          }
+                          navigate(`/admin/clientes/${data.id}`);
+                        }}
+                      >
+                        <ExternalLink className="h-3 w-3 mr-1" />Ver
                       </Button>
                       {l.status !== "plan_prueba_activo" && l.status !== "plan_prueba_finalizado" && (
                         <Button
