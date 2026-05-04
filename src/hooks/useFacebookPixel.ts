@@ -21,10 +21,17 @@ export const useFacebookPixel = () => {
 
   const trackEvent = useCallback((eventName: string, parameters?: Record<string, unknown>, eventId?: string) => {
     if (typeof window !== 'undefined' && window.fbq) {
+      const STANDARD_EVENTS = new Set([
+        'PageView', 'ViewContent', 'Search', 'AddToCart', 'AddToWishlist',
+        'InitiateCheckout', 'AddPaymentInfo', 'Purchase', 'Lead', 'CompleteRegistration',
+        'Contact', 'CustomizeProduct', 'Donate', 'FindLocation', 'Schedule',
+        'StartTrial', 'SubmitApplication', 'Subscribe',
+      ]);
+      const method = STANDARD_EVENTS.has(eventName) ? 'track' : 'trackCustom';
       if (eventId) {
-        window.fbq('track', eventName, parameters, { eventID: eventId });
+        window.fbq(method, eventName, parameters, { eventID: eventId });
       } else {
-        window.fbq('track', eventName, parameters);
+        window.fbq(method, eventName, parameters);
       }
     }
   }, []);
