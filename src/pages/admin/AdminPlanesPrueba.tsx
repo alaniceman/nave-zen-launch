@@ -57,6 +57,7 @@ export default function AdminPlanesPrueba() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [paidModalLead, setPaidModalLead] = useState<Lead | null>(null);
+  const navigate = useNavigate();
 
   const fetch = async () => {
     setLoading(true);
