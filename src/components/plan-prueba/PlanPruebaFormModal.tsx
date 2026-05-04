@@ -123,31 +123,38 @@ export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) 
         body: { step: "finalize", leadId, planType: plan, startDate: startDateStr },
       });
       if (error || !data?.boxmagicUrl) throw new Error(data?.error || "Error al confirmar");
-      setBoxmagicUrl(data.boxmagicUrl);
-      setStep(3);
+
+      // Track redirect event
+      const redirectEventId = `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
+      trackEvent("plan_trial_redirect_payment", { plan_type: plan }, redirectEventId);
+      if (userInfo) {
+        trackServerEvent({
+          eventName: "plan_trial_redirect_payment",
+          eventId: redirectEventId,
+          userEmail: userInfo.email,
+          userName: userInfo.name,
+          userPhone: userInfo.phone,
+          contentName: PLAN_LABELS[plan],
+        }).catch(() => {});
+      }
+
+      // Close form modal and trigger global RedirectModal via delegated [data-checkout-url]
+      onOpenChange(false);
+      requestAnimationFrame(() => {
+        const trigger = document.createElement("a");
+        trigger.href = data.boxmagicUrl;
+        trigger.setAttribute("data-checkout-url", data.boxmagicUrl);
+        trigger.setAttribute("data-plan", PLAN_LABELS[plan]);
+        trigger.style.display = "none";
+        document.body.appendChild(trigger);
+        trigger.click();
+        document.body.removeChild(trigger);
+      });
     } catch (e: any) {
       setError(e.message || "Error al confirmar");
     } finally {
       setSubmitting(false);
     }
-  };
-
-  const onContinueToPayment = () => {
-    if (!boxmagicUrl) return;
-    const eventId = `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
-    trackEvent("plan_trial_redirect_payment", { plan_type: plan }, eventId);
-    if (userInfo) {
-      trackServerEvent({
-        eventName: "plan_trial_redirect_payment",
-        eventId,
-        userEmail: userInfo.email,
-        userName: userInfo.name,
-        userPhone: userInfo.phone,
-        contentName: PLAN_LABELS[plan],
-      }).catch(() => {});
-    }
-    window.open(boxmagicUrl, "_blank", "noopener,noreferrer");
-    onOpenChange(false);
   };
 
   return (
