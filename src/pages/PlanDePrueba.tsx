@@ -86,7 +86,7 @@ export default function PlanDePrueba() {
                 onClick={() => scrollTo(pricingRef)}
                 className="bg-[#2E4D3A] hover:bg-[#26412F] text-white font-semibold px-8 py-4 rounded-xl text-lg transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
               >
-                Comprar plan de prueba
+                Activar plan de prueba
               </button>
               <button
                 onClick={() => scrollTo(scheduleRef)}
