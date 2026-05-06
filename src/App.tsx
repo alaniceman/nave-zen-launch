@@ -38,6 +38,7 @@ const Cyber2025 = lazy(() => import("./pages/Cyber2025"));
 const PlanAnual2026 = lazy(() => import("./pages/PlanAnual2026"));
 const SanValentin = lazy(() => import("./pages/SanValentin"));
 const MarzoReset = lazy(() => import("./pages/MarzoReset"));
+const DiaDeLaMadre = lazy(() => import("./pages/DiaDeLaMadre"));
 const Horarios = lazy(() => import("./pages/Horarios"));
 const ConoceElLugar = lazy(() => import("./pages/ConoceElLugar"));
 const FAQ = lazy(() => import("./pages/FAQ"));
