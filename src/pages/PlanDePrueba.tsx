@@ -174,6 +174,16 @@ export default function PlanDePrueba() {
             />
           </div>
 
+          {/* Aviso de elegibilidad */}
+          <div className="max-w-2xl mx-auto mt-8 bg-white border border-[#E8ECF0] rounded-2xl p-5 text-center">
+            <p className="text-[#1F3A2A] font-semibold mb-1">Plan de prueba para nuevos alumnos</p>
+            <p className="text-[#4A4A4A] text-sm leading-relaxed">
+              Válido solo una vez por persona. Creado para quienes quieren conocer Nave Studio, probar nuestras clases de forma ilimitada y decidir si una membresía es el siguiente paso para su práctica.
+              <br />
+              <span className="text-[#4A4A4A]/80 text-xs">No aplica para alumnos activos o personas que ya hayan utilizado un plan de prueba anteriormente.</span>
+            </p>
+          </div>
+
           {/* Link a horarios dentro de la misma página */}
           <div className="text-center mt-10">
             <button
