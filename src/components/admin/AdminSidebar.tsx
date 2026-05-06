@@ -38,6 +38,7 @@ const menuItems = [
   { title: 'Plantillas Email', url: '/admin/emails', icon: Mail },
   { title: 'Chat Logs', url: '/admin/chat-logs', icon: MessageCircle },
   { title: 'Nave Brain', url: '/admin/brain', icon: Brain },
+  { title: 'Conocimiento Nave AI', url: '/admin/nave-ai', icon: Sparkles },
 ];
 
 export function AdminSidebar() {
