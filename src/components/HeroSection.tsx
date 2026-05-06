@@ -194,12 +194,13 @@ const HeroSlideDiaMadre = () => {
 
 export const HeroSection = () => {
   const [showPromo, setShowPromo] = useState(false);
+  const [showDiaMadre, setShowDiaMadre] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  // Check if we should show Plan de Prueba promo
   useEffect(() => {
     const now = new Date();
     setShowPromo(now < PROMO_END_DATE);
+    setShowDiaMadre(now < DIA_MADRE_END_DATE);
   }, []);
 
   const autoplayPlugin = Autoplay({
@@ -209,10 +210,7 @@ export const HeroSection = () => {
   });
 
   const [emblaRef, emblaApi] = useEmblaCarousel(
-    {
-      loop: true,
-      duration: 30,
-    },
+    { loop: true, duration: 30 },
     [autoplayPlugin]
   );
 
@@ -234,8 +232,8 @@ export const HeroSection = () => {
     };
   }, [emblaApi, onSelect]);
 
-  // If promo expired, just show main hero without carousel
-  if (!showPromo) {
+  // If no promos active, just show main hero
+  if (!showPromo && !showDiaMadre) {
     return (
       <section className="relative min-h-screen overflow-hidden">
         <HeroSlideMain />
@@ -244,7 +242,8 @@ export const HeroSection = () => {
   }
 
   const slides = [
-    { id: 'plan-prueba', component: <HeroSlidePlanPrueba /> },
+    ...(showDiaMadre ? [{ id: 'dia-madre', component: <HeroSlideDiaMadre /> }] : []),
+    ...(showPromo ? [{ id: 'plan-prueba', component: <HeroSlidePlanPrueba /> }] : []),
     { id: 'main', component: <HeroSlideMain /> },
   ];
 
