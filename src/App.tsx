@@ -138,6 +138,8 @@ const App = () => {
             <Route path="/anual" element={<PlanAnual2026 />} />
             <Route path="/san-valentin" element={<SanValentin />} />
             <Route path="/marzo-reset" element={<MarzoReset />} />
+            <Route path="/dia-de-la-madre" element={<DiaDeLaMadre />} />
+            <Route path="/diadelamadre" element={<Navigate to="/dia-de-la-madre" replace />} />
             <Route path="/horarios" element={<Horarios />} />
             <Route path="/conoce-el-lugar" element={<ConoceElLugar />} />
             <Route path="/faq" element={<FAQ />} />
