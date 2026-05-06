@@ -174,6 +174,16 @@ export default function PlanDePrueba() {
             />
           </div>
 
+          {/* Aviso de elegibilidad */}
+          <div className="max-w-2xl mx-auto mt-8 bg-white border border-[#E8ECF0] rounded-2xl p-5 text-center">
+            <p className="text-[#1F3A2A] font-semibold mb-1">Plan de prueba para nuevos alumnos</p>
+            <p className="text-[#4A4A4A] text-sm leading-relaxed">
+              Válido solo una vez por persona. Creado para quienes quieren conocer Nave Studio, probar nuestras clases de forma ilimitada y decidir si una membresía es el siguiente paso para su práctica.
+              <br />
+              <span className="text-[#4A4A4A]/80 text-xs">No aplica para alumnos activos o personas que ya hayan utilizado un plan de prueba anteriormente.</span>
+            </p>
+          </div>
+
           {/* Link a horarios dentro de la misma página */}
           <div className="text-center mt-10">
             <button
@@ -246,6 +256,16 @@ export default function PlanDePrueba() {
           <div className="space-y-4">
             {[
               {
+                title: "¿Quién puede comprar el plan de prueba?",
+                content: (
+                  <>
+                    El plan de prueba está pensado <strong>solo para nuevos alumnos</strong> y es válido <strong>una única vez por persona</strong>. Su objetivo es que puedas conocer Nave Studio, probar nuestras clases de forma ilimitada y decidir si una membresía es el siguiente paso para tu práctica.
+                    <br /><br />
+                    <span className="text-[#4A4A4A]/90">No aplica para alumnos activos o personas que ya hayan utilizado un plan de prueba anteriormente. Si tienes dudas sobre tu caso, escríbenos por WhatsApp antes de comprar.</span>
+                  </>
+                ),
+              },
+              {
                 title: "Qué es Nave Studio",
                 content:
                   "Somos un estudio en Las Condes que combina yoga, respiración consciente y exposición controlada al frío (Criomedicina y Método Wim Hof). Un espacio diseñado para entrenar cuerpo, mente y sistema nervioso.",
@@ -262,8 +282,20 @@ export default function PlanDePrueba() {
               },
               {
                 title: "Cómo se agenda desde BoxMagic",
-                content:
-                  'Entra a cualesmi.boxmagic.app/members con el email que registraste y tu contraseña inicial. Desde ahí puedes ver horarios y reservar tus clases.',
+                content: (
+                  <>
+                    Ingresa a{" "}
+                    <a
+                      href="https://cualesmi.boxmagic.app/members"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[#2E4D3A] font-semibold underline underline-offset-2 hover:text-[#1F3A2A]"
+                    >
+                      cualesmi.boxmagic.app/members
+                    </a>
+                    , descarga la app de BoxMagic e inicia sesión con el email que registraste. Desde ahí puedes ver los horarios y reservar tus clases.
+                  </>
+                ),
               },
               {
                 title: "Reglas de seguridad — Criomedicina / Método Wim Hof",
