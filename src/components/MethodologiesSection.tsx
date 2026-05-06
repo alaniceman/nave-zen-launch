@@ -113,10 +113,10 @@ export const MethodologiesSection = () => {
             ¿Primera vez en la Nave?
           </p>
           <Link
-            to="/clase-de-prueba/agendar"
+            to="/plan-de-prueba"
             className="inline-block bg-accent text-white font-medium py-3 px-8 rounded-lg hover:bg-primary transition-colors duration-200 font-inter"
           >
-            Agenda tu clase de prueba gratis →
+            Activa tu Plan de Prueba (7 o 15 días) →
           </Link>
         </div>
       </div>

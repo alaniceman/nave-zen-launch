@@ -77,8 +77,8 @@ const Experiencias = () => {
         "Reduce estrés y ansiedad"
       ],
       note: "Para sumergirte necesitas haber completado una sesión de Método Wim Hof.",
-      cta: "Clase de prueba GRATIS",
-      ctaAction: "trial",
+      cta: "Activa tu plan de prueba",
+      href: "/plan-de-prueba",
     },
     {
       id: "breathwork",
@@ -149,11 +149,11 @@ const Experiencias = () => {
         </p>
         <div className="flex flex-col sm:flex-row gap-4 animate-fade-in">
           <Button
-            onClick={openTrialModal}
+            asChild
             size="lg"
             className="bg-accent hover:bg-accent/90 text-white py-3 px-8 rounded-[10px] transition-all duration-200 hover:scale-105 text-base"
           >
-            Prueba una clase gratis
+            <Link to="/plan-de-prueba">Activa tu plan de prueba</Link>
           </Button>
           <Button
             asChild
@@ -340,15 +340,15 @@ const Experiencias = () => {
             ¿Listo para vivir tu primera experiencia?
           </h2>
           <p className="text-muted-foreground mb-10 max-w-lg mx-auto leading-relaxed text-lg">
-            Comienza con una clase de prueba gratuita o explora nuestros planes.
+            Comienza con un Plan de Prueba (7 o 15 días) o explora nuestros planes mensuales.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
-              onClick={openTrialModal}
+              asChild
               size="lg"
               className="bg-accent hover:bg-accent/90 text-white py-3 px-8 rounded-[10px] transition-all duration-200 hover:scale-105 text-base"
             >
-              Clase de prueba gratis
+              <Link to="/plan-de-prueba">Activa tu plan de prueba</Link>
             </Button>
             <Button
               asChild

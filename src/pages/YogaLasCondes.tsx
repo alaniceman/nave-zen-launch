@@ -120,7 +120,7 @@ const structuredDataYoga = {
   "@context": "https://schema.org",
   "@type": "SportsActivityLocation",
   "name": "Nave Studio — Yoga en Las Condes",
-  "description": "Clases de Yoga en Las Condes: Yin, Yang, Vinyasa, Vinyasa Somático, Integral y Power Yoga. Primera clase de prueba gratis.",
+  "description": "Clases de Yoga en Las Condes: Yin, Yang, Vinyasa, Vinyasa Somático, Integral y Power Yoga. Plan de prueba 7 días por $9.900.",
   "url": "https://studiolanave.com/yoga-las-condes",
   "telephone": "+56946120426",
   "address": {
@@ -183,10 +183,10 @@ const YogaLasCondes = () => {
     <>
       <Helmet>
         <title>Yoga en Las Condes | Yin, Vinyasa, Vinyasa Somático, Power Yoga | Nave Studio</title>
-        <meta name="description" content="Clases de Yoga en Las Condes, Santiago. Prueba Yin, Vinyasa, Vinyasa Somático, Power e Integral Yoga con instructores certificados. Primera clase gratis. Antares 259." />
+        <meta name="description" content="Clases de Yoga en Las Condes, Santiago. Prueba Yin, Vinyasa, Vinyasa Somático, Power e Integral Yoga con instructores certificados. Plan de prueba 7 días por $9.900. Antares 259." />
         <link rel="canonical" href="https://studiolanave.com/yoga-las-condes" />
         <meta property="og:title" content="Yoga en Las Condes | Yin, Vinyasa, Vinyasa Somático, Power Yoga | Nave Studio" />
-        <meta property="og:description" content="Clases de Yoga en Las Condes. Yin, Vinyasa, Vinyasa Somático, Power e Integral con instructores certificados. Primera clase gratis." />
+        <meta property="og:description" content="Clases de Yoga en Las Condes. Yin, Vinyasa, Vinyasa Somático, Power e Integral con instructores certificados. Plan de prueba 7 días por $9.900." />
         <meta property="og:url" content="https://studiolanave.com/yoga-las-condes" />
         <meta property="og:image" content="https://studiolanave.com/lovable-uploads/82672388-9723-4aee-a1f2-ac72618cd26a.png" />
         <meta property="og:type" content="website" />
@@ -206,7 +206,7 @@ const YogaLasCondes = () => {
           <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
             <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm text-white/90 text-sm px-4 py-1.5 rounded-full mb-6 border border-white/20">
               <Sparkles className="w-4 h-4" />
-              Clases de lunes a domingo · Primera clase gratis
+              Clases de lunes a domingo · Plan de prueba 7 días $9.900
             </div>
             <h1 className="text-5xl md:text-7xl font-bold text-white font-space mb-5 leading-tight tracking-tight">
               Yoga en<br />Las Condes
@@ -219,10 +219,10 @@ const YogaLasCondes = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="/clase-de-prueba/agendar"
+                href="/plan-de-prueba"
                 className="bg-accent hover:bg-accent/90 text-white rounded-full px-10 py-4 font-semibold transition-all duration-300 hover:scale-105 hover:shadow-xl shadow-lg font-inter inline-flex items-center justify-center text-lg"
               >
-                Agenda tu clase gratis
+                Activa tu plan de prueba
               </a>
               <a
                 href="#horarios-yoga"
@@ -537,9 +537,9 @@ const YogaLasCondes = () => {
               ))}
             </div>
             <p className="text-center text-sm text-muted-foreground font-inter mt-8">
-              ¿Primera vez? Tu{" "}
-              <a href="/clase-de-prueba/agendar" className="text-accent underline font-semibold hover:text-primary transition-colors">
-                clase de prueba es gratis
+              ¿Primera vez? Activa tu{" "}
+              <a href="/plan-de-prueba" className="text-accent underline font-semibold hover:text-primary transition-colors">
+                Plan de Prueba (7 días por $9.900)
               </a>
               .
             </p>

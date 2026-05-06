@@ -5,22 +5,22 @@ const FreeYogaSection = () => {
     <section className="py-20 bg-neutral-50 text-center">
       <div className="container mx-auto px-6">
         <h2 className="text-primary text-3xl font-bold mb-4 font-space-grotesk">
-          ¿Te gustaría conocer la Nave y empezar con una clase{" "}
-          <span className="text-accent">gratuita</span> de Yoga?
+          ¿Quieres vivir Nave Studio con{" "}
+          <span className="text-accent">acceso ilimitado</span>?
         </h2>
         <p className="max-w-xl mx-auto text-muted-foreground mb-8 font-inter">
-          Vive la energía del estudio, respira profundo y prueba nuestras prácticas sin costo.
+          Activa tu Plan de Prueba de 7 o 15 días: Yoga, Breathwork, Criomedicina y Método Wim Hof — ilimitado. Tú eliges la fecha de inicio.
         </p>
-        <Button 
+        <Button
           asChild
           className="bg-accent text-white font-medium py-3 px-8 rounded-lg hover:bg-primary transition-colors duration-300 font-inter"
         >
-          <a href="/clase-de-prueba/agendar">
-            Agenda tu clase de prueba
+          <a href="/plan-de-prueba">
+            Ver planes de prueba
           </a>
         </Button>
         <p className="text-xs text-muted-foreground mt-4 font-inter">
-          *clase gratuita no incluye baño de agua fría
+          Desde $9.900 · 7 días · acceso a todas las experiencias
         </p>
       </div>
     </section>

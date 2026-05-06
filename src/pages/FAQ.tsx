@@ -20,12 +20,12 @@ const FAQ = () => {
       answer: "El Ice Bath es seguro cuando se practica correctamente bajo supervisión. Nuestros coaches están certificados para guiarte paso a paso. Contraindicaciones: embarazo, problemas cardíacos graves, presión arterial descontrolada. Siempre consulta con tu médico si tienes dudas."
     },
     {
-      question: "¿Puedo tomar una clase de prueba antes de suscribirme?",
-      answer: "¡Por supuesto! Ofrecemos clases de prueba gratuitas para que experimentes nuestras metodologías. Puedes agendar directamente desde nuestra web en la sección 'Clase de prueba'."
+      question: "¿Tienen clase de prueba gratis?",
+      answer: "No, ya no ofrecemos clases de prueba gratuitas. Ahora tenemos Planes de Prueba pagados con acceso ilimitado por 7 días ($9.900) o 15 días ($19.900). Tú eliges la fecha de inicio (hasta 30 días en el futuro). Más info en /plan-de-prueba."
     },
     {
-      question: "¿La clase de prueba incluye inmersión en agua fría?",
-      answer: "No. Las clases de prueba no incluyen inmersión en hielo al final, independiente de si ya has hecho baños de hielo antes o no. Esto es parte del proceso para que primero conozcas el espacio, la práctica y cómo trabajamos. Si te interesa el hielo, te invitamos a agendar una sesión del Método Wim Hof."
+      question: "¿El plan de prueba incluye agua fría (Ice Bath)?",
+      answer: "Sí, el Plan de Prueba incluye acceso a Yoga, Breathwork, Criomedicina y Método Wim Hof. Para entrar al agua fría necesitas haber hecho una sesión guiada de Wim Hof previamente; puede ser dentro del mismo plan de prueba."
     },
     {
       question: "¿Puedo acceder al agua fría después de una clase de yoga pagada?",

@@ -7,7 +7,7 @@ const seoData = {
     description: "Ice Bath, Breathwork Wim Hof, Yoga y biohacking. Reserva tu clase en Las Condes y regula tu sistema nervioso.",
     canonical: "https://studiolanave.com/",
     ogTitle: "Nave Studio | Ice Bath, Breathwork y Yoga en Las Condes",
-    ogDescription: "Centro de bienestar basado en ciencia. Regula tu sistema nervioso con Método Wim Hof, baños de hielo y yoga. Primera clase gratis.",
+    ogDescription: "Centro de bienestar basado en ciencia. Regula tu sistema nervioso con Método Wim Hof, baños de hielo y yoga. Plan de prueba 7 días por $9.900.",
     ogImage: "https://studiolanave.com/og-image.png",
     ogType: "website"
   },
@@ -103,10 +103,10 @@ const seoData = {
   },
   "/yoga-las-condes": {
     title: "Yoga en Las Condes | Yin, Vinyasa, Power Yoga | Nave Studio",
-    description: "Clases de Yoga en Las Condes, Santiago. Yin, Vinyasa, Power e Integral Yoga con instructores certificados. Primera clase gratis. Antares 259.",
+    description: "Clases de Yoga en Las Condes, Santiago. Yin, Vinyasa, Power e Integral Yoga con instructores certificados. Plan de prueba 7 días por $9.900. Antares 259.",
     canonical: "https://studiolanave.com/yoga-las-condes",
     ogTitle: "Yoga en Las Condes | Yin, Vinyasa, Power Yoga | Nave Studio",
-    ogDescription: "Clases de Yoga en Las Condes. Prueba Yin, Vinyasa, Power e Integral Yoga. Primera clase gratis en Antares 259.",
+    ogDescription: "Clases de Yoga en Las Condes. Prueba Yin, Vinyasa, Power e Integral Yoga. Plan de prueba 7 días por $9.900 en Antares 259.",
     ogImage: "https://studiolanave.com/lovable-uploads/82672388-9723-4aee-a1f2-ac72618cd26a.png",
     ogType: "website"
   },
