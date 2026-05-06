@@ -4,9 +4,10 @@ import { useEffect, useState, useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { cn } from "@/lib/utils";
+import planPruebaHero from "@/assets/plan-prueba-hero.webp";
 
-// Bautizo de Hielo promo end date — 31 mayo 2026 fin del día Chile (UTC-3)
-const BAUTIZO_END_DATE = new Date("2026-06-01T03:00:00Z");
+// Plan de Prueba promo end date — 31 mayo 2026 fin del día Chile (UTC-3)
+const PROMO_END_DATE = new Date("2026-06-01T03:00:00Z");
 
 const HeroSlideMain = () => {
   const navigate = useNavigate();
@@ -79,54 +80,53 @@ const HeroSlideMain = () => {
   );
 };
 
-const HeroSlideBautizo = () => {
+const HeroSlidePlanPrueba = () => {
   const navigate = useNavigate();
 
   return (
     <div className="relative min-h-screen flex items-start md:items-center justify-center pt-20 md:pt-0">
-      {/* Background — brand palette */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary to-accent" />
-      <div
-        className="absolute inset-0 opacity-20"
-        style={{
-          backgroundImage:
-            'radial-gradient(circle at 25% 25%, rgba(255,255,255,0.4) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(255,255,255,0.2) 0%, transparent 45%)',
-        }}
+      {/* Background image */}
+      <img
+        src={planPruebaHero}
+        alt="Plan de Prueba — Yoga en Nave Studio"
+        className="absolute inset-0 w-full h-full object-cover"
+        fetchPriority="high"
       />
+      <div className="absolute inset-0 bg-primary/65" />
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-6 text-center text-white">
         <div className="max-w-4xl mx-auto space-y-5 md:space-y-7">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md text-white px-5 py-2.5 rounded-full text-sm md:text-base font-semibold border border-white/25 shadow-lg">
-            <span className="text-base">🧊</span>
-            Bautizo de Hielo · también para regalar 🎁
+            <span className="text-base">✨</span>
+            Plan de Prueba · 7 o 15 días
           </div>
 
           {/* Heading */}
           <h1 className="font-space-grotesk font-bold text-3xl md:text-6xl lg:text-7xl leading-[1.1]">
-            Bautizo de Hielo
+            Plan de Prueba
             <span className="block text-xl md:text-3xl lg:text-4xl font-medium text-white/90 mt-3">
-              Una sesión guiada de Criomedicina
+              Acceso ilimitado a todas las clases
             </span>
           </h1>
 
           {/* Price */}
-          <div className="flex items-center justify-center gap-4 pt-2">
-            <span className="font-space-grotesk text-5xl md:text-7xl font-bold">$15.000</span>
+          <div className="flex items-center justify-center gap-4 pt-2 flex-wrap">
             <div className="text-left">
-              <p className="line-through text-base md:text-lg text-white/60">$30.000</p>
-              <span className="inline-block bg-accent text-white text-xs md:text-sm font-bold px-3 py-1 rounded-full">
-                50% OFF
-              </span>
+              <span className="font-space-grotesk text-4xl md:text-6xl font-bold">$9.900</span>
+              <p className="text-sm md:text-base text-white/80">7 días</p>
+            </div>
+            <span className="text-3xl md:text-4xl text-white/50">·</span>
+            <div className="text-left">
+              <span className="font-space-grotesk text-4xl md:text-6xl font-bold">$19.900</span>
+              <p className="text-sm md:text-base text-white/80">15 días</p>
             </div>
           </div>
 
           {/* Description */}
-          <p className="font-inter text-base md:text-lg text-white/85 max-w-xl mx-auto">
-            Breathwork + inmersión guiada en agua a <strong>3°C</strong> con coach certificado.
-            Vívelo solo, ven con alguien (Dúo $30.000) o con tus amigos (Trío $45.000).
-            También puedes <strong>regalarlo</strong>.
+          <p className="font-inter text-base md:text-lg text-white/90 max-w-xl mx-auto">
+            Yoga, Breathwork, Criomedicina y Método Wim Hof. <strong>Tú eliges cuándo empezar</strong> (hasta 30 días en el futuro).
           </p>
 
           {/* CTA */}
@@ -135,16 +135,16 @@ const HeroSlideBautizo = () => {
               type="button"
               onClick={(e) => {
                 e.stopPropagation();
-                navigate('/bautizo-hielo');
+                navigate('/plan-de-prueba');
               }}
               className="w-full md:w-auto min-w-[320px] bg-white text-primary hover:bg-white/90 font-bold text-lg py-6 px-10 rounded-xl shadow-xl hover:shadow-2xl transition-all transform hover:scale-105"
               size="xl"
             >
-              Reservar o regalar →
+              Comenzar mi plan de prueba →
             </Button>
 
             <p className="font-inter text-xs text-white/70">
-              60 min · coach certificado · disponible como Gift Card
+              Acceso ilimitado · Inicio flexible · Todas las disciplinas
             </p>
           </div>
         </div>
@@ -157,10 +157,10 @@ export const HeroSection = () => {
   const [showPromo, setShowPromo] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  // Check if we should show Bautizo promo
+  // Check if we should show Plan de Prueba promo
   useEffect(() => {
     const now = new Date();
-    setShowPromo(now < BAUTIZO_END_DATE);
+    setShowPromo(now < PROMO_END_DATE);
   }, []);
 
   const autoplayPlugin = Autoplay({
@@ -205,7 +205,7 @@ export const HeroSection = () => {
   }
 
   const slides = [
-    { id: 'bautizo', component: <HeroSlideBautizo /> },
+    { id: 'plan-prueba', component: <HeroSlidePlanPrueba /> },
     { id: 'main', component: <HeroSlideMain /> },
   ];
 
