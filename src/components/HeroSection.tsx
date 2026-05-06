@@ -155,6 +155,43 @@ const HeroSlidePlanPrueba = () => {
   );
 };
 
+const HeroSlideDiaMadre = () => {
+  const navigate = useNavigate();
+  return (
+    <div className="relative min-h-screen flex items-start md:items-center justify-center pt-20 md:pt-0 bg-gradient-to-br from-rose-500 via-rose-400 to-amber-400">
+      <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
+      <div className="relative z-10 container mx-auto px-6 text-center text-white">
+        <div className="max-w-3xl mx-auto space-y-5 md:space-y-7">
+          <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md text-white px-5 py-2.5 rounded-full text-sm md:text-base font-semibold border border-white/30">
+            💐 Día de la Madre · Edición limitada
+          </div>
+          <h1 className="font-space-grotesk font-bold text-4xl md:text-6xl lg:text-7xl leading-[1.05]">
+            Mamá también necesita un reset
+          </h1>
+          <p className="font-inter text-base md:text-xl text-white/95 max-w-2xl mx-auto">
+            Regálale 4 sesiones en Nave Studio — Yoga o Criomedicina. Puede usarlas sola o compartirlas contigo.
+          </p>
+          <div className="flex items-center justify-center gap-3 pt-2">
+            <span className="font-space-grotesk text-5xl md:text-7xl font-bold">$45.000</span>
+            <span className="text-sm md:text-base text-white/90 self-end pb-2">4 sesiones</span>
+          </div>
+          <div className="space-y-3 pt-2">
+            <Button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); navigate('/dia-de-la-madre'); }}
+              className="w-full md:w-auto min-w-[320px] bg-white text-rose-600 hover:bg-white/90 font-bold text-lg py-6 px-10 rounded-xl shadow-xl transition-all transform hover:scale-105"
+              size="xl"
+            >
+              Quiero regalarle bienestar →
+            </Button>
+            <p className="font-inter text-xs text-white/80">Validez 200 días · Gift Card descargable</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export const HeroSection = () => {
   const [showPromo, setShowPromo] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
