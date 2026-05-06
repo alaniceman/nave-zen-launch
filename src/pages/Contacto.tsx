@@ -243,20 +243,20 @@ Mensaje: ${formData.message}`
         </div>
       </section>
 
-      {/* Free Trial CTA Section */}
+      {/* Plan de Prueba CTA Section */}
       <section className="py-20 px-6 text-center bg-white">
         <div className="max-w-4xl mx-auto animate-fade-in">
           <h2 className="text-2xl md:text-3xl font-heading text-primary mb-4">
             ¿Quieres vivir Nave Studio antes de decidir?
           </h2>
           <p className="text-neutral-mid mb-8 max-w-lg mx-auto leading-relaxed">
-            Agenda una clase gratuita de Yoga y siente la energía del espacio.
+            Activa tu Plan de Prueba de 7 o 15 días con acceso ilimitado a Yoga, Breathwork, Criomedicina y Método Wim Hof. Tú eliges la fecha de inicio.
           </p>
           <Button
-            onClick={() => setIsTrialModalOpen(true)}
+            asChild
             className="bg-secondary hover:bg-primary text-white py-3 px-10 rounded-[10px] transition-all duration-200 hover:scale-105"
           >
-            Reservar clase de prueba
+            <a href="/plan-de-prueba">Ver planes de prueba</a>
           </Button>
         </div>
       </section>

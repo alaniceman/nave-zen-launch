@@ -10,40 +10,48 @@ export const TrialYogaSection = () => {
           {/* Text content */}
           <div className="order-2 lg:order-1">
             <h2 className="text-3xl md:text-4xl text-primary mb-4 font-space font-bold">
-              Clase de prueba de Yoga — <span className="text-accent">GRATIS</span>
+              Plan de Prueba — <span className="text-accent">7 o 15 días</span>
             </h2>
             <p className="text-neutral-mid mb-6 md:mb-8 max-w-prose font-inter">
-              Vive una sesión de Yoga (Yin, Yang o Integral) para conocer la Nave, a tu profe y la energía del espacio.
+              Vive Nave Studio con acceso ilimitado a Yoga, Breathwork, Criomedicina y Método Wim Hof. Tú eliges cuándo empezar.
             </p>
 
             <ul className="space-y-3 mb-6 md:mb-8">
               <li className="text-neutral-dark flex items-start font-inter">
                 <span className="w-2 h-2 rounded-full bg-accent mr-3 mt-2" />
-                Duración 60 min · nivel principiante bienvenido
+                7 días por $9.900 · 15 días por $19.900
+              </li>
+              <li className="text-neutral-dark flex items-start font-inter">
+                <span className="w-2 h-2 rounded-full bg-accent mr-3 mt-2" />
+                Acceso ilimitado a todas las clases
+              </li>
+              <li className="text-neutral-dark flex items-start font-inter">
+                <span className="w-2 h-2 rounded-full bg-accent mr-3 mt-2" />
+                Elige la fecha de inicio (hasta 30 días en el futuro)
               </li>
             </ul>
 
             <div className="bg-warm/15 text-primary rounded-[10px] p-4 mb-6 md:mb-8 border border-warm/30">
               <p className="font-inter text-sm">
-                Para ingresar al hielo después de Yoga debes haber realizado <strong>una sesión guiada del Método Wim Hof</strong> (breathwork + ice bath).
+                Para ingresar al hielo después de Yoga debes haber realizado <strong>una sesión guiada del Método Wim Hof</strong> (puede ser dentro del mismo plan de prueba).
               </p>
             </div>
 
             <div className="space-y-4 mb-6">
               <a
-                href="/clase-de-prueba/agendar"
+                href="/plan-de-prueba"
                 className="w-full sm:w-auto bg-accent hover:bg-primary text-white rounded-[10px] px-6 py-3 font-medium transition-transform duration-200 hover:scale-105 focus-visible:outline-2 focus-visible:outline-dashed focus-visible:outline-accent font-inter inline-flex items-center justify-center"
-                aria-label="Agendar clase de prueba"
+                aria-label="Ver planes de prueba"
               >
-                Agendar clase de prueba
+                Ver planes de prueba
               </a>
-              
+
               <div className="flex flex-col sm:flex-row gap-4 text-sm">
                 <a
                   href="/horarios"
                   className="text-accent underline-offset-4 hover:underline hover:text-primary transition-colors font-inter"
                 >
-                  Ver horarios de Yoga →
+                  Ver horarios →
                 </a>
                 <a
                   href="/blog/metodo-wim-hof-respiracion-frio-mente"
