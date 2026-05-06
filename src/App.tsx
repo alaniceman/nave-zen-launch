@@ -89,6 +89,7 @@ const AdminMembershipPlans = lazy(() => import("./pages/admin/AdminMembershipPla
 const AdminEmailTemplates = lazy(() => import("./pages/admin/AdminEmailTemplates"));
 const AdminChatLogs = lazy(() => import("./pages/admin/AdminChatLogs"));
 const AdminBrain = lazy(() => import("./pages/admin/AdminBrain"));
+const AdminAIKnowledge = lazy(() => import("./pages/admin/AdminAIKnowledge"));
 
 const queryClient = new QueryClient();
 
@@ -194,6 +195,7 @@ const App = () => {
               <Route path="emails" element={<AdminEmailTemplates />} />
               <Route path="chat-logs" element={<AdminChatLogs />} />
               <Route path="brain" element={<AdminBrain />} />
+              <Route path="nave-ai" element={<AdminAIKnowledge />} />
             </Route>
             
             {/* Redirect legacy routes */}

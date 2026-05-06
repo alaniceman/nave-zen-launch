@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      ai_knowledge: {
+        Row: {
+          category: string
+          content: string
+          created_at: string
+          id: string
+          is_active: boolean
+          priority: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string
+          content: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          priority?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          content?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          priority?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       availability_rules: {
         Row: {
           created_at: string
@@ -602,36 +635,51 @@ export type Database = {
       }
       membership_plans: {
         Row: {
+          allows_custom_start_date: boolean
           classes_included: number
           created_at: string
           description: string | null
+          duration_days: number | null
           frequency: string
           id: string
           is_active: boolean
           name: string
+          original_price_clp: number | null
+          plan_type: string
           price_clp: number
+          sort_order: number
           updated_at: string
         }
         Insert: {
+          allows_custom_start_date?: boolean
           classes_included: number
           created_at?: string
           description?: string | null
+          duration_days?: number | null
           frequency: string
           id?: string
           is_active?: boolean
           name: string
+          original_price_clp?: number | null
+          plan_type?: string
           price_clp: number
+          sort_order?: number
           updated_at?: string
         }
         Update: {
+          allows_custom_start_date?: boolean
           classes_included?: number
           created_at?: string
           description?: string | null
+          duration_days?: number | null
           frequency?: string
           id?: string
           is_active?: boolean
           name?: string
+          original_price_clp?: number | null
+          plan_type?: string
           price_clp?: number
+          sort_order?: number
           updated_at?: string
         }
         Relationships: []
