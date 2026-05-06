@@ -40,8 +40,20 @@ const FAQ = () => {
       answer: "Las sesiones duran entre 60-90 minutos. Ice Bath incluye preparación con breathwork, inmersión supervisada y recuperación. Yoga incluye calentamiento, práctica completa y relajación final. Todas las clases incluyen orientación personalizada."
     },
     {
-      question: "¿Puedo cancelar o reprogramar mi clase?",
-      answer: "Sí, puedes cancelar hasta 2 horas antes de la clase sin penalización. Para reprogramar, contáctanos por WhatsApp. Las clases perdidas sin aviso no se reponen, pero somos flexibles en casos especiales."
+      question: "¿Puedo cancelar o reagendar mi sesión?",
+      answer: "Depende del tipo de plan. Si compraste un paquete de sesiones, puedes cancelar o reagendar con al menos 24 horas de anticipación; si no asistes o cancelas fuera de plazo, puedes recuperar la sesión pagando el 50% del valor de la clase, de lo contrario la sesión se considera utilizada. Si tienes una membresía mensual, debes cancelar con al menos 6 horas de anticipación desde la app, de lo contrario la clase se considera utilizada. Para reagendar, contáctanos por WhatsApp."
+    },
+    {
+      question: "¿Puedo congelar mi membresía?",
+      answer: "Sí. Congelar suspende temporalmente el pago de tu plan y mantiene congelado el precio actual aunque haya alzas futuras. Esta opción puede usarse una sola vez y debe solicitarse con anticipación, indicando motivo y fecha estimada de regreso. Si después de congelar vuelves a pausar o dejar de pagar, la membresía se considera cancelada y al volver aplicarán los valores y condiciones vigentes."
+    },
+    {
+      question: "¿Las clases no usadas se acumulan al mes siguiente?",
+      answer: "No. Las clases no utilizadas no se acumulan ni se traspasan al mes siguiente, salvo casos justificados como licencia médica o viaje con pasaje de avión."
+    },
+    {
+      question: "¿Hacen devoluciones?",
+      answer: "No realizamos devoluciones por inasistencias, clases no utilizadas o falta de uso de la membresía. Cada persona es responsable de su asistencia y compromiso con el proceso. Si ocurre algún imprevisto de nuestra parte, la sesión no se pierde y buscaremos compensarte de la mejor manera posible."
     },
     {
       question: "¿Necesito experiencia previa en breathwork o yoga?",

@@ -73,22 +73,30 @@ const Terminos = () => {
               </div>
 
               <div>
-                <h2 className="text-2xl font-heading text-primary mb-4">5. Política de Cancelaciones</h2>
+                <h2 className="text-2xl font-heading text-primary mb-4">5. Política de Cancelaciones y Reagendamientos</h2>
+                <p className="text-neutral-mid leading-relaxed mb-3"><strong>Paquetes de sesiones:</strong></p>
+                <ul className="list-disc pl-6 text-neutral-mid space-y-2 mb-4">
+                  <li>Puedes cancelar o reagendar con al menos 24 horas de anticipación.</li>
+                  <li>Si no asistes o cancelas fuera de plazo, puedes recuperar la sesión pagando el 50% del valor de la clase.</li>
+                  <li>De lo contrario, la sesión se considera utilizada y se pierde.</li>
+                </ul>
+                <p className="text-neutral-mid leading-relaxed mb-3"><strong>Membresías mensuales:</strong></p>
                 <ul className="list-disc pl-6 text-neutral-mid space-y-2">
-                  <li>Cancelaciones hasta 2 horas antes: sin penalización</li>
-                  <li>Cancelaciones con menos de 2 horas: pérdida de la clase</li>
-                  <li>No-shows: pérdida de la clase</li>
-                  <li>Emergencias médicas: evaluación caso a caso</li>
+                  <li>Debes cancelar tu clase agendada con al menos 6 horas de anticipación desde la app.</li>
+                  <li>Si no avisas dentro de ese plazo, la clase se considera utilizada.</li>
+                  <li>Emergencias médicas: evaluación caso a caso.</li>
                 </ul>
               </div>
 
               <div>
-                <h2 className="text-2xl font-heading text-primary mb-4">6. Membresías y Pagos</h2>
+                <h2 className="text-2xl font-heading text-primary mb-4">6. Membresías, Congelación y Pagos</h2>
                 <ul className="list-disc pl-6 text-neutral-mid space-y-2">
-                  <li>Los pagos se procesan a través de plataformas seguras</li>
-                  <li>Las membresías son intransferibles</li>
-                  <li>No hay reembolsos por clases no utilizadas</li>
-                  <li>Los precios pueden cambiar con 30 días de aviso</li>
+                  <li>Las membresías funcionan con una cantidad de clases mensuales (tokens en la app), sujetas a cupos.</li>
+                  <li>Las clases no utilizadas no se acumulan ni se traspasan al mes siguiente, salvo casos justificados como licencia médica o viaje con pasaje de avión.</li>
+                  <li><strong>Congelación:</strong> suspende temporalmente el pago y mantiene congelado el precio actual aunque haya alzas futuras. Puede usarse una sola vez, solicitándola con anticipación e indicando motivo y fecha estimada de regreso.</li>
+                  <li>Si después de congelar vuelves a pausar o dejar de pagar, la membresía se considera cancelada y al volver aplicarán los valores y condiciones vigentes.</li>
+                  <li>No se realizan devoluciones por inasistencias, clases no utilizadas o falta de uso de la membresía.</li>
+                  <li>Las membresías son intransferibles. Los precios pueden cambiar con 30 días de aviso.</li>
                 </ul>
               </div>
 
