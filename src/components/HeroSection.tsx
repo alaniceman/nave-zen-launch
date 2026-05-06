@@ -8,6 +8,8 @@ import planPruebaHero from "@/assets/plan-prueba-hero.webp";
 
 // Plan de Prueba promo end date — 31 mayo 2026 fin del día Chile (UTC-3)
 const PROMO_END_DATE = new Date("2026-06-01T03:00:00Z");
+// Día de la Madre (Chile: 10 mayo 2026) — banner activo hasta fin del 10 mayo
+const DIA_MADRE_END_DATE = new Date("2026-05-11T03:00:00Z");
 
 const HeroSlideMain = () => {
   const navigate = useNavigate();
