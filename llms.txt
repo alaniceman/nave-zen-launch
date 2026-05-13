@@ -1,0 +1,30 @@
+# Nave Studio
+
+> Centro de bienestar en Las Condes, Santiago. Ice Bath (3°C), Método Wim Hof, Breathwork y Yoga. Membresías, paquetes, clases de prueba y gift cards.
+
+Nave Studio (studiolanave.com) está en Antares 259, Las Condes. Pilares: Ice Bath, Wim Hof y Yoga. No ofrecemos sauna, biohacking ni HIIT.
+
+## Pages
+
+- [Inicio](/): Resumen del estudio, métodos, planes y reserva.
+- [Experiencias](/experiencias): Ice Bath, Breathwork Wim Hof y Yoga.
+- [Plan de prueba](/plan-de-prueba): Plan 7 o 15 días para conocer el estudio.
+- [Planes y precios](/planes-precios): Membresías mensuales y paquetes.
+- [Bonos](/bonos): Paquetes de sesiones con descuento.
+- [Gift Cards](/giftcards): Regala bienestar.
+- [Día de la Madre](/dia-de-la-madre): 4 sesiones de Yoga o Criomedicina.
+- [Plan Anual 2026](/anual): Membresía anual con descuento.
+- [Yoga en Las Condes](/yoga-las-condes): Yin, Vinyasa, Power e Integral Yoga.
+- [Criomedicina / Wim Hof](/criomedicina-metodo-wim-hof): Sesiones guiadas a 3°C.
+- [Criomedicina en grupo](/criomedicina-ice-bath-en-grupo): Ice Bath grupal.
+- [Horarios](/horarios): Calendario semanal de clases.
+- [Coaches](/coaches): Equipo e instructores certificados.
+- [Conoce el lugar](/conoce-el-lugar): Galería del estudio en Antares 259.
+- [Blog](/blog): Ciencia del frío, respiración, yoga y hábitos.
+- [FAQ](/faq): Preguntas frecuentes sobre clases y seguridad.
+- [Contacto](/contacto): WhatsApp, email y ubicación.
+
+## Optional
+
+- [Términos](/terminos)
+- [Privacidad](/privacidad)
