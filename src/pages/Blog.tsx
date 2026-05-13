@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -85,6 +86,24 @@ const Blog = () => {
   ];
 
   return (
+    <>
+      <Helmet>
+        <title>Blog Nave Studio | Ice Bath, Wim Hof, Yoga y hábitos</title>
+        <meta name="description" content="Guías basadas en ciencia sobre Ice Bath, Método Wim Hof, respiración, yoga y hábitos. Lee y mejora tu energía con Nave Studio." />
+        <link rel="canonical" href="https://studiolanave.com/blog" />
+        <meta property="og:title" content="Blog Nave Studio | Ice Bath, Wim Hof y Yoga" />
+        <meta property="og:description" content="Artículos con ciencia aplicada a frío, respiración y bienestar. Aprende y mejora tu energía." />
+        <meta property="og:url" content="https://studiolanave.com/blog" />
+        <meta property="og:type" content="website" />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "name": "Blog Nave Studio",
+          "url": "https://studiolanave.com/blog",
+          "description": "Artículos con ciencia aplicada a Ice Bath, Wim Hof, yoga y hábitos.",
+          "isPartOf": { "@type": "WebSite", "name": "Nave Studio", "url": "https://studiolanave.com" }
+        })}</script>
+      </Helmet>
     <main className="min-h-screen">
       {/* Hero Section */}
       <section className="relative py-20 bg-gradient-to-br from-primary/5 to-secondary/5">
