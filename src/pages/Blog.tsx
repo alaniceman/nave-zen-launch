@@ -220,6 +220,7 @@ const Blog = () => {
 
       <Footer />
     </main>
+    </>
   );
 };
 
