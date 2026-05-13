@@ -170,6 +170,16 @@ const Coaches = () => {
   }
 
   return (
+    <>
+      <Helmet>
+        <title>Equipo de coaches certificados | Nave Studio</title>
+        <meta name="description" content="Conoce al equipo de Nave Studio: instructores certificados en Método Wim Hof, Yoga y movimiento consciente. Reserva con tu coach ideal en Las Condes." />
+        <link rel="canonical" href="https://studiolanave.com/coaches" />
+        <meta property="og:title" content="Equipo de coaches certificados | Nave Studio" />
+        <meta property="og:description" content="Instructores certificados en Wim Hof, Yoga y bienestar. Conoce al equipo y reserva tu sesión en Las Condes." />
+        <meta property="og:url" content="https://studiolanave.com/coaches" />
+        <meta property="og:type" content="website" />
+      </Helmet>
     <main className="min-h-screen" id="coaches">
       {/* Hero Section */}
       <section 
@@ -435,6 +445,7 @@ const Coaches = () => {
 
       <Footer />
     </main>
+    </>
   )
 }
 
