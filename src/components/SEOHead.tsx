@@ -3,8 +3,8 @@ import { useEffect } from "react";
 
 const seoData = {
   "/": {
-    title: "Nave Studio | Centro de bienestar basado en ciencia en Las Condes",
-    description: "Ice Bath, Breathwork Wim Hof, Yoga y biohacking. Reserva tu clase en Las Condes y regula tu sistema nervioso.",
+    title: "Nave Studio | Ice Bath, Wim Hof y Yoga en Las Condes",
+    description: "Ice Bath, Breathwork Wim Hof, Yoga y biohacking en Las Condes. Reserva tu clase y regula tu sistema nervioso.",
     canonical: "https://studiolanave.com/",
     ogTitle: "Nave Studio | Ice Bath, Breathwork y Yoga en Las Condes",
     ogDescription: "Centro de bienestar basado en ciencia. Regula tu sistema nervioso con Método Wim Hof, baños de hielo y yoga. Plan de prueba 7 días por $9.900.",

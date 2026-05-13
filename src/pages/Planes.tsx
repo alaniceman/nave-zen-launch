@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -57,7 +58,17 @@ const Planes = () => {
       });
     };
   }, [trackViewContent, trackInitiateCheckout]);
-  return <main className="min-h-screen bg-background">
+  return <>
+      <Helmet>
+        <title>Planes y precios | Membresías Nave Studio Las Condes</title>
+        <meta name="description" content="Membresías mensuales y paquetes para Ice Bath, Wim Hof y Yoga en Las Condes. Desde 1 sesión por semana hasta acceso ilimitado. Reserva online." />
+        <link rel="canonical" href="https://studiolanave.com/planes-precios" />
+        <meta property="og:title" content="Planes y precios | Nave Studio" />
+        <meta property="og:description" content="Membresías y paquetes para Ice Bath, Wim Hof y Yoga. Reserva tu plan en Las Condes." />
+        <meta property="og:url" content="https://studiolanave.com/planes-precios" />
+        <meta property="og:type" content="website" />
+      </Helmet>
+      <main className="min-h-screen bg-background">
       {/* Pricing Hero */}
       <section className="h-[80vh] relative flex items-center justify-center text-center px-6" style={{
       backgroundImage: 'url(/lovable-uploads/ef74bdd8-fac8-490a-80e9-61b767656331.png)',
@@ -462,6 +473,7 @@ const Planes = () => {
       </section>
 
       <Footer />
-    </main>;
+    </main>
+    </>;
 };
 export default Planes;
