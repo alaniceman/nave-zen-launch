@@ -267,7 +267,8 @@ export const ChatWidget = forwardRef<ChatWidgetHandle>(function ChatWidget(_prop
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Escribe tu pregunta..."
-                  className="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground outline-none py-2"
+                  className="flex-1 bg-transparent text-base sm:text-sm text-foreground placeholder:text-muted-foreground outline-none py-2"
+                  style={{ fontSize: '16px' }}
                   disabled={isLoading}
                   maxLength={500}
                 />
