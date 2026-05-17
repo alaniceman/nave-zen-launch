@@ -198,6 +198,12 @@ serve(async (req) => {
           model: "google/gemini-2.5-flash",
           messages: [
             { role: "system", content: SYSTEM_PROMPT },
+            ...(knowledgeContext
+              ? [{
+                  role: "system" as const,
+                  content: `BASE DE CONOCIMIENTO DE NAVE STUDIO (fuente de verdad sobre tono, servicios, reglas y FAQs — úsala para informarte, pero respeta SIEMPRE el formato JSON pedido arriba):\n${knowledgeContext}`,
+                }]
+              : []),
             {
               role: "system",
               content: `CONTEXTO EN VIVO (úsalo si necesitas mencionar precios o productos):\n${liveContext}`,
