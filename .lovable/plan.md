@@ -1,58 +1,42 @@
-# Landing Generativa `/generative` con Nave AI
+# Conectar `/generative` a la documentación de Nave AI
 
-Una landing en blanco con un solo input. El usuario escribe quién es o qué busca ("soy corredor con ansiedad", "regalo para mi pareja", "quiero empezar yoga"), y la página se reconstruye en vivo: hero, beneficios, prueba social, CTA — todo adaptado a su intención, usando la info real de Nave Studio.
+Hoy la edge function `generate-landing` solo inyecta planes y bonos en vivo. Nave AI (chatbot) además lee la tabla editable `ai_knowledge`, donde tú vas agregando reglas, tono, info de servicios, FAQs, etc. Queremos que la landing generativa use la **misma** fuente, para que cualquier cambio que hagas en `/admin/ai-knowledge` se refleje también acá.
 
-## Experiencia (MVP)
+## Qué cambia
 
-1. Usuario entra a `/generative` → ve un input centrado tipo "Cuéntanos qué buscas" + ejemplos clickeables (chips).
-2. Envía → la página hace fade-out del input y aparece un esqueleto animado mientras la IA genera.
-3. La IA devuelve JSON estructurado (hero, 3 beneficios, recomendación de plan/experiencia, CTA). El frontend lo renderiza con los componentes ya existentes de Nave (tipografía, colores, botones).
-4. CTA contextual: si pidió regalo → Gift Cards; si pidió probar → Plan de prueba; si pidió yoga → Yoga Las Condes; etc.
-5. Botón "Generar otra versión" para reintentar.
+- `generate-landing` pasa a leer `ai_knowledge` (filas activas, ordenadas por `priority`) además de los planes y bonos que ya lee.
+- El system prompt se arma en este orden:
+  1. **Rol creativo + formato JSON estricto** (lo que ya tiene hoy, queda fijo en código porque define la estructura de salida).
+  2. **Knowledge base de Nave AI** (texto editable desde admin).
+  3. **Datos en vivo** (membresías, bonos).
+- Si `ai_knowledge` está vacío, se usa un fallback corto (igual que hace `chat-nave`).
 
-## Por qué arrancar así
+## Por qué así
 
-- **Una sola pantalla, un solo input**: máximo "wow", mínimo scope. Validamos si la gente realmente escribe.
-- **Output estructurado (no markdown libre)**: garantiza que la marca se vea siempre bien y no rompa el diseño.
-- **Streaming desde el primer día**: la magia de "ver la página armarse" es la mitad del valor.
-- **Reusa data en vivo**: la edge function ya tiene `buildLiveDataSection()` con planes, bonos y promos reales — la reaprovechamos.
+- Reusa la misma fuente de verdad que ya editas para el chatbot → no duplicas contenido.
+- La parte "formato JSON" se queda en código porque si el admin la borra sin querer, la landing rompe. El admin controla el **contenido/tono**, no la estructura.
+- No agregamos tabla nueva ni endpoint nuevo.
 
-## Arquitectura técnica
+## Archivos a tocar
+
+- `supabase/functions/generate-landing/index.ts` → agregar `buildKnowledgeSection()` (igual al de `chat-nave/systemPrompt.ts`) y concatenarlo al prompt.
+- Nada más. Frontend no cambia.
+
+## Detalle técnico
 
 ```text
-/generative (React page)
-   │  POST { userInput }
-   ▼
-edge function: generate-landing
-   │  - system prompt: "eres director creativo de Nave Studio…"
-   │  - inyecta info en vivo (membresías, bonos, promos) reusando systemPrompt.ts
-   │  - Lovable AI Gateway, modelo google/gemini-3-flash-preview
-   │  - streamText con Output.object(schema Zod)
-   ▼
-JSON estructurado:
-{
-  hero:    { eyebrow, title, subtitle },
-  pills:   [string, string, string],
-  benefits:[{ icon, title, body } x3],
-  recommendation: { type: "plan"|"bono"|"giftcard"|"trial"|"yoga",
-                    title, reason, ctaLabel, ctaHref },
-  social:  { quote, author },
-  closing: { title, ctaLabel, ctaHref }
-}
+SYSTEM_PROMPT (rol + schema JSON, fijo)
+        +
+ai_knowledge (DB, editable en /admin/ai-knowledge)
+        +
+CONTEXTO EN VIVO (planes + bonos desde DB)
+        +
+user input
 ```
 
-- Nuevo archivo: `supabase/functions/generate-landing/index.ts`
-- Nuevo archivo: `src/pages/Generative.tsx`
-- Ruta en `App.tsx`: `<Route path="/generative" element={<Generative />} />`
-- Sin DB nueva. Sin auth. Rate-limit simple por IP en la edge function.
+Sin cambios de schema, sin migraciones, sin secrets nuevos.
 
-## Qué NO incluye este primer paso
+## Fuera de scope
 
-- Guardar las landings generadas (se puede agregar después).
-- Generar imágenes con IA (usamos las fotos existentes de Nave).
-- Compartir por URL (`/generative/:slug`) — fase 2.
-- A/B testing o analytics avanzados.
-
-## Próximo paso si te gusta
-
-Apruebo el plan y armo: ruta + página con input y skeleton + edge function `generate-landing` con schema Zod y data en vivo + un set de 4-5 ejemplos pre-cargados para que la primera impresión sea instantánea.
+- Mover el rol creativo a la DB (riesgoso, rompe el JSON si se edita mal).
+- UI nueva en admin (ya existe `/admin/ai-knowledge`).
