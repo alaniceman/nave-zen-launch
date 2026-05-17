@@ -25,6 +25,26 @@ function checkRateLimit(ip: string): boolean {
   return entry.count <= 20;
 }
 
+/* ── Knowledge base editable desde /admin/ai-knowledge ── */
+async function buildKnowledgeContext(): Promise<string> {
+  try {
+    const { data, error } = await supabase
+      .from("ai_knowledge")
+      .select("content, priority")
+      .eq("is_active", true)
+      .order("priority", { ascending: false });
+    if (error) {
+      console.error("ai_knowledge query error:", error);
+      return "";
+    }
+    if (!data || data.length === 0) return "";
+    return data.map((r: any) => r.content).join("\n\n");
+  } catch (e) {
+    console.error("buildKnowledgeContext error:", e);
+    return "";
+  }
+}
+
 /* ── Live data from DB (planes, bonos) ── */
 async function buildLiveContext(): Promise<string> {
   const parts: string[] = [];
@@ -161,7 +181,10 @@ serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY missing");
 
-    const liveContext = await buildLiveContext();
+    const [knowledgeContext, liveContext] = await Promise.all([
+      buildKnowledgeContext(),
+      buildLiveContext(),
+    ]);
 
     const response = await fetch(
       "https://ai.gateway.lovable.dev/v1/chat/completions",
@@ -175,6 +198,12 @@ serve(async (req) => {
           model: "google/gemini-2.5-flash",
           messages: [
             { role: "system", content: SYSTEM_PROMPT },
+            ...(knowledgeContext
+              ? [{
+                  role: "system" as const,
+                  content: `BASE DE CONOCIMIENTO DE NAVE STUDIO (fuente de verdad sobre tono, servicios, reglas y FAQs — úsala para informarte, pero respeta SIEMPRE el formato JSON pedido arriba):\n${knowledgeContext}`,
+                }]
+              : []),
             {
               role: "system",
               content: `CONTEXTO EN VIVO (úsalo si necesitas mencionar precios o productos):\n${liveContext}`,
