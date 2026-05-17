@@ -25,6 +25,26 @@ function checkRateLimit(ip: string): boolean {
   return entry.count <= 20;
 }
 
+/* ── Knowledge base editable desde /admin/ai-knowledge ── */
+async function buildKnowledgeContext(): Promise<string> {
+  try {
+    const { data, error } = await supabase
+      .from("ai_knowledge")
+      .select("content, priority")
+      .eq("is_active", true)
+      .order("priority", { ascending: false });
+    if (error) {
+      console.error("ai_knowledge query error:", error);
+      return "";
+    }
+    if (!data || data.length === 0) return "";
+    return data.map((r: any) => r.content).join("\n\n");
+  } catch (e) {
+    console.error("buildKnowledgeContext error:", e);
+    return "";
+  }
+}
+
 /* ── Live data from DB (planes, bonos) ── */
 async function buildLiveContext(): Promise<string> {
   const parts: string[] = [];
