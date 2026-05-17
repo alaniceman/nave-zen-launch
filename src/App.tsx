@@ -63,6 +63,7 @@ const YogaLasCondes = lazy(() => import("./pages/YogaLasCondes"));
 const Icefest = lazy(() => import("./pages/Icefest"));
 const BautizoHielo = lazy(() => import("./pages/BautizoHielo"));
 const InstructorProfile = lazy(() => import("./pages/InstructorProfile"));
+const Generative = lazy(() => import("./pages/Generative"));
 
 // Lazy-loaded admin pages
 const AdminLogin = lazy(() => import("./pages/admin/Login"));
@@ -170,6 +171,7 @@ const App = () => {
             <Route path="/icefest" element={<Icefest />} />
             <Route path="/bautizo-hielo" element={<BautizoHielo />} />
             <Route path="/instructor/:slug" element={<InstructorProfile />} />
+            <Route path="/generative" element={<Generative />} />
             
             {/* Admin Routes */}
             <Route path="/admin/login" element={<AdminLogin />} />
