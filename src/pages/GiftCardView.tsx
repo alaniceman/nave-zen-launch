@@ -13,6 +13,9 @@ interface GiftCardData {
     code: string;
     is_used: boolean;
     expires_at: string;
+    used_at?: string | null;
+    used_by_name?: string | null;
+    used_for_date?: string | null;
   }[];
   packageName: string;
   buyerName: string;
