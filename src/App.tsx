@@ -173,6 +173,7 @@ const App = () => {
             <Route path="/bautizo-hielo" element={<BautizoHielo />} />
             <Route path="/instructor/:slug" element={<InstructorProfile />} />
             <Route path="/generative" element={<Generative />} />
+            <Route path="/fotos-workshop/buda" element={<FotosWorkshopBuda />} />
             
             {/* Admin Routes */}
             <Route path="/admin/login" element={<AdminLogin />} />
