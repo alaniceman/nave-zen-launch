@@ -192,12 +192,23 @@ export default function GiftCardView() {
 
             {/* Session Codes */}
             <div className="mb-6">
-              <h2 className="font-semibold mb-4 flex items-center gap-2">
-                <span>Códigos de sesión</span>
-                <span className="text-sm font-normal text-muted-foreground">
-                  ({availableCodes.length} disponibles)
-                </span>
-              </h2>
+              <div className="mb-4">
+                <h2 className="font-semibold mb-3">Códigos de sesión</h2>
+                <div className="grid grid-cols-3 gap-2">
+                  <div className="p-3 rounded-lg bg-muted/50 text-center">
+                    <p className="text-2xl font-bold">{giftCardData.codes.length}</p>
+                    <p className="text-xs text-muted-foreground">Total</p>
+                  </div>
+                  <div className="p-3 rounded-lg bg-primary/10 text-center">
+                    <p className="text-2xl font-bold text-primary">{availableCodes.length}</p>
+                    <p className="text-xs text-muted-foreground">Disponibles</p>
+                  </div>
+                  <div className="p-3 rounded-lg bg-muted/30 text-center">
+                    <p className="text-2xl font-bold text-muted-foreground">{usedCodes.length}</p>
+                    <p className="text-xs text-muted-foreground">Usados</p>
+                  </div>
+                </div>
+              </div>
 
               <div className="space-y-3">
                 {availableCodes.map((codeData) => (
@@ -223,19 +234,43 @@ export default function GiftCardView() {
                 ))}
 
                 {usedCodes.length > 0 && (
-                  <div className="mt-4">
-                    <p className="text-sm text-muted-foreground mb-2">Códigos usados:</p>
-                    {usedCodes.map((codeData) => (
-                      <div
-                        key={codeData.code}
-                        className="flex items-center justify-between p-3 bg-muted/30 rounded-lg opacity-60"
-                      >
-                        <code className="text-sm font-mono line-through">
-                          {codeData.code}
-                        </code>
-                        <span className="text-xs text-muted-foreground">Usado</span>
-                      </div>
-                    ))}
+                  <div className="mt-6">
+                    <p className="text-sm font-medium text-muted-foreground mb-2">
+                      Códigos canjeados ({usedCodes.length})
+                    </p>
+                    <div className="space-y-2">
+                      {usedCodes.map((codeData) => (
+                        <div
+                          key={codeData.code}
+                          className="p-3 bg-muted/30 rounded-lg"
+                        >
+                          <div className="flex items-center justify-between mb-1">
+                            <code className="text-sm font-mono line-through opacity-70">
+                              {codeData.code}
+                            </code>
+                            <span className="text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
+                              Usado
+                            </span>
+                          </div>
+                          {(codeData.used_by_name || codeData.used_for_date || codeData.used_at) && (
+                            <div className="text-xs text-muted-foreground space-y-0.5 mt-1">
+                              {codeData.used_by_name && (
+                                <p>Reservado por: <span className="font-medium text-foreground/80">{codeData.used_by_name}</span></p>
+                              )}
+                              {codeData.used_for_date && (
+                                <p>Clase: {new Date(codeData.used_for_date).toLocaleString("es-CL", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}</p>
+                              )}
+                              {codeData.used_at && !codeData.used_for_date && (
+                                <p>Canjeado: {formatDate(codeData.used_at)}</p>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                    <p className="text-xs text-muted-foreground/80 mt-3 italic">
+                      Si compartiste algún código, también aparecerá aquí cuando sea canjeado.
+                    </p>
                   </div>
                 )}
               </div>
