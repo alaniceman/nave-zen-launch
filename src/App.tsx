@@ -64,6 +64,7 @@ const Icefest = lazy(() => import("./pages/Icefest"));
 const BautizoHielo = lazy(() => import("./pages/BautizoHielo"));
 const InstructorProfile = lazy(() => import("./pages/InstructorProfile"));
 const Generative = lazy(() => import("./pages/Generative"));
+const FotosWorkshopBuda = lazy(() => import("./pages/FotosWorkshopBuda"));
 
 // Lazy-loaded admin pages
 const AdminLogin = lazy(() => import("./pages/admin/Login"));
