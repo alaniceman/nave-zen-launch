@@ -32,7 +32,7 @@ serve(async (req) => {
     // Fetch session codes with matching token - using service role bypasses RLS
     const { data: codes, error: codesError } = await supabase
       .from('session_codes')
-      .select('code, is_used, expires_at, package_id, applicable_service_ids, buyer_name')
+      .select('code, is_used, expires_at, package_id, applicable_service_ids, buyer_name, used_at, used_in_booking_id')
       .eq('giftcard_access_token', token);
 
     if (codesError) {
@@ -81,12 +81,32 @@ serve(async (req) => {
       serviceNames = services?.map(s => s.name) || [];
     }
 
+    // Fetch booking info for used codes (to show who redeemed)
+    const bookingIds = codes
+      .map((c: any) => c.used_in_booking_id)
+      .filter((id: string | null): id is string => !!id);
+
+    const bookingMap = new Map<string, { customer_name: string; date_time_start: string }>();
+    if (bookingIds.length > 0) {
+      const { data: bookings } = await supabase
+        .from('bookings')
+        .select('id, customer_name, date_time_start')
+        .in('id', bookingIds);
+      (bookings || []).forEach((b: any) => bookingMap.set(b.id, b));
+    }
+
     const response = {
-      codes: codes.map(c => ({
-        code: c.code,
-        is_used: c.is_used,
-        expires_at: c.expires_at,
-      })),
+      codes: codes.map((c: any) => {
+        const booking = c.used_in_booking_id ? bookingMap.get(c.used_in_booking_id) : null;
+        return {
+          code: c.code,
+          is_used: c.is_used,
+          expires_at: c.expires_at,
+          used_at: c.used_at,
+          used_by_name: booking?.customer_name || null,
+          used_for_date: booking?.date_time_start || null,
+        };
+      }),
       packageName: packageData?.name || 'Paquete de Sesiones',
       buyerName: codes[0].buyer_name,
       sessionsQuantity: packageData?.sessions_quantity || codes.length,
