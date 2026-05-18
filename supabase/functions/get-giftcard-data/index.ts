@@ -32,7 +32,7 @@ serve(async (req) => {
     // Fetch session codes with matching token - using service role bypasses RLS
     const { data: codes, error: codesError } = await supabase
       .from('session_codes')
-      .select('code, is_used, expires_at, package_id, applicable_service_ids, buyer_name')
+      .select('code, is_used, expires_at, package_id, applicable_service_ids, buyer_name, used_at, used_in_booking_id')
       .eq('giftcard_access_token', token);
 
     if (codesError) {
