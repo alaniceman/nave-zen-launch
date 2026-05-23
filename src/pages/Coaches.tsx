@@ -104,6 +104,15 @@ const Coaches = () => {
       description: "Te acompaño a transitar etapas de cambio con serenidad, cuerpo y corazón alineados.",
       image: "/lovable-uploads/amber.webp",
       tags: ["Energía", "Terapia"]
+    },
+    {
+      id: 9,
+      name: "Vianny Macero",
+      title: "Instructora de Vinyasa Somático y Yin Yoga · Coach Somática",
+      credentials: "Nutricionista Funcional Integrativa · Especialista en Psiconutrición y Sistema Nervioso",
+      description: "A través del movimiento, la regulación y la nutrición, te acompaño a volver a ti, y desde ahí, construir una vida más coherente y viva.",
+      image: "/lovable-uploads/vianny-macero.webp",
+      tags: ["Movimiento", "Terapia"]
     }
   ]
 
