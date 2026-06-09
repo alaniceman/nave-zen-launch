@@ -78,7 +78,7 @@ const membershipPlans = [
     name: "Órbita",
     sessions: "2 / sem",
     price: "$79.000",
-    promo: "30% OFF 1° mes — código 1MES",
+    promo: "Prueba antes con Plan de Prueba desde $9.900",
     features: [
       "Yoga (Yin · Yang · Integral · Vinyasa · Vinyasa Somático · Power)",
       "Método Wim Hof",
@@ -95,7 +95,7 @@ const membershipPlans = [
     name: "Universo",
     sessions: "Ilimitadas",
     price: "$95.000",
-    promo: "30% OFF 1° mes — código 1MES",
+    promo: "Prueba antes con Plan de Prueba desde $9.900",
     features: [
       "Yoga (Yin · Yang · Integral · Vinyasa · Vinyasa Somático · Power)",
       "Método Wim Hof",

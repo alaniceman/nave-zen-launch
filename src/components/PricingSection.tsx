@@ -73,7 +73,7 @@ const PricingSection = () => {
           </a>
 
           <p className="text-xs text-muted-foreground mt-3 font-inter">
-            30% OFF el primer mes con código <strong>1MES</strong> (aplica a Universo y Órbita).
+            ¿Primera vez? Prueba todas las clases con el <a href="/plan-de-prueba" className="text-accent underline hover:text-primary">Plan de Prueba desde $9.900</a>.
           </p>
         </div>
       </section>

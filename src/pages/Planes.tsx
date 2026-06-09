@@ -216,7 +216,7 @@ const Planes = () => {
                   <div className="pt-4 border-t">
                     <div className="text-center space-y-2">
                       <span className="text-3xl font-bold text-foreground">$79.000</span>
-                      <Badge className="bg-warm text-white">30% OFF 1° mes - código 1MES</Badge>
+                      <Badge className="bg-warm text-white">Prueba antes con Plan de Prueba desde $9.900</Badge>
                     </div>
                   </div>
                   <Button className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium" data-plan="Órbita" data-checkout-url="https://boxmagic.cl/market/plan_subscription/ev4VPzOD9A">
@@ -263,7 +263,7 @@ const Planes = () => {
                   <div className="pt-4 border-t">
                     <div className="text-center space-y-2">
                       <span className="text-3xl font-bold text-foreground">$95.000</span>
-                      <Badge className="bg-warm text-white">30% OFF 1° mes - código 1MES</Badge>
+                      <Badge className="bg-warm text-white">Prueba antes con Plan de Prueba desde $9.900</Badge>
                     </div>
                   </div>
                   <CheckoutRedirectButton url="https://boxmagic.cl/market/plan_subscription/j80p5OdDW6" plan="Universo" className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium">
@@ -464,8 +464,8 @@ const Planes = () => {
               </p>
             </div>
             <Button size="lg" className="bg-accent hover:bg-primary text-white font-inter font-medium hover:scale-105 transition-transform duration-300 h-14 px-10 text-base" asChild>
-              <a href="#habito-semanal">
-                Comienza hoy con 30% OFF
+              <a href="/plan-de-prueba">
+                Empieza hoy con tu Plan de Prueba
               </a>
             </Button>
           </div>

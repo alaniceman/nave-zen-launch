@@ -354,7 +354,7 @@ const CriomedicinMetodoWimHof = () => {
                 <h3 className="font-semibold text-primary">Universo — Ilimitado</h3>
                 <p className="text-4xl font-bold text-primary mt-1">$95.000<span className="text-base text-muted-foreground">/mes</span></p>
                 <p className="text-sm text-muted-foreground mt-2">Incluye Criomedicina, Yoga, Breathwork, Biohacking, Ice Bath.</p>
-                <p className="text-xs text-muted-foreground mt-1">30% OFF 1er mes con código <strong>1MES</strong>.</p>
+                <p className="text-xs text-muted-foreground mt-1">¿Primera vez? Prueba con el <a href="/plan-de-prueba" className="text-accent underline">Plan de Prueba desde $9.900</a>.</p>
                 <CheckoutRedirectButton url="https://boxmagic.cl/market/plan_subscription/j80p5OdDW6" plan="Membresía Universo" className="mt-3 bg-primary text-primary-foreground px-5 py-3 rounded-lg hover:bg-primary/90 w-full font-medium">
                   Suscribirme
                 </CheckoutRedirectButton>
@@ -363,7 +363,7 @@ const CriomedicinMetodoWimHof = () => {
                 <h3 className="font-semibold text-primary">Órbita — 2/sem</h3>
                 <p className="text-4xl font-bold text-primary mt-1">$79.000<span className="text-base text-muted-foreground">/mes</span></p>
                 <p className="text-sm text-muted-foreground mt-2">2 sesiones por semana en cualquier disciplina.</p>
-                <p className="text-xs text-muted-foreground mt-1">30% OFF 1er mes con código <strong>1MES</strong>.</p>
+                <p className="text-xs text-muted-foreground mt-1">¿Primera vez? Prueba con el <a href="/plan-de-prueba" className="text-accent underline">Plan de Prueba desde $9.900</a>.</p>
                 <CheckoutRedirectButton url="https://boxmagic.cl/market/plan_subscription/ev4VPzOD9A" plan="Membresía Órbita" className="mt-3 bg-primary text-primary-foreground px-5 py-3 rounded-lg hover:bg-primary/90 w-full font-medium">
                   Suscribirme
                 </CheckoutRedirectButton>
