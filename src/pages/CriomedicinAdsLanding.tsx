@@ -584,7 +584,7 @@ import { ReviewsTrustBar } from "@/components/ReviewsTrustBar";
                      </li>
                      <li className="flex items-center gap-2">
                        <CheckCircle2 className="w-4 h-4 text-secondary flex-shrink-0" />
-                       30% dcto en tu primer mes con código 1MES
+                       Prueba antes con el Plan de Prueba desde $9.900
                      </li>
                    </ul>
                  </div>
