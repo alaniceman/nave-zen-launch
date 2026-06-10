@@ -140,14 +140,14 @@ const Planes = () => {
                   <div className="space-y-3">
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-muted-foreground">Sesiones presenciales</span>
-                      <span className="font-medium">1 / sem</span>
+                      <span className="font-medium">5 / mes</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-muted-foreground">Método Wim Hof</span>
+                      <span className="text-sm text-muted-foreground">Criomedicina / Método Wim Hof</span>
                       <span className="text-accent">✔</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-muted-foreground">Yoga (Yin · Yang · Integral)</span>
+                      <span className="text-sm text-muted-foreground">Yoga (Vinyasa · Yin · Yang · Integral · Power)</span>
                       <span className="text-accent">✔</span>
                     </div>
                     <div className="flex justify-between items-center">
@@ -155,18 +155,16 @@ const Planes = () => {
                       <span className="text-accent">✔</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-muted-foreground">Isométrica + Flexibilidad</span>
+                      <span className="text-sm text-muted-foreground">Comunidad online</span>
                       <span className="text-accent">✔</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm text-muted-foreground">Comunidad online + mentorías</span>
-                      <span className="text-muted-foreground">—</span>
                     </div>
                   </div>
                   <div className="pt-4 border-t">
                     <div className="text-center space-y-2">
                       <span className="text-3xl font-bold text-foreground">$59.000</span>
-                      <div className="h-6"></div>
+                      <a href="#plan-prueba-section" className="inline-block">
+                        <Badge className="bg-warm text-white cursor-pointer hover:bg-warm/90">Prueba antes con Plan de Prueba desde $9.900</Badge>
+                      </a>
                     </div>
                   </div>
                   <Button className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium" data-plan="Eclipse" data-checkout-url="https://boxmagic.cl/market/plan/AvLXQOM4EK">
@@ -190,14 +188,14 @@ const Planes = () => {
                   <div className="space-y-3">
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-muted-foreground">Sesiones presenciales</span>
-                      <span className="font-medium">2 / sem</span>
+                      <span className="font-medium">10 / mes</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-muted-foreground">Método Wim Hof</span>
+                      <span className="text-sm text-muted-foreground">Criomedicina / Método Wim Hof</span>
                       <span className="text-accent">✔</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-muted-foreground">Yoga (Yin · Yang · Integral)</span>
+                      <span className="text-sm text-muted-foreground">Yoga (Vinyasa · Yin · Yang · Integral · Power)</span>
                       <span className="text-accent">✔</span>
                     </div>
                     <div className="flex justify-between items-center">
@@ -205,18 +203,16 @@ const Planes = () => {
                       <span className="text-accent">✔</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-muted-foreground">Isométrica + Flexibilidad</span>
-                      <span className="text-accent">✔</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm text-muted-foreground">Comunidad online + mentorías</span>
+                      <span className="text-sm text-muted-foreground">Comunidad online</span>
                       <span className="text-accent">✔</span>
                     </div>
                   </div>
                   <div className="pt-4 border-t">
                     <div className="text-center space-y-2">
                       <span className="text-3xl font-bold text-foreground">$79.000</span>
-                      <Badge className="bg-warm text-white">Prueba antes con Plan de Prueba desde $9.900</Badge>
+                      <a href="#plan-prueba-section" className="inline-block">
+                        <Badge className="bg-warm text-white cursor-pointer hover:bg-warm/90">Prueba antes con Plan de Prueba desde $9.900</Badge>
+                      </a>
                     </div>
                   </div>
                   <Button className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium" data-plan="Órbita" data-checkout-url="https://boxmagic.cl/market/plan_subscription/ev4VPzOD9A">
@@ -240,11 +236,11 @@ const Planes = () => {
                       <span className="font-medium">Ilimitadas</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-muted-foreground">Método Wim Hof</span>
+                      <span className="text-sm text-muted-foreground">Criomedicina / Método Wim Hof</span>
                       <span className="text-accent">✔</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-muted-foreground">Yoga (Yin · Yang · Integral)</span>
+                      <span className="text-sm text-muted-foreground">Yoga (Vinyasa · Yin · Yang · Integral · Power)</span>
                       <span className="text-accent">✔</span>
                     </div>
                     <div className="flex justify-between items-center">
@@ -252,18 +248,16 @@ const Planes = () => {
                       <span className="text-accent">✔</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-muted-foreground">Isométrica + Flexibilidad</span>
-                      <span className="text-accent">✔</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm text-muted-foreground">Comunidad online + mentorías</span>
+                      <span className="text-sm text-muted-foreground">Comunidad online</span>
                       <span className="text-accent">✔</span>
                     </div>
                   </div>
                   <div className="pt-4 border-t">
                     <div className="text-center space-y-2">
                       <span className="text-3xl font-bold text-foreground">$95.000</span>
-                      <Badge className="bg-warm text-white">Prueba antes con Plan de Prueba desde $9.900</Badge>
+                      <a href="#plan-prueba-section" className="inline-block">
+                        <Badge className="bg-warm text-white cursor-pointer hover:bg-warm/90">Prueba antes con Plan de Prueba desde $9.900</Badge>
+                      </a>
                     </div>
                   </div>
                   <CheckoutRedirectButton url="https://boxmagic.cl/market/plan_subscription/j80p5OdDW6" plan="Universo" className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium">
@@ -272,25 +266,6 @@ const Planes = () => {
                   <a href="/horarios#hoy" className="inline-block mt-2 text-accent underline hover:text-primary transition-colors text-sm">
                     Ver horarios de clases →
                   </a>
-                </CardContent>
-              </Card>
-            </div>
-            
-            {/* Misión 90 Órbita en hábito semanal */}
-            <div className="mt-12 max-w-md mx-auto">
-              <Card className="border-2 border-warm hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[16px]">
-                <CardHeader className="text-center">
-                  <CardTitle className="text-xl font-bold text-primary font-space">Misión 90 Órbita</CardTitle>
-                  <Badge className="bg-warm text-white mx-auto">Paga en 3 cuotas sin interés</Badge>
-                </CardHeader>
-                <CardContent className="space-y-4 text-center">
-                  <p className="text-muted-foreground font-inter text-sm">
-                    27 sesiones en 90 días · 2/sem · plan trimestral con ahorro — ¡la mejor oferta!
-                  </p>
-                  <div className="text-3xl font-bold text-foreground">$199.000</div>
-                  <Button className="w-full bg-primary hover:bg-primary/90 text-white font-inter font-medium" data-checkout-url="https://boxmagic.cl/market/plan/WkD17d743z" data-plan="Misión 90 Órbita">
-                    Comenzar misión
-                  </Button>
                 </CardContent>
               </Card>
             </div>
@@ -454,7 +429,9 @@ const Planes = () => {
           </section>
 
           {/* Trial Yoga Section */}
-          <PricingTrialYogaSection />
+          <div id="plan-prueba-section" className="scroll-mt-24">
+            <PricingTrialYogaSection />
+          </div>
 
           {/* Guarantee & Final CTA */}
           <div className="text-center space-y-6 animate-fade-in">
@@ -469,6 +446,31 @@ const Planes = () => {
               </a>
             </Button>
           </div>
+        </div>
+      </section>
+
+      {/* Plan Trimestral - Misión 90 Órbita (al final) */}
+      <section className="py-16 bg-neutral-50">
+        <div className="max-w-md mx-auto px-6">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl md:text-4xl font-bold text-primary font-space">Plan trimestral</h2>
+            <p className="text-muted-foreground mt-2 font-inter">Compromiso de 90 días con el mejor precio por sesión.</p>
+          </div>
+          <Card className="border-2 border-warm hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[16px]">
+            <CardHeader className="text-center">
+              <CardTitle className="text-xl font-bold text-primary font-space">Misión 90 Órbita</CardTitle>
+              <Badge className="bg-warm text-white mx-auto">Paga en 3 cuotas sin interés</Badge>
+            </CardHeader>
+            <CardContent className="space-y-4 text-center">
+              <p className="text-muted-foreground font-inter text-sm">
+                27 sesiones en 90 días · 2/sem · plan trimestral con ahorro — ¡la mejor oferta!
+              </p>
+              <div className="text-3xl font-bold text-foreground">$199.000</div>
+              <Button className="w-full bg-primary hover:bg-primary/90 text-white font-inter font-medium" data-checkout-url="https://boxmagic.cl/market/plan/WkD17d743z" data-plan="Misión 90 Órbita">
+                Comenzar misión
+              </Button>
+            </CardContent>
+          </Card>
         </div>
       </section>
 
