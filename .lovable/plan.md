@@ -1,42 +1,32 @@
-# Conectar `/generative` a la documentación de Nave AI
+## Cambios en `/planes-precios` (src/pages/Planes.tsx)
 
-Hoy la edge function `generate-landing` solo inyecta planes y bonos en vivo. Nave AI (chatbot) además lee la tabla editable `ai_knowledge`, donde tú vas agregando reglas, tono, info de servicios, FAQs, etc. Queremos que la landing generativa use la **misma** fuente, para que cualquier cambio que hagas en `/admin/ai-knowledge` se refleje también acá.
+### 1) Nuevo formato de features en las 3 membresías (Eclipse, Órbita, Universo)
 
-## Qué cambia
+Reemplazar las filas actuales de cada card por exactamente estas 5, en este orden:
 
-- `generate-landing` pasa a leer `ai_knowledge` (filas activas, ordenadas por `priority`) además de los planes y bonos que ya lee.
-- El system prompt se arma en este orden:
-  1. **Rol creativo + formato JSON estricto** (lo que ya tiene hoy, queda fijo en código porque define la estructura de salida).
-  2. **Knowledge base de Nave AI** (texto editable desde admin).
-  3. **Datos en vivo** (membresías, bonos).
-- Si `ai_knowledge` está vacío, se usa un fallback corto (igual que hace `chat-nave`).
+- **Sesiones presenciales** → Eclipse: `5 / mes` · Órbita: `10 / mes` · Universo: `Ilimitadas` (se mantiene)
+- **Criomedicina / Método Wim Hof** ✔
+- **Yoga (Vinyasa · Yin · Yang · Integral · Power)** ✔
+- **Breathwork & Meditación** ✔
+- **Comunidad online** ✔
 
-## Por qué así
+Se elimina la fila "Isométrica + Flexibilidad" y la fila "Comunidad online + mentorías" (reemplazada por "Comunidad online").
 
-- Reusa la misma fuente de verdad que ya editas para el chatbot → no duplicas contenido.
-- La parte "formato JSON" se queda en código porque si el admin la borra sin querer, la landing rompe. El admin controla el **contenido/tono**, no la estructura.
-- No agregamos tabla nueva ni endpoint nuevo.
+### 2) Badge "Plan de Prueba" en Eclipse
 
-## Archivos a tocar
+Agregar a la card Eclipse (debajo del precio $59.000) el mismo badge que ya existe en Órbita/Universo:
 
-- `supabase/functions/generate-landing/index.ts` → agregar `buildKnowledgeSection()` (igual al de `chat-nave/systemPrompt.ts`) y concatenarlo al prompt.
-- Nada más. Frontend no cambia.
+> "Prueba antes con Plan de Prueba desde $9.900"
 
-## Detalle técnico
+Envolverlo en un `<a href="#plan-prueba-section">` para que al click haga scroll a la sección de Plan de Prueba ya existente en la misma página (`<PricingTrialYogaSection />` en línea 457). Se le agregará `id="plan-prueba-section"` al wrapper de esa sección para que el ancla funcione.
 
-```text
-SYSTEM_PROMPT (rol + schema JSON, fijo)
-        +
-ai_knowledge (DB, editable en /admin/ai-knowledge)
-        +
-CONTEXTO EN VIVO (planes + bonos desde DB)
-        +
-user input
-```
+Nota: los badges equivalentes en Órbita y Universo también se harán clickeables al mismo ancla, por consistencia.
 
-Sin cambios de schema, sin migraciones, sin secrets nuevos.
+### 3) Mover "Misión 90 Órbita" (plan trimestral) al final de la página
 
-## Fuera de scope
+- Eliminar el bloque actual de "Misión 90 Órbita" dentro de la sección `#habito-semanal` (líneas ~279-296).
+- Re-insertarlo como nueva sección al final del `<main>`, justo antes del `<Footer />`, con su mismo card y CTA intactos, bajo un encabezado breve tipo "Plan trimestral".
 
-- Mover el rol creativo a la DB (riesgoso, rompe el JSON si se edita mal).
-- UI nueva en admin (ya existe `/admin/ai-knowledge`).
+### Fuera de alcance
+
+No se tocan precios, URLs de checkout, tracking de Pixel, ni otras secciones (Paquetes Criomedicina, Solo Yoga, Drop-In, etc.).
