@@ -140,7 +140,7 @@ const Planes = () => {
                   <div className="space-y-3">
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-muted-foreground">Sesiones presenciales</span>
-                      <span className="font-medium">5 / mes</span>
+                      <span className="font-medium">1 / sem</span>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-muted-foreground">Criomedicina / Método Wim Hof</span>
@@ -188,7 +188,7 @@ const Planes = () => {
                   <div className="space-y-3">
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-muted-foreground">Sesiones presenciales</span>
-                      <span className="font-medium">10 / mes</span>
+                      <span className="font-medium">2 / sem</span>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-muted-foreground">Criomedicina / Método Wim Hof</span>
