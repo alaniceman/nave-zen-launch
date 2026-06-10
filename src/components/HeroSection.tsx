@@ -6,8 +6,6 @@ import Autoplay from "embla-carousel-autoplay";
 import { cn } from "@/lib/utils";
 import planPruebaHero from "@/assets/plan-prueba-hero.webp";
 
-// Plan de Prueba promo end date — 31 mayo 2026 fin del día Chile (UTC-3)
-const PROMO_END_DATE = new Date("2026-06-01T03:00:00Z");
 // Día de la Madre (Chile: 10 mayo 2026) — banner activo hasta fin del 10 mayo
 const DIA_MADRE_END_DATE = new Date("2026-05-11T03:00:00Z");
 
@@ -193,13 +191,11 @@ const HeroSlideDiaMadre = () => {
 };
 
 export const HeroSection = () => {
-  const [showPromo, setShowPromo] = useState(false);
   const [showDiaMadre, setShowDiaMadre] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   useEffect(() => {
     const now = new Date();
-    setShowPromo(now < PROMO_END_DATE);
     setShowDiaMadre(now < DIA_MADRE_END_DATE);
   }, []);
 
@@ -232,19 +228,10 @@ export const HeroSection = () => {
     };
   }, [emblaApi, onSelect]);
 
-  // If no promos active, just show main hero
-  if (!showPromo && !showDiaMadre) {
-    return (
-      <section className="relative min-h-screen overflow-hidden">
-        <HeroSlideMain />
-      </section>
-    );
-  }
-
   const slides = [
-    ...(showDiaMadre ? [{ id: 'dia-madre', component: <HeroSlideDiaMadre /> }] : []),
-    ...(showPromo ? [{ id: 'plan-prueba', component: <HeroSlidePlanPrueba /> }] : []),
+    { id: 'plan-prueba', component: <HeroSlidePlanPrueba /> },
     { id: 'main', component: <HeroSlideMain /> },
+    ...(showDiaMadre ? [{ id: 'dia-madre', component: <HeroSlideDiaMadre /> }] : []),
   ];
 
   return (
