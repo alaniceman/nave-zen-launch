@@ -429,7 +429,9 @@ const Planes = () => {
           </section>
 
           {/* Trial Yoga Section */}
-          <PricingTrialYogaSection />
+          <div id="plan-prueba-section" className="scroll-mt-24">
+            <PricingTrialYogaSection />
+          </div>
 
           {/* Guarantee & Final CTA */}
           <div className="text-center space-y-6 animate-fade-in">
