@@ -1,32 +1,20 @@
-## Cambios en `/planes-precios` (src/pages/Planes.tsx)
+## Plan de Prueba: banner permanente como primer slide del Hero
 
-### 1) Nuevo formato de features en las 3 membresías (Eclipse, Órbita, Universo)
+**Archivo:** `src/components/HeroSection.tsx`
 
-Reemplazar las filas actuales de cada card por exactamente estas 5, en este orden:
+### Contexto
+El slide `HeroSlidePlanPrueba` ya existe en el Hero pero está condicionado por una fecha de fin de promo (`PROMO_END_DATE`). El Plan de Prueba no es una promo temporal — es la oferta de entrada permanente del estudio.
 
-- **Sesiones presenciales** → Eclipse: `5 / mes` · Órbita: `10 / mes` · Universo: `Ilimitadas` (se mantiene)
-- **Criomedicina / Método Wim Hof** ✔
-- **Yoga (Vinyasa · Yin · Yang · Integral · Power)** ✔
-- **Breathwork & Meditación** ✔
-- **Comunidad online** ✔
+### Cambios
 
-Se elimina la fila "Isométrica + Flexibilidad" y la fila "Comunidad online + mentorías" (reemplazada por "Comunidad online").
+1. **Eliminar la lógica de expiración del Plan de Prueba**
+   - Quitar `PROMO_END_DATE` y el estado `showPromo` que dependía de la fecha.
+   - El slide `HeroSlidePlanPrueba` siempre se renderiza.
 
-### 2) Badge "Plan de Prueba" en Eclipse
-
-Agregar a la card Eclipse (debajo del precio $59.000) el mismo badge que ya existe en Órbita/Universo:
-
-> "Prueba antes con Plan de Prueba desde $9.900"
-
-Envolverlo en un `<a href="#plan-prueba-section">` para que al click haga scroll a la sección de Plan de Prueba ya existente en la misma página (`<PricingTrialYogaSection />` en línea 457). Se le agregará `id="plan-prueba-section"` al wrapper de esa sección para que el ancla funcione.
-
-Nota: los badges equivalentes en Órbita y Universo también se harán clickeables al mismo ancla, por consistencia.
-
-### 3) Mover "Misión 90 Órbita" (plan trimestral) al final de la página
-
-- Eliminar el bloque actual de "Misión 90 Órbita" dentro de la sección `#habito-semanal` (líneas ~279-296).
-- Re-insertarlo como nueva sección al final del `<main>`, justo antes del `<Footer />`, con su mismo card y CTA intactos, bajo un encabezado breve tipo "Plan trimestral".
+2. **Garantizar que sea el primer slide**
+   - Nuevo orden fijo del carrusel: `[plan-prueba, main, ...(dia-madre si aplica)]`.
+   - El slide Día de la Madre mantiene su condicional por fecha (sigue siendo estacional) pero se mueve al final para que nunca desplace al Plan de Prueba.
+   - Asegurar que el carrusel arranque en index 0 (Plan de Prueba).
 
 ### Fuera de alcance
-
-No se tocan precios, URLs de checkout, tracking de Pixel, ni otras secciones (Paquetes Criomedicina, Solo Yoga, Drop-In, etc.).
+No se modifica el diseño/copy del slide, el CTA, la imagen, ni otras secciones de Index.
