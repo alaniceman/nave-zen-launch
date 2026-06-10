@@ -449,6 +449,31 @@ const Planes = () => {
         </div>
       </section>
 
+      {/* Plan Trimestral - Misión 90 Órbita (al final) */}
+      <section className="py-16 bg-neutral-50">
+        <div className="max-w-md mx-auto px-6">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl md:text-4xl font-bold text-primary font-space">Plan trimestral</h2>
+            <p className="text-muted-foreground mt-2 font-inter">Compromiso de 90 días con el mejor precio por sesión.</p>
+          </div>
+          <Card className="border-2 border-warm hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[16px]">
+            <CardHeader className="text-center">
+              <CardTitle className="text-xl font-bold text-primary font-space">Misión 90 Órbita</CardTitle>
+              <Badge className="bg-warm text-white mx-auto">Paga en 3 cuotas sin interés</Badge>
+            </CardHeader>
+            <CardContent className="space-y-4 text-center">
+              <p className="text-muted-foreground font-inter text-sm">
+                27 sesiones en 90 días · 2/sem · plan trimestral con ahorro — ¡la mejor oferta!
+              </p>
+              <div className="text-3xl font-bold text-foreground">$199.000</div>
+              <Button className="w-full bg-primary hover:bg-primary/90 text-white font-inter font-medium" data-checkout-url="https://boxmagic.cl/market/plan/WkD17d743z" data-plan="Misión 90 Órbita">
+                Comenzar misión
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
       <Footer />
     </main>
     </>;
