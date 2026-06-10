@@ -46,13 +46,13 @@ const HeroSlideMain = () => {
               Para sentirte sano, fuerte y feliz.
             </h2>
             <div className="font-inter font-medium text-lg md:text-xl text-white/80 tracking-wide">
-              Ice Bath · Método Wim Hof · Yoga · Breathwork
+              Yoga · Ice Bath · Método Wim Hof · Breathwork
             </div>
           </div>
 
           {/* Micro line */}
           <p className="font-inter text-base md:text-lg text-white/80 max-w-2xl mx-auto">
-            Creado por <a href="https://instagram.com/alan_iceman" target="_blank" rel="noopener noreferrer" className="font-medium text-accent hover:text-accent/80 transition-colors">Alan Iceman</a> — Instructor Wim Hof, +115k seguidores en Instagram
+            Creado por <a href="https://instagram.com/alan_iceman" target="_blank" rel="noopener noreferrer" className="font-medium text-accent hover:text-accent/80 transition-colors">Alan Iceman</a> — Instructor Wim Hof, +118k seguidores en Instagram
           </p>
 
           {/* CTA Section */}
