@@ -67,9 +67,15 @@ export default function PlanDePrueba() {
 
         <div className="container mx-auto px-4 max-w-5xl">
           <div className="text-center">
-            <div className="inline-flex items-center gap-2 bg-white/70 backdrop-blur border border-[#2E4D3A]/15 text-[#2E4D3A] px-4 py-1.5 rounded-full text-sm font-medium mb-6 shadow-sm">
-              <Sparkles className="w-4 h-4" />
-              Acceso completo durante tu prueba
+            <div className="flex flex-wrap items-center justify-center gap-2 mb-6">
+              <div className="inline-flex items-center gap-2 bg-white/70 backdrop-blur border border-[#2E4D3A]/15 text-[#2E4D3A] px-4 py-1.5 rounded-full text-sm font-medium shadow-sm">
+                <Sparkles className="w-4 h-4" />
+                Acceso completo durante tu prueba
+              </div>
+              <div className="inline-flex items-center gap-1.5 bg-amber-50 border border-amber-200 text-amber-800 px-3 py-1.5 rounded-full text-sm font-semibold shadow-sm">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                Cupos limitados
+              </div>
             </div>
 
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-[#1F3A2A] mb-6 leading-[1.05] tracking-tight">
