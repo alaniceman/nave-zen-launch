@@ -65,6 +65,7 @@ const BautizoHielo = lazy(() => import("./pages/BautizoHielo"));
 const InstructorProfile = lazy(() => import("./pages/InstructorProfile"));
 const Generative = lazy(() => import("./pages/Generative"));
 const FotosWorkshopBuda = lazy(() => import("./pages/FotosWorkshopBuda"));
+const TallerSantiago = lazy(() => import("./pages/TallerSantiago"));
 
 // Lazy-loaded admin pages
 const AdminLogin = lazy(() => import("./pages/admin/Login"));
@@ -207,6 +208,7 @@ const App = () => {
             
             {/* Redirect legacy routes */}
             <Route path="/planes" element={<Navigate to="/planes-precios" replace />} />
+            <Route path="/taller-wim-hof-santiago-fundamentales-avanzado" element={<TallerSantiago />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
