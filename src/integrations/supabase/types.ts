@@ -546,6 +546,33 @@ export type Database = {
         }
         Relationships: []
       }
+      event_cupos: {
+        Row: {
+          created_at: string
+          cupos_total: number
+          cupos_vendidos: number
+          event_id: string
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          cupos_total?: number
+          cupos_vendidos?: number
+          event_id: string
+          id?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          cupos_total?: number
+          cupos_vendidos?: number
+          event_id?: string
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       generated_slots: {
         Row: {
           confirmed_bookings: number
@@ -1105,6 +1132,66 @@ export type Database = {
           sort_order?: number
           updated_at?: string | null
           validity_days?: number
+        }
+        Relationships: []
+      }
+      taller_santiago_avanzado: {
+        Row: {
+          consent: boolean
+          created_at: string
+          email: string
+          id: string
+          name: string
+          paid: boolean
+          phone: string
+        }
+        Insert: {
+          consent?: boolean
+          created_at?: string
+          email: string
+          id?: string
+          name: string
+          paid?: boolean
+          phone: string
+        }
+        Update: {
+          consent?: boolean
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string
+          paid?: boolean
+          phone?: string
+        }
+        Relationships: []
+      }
+      taller_santiago_fundamentos: {
+        Row: {
+          consent: boolean
+          created_at: string
+          email: string
+          id: string
+          name: string
+          paid: boolean
+          phone: string
+        }
+        Insert: {
+          consent?: boolean
+          created_at?: string
+          email: string
+          id?: string
+          name: string
+          paid?: boolean
+          phone: string
+        }
+        Update: {
+          consent?: boolean
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string
+          paid?: boolean
+          phone?: string
         }
         Relationships: []
       }
