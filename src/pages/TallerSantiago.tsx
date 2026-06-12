@@ -38,7 +38,7 @@ import {
   Menu,
   X,
 } from "lucide-react";
-import Footer from "@/components/Footer";
+import { Footer } from "@/components/Footer";
 import heroAsset from "@/assets/alan-ice-bath-smile.webp.asset.json";
 import alanWhmAsset from "@/assets/alan-wim-hof.webp.asset.json";
 
