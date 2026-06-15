@@ -261,18 +261,39 @@ const AdminShopProducts = () => {
 
               <div className="space-y-2">
                 <Label>Imágenes (cuadradas) — la primera es la portada</Label>
+                <div>
+                  <input
+                    id="shop-image-upload"
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    className="hidden"
+                    onChange={(e) => { handleUpload(e.target.files); e.target.value = ""; }}
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full"
+                    disabled={uploading}
+                    onClick={() => document.getElementById("shop-image-upload")?.click()}
+                  >
+                    {uploading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Upload className="h-4 w-4 mr-2" />}
+                    {uploading ? "Subiendo..." : "Subir imágenes"}
+                  </Button>
+                </div>
                 <div className="flex gap-2">
                   <Input
                     value={newImage}
-                    placeholder="https://..."
+                    placeholder="O pega una URL https://..."
                     onChange={(e) => setNewImage(e.target.value)}
                     onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addImage(); } }}
                   />
-                  <Button type="button" variant="outline" onClick={addImage}>Agregar</Button>
+                  <Button type="button" variant="outline" onClick={addImage}>Agregar URL</Button>
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Sube la imagen al proyecto (Lovable uploads) y pega la URL aquí. Puedes agregar varias y reordenarlas.
+                  Puedes subir varias fotos y reordenarlas. La primera es la portada.
                 </p>
+
 
                 {(editing.image_urls || []).length > 0 && (
                   <div className="space-y-2">
