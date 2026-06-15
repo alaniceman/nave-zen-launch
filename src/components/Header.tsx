@@ -14,6 +14,7 @@ const navigationItems: NavItem[] = [
     children: [
       { label: "Yoga", href: "/yoga-las-condes" },
       { label: "Criomedicina y Método Wim Hof", href: "/criomedicina-metodo-wim-hof-las-condes" },
+      { label: "Talleres y Retiros", href: "/talleres-y-retiros" },
       { label: "Todas las experiencias", href: "/experiencias" },
       { label: "Coaches", href: "/coaches" },
     ],
