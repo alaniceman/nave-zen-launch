@@ -1,47 +1,65 @@
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import { Menu, X, ChevronDown } from "lucide-react"
+import {
+  Menu, X, ChevronDown,
+  Flower2, Snowflake, Mountain, Sparkles, Users,
+  CalendarDays, Ticket, Clock, MapPin,
+  Gift, CreditCard, Package,
+  BookOpen, MessageCircle,
+  Rocket, UserPlus, LogIn,
+  type LucideIcon,
+} from "lucide-react"
 
-type NavLink = { label: string; href: string }
-type NavDropdown = { label: string; type: "dropdown"; children: NavLink[] }
-type NavDirect = { label: string; href: string; type: "link" }
+type NavLink = { label: string; href: string; icon: LucideIcon }
+type NavDropdown = { label: string; type: "dropdown"; children: NavLink[]; icon: LucideIcon }
+type NavDirect = { label: string; href: string; type: "link"; icon: LucideIcon }
 type NavItem = NavDropdown | NavDirect
 
 const navigationItems: NavItem[] = [
   {
     label: "Experiencias",
     type: "dropdown",
+    icon: Sparkles,
     children: [
-      { label: "Yoga", href: "/yoga-las-condes" },
-      { label: "Criomedicina y Método Wim Hof", href: "/criomedicina-metodo-wim-hof-las-condes" },
-      { label: "Talleres y Retiros", href: "/talleres-y-retiros" },
-      { label: "Todas las experiencias", href: "/experiencias" },
-      { label: "Coaches", href: "/coaches" },
+      { label: "Yoga", href: "/yoga-las-condes", icon: Flower2 },
+      { label: "Criomedicina y Método Wim Hof", href: "/criomedicina-metodo-wim-hof-las-condes", icon: Snowflake },
+      { label: "Talleres y Retiros", href: "/talleres-y-retiros", icon: Mountain },
+      { label: "Todas las experiencias", href: "/experiencias", icon: Sparkles },
+      { label: "Coaches", href: "/coaches", icon: Users },
     ],
   },
   {
     label: "Agenda y Horarios",
     type: "dropdown",
+    icon: CalendarDays,
     children: [
-      { label: "Agenda Criomedicina", href: "/agenda-nave-studio" },
-      { label: "Plan de Prueba", href: "/plan-de-prueba" },
-      { label: "Horarios", href: "/horarios" },
-      { label: "Conoce el lugar", href: "/conoce-el-lugar" },
+      { label: "Agenda Criomedicina", href: "/agenda-nave-studio", icon: CalendarDays },
+      { label: "Plan de Prueba", href: "/plan-de-prueba", icon: Ticket },
+      { label: "Horarios", href: "/horarios", icon: Clock },
+      { label: "Conoce el lugar", href: "/conoce-el-lugar", icon: MapPin },
     ],
   },
   {
     label: "Planes",
     type: "dropdown",
+    icon: CreditCard,
     children: [
-      { label: "Plan de Prueba", href: "/plan-de-prueba" },
-      { label: "Membresías", href: "/planes-precios" },
-      { label: "Paquete de sesiones", href: "/bonos" },
-      { label: "Gift Cards", href: "/giftcards" },
+      { label: "Plan de Prueba", href: "/plan-de-prueba", icon: Ticket },
+      { label: "Membresías", href: "/planes-precios", icon: CreditCard },
+      { label: "Paquete de sesiones", href: "/bonos", icon: Package },
+      { label: "Gift Cards", href: "/giftcards", icon: Gift },
     ],
   },
-  { label: "Blog", href: "/blog", type: "link" },
-  { label: "Contacto", href: "/contacto", type: "link" },
+  { label: "Blog", href: "/blog", type: "link", icon: BookOpen },
+  { label: "Contacto", href: "/contacto", type: "link", icon: MessageCircle },
 ]
+
+const empezarItems: { label: string; href: string; icon: LucideIcon }[] = [
+  { label: "Plan de prueba", href: "/plan-de-prueba", icon: Rocket },
+  { label: "Registrarse", href: "https://boxmagic.cl/crear_cuenta/NaveStudio", icon: UserPlus },
+  { label: "Ingresar a la app", href: "https://members.boxmagic.app/a/g/Kp0MWKaL8x", icon: LogIn },
+]
+
 
 export const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false)
