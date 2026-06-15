@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import useEmblaCarousel from "embla-carousel-react";
 import { cn } from "@/lib/utils";
 
@@ -30,6 +31,9 @@ export const ProductGallery = ({ images, alt, className }: Props) => {
     );
   }
 
+  const scrollPrev = () => emblaApi?.scrollPrev();
+  const scrollNext = () => emblaApi?.scrollNext();
+
   return (
     <div className={cn("relative", className)}>
       <div ref={emblaRef} className="overflow-hidden rounded-xl bg-muted">
@@ -42,20 +46,38 @@ export const ProductGallery = ({ images, alt, className }: Props) => {
         </div>
       </div>
       {images.length > 1 && (
-        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5">
-          {images.map((_, i) => (
-            <button
-              key={i}
-              type="button"
-              aria-label={`Imagen ${i + 1}`}
-              onClick={() => emblaApi?.scrollTo(i)}
-              className={cn(
-                "h-1.5 rounded-full transition-all",
-                i === selected ? "w-5 bg-white" : "w-1.5 bg-white/60"
-              )}
-            />
-          ))}
-        </div>
+        <>
+          <button
+            type="button"
+            onClick={scrollPrev}
+            aria-label="Imagen anterior"
+            className="absolute left-2 top-1/2 -translate-y-1/2 h-9 w-9 flex items-center justify-center rounded-full bg-black/30 text-white backdrop-blur-sm hover:bg-black/50 transition-colors"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </button>
+          <button
+            type="button"
+            onClick={scrollNext}
+            aria-label="Imagen siguiente"
+            className="absolute right-2 top-1/2 -translate-y-1/2 h-9 w-9 flex items-center justify-center rounded-full bg-black/30 text-white backdrop-blur-sm hover:bg-black/50 transition-colors"
+          >
+            <ChevronRight className="h-5 w-5" />
+          </button>
+          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5">
+            {images.map((_, i) => (
+              <button
+                key={i}
+                type="button"
+                aria-label={`Imagen ${i + 1}`}
+                onClick={() => emblaApi?.scrollTo(i)}
+                className={cn(
+                  "h-1.5 rounded-full transition-all",
+                  i === selected ? "w-5 bg-white" : "w-1.5 bg-white/60"
+                )}
+              />
+            ))}
+          </div>
+        </>
       )}
     </div>
   );
