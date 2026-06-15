@@ -138,8 +138,9 @@ export const Header = () => {
                 <div key={item.label} className="relative" data-nav-dropdown>
                   <button
                     onClick={() => toggleDropdown(item.label)}
-                    className="group inline-flex items-center gap-1 font-inter text-sm lg:text-base text-neutral-mid hover:text-warm transition-colors duration-200 focus:outline-dashed focus:outline-2 focus:outline-secondary"
+                    className="group inline-flex items-center gap-1.5 font-inter text-sm lg:text-base text-neutral-mid hover:text-warm transition-colors duration-200 focus:outline-dashed focus:outline-2 focus:outline-secondary"
                   >
+                    <item.icon className="w-4 h-4" strokeWidth={1.75} />
                     {item.label}
                     <ChevronDown
                       className={`w-4 h-4 transition-transform duration-200 ${openDropdown === item.label ? 'rotate-180' : ''}`}
