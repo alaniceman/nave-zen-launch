@@ -42,9 +42,9 @@ const Tienda = () => {
             <div className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 mb-4">
               <ShoppingBag className="h-7 w-7 text-primary" />
             </div>
-            <h1 className="font-space-grotesk text-4xl md:text-5xl font-bold text-primary mb-3">Tienda</h1>
+            <h1 className="font-space-grotesk text-4xl md:text-5xl font-bold text-primary mb-3">Tienda Nave Studio</h1>
             <p className="font-inter text-base md:text-lg text-muted-foreground max-w-xl mx-auto">
-              Lo que tenemos hoy en vitrina. Compra desde tu celular y retira al toque.
+              Lo que tenemos hoy en vitrina. Compra desde tu celular y retira en Nave Studio.
             </p>
           </header>
 
