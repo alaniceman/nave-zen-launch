@@ -104,12 +104,12 @@ const HeroSlidePlanPrueba = () => {
           </div>
 
           {/* Heading */}
-          <h1 className="font-space-grotesk font-bold text-3xl md:text-6xl lg:text-7xl leading-[1.1]">
+          <h2 className="font-space-grotesk font-bold text-3xl md:text-6xl lg:text-7xl leading-[1.1]">
             Plan de Prueba
             <span className="block text-xl md:text-3xl lg:text-4xl font-medium text-white/90 mt-3">
               Acceso ilimitado a todas las clases
             </span>
-          </h1>
+          </h2>
 
           {/* Price */}
           <div className="flex items-center justify-center gap-4 pt-2 flex-wrap">
@@ -163,9 +163,9 @@ const HeroSlideDiaMadre = () => {
           <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md text-white px-5 py-2.5 rounded-full text-sm md:text-base font-semibold border border-white/30">
             💐 Día de la Madre · Edición limitada
           </div>
-          <h1 className="font-space-grotesk font-bold text-4xl md:text-6xl lg:text-7xl leading-[1.05]">
+          <h2 className="font-space-grotesk font-bold text-4xl md:text-6xl lg:text-7xl leading-[1.05]">
             Mamá también necesita un reset
-          </h1>
+          </h2>
           <p className="font-inter text-base md:text-xl text-white/95 max-w-2xl mx-auto">
             Regálale 4 sesiones en Nave Studio — Yoga o Criomedicina. Puede usarlas sola o compartirlas contigo.
           </p>

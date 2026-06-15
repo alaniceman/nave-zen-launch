@@ -92,7 +92,7 @@ const Planes = () => {
       {/* Menú de Intención */}
       <section id="intent-menu" className="py-16 bg-neutral-50">
         <div className="max-w-6xl mx-auto px-4 md:px-6">
-          <h1 className="text-3xl md:text-4xl font-bold text-primary text-center font-space">Elige cómo quieres empezar</h1>
+          <h2 className="text-3xl md:text-4xl font-bold text-primary text-center font-space">Elige cómo quieres empezar</h2>
           <p className="text-muted-foreground text-center mt-2 font-inter">Selecciona tu objetivo y te mostramos el plan ideal.</p>
           <div className="grid gap-4 mt-8 grid-cols-1 sm:grid-cols-3">
             {/* Hábito Semanal */}

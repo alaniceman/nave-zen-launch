@@ -120,7 +120,7 @@ export default function Icefest() {
         />
         <meta property="og:title" content="Icefest ❄️ — 6 Sesiones de Criomedicina por $60.000" />
         <meta property="og:description" content="6 sesiones de Criomedicina por $60.000. Compartibles, 6 meses de validez. Solo por 10 días." />
-        <link rel="canonical" href="https://nave-zen-launch.lovable.app/icefest" />
+        <link rel="canonical" href="https://studiolanave.com/icefest" />
       </Helmet>
 
       <main className="min-h-screen bg-gradient-to-b from-slate-900 via-sky-950 to-slate-900">
