@@ -7,7 +7,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Plus, Pencil, Trash2, X, ArrowUp, ArrowDown } from "lucide-react";
+import { Loader2, Plus, Pencil, Trash2, X, ArrowUp, ArrowDown, Upload } from "lucide-react";
+
+const BUCKET = "shop-products";
 
 type Product = {
   id: string;
