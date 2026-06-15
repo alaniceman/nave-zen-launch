@@ -7,7 +7,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Plus, Pencil, Trash2, X, ArrowUp, ArrowDown } from "lucide-react";
+import { Loader2, Plus, Pencil, Trash2, X, ArrowUp, ArrowDown, Upload } from "lucide-react";
+
+const BUCKET = "shop-products";
 
 type Product = {
   id: string;
@@ -39,6 +41,32 @@ const AdminShopProducts = () => {
   const [editing, setEditing] = useState<Partial<Product> | null>(null);
   const [saving, setSaving] = useState(false);
   const [newImage, setNewImage] = useState("");
+  const [uploading, setUploading] = useState(false);
+
+  const handleUpload = async (files: FileList | null) => {
+    if (!files || files.length === 0 || !editing) return;
+    setUploading(true);
+    try {
+      const uploaded: string[] = [];
+      for (const file of Array.from(files)) {
+        const ext = file.name.split(".").pop() || "jpg";
+        const path = `${crypto.randomUUID()}.${ext}`;
+        const { error } = await supabase.storage.from(BUCKET).upload(path, file, {
+          cacheControl: "3600",
+          upsert: false,
+          contentType: file.type,
+        });
+        if (error) throw error;
+        const { data } = supabase.storage.from(BUCKET).getPublicUrl(path);
+        uploaded.push(data.publicUrl);
+      }
+      setEditing({ ...editing, image_urls: [...(editing.image_urls || []), ...uploaded] });
+    } catch (err: any) {
+      toast({ title: "Error al subir imagen", description: err.message, variant: "destructive" });
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const load = async () => {
     setLoading(true);
@@ -233,18 +261,39 @@ const AdminShopProducts = () => {
 
               <div className="space-y-2">
                 <Label>Imágenes (cuadradas) — la primera es la portada</Label>
+                <div>
+                  <input
+                    id="shop-image-upload"
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    className="hidden"
+                    onChange={(e) => { handleUpload(e.target.files); e.target.value = ""; }}
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full"
+                    disabled={uploading}
+                    onClick={() => document.getElementById("shop-image-upload")?.click()}
+                  >
+                    {uploading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Upload className="h-4 w-4 mr-2" />}
+                    {uploading ? "Subiendo..." : "Subir imágenes"}
+                  </Button>
+                </div>
                 <div className="flex gap-2">
                   <Input
                     value={newImage}
-                    placeholder="https://..."
+                    placeholder="O pega una URL https://..."
                     onChange={(e) => setNewImage(e.target.value)}
                     onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addImage(); } }}
                   />
-                  <Button type="button" variant="outline" onClick={addImage}>Agregar</Button>
+                  <Button type="button" variant="outline" onClick={addImage}>Agregar URL</Button>
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Sube la imagen al proyecto (Lovable uploads) y pega la URL aquí. Puedes agregar varias y reordenarlas.
+                  Puedes subir varias fotos y reordenarlas. La primera es la portada.
                 </p>
+
 
                 {(editing.image_urls || []).length > 0 && (
                   <div className="space-y-2">
