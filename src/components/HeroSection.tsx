@@ -106,7 +106,7 @@ const HeroSlidePlanPrueba = () => {
           {/* Heading */}
           <h2 className="font-space-grotesk font-bold text-3xl md:text-6xl lg:text-7xl leading-[1.1]">
             Plan de Prueba
-            <span className="block text-xl md:the-3xl lg:text-4xl font-medium text-white/90 mt-3">
+            <span className="block text-xl md:text-3xl lg:text-4xl font-medium text-white/90 mt-3">
               Acceso ilimitado a todas las clases
             </span>
           </h2>
