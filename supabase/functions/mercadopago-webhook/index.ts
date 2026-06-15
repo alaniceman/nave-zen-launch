@@ -67,6 +67,89 @@ function isValidUUID(str: string): boolean {
   return uuidRegex.test(str);
 }
 
+// Handle shop product order payments (physical store)
+async function handleShopOrderPayment(
+  payment: any,
+  orderId: string,
+  supabase: any,
+  corsHeaders: any
+) {
+  const paymentIdStr = payment.id.toString();
+  console.log(`Processing shop order payment: orderId=${orderId}, paymentId=${paymentIdStr}, status=${payment.status}`);
+
+  const { data: order, error: orderError } = await supabase
+    .from("shop_orders")
+    .select("*")
+    .eq("id", orderId)
+    .single();
+
+  if (orderError || !order) {
+    return new Response(JSON.stringify({ status: "order_not_found" }), {
+      status: 200,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  if (order.status === "paid" || order.mercado_pago_payment_id === paymentIdStr) {
+    return new Response(JSON.stringify({ status: "already_processed" }), {
+      status: 200,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  if (payment.status === "pending") {
+    await supabase
+      .from("shop_orders")
+      .update({ status: "pending", mercado_pago_payment_id: paymentIdStr })
+      .eq("id", orderId);
+    return new Response(JSON.stringify({ status: "payment_pending" }), {
+      status: 200,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  if (payment.status !== "approved") {
+    await supabase
+      .from("shop_orders")
+      .update({ status: "failed", mercado_pago_payment_id: paymentIdStr })
+      .eq("id", orderId);
+    return new Response(JSON.stringify({ status: "payment_not_approved" }), {
+      status: 200,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  // Approved — verify amount
+  if (Math.abs(payment.transaction_amount - order.product_price) > 1) {
+    await supabase
+      .from("shop_orders")
+      .update({ status: "failed", mercado_pago_payment_id: paymentIdStr })
+      .eq("id", orderId);
+    return new Response(JSON.stringify({ status: "amount_mismatch" }), {
+      status: 200,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  await supabase
+    .from("shop_orders")
+    .update({
+      status: "paid",
+      mercado_pago_payment_id: paymentIdStr,
+      paid_at: new Date().toISOString(),
+    })
+    .eq("id", orderId)
+    .in("status", ["pending", "failed"]);
+
+  console.log(`Shop order ${orderId} marked as paid`);
+
+  return new Response(JSON.stringify({ status: "shop_order_paid" }), {
+    status: 200,
+    headers: { ...corsHeaders, "Content-Type": "application/json" },
+  });
+}
+
+
 // Handle session package/giftcard order payments using package_orders table
 async function handlePackageOrderPayment(
   payment: any,
@@ -713,6 +796,18 @@ serve(async (req) => {
     
     // First, check if it's a valid UUID
     if (isValidUUID(externalReference)) {
+      // Check shop_orders first
+      const { data: shopOrder } = await supabase
+        .from("shop_orders")
+        .select("id")
+        .eq("id", externalReference)
+        .maybeSingle();
+
+      if (shopOrder) {
+        console.log("Processing as shop order");
+        return await handleShopOrderPayment(payment, externalReference, supabase, corsHeaders);
+      }
+
       // Check if it's a package_order (new flow)
       const { data: order } = await supabase
         .from("package_orders")
@@ -729,6 +824,7 @@ serve(async (req) => {
       console.log("Processing as booking");
       return await handleBookingPayment(payment, externalReference, supabase, corsHeaders, paymentId);
     }
+
 
     // Try to parse as JSON (legacy session_package format)
     try {

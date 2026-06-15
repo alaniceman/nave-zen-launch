@@ -6,7 +6,7 @@ import {
   CalendarDays, Ticket, Clock, MapPin,
   Gift, CreditCard, Package,
   BookOpen, MessageCircle,
-  Rocket, UserPlus, LogIn,
+  Rocket, UserPlus, LogIn, Store,
   type LucideIcon,
 } from "lucide-react"
 
@@ -50,6 +50,7 @@ const navigationItems: NavItem[] = [
       { label: "Gift Cards", href: "/giftcards", icon: Gift },
     ],
   },
+  { label: "Tienda", href: "/tienda", type: "link", icon: Store },
   { label: "Blog", href: "/blog", type: "link", icon: BookOpen },
   { label: "Contacto", href: "/contacto", type: "link", icon: MessageCircle },
 ]

@@ -1,4 +1,4 @@
-import { Calendar, Users, Package, Clock, User, LogOut, Ticket, Gift, Key, MapPin, ShoppingCart, AlertCircle, LayoutDashboard, Mail, Crown, Contact, MessageCircle, Brain, Sparkles } from 'lucide-react';
+import { Calendar, Users, Package, Clock, User, LogOut, Ticket, Gift, Key, MapPin, ShoppingCart, AlertCircle, LayoutDashboard, Mail, Crown, Contact, MessageCircle, Brain, Sparkles, Store } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import {
@@ -39,6 +39,8 @@ const menuItems = [
   { title: 'Chat Logs', url: '/admin/chat-logs', icon: MessageCircle },
   { title: 'Nave Brain', url: '/admin/brain', icon: Brain },
   { title: 'Conocimiento Nave AI', url: '/admin/nave-ai', icon: Sparkles },
+  { title: 'Tienda · Productos', url: '/admin/tienda', icon: Store },
+  { title: 'Tienda · Compras', url: '/admin/tienda-ordenes', icon: ShoppingCart },
 ];
 
 export function AdminSidebar() {
