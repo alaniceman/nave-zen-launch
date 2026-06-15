@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { ProductGallery } from "./ProductGallery";
 
 export type ShopProduct = {
   id: string;
@@ -7,11 +8,18 @@ export type ShopProduct = {
   description: string | null;
   price: number;
   image_url: string | null;
+  image_urls: string[] | null;
   is_active: boolean;
   sort_order: number;
 };
 
 const formatCLP = (n: number) => `$${n.toLocaleString("es-CL")}`;
+
+export const getProductImages = (p: Pick<ShopProduct, "image_url" | "image_urls">): string[] => {
+  const arr = (p.image_urls || []).filter(Boolean);
+  if (arr.length) return arr;
+  return p.image_url ? [p.image_url] : [];
+};
 
 type Props = {
   product: ShopProduct;
@@ -20,22 +28,10 @@ type Props = {
 };
 
 export const ProductCard = ({ product, onDetails, onBuy }: Props) => {
+  const images = getProductImages(product);
   return (
     <article className="group flex flex-col rounded-2xl border border-border bg-background overflow-hidden hover:shadow-md transition-shadow">
-      <div className="aspect-square bg-muted overflow-hidden">
-        {product.image_url ? (
-          <img
-            src={product.image_url}
-            alt={product.name}
-            loading="lazy"
-            className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-300"
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center text-muted-foreground text-sm">
-            Sin imagen
-          </div>
-        )}
-      </div>
+      <ProductGallery images={images} alt={product.name} className="rounded-none" />
       <div className="flex flex-col flex-1 p-5">
         <h3 className="font-space-grotesk font-bold text-lg text-foreground leading-tight mb-1">
           {product.name}

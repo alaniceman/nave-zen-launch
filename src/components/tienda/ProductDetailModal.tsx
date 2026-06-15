@@ -1,6 +1,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import type { ShopProduct } from "./ProductCard";
+import { getProductImages, type ShopProduct } from "./ProductCard";
+import { ProductGallery } from "./ProductGallery";
 
 const formatCLP = (n: number) => `$${n.toLocaleString("es-CL")}`;
 
@@ -13,18 +14,15 @@ type Props = {
 
 export const ProductDetailModal = ({ product, open, onOpenChange, onBuy }: Props) => {
   if (!product) return null;
+  const images = getProductImages(product);
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg">
+      <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="font-space-grotesk text-2xl">{product.name}</DialogTitle>
         </DialogHeader>
 
-        {product.image_url && (
-          <div className="aspect-square w-full rounded-xl overflow-hidden bg-muted">
-            <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
-          </div>
-        )}
+        {images.length > 0 && <ProductGallery images={images} alt={product.name} />}
 
         <p className="font-space-grotesk text-2xl font-bold text-primary">
           {formatCLP(product.price)}
