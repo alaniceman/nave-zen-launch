@@ -263,21 +263,28 @@ export const Header = () => {
                         onClick={() => toggleMobileSection(item.label)}
                         className="flex w-full items-center justify-between px-6 py-2.5 font-inter text-base text-neutral-dark hover:text-warm hover:bg-neutral-light transition-all duration-200"
                       >
-                        {item.label}
+                        <span className="inline-flex items-center gap-3">
+                          <item.icon className="w-4 h-4 text-neutral-mid" strokeWidth={1.75} />
+                          {item.label}
+                        </span>
                         <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${openMobileSection === item.label ? 'rotate-180' : ''}`} />
                       </button>
                       {openMobileSection === item.label && (
                         <ul className="bg-neutral-light/50">
-                          {item.children.map((child) => (
-                            <li key={child.href}>
-                              <button
-                                onClick={() => navigateTo(child.href)}
-                                className="block w-full text-left pl-10 pr-6 py-2.5 font-inter text-sm text-neutral-mid hover:text-warm transition-all duration-200"
-                              >
-                                {child.label}
-                              </button>
-                            </li>
-                          ))}
+                          {item.children.map((child) => {
+                            const ChildIcon = child.icon
+                            return (
+                              <li key={child.href}>
+                                <button
+                                  onClick={() => navigateTo(child.href)}
+                                  className="flex w-full items-center gap-3 pl-10 pr-6 py-2.5 font-inter text-sm text-neutral-mid hover:text-warm transition-all duration-200 text-left"
+                                >
+                                  <ChildIcon className="w-4 h-4 flex-shrink-0" strokeWidth={1.75} />
+                                  <span>{child.label}</span>
+                                </button>
+                              </li>
+                            )
+                          })}
                         </ul>
                       )}
                     </li>
@@ -285,8 +292,9 @@ export const Header = () => {
                     <li key={item.label}>
                       <button
                         onClick={() => navigateTo(item.href)}
-                        className="block w-full text-left px-6 py-2.5 font-inter text-base text-neutral-dark hover:text-warm hover:bg-neutral-light transition-all duration-200"
+                        className="flex w-full items-center gap-3 text-left px-6 py-2.5 font-inter text-base text-neutral-dark hover:text-warm hover:bg-neutral-light transition-all duration-200"
                       >
+                        <item.icon className="w-4 h-4 text-neutral-mid" strokeWidth={1.75} />
                         {item.label}
                       </button>
                     </li>
@@ -296,9 +304,9 @@ export const Header = () => {
 
               {/* Action buttons */}
               <div className="mt-6 px-6 space-y-2.5">
-                <a href="/plan-de-prueba" className="block w-full bg-warm hover:bg-forest text-white font-inter font-medium py-2.5 rounded-[10px] transition-all duration-200 text-center text-sm">Plan de prueba</a>
-                <a href="https://boxmagic.cl/crear_cuenta/NaveStudio" className="block w-full bg-primary hover:bg-secondary text-white font-inter font-medium py-2.5 rounded-[10px] transition-all duration-200 text-center text-sm">Registrarse</a>
-                <a href="https://members.boxmagic.app/a/g/Kp0MWKaL8x" className="block w-full bg-secondary hover:bg-primary text-white font-inter font-medium py-2.5 rounded-[10px] transition-all duration-200 text-center text-sm">Ingresar a la app</a>
+                <a href="/plan-de-prueba" className="inline-flex w-full items-center justify-center gap-2 bg-warm hover:bg-forest text-white font-inter font-medium py-2.5 rounded-[10px] transition-all duration-200 text-center text-sm"><Rocket className="w-4 h-4" strokeWidth={1.75} />Plan de prueba</a>
+                <a href="https://boxmagic.cl/crear_cuenta/NaveStudio" className="inline-flex w-full items-center justify-center gap-2 bg-primary hover:bg-secondary text-white font-inter font-medium py-2.5 rounded-[10px] transition-all duration-200 text-center text-sm"><UserPlus className="w-4 h-4" strokeWidth={1.75} />Registrarse</a>
+                <a href="https://members.boxmagic.app/a/g/Kp0MWKaL8x" className="inline-flex w-full items-center justify-center gap-2 bg-secondary hover:bg-primary text-white font-inter font-medium py-2.5 rounded-[10px] transition-all duration-200 text-center text-sm"><LogIn className="w-4 h-4" strokeWidth={1.75} />Ingresar a la app</a>
               </div>
             </nav>
           </div>
