@@ -182,10 +182,10 @@ const YogaLasCondes = () => {
   return (
     <>
       <Helmet>
-        <title>Yoga en Las Condes | Yin, Vinyasa, Vinyasa Somático, Power Yoga | Nave Studio</title>
+        <title>Yoga en Las Condes — Yin, Vinyasa y Power | Nave Studio</title>
         <meta name="description" content="Clases de Yoga en Las Condes, Santiago. Prueba Yin, Vinyasa, Vinyasa Somático, Power e Integral Yoga con instructores certificados. Plan de prueba 7 días por $9.900. Antares 259." />
         <link rel="canonical" href="https://studiolanave.com/yoga-las-condes" />
-        <meta property="og:title" content="Yoga en Las Condes | Yin, Vinyasa, Vinyasa Somático, Power Yoga | Nave Studio" />
+        <meta property="og:title" content="Yoga en Las Condes — Yin, Vinyasa y Power | Nave Studio" />
         <meta property="og:description" content="Clases de Yoga en Las Condes. Yin, Vinyasa, Vinyasa Somático, Power e Integral con instructores certificados. Plan de prueba 7 días por $9.900." />
         <meta property="og:url" content="https://studiolanave.com/yoga-las-condes" />
         <meta property="og:image" content="https://studiolanave.com/lovable-uploads/82672388-9723-4aee-a1f2-ac72618cd26a.png" />

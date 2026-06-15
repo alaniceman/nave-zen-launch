@@ -43,9 +43,9 @@ const CriomedicinMetodoWimHof = () => {
   }, []);
   return <div className="min-h-screen bg-background">
       <Helmet>
-        <title>Criomedicina (Método Wim Hof) en Chile — Ice Bath & Breathwork | Nave Studio</title>
+        <title>Criomedicina y Método Wim Hof en Chile | Nave Studio</title>
         <meta name="description" content="Sesiones guiadas de Método Wim Hof en Santiago (Las Condes): respiración + baño de hielo a 3 °C. Horarios, precios y reserva online." />
-        <meta property="og:title" content="Criomedicina (Método Wim Hof) en Chile — Ice Bath & Breathwork | Nave Studio" />
+        <meta property="og:title" content="Criomedicina y Método Wim Hof en Chile | Nave Studio" />
         <meta property="og:description" content="Sesiones guiadas de Método Wim Hof en Santiago (Las Condes): respiración + baño de hielo a 3 °C. Horarios, precios y reserva online." />
         <meta property="og:image" content="/og/wimhof.jpg" />
         <meta property="og:url" content="https://studiolanave.com/criomedicina-metodo-wim-hof" />
