@@ -150,16 +150,20 @@ export const Header = () => {
                       data-nav-menu
                       className="absolute left-0 mt-2 w-56 rounded-xl bg-background shadow-lg ring-1 ring-black/5 overflow-hidden z-50"
                     >
-                      {item.children.map((child) => (
-                        <a
-                          key={child.href}
-                          href={child.href}
-                          onClick={(e) => { e.preventDefault(); navigateTo(child.href) }}
-                          className="block px-4 py-3 text-foreground hover:bg-neutral-light transition-all duration-200 text-sm"
-                        >
-                          {child.label}
-                        </a>
-                      ))}
+                      {item.children.map((child) => {
+                        const ChildIcon = child.icon
+                        return (
+                          <a
+                            key={child.href}
+                            href={child.href}
+                            onClick={(e) => { e.preventDefault(); navigateTo(child.href) }}
+                            className="flex items-center gap-3 px-4 py-3 text-foreground hover:bg-neutral-light transition-all duration-200 text-sm"
+                          >
+                            <ChildIcon className="w-4 h-4 text-neutral-mid flex-shrink-0" strokeWidth={1.75} />
+                            <span>{child.label}</span>
+                          </a>
+                        )
+                      })}
                     </div>
                   )}
                 </div>
@@ -167,8 +171,9 @@ export const Header = () => {
                 <button
                   key={item.label}
                   onClick={() => navigateTo(item.href)}
-                  className="group font-inter text-sm lg:text-base text-neutral-mid hover:text-warm transition-colors duration-200 relative focus:outline-dashed focus:outline-2 focus:outline-secondary"
+                  className="group inline-flex items-center gap-1.5 font-inter text-sm lg:text-base text-neutral-mid hover:text-warm transition-colors duration-200 relative focus:outline-dashed focus:outline-2 focus:outline-secondary"
                 >
+                  <item.icon className="w-4 h-4" strokeWidth={1.75} />
                   {item.label}
                   <span className="absolute left-0 bottom-0 w-full h-0.5 bg-warm scale-x-0 origin-left transition-transform duration-200 group-hover:scale-x-100" />
                 </button>
@@ -188,6 +193,7 @@ export const Header = () => {
               Empezar
               <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${openDropdown === "empezar" ? "rotate-180" : ""}`} />
             </button>
+
             {openDropdown === "empezar" && (
               <div
                 data-nav-menu
