@@ -1,47 +1,65 @@
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import { Menu, X, ChevronDown } from "lucide-react"
+import {
+  Menu, X, ChevronDown,
+  Flower2, Snowflake, Mountain, Sparkles, Users,
+  CalendarDays, Ticket, Clock, MapPin,
+  Gift, CreditCard, Package,
+  BookOpen, MessageCircle,
+  Rocket, UserPlus, LogIn,
+  type LucideIcon,
+} from "lucide-react"
 
-type NavLink = { label: string; href: string }
-type NavDropdown = { label: string; type: "dropdown"; children: NavLink[] }
-type NavDirect = { label: string; href: string; type: "link" }
+type NavLink = { label: string; href: string; icon: LucideIcon }
+type NavDropdown = { label: string; type: "dropdown"; children: NavLink[]; icon: LucideIcon }
+type NavDirect = { label: string; href: string; type: "link"; icon: LucideIcon }
 type NavItem = NavDropdown | NavDirect
 
 const navigationItems: NavItem[] = [
   {
     label: "Experiencias",
     type: "dropdown",
+    icon: Sparkles,
     children: [
-      { label: "Yoga", href: "/yoga-las-condes" },
-      { label: "Criomedicina y Método Wim Hof", href: "/criomedicina-metodo-wim-hof-las-condes" },
-      { label: "Talleres y Retiros", href: "/talleres-y-retiros" },
-      { label: "Todas las experiencias", href: "/experiencias" },
-      { label: "Coaches", href: "/coaches" },
+      { label: "Yoga", href: "/yoga-las-condes", icon: Flower2 },
+      { label: "Criomedicina y Método Wim Hof", href: "/criomedicina-metodo-wim-hof-las-condes", icon: Snowflake },
+      { label: "Talleres y Retiros", href: "/talleres-y-retiros", icon: Mountain },
+      { label: "Todas las experiencias", href: "/experiencias", icon: Sparkles },
+      { label: "Coaches", href: "/coaches", icon: Users },
     ],
   },
   {
     label: "Agenda y Horarios",
     type: "dropdown",
+    icon: CalendarDays,
     children: [
-      { label: "Agenda Criomedicina", href: "/agenda-nave-studio" },
-      { label: "Plan de Prueba", href: "/plan-de-prueba" },
-      { label: "Horarios", href: "/horarios" },
-      { label: "Conoce el lugar", href: "/conoce-el-lugar" },
+      { label: "Agenda Criomedicina", href: "/agenda-nave-studio", icon: CalendarDays },
+      { label: "Plan de Prueba", href: "/plan-de-prueba", icon: Ticket },
+      { label: "Horarios", href: "/horarios", icon: Clock },
+      { label: "Conoce el lugar", href: "/conoce-el-lugar", icon: MapPin },
     ],
   },
   {
     label: "Planes",
     type: "dropdown",
+    icon: CreditCard,
     children: [
-      { label: "Plan de Prueba", href: "/plan-de-prueba" },
-      { label: "Membresías", href: "/planes-precios" },
-      { label: "Paquete de sesiones", href: "/bonos" },
-      { label: "Gift Cards", href: "/giftcards" },
+      { label: "Plan de Prueba", href: "/plan-de-prueba", icon: Ticket },
+      { label: "Membresías", href: "/planes-precios", icon: CreditCard },
+      { label: "Paquete de sesiones", href: "/bonos", icon: Package },
+      { label: "Gift Cards", href: "/giftcards", icon: Gift },
     ],
   },
-  { label: "Blog", href: "/blog", type: "link" },
-  { label: "Contacto", href: "/contacto", type: "link" },
+  { label: "Blog", href: "/blog", type: "link", icon: BookOpen },
+  { label: "Contacto", href: "/contacto", type: "link", icon: MessageCircle },
 ]
+
+const empezarItems: { label: string; href: string; icon: LucideIcon }[] = [
+  { label: "Plan de prueba", href: "/plan-de-prueba", icon: Rocket },
+  { label: "Registrarse", href: "https://boxmagic.cl/crear_cuenta/NaveStudio", icon: UserPlus },
+  { label: "Ingresar a la app", href: "https://members.boxmagic.app/a/g/Kp0MWKaL8x", icon: LogIn },
+]
+
 
 export const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -120,8 +138,9 @@ export const Header = () => {
                 <div key={item.label} className="relative" data-nav-dropdown>
                   <button
                     onClick={() => toggleDropdown(item.label)}
-                    className="group inline-flex items-center gap-1 font-inter text-sm lg:text-base text-neutral-mid hover:text-warm transition-colors duration-200 focus:outline-dashed focus:outline-2 focus:outline-secondary"
+                    className="group inline-flex items-center gap-1.5 font-inter text-sm lg:text-base text-neutral-mid hover:text-warm transition-colors duration-200 focus:outline-dashed focus:outline-2 focus:outline-secondary"
                   >
+                    <item.icon className="w-4 h-4" strokeWidth={1.75} />
                     {item.label}
                     <ChevronDown
                       className={`w-4 h-4 transition-transform duration-200 ${openDropdown === item.label ? 'rotate-180' : ''}`}
@@ -132,16 +151,20 @@ export const Header = () => {
                       data-nav-menu
                       className="absolute left-0 mt-2 w-56 rounded-xl bg-background shadow-lg ring-1 ring-black/5 overflow-hidden z-50"
                     >
-                      {item.children.map((child) => (
-                        <a
-                          key={child.href}
-                          href={child.href}
-                          onClick={(e) => { e.preventDefault(); navigateTo(child.href) }}
-                          className="block px-4 py-3 text-foreground hover:bg-neutral-light transition-all duration-200 text-sm"
-                        >
-                          {child.label}
-                        </a>
-                      ))}
+                      {item.children.map((child) => {
+                        const ChildIcon = child.icon
+                        return (
+                          <a
+                            key={child.href}
+                            href={child.href}
+                            onClick={(e) => { e.preventDefault(); navigateTo(child.href) }}
+                            className="flex items-center gap-3 px-4 py-3 text-foreground hover:bg-neutral-light transition-all duration-200 text-sm"
+                          >
+                            <ChildIcon className="w-4 h-4 text-neutral-mid flex-shrink-0" strokeWidth={1.75} />
+                            <span>{child.label}</span>
+                          </a>
+                        )
+                      })}
                     </div>
                   )}
                 </div>
@@ -149,8 +172,9 @@ export const Header = () => {
                 <button
                   key={item.label}
                   onClick={() => navigateTo(item.href)}
-                  className="group font-inter text-sm lg:text-base text-neutral-mid hover:text-warm transition-colors duration-200 relative focus:outline-dashed focus:outline-2 focus:outline-secondary"
+                  className="group inline-flex items-center gap-1.5 font-inter text-sm lg:text-base text-neutral-mid hover:text-warm transition-colors duration-200 relative focus:outline-dashed focus:outline-2 focus:outline-secondary"
                 >
+                  <item.icon className="w-4 h-4" strokeWidth={1.75} />
                   {item.label}
                   <span className="absolute left-0 bottom-0 w-full h-0.5 bg-warm scale-x-0 origin-left transition-transform duration-200 group-hover:scale-x-100" />
                 </button>
@@ -170,6 +194,7 @@ export const Header = () => {
               Empezar
               <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${openDropdown === "empezar" ? "rotate-180" : ""}`} />
             </button>
+
             {openDropdown === "empezar" && (
               <div
                 data-nav-menu
@@ -177,9 +202,20 @@ export const Header = () => {
                 aria-label="Opciones de empezar"
                 className="absolute right-0 mt-2 w-56 rounded-xl bg-background shadow-lg ring-1 ring-black/5 overflow-hidden z-50"
               >
-                <a role="menuitem" href="/plan-de-prueba" className="block px-4 py-3 text-foreground hover:bg-neutral-light transition-all duration-200">Plan de prueba</a>
-                <a role="menuitem" href="https://boxmagic.cl/crear_cuenta/NaveStudio" className="block px-4 py-3 text-foreground hover:bg-neutral-light transition-all duration-200">Registrarse</a>
-                <a role="menuitem" href="https://members.boxmagic.app/a/g/Kp0MWKaL8x" className="block px-4 py-3 text-foreground hover:bg-neutral-light transition-all duration-200">Ingresar a la app</a>
+                {empezarItems.map((it) => {
+                  const Icon = it.icon
+                  return (
+                    <a
+                      key={it.href}
+                      role="menuitem"
+                      href={it.href}
+                      className="flex items-center gap-3 px-4 py-3 text-foreground hover:bg-neutral-light transition-all duration-200 text-sm"
+                    >
+                      <Icon className="w-4 h-4 text-neutral-mid flex-shrink-0" strokeWidth={1.75} />
+                      <span>{it.label}</span>
+                    </a>
+                  )
+                })}
               </div>
             )}
           </div>
@@ -227,21 +263,28 @@ export const Header = () => {
                         onClick={() => toggleMobileSection(item.label)}
                         className="flex w-full items-center justify-between px-6 py-2.5 font-inter text-base text-neutral-dark hover:text-warm hover:bg-neutral-light transition-all duration-200"
                       >
-                        {item.label}
+                        <span className="inline-flex items-center gap-3">
+                          <item.icon className="w-4 h-4 text-neutral-mid" strokeWidth={1.75} />
+                          {item.label}
+                        </span>
                         <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${openMobileSection === item.label ? 'rotate-180' : ''}`} />
                       </button>
                       {openMobileSection === item.label && (
                         <ul className="bg-neutral-light/50">
-                          {item.children.map((child) => (
-                            <li key={child.href}>
-                              <button
-                                onClick={() => navigateTo(child.href)}
-                                className="block w-full text-left pl-10 pr-6 py-2.5 font-inter text-sm text-neutral-mid hover:text-warm transition-all duration-200"
-                              >
-                                {child.label}
-                              </button>
-                            </li>
-                          ))}
+                          {item.children.map((child) => {
+                            const ChildIcon = child.icon
+                            return (
+                              <li key={child.href}>
+                                <button
+                                  onClick={() => navigateTo(child.href)}
+                                  className="flex w-full items-center gap-3 pl-10 pr-6 py-2.5 font-inter text-sm text-neutral-mid hover:text-warm transition-all duration-200 text-left"
+                                >
+                                  <ChildIcon className="w-4 h-4 flex-shrink-0" strokeWidth={1.75} />
+                                  <span>{child.label}</span>
+                                </button>
+                              </li>
+                            )
+                          })}
                         </ul>
                       )}
                     </li>
@@ -249,8 +292,9 @@ export const Header = () => {
                     <li key={item.label}>
                       <button
                         onClick={() => navigateTo(item.href)}
-                        className="block w-full text-left px-6 py-2.5 font-inter text-base text-neutral-dark hover:text-warm hover:bg-neutral-light transition-all duration-200"
+                        className="flex w-full items-center gap-3 text-left px-6 py-2.5 font-inter text-base text-neutral-dark hover:text-warm hover:bg-neutral-light transition-all duration-200"
                       >
+                        <item.icon className="w-4 h-4 text-neutral-mid" strokeWidth={1.75} />
                         {item.label}
                       </button>
                     </li>
@@ -260,9 +304,9 @@ export const Header = () => {
 
               {/* Action buttons */}
               <div className="mt-6 px-6 space-y-2.5">
-                <a href="/plan-de-prueba" className="block w-full bg-warm hover:bg-forest text-white font-inter font-medium py-2.5 rounded-[10px] transition-all duration-200 text-center text-sm">Plan de prueba</a>
-                <a href="https://boxmagic.cl/crear_cuenta/NaveStudio" className="block w-full bg-primary hover:bg-secondary text-white font-inter font-medium py-2.5 rounded-[10px] transition-all duration-200 text-center text-sm">Registrarse</a>
-                <a href="https://members.boxmagic.app/a/g/Kp0MWKaL8x" className="block w-full bg-secondary hover:bg-primary text-white font-inter font-medium py-2.5 rounded-[10px] transition-all duration-200 text-center text-sm">Ingresar a la app</a>
+                <a href="/plan-de-prueba" className="inline-flex w-full items-center justify-center gap-2 bg-warm hover:bg-forest text-white font-inter font-medium py-2.5 rounded-[10px] transition-all duration-200 text-center text-sm"><Rocket className="w-4 h-4" strokeWidth={1.75} />Plan de prueba</a>
+                <a href="https://boxmagic.cl/crear_cuenta/NaveStudio" className="inline-flex w-full items-center justify-center gap-2 bg-primary hover:bg-secondary text-white font-inter font-medium py-2.5 rounded-[10px] transition-all duration-200 text-center text-sm"><UserPlus className="w-4 h-4" strokeWidth={1.75} />Registrarse</a>
+                <a href="https://members.boxmagic.app/a/g/Kp0MWKaL8x" className="inline-flex w-full items-center justify-center gap-2 bg-secondary hover:bg-primary text-white font-inter font-medium py-2.5 rounded-[10px] transition-all duration-200 text-center text-sm"><LogIn className="w-4 h-4" strokeWidth={1.75} />Ingresar a la app</a>
               </div>
             </nav>
           </div>
