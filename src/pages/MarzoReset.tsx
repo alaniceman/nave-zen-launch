@@ -122,7 +122,7 @@ export default function MarzoReset() {
         
         <meta property="og:title" content="Marzo Reset — Criomedicina desde $40.000" />
         <meta property="og:description" content="Baja el estrés de marzo. 2 o 3 sesiones de Criomedicina / Método Wim Hof desde $40.000." />
-        <link rel="canonical" href="https://nave-zen-launch.lovable.app/marzo-reset" />
+        <link rel="canonical" href="https://studiolanave.com/marzo-reset" />
       </Helmet>
 
       <main className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-cyan-50">
