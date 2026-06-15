@@ -202,9 +202,20 @@ export const Header = () => {
                 aria-label="Opciones de empezar"
                 className="absolute right-0 mt-2 w-56 rounded-xl bg-background shadow-lg ring-1 ring-black/5 overflow-hidden z-50"
               >
-                <a role="menuitem" href="/plan-de-prueba" className="block px-4 py-3 text-foreground hover:bg-neutral-light transition-all duration-200">Plan de prueba</a>
-                <a role="menuitem" href="https://boxmagic.cl/crear_cuenta/NaveStudio" className="block px-4 py-3 text-foreground hover:bg-neutral-light transition-all duration-200">Registrarse</a>
-                <a role="menuitem" href="https://members.boxmagic.app/a/g/Kp0MWKaL8x" className="block px-4 py-3 text-foreground hover:bg-neutral-light transition-all duration-200">Ingresar a la app</a>
+                {empezarItems.map((it) => {
+                  const Icon = it.icon
+                  return (
+                    <a
+                      key={it.href}
+                      role="menuitem"
+                      href={it.href}
+                      className="flex items-center gap-3 px-4 py-3 text-foreground hover:bg-neutral-light transition-all duration-200 text-sm"
+                    >
+                      <Icon className="w-4 h-4 text-neutral-mid flex-shrink-0" strokeWidth={1.75} />
+                      <span>{it.label}</span>
+                    </a>
+                  )
+                })}
               </div>
             )}
           </div>
