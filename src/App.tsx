@@ -99,6 +99,8 @@ const AdminEmailTemplates = lazy(() => import("./pages/admin/AdminEmailTemplates
 const AdminChatLogs = lazy(() => import("./pages/admin/AdminChatLogs"));
 const AdminBrain = lazy(() => import("./pages/admin/AdminBrain"));
 const AdminAIKnowledge = lazy(() => import("./pages/admin/AdminAIKnowledge"));
+const AdminShopProducts = lazy(() => import("./pages/admin/AdminShopProducts"));
+const AdminShopOrders = lazy(() => import("./pages/admin/AdminShopOrders"));
 
 const queryClient = new QueryClient();
 
@@ -180,7 +182,13 @@ const App = () => {
             <Route path="/instructor/:slug" element={<InstructorProfile />} />
             <Route path="/generative" element={<Generative />} />
             <Route path="/fotos-workshop/buda" element={<FotosWorkshopBuda />} />
-            
+
+            {/* Tienda */}
+            <Route path="/tienda" element={<Tienda />} />
+            <Route path="/tienda/success" element={<TiendaSuccess />} />
+            <Route path="/tienda/failure" element={<TiendaFailure />} />
+            <Route path="/tienda/pending" element={<TiendaPending />} />
+
             {/* Admin Routes */}
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin" element={<ProtectedRoute requireAdmin><AdminLayout /></ProtectedRoute>}>
@@ -209,6 +217,8 @@ const App = () => {
               <Route path="chat-logs" element={<AdminChatLogs />} />
               <Route path="brain" element={<AdminBrain />} />
               <Route path="nave-ai" element={<AdminAIKnowledge />} />
+              <Route path="tienda" element={<AdminShopProducts />} />
+              <Route path="tienda-ordenes" element={<AdminShopOrders />} />
             </Route>
             
             {/* Redirect legacy routes */}
