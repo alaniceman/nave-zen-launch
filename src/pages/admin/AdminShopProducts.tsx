@@ -209,7 +209,7 @@ const AdminShopProducts = () => {
         <div className="flex justify-center py-20"><Loader2 className="h-6 w-6 animate-spin" /></div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {products.map((p) => {
+          {products.map((p, idx) => {
             const cover = getCover(p);
             const count = (p.image_urls?.length || (p.image_url ? 1 : 0));
             return (
@@ -233,7 +233,6 @@ const AdminShopProducts = () => {
                   </div>
                   <p className="text-sm text-muted-foreground line-clamp-2">{p.short_description}</p>
                   <p className="font-bold text-primary text-lg">${p.price.toLocaleString("es-CL")}</p>
-                  <p className="text-xs text-muted-foreground">Orden: {p.sort_order}</p>
                   <div className="flex gap-2 mt-auto">
                     <Button size="sm" variant="outline" onClick={() => openEdit(p)}>
                       <Pencil className="h-3.5 w-3.5 mr-1" /> Editar
@@ -241,6 +240,26 @@ const AdminShopProducts = () => {
                     <Button size="sm" variant="outline" onClick={() => handleDelete(p.id)}>
                       <Trash2 className="h-3.5 w-3.5" />
                     </Button>
+                    <div className="flex flex-col ml-auto">
+                      <button
+                        type="button"
+                        onClick={() => moveProduct(idx, -1)}
+                        disabled={idx === 0}
+                        className="p-0.5 disabled:opacity-30 hover:text-primary"
+                        title="Subir"
+                      >
+                        <ArrowUp className="h-3.5 w-3.5" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => moveProduct(idx, 1)}
+                        disabled={idx === products.length - 1}
+                        className="p-0.5 disabled:opacity-30 hover:text-primary"
+                        title="Bajar"
+                      >
+                        <ArrowDown className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
