@@ -41,6 +41,32 @@ const AdminShopProducts = () => {
   const [editing, setEditing] = useState<Partial<Product> | null>(null);
   const [saving, setSaving] = useState(false);
   const [newImage, setNewImage] = useState("");
+  const [uploading, setUploading] = useState(false);
+
+  const handleUpload = async (files: FileList | null) => {
+    if (!files || files.length === 0 || !editing) return;
+    setUploading(true);
+    try {
+      const uploaded: string[] = [];
+      for (const file of Array.from(files)) {
+        const ext = file.name.split(".").pop() || "jpg";
+        const path = `${crypto.randomUUID()}.${ext}`;
+        const { error } = await supabase.storage.from(BUCKET).upload(path, file, {
+          cacheControl: "3600",
+          upsert: false,
+          contentType: file.type,
+        });
+        if (error) throw error;
+        const { data } = supabase.storage.from(BUCKET).getPublicUrl(path);
+        uploaded.push(data.publicUrl);
+      }
+      setEditing({ ...editing, image_urls: [...(editing.image_urls || []), ...uploaded] });
+    } catch (err: any) {
+      toast({ title: "Error al subir imagen", description: err.message, variant: "destructive" });
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const load = async () => {
     setLoading(true);
