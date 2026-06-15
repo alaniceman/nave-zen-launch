@@ -148,6 +148,26 @@ const AdminShopProducts = () => {
     }
   };
 
+  const moveProduct = async (index: number, direction: -1 | 1) => {
+    const targetIndex = index + direction;
+    if (targetIndex < 0 || targetIndex >= products.length) return;
+    const current = products[index];
+    const target = products[targetIndex];
+    const { error: err1 } = await supabase
+      .from("shop_products")
+      .update({ sort_order: target.sort_order })
+      .eq("id", current.id);
+    const { error: err2 } = await supabase
+      .from("shop_products")
+      .update({ sort_order: current.sort_order })
+      .eq("id", target.id);
+    if (err1 || err2) {
+      toast({ title: "Error al reordenar", description: (err1 || err2)?.message, variant: "destructive" });
+    } else {
+      load();
+    }
+  };
+
   const addImage = () => {
     const url = newImage.trim();
     if (!url || !editing) return;
