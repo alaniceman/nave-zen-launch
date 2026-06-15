@@ -67,6 +67,10 @@ const Generative = lazy(() => import("./pages/Generative"));
 const FotosWorkshopBuda = lazy(() => import("./pages/FotosWorkshopBuda"));
 const TallerSantiago = lazy(() => import("./pages/TallerSantiago"));
 const TalleresYRetiros = lazy(() => import("./pages/TalleresYRetiros"));
+const Tienda = lazy(() => import("./pages/Tienda"));
+const TiendaSuccess = lazy(() => import("./pages/TiendaSuccess"));
+const TiendaFailure = lazy(() => import("./pages/TiendaFailure"));
+const TiendaPending = lazy(() => import("./pages/TiendaPending"));
 
 // Lazy-loaded admin pages
 const AdminLogin = lazy(() => import("./pages/admin/Login"));
