@@ -384,7 +384,7 @@ const PlanAnual2026 = () => {
             <p className="font-inter text-lg md:text-xl text-muted-foreground mb-10">
               Ocurre cuando te comprometes con el proceso.
               <br />
-              El Plan Anual 2026 es tu sistema para sostener constancia:
+              La Membresía Anual 2026 es tu sistema para sostener constancia:
               entrenas tu respiración, tu relación con el frío y tu disciplina,
               con una comunidad que te acompaña.
             </p>
@@ -402,7 +402,7 @@ const PlanAnual2026 = () => {
             </div>
 
             <Button size="lg" onClick={scrollToPlans}>
-              Quiero asegurar mi plan
+              Quiero asegurar mi membresía
             </Button>
           </div>
         </section>

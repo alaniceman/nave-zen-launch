@@ -46,7 +46,7 @@ const PlanesAnualesPromo = () => {
              <div className="flex-shrink-0">
                <Link to="/anual">
                  <Button size="lg" className="w-full md:w-auto bg-warm hover:bg-primary text-white">
-                   Ver planes anuales
+                    Ver membresías anuales
                    <ArrowRight className="ml-2 w-4 h-4" />
                  </Button>
                </Link>
