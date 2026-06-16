@@ -31,10 +31,10 @@ const PlanAnual2026 = () => {
   return (
     <>
       <Helmet>
-        <title>Plan Anual 2026 - Nave Studio</title>
+        <title>Membresía Anual 2026 - Nave Studio</title>
         <meta
           name="description"
-          content="Plan Anual 2026 en Nave Studio. Método Wim Hof, Yoga y comunidad. 2 meses gratis, entradas Icefest incluidas y pago en 12 cuotas sin interés."
+          content="Membresía Anual 2026 en Nave Studio. Método Wim Hof, Yoga y comunidad. 2 meses gratis, entradas Icefest incluidas y pago en 12 cuotas sin interés."
         />
       </Helmet>
 
