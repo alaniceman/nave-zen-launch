@@ -94,6 +94,14 @@ const AdminShopProducts = () => {
     setNewImage("");
   };
 
+  const resequenceAll = async (orderedIds: string[]) => {
+    await Promise.all(
+      orderedIds.map((id, i) =>
+        supabase.from("shop_products").update({ sort_order: i + 1 }).eq("id", id)
+      )
+    );
+  };
+
   const handleSave = async () => {
     if (!editing) return;
     if (!editing.name || editing.price == null || editing.price < 0) {
@@ -102,27 +110,43 @@ const AdminShopProducts = () => {
     }
     setSaving(true);
     const images = (editing.image_urls || []).filter(Boolean);
+    const isNew = !editing.id;
+    const currentIndex = editing.id ? products.findIndex(p => p.id === editing.id) : -1;
+    const defaultPos = isNew ? products.length + 1 : currentIndex + 1;
+    const desiredPos = Math.max(1, Math.round(Number(editing.sort_order)) || defaultPos);
+
     const payload = {
       name: editing.name,
       short_description: editing.short_description || null,
       description: editing.description || null,
       price: Math.round(Number(editing.price)),
       image_urls: images,
-      image_url: images[0] || null, // keep legacy field synced with first image
+      image_url: images[0] || null,
       is_active: editing.is_active ?? true,
-      sort_order: editing.sort_order ?? 0,
+      sort_order: desiredPos,
     };
-    const { error } = editing.id
-      ? await supabase.from("shop_products").update(payload).eq("id", editing.id)
-      : await supabase.from("shop_products").insert(payload);
-    setSaving(false);
-    if (error) {
-      toast({ title: "Error al guardar", description: error.message, variant: "destructive" });
-    } else {
-      toast({ title: "Producto guardado" });
-      setEditing(null);
-      load();
+
+    const { data: saved, error } = editing.id
+      ? await supabase.from("shop_products").update(payload).eq("id", editing.id).select().single()
+      : await supabase.from("shop_products").insert(payload).select().single();
+
+    if (error || !saved) {
+      setSaving(false);
+      toast({ title: "Error al guardar", description: error?.message, variant: "destructive" });
+      return;
     }
+
+    // Re-sequence: place saved item at desiredPos and renumber the rest
+    const others = products.filter(p => p.id !== saved.id).map(p => p.id);
+    const insertAt = Math.min(Math.max(0, desiredPos - 1), others.length);
+    const newOrder = [...others];
+    newOrder.splice(insertAt, 0, saved.id);
+    await resequenceAll(newOrder);
+
+    setSaving(false);
+    toast({ title: "Producto guardado" });
+    setEditing(null);
+    load();
   };
 
   const handleDelete = async (id: string) => {
@@ -131,6 +155,7 @@ const AdminShopProducts = () => {
     if (error) {
       toast({ title: "Error al eliminar", description: error.message, variant: "destructive" });
     } else {
+      await resequenceAll(products.filter(p => p.id !== id).map(p => p.id));
       toast({ title: "Producto eliminado" });
       load();
     }
@@ -151,22 +176,14 @@ const AdminShopProducts = () => {
   const moveProduct = async (index: number, direction: -1 | 1) => {
     const targetIndex = index + direction;
     if (targetIndex < 0 || targetIndex >= products.length) return;
-    const current = products[index];
-    const target = products[targetIndex];
-    const { error: err1 } = await supabase
-      .from("shop_products")
-      .update({ sort_order: target.sort_order })
-      .eq("id", current.id);
-    const { error: err2 } = await supabase
-      .from("shop_products")
-      .update({ sort_order: current.sort_order })
-      .eq("id", target.id);
-    if (err1 || err2) {
-      toast({ title: "Error al reordenar", description: (err1 || err2)?.message, variant: "destructive" });
-    } else {
-      load();
-    }
+    const arr = [...products];
+    [arr[index], arr[targetIndex]] = [arr[targetIndex], arr[index]];
+    // Optimistic UI update
+    setProducts(arr.map((p, i) => ({ ...p, sort_order: i + 1 })));
+    await resequenceAll(arr.map(p => p.id));
+    load();
   };
+
 
   const addImage = () => {
     const url = newImage.trim();
