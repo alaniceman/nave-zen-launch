@@ -384,7 +384,7 @@ const PlanAnual2026 = () => {
             <p className="font-inter text-lg md:text-xl text-muted-foreground mb-10">
               Ocurre cuando te comprometes con el proceso.
               <br />
-              La Membresía Anual 2026 es tu sistema para sostener constancia:
+              La Membresía Anual es tu sistema para sostener constancia:
               entrenas tu respiración, tu relación con el frío y tu disciplina,
               con una comunidad que te acompaña.
             </p>
@@ -411,10 +411,10 @@ const PlanAnual2026 = () => {
         <section className="py-20 bg-muted">
           <div className="container mx-auto px-4 max-w-3xl text-center">
             <h2 className="font-space text-3xl md:text-4xl font-bold mb-6 text-foreground">
-              El 2026 viene con Novedades en Nave Studio ❄️
+              Este año viene con Novedades en Nave Studio ❄️
             </h2>
             <p className="font-inter text-lg md:text-xl text-muted-foreground mb-10">
-              Este 2026 se viene con todo.
+              Este año se viene con todo.
               <br />
               Se sumarán nuevas disciplinas, un evento exclusivo de la comunidad
               y más beneficios para miembros anuales.
@@ -458,7 +458,7 @@ const PlanAnual2026 = () => {
               Muchas gracias por la confianza, por su buena onda y entrega.
               <br />
               <span className="font-semibold text-foreground">
-                El equipo de Nave Studio les da las gracias y un feliz año 2026.
+                El equipo de Nave Studio les da las gracias y un feliz año.
               </span>
             </p>
           </div>
@@ -495,7 +495,7 @@ const PlanAnual2026 = () => {
               <div className="flex items-center gap-3 w-full">
                 <Check className="w-5 h-5 text-primary flex-shrink-0" />
                 <span>
-                  Beneficios exclusivos 2026 (disciplinas + evento + sorpresas)
+                  Beneficios exclusivos (disciplinas + evento + sorpresas)
                 </span>
               </div>
             </div>
@@ -513,7 +513,7 @@ const PlanAnual2026 = () => {
               Esto es por tiempo limitado
             </h2>
             <p className="font-inter text-lg md:text-xl opacity-90 mb-10">
-              Los planes anuales 2026 vienen con beneficios especiales (Icefest
+              Los planes anuales vienen con beneficios especiales (Icefest
               + descuento al Retiro Guatemala).
               <br />
               Cuando se cierran, se cierran.
@@ -522,7 +522,7 @@ const PlanAnual2026 = () => {
             <div className="flex flex-col items-center gap-3 mb-10 text-left max-w-md mx-auto">
               <div className="flex items-center gap-3 w-full">
                 <Sparkles className="w-5 h-5 flex-shrink-0" />
-                <span>Beneficios exclusivos solo Membresía Anual 2026</span>
+                <span>Beneficios exclusivos solo Membresía Anual</span>
               </div>
               <div className="flex items-center gap-3 w-full">
                 <Snowflake className="w-5 h-5 flex-shrink-0" />
@@ -570,7 +570,7 @@ const PlanAnual2026 = () => {
                 className="bg-card border border-border rounded-lg px-6"
               >
                 <AccordionTrigger className="text-left font-medium">
-                  ¿La entrada a Icefest 2026 se puede compartir?
+                  ¿La entrada a Icefest se puede compartir?
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground">
                   Sí. Las entradas incluidas son transferibles, puedes
@@ -633,7 +633,7 @@ const PlanAnual2026 = () => {
             </div>
 
             <p className="text-sm text-muted-foreground mt-10">
-              Nave Studio · Membresía Anual 2026 · Beneficios sujetos a
+              Nave Studio · Membresía Anual · Beneficios sujetos a
               cupos/condiciones del evento
             </p>
           </div>
