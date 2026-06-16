@@ -31,10 +31,10 @@ const PlanAnual2026 = () => {
   return (
     <>
       <Helmet>
-        <title>Membresía Anual 2026 - Nave Studio</title>
+        <title>Membresía Anual - Nave Studio</title>
         <meta
           name="description"
-          content="Membresía Anual 2026 en Nave Studio. Método Wim Hof, Yoga y comunidad. 2 meses gratis, entradas Icefest incluidas y pago en 12 cuotas sin interés."
+          content="Membresía Anual en Nave Studio. Método Wim Hof, Yoga y comunidad. 2 meses gratis, entradas Icefest incluidas y pago en 12 cuotas sin interés."
         />
       </Helmet>
 
@@ -52,7 +52,7 @@ const PlanAnual2026 = () => {
 
           <div className="relative z-10 container mx-auto px-4 py-20 text-center text-primary-foreground">
             <h1 className="font-space text-4xl md:text-6xl lg:text-7xl font-bold mb-6 animate-fade-in">
-              Membresía Anual 2026
+              Membresía Anual
             </h1>
             <h2 className="font-space text-xl md:text-2xl lg:text-3xl font-medium mb-8 opacity-90">
               Un año completo de respiración, hielo y comunidad
@@ -69,7 +69,7 @@ const PlanAnual2026 = () => {
               </div>
               <div className="flex items-center gap-3 w-full">
                 <Sparkles className="w-5 h-5 flex-shrink-0" />
-                <span>Yoga y nuevas disciplinas 2026</span>
+                <span>Yoga y nuevas disciplinas</span>
               </div>
               <div className="flex items-center gap-3 w-full">
                 <Users className="w-5 h-5 flex-shrink-0" />
@@ -77,7 +77,7 @@ const PlanAnual2026 = () => {
               </div>
               <div className="flex items-center gap-3 w-full">
                 <Gift className="w-5 h-5 flex-shrink-0" />
-                <span>Entradas a Icefest 2026 según tu plan (transferibles)</span>
+                <span>Entradas a Icefest según tu plan (transferibles)</span>
               </div>
             </div>
 
@@ -87,7 +87,7 @@ const PlanAnual2026 = () => {
                 className="bg-background text-primary hover:bg-background/90 font-semibold text-lg px-8"
                 onClick={scrollToPlans}
               >
-                Quiero mi Membresía Anual 2026
+                Quiero mi Membresía Anual
               </Button>
           <Button
             variant="outline"
@@ -101,7 +101,7 @@ const PlanAnual2026 = () => {
             </div>
 
             <p className="text-sm opacity-75">
-              Cupos limitados · Beneficios exclusivos 2026 · Pagos en 12 cuotas
+              Cupos limitados · Beneficios exclusivos · Pagos en 12 cuotas
               disponibles
             </p>
           </div>
@@ -111,7 +111,7 @@ const PlanAnual2026 = () => {
         <section id="planes" className="py-20 bg-muted">
           <div className="container mx-auto px-4">
             <h2 className="font-space text-3xl md:text-4xl font-bold mb-4 text-center text-foreground">
-              Membresías Anuales 2026
+              Membresías Anuales
             </h2>
             <p className="text-center text-muted-foreground mb-12 max-w-xl mx-auto">
               Elige la membresía que mejor se adapte a tu ritmo. Todas incluyen
@@ -148,7 +148,7 @@ const PlanAnual2026 = () => {
                       <div className="flex items-start gap-2">
                         <Snowflake className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
                         <div>
-                          <p className="font-medium">1 entrada a Icefest 2026</p>
+                          <p className="font-medium">1 entrada a Icefest</p>
                           <p className="text-muted-foreground text-xs">
                             Transferible · Valor $70.000
                           </p>
@@ -235,7 +235,7 @@ const PlanAnual2026 = () => {
                       <div className="flex items-start gap-2">
                         <Snowflake className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
                         <div>
-                          <p className="font-medium">2 entradas a Icefest 2026</p>
+                          <p className="font-medium">2 entradas a Icefest</p>
                           <p className="text-muted-foreground text-xs">
                             Transferibles · Valor $140.000
                           </p>
@@ -318,7 +318,7 @@ const PlanAnual2026 = () => {
                       <div className="flex items-start gap-2">
                         <Snowflake className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
                         <div>
-                          <p className="font-medium">3 entradas a Icefest 2026</p>
+                          <p className="font-medium">3 entradas a Icefest</p>
                           <p className="text-muted-foreground text-xs">
                             Transferibles · Valor $210.000
                           </p>
