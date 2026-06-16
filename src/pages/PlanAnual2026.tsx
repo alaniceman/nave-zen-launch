@@ -52,13 +52,13 @@ const PlanAnual2026 = () => {
 
           <div className="relative z-10 container mx-auto px-4 py-20 text-center text-primary-foreground">
             <h1 className="font-space text-4xl md:text-6xl lg:text-7xl font-bold mb-6 animate-fade-in">
-              Empieza el 2026 como nunca antes
+              Membresía Anual 2026
             </h1>
             <h2 className="font-space text-xl md:text-2xl lg:text-3xl font-medium mb-8 opacity-90">
-              Tu año de respiración, hielo y comunidad comienza aquí
+              Un año completo de respiración, hielo y comunidad
             </h2>
             <p className="font-inter text-lg md:text-xl max-w-2xl mx-auto mb-8 opacity-85">
-              Un año completo en Nave Studio para construir un cuerpo fuerte,
+              Tu membresía anual en Nave Studio para construir un cuerpo fuerte,
               una mente clara y una rutina que sí se sostiene.
             </p>
 
