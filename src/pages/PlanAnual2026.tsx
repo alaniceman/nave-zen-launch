@@ -31,10 +31,10 @@ const PlanAnual2026 = () => {
   return (
     <>
       <Helmet>
-        <title>Plan Anual 2026 - Nave Studio</title>
+        <title>Membresía Anual 2026 - Nave Studio</title>
         <meta
           name="description"
-          content="Plan Anual 2026 en Nave Studio. Método Wim Hof, Yoga y comunidad. 2 meses gratis, entradas Icefest incluidas y pago en 12 cuotas sin interés."
+          content="Membresía Anual 2026 en Nave Studio. Método Wim Hof, Yoga y comunidad. 2 meses gratis, entradas Icefest incluidas y pago en 12 cuotas sin interés."
         />
       </Helmet>
 
@@ -52,13 +52,13 @@ const PlanAnual2026 = () => {
 
           <div className="relative z-10 container mx-auto px-4 py-20 text-center text-primary-foreground">
             <h1 className="font-space text-4xl md:text-6xl lg:text-7xl font-bold mb-6 animate-fade-in">
-              Empieza el 2026 como nunca antes
+              Membresía Anual 2026
             </h1>
             <h2 className="font-space text-xl md:text-2xl lg:text-3xl font-medium mb-8 opacity-90">
-              Tu año de respiración, hielo y comunidad comienza aquí
+              Un año completo de respiración, hielo y comunidad
             </h2>
             <p className="font-inter text-lg md:text-xl max-w-2xl mx-auto mb-8 opacity-85">
-              Un año completo en Nave Studio para construir un cuerpo fuerte,
+              Tu membresía anual en Nave Studio para construir un cuerpo fuerte,
               una mente clara y una rutina que sí se sostiene.
             </p>
 
@@ -87,7 +87,7 @@ const PlanAnual2026 = () => {
                 className="bg-background text-primary hover:bg-background/90 font-semibold text-lg px-8"
                 onClick={scrollToPlans}
               >
-                Quiero mi Plan Anual 2026
+                Quiero mi Membresía Anual 2026
               </Button>
           <Button
             variant="outline"
@@ -111,10 +111,10 @@ const PlanAnual2026 = () => {
         <section id="planes" className="py-20 bg-muted">
           <div className="container mx-auto px-4">
             <h2 className="font-space text-3xl md:text-4xl font-bold mb-4 text-center text-foreground">
-              Planes Anuales 2026
+              Membresías Anuales 2026
             </h2>
             <p className="text-center text-muted-foreground mb-12 max-w-xl mx-auto">
-              Elige el plan que mejor se adapte a tu ritmo. Todos incluyen
+              Elige la membresía que mejor se adapte a tu ritmo. Todas incluyen
               beneficios exclusivos.
             </p>
 
@@ -384,7 +384,7 @@ const PlanAnual2026 = () => {
             <p className="font-inter text-lg md:text-xl text-muted-foreground mb-10">
               Ocurre cuando te comprometes con el proceso.
               <br />
-              El Plan Anual 2026 es tu sistema para sostener constancia:
+              La Membresía Anual 2026 es tu sistema para sostener constancia:
               entrenas tu respiración, tu relación con el frío y tu disciplina,
               con una comunidad que te acompaña.
             </p>
@@ -402,7 +402,7 @@ const PlanAnual2026 = () => {
             </div>
 
             <Button size="lg" onClick={scrollToPlans}>
-              Quiero asegurar mi plan
+              Quiero asegurar mi membresía
             </Button>
           </div>
         </section>
@@ -501,7 +501,7 @@ const PlanAnual2026 = () => {
             </div>
 
             <Button size="lg" onClick={scrollToPlans}>
-              Quiero entrar al Plan Anual
+              Quiero entrar a la Membresía Anual
             </Button>
           </div>
         </section>
@@ -522,7 +522,7 @@ const PlanAnual2026 = () => {
             <div className="flex flex-col items-center gap-3 mb-10 text-left max-w-md mx-auto">
               <div className="flex items-center gap-3 w-full">
                 <Sparkles className="w-5 h-5 flex-shrink-0" />
-                <span>Beneficios exclusivos solo Plan Anual 2026</span>
+                <span>Beneficios exclusivos solo Membresía Anual 2026</span>
               </div>
               <div className="flex items-center gap-3 w-full">
                 <Snowflake className="w-5 h-5 flex-shrink-0" />
@@ -587,7 +587,7 @@ const PlanAnual2026 = () => {
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground">
                   No pasa nada. La idea es construir constancia en el tiempo. Tu
-                  plan anual es una invitación a volver al hábito.
+                  membresía anual es una invitación a volver al hábito.
                 </AccordionContent>
               </AccordionItem>
 
@@ -633,7 +633,7 @@ const PlanAnual2026 = () => {
             </div>
 
             <p className="text-sm text-muted-foreground mt-10">
-              Nave Studio · Plan Anual 2026 · Beneficios sujetos a
+              Nave Studio · Membresía Anual 2026 · Beneficios sujetos a
               cupos/condiciones del evento
             </p>
           </div>
