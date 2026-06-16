@@ -87,7 +87,7 @@ const PlanAnual2026 = () => {
                 className="bg-background text-primary hover:bg-background/90 font-semibold text-lg px-8"
                 onClick={scrollToPlans}
               >
-                Quiero mi Plan Anual 2026
+                Quiero mi Membresía Anual 2026
               </Button>
           <Button
             variant="outline"
@@ -111,10 +111,10 @@ const PlanAnual2026 = () => {
         <section id="planes" className="py-20 bg-muted">
           <div className="container mx-auto px-4">
             <h2 className="font-space text-3xl md:text-4xl font-bold mb-4 text-center text-foreground">
-              Planes Anuales 2026
+              Membresías Anuales 2026
             </h2>
             <p className="text-center text-muted-foreground mb-12 max-w-xl mx-auto">
-              Elige el plan que mejor se adapte a tu ritmo. Todos incluyen
+              Elige la membresía que mejor se adapte a tu ritmo. Todas incluyen
               beneficios exclusivos.
             </p>
 

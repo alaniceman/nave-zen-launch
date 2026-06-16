@@ -21,7 +21,7 @@ const PlanesAnualesPromo = () => {
                 🔥 Oferta solo por {currentMonth}
               </Badge>
                <h2 className="font-space text-2xl md:text-3xl font-bold text-primary">
-                 Planes Anuales 2026
+                 Membresía Anual 2026
                </h2>
                <p className="text-muted-foreground text-sm md:text-base max-w-md">
                  Compromiso anual con hasta 2 meses gratis y beneficios exclusivos.
