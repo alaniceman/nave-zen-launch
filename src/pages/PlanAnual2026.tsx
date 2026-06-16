@@ -501,7 +501,7 @@ const PlanAnual2026 = () => {
             </div>
 
             <Button size="lg" onClick={scrollToPlans}>
-              Quiero entrar al Plan Anual
+              Quiero entrar a la Membresía Anual
             </Button>
           </div>
         </section>
@@ -522,7 +522,7 @@ const PlanAnual2026 = () => {
             <div className="flex flex-col items-center gap-3 mb-10 text-left max-w-md mx-auto">
               <div className="flex items-center gap-3 w-full">
                 <Sparkles className="w-5 h-5 flex-shrink-0" />
-                <span>Beneficios exclusivos solo Plan Anual 2026</span>
+                <span>Beneficios exclusivos solo Membresía Anual 2026</span>
               </div>
               <div className="flex items-center gap-3 w-full">
                 <Snowflake className="w-5 h-5 flex-shrink-0" />
@@ -587,7 +587,7 @@ const PlanAnual2026 = () => {
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground">
                   No pasa nada. La idea es construir constancia en el tiempo. Tu
-                  plan anual es una invitación a volver al hábito.
+                  membresía anual es una invitación a volver al hábito.
                 </AccordionContent>
               </AccordionItem>
 
@@ -633,7 +633,7 @@ const PlanAnual2026 = () => {
             </div>
 
             <p className="text-sm text-muted-foreground mt-10">
-              Nave Studio · Plan Anual 2026 · Beneficios sujetos a
+              Nave Studio · Membresía Anual 2026 · Beneficios sujetos a
               cupos/condiciones del evento
             </p>
           </div>
