@@ -30,10 +30,43 @@ const Tienda = () => {
   return (
     <>
       <Helmet>
-        <title>Tienda | Nave Studio</title>
-        <meta name="description" content="Productos disponibles en la vitrina de Nave Studio. Compra rápido por Mercado Pago y retira en el local." />
+        <title>Tienda Nave Studio | Productos de bienestar en Las Condes</title>
+        <meta name="description" content="Tienda Nave Studio: ropa, accesorios y productos de bienestar para tu práctica de Ice Bath, Wim Hof y Yoga. Compra desde tu celular y retira en Las Condes." />
+        <meta name="keywords" content="tienda nave studio, productos ice bath, ropa yoga las condes, accesorios wim hof, tienda bienestar santiago" />
         <link rel="canonical" href="https://studiolanave.com/tienda" />
-        <meta name="robots" content="noindex,nofollow" />
+
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Nave Studio" />
+        <meta property="og:title" content="Tienda Nave Studio | Productos de bienestar" />
+        <meta property="og:description" content="Lo que tenemos hoy en vitrina: ropa, accesorios y productos para tu práctica. Compra desde tu celular y retira en Nave Studio, Las Condes." />
+        <meta property="og:url" content="https://studiolanave.com/tienda" />
+        <meta property="og:image" content="https://studiolanave.com/og-image.png" />
+        <meta property="og:locale" content="es_CL" />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Tienda Nave Studio | Productos de bienestar" />
+        <meta name="twitter:description" content="Ropa, accesorios y productos para Ice Bath, Wim Hof y Yoga. Compra online y retira en Las Condes." />
+        <meta name="twitter:image" content="https://studiolanave.com/og-image.png" />
+
+        {/* Structured data */}
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Store",
+          "name": "Tienda Nave Studio",
+          "description": "Tienda de productos de bienestar de Nave Studio: ropa, accesorios y artículos para Ice Bath, Wim Hof y Yoga.",
+          "url": "https://studiolanave.com/tienda",
+          "image": "https://studiolanave.com/og-image.png",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Antares 259",
+            "addressLocality": "Las Condes",
+            "addressRegion": "Región Metropolitana",
+            "addressCountry": "CL"
+          },
+          "telephone": "+56946120426"
+        })}</script>
       </Helmet>
 
       <main className="min-h-screen bg-background pt-24 pb-16">
