@@ -197,7 +197,7 @@ Deno.serve(async (req) => {
         // First get the booking with full details
         const { data: booking, error: fetchError } = await supabase
           .from('bookings')
-          .select('id, session_code_id, status, customer_name, customer_email, customer_phone, service_id')
+          .select('id, session_code_id, status, customer_name, customer_email, customer_phone, service_id, date_time_start')
           .eq('id', id)
           .single();
 
@@ -208,6 +208,12 @@ Deno.serve(async (req) => {
             { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 404 }
           );
         }
+
+        // Safety guard: if the class already started, the code should NOT be released
+        // (the person likely attended). Admin must use the refund action to force-release.
+        const classAlreadyStarted = booking.date_time_start
+          ? new Date(booking.date_time_start) <= new Date()
+          : false;
 
         // Update booking status to CANCELLED
         const { error: updateError } = await supabase
@@ -227,29 +233,33 @@ Deno.serve(async (req) => {
         let codeCreated = null;
 
         if (booking.session_code_id) {
-          // Existing flow: release the session code
-          console.log('Releasing session code:', booking.session_code_id);
-          
-          const { data: sessionCode } = await supabase
-            .from('session_codes')
-            .select('code')
-            .eq('id', booking.session_code_id)
-            .single();
-
-          const { error: releaseError } = await supabase
-            .from('session_codes')
-            .update({
-              is_used: false,
-              used_at: null,
-              used_in_booking_id: null
-            })
-            .eq('id', booking.session_code_id);
-
-          if (releaseError) {
-            console.error('Error releasing session code:', releaseError);
+          if (classAlreadyStarted) {
+            console.log('Class already started — NOT releasing session code:', booking.session_code_id);
           } else {
-            codeReleased = sessionCode?.code || booking.session_code_id;
-            console.log('Session code released successfully:', codeReleased);
+            // Existing flow: release the session code
+            console.log('Releasing session code:', booking.session_code_id);
+
+            const { data: sessionCode } = await supabase
+              .from('session_codes')
+              .select('code')
+              .eq('id', booking.session_code_id)
+              .single();
+
+            const { error: releaseError } = await supabase
+              .from('session_codes')
+              .update({
+                is_used: false,
+                used_at: null,
+                used_in_booking_id: null
+              })
+              .eq('id', booking.session_code_id);
+
+            if (releaseError) {
+              console.error('Error releasing session code:', releaseError);
+            } else {
+              codeReleased = sessionCode?.code || booking.session_code_id;
+              console.log('Session code released successfully:', codeReleased);
+            }
           }
         } else {
           // New flow: create a recovery session code for direct bookings
