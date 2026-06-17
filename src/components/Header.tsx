@@ -45,9 +45,9 @@ const navigationItems: NavItem[] = [
       icon: CreditCard,
       children: [
         { label: "Plan de Prueba", href: "/plan-de-prueba", icon: Ticket },
-        { label: "Membresía Mensual", href: "/planes-precios", icon: CreditCard },
+        { label: "Membresías Mensuales", href: "/planes-precios", icon: CreditCard },
         { label: "Membresías Anuales", href: "/anual", icon: CalendarDays },
-        { label: "Paquete de sesiones", href: "/bonos", icon: Package },
+        { label: "Paquetes de sesiones", href: "/bonos", icon: Package },
         { label: "Gift Cards", href: "/giftcards", icon: Gift },
       ],
     },
