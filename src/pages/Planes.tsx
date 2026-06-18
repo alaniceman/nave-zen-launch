@@ -12,15 +12,15 @@ import { CheckoutRedirectButton } from "@/components/CheckoutRedirectButton";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
 import { PlanesAnualesPromo } from "@/components/PlanesAnualesPromo";
 
-const SesionesPresencialesLabel = () => (
+const TooltipLabel = ({ label }: { label: string }) => (
   <Popover>
     <PopoverTrigger asChild>
       <button
         type="button"
         className="text-sm text-muted-foreground inline-flex items-center gap-1 underline underline-offset-2 decoration-dotted decoration-muted-foreground/60 hover:text-foreground transition-colors"
       >
-        Sesiones presenciales
-        <Info size={13} className="opacity-70" aria-hidden="true" />
+        {label}
+        <Info size={13} className="opacity-70 shrink-0" aria-hidden="true" />
       </button>
     </PopoverTrigger>
     <PopoverContent
