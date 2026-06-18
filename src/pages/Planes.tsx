@@ -23,8 +23,21 @@ const SesionesPresencialesLabel = () => (
         <Info size={13} className="opacity-70" aria-hidden="true" />
       </button>
     </PopoverTrigger>
-    <PopoverContent side="top" className="w-72 text-sm leading-relaxed">
-      No pierdes tu sesión si una semana no puedes venir. Puedes usarla en otra semana dentro del mismo ciclo mensual.
+    <PopoverContent
+      side="top"
+      align="center"
+      collisionPadding={16}
+      className="max-w-[85vw] w-auto sm:w-72 p-5 text-sm leading-relaxed shadow-lg border border-border/60"
+    >
+      <div className="flex flex-col gap-2 items-center text-center">
+        <span className="text-xs font-semibold tracking-wide uppercase text-primary">
+          Flexibilidad de sesiones
+        </span>
+        <div className="h-px bg-border/40 w-full" />
+        <p className="text-muted-foreground">
+          No pierdes tu sesión si una semana no puedes venir. Puedes usarla en otra semana dentro del mismo ciclo mensual.
+        </p>
+      </div>
     </PopoverContent>
   </Popover>
 );
