@@ -213,7 +213,7 @@ const HeroSlideDiaPadre = () => {
             Papá también necesita un reset
           </h2>
           <p className="font-inter text-base md:text-xl text-white/95 max-w-2xl mx-auto">
-            Regálale 4 sesiones en Nave Studio — Ice Bath, Wim Hof o Yoga. Puede usarlas solo o compartirlas contigo.
+            Regálale 4 sesiones en Nave Studio — Ice Bath, Wim Hof o Yoga. Puede usarlas solo o compartirlas con quien quiera.
           </p>
           <div className="flex items-center justify-center gap-3 pt-2">
             <span className="font-space-grotesk text-5xl md:text-7xl font-bold">$45.000</span>
