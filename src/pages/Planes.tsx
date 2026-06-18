@@ -171,7 +171,7 @@ const Planes = () => {
                 <CardContent className="space-y-4">
                   <div className="space-y-3">
                     <div className="flex justify-between items-center">
-                      <SesionesPresencialesLabel />
+                      <TooltipLabel label="Sesiones presenciales" />
                       <span className="font-medium">1 / sem</span>
                     </div>
                     <div className="flex justify-between items-center">
