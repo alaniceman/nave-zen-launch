@@ -9,8 +9,8 @@ import diaPadreHero from "@/assets/dia-del-padre-hero.jpg";
 
 // Día de la Madre (Chile: 10 mayo 2026) — banner activo hasta fin del 10 mayo
 const DIA_MADRE_END_DATE = new Date("2026-05-11T03:00:00Z");
-// Día del Padre (Chile: 21 junio 2026) — banner activo hasta fin del 21 junio
-const DIA_PADRE_END_DATE = new Date("2026-06-22T03:00:00Z");
+// Día del Padre — DESACTIVADO
+const DIA_PADRE_END_DATE = new Date("2000-01-01T00:00:00Z");
 
 const HeroSlideMain = () => {
   const navigate = useNavigate();
