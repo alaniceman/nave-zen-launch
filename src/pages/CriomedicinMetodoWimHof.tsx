@@ -314,6 +314,9 @@ const CriomedicinMetodoWimHof = () => {
                       {pkg.description && (
                         <p className="text-sm text-muted-foreground mt-2">{pkg.description}</p>
                       )}
+                      <p className="text-xs text-primary/80 font-medium mt-1">
+                        Comparte con quien quieras — cada sesión tiene su propio código
+                      </p>
                       <p className="text-xs text-muted-foreground mt-1">
                         Válido por {pkg.validity_days} días
                       </p>

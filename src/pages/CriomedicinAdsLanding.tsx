@@ -520,8 +520,11 @@ import { ReviewsTrustBar } from "@/components/ReviewsTrustBar";
                    <CardContent className="p-6">
                      <h3 className="text-xl font-bold font-space text-primary mb-2">{pkg.name}</h3>
                      {pkg.description && (
-                       <p className="text-foreground/70 font-inter text-sm mb-4">{pkg.description}</p>
+                       <p className="text-foreground/70 font-inter text-sm mb-1">{pkg.description}</p>
                      )}
+                     <p className="text-xs text-primary/80 font-medium mb-4">
+                       Comparte con quien quieras — cada sesión tiene su propio código
+                     </p>
                      <div className="flex items-baseline gap-2 mb-4">
                        <span className="text-3xl font-bold text-secondary">{formatPrice(pkg.price_clp)}</span>
                        <span className="text-foreground/50 text-sm">/ {pkg.sessions_quantity} sesiones</span>

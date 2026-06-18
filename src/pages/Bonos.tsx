@@ -282,8 +282,11 @@ export default function Bonos() {
                             <Package className="h-5 w-5 text-primary" />
                             <h3 className="text-xl font-bold">{pkg.name}</h3>
                           </div>
-                          <p className="text-sm text-muted-foreground mb-3">
+                          <p className="text-sm text-muted-foreground mb-1">
                             {pkg.description}
+                          </p>
+                          <p className="text-xs text-primary/80 font-medium mb-3">
+                            Comparte con quien quieras — cada sesión tiene su propio código
                           </p>
                           <div className="space-y-2 text-sm">
                             <div className="flex items-center gap-2">
