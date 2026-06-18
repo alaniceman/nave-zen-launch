@@ -432,7 +432,7 @@ const Planes = () => {
                 </CardHeader>
                 <CardContent className="text-center space-y-4">
                   <p className="text-muted-foreground font-inter text-sm">
-                    2 clases semanales para profundizar tu práctica y ver resultados reales.
+                    <TooltipLabel label="2 clases semanales" /> para profundizar tu práctica y ver resultados reales.
                   </p>
                   <div className="text-3xl font-bold text-foreground">$69.000</div>
                   <Button className="w-full bg-accent hover:bg-primary text-white font-inter font-medium" data-checkout-url="https://boxmagic.cl/market/plan/XY0llrA0kV" data-plan="Yoga Continuo">
