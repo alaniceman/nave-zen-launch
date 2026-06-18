@@ -12,15 +12,15 @@ import { CheckoutRedirectButton } from "@/components/CheckoutRedirectButton";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
 import { PlanesAnualesPromo } from "@/components/PlanesAnualesPromo";
 
-const SesionesPresencialesLabel = () => (
+const TooltipLabel = ({ label }: { label: string }) => (
   <Popover>
     <PopoverTrigger asChild>
       <button
         type="button"
         className="text-sm text-muted-foreground inline-flex items-center gap-1 underline underline-offset-2 decoration-dotted decoration-muted-foreground/60 hover:text-foreground transition-colors"
       >
-        Sesiones presenciales
-        <Info size={13} className="opacity-70" aria-hidden="true" />
+        {label}
+        <Info size={13} className="opacity-70 shrink-0" aria-hidden="true" />
       </button>
     </PopoverTrigger>
     <PopoverContent
@@ -171,7 +171,7 @@ const Planes = () => {
                 <CardContent className="space-y-4">
                   <div className="space-y-3">
                     <div className="flex justify-between items-center">
-                      <SesionesPresencialesLabel />
+                      <TooltipLabel label="Sesiones presenciales" />
                       <span className="font-medium">1 / sem</span>
                     </div>
                     <div className="flex justify-between items-center">
@@ -219,7 +219,7 @@ const Planes = () => {
                 <CardContent className="space-y-4">
                   <div className="space-y-3">
                     <div className="flex justify-between items-center">
-                      <SesionesPresencialesLabel />
+                      <TooltipLabel label="Sesiones presenciales" />
                       <span className="font-medium">2 / sem</span>
                     </div>
                     <div className="flex justify-between items-center">
@@ -412,7 +412,7 @@ const Planes = () => {
                 </CardHeader>
                 <CardContent className="text-center space-y-4">
                   <p className="text-muted-foreground font-inter text-sm">
-                    1 clase semanal de Yoga (Yin · Yang · Vinyasa · Integral · Power). Ideal para mantener tu práctica.
+                    <TooltipLabel label="1 clase semanal de Yoga" /> (Yin · Yang · Vinyasa · Integral · Power). Ideal para mantener tu práctica.
                   </p>
                   <div className="text-3xl font-bold text-foreground">$49.000</div>
                   <Button className="w-full bg-accent hover:bg-primary text-white font-inter font-medium" data-checkout-url="https://boxmagic.cl/market/plan/oGDPzoy4b5" data-plan="Yoga Esencial">
@@ -432,7 +432,7 @@ const Planes = () => {
                 </CardHeader>
                 <CardContent className="text-center space-y-4">
                   <p className="text-muted-foreground font-inter text-sm">
-                    2 clases semanales para profundizar tu práctica y ver resultados reales.
+                    <TooltipLabel label="2 clases semanales" /> para profundizar tu práctica y ver resultados reales.
                   </p>
                   <div className="text-3xl font-bold text-foreground">$69.000</div>
                   <Button className="w-full bg-accent hover:bg-primary text-white font-inter font-medium" data-checkout-url="https://boxmagic.cl/market/plan/XY0llrA0kV" data-plan="Yoga Continuo">
