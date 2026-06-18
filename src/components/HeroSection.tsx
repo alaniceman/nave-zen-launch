@@ -5,9 +5,12 @@ import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { cn } from "@/lib/utils";
 import planPruebaHero from "@/assets/plan-prueba-hero.webp";
+import diaPadreHero from "@/assets/dia-del-padre-hero.jpg";
 
 // Día de la Madre (Chile: 10 mayo 2026) — banner activo hasta fin del 10 mayo
 const DIA_MADRE_END_DATE = new Date("2026-05-11T03:00:00Z");
+// Día del Padre (Chile: 21 junio 2026) — banner activo hasta fin del 21 junio
+const DIA_PADRE_END_DATE = new Date("2026-06-22T03:00:00Z");
 
 const HeroSlideMain = () => {
   const navigate = useNavigate();
@@ -190,13 +193,58 @@ const HeroSlideDiaMadre = () => {
   );
 };
 
+const HeroSlideDiaPadre = () => {
+  const navigate = useNavigate();
+  return (
+    <div className="relative min-h-screen flex items-start md:items-center justify-center pt-20 md:pt-0">
+      <img
+        src={diaPadreHero}
+        alt="Día del Padre — Ice Bath en Nave Studio"
+        className="absolute inset-0 w-full h-full object-cover"
+        fetchPriority="high"
+      />
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-900/80 via-slate-900/60 to-sky-900/70" />
+      <div className="relative z-10 container mx-auto px-6 text-center text-white">
+        <div className="max-w-3xl mx-auto space-y-5 md:space-y-7">
+          <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md text-white px-5 py-2.5 rounded-full text-sm md:text-base font-semibold border border-white/25">
+            🧊 Día del Padre · Edición limitada
+          </div>
+          <h2 className="font-space-grotesk font-bold text-4xl md:text-6xl lg:text-7xl leading-[1.05]">
+            Papá también necesita un reset
+          </h2>
+          <p className="font-inter text-base md:text-xl text-white/95 max-w-2xl mx-auto">
+            Regálale 4 sesiones en Nave Studio — Ice Bath, Wim Hof o Yoga. Puede usarlas solo o compartirlas contigo.
+          </p>
+          <div className="flex items-center justify-center gap-3 pt-2">
+            <span className="font-space-grotesk text-5xl md:text-7xl font-bold">$45.000</span>
+            <span className="text-sm md:text-base text-white/90 self-end pb-2">4 sesiones</span>
+          </div>
+          <div className="space-y-3 pt-2">
+            <Button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); navigate('/dia-del-padre'); }}
+              className="w-full md:w-auto min-w-[320px] bg-white text-slate-900 hover:bg-white/90 font-bold text-lg py-6 px-10 rounded-xl shadow-xl transition-all transform hover:scale-105"
+              size="xl"
+            >
+              Quiero regalarle bienestar →
+            </Button>
+            <p className="font-inter text-xs text-white/80">Validez 200 días · Gift Card descargable</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export const HeroSection = () => {
   const [showDiaMadre, setShowDiaMadre] = useState(false);
+  const [showDiaPadre, setShowDiaPadre] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   useEffect(() => {
     const now = new Date();
     setShowDiaMadre(now < DIA_MADRE_END_DATE);
+    setShowDiaPadre(now < DIA_PADRE_END_DATE);
   }, []);
 
   const autoplayPlugin = Autoplay({
