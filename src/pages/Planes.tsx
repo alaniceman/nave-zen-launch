@@ -3,12 +3,31 @@ import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import { Info } from "lucide-react";
 import { Footer } from "@/components/Footer";
 import { PricingTrialMiniBar } from "@/components/PricingTrialMiniBar";
 import { PricingTrialYogaSection } from "@/components/PricingTrialYogaSection";
 import { CheckoutRedirectButton } from "@/components/CheckoutRedirectButton";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
 import { PlanesAnualesPromo } from "@/components/PlanesAnualesPromo";
+
+const SesionesPresencialesLabel = () => (
+  <Popover>
+    <PopoverTrigger asChild>
+      <button
+        type="button"
+        className="text-sm text-muted-foreground inline-flex items-center gap-1 underline underline-offset-2 decoration-dotted decoration-muted-foreground/60 hover:text-foreground transition-colors"
+      >
+        Sesiones presenciales
+        <Info size={13} className="opacity-70" aria-hidden="true" />
+      </button>
+    </PopoverTrigger>
+    <PopoverContent side="top" className="w-72 text-sm leading-relaxed">
+      No pierdes tu sesión si una semana no puedes venir. Puedes usarla en otra semana dentro del mismo ciclo mensual.
+    </PopoverContent>
+  </Popover>
+);
 const Planes = () => {
   const {
     trackViewContent,
