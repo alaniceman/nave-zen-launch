@@ -35,7 +35,7 @@ const TooltipLabel = ({ label }: { label: string }) => (
         </span>
         <div className="h-px bg-border/40 w-full" />
         <p className="text-muted-foreground">
-          No pierdes tu sesión si una semana no puedes venir. Puedes usarla en otra semana dentro del mismo ciclo mensual.
+          No pierdes tu sesión si una semana no puedes venir. Puedes usarla en otra semana dentro de tu ciclo actual de membresía, antes de la próxima renovación.
         </p>
       </div>
     </PopoverContent>
