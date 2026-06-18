@@ -279,6 +279,7 @@ export const HeroSection = () => {
   const slides = [
     { id: 'plan-prueba', component: <HeroSlidePlanPrueba /> },
     { id: 'main', component: <HeroSlideMain /> },
+    ...(showDiaPadre ? [{ id: 'dia-padre', component: <HeroSlideDiaPadre /> }] : []),
     ...(showDiaMadre ? [{ id: 'dia-madre', component: <HeroSlideDiaMadre /> }] : []),
   ];
 
