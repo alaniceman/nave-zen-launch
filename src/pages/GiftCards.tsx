@@ -279,7 +279,8 @@ export default function GiftCards() {
               Regala un pack de sesiones. Quien lo reciba obtendrá los códigos y podrá reservar cuando quiera en nuestra{" "}
               <Link to="/agenda-nave-studio" className="text-primary hover:underline font-medium">
                 agenda
-              </Link>.
+              </Link>.{" "}
+              Podrá compartir los códigos con quien quiera (ideal para venir en grupo o varias sesiones).
             </p>
           </div>
 
