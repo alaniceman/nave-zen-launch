@@ -412,7 +412,7 @@ const Planes = () => {
                 </CardHeader>
                 <CardContent className="text-center space-y-4">
                   <p className="text-muted-foreground font-inter text-sm">
-                    1 clase semanal de Yoga (Yin · Yang · Vinyasa · Integral · Power). Ideal para mantener tu práctica.
+                    <TooltipLabel label="1 clase semanal de Yoga" /> (Yin · Yang · Vinyasa · Integral · Power). Ideal para mantener tu práctica.
                   </p>
                   <div className="text-3xl font-bold text-foreground">$49.000</div>
                   <Button className="w-full bg-accent hover:bg-primary text-white font-inter font-medium" data-checkout-url="https://boxmagic.cl/market/plan/oGDPzoy4b5" data-plan="Yoga Esencial">
