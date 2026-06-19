@@ -107,6 +107,7 @@ export default function GiftCards() {
         .select("*")
         .eq("is_active", true)
         .eq("available_as_giftcard", true)
+        .order("sort_order", { ascending: true })
         .order("sessions_quantity", { ascending: true });
 
       if (error) throw error;
