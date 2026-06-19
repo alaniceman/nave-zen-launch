@@ -98,9 +98,12 @@ export default function Bonos() {
       const {
         data,
         error
-      } = await supabase.from("session_packages").select("*").eq("is_active", true).order("sessions_quantity", {
-        ascending: true
-      });
+      } = await supabase
+        .from("session_packages")
+        .select("*")
+        .eq("is_active", true)
+        .order("sort_order", { ascending: true })
+        .order("sessions_quantity", { ascending: true });
       if (error) throw error;
       setPackages(data || []);
     } catch (error) {
