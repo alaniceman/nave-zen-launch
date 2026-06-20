@@ -89,6 +89,18 @@ const handler = async (req: Request): Promise<Response> => {
                   Ver y Descargar Gift Card
                 </a>
               </div>
+
+              <div style="background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 15px; margin: 20px 0; text-align: center;">
+                <p style="margin: 0 0 8px 0; font-size: 13px; color: #666;">
+                  ¿No ves el botón? Copia y pega este link en tu navegador:
+                </p>
+                <p style="margin: 0; font-size: 13px; word-break: break-all;">
+                  <a href="${giftcardLink}" style="color: ${accentColor}; text-decoration: underline;">${giftcardLink}</a>
+                </p>
+                <p style="margin: 10px 0 0 0; font-size: 12px; color: #888;">
+                  Guarda este link para ver tus códigos disponibles y usados en cualquier momento.
+                </p>
+              </div>
               
               <div style="background: #f8f9fa; border-radius: 8px; padding: 20px; margin: 20px 0;">
                 <p style="margin: 0 0 10px 0; font-size: 14px; color: #666;">
