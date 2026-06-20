@@ -1,0 +1,1 @@
+UPDATE public.package_orders SET mercado_pago_payment_id = NULL WHERE id = '6fdaefe6-3d5e-4ab0-8ef4-5e56b3ef4e6a';
