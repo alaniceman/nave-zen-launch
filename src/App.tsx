@@ -160,6 +160,7 @@ const App = () => {
             <Route path="/prueba-nave-studio" element={<Navigate to="/plan-de-prueba" replace />} />
             <Route path="/clase-de-prueba" element={<Navigate to="/plan-de-prueba" replace />} />
             <Route path="/clase-de-prueba/agendar" element={<Navigate to="/plan-de-prueba" replace />} />
+            <Route path="/agendar" element={<Navigate to="/agenda-nave-studio" replace />} />
             <Route path="/criomedicina-metodo-wim-hof" element={<CriomedicinMetodoWimHof />} />
             <Route path="/criomedicina-ice-bath-en-grupo" element={<CriomedicinIceBathEnGrupo />} />
             <Route path="/criomedicina-metodo-wim-hof-las-condes" element={<CriomedicinAdsLanding />} />
