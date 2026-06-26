@@ -55,7 +55,7 @@ const gallery: GalleryImage[] = [
 ];
 
 const ADDRESS = "Antares 259, Las Condes, Santiago";
-const MAPS_URL = "https://maps.app.goo.gl/RZmsnSLuxH8XkW2K6";
+const MAPS_URL = "https://maps.app.goo.gl/PvKkqNvETsDZEAGFA";
 const WHATSAPP_URL = "https://wa.me/56946120426";
 const WHATSAPP_DISPLAY = "+56 9 4612 0426";
 const INSTAGRAM_URL = "https://www.instagram.com/nave.icestudio";
