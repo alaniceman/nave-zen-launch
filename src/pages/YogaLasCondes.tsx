@@ -396,6 +396,9 @@ const YogaLasCondes = () => {
                     <span className="text-4xl font-bold text-foreground">$69.000</span>
                     <span className="text-muted-foreground text-sm">/mes</span>
                   </div>
+                  <a href="/plan-de-prueba" className="block mb-6 bg-warm/10 text-warm border border-warm/20 rounded-lg px-3 py-2 text-xs font-semibold text-center hover:bg-warm/20 transition-colors">
+                    Prueba antes con Plan de Prueba desde $9.900
+                  </a>
                   <ul className="space-y-3 mb-8">
                     <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">
                       <Check className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
