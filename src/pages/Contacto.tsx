@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { Footer } from "@/components/Footer"
 import { TrialClassModal } from "@/components/TrialClassModal"
-import { MapPin, Phone, Instagram, Clock } from "lucide-react"
+import { MapPin, Phone, Instagram, Clock, ChevronLeft, ChevronRight, X } from "lucide-react"
 
 import studioCorazon from "@/assets/studio-corazon.webp.asset.json"
 import studioIceSonrisa from "@/assets/studio-ice-sonrisa.webp.asset.json"
