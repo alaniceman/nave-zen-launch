@@ -197,6 +197,71 @@ Mensaje: ${formData.message}`
         </div>
       </section>
 
+      {/* Galería del espacio */}
+      <section className="py-20 md:py-28 bg-white">
+        <div className="container mx-auto px-6 max-w-7xl">
+          <div className="text-center mb-12 md:mb-16 animate-fade-in">
+            <p className="text-secondary font-medium text-sm uppercase tracking-widest mb-3">Nuestro espacio</p>
+            <h2 className="text-3xl md:text-5xl font-heading text-primary mb-5">
+              Conoce el estudio
+            </h2>
+            <p className="text-neutral-mid max-w-2xl mx-auto leading-relaxed">
+              Un refugio diseñado para reconectar contigo: luz natural, vista a la cordillera y cada detalle pensado para tu práctica.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 auto-rows-[180px] md:auto-rows-[240px]">
+            {galleryImages.map((img, i) => (
+              <button
+                key={img.src}
+                type="button"
+                onClick={() => setLightboxIndex(i)}
+                className={`group relative overflow-hidden rounded-2xl bg-neutral-light focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2 ${
+                  i === 0 ? "col-span-2 row-span-2" : ""
+                }`}
+                aria-label={`Ver foto ${i + 1}: ${img.alt}`}
+              >
+                <img
+                  src={img.src}
+                  alt={img.alt}
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-primary/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <Dialog open={lightboxIndex !== null} onOpenChange={(open) => !open && setLightboxIndex(null)}>
+          <DialogContent className="max-w-5xl p-0 bg-transparent border-0 shadow-none">
+            {lightboxIndex !== null && (
+              <div className="relative">
+                <img
+                  src={galleryImages[lightboxIndex].src}
+                  alt={galleryImages[lightboxIndex].alt}
+                  className="w-full h-auto max-h-[85vh] object-contain rounded-2xl"
+                />
+                <div className="flex justify-center gap-2 mt-4">
+                  {galleryImages.map((_, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      onClick={() => setLightboxIndex(i)}
+                      aria-label={`Ir a foto ${i + 1}`}
+                      className={`h-2 rounded-full transition-all ${
+                        i === lightboxIndex ? "w-8 bg-white" : "w-2 bg-white/50 hover:bg-white/80"
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
+      </section>
+
       {/* Contact Form Section */}
       <section id="form-contacto" className="bg-neutral-light py-16 px-6">
         <div className="max-w-2xl mx-auto">
