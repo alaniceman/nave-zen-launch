@@ -194,7 +194,7 @@ const Planes = () => {
                   <div className="pt-4 border-t">
                     <div className="text-center space-y-2">
                       <span className="text-3xl font-bold text-foreground">$59.000</span>
-                      <a href="#plan-prueba-section" className="inline-block">
+                      <a href="/plan-de-prueba" className="inline-block">
                         <Badge className="bg-warm text-white cursor-pointer hover:bg-warm/90">Prueba antes con Plan de Prueba desde $9.900</Badge>
                       </a>
                     </div>
@@ -242,7 +242,7 @@ const Planes = () => {
                   <div className="pt-4 border-t">
                     <div className="text-center space-y-2">
                       <span className="text-3xl font-bold text-foreground">$79.000</span>
-                      <a href="#plan-prueba-section" className="inline-block">
+                      <a href="/plan-de-prueba" className="inline-block">
                         <Badge className="bg-warm text-white cursor-pointer hover:bg-warm/90">Prueba antes con Plan de Prueba desde $9.900</Badge>
                       </a>
                     </div>
@@ -287,7 +287,7 @@ const Planes = () => {
                   <div className="pt-4 border-t">
                     <div className="text-center space-y-2">
                       <span className="text-3xl font-bold text-foreground">$95.000</span>
-                      <a href="#plan-prueba-section" className="inline-block">
+                      <a href="/plan-de-prueba" className="inline-block">
                         <Badge className="bg-warm text-white cursor-pointer hover:bg-warm/90">Prueba antes con Plan de Prueba desde $9.900</Badge>
                       </a>
                     </div>
