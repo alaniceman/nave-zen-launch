@@ -8,11 +8,32 @@ import { Footer } from "@/components/Footer"
 import { TrialClassModal } from "@/components/TrialClassModal"
 import { MapPin, Phone, Instagram, Clock } from "lucide-react"
 
+import studioCorazon from "@/assets/studio-corazon.webp.asset.json"
+import studioIceSonrisa from "@/assets/studio-ice-sonrisa.webp.asset.json"
+import studioMeditacionGrupo from "@/assets/studio-meditacion-grupo.webp.asset.json"
+import studioSavasana from "@/assets/studio-savasana.webp.asset.json"
+import studioMeditacionLoto from "@/assets/studio-meditacion-loto.webp.asset.json"
+import studioRespiraCirculo from "@/assets/studio-respira-circulo.webp.asset.json"
+import studioYogaPerro from "@/assets/studio-yoga-perro.webp.asset.json"
+import studioIceSereno from "@/assets/studio-ice-sereno.webp.asset.json"
+import studioIceMedicina from "@/assets/studio-ice-medicina.webp.asset.json"
+import studioSoundBath from "@/assets/studio-sound-bath.webp.asset.json"
+
 const galleryImages = [
   { src: "/lovable-uploads/yoga-sala-1.webp", alt: "Sala principal de Nave Studio en Las Condes" },
+  { src: studioSoundBath.url, alt: "Sound bath con luces inmersivas en Nave Studio" },
+  { src: studioIceSonrisa.url, alt: "Sonrisa durante baño de hielo en Nave Studio" },
+  { src: studioMeditacionLoto.url, alt: "Clase de meditación en círculo en Nave Studio" },
   { src: "/lovable-uploads/yoga-sala-2.webp", alt: "Vista amplia del estudio con luz natural" },
+  { src: studioCorazon.url, alt: "Mujer en gratitud tras sesión de ice bath" },
+  { src: studioMeditacionGrupo.url, alt: "Sesión grupal de respiración y relajación" },
+  { src: studioRespiraCirculo.url, alt: "Círculo de breathwork bajo claraboya 'Respira'" },
   { src: "/lovable-uploads/yoga-sala-3.webp", alt: "Estudio con vista a la cordillera de los Andes" },
+  { src: studioIceSereno.url, alt: "Momento sereno en baño de hielo con luz dorada" },
+  { src: studioSavasana.url, alt: "Savasana en sala de yoga de Nave Studio" },
+  { src: studioYogaPerro.url, alt: "Clase de yoga con mascota en Nave Studio" },
   { src: "/lovable-uploads/yoga-sala-4.webp", alt: "Rincón de meditación de Nave Studio" },
+  { src: studioIceMedicina.url, alt: "Ice bath bajo cartel 'La medicina es aparte'" },
 ]
 
 
