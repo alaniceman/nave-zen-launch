@@ -18,6 +18,8 @@ const galleryImages = [
 
 const Contacto = () => {
   const [isTrialModalOpen, setIsTrialModalOpen] = useState(false)
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
+
   
   const [formData, setFormData] = useState({
     name: "",
