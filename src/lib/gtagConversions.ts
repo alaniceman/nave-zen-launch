@@ -15,7 +15,7 @@ const GOOGLE_ADS_ID = "AW-18275451491";
 // TODO: replace placeholder labels with the ones generated in Google Ads.
 export const CONVERSIONS = {
   purchase_paquete: `${GOOGLE_ADS_ID}/HoB3CIumm8YcEOOEtYpE`, // Compra (provisto)
-  lead_plan_prueba: `${GOOGLE_ADS_ID}/TODO_LEAD_PLAN_PRUEBA`,
+  lead_plan_prueba: `${GOOGLE_ADS_ID}/u-g1CJLfpMYcEOOEtYpE`,
   whatsapp_click: `${GOOGLE_ADS_ID}/TODO_WHATSAPP_CLICK`,
   suscribirme_click: `${GOOGLE_ADS_ID}/TODO_SUSCRIBIRME_CLICK`,
   agendar_clase_click: `${GOOGLE_ADS_ID}/TODO_AGENDAR_CLICK`,
