@@ -16,8 +16,8 @@ const GOOGLE_ADS_ID = "AW-18275451491";
 export const CONVERSIONS = {
   purchase_paquete: `${GOOGLE_ADS_ID}/HoB3CIumm8YcEOOEtYpE`, // Compra (provisto)
   lead_plan_prueba: `${GOOGLE_ADS_ID}/u-g1CJLfpMYcEOOEtYpE`,
-  whatsapp_click: `${GOOGLE_ADS_ID}/TODO_WHATSAPP_CLICK`,
-  suscribirme_click: `${GOOGLE_ADS_ID}/TODO_SUSCRIBIRME_CLICK`,
+  whatsapp_click: `${GOOGLE_ADS_ID}/4AroCNXdjcYcEOOEtYpE`,
+  suscribirme_click: `${GOOGLE_ADS_ID}/Q80SCN-OpcYcEOOEtYpE`,
   agendar_clase_click: `${GOOGLE_ADS_ID}/TODO_AGENDAR_CLICK`,
   contacto_form_submit: `${GOOGLE_ADS_ID}/TODO_CONTACTO_FORM`,
 } as const;
