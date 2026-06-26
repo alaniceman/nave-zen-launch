@@ -500,9 +500,9 @@ const YogaLasCondes = () => {
                     </div>
 
                     {plan.promo && (
-                      <div className="mb-6 bg-warm/10 text-warm border border-warm/20 rounded-lg px-3 py-2 text-xs font-semibold text-center">
+                      <a href="/plan-de-prueba" className="block mb-6 bg-warm/10 text-warm border border-warm/20 rounded-lg px-3 py-2 text-xs font-semibold text-center hover:bg-warm/20 transition-colors">
                         {plan.promo}
-                      </div>
+                      </a>
                     )}
 
                     <ul className="space-y-3 mb-8">
