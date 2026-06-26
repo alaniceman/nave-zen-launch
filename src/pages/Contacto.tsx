@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Helmet } from "react-helmet-async"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { Footer } from "@/components/Footer"
 import { TrialClassModal } from "@/components/TrialClassModal"
-import { MapPin, Phone, Instagram, Clock } from "lucide-react"
+import { MapPin, Phone, Instagram, Clock, ChevronLeft, ChevronRight, X } from "lucide-react"
 
 import studioCorazon from "@/assets/studio-corazon.webp.asset.json"
 import studioIceSonrisa from "@/assets/studio-ice-sonrisa.webp.asset.json"
@@ -83,6 +83,28 @@ Mensaje: ${formData.message}`
       window.location.href = href
     }
   }
+
+  const goNext = () => {
+    if (lightboxIndex !== null) {
+      setLightboxIndex((lightboxIndex + 1) % galleryImages.length)
+    }
+  }
+
+  const goPrev = () => {
+    if (lightboxIndex !== null) {
+      setLightboxIndex((lightboxIndex - 1 + galleryImages.length) % galleryImages.length)
+    }
+  }
+
+  useEffect(() => {
+    if (lightboxIndex === null) return
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight') goNext()
+      if (e.key === 'ArrowLeft') goPrev()
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [lightboxIndex])
 
   return (
     <>
@@ -256,14 +278,47 @@ Mensaje: ${formData.message}`
         </div>
 
         <Dialog open={lightboxIndex !== null} onOpenChange={(open) => !open && setLightboxIndex(null)}>
-          <DialogContent className="max-w-5xl p-0 bg-transparent border-0 shadow-none">
+          <DialogContent hideCloseButton className="max-w-5xl p-0 bg-transparent border-0 shadow-none overflow-visible">
             {lightboxIndex !== null && (
-              <div className="relative">
-                <img
-                  src={galleryImages[lightboxIndex].src}
-                  alt={galleryImages[lightboxIndex].alt}
-                  className="w-full h-auto max-h-[85vh] object-contain rounded-2xl"
-                />
+              <div className="relative flex flex-col items-center">
+                {/* Close */}
+                <button
+                  type="button"
+                  onClick={() => setLightboxIndex(null)}
+                  className="absolute -top-14 right-0 z-50 flex items-center justify-center rounded-full bg-black/60 p-2.5 text-white backdrop-blur-sm hover:bg-black/80 transition-colors"
+                  aria-label="Cerrar"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+
+                <div className="relative flex items-center justify-center w-full">
+                  {/* Prev */}
+                  <button
+                    type="button"
+                    onClick={goPrev}
+                    className="absolute left-2 md:left-4 z-50 flex items-center justify-center rounded-full bg-black/60 p-2.5 text-white backdrop-blur-sm hover:bg-black/80 transition-colors"
+                    aria-label="Foto anterior"
+                  >
+                    <ChevronLeft className="h-6 w-6" />
+                  </button>
+
+                  <img
+                    src={galleryImages[lightboxIndex].src}
+                    alt={galleryImages[lightboxIndex].alt}
+                    className="w-full h-auto max-h-[80vh] object-contain rounded-2xl"
+                  />
+
+                  {/* Next */}
+                  <button
+                    type="button"
+                    onClick={goNext}
+                    className="absolute right-2 md:right-4 z-50 flex items-center justify-center rounded-full bg-black/60 p-2.5 text-white backdrop-blur-sm hover:bg-black/80 transition-colors"
+                    aria-label="Foto siguiente"
+                  >
+                    <ChevronRight className="h-6 w-6" />
+                  </button>
+                </div>
+
                 <div className="flex justify-center gap-2 mt-4">
                   {galleryImages.map((_, i) => (
                     <button
