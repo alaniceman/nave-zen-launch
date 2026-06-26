@@ -210,7 +210,7 @@ const ClaseDePrueba = () => {
               <div className="animate-fade-in">
                 <div className="relative">
                   <iframe 
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3328.4234567890123!2d-70.61234567890123!3d-33.41234567890123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662c5a1234567890%3A0x1234567890abcdef!2sAntares%20259%2C%20Las%20Condes%2C%20Regi%C3%B3n%20Metropolitana%2C%20Chile!5e0!3m2!1sen!2scl!4v1234567890123!5m2!1sen!2scl"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3330.1805968439147!2d-70.5415055!3d-33.4093709!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662cf4ba0be0e8d%3A0xef67ada98859fcfb!2sNave%20Studio%20-%20Yoga%20y%20M%C3%A9todo%20Wim%20Hof%20(Ba%C3%B1os%20de%20Hielo)!5e0!3m2!1ses!2scl!4v1700000000000!5m2!1ses!2scl"
                     width="100%" 
                     height="320" 
                     loading="lazy"
