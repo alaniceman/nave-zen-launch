@@ -84,6 +84,28 @@ Mensaje: ${formData.message}`
     }
   }
 
+  const goNext = () => {
+    if (lightboxIndex !== null) {
+      setLightboxIndex((lightboxIndex + 1) % galleryImages.length)
+    }
+  }
+
+  const goPrev = () => {
+    if (lightboxIndex !== null) {
+      setLightboxIndex((lightboxIndex - 1 + galleryImages.length) % galleryImages.length)
+    }
+  }
+
+  useEffect(() => {
+    if (lightboxIndex === null) return
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight') goNext()
+      if (e.key === 'ArrowLeft') goPrev()
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [lightboxIndex])
+
   return (
     <>
       <Helmet>
