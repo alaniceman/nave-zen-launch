@@ -18,6 +18,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { ProtectedRoute } from "@/components/admin/ProtectedRoute";
 import { MailerLiteUniversal } from "@/components/MailerLiteUniversal";
+import { GtagClickTracker } from "@/components/GtagClickTracker";
 import { Loader2 } from "lucide-react";
 
 // Lazy-loaded pages
@@ -127,6 +128,7 @@ const App = () => {
              <ScrollToTop />
               <SEOHead />
               <FacebookPixelRouterTracker />
+              <GtagClickTracker />
               <MailerLiteUniversal />
               <TrialDelegationHandler />
               <Header />
