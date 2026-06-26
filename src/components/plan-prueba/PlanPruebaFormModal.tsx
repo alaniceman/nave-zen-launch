@@ -124,6 +124,10 @@ export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) 
       });
       if (error || !data?.boxmagicUrl) throw new Error(data?.error || "Error al confirmar");
 
+      // Google Ads conversion: lead_plan_prueba
+      const { trackConversion } = await import("@/lib/gtagConversions");
+      trackConversion("lead_plan_prueba", { currency: "CLP" });
+
       // Track redirect event
       const redirectEventId = `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
       trackEvent("plan_trial_redirect_payment", { plan_type: plan }, redirectEventId);

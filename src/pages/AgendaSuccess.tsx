@@ -6,6 +6,7 @@ import { CheckCircle, Clock, Loader2, XCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
 import { useFacebookConversionsAPI } from "@/hooks/useFacebookConversionsAPI";
+import { trackConversion } from "@/lib/gtagConversions";
 
 type BookingStatus = "CONFIRMED" | "PENDING_PAYMENT" | "CANCELLED" | null;
 
@@ -71,7 +72,13 @@ export default function AgendaSuccess() {
               orderId: externalReference,
               eventId,
             });
-            
+
+            trackConversion("purchase_paquete", {
+              value: price,
+              currency: "CLP",
+              transaction_id: externalReference,
+            });
+
             setHasFiredPixel(true);
           }
         } else {

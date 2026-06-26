@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Footer } from "@/components/Footer";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
+import { trackConversion } from "@/lib/gtagConversions";
 
 interface OrderStatus {
   orderId: string;
@@ -100,6 +101,11 @@ export default function GiftCardsSuccess() {
         content_type: "product",
         content_ids: [orderId],
       }, eventId);
+      trackConversion("purchase_paquete", {
+        value: orderStatus.finalPrice || 0,
+        currency: "CLP",
+        transaction_id: orderId,
+      });
       setHasFiredPixel(true);
     }
   }, [orderStatus?.statusType, orderStatus?.finalPrice, orderStatus?.packageName, orderId, hasFiredPixel, trackEvent]);
