@@ -63,6 +63,7 @@ const membershipPlans = [
     name: "Eclipse",
     sessions: "1 / sem",
     price: "$59.000",
+    promo: "Prueba antes con Plan de Prueba desde $9.900",
     features: [
       "Yoga (Yin · Yang · Integral · Vinyasa · Vinyasa Somático · Power)",
       "Método Wim Hof",
@@ -358,6 +359,9 @@ const YogaLasCondes = () => {
                   <span className="text-4xl font-bold text-foreground">$49.000</span>
                   <span className="text-muted-foreground text-sm">/mes</span>
                 </div>
+                <a href="/plan-de-prueba" className="block mb-6 bg-warm/10 text-warm border border-warm/20 rounded-lg px-3 py-2 text-xs font-semibold text-center hover:bg-warm/20 transition-colors">
+                  Prueba antes con Plan de Prueba desde $9.900
+                </a>
                 <ul className="space-y-3 mb-8">
                   <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">
                     <Check className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
@@ -392,6 +396,9 @@ const YogaLasCondes = () => {
                     <span className="text-4xl font-bold text-foreground">$69.000</span>
                     <span className="text-muted-foreground text-sm">/mes</span>
                   </div>
+                  <a href="/plan-de-prueba" className="block mb-6 bg-warm/10 text-warm border border-warm/20 rounded-lg px-3 py-2 text-xs font-semibold text-center hover:bg-warm/20 transition-colors">
+                    Prueba antes con Plan de Prueba desde $9.900
+                  </a>
                   <ul className="space-y-3 mb-8">
                     <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">
                       <Check className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
@@ -422,6 +429,9 @@ const YogaLasCondes = () => {
                   <span className="text-4xl font-bold text-foreground">$85.000</span>
                   <span className="text-muted-foreground text-sm">/mes</span>
                 </div>
+                <a href="/plan-de-prueba" className="block mb-6 bg-warm/10 text-warm border border-warm/20 rounded-lg px-3 py-2 text-xs font-semibold text-center hover:bg-warm/20 transition-colors">
+                  Prueba antes con Plan de Prueba desde $9.900
+                </a>
                 <ul className="space-y-3 mb-8">
                   <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">
                     <Check className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
@@ -499,9 +509,9 @@ const YogaLasCondes = () => {
                     </div>
 
                     {plan.promo && (
-                      <div className="mb-6 bg-warm/10 text-warm border border-warm/20 rounded-lg px-3 py-2 text-xs font-semibold text-center">
+                      <a href="/plan-de-prueba" className="block mb-6 bg-warm/10 text-warm border border-warm/20 rounded-lg px-3 py-2 text-xs font-semibold text-center hover:bg-warm/20 transition-colors">
                         {plan.promo}
-                      </div>
+                      </a>
                     )}
 
                     <ul className="space-y-3 mb-8">
