@@ -3,9 +3,18 @@ import { Helmet } from "react-helmet-async"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { Footer } from "@/components/Footer"
 import { TrialClassModal } from "@/components/TrialClassModal"
 import { MapPin, Phone, Instagram, Clock } from "lucide-react"
+
+const galleryImages = [
+  { src: "/lovable-uploads/yoga-sala-1.webp", alt: "Sala principal de Nave Studio en Las Condes" },
+  { src: "/lovable-uploads/yoga-sala-2.webp", alt: "Vista amplia del estudio con luz natural" },
+  { src: "/lovable-uploads/yoga-sala-3.webp", alt: "Estudio con vista a la cordillera de los Andes" },
+  { src: "/lovable-uploads/yoga-sala-4.webp", alt: "Rincón de meditación de Nave Studio" },
+]
+
 
 const Contacto = () => {
   const [isTrialModalOpen, setIsTrialModalOpen] = useState(false)
