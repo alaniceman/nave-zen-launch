@@ -63,6 +63,7 @@ const membershipPlans = [
     name: "Eclipse",
     sessions: "1 / sem",
     price: "$59.000",
+    promo: "Prueba antes con Plan de Prueba desde $9.900",
     features: [
       "Yoga (Yin · Yang · Integral · Vinyasa · Vinyasa Somático · Power)",
       "Método Wim Hof",
