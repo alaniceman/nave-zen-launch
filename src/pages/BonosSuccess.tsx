@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Footer } from "@/components/Footer";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
+import { trackConversion } from "@/lib/gtagConversions";
 
 export default function BonosSuccess() {
   const navigate = useNavigate();
@@ -42,6 +43,11 @@ export default function BonosSuccess() {
             content_type: "product",
             content_ids: [orderId],
           }, eventId);
+          trackConversion("purchase_paquete", {
+            value: status.finalPrice || 0,
+            currency: "CLP",
+            transaction_id: orderId,
+          });
           setHasFiredPixel(true);
         }
       } catch (err) {
