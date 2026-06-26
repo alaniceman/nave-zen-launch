@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
-import { Info } from "lucide-react";
+import { Info, Check, Star } from "lucide-react";
 import { Footer } from "@/components/Footer";
 import { PricingTrialMiniBar } from "@/components/PricingTrialMiniBar";
 import { PricingTrialYogaSection } from "@/components/PricingTrialYogaSection";
