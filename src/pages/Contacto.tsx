@@ -278,14 +278,47 @@ Mensaje: ${formData.message}`
         </div>
 
         <Dialog open={lightboxIndex !== null} onOpenChange={(open) => !open && setLightboxIndex(null)}>
-          <DialogContent className="max-w-5xl p-0 bg-transparent border-0 shadow-none">
+          <DialogContent hideCloseButton className="max-w-5xl p-0 bg-transparent border-0 shadow-none overflow-visible">
             {lightboxIndex !== null && (
-              <div className="relative">
-                <img
-                  src={galleryImages[lightboxIndex].src}
-                  alt={galleryImages[lightboxIndex].alt}
-                  className="w-full h-auto max-h-[85vh] object-contain rounded-2xl"
-                />
+              <div className="relative flex flex-col items-center">
+                {/* Close */}
+                <button
+                  type="button"
+                  onClick={() => setLightboxIndex(null)}
+                  className="absolute -top-14 right-0 z-50 flex items-center justify-center rounded-full bg-black/60 p-2.5 text-white backdrop-blur-sm hover:bg-black/80 transition-colors"
+                  aria-label="Cerrar"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+
+                <div className="relative flex items-center justify-center w-full">
+                  {/* Prev */}
+                  <button
+                    type="button"
+                    onClick={goPrev}
+                    className="absolute left-2 md:left-4 z-50 flex items-center justify-center rounded-full bg-black/60 p-2.5 text-white backdrop-blur-sm hover:bg-black/80 transition-colors"
+                    aria-label="Foto anterior"
+                  >
+                    <ChevronLeft className="h-6 w-6" />
+                  </button>
+
+                  <img
+                    src={galleryImages[lightboxIndex].src}
+                    alt={galleryImages[lightboxIndex].alt}
+                    className="w-full h-auto max-h-[80vh] object-contain rounded-2xl"
+                  />
+
+                  {/* Next */}
+                  <button
+                    type="button"
+                    onClick={goNext}
+                    className="absolute right-2 md:right-4 z-50 flex items-center justify-center rounded-full bg-black/60 p-2.5 text-white backdrop-blur-sm hover:bg-black/80 transition-colors"
+                    aria-label="Foto siguiente"
+                  >
+                    <ChevronRight className="h-6 w-6" />
+                  </button>
+                </div>
+
                 <div className="flex justify-center gap-2 mt-4">
                   {galleryImages.map((_, i) => (
                     <button
