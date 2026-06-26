@@ -405,58 +405,88 @@ const Planes = () => {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
               {/* Yoga Esencial */}
-              <Card className="border hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[16px]">
-                <CardHeader className="text-center">
-                  <CardTitle className="text-lg font-bold text-primary font-space">Yoga Esencial</CardTitle>
-                  <Badge className="bg-accent text-white mx-auto">1 clase / sem</Badge>
-                </CardHeader>
-                <CardContent className="text-center space-y-4">
-                  <p className="text-muted-foreground font-inter text-sm">
-                    <TooltipLabel label="1 clase semanal de Yoga" /> (Yin · Yang · Vinyasa · Integral · Power). Ideal para mantener tu práctica.
-                  </p>
-                  <div className="text-3xl font-bold text-foreground">$49.000</div>
-                  <Button className="w-full bg-accent hover:bg-primary text-white font-inter font-medium" data-checkout-url="https://boxmagic.cl/market/plan/oGDPzoy4b5" data-plan="Yoga Esencial">
-                    Suscribirme
-                  </Button>
-                </CardContent>
-              </Card>
+              <div className="bg-card rounded-2xl p-7 border-2 border-border/50 hover:border-accent/30 hover:shadow-xl transition-all duration-300 group">
+                <h3 className="text-2xl font-bold text-primary font-space mb-1">Yoga Esencial</h3>
+                <p className="text-sm text-muted-foreground font-inter mb-5">1 clase por semana</p>
+                <div className="mb-6">
+                  <span className="text-4xl font-bold text-foreground">$49.000</span>
+                  <span className="text-muted-foreground text-sm">/mes</span>
+                </div>
+                <a href="/plan-de-prueba" className="block mb-6 bg-warm/10 text-warm border border-warm/20 rounded-lg px-3 py-2 text-xs font-semibold text-center hover:bg-warm/20 transition-colors">
+                  Prueba antes con Plan de Prueba desde $9.900
+                </a>
+                <ul className="space-y-3 mb-8">
+                  <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">
+                    <Check className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                    Yoga (Yin · Yang · Integral · Vinyasa · Power)
+                  </li>
+                  <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">
+                    <Check className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                    Ideal para mantener tu práctica semanal
+                  </li>
+                </ul>
+                <Button className="w-full rounded-full px-6 py-3.5 font-semibold font-inter bg-accent hover:bg-primary text-white" data-checkout-url="https://boxmagic.cl/market/plan/oGDPzoy4b5" data-plan="Yoga Esencial">
+                  Suscribirme
+                </Button>
+              </div>
 
               {/* Yoga Continuo */}
-              <Card className="relative border-2 border-warm hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[16px]">
-                <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-warm text-white">
+              <div className="relative bg-card rounded-2xl p-7 border-2 border-warm shadow-lg scale-[1.02] hover:shadow-xl transition-all duration-300 group">
+                <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-warm text-white px-4 py-1 text-xs shadow-md">
+                  <Star className="w-3 h-3 mr-1" />
                   Más popular
                 </Badge>
-                <CardHeader className="text-center pt-8">
-                  <CardTitle className="text-lg font-bold text-primary font-space">Yoga Continuo</CardTitle>
-                  <Badge className="bg-accent text-white mx-auto">2 clases / sem</Badge>
-                </CardHeader>
-                <CardContent className="text-center space-y-4">
-                  <p className="text-muted-foreground font-inter text-sm">
-                    <TooltipLabel label="2 clases semanales" /> para profundizar tu práctica y ver resultados reales.
-                  </p>
-                  <div className="text-3xl font-bold text-foreground">$69.000</div>
-                  <Button className="w-full bg-accent hover:bg-primary text-white font-inter font-medium" data-checkout-url="https://boxmagic.cl/market/plan/XY0llrA0kV" data-plan="Yoga Continuo">
+                <div className="pt-2">
+                  <h3 className="text-2xl font-bold text-primary font-space mb-1">Yoga Continuo</h3>
+                  <p className="text-sm text-muted-foreground font-inter mb-5">2 clases por semana</p>
+                  <div className="mb-6">
+                    <span className="text-4xl font-bold text-foreground">$69.000</span>
+                    <span className="text-muted-foreground text-sm">/mes</span>
+                  </div>
+                  <a href="/plan-de-prueba" className="block mb-6 bg-warm/10 text-warm border border-warm/20 rounded-lg px-3 py-2 text-xs font-semibold text-center hover:bg-warm/20 transition-colors">
+                    Prueba antes con Plan de Prueba desde $9.900
+                  </a>
+                  <ul className="space-y-3 mb-8">
+                    <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">
+                      <Check className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                      Yoga (Yin · Yang · Integral · Vinyasa · Power)
+                    </li>
+                    <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">
+                      <Check className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                      Profundiza tu práctica con más frecuencia
+                    </li>
+                  </ul>
+                  <Button className="w-full rounded-full px-6 py-3.5 font-semibold font-inter bg-warm hover:bg-warm/90 text-white shadow-md" data-checkout-url="https://boxmagic.cl/market/plan/XY0llrA0kV" data-plan="Yoga Continuo">
                     Suscribirme
                   </Button>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
 
               {/* Yoga Libre */}
-              <Card className="border-2 border-accent hover:shadow-lg hover:scale-105 transition-all duration-300 animate-fade-in rounded-[16px]">
-                <CardHeader className="text-center">
-                  <CardTitle className="text-lg font-bold text-primary font-space">Yoga Libre</CardTitle>
-                  <Badge className="bg-accent text-white mx-auto">Ilimitadas</Badge>
-                </CardHeader>
-                <CardContent className="text-center space-y-4">
-                  <p className="text-muted-foreground font-inter text-sm">
-                    Clases ilimitadas de Yoga. Practica todos los días que quieras, sin restricciones.
-                  </p>
-                  <div className="text-3xl font-bold text-foreground">$85.000</div>
-                  <Button className="w-full bg-accent hover:bg-primary text-white font-inter font-medium" data-checkout-url="https://boxmagic.cl/market/plan/rq4mapE4JZ" data-plan="Yoga Libre">
-                    Suscribirme
-                  </Button>
-                </CardContent>
-              </Card>
+              <div className="bg-card rounded-2xl p-7 border-2 border-accent/50 hover:shadow-xl transition-all duration-300 group">
+                <h3 className="text-2xl font-bold text-primary font-space mb-1">Yoga Libre</h3>
+                <p className="text-sm text-muted-foreground font-inter mb-5">Clases ilimitadas</p>
+                <div className="mb-6">
+                  <span className="text-4xl font-bold text-foreground">$85.000</span>
+                  <span className="text-muted-foreground text-sm">/mes</span>
+                </div>
+                <a href="/plan-de-prueba" className="block mb-6 bg-warm/10 text-warm border border-warm/20 rounded-lg px-3 py-2 text-xs font-semibold text-center hover:bg-warm/20 transition-colors">
+                  Prueba antes con Plan de Prueba desde $9.900
+                </a>
+                <ul className="space-y-3 mb-8">
+                  <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">
+                    <Check className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                    Yoga (Yin · Yang · Integral · Vinyasa · Power)
+                  </li>
+                  <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">
+                    <Check className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                    Sin límites, practica todos los días
+                  </li>
+                </ul>
+                <Button className="w-full rounded-full px-6 py-3.5 font-semibold font-inter bg-accent hover:bg-primary text-white" data-checkout-url="https://boxmagic.cl/market/plan/rq4mapE4JZ" data-plan="Yoga Libre">
+                  Suscribirme
+                </Button>
+              </div>
             </div>
           </section>
 
