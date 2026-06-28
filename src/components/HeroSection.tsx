@@ -193,13 +193,13 @@ const HeroSlideDiaMadre = () => {
   );
 };
 
-const HeroSlideDiaPadre = () => {
+const HeroSlidePromoInvierno = () => {
   const navigate = useNavigate();
   return (
     <div className="relative min-h-screen flex items-start md:items-center justify-center pt-20 md:pt-0">
       <img
-        src={diaPadreHero}
-        alt="Día del Padre — Ice Bath en Nave Studio"
+        src={promoInviernoHero}
+        alt="Promo Invierno — Ice Bath y Yoga en Nave Studio"
         className="absolute inset-0 w-full h-full object-cover"
         fetchPriority="high"
       />
@@ -207,28 +207,28 @@ const HeroSlideDiaPadre = () => {
       <div className="relative z-10 container mx-auto px-6 text-center text-white">
         <div className="max-w-3xl mx-auto space-y-5 md:space-y-7">
           <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md text-white px-5 py-2.5 rounded-full text-sm md:text-base font-semibold border border-white/25">
-            🧊 Día del Padre · Edición limitada
+            ❄️ Promo Invierno · Edición limitada
           </div>
           <h2 className="font-space-grotesk font-bold text-4xl md:text-6xl lg:text-7xl leading-[1.05]">
-            Papá también necesita un reset
+            Tolera el frío el doble
           </h2>
           <p className="font-inter text-base md:text-xl text-white/95 max-w-2xl mx-auto">
-            Regálale 4 sesiones en Nave Studio — Ice Bath, Wim Hof o Yoga. Puede usarlas solo o compartirlas con quien quiera.
+            6 sesiones de Yoga o Criomedicina. Está comprobado: 6 sesiones te ayudan a tolerar el frío el doble. El invierno deja de ser tema.
           </p>
           <div className="flex items-center justify-center gap-3 pt-2">
-            <span className="font-space-grotesk text-5xl md:text-7xl font-bold">$45.000</span>
-            <span className="text-sm md:text-base text-white/90 self-end pb-2">4 sesiones</span>
+            <span className="font-space-grotesk text-5xl md:text-7xl font-bold">$60.000</span>
+            <span className="text-sm md:text-base text-white/90 self-end pb-2">6 sesiones</span>
           </div>
           <div className="space-y-3 pt-2">
             <Button
               type="button"
-              onClick={(e) => { e.stopPropagation(); navigate('/dia-del-padre'); }}
+              onClick={(e) => { e.stopPropagation(); navigate('/promo-invierno'); }}
               className="w-full md:w-auto min-w-[320px] bg-white text-slate-900 hover:bg-white/90 font-bold text-lg py-6 px-10 rounded-xl shadow-xl transition-all transform hover:scale-105"
               size="xl"
             >
-              Quiero regalarle bienestar →
+              Quiero la promo de invierno →
             </Button>
-            <p className="font-inter text-xs text-white/80">Validez 200 días · Gift Card descargable</p>
+            <p className="font-inter text-xs text-white/80">Validez 3 meses · puedes compartir los códigos</p>
           </div>
         </div>
       </div>
