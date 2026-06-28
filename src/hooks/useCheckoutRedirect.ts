@@ -18,8 +18,7 @@ export function useCheckoutRedirect() {
     if (isOpen) {
       try {
         // Optional analytics
-        // @ts-expect-error - dataLayer might not exist
-        window?.dataLayer?.push?.({ event: "checkout_redirect_cancelled", plan: plan ?? undefined });
+        (window as any)?.dataLayer?.push?.({ event: "checkout_redirect_cancelled", plan: plan ?? undefined });
       } catch {}
     }
     setIsOpen(false);
