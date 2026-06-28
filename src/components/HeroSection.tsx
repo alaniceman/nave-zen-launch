@@ -5,12 +5,12 @@ import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { cn } from "@/lib/utils";
 import planPruebaHero from "@/assets/plan-prueba-hero.webp";
-import diaPadreHero from "@/assets/dia-del-padre-hero.jpg";
+import promoInviernoHero from "@/assets/promo-invierno-hero.jpg";
 
 // Día de la Madre (Chile: 10 mayo 2026) — banner activo hasta fin del 10 mayo
 const DIA_MADRE_END_DATE = new Date("2026-05-11T03:00:00Z");
-// Día del Padre
-const DIA_PADRE_END_DATE = new Date("2026-07-01T03:00:00Z");
+// Promo Invierno — activa hasta fin de invierno (21 sept 2026)
+const PROMO_INVIERNO_END_DATE = new Date("2026-09-22T03:00:00Z");
 
 const HeroSlideMain = () => {
   const navigate = useNavigate();
