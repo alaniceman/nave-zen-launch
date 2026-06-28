@@ -41,6 +41,7 @@ const SanValentin = lazy(() => import("./pages/SanValentin"));
 const MarzoReset = lazy(() => import("./pages/MarzoReset"));
 const DiaDeLaMadre = lazy(() => import("./pages/DiaDeLaMadre"));
 const DiaDelPadre = lazy(() => import("./pages/DiaDelPadre"));
+const PromoInvierno = lazy(() => import("./pages/PromoInvierno"));
 const Horarios = lazy(() => import("./pages/Horarios"));
 const ConoceElLugar = lazy(() => import("./pages/ConoceElLugar"));
 const FAQ = lazy(() => import("./pages/FAQ"));
