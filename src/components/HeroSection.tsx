@@ -238,13 +238,13 @@ const HeroSlidePromoInvierno = () => {
 
 export const HeroSection = () => {
   const [showDiaMadre, setShowDiaMadre] = useState(false);
-  const [showDiaPadre, setShowDiaPadre] = useState(false);
+  const [showPromoInvierno, setShowPromoInvierno] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   useEffect(() => {
     const now = new Date();
     setShowDiaMadre(now < DIA_MADRE_END_DATE);
-    setShowDiaPadre(now < DIA_PADRE_END_DATE);
+    setShowPromoInvierno(now < PROMO_INVIERNO_END_DATE);
   }, []);
 
   const autoplayPlugin = Autoplay({
