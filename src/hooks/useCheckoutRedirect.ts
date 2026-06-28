@@ -33,8 +33,7 @@ export function useCheckoutRedirect() {
 
     try {
       // Optional analytics
-      // @ts-expect-error - dataLayer might not exist
-      window?.dataLayer?.push?.({ event: "checkout_redirect_started", plan: planName });
+      (window as any)?.dataLayer?.push?.({ event: "checkout_redirect_started", plan: planName });
     } catch {}
 
     timerRef.current = window.setTimeout(() => {
