@@ -40,7 +40,7 @@ const PlanAnual2026 = lazy(() => import("./pages/PlanAnual2026"));
 const SanValentin = lazy(() => import("./pages/SanValentin"));
 const MarzoReset = lazy(() => import("./pages/MarzoReset"));
 const DiaDeLaMadre = lazy(() => import("./pages/DiaDeLaMadre"));
-const DiaDelPadre = lazy(() => import("./pages/DiaDelPadre"));
+const PromoInvierno = lazy(() => import("./pages/PromoInvierno"));
 const Horarios = lazy(() => import("./pages/Horarios"));
 const ConoceElLugar = lazy(() => import("./pages/ConoceElLugar"));
 const FAQ = lazy(() => import("./pages/FAQ"));
@@ -153,8 +153,9 @@ const App = () => {
             <Route path="/marzo-reset" element={<MarzoReset />} />
             <Route path="/dia-de-la-madre" element={<DiaDeLaMadre />} />
             <Route path="/diadelamadre" element={<Navigate to="/dia-de-la-madre" replace />} />
-            <Route path="/dia-del-padre" element={<DiaDelPadre />} />
-            <Route path="/diadelpadre" element={<Navigate to="/dia-del-padre" replace />} />
+            <Route path="/promo-invierno" element={<PromoInvierno />} />
+            <Route path="/dia-del-padre" element={<Navigate to="/promo-invierno" replace />} />
+            <Route path="/diadelpadre" element={<Navigate to="/promo-invierno" replace />} />
             <Route path="/horarios" element={<Horarios />} />
             <Route path="/conoce-el-lugar" element={<ConoceElLugar />} />
             <Route path="/faq" element={<FAQ />} />
