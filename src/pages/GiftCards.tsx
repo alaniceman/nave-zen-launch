@@ -533,6 +533,16 @@ export default function GiftCards() {
                           </>
                         )}
                       </Button>
+
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground mt-2">
+                        <Shield className="w-3.5 h-3.5 flex-shrink-0" />
+                        <span>
+                          Al comprar aceptas las{" "}
+                          <Link to="/reglas-nave-studio" className="text-primary hover:underline font-medium">
+                            Reglas Nave Studio
+                          </Link>
+                        </span>
+                      </div>
                     </form>
                   )}
                 </Card>
