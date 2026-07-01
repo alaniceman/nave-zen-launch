@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { ArrowDown, Check, Sparkles } from "lucide-react";
+import { Link } from "react-router-dom";
+import { ArrowDown, Check, Sparkles, Shield } from "lucide-react";
 import { Footer } from "@/components/Footer";
 import { PlanPruebaFormModal } from "@/components/plan-prueba/PlanPruebaFormModal";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
