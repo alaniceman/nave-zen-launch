@@ -68,6 +68,7 @@ const InstructorProfile = lazy(() => import("./pages/InstructorProfile"));
 const Generative = lazy(() => import("./pages/Generative"));
 const FotosWorkshopBuda = lazy(() => import("./pages/FotosWorkshopBuda"));
 const FotosTallerWimHofSantiago = lazy(() => import("./pages/FotosTallerWimHofSantiago"));
+const ReglasNaveStudio = lazy(() => import("./pages/ReglasNaveStudio"));
 const TallerSantiago = lazy(() => import("./pages/TallerSantiago"));
 const TalleresYRetiros = lazy(() => import("./pages/TalleresYRetiros"));
 const Tienda = lazy(() => import("./pages/Tienda"));
@@ -169,6 +170,7 @@ const App = () => {
             <Route path="/criomedicina-ice-bath-en-grupo" element={<CriomedicinIceBathEnGrupo />} />
             <Route path="/criomedicina-metodo-wim-hof-las-condes" element={<CriomedicinAdsLanding />} />
             <Route path="/terminos" element={<Terminos />} />
+            <Route path="/reglas-nave-studio" element={<ReglasNaveStudio />} />
             <Route path="/privacidad" element={<Privacidad />} />
             <Route path="/bonos" element={<Bonos />} />
             <Route path="/bonos/success" element={<BonosSuccess />} />
