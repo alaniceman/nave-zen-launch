@@ -176,6 +176,13 @@ const Footer = () => {
             className="text-accent hover:text-warm transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
           >
             Política de privacidad
+          </a>{" "}
+          ·{" "}
+          <a 
+            href="https://studiolanave.com/reglas-nave-studio" 
+            className="text-accent hover:text-warm transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
+          >
+            Reglas Nave Studio
           </a>
         </div>
       </div>

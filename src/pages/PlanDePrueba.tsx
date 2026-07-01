@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { ArrowDown, Check, Sparkles } from "lucide-react";
+import { Link } from "react-router-dom";
+import { ArrowDown, Check, Sparkles, Shield } from "lucide-react";
 import { Footer } from "@/components/Footer";
 import { PlanPruebaFormModal } from "@/components/plan-prueba/PlanPruebaFormModal";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
@@ -188,6 +189,17 @@ export default function PlanDePrueba() {
               <br />
               <span className="text-[#4A4A4A]/80 text-xs">No aplica para alumnos activos o personas que ya hayan utilizado un plan de prueba anteriormente.</span>
             </p>
+          </div>
+
+          {/* Link a reglas */}
+          <div className="max-w-2xl mx-auto mt-4 flex items-center justify-center gap-2 text-sm text-[#4A4A4A]">
+            <Shield className="w-4 h-4 text-[#2E4D3A]" />
+            <span>
+              Al sumarte aceptas las{" "}
+              <Link to="/reglas-nave-studio" className="text-[#2E4D3A] font-semibold hover:underline">
+                Reglas Nave Studio
+              </Link>
+            </span>
           </div>
 
           {/* Link a horarios dentro de la misma página */}

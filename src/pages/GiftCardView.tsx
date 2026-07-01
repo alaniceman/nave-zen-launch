@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Loader2, Gift, Calendar, Download, Copy, Check, ExternalLink } from "lucide-react";
+import { Loader2, Gift, Calendar, Download, Copy, Check, ExternalLink, Shield } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Footer } from "@/components/Footer";
@@ -329,6 +329,17 @@ export default function GiftCardView() {
                 <span>¡Tu sesión quedará confirmada sin costo adicional!</span>
               </li>
             </ol>
+
+            <div className="flex items-start gap-2 text-xs text-muted-foreground mt-4 p-3 bg-muted/40 rounded-lg">
+              <Shield className="w-4 h-4 flex-shrink-0 mt-0.5" />
+              <span>
+                Recuerda revisar las{" "}
+                <Link to="/reglas-nave-studio" className="text-primary hover:underline font-medium">
+                  Reglas Nave Studio
+                </Link>{" "}
+                antes de asistir a tu clase.
+              </span>
+            </div>
 
             <Link to="/agenda-nave-studio" className="block mt-6">
               <Button className="w-full" size="lg">

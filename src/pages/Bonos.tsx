@@ -8,7 +8,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Loader2, Package, Calendar, CheckCircle2 } from "lucide-react";
+import { Loader2, Package, Calendar, CheckCircle2, Shield } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Footer } from "@/components/Footer";
@@ -419,6 +419,16 @@ export default function Bonos() {
                             Procesando...
                           </> : "Comprar y pagar"}
                       </Button>
+
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground mt-2">
+                        <Shield className="w-3.5 h-3.5 flex-shrink-0" />
+                        <span>
+                          Al comprar aceptas las{" "}
+                          <Link to="/reglas-nave-studio" className="text-primary hover:underline font-medium">
+                            Reglas Nave Studio
+                          </Link>
+                        </span>
+                      </div>
                     </form>}
                 </Card>
               </div>
