@@ -190,6 +190,7 @@ const App = () => {
             <Route path="/instructor/:slug" element={<InstructorProfile />} />
             <Route path="/generative" element={<Generative />} />
             <Route path="/fotos-workshop/buda" element={<FotosWorkshopBuda />} />
+            <Route path="/fotos-taller/wim-hof-santiago" element={<FotosTallerWimHofSantiago />} />
 
             {/* Tienda */}
             <Route path="/tienda" element={<Tienda />} />
