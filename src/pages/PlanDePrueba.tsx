@@ -191,6 +191,17 @@ export default function PlanDePrueba() {
             </p>
           </div>
 
+          {/* Link a reglas */}
+          <div className="max-w-2xl mx-auto mt-4 flex items-center justify-center gap-2 text-sm text-[#4A4A4A]">
+            <Shield className="w-4 h-4 text-[#2E4D3A]" />
+            <span>
+              Al sumarte aceptas las{" "}
+              <Link to="/reglas-nave-studio" className="text-[#2E4D3A] font-semibold hover:underline">
+                Reglas Nave Studio
+              </Link>
+            </span>
+          </div>
+
           {/* Link a horarios dentro de la misma página */}
           <div className="text-center mt-10">
             <button
