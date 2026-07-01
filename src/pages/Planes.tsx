@@ -269,7 +269,7 @@ const Planes = () => {
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-accent font-medium">Bonus&nbsp;</span>
-                      <span className="font-medium text-accent">Hasta 2 visitas el mismo día</span>
+                      <span className="font-medium text-accent">Hasta 2 clases x día</span>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-muted-foreground">Criomedicina / Método Wim Hof</span>
