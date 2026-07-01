@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Loader2, Gift, Calendar, Download, Copy, Check, ExternalLink } from "lucide-react";
+import { Loader2, Gift, Calendar, Download, Copy, Check, ExternalLink, Shield } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Footer } from "@/components/Footer";
