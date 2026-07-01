@@ -67,6 +67,7 @@ const BautizoHielo = lazy(() => import("./pages/BautizoHielo"));
 const InstructorProfile = lazy(() => import("./pages/InstructorProfile"));
 const Generative = lazy(() => import("./pages/Generative"));
 const FotosWorkshopBuda = lazy(() => import("./pages/FotosWorkshopBuda"));
+const FotosTallerWimHofSantiago = lazy(() => import("./pages/FotosTallerWimHofSantiago"));
 const TallerSantiago = lazy(() => import("./pages/TallerSantiago"));
 const TalleresYRetiros = lazy(() => import("./pages/TalleresYRetiros"));
 const Tienda = lazy(() => import("./pages/Tienda"));
