@@ -268,6 +268,10 @@ const Planes = () => {
                       <span className="font-medium">Ilimitadas</span>
                     </div>
                     <div className="flex justify-between items-center">
+                      <span className="text-sm text-accent font-medium">Bonus Universo</span>
+                      <span className="font-medium text-accent">Hasta 2 visitas el mismo día</span>
+                    </div>
+                    <div className="flex justify-between items-center">
                       <span className="text-sm text-muted-foreground">Criomedicina / Método Wim Hof</span>
                       <span className="text-accent">✔</span>
                     </div>

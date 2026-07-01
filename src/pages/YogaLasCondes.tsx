@@ -103,6 +103,7 @@ const membershipPlans = [
       "Breathwork & Meditación",
       "Isométrica + Flexibilidad",
       "Comunidad online + mentorías",
+      "Hasta 2 visitas el mismo día",
     ],
     excludes: [],
     url: "https://boxmagic.cl/market/plan_subscription/j80p5OdDW6",
