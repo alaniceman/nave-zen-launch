@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -8,9 +8,9 @@ import { Info, Check, Star } from "lucide-react";
 import { Footer } from "@/components/Footer";
 import { PricingTrialMiniBar } from "@/components/PricingTrialMiniBar";
 import { PricingTrialYogaSection } from "@/components/PricingTrialYogaSection";
-import { CheckoutRedirectButton } from "@/components/CheckoutRedirectButton";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
 import { PlanesAnualesPromo } from "@/components/PlanesAnualesPromo";
+import { MembershipFormModal, type MembershipGroup } from "@/components/membership/MembershipFormModal";
 
 const TooltipLabel = ({ label }: { label: string }) => (
   <Popover>
@@ -46,6 +46,12 @@ const Planes = () => {
     trackViewContent,
     trackInitiateCheckout
   } = useFacebookPixel();
+  const [membershipModal, setMembershipModal] = useState<{ open: boolean; group: MembershipGroup; code: string }>({
+    open: false, group: "completa", code: "orbita",
+  });
+  const openMembership = (group: MembershipGroup, code: string) => {
+    setMembershipModal({ open: true, group, code });
+  };
   useEffect(() => {
     // Track ViewContent event for pricing page
     trackViewContent({
