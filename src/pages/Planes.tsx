@@ -268,8 +268,8 @@ const Planes = () => {
                       <span className="font-medium">Ilimitadas</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-accent font-medium">Bonus&nbsp;</span>
-                      <span className="font-medium text-accent">Hasta 2 clases x día</span>
+                      <span className="text-sm text-accent font-medium">Bonus: Agenda hasta 2 clases al día&nbsp;</span>
+                      <span className="font-medium text-accent">✔</span>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-muted-foreground">Criomedicina / Método Wim Hof</span>
