@@ -660,6 +660,72 @@ export type Database = {
         }
         Relationships: []
       }
+      membership_leads: {
+        Row: {
+          admin_notes: string | null
+          boxmagic_url: string | null
+          created_at: string
+          customer_email: string
+          customer_name: string
+          customer_phone: string
+          id: string
+          paid_at: string | null
+          paid_marked_by: string | null
+          plan_code: string | null
+          plan_group: string | null
+          plan_label: string | null
+          redirected_at: string | null
+          requested_start_date: string | null
+          status: string
+          updated_at: string
+          utm_campaign: string | null
+          utm_medium: string | null
+          utm_source: string | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          boxmagic_url?: string | null
+          created_at?: string
+          customer_email: string
+          customer_name: string
+          customer_phone: string
+          id?: string
+          paid_at?: string | null
+          paid_marked_by?: string | null
+          plan_code?: string | null
+          plan_group?: string | null
+          plan_label?: string | null
+          redirected_at?: string | null
+          requested_start_date?: string | null
+          status?: string
+          updated_at?: string
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Update: {
+          admin_notes?: string | null
+          boxmagic_url?: string | null
+          created_at?: string
+          customer_email?: string
+          customer_name?: string
+          customer_phone?: string
+          id?: string
+          paid_at?: string | null
+          paid_marked_by?: string | null
+          plan_code?: string | null
+          plan_group?: string | null
+          plan_label?: string | null
+          redirected_at?: string | null
+          requested_start_date?: string | null
+          status?: string
+          updated_at?: string
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Relationships: []
+      }
       membership_plans: {
         Row: {
           allows_custom_start_date: boolean
