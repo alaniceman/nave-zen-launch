@@ -20,6 +20,7 @@ const menuItems = [
   { title: 'Dashboard', url: '/admin/dashboard', icon: LayoutDashboard },
   { title: 'Clientes', url: '/admin/clientes', icon: Contact },
   { title: 'Membresías', url: '/admin/membresias', icon: Crown },
+  { title: 'Leads Membresías', url: '/admin/membresias-leads', icon: Crown },
   { title: 'Reservas', url: '/admin/agenda', icon: Calendar },
   { title: 'Órdenes de Compra', url: '/admin/ordenes', icon: ShoppingCart },
   { title: 'Carros Abandonados', url: '/admin/carros-abandonados', icon: AlertCircle },

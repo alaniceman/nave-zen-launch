@@ -62,3 +62,7 @@ verify_jwt = false
 
 [functions.send-plan-prueba-activo]
 verify_jwt = false
+
+[functions.submit-membership-lead]
+verify_jwt = false
+
