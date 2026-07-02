@@ -99,6 +99,7 @@ const AdminPlanesPrueba = lazy(() => import("./pages/admin/AdminPlanesPrueba"));
 const AdminCustomers = lazy(() => import("./pages/admin/AdminCustomers"));
 const AdminCustomerDetail = lazy(() => import("./pages/admin/AdminCustomerDetail"));
 const AdminMembershipPlans = lazy(() => import("./pages/admin/AdminMembershipPlans"));
+const AdminMembershipLeads = lazy(() => import("./pages/admin/AdminMembershipLeads"));
 const AdminEmailTemplates = lazy(() => import("./pages/admin/AdminEmailTemplates"));
 const AdminChatLogs = lazy(() => import("./pages/admin/AdminChatLogs"));
 const AdminBrain = lazy(() => import("./pages/admin/AdminBrain"));
@@ -222,6 +223,7 @@ const App = () => {
               <Route path="clientes" element={<AdminCustomers />} />
               <Route path="clientes/:id" element={<AdminCustomerDetail />} />
               <Route path="membresias" element={<AdminMembershipPlans />} />
+              <Route path="membresias-leads" element={<AdminMembershipLeads />} />
               <Route path="horarios" element={<AdminScheduleEntries />} />
               <Route path="mailerlite" element={<AdminMailerLite />} />
               <Route path="emails" element={<AdminEmailTemplates />} />
