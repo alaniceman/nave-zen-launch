@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
@@ -56,6 +57,7 @@ export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) 
   const [boxmagicUrl, setBoxmagicUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [userInfo, setUserInfo] = useState<Step1Values | null>(null);
+  const [understood, setUnderstood] = useState(false);
   const { trackEvent } = useFacebookPixel();
   const { trackServerEvent } = useFacebookConversionsAPI();
 
@@ -72,6 +74,7 @@ export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) 
       setBoxmagicUrl(null);
       setError(null);
       setStartDate(undefined);
+      setUnderstood(false);
       form.reset();
     }
   }, [open, initialPlan, form]);
@@ -265,9 +268,29 @@ export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) 
               </p>
             </div>
 
+            <div className="space-y-2">
+              <label className="flex items-start gap-3 cursor-pointer">
+                <Checkbox
+                  checked={understood}
+                  onCheckedChange={(checked) => setUnderstood(checked === true)}
+                  className="mt-0.5 shrink-0"
+                />
+                <span className="text-sm text-[#1A1A1A] leading-snug">
+                  Entiendo que este beneficio de prueba está reservado para personas que quieren conocer Nave Studio con intención real de continuar con una membresía, no para usarlo como un paquete de sesiones con descuento.
+                </span>
+              </label>
+              <p className="text-xs text-muted-foreground pl-7">
+                Para visitas puntuales o experiencias ocasionales, te recomendamos{" "}
+                <a href="/bonos" className="underline hover:text-[#2E4D3A]">
+                  comprar una sesión suelta o un paquete
+                </a>
+                .
+              </p>
+            </div>
+
             <Button
               onClick={onSubmitStep2}
-              disabled={submitting || !startDate}
+              disabled={submitting || !startDate || !understood}
               className="w-full bg-[#2E4D3A] hover:bg-[#2E4D3A]/90 text-white py-6 text-base"
             >
               {submitting && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
