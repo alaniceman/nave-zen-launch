@@ -547,6 +547,12 @@ const Planes = () => {
       </section>
 
       <Footer />
+      <MembershipFormModal
+        open={membershipModal.open}
+        onOpenChange={(o) => setMembershipModal((s) => ({ ...s, open: o }))}
+        group={membershipModal.group}
+        initialCode={membershipModal.code}
+      />
     </main>
     </>;
 };
