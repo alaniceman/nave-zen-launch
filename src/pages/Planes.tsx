@@ -205,7 +205,7 @@ const Planes = () => {
                       </a>
                     </div>
                   </div>
-                  <Button className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium" data-plan="Eclipse" data-checkout-url="https://boxmagic.cl/market/plan/AvLXQOM4EK">
+                  <Button className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium" onClick={() => openMembership("completa", "eclipse")}>
                     Suscribirme
                   </Button>
                   <a href="/horarios#hoy" className="inline-block mt-2 text-accent underline hover:text-primary transition-colors text-sm">
@@ -253,7 +253,7 @@ const Planes = () => {
                       </a>
                     </div>
                   </div>
-                  <Button className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium" data-plan="Órbita" data-checkout-url="https://boxmagic.cl/market/plan_subscription/ev4VPzOD9A">
+                  <Button className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium" onClick={() => openMembership("completa", "orbita")}>
                     Suscribirme
                   </Button>
                   <a href="/horarios#hoy" className="inline-block mt-2 text-accent underline hover:text-primary transition-colors text-sm">
@@ -302,9 +302,9 @@ const Planes = () => {
                       </a>
                     </div>
                   </div>
-                  <CheckoutRedirectButton url="https://boxmagic.cl/market/plan_subscription/j80p5OdDW6" plan="Universo" className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium">
+                  <Button className="w-full mt-6 bg-accent hover:bg-primary text-white font-inter font-medium" onClick={() => openMembership("completa", "universo")}>
                     Suscribirme
-                  </CheckoutRedirectButton>
+                  </Button>
                   <a href="/horarios#hoy" className="inline-block mt-2 text-accent underline hover:text-primary transition-colors text-sm">
                     Ver horarios de clases →
                   </a>
@@ -435,7 +435,7 @@ const Planes = () => {
                     Ideal para mantener tu práctica semanal
                   </li>
                 </ul>
-                <Button className="w-full rounded-full px-6 py-3.5 font-semibold font-inter bg-accent hover:bg-primary text-white" data-checkout-url="https://boxmagic.cl/market/plan/oGDPzoy4b5" data-plan="Yoga Esencial">
+                <Button className="w-full rounded-full px-6 py-3.5 font-semibold font-inter bg-accent hover:bg-primary text-white" onClick={() => openMembership("yoga", "yoga_esencial")}>
                   Suscribirme
                 </Button>
               </div>
@@ -466,7 +466,7 @@ const Planes = () => {
                       Profundiza tu práctica con más frecuencia
                     </li>
                   </ul>
-                  <Button className="w-full rounded-full px-6 py-3.5 font-semibold font-inter bg-warm hover:bg-warm/90 text-white shadow-md" data-checkout-url="https://boxmagic.cl/market/plan/XY0llrA0kV" data-plan="Yoga Continuo">
+                  <Button className="w-full rounded-full px-6 py-3.5 font-semibold font-inter bg-warm hover:bg-warm/90 text-white shadow-md" onClick={() => openMembership("yoga", "yoga_continuo")}>
                     Suscribirme
                   </Button>
                 </div>
@@ -493,7 +493,7 @@ const Planes = () => {
                     Sin límites, practica todos los días
                   </li>
                 </ul>
-                <Button className="w-full rounded-full px-6 py-3.5 font-semibold font-inter bg-accent hover:bg-primary text-white" data-checkout-url="https://boxmagic.cl/market/plan/rq4mapE4JZ" data-plan="Yoga Libre">
+                <Button className="w-full rounded-full px-6 py-3.5 font-semibold font-inter bg-accent hover:bg-primary text-white" onClick={() => openMembership("yoga", "yoga_libre")}>
                   Suscribirme
                 </Button>
               </div>
