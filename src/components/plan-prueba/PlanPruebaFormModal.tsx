@@ -74,6 +74,7 @@ export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) 
       setBoxmagicUrl(null);
       setError(null);
       setStartDate(undefined);
+      setUnderstood(false);
       form.reset();
     }
   }, [open, initialPlan, form]);
