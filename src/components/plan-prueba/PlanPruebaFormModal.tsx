@@ -57,6 +57,7 @@ export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) 
   const [boxmagicUrl, setBoxmagicUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [userInfo, setUserInfo] = useState<Step1Values | null>(null);
+  const [understood, setUnderstood] = useState(false);
   const { trackEvent } = useFacebookPixel();
   const { trackServerEvent } = useFacebookConversionsAPI();
 
