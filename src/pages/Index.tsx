@@ -40,6 +40,7 @@ const Index = () => {
       <GiftCardSection />
       <Footer />
       <StickyMobileCTA />
+      <NextClassAutoWidget tags={["yoga","wim-hof"]} href="/horarios" storageKey="home" />
     </main>
     </>
   );
