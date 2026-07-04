@@ -101,7 +101,7 @@ export const NextClassWidget = ({ when, time, title, instructor, href = "#horari
           </div>
           <div className="min-w-0 flex-1">
             <p className="text-[10px] uppercase tracking-widest text-accent font-medium font-inter leading-tight">
-              Próxima clase {when}
+              {labelPrefix} {when}
             </p>
             <p className="text-sm font-bold text-primary font-space leading-tight truncate">
               {time} · {title}
