@@ -375,6 +375,7 @@ const Experiencias = () => {
 
       <Footer />
       <StickyMobileCTA />
+      <NextClassAutoWidget tags={["yoga","wim-hof","breathwork"]} href="/horarios" storageKey="experiencias" />
     </main>
     </>
   )
