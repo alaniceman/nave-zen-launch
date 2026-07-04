@@ -4,7 +4,6 @@ import { Helmet } from "react-helmet-async"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Footer } from "@/components/Footer"
-import { TrialMiniBar } from "@/components/TrialMiniBar"
 import { useTrialModal } from "@/hooks/useTrialModal"
 import { useFacebookPixel } from "@/hooks/useFacebookPixel"
 import { StickyMobileCTA } from "@/components/StickyMobileCTA"
@@ -135,7 +134,7 @@ const Experiencias = () => {
         <meta property="og:type" content="website" />
       </Helmet>
       <main className="min-h-screen" id="experiencias">
-      <TrialMiniBar />
+      
 
       {/* Hero */}
       <section
