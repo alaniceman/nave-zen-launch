@@ -49,11 +49,12 @@ export const NextClassAutoWidget = ({ tags, labelPrefix, href }: Props) => {
   if (!next) return null;
   return (
     <NextClassWidget
-      when={label ? `${label} ${next.when}` : next.when}
+      when={next.when}
       time={next.item.time}
       title={next.item.title}
       instructor={next.item.instructor}
       href={href}
+      labelPrefix={labelPrefix}
     />
   );
 };
