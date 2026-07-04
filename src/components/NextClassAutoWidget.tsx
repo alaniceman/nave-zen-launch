@@ -15,9 +15,11 @@ interface Props {
   labelPrefix?: string;
   /** Anchor / href when tapping the card */
   href?: string;
+  /** Per-landing session-storage suffix so dismissals don't bleed across pages */
+  storageKey?: string;
 }
 
-export const NextClassAutoWidget = ({ tags, labelPrefix, href }: Props) => {
+export const NextClassAutoWidget = ({ tags, labelPrefix, href, storageKey }: Props) => {
   const { data: scheduleData } = useScheduleEntries();
 
   const next = useMemo(() => {
