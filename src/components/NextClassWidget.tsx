@@ -8,13 +8,15 @@ interface NextClassWidgetProps {
   instructor?: string;
   href?: string;
   labelPrefix?: string;
+  storageKey?: string;
 }
 
-const DISMISS_KEY = "nextClassWidgetDismissed";
+const DEFAULT_DISMISS_KEY = "nextClassWidgetDismissed";
 const SCROLL_TRIGGER = 400;
 const SWIPE_THRESHOLD = 60;
 
-export const NextClassWidget = ({ when, time, title, instructor, href = "#horarios-yoga", labelPrefix = "Próxima clase" }: NextClassWidgetProps) => {
+export const NextClassWidget = ({ when, time, title, instructor, href = "#horarios-yoga", labelPrefix = "Próxima clase", storageKey }: NextClassWidgetProps) => {
+  const dismissKey = storageKey ? `${DEFAULT_DISMISS_KEY}:${storageKey}` : DEFAULT_DISMISS_KEY;
   const [visible, setVisible] = useState(false);
   const [dismissed, setDismissed] = useState(false);
   const [drag, setDrag] = useState({ x: 0, y: 0 });
@@ -24,8 +26,8 @@ export const NextClassWidget = ({ when, time, title, instructor, href = "#horari
   // Restore dismissed state per session
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (sessionStorage.getItem(DISMISS_KEY) === "1") setDismissed(true);
-  }, []);
+    if (sessionStorage.getItem(dismissKey) === "1") setDismissed(true);
+  }, [dismissKey]);
 
   // Scroll trigger
   useEffect(() => {
@@ -37,7 +39,7 @@ export const NextClassWidget = ({ when, time, title, instructor, href = "#horari
   }, [dismissed]);
 
   const dismiss = () => {
-    sessionStorage.setItem(DISMISS_KEY, "1");
+    sessionStorage.setItem(dismissKey, "1");
     setDismissed(true);
   };
 
