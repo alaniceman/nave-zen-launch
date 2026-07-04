@@ -331,6 +331,67 @@ const YogaLasCondes = () => {
           </div>
         </section>
 
+
+        {/* Ice Bath opcional — complemento del yoga */}
+        <section className="py-16 md:py-20 bg-gradient-to-b from-background via-primary/5 to-background">
+          <div className="container mx-auto px-6 max-w-5xl">
+            <div className="bg-card rounded-3xl border border-primary/15 overflow-hidden shadow-lg">
+              <div className="grid md:grid-cols-2 gap-0">
+                <div className="relative min-h-[260px] md:min-h-full">
+                  <img
+                    src={studioIceSereno.url}
+                    alt="Ice Bath a 3°C opcional en Nave Studio para complementar el yoga"
+                    className="absolute inset-0 w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-primary/40 to-transparent" />
+                </div>
+                <div className="p-8 md:p-12 flex flex-col justify-center">
+                  <div className="inline-flex items-center gap-2 bg-primary/10 text-primary text-xs px-3 py-1.5 rounded-full mb-4 self-start">
+                    <Snowflake className="w-3.5 h-3.5" />
+                    Opcional · Incluido en Membresías Completas
+                  </div>
+                  <h2 className="text-2xl md:text-4xl font-bold text-primary font-space mb-4 leading-tight">
+                    Cierra tu práctica con un<br />Ice Bath a 3°C
+                  </h2>
+                  <p className="text-muted-foreground font-inter text-base md:text-lg mb-6 leading-relaxed">
+                    Después de tu clase de yoga, sumérgete 2 minutos en agua a 3°C guiado por el Método Wim Hof. Reduce inflamación, acelera la recuperación y potencia la sensación de calma que ya trajo tu práctica.
+                  </p>
+                  <ul className="space-y-2.5 mb-8">
+                    <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">
+                      <Check className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                      Efecto anti-inflamatorio y recuperación muscular
+                    </li>
+                    <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">
+                      <Check className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                      Regula el sistema nervioso y libera endorfinas
+                    </li>
+                    <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">
+                      <Check className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                      Requiere 1 sesión previa guiada de Wim Hof (por seguridad)
+                    </li>
+                  </ul>
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <a
+                      href="/criomedicina-metodo-wim-hof"
+                      className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white rounded-full px-6 py-3 font-semibold font-inter text-sm transition-all hover:scale-105"
+                    >
+                      Conocer Ice Bath
+                      <ArrowRight className="w-4 h-4" />
+                    </a>
+                    <a
+                      href="#planes-completas"
+                      className="inline-flex items-center justify-center gap-2 border border-primary/30 text-primary hover:bg-primary/5 rounded-full px-6 py-3 font-medium font-inter text-sm transition-all"
+                    >
+                      Ver membresías completas
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Instructores de Yoga */}
         <CoachesSection filterIds={["maral", "amanda", "mar", "vianny", "karim"]} />
 
