@@ -5,6 +5,8 @@ import { ArrowDown, Check, Sparkles, Shield } from "lucide-react";
 import { Footer } from "@/components/Footer";
 import { PlanPruebaFormModal } from "@/components/plan-prueba/PlanPruebaFormModal";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
+import { AskNaveBar } from "@/components/AskNaveBar";
+
 
 const ScheduleDayCards = lazy(() => import("@/components/ScheduleDayCards"));
 const ReviewsTrustBar = lazy(() =>
