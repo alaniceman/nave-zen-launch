@@ -14,6 +14,46 @@ import protocolo15MinutosHeroImage from "@/assets/blog-protocolo-15-minutos-hero
 const Blog = () => {
   const blogPosts = [
     {
+      title: "Yin Yoga: qué es, beneficios y por qué cambia tu cuerpo desde la primera clase",
+      slug: "/blog/yin-yoga-beneficios-movilidad-flexibilidad",
+      excerpt: "Descubre qué es el Yin Yoga, sus beneficios para la flexibilidad y el sistema nervioso, y por qué una sola clase puede transformar tu relación con el cuerpo.",
+      author: "Nave Studio",
+      date: "4 de julio, 2026",
+      categories: ["Yoga", "Yin", "Flexibilidad", "Bienestar"],
+      image: yinVinyasaHeroImage,
+      imageAlt: "Práctica de Yin Yoga en Nave Studio Las Condes"
+    },
+    {
+      title: "Vinyasa Yoga: el arte de moverte con la respiración en Las Condes",
+      slug: "/blog/vinyasa-yoga-flujo-respiracion-las-condes",
+      excerpt: "Descubre el Vinyasa Yoga en Las Condes: flujo continuo de posturas sincronizado con la respiración para ganar fuerza, resistencia y claridad mental.",
+      author: "Nave Studio",
+      date: "4 de julio, 2026",
+      categories: ["Yoga", "Vinyasa", "Respiración", "Bienestar"],
+      image: yinVinyasaHeroImage,
+      imageAlt: "Práctica de Vinyasa Yoga en Nave Studio Las Condes"
+    },
+    {
+      title: "Power Yoga: fuerza, resistencia y foco en una sola práctica",
+      slug: "/blog/power-yoga-fuerza-resistencia",
+      excerpt: "Descubre el Power Yoga en Las Condes: una práctica de alta intensidad que desarrolla fuerza muscular, resistencia y determinación.",
+      author: "Nave Studio",
+      date: "4 de julio, 2026",
+      categories: ["Yoga", "Power Yoga", "Fuerza", "Bienestar"],
+      image: yinVinyasaHeroImage,
+      imageAlt: "Práctica de Power Yoga en Nave Studio Las Condes"
+    },
+    {
+      title: "Integral Yoga: el equilibrio perfecto entre fuerza, flexibilidad y meditación",
+      slug: "/blog/integral-yoga-equilibrio-meditacion",
+      excerpt: "Descubre el Integral Yoga en Las Condes: una práctica completa que equilibra fuerza, flexibilidad y meditación activa para todos los niveles.",
+      author: "Nave Studio",
+      date: "4 de julio, 2026",
+      categories: ["Yoga", "Integral", "Meditación", "Bienestar"],
+      image: yinVinyasaHeroImage,
+      imageAlt: "Práctica de Integral Yoga en Nave Studio Las Condes"
+    },
+    {
       title: "Protocolo 15 Minutos: Respiración + Agua Fría para uso diario",
       slug: "/blog/protocolo-15-minutos-respiracion-agua-fria",
       excerpt: "Protocolo diario de 15 minutos que combina respiración consciente + exposición al frío para activar tu fisiología, entrenar tu mente y mejorar tu bienestar.",
