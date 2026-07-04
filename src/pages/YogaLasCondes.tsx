@@ -223,7 +223,7 @@ const YogaLasCondes = () => {
               Nave Studio
             </p>
             <p className="text-base md:text-lg text-white/60 font-inter mb-10 tracking-wide">
-              Yin · Yang · Vinyasa · Vinyasa Somático · Integral · Power Yoga
+              Yin · Yang · Vinyasa · Vinyasa Somático · Integral · Power · Power Vinyasa
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
@@ -257,7 +257,7 @@ const YogaLasCondes = () => {
             <div className="text-center mb-16">
               <p className="text-accent font-medium font-inter text-sm uppercase tracking-widest mb-3">Encuentra tu práctica</p>
               <h2 className="text-3xl md:text-5xl font-bold text-primary font-space mb-5">
-                5 estilos de Yoga
+                7 estilos de Yoga
               </h2>
               <p className="text-muted-foreground font-inter max-w-2xl mx-auto text-lg">
                 Desde la calma del Yin hasta la intensidad del Power Yoga, hay una práctica que resuena contigo.
