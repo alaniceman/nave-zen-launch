@@ -10,6 +10,10 @@ import habitosDisciplinaHeroImage from "@/assets/blog-habitos-disciplina-hero.jp
 import aguaFriaGuiadoHeroImage from "@/assets/blog-agua-fria-guiado-hero.jpg";
 import protocoloSeguroHeroImage from "@/assets/blog-protocolo-seguro-hero.jpg";
 import protocolo15MinutosHeroImage from "@/assets/blog-protocolo-15-minutos-hero.jpg";
+import yinHeroAsset from "@/assets/studio-savasana.webp.asset.json";
+import vinyasaHeroAsset from "@/assets/studio-yoga-perro.webp.asset.json";
+import powerHeroAsset from "@/assets/studio-corazon.webp.asset.json";
+import integralHeroAsset from "@/assets/studio-meditacion-loto.webp.asset.json";
 
 const Blog = () => {
   const blogPosts = [
