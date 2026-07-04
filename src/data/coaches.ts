@@ -110,10 +110,22 @@ export const coaches: Coach[] = [
     bio: "Vianny es Nutricionista Funcional Integrativa, especialista en Psiconutrición y Sistema Nervioso, Coach Somática e instructora de Vinyasa Somático y Yin Yoga. Su trabajo integra el movimiento consciente, la regulación del sistema nervioso y la nutrición funcional para acompañar procesos de reconexión profunda con el cuerpo. Guía prácticas que invitan a habitarse con presencia, suavidad y coherencia, construyendo desde ahí una vida más viva y alineada.",
     galleryImages: [],
   },
+  {
+    id: "karim",
+    slug: "karim-campusano",
+    name: "Karim Campusano",
+    role: "Instructora de Power Vinyasa · Vinyasa Yoga Master Teacher (500hrs RYT)",
+    credentials: "Vinyasa Yoga Master Teacher (500hrs RYT) — Federación Internacional de Yoga · Antropóloga Social U. de Chile",
+    purpose: "Apasionada por el movimiento, la exploración y el aprendizaje progresivo. Me gusta crear espacios desafiantes y accesibles a la vez, donde cada persona pueda desarrollar su práctica a su propio ritmo.",
+    image: "/__l5e/assets-v1/6b85aa3f-927c-4fdb-a41e-b6d69c2b59dd/karim.webp",
+    tags: ["Movimiento"],
+    bio: "Karim es Vinyasa Yoga Master Teacher certificada con 500hrs RYT por la Federación Internacional de Yoga y Antropóloga Social de la Universidad de Chile. Guía clases de Power Vinyasa que combinan fuerza, movilidad y conciencia corporal, con progresiones adaptadas a cada nivel. Su enfoque une el rigor de la práctica con una mirada humana y curiosa, creando espacios desafiantes y accesibles donde cada persona puede desarrollar su propio camino.",
+    galleryImages: [],
+  },
 ];
 
 // Coaches that have a matching professional in the DB and can be booked via agenda
-export const BOOKABLE_SLUGS = ["sol", "maral", "rolo", "mar", "amanda", "vianny-macero"];
+export const BOOKABLE_SLUGS = ["sol", "maral", "rolo", "mar", "amanda", "vianny-macero", "karim-campusano"];
 
 export const getCoachBySlug = (slug: string): Coach | undefined =>
   coaches.find((c) => c.slug === slug);

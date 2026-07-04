@@ -49,6 +49,12 @@ const yogaStyles = [
     description: "Regulá tu sistema nervioso a través del flujo de movimiento, respiración, vibración y quietud. Una invitación a habitar tu cuerpo y soltar lo rígido.",
     benefits: ["Regulación nerviosa", "Soltar tensión profunda", "Conexión cuerpo-mente"],
   },
+  {
+    name: "Power Vinyasa",
+    icon: Zap,
+    description: "Una práctica dinámica y energizante para desarrollar fuerza, movilidad y conciencia corporal, con opciones y progresiones para adaptar cada postura a tu nivel sin perder el disfrute del proceso.",
+    benefits: ["Fuerza y movilidad", "Progresiones adaptables", "Conciencia corporal"],
+  },
 ];
 
 const galleryImages = [
@@ -217,7 +223,7 @@ const YogaLasCondes = () => {
               Nave Studio
             </p>
             <p className="text-base md:text-lg text-white/60 font-inter mb-10 tracking-wide">
-              Yin · Yang · Vinyasa · Vinyasa Somático · Integral · Power Yoga
+              Yin · Yang · Vinyasa · Vinyasa Somático · Integral · Power · Power Vinyasa
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
@@ -251,7 +257,7 @@ const YogaLasCondes = () => {
             <div className="text-center mb-16">
               <p className="text-accent font-medium font-inter text-sm uppercase tracking-widest mb-3">Encuentra tu práctica</p>
               <h2 className="text-3xl md:text-5xl font-bold text-primary font-space mb-5">
-                5 estilos de Yoga
+                7 estilos de Yoga
               </h2>
               <p className="text-muted-foreground font-inter max-w-2xl mx-auto text-lg">
                 Desde la calma del Yin hasta la intensidad del Power Yoga, hay una práctica que resuena contigo.
@@ -289,7 +295,7 @@ const YogaLasCondes = () => {
         </section>
 
         {/* Instructores de Yoga */}
-        <CoachesSection filterIds={["maral", "amanda", "mar", "vianny"]} />
+        <CoachesSection filterIds={["maral", "amanda", "mar", "vianny", "karim"]} />
 
         {/* Horarios */}
         <section id="horarios-yoga" className="py-20 md:py-28 bg-muted">
