@@ -12,6 +12,7 @@ import { TrialYogaSection } from "@/components/TrialYogaSection"
 import { GiftCardSection } from "@/components/GiftCardSection"
 import { StickyMobileCTA } from "@/components/StickyMobileCTA"
 import { BautizoHieloPromo } from "@/components/BautizoHieloPromo"
+import { NextClassAutoWidget } from "@/components/NextClassAutoWidget"
 
 const Index = () => {
   return (
