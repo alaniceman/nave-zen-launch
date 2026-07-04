@@ -145,14 +145,14 @@ import { ReviewsTrustBar } from "@/components/ReviewsTrustBar";
                text: "No. Es apto para principiantes y adaptamos la sesión a tu nivel.",
              },
            },
-           {
-             "@type": "Question",
-             name: "¿Cuánto dura la sesión de Método Wim Hof?",
-             acceptedAnswer: {
-               "@type": "Answer",
-               text: "Depende del formato, pero considera aproximadamente 60-90 minutos.",
-             },
-           },
+            {
+              "@type": "Question",
+              name: "¿Cuánto dura la sesión de Método Wim Hof?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "La sesión dura 60 minutos.",
+              },
+            },
            {
              "@type": "Question",
              name: "¿Dónde queda Nave Studio?",
@@ -700,10 +700,10 @@ import { ReviewsTrustBar } from "@/components/ReviewsTrustBar";
                  q: "¿Necesito experiencia?",
                  a: "No. Es apto para principiantes y adaptamos la sesión a tu nivel.",
                },
-               {
-                 q: "¿Cuánto dura la sesión?",
-                 a: "Depende del formato, pero considera aproximadamente 60–90 minutos.",
-               },
+                {
+                  q: "¿Cuánto dura la sesión?",
+                  a: "La sesión dura 60 minutos.",
+                },
                {
                  q: "¿Tengo que estar mucho rato en el agua fría?",
                  a: "No. La duración se ajusta. El objetivo es técnica y regulación, no récords.",
