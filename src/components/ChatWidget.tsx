@@ -169,12 +169,30 @@ export const ChatWidget = forwardRef<ChatWidgetHandle>(function ChatWidget(_prop
     } finally {
       setIsLoading(false);
     }
-  }, [input, isLoading, messages, sessionCount]);
+  }, [isLoading, messages, sessionCount, sessionId]);
+
+  const send = useCallback(() => sendMessage(input), [sendMessage, input]);
+
+  // Listen for global ask events (from AskNaveBar across the site)
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent<{ question?: string }>).detail;
+      const q = detail?.question?.trim();
+      setOpen(true);
+      if (q) {
+        // small delay so the panel is mounted and the message appears after opening
+        setTimeout(() => sendMessage(q), 60);
+      }
+    };
+    window.addEventListener("nave:ask", handler as EventListener);
+    return () => window.removeEventListener("nave:ask", handler as EventListener);
+  }, [sendMessage]);
 
   const handleClose = useCallback(() => {
     abortRef.current?.abort();
     setOpen(false);
   }, []);
+
 
   const limitReached = sessionCount >= SESSION_LIMIT;
 
