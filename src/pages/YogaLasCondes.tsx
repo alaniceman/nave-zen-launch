@@ -574,7 +574,7 @@ const YogaLasCondes = () => {
         </section>
 
         {/* Membresías completas — Eclipse, Órbita, Universo */}
-        <section className="py-20 md:py-28 bg-background">
+        <section id="planes-completas" className="py-20 md:py-28 bg-background">
           <div className="container mx-auto px-6 max-w-6xl">
             <div className="text-center mb-16">
               <p className="text-accent font-medium font-inter text-sm uppercase tracking-widest mb-3">Todas las experiencias</p>
