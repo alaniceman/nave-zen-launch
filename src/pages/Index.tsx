@@ -31,7 +31,6 @@ const Index = () => {
       </Helmet>
       <main className="overflow-x-hidden" id="home">
       <HeroSection />
-      <TrialMiniBar />
       <AskNaveBar />
       <SocialProofSection />
 
