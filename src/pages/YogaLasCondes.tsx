@@ -180,6 +180,70 @@ const structuredDataYoga = {
   }
 };
 
+const faqs = [
+  {
+    q: "¿Necesito experiencia previa para tomar clases de yoga?",
+    a: "No. Todas nuestras clases ofrecen variaciones y progresiones para principiantes y practicantes avanzados. Si es tu primera vez, te recomendamos Yin, Yoga Integral o Vinyasa como punto de partida.",
+  },
+  {
+    q: "¿Qué debo llevar a mi primera clase?",
+    a: "Solo ropa cómoda y una botella de agua. Tenemos mats, cojines, mantas y bloques disponibles sin costo. Llega 10 minutos antes para instalarte con calma.",
+  },
+  {
+    q: "¿Cuál estilo de yoga es mejor para mí?",
+    a: "Depende de tu objetivo: Yin y Vinyasa Somático para relajar y soltar tensión; Vinyasa e Integral para equilibrio cuerpo-mente; Yang, Power y Power Vinyasa si buscas fuerza e intensidad. Puedes probar varios con el Plan de Prueba.",
+  },
+  {
+    q: "¿El Ice Bath es obligatorio si vengo a yoga?",
+    a: "No, es completamente opcional. Puedes practicar solo yoga con nuestras Membresías Solo Yoga. Si quieres complementar con Ice Bath, requerirás una sesión previa guiada de Método Wim Hof por seguridad.",
+  },
+  {
+    q: "¿Cuánto duran las clases y con qué frecuencia debería practicar?",
+    a: "Cada clase dura 60 minutos. Para notar cambios en flexibilidad y bienestar recomendamos al menos 2 clases por semana. Con nuestro plan Yoga Continuo o Universo puedes practicar todos los días.",
+  },
+  {
+    q: "¿Dónde están ubicados?",
+    a: "En Antares 259, Las Condes, Santiago — a pasos del Metro Los Domínicos. Contamos con estacionamiento en el sector.",
+  },
+];
+
+const structuredDataFAQ = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map(f => ({
+    "@type": "Question",
+    "name": f.q,
+    "acceptedAnswer": { "@type": "Answer", "text": f.a },
+  })),
+};
+
+const blogLinks = [
+  {
+    style: "Yin Yoga",
+    title: "Yin Yoga: beneficios para movilidad y flexibilidad",
+    href: "/blog/yin-yoga-beneficios-movilidad-flexibilidad",
+    icon: Flower2,
+  },
+  {
+    style: "Vinyasa Yoga",
+    title: "Vinyasa Yoga: el flujo entre respiración y movimiento",
+    href: "/blog/vinyasa-yoga-flujo-respiracion-las-condes",
+    icon: Wind,
+  },
+  {
+    style: "Power Yoga",
+    title: "Power Yoga: construir fuerza y resistencia sobre el mat",
+    href: "/blog/power-yoga-fuerza-resistencia",
+    icon: Zap,
+  },
+  {
+    style: "Yoga Integral",
+    title: "Yoga Integral: equilibrio entre práctica física y meditación",
+    href: "/blog/integral-yoga-equilibrio-meditacion",
+    icon: Sun,
+  },
+];
+
 const YogaLasCondes = () => {
   const { trackViewContent, trackLead, trackInitiateCheckout } = useFacebookPixel();
   const { data: scheduleData, isLoading: isScheduleLoading } = useScheduleEntries();
@@ -196,6 +260,34 @@ const YogaLasCondes = () => {
       if (items.length === 0) return null;
       return { day: dayKey, dayName: DAY_NAMES_YOGA[dayKey], items };
     }).filter(Boolean) as { day: string; dayName: string; items: typeof scheduleData.scheduleData[string] }[];
+  }, [scheduleData]);
+
+  // Próxima clase de yoga (hoy o el siguiente día con clases) — timezone Chile
+  const nextClass = useMemo(() => {
+    if (!scheduleData) return null;
+    const nowCL = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Santiago" }));
+    // JS: 0=domingo..6=sábado. Nuestro DAY_KEYS_YOGA: 0=lunes..6=domingo
+    const jsDay = nowCL.getDay();
+    const todayIdx = jsDay === 0 ? 6 : jsDay - 1;
+    const nowMin = nowCL.getHours() * 60 + nowCL.getMinutes();
+    for (let offset = 0; offset < 7; offset++) {
+      const idx = (todayIdx + offset) % 7;
+      const dayKey = DAY_KEYS_YOGA[idx];
+      const items = (scheduleData.scheduleData[dayKey] || [])
+        .filter(i => i.color_tag === 'yoga')
+        .sort((a, b) => a.time.localeCompare(b.time));
+      for (const item of items) {
+        const [h, m] = item.time.split(":").map(Number);
+        const itemMin = h * 60 + m;
+        if (offset > 0 || itemMin > nowMin) {
+          return {
+            item,
+            when: offset === 0 ? "hoy" : offset === 1 ? "mañana" : DAY_NAMES_YOGA[dayKey].toLowerCase(),
+          };
+        }
+      }
+    }
+    return null;
   }, [scheduleData]);
 
   useEffect(() => {
@@ -222,6 +314,7 @@ const YogaLasCondes = () => {
         <meta property="og:image" content="https://studiolanave.com/lovable-uploads/82672388-9723-4aee-a1f2-ac72618cd26a.png" />
         <meta property="og:type" content="website" />
         <script type="application/ld+json">{JSON.stringify(structuredDataYoga)}</script>
+        <script type="application/ld+json">{JSON.stringify(structuredDataFAQ)}</script>
       </Helmet>
 
       <main>
@@ -691,12 +784,103 @@ const YogaLasCondes = () => {
           </div>
         </section>
 
+        {/* Cross-links a blog — internal linking SEO */}
+        <section className="py-20 md:py-24 bg-background">
+          <div className="container mx-auto px-6 max-w-6xl">
+            <div className="text-center mb-12">
+              <p className="text-accent font-medium font-inter text-sm uppercase tracking-widest mb-3">Aprende más</p>
+              <h2 className="text-3xl md:text-4xl font-bold text-primary font-space mb-4">
+                Profundiza en tu estilo de yoga
+              </h2>
+              <p className="text-muted-foreground font-inter max-w-2xl mx-auto">
+                Guías detalladas para conocer los beneficios, la técnica y qué esperar de cada práctica.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              {blogLinks.map((b) => {
+                const Icon = b.icon;
+                return (
+                  <a
+                    key={b.href}
+                    href={b.href}
+                    className="group bg-card rounded-2xl p-6 border border-border/50 hover:border-accent/30 hover:shadow-lg transition-all duration-300 flex flex-col"
+                  >
+                    <div className="w-11 h-11 rounded-xl bg-accent/10 flex items-center justify-center mb-4 group-hover:bg-accent/20 transition-colors">
+                      <Icon className="w-5 h-5 text-accent" />
+                    </div>
+                    <p className="text-xs uppercase tracking-wider text-accent font-medium font-inter mb-2">{b.style}</p>
+                    <h3 className="text-base font-bold text-primary font-space leading-snug mb-4 flex-grow">{b.title}</h3>
+                    <span className="text-sm text-accent font-inter font-medium inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+                      Leer artículo <ArrowRight className="w-4 h-4" />
+                    </span>
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section className="py-20 md:py-28 bg-muted">
+          <div className="container mx-auto px-6 max-w-3xl">
+            <div className="text-center mb-12">
+              <p className="text-accent font-medium font-inter text-sm uppercase tracking-widest mb-3">Preguntas frecuentes</p>
+              <h2 className="text-3xl md:text-5xl font-bold text-primary font-space mb-4">
+                Resolvemos tus dudas
+              </h2>
+            </div>
+            <div className="space-y-3">
+              {faqs.map((f, i) => (
+                <details
+                  key={i}
+                  className="group bg-card rounded-2xl border border-border/50 hover:border-accent/30 transition-colors overflow-hidden"
+                >
+                  <summary className="cursor-pointer list-none p-6 flex items-start justify-between gap-4 font-space font-semibold text-primary text-base md:text-lg">
+                    <span className="flex-1">{f.q}</span>
+                    <span className="flex-shrink-0 w-7 h-7 rounded-full bg-accent/10 text-accent flex items-center justify-center text-lg leading-none group-open:rotate-45 transition-transform duration-300">
+                      +
+                    </span>
+                  </summary>
+                  <div className="px-6 pb-6 text-muted-foreground font-inter leading-relaxed">
+                    {f.a}
+                  </div>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* Clase de prueba */}
         <TrialYogaSection />
 
         {/* Ubicación */}
         <LocationSection />
       </main>
+
+      {/* Widget flotante desktop: próxima clase */}
+      {nextClass && (
+        <a
+          href="#horarios-yoga"
+          className="hidden lg:flex fixed bottom-6 left-6 z-40 bg-card/95 backdrop-blur-md border border-accent/30 rounded-2xl shadow-xl px-4 py-3 items-center gap-3 hover:scale-105 hover:shadow-2xl transition-all duration-300 group max-w-xs"
+        >
+          <div className="w-10 h-10 rounded-xl bg-accent/15 flex items-center justify-center flex-shrink-0">
+            <Sparkles className="w-5 h-5 text-accent" />
+          </div>
+          <div className="min-w-0">
+            <p className="text-[10px] uppercase tracking-widest text-accent font-medium font-inter leading-tight">
+              Próxima clase {nextClass.when}
+            </p>
+            <p className="text-sm font-bold text-primary font-space leading-tight truncate">
+              {nextClass.item.time} · {nextClass.item.title}
+            </p>
+            {nextClass.item.instructor && (
+              <p className="text-xs text-muted-foreground font-inter truncate">
+                con {nextClass.item.instructor}
+              </p>
+            )}
+          </div>
+        </a>
+      )}
 
       <Footer />
       <StickyMobileCTA />
