@@ -126,7 +126,10 @@ const Planes = () => {
         </div>
       </section>
 
+      <AskNaveBar />
+
       {/* Planes Anuales Promo - Oferta Enero */}
+
       <PlanesAnualesPromo />
 
       {/* Menú de Intención */}
