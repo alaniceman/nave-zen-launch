@@ -18,6 +18,7 @@ const yogaStyles = [
     icon: Flower2,
     description: "Posturas pasivas y prolongadas para soltar tensión profunda y ganar flexibilidad.",
     benefits: ["Flexibilidad profunda", "Relajación del sistema nervioso", "Liberación de fascia"],
+    href: "/yoga/yin-yoga-las-condes",
   },
   {
     name: "Yang Yoga",
@@ -30,18 +31,21 @@ const yogaStyles = [
     icon: Wind,
     description: "Flujo continuo de posturas sincronizado con la respiración.",
     benefits: ["Coordinación cuerpo-mente", "Resistencia", "Creatividad en movimiento"],
+    href: "/yoga/vinyasa-yoga-las-condes",
   },
   {
     name: "Yoga Integral",
     icon: Sun,
     description: "Combina fuerza, flexibilidad y meditación en una práctica completa.",
     benefits: ["Equilibrio completo", "Meditación activa", "Para todos los niveles"],
+    href: "/yoga/integral-yoga-las-condes",
   },
   {
     name: "Power Yoga",
     icon: Zap,
     description: "Yoga de alta intensidad enfocado en fuerza y resistencia muscular.",
     benefits: ["Alta intensidad", "Tonificación", "Desafío físico"],
+    href: "/yoga/power-yoga-las-condes",
   },
   {
     name: "Vinyasa Somático",
