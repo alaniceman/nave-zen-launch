@@ -10,7 +10,7 @@ import { TrialYogaSection } from "@/components/TrialYogaSection";
 import { Footer } from "@/components/Footer";
 import { ReviewsTrustBar } from "@/components/ReviewsTrustBar";
 import { Badge } from "@/components/ui/badge";
-import { Flower2, Flame, Wind, Sun, Zap, Heart, Check, Star, Sparkles } from "lucide-react";
+import { Flower2, Flame, Wind, Sun, Zap, Heart, Check, Star, Sparkles, ArrowRight } from "lucide-react";
 
 const yogaStyles = [
   {
@@ -18,6 +18,7 @@ const yogaStyles = [
     icon: Flower2,
     description: "Posturas pasivas y prolongadas para soltar tensión profunda y ganar flexibilidad.",
     benefits: ["Flexibilidad profunda", "Relajación del sistema nervioso", "Liberación de fascia"],
+    href: "/yoga/yin-yoga-las-condes",
   },
   {
     name: "Yang Yoga",
@@ -30,18 +31,21 @@ const yogaStyles = [
     icon: Wind,
     description: "Flujo continuo de posturas sincronizado con la respiración.",
     benefits: ["Coordinación cuerpo-mente", "Resistencia", "Creatividad en movimiento"],
+    href: "/yoga/vinyasa-yoga-las-condes",
   },
   {
     name: "Yoga Integral",
     icon: Sun,
     description: "Combina fuerza, flexibilidad y meditación en una práctica completa.",
     benefits: ["Equilibrio completo", "Meditación activa", "Para todos los niveles"],
+    href: "/yoga/integral-yoga-las-condes",
   },
   {
     name: "Power Yoga",
     icon: Zap,
     description: "Yoga de alta intensidad enfocado en fuerza y resistencia muscular.",
     benefits: ["Alta intensidad", "Tonificación", "Desafío físico"],
+    href: "/yoga/power-yoga-las-condes",
   },
   {
     name: "Vinyasa Somático",
@@ -264,9 +268,9 @@ const YogaLasCondes = () => {
               </p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {yogaStyles.map((style, index) => {
+              {yogaStyles.map((style) => {
                 const Icon = style.icon;
-                return (
+                const card = (
                   <article
                     key={style.name}
                     className="group bg-card rounded-2xl p-7 border border-border/50 hover:border-accent/30 hover:shadow-xl transition-all duration-500 relative overflow-hidden"
@@ -286,8 +290,18 @@ const YogaLasCondes = () => {
                           </li>
                         ))}
                       </ul>
+                      {style.href && (
+                        <p className="mt-5 text-accent font-inter text-sm font-medium inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+                          Explorar {style.name} <ArrowRight className="w-4 h-4" />
+                        </p>
+                      )}
                     </div>
                   </article>
+                );
+                return style.href ? (
+                  <a key={style.name} href={style.href} className="block no-underline">{card}</a>
+                ) : (
+                  <div key={style.name}>{card}</div>
                 );
               })}
             </div>
