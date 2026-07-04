@@ -200,13 +200,13 @@ const seoData = {
     ogImage: "https://studiolanave.com/og-image.png",
     ogType: "website"
   },
-  "/contacto": {
-    title: "Contacto y ubicación | Nave Studio Las Condes",
-    description: "Contáctanos por WhatsApp o visítanos en Antares 259, Las Condes. Horarios, teléfono y cómo llegar a Nave Studio.",
-    canonical: "https://studiolanave.com/contacto",
-    ogTitle: "Contacto | Nave Studio Las Condes",
-    ogDescription: "WhatsApp, dirección y horarios de Nave Studio en Antares 259, Las Condes.",
-    ogImage: "https://studiolanave.com/og-image.png",
+  "/conoce-nuestro-lugar-placeholder-remove": {
+    title: "",
+    description: "",
+    canonical: "",
+    ogTitle: "",
+    ogDescription: "",
+    ogImage: "",
     ogType: "website"
   },
   "/conoce-el-lugar": {
