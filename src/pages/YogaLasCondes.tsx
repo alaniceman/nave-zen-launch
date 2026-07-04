@@ -8,6 +8,7 @@ import { LocationSection } from "@/components/LocationSection";
 import { StickyMobileCTA } from "@/components/StickyMobileCTA";
 import { TrialYogaSection } from "@/components/TrialYogaSection";
 import { Footer } from "@/components/Footer";
+import { NextClassWidget } from "@/components/NextClassWidget";
 import { ReviewsTrustBar } from "@/components/ReviewsTrustBar";
 import { Badge } from "@/components/ui/badge";
 import { Flower2, Flame, Wind, Sun, Zap, Heart, Check, Star, Sparkles, ArrowRight, Snowflake } from "lucide-react";
@@ -857,29 +858,14 @@ const YogaLasCondes = () => {
         <LocationSection />
       </main>
 
-      {/* Widget flotante desktop: próxima clase */}
+      {/* Widget flotante: próxima clase (scroll trigger + swipe-to-dismiss en mobile) */}
       {nextClass && (
-        <a
-          href="#horarios-yoga"
-          className="hidden lg:flex fixed bottom-6 left-6 z-40 bg-card/95 backdrop-blur-md border border-accent/30 rounded-2xl shadow-xl px-4 py-3 items-center gap-3 hover:scale-105 hover:shadow-2xl transition-all duration-300 group max-w-xs"
-        >
-          <div className="w-10 h-10 rounded-xl bg-accent/15 flex items-center justify-center flex-shrink-0">
-            <Sparkles className="w-5 h-5 text-accent" />
-          </div>
-          <div className="min-w-0">
-            <p className="text-[10px] uppercase tracking-widest text-accent font-medium font-inter leading-tight">
-              Próxima clase {nextClass.when}
-            </p>
-            <p className="text-sm font-bold text-primary font-space leading-tight truncate">
-              {nextClass.item.time} · {nextClass.item.title}
-            </p>
-            {nextClass.item.instructor && (
-              <p className="text-xs text-muted-foreground font-inter truncate">
-                con {nextClass.item.instructor}
-              </p>
-            )}
-          </div>
-        </a>
+        <NextClassWidget
+          when={nextClass.when}
+          time={nextClass.item.time}
+          title={nextClass.item.title}
+          instructor={nextClass.item.instructor}
+        />
       )}
 
       <Footer />
