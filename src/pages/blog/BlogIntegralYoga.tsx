@@ -1,8 +1,9 @@
 import { Helmet } from "react-helmet-async";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
+import heroAsset from "@/assets/studio-meditacion-loto.webp.asset.json";
 
-const heroImage = "/lovable-uploads/82672388-9723-4aee-a1f2-ac72618cd26a.png";
+const heroImage = heroAsset.url;
 const pubDate = "2026-07-04T00:00:00-04:00";
 
 const jsonLdData = {

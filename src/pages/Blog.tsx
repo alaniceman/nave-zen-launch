@@ -10,6 +10,10 @@ import habitosDisciplinaHeroImage from "@/assets/blog-habitos-disciplina-hero.jp
 import aguaFriaGuiadoHeroImage from "@/assets/blog-agua-fria-guiado-hero.jpg";
 import protocoloSeguroHeroImage from "@/assets/blog-protocolo-seguro-hero.jpg";
 import protocolo15MinutosHeroImage from "@/assets/blog-protocolo-15-minutos-hero.jpg";
+import yinHeroAsset from "@/assets/studio-savasana.webp.asset.json";
+import vinyasaHeroAsset from "@/assets/studio-yoga-perro.webp.asset.json";
+import powerHeroAsset from "@/assets/studio-corazon.webp.asset.json";
+import integralHeroAsset from "@/assets/studio-meditacion-loto.webp.asset.json";
 
 const Blog = () => {
   const blogPosts = [
@@ -20,7 +24,7 @@ const Blog = () => {
       author: "Nave Studio",
       date: "4 de julio, 2026",
       categories: ["Yoga", "Yin", "Flexibilidad", "Bienestar"],
-      image: yinVinyasaHeroImage,
+      image: yinHeroAsset.url,
       imageAlt: "Práctica de Yin Yoga en Nave Studio Las Condes"
     },
     {
@@ -30,7 +34,7 @@ const Blog = () => {
       author: "Nave Studio",
       date: "4 de julio, 2026",
       categories: ["Yoga", "Vinyasa", "Respiración", "Bienestar"],
-      image: yinVinyasaHeroImage,
+      image: vinyasaHeroAsset.url,
       imageAlt: "Práctica de Vinyasa Yoga en Nave Studio Las Condes"
     },
     {
@@ -40,7 +44,7 @@ const Blog = () => {
       author: "Nave Studio",
       date: "4 de julio, 2026",
       categories: ["Yoga", "Power Yoga", "Fuerza", "Bienestar"],
-      image: yinVinyasaHeroImage,
+      image: powerHeroAsset.url,
       imageAlt: "Práctica de Power Yoga en Nave Studio Las Condes"
     },
     {
@@ -50,7 +54,7 @@ const Blog = () => {
       author: "Nave Studio",
       date: "4 de julio, 2026",
       categories: ["Yoga", "Integral", "Meditación", "Bienestar"],
-      image: yinVinyasaHeroImage,
+      image: integralHeroAsset.url,
       imageAlt: "Práctica de Integral Yoga en Nave Studio Las Condes"
     },
     {
