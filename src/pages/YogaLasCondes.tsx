@@ -367,7 +367,10 @@ const YogaLasCondes = () => {
           <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background to-transparent" />
         </section>
 
+        <AskNaveBar />
+
         {/* Reseñas reales de Yoga */}
+
         <section className="py-12 md:py-16 bg-neutral-light">
           <div className="container mx-auto px-6">
             <ReviewsTrustBar category="Yoga" title="Lo que dicen nuestras alumnas de Yoga" />
