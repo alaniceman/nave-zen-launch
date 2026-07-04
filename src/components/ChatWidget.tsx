@@ -46,8 +46,8 @@ export const ChatWidget = forwardRef<ChatWidgetHandle>(function ChatWidget(_prop
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, open]);
 
-  const send = useCallback(async () => {
-    const text = input.trim();
+  const sendMessage = useCallback(async (rawText: string) => {
+    const text = rawText.trim();
     if (!text || isLoading) return;
     if (sessionCount >= SESSION_LIMIT) return;
 
@@ -65,6 +65,7 @@ export const ChatWidget = forwardRef<ChatWidgetHandle>(function ChatWidget(_prop
     let assistantSoFar = "";
 
     const allMessages = [...messages.filter((m) => m !== INITIAL_MSG), userMsg];
+
 
     try {
       const resp = await fetch(CHAT_URL, {
