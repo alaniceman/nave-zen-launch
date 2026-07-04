@@ -66,26 +66,26 @@ const seoData = {
     ogType: "website"
   },
   "/terminos": {
-    title: "Términos de servicio | Nave Studio",
-    description: "Términos de servicio de Nave Studio",
+    title: "Términos y condiciones de servicio | Nave Studio",
+    description: "Términos y condiciones de uso de los servicios de Nave Studio: reservas, cancelaciones, membresías, pagos y responsabilidades del usuario.",
     canonical: "https://studiolanave.com/terminos",
-    ogTitle: "Términos de servicio | Nave Studio",
-    ogDescription: "Términos y condiciones de servicio de Nave Studio.",
+    ogTitle: "Términos y condiciones | Nave Studio",
+    ogDescription: "Condiciones de reservas, cancelaciones, membresías y pagos de Nave Studio.",
     ogImage: "https://studiolanave.com/og-image.png",
     ogType: "website"
   },
   "/privacidad": {
-    title: "Política de privacidad | Nave Studio",
-    description: "Política de privacidad de Nave Studio",
+    title: "Política de privacidad y datos personales | Nave Studio",
+    description: "Cómo Nave Studio recopila, usa y protege tus datos personales conforme a la Ley 19.628. Derechos, cookies y contacto para consultas de privacidad.",
     canonical: "https://studiolanave.com/privacidad",
     ogTitle: "Política de privacidad | Nave Studio",
-    ogDescription: "Política de privacidad y protección de datos de Nave Studio.",
+    ogDescription: "Cómo protegemos tus datos personales y qué derechos tienes bajo la Ley 19.628 en Chile.",
     ogImage: "https://studiolanave.com/og-image.png",
     ogType: "website"
   },
   "/criomedicina-metodo-wim-hof": {
-    title: "Criomedicina (Método Wim Hof) en Chile — Ice Bath & Breathwork | Nave Studio",
-    description: "Sesiones guiadas de Método Wim Hof en Santiago (Las Condes): respiración + baño de hielo a 3 °C. Horarios, precios y reserva online.",
+    title: "Criomedicina Wim Hof en Santiago | Nave Studio",
+    description: "Sesiones guiadas de Método Wim Hof en Las Condes: respiración + baño de hielo a 3 °C. Horarios, precios y reserva online.",
     canonical: "https://studiolanave.com/criomedicina-metodo-wim-hof",
     ogTitle: "Método Wim Hof en Chile — Ice Bath y Breathwork | Nave Studio",
     ogDescription: "Sesiones guiadas de respiración + baño de hielo a 3°C en Las Condes. Instructores certificados. Reserva online.",
@@ -93,11 +93,20 @@ const seoData = {
     ogType: "website"
   },
   "/criomedicina-ice-bath-en-grupo": {
-    title: "Criomedicina en grupo — Ice Bath grupal con descuento | Nave Studio",
-    description: "Experiencia grupal de criomedicina (Método Wim Hof) en Santiago. Descuentos especiales para grupos de 3-10 personas. Reserva tu cupo grupal.",
+    title: "Ice Bath grupal Wim Hof | Nave Studio",
+    description: "Experiencia grupal de criomedicina (Método Wim Hof) en Santiago. Descuentos para grupos de 3-10 personas. Reserva tu cupo grupal.",
     canonical: "https://studiolanave.com/criomedicina-ice-bath-en-grupo",
-    ogTitle: "Ice Bath grupal con descuento — Criomedicina en grupo | Nave Studio",
-    ogDescription: "Experiencia de Método Wim Hof para grupos de 3-10 personas. Descuentos especiales. Reserva tu cupo grupal ahora.",
+    ogTitle: "Ice Bath grupal con descuento | Nave Studio",
+    ogDescription: "Método Wim Hof para grupos de 3-10 personas. Descuentos especiales. Reserva tu cupo grupal.",
+    ogImage: "https://studiolanave.com/og-image.png",
+    ogType: "website"
+  },
+  "/criomedicina-metodo-wim-hof-las-condes": {
+    title: "Método Wim Hof en Las Condes | Nave Studio",
+    description: "Vive el Método Wim Hof en Las Condes: respiración consciente + baño de hielo a 3 °C guiado por instructores certificados. Reserva tu sesión.",
+    canonical: "https://studiolanave.com/criomedicina-metodo-wim-hof-las-condes",
+    ogTitle: "Método Wim Hof en Las Condes | Nave Studio",
+    ogDescription: "Respiración + Ice Bath a 3 °C con instructores certificados en Las Condes. Agenda tu sesión.",
     ogImage: "https://studiolanave.com/og-image.png",
     ogType: "website"
   },
@@ -116,6 +125,123 @@ const seoData = {
     canonical: "https://studiolanave.com/cyber-2025",
     ogTitle: "🔥 Cyber La Nave 2025 — 80% OFF en entrenamientos de bienestar",
     ogDescription: "Solo quedan 4 cupos. Método Wim Hof, Ice Bath, Yoga y Biohacking a precio único. Termina el 8 de octubre. ⏰",
+    ogImage: "https://studiolanave.com/og-image.png",
+    ogType: "website"
+  },
+  "/san-valentin": {
+    title: "San Valentín en Nave Studio | Regalo de bienestar en pareja",
+    description: "Regala una experiencia distinta este San Valentín: sesión de Ice Bath, Wim Hof o Yoga en pareja en Nave Studio Las Condes.",
+    canonical: "https://studiolanave.com/san-valentin",
+    ogTitle: "San Valentín en Nave Studio — Bienestar en pareja",
+    ogDescription: "Experiencia de Ice Bath, Wim Hof o Yoga en pareja este 14 de febrero en Las Condes.",
+    ogImage: "https://studiolanave.com/og-image.png",
+    ogType: "website"
+  },
+  "/marzo-reset": {
+    title: "Marzo Reset | Vuelve con energía a la rutina | Nave Studio",
+    description: "Reinicia tu año en marzo con Ice Bath, Wim Hof y Yoga en Las Condes. Planes especiales para volver con energía y foco a tu rutina.",
+    canonical: "https://studiolanave.com/marzo-reset",
+    ogTitle: "Marzo Reset — Empieza el año con energía | Nave Studio",
+    ogDescription: "Planes de marzo con Ice Bath, Wim Hof y Yoga para reiniciar tu año en Las Condes.",
+    ogImage: "https://studiolanave.com/og-image.png",
+    ogType: "website"
+  },
+  "/dia-de-la-madre": {
+    title: "Día de la Madre | Regala bienestar en Nave Studio",
+    description: "Sorprende a mamá con una experiencia de bienestar en Nave Studio: Yoga, Ice Bath o Wim Hof con giftcards personalizadas en Las Condes.",
+    canonical: "https://studiolanave.com/dia-de-la-madre",
+    ogTitle: "Día de la Madre — Giftcards de bienestar | Nave Studio",
+    ogDescription: "Regálale a mamá una experiencia de Yoga, Ice Bath o Wim Hof en Las Condes.",
+    ogImage: "https://studiolanave.com/og-image.png",
+    ogType: "website"
+  },
+  "/promo-invierno": {
+    title: "Promo de Invierno | Ice Bath y Wim Hof | Nave Studio",
+    description: "Aprovecha nuestra promoción de invierno para vivir el Método Wim Hof y baños de hielo en Las Condes. Precios especiales por tiempo limitado.",
+    canonical: "https://studiolanave.com/promo-invierno",
+    ogTitle: "Promo de Invierno — Ice Bath y Wim Hof | Nave Studio",
+    ogDescription: "Vive el Método Wim Hof e Ice Bath en Las Condes con precios especiales de invierno.",
+    ogImage: "https://studiolanave.com/og-image.png",
+    ogType: "website"
+  },
+  "/anual": {
+    title: "Plan Anual 2026 | Membresía Nave Studio Las Condes",
+    description: "Membresía anual de Nave Studio: Yoga ilimitado, Ice Bath y Wim Hof en Las Condes con el mejor precio del año. Cupos limitados.",
+    canonical: "https://studiolanave.com/anual",
+    ogTitle: "Plan Anual 2026 | Nave Studio",
+    ogDescription: "Membresía anual con el mejor precio: Yoga ilimitado, Ice Bath y Wim Hof en Las Condes.",
+    ogImage: "https://studiolanave.com/og-image.png",
+    ogType: "website"
+  },
+  "/plan-de-prueba": {
+    title: "Plan de prueba 7 o 15 días | Nave Studio Las Condes",
+    description: "Accede a Yoga, Ice Bath, Wim Hof y Breathwork por 7 días ($9.900) o 15 días ($19.900) en Las Condes. Elige tu fecha de inicio.",
+    canonical: "https://studiolanave.com/plan-de-prueba",
+    ogTitle: "Plan de prueba 7 o 15 días | Nave Studio",
+    ogDescription: "Prueba Yoga, Ice Bath y Wim Hof por 7 o 15 días en Las Condes desde $9.900.",
+    ogImage: "https://studiolanave.com/og-image.png",
+    ogType: "website"
+  },
+  "/bonos": {
+    title: "Bonos de sesiones | Packs Ice Bath, Wim Hof y Yoga | Nave Studio",
+    description: "Compra packs de 5, 10 o más sesiones de Ice Bath, Wim Hof o Yoga en Nave Studio Las Condes con descuentos progresivos.",
+    canonical: "https://studiolanave.com/bonos",
+    ogTitle: "Bonos y packs de sesiones | Nave Studio",
+    ogDescription: "Packs de sesiones con descuento para Ice Bath, Wim Hof y Yoga en Las Condes.",
+    ogImage: "https://studiolanave.com/og-image.png",
+    ogType: "website"
+  },
+  "/giftcards": {
+    title: "Giftcards de bienestar | Regala Nave Studio",
+    description: "Regala una giftcard de Nave Studio: Yoga, Ice Bath, Wim Hof o membresías completas. Envío digital inmediato y personalizable.",
+    canonical: "https://studiolanave.com/giftcards",
+    ogTitle: "Giftcards de Nave Studio",
+    ogDescription: "Regala una experiencia de Yoga, Ice Bath o Wim Hof. Envío digital inmediato.",
+    ogImage: "https://studiolanave.com/og-image.png",
+    ogType: "website"
+  },
+  "/contacto": {
+    title: "Contacto y ubicación | Nave Studio Las Condes",
+    description: "Contáctanos por WhatsApp o visítanos en Antares 259, Las Condes. Horarios, teléfono y cómo llegar a Nave Studio.",
+    canonical: "https://studiolanave.com/contacto",
+    ogTitle: "Contacto | Nave Studio Las Condes",
+    ogDescription: "WhatsApp, dirección y horarios de Nave Studio en Antares 259, Las Condes.",
+    ogImage: "https://studiolanave.com/og-image.png",
+    ogType: "website"
+  },
+  "/conoce-el-lugar": {
+    title: "Conoce el estudio | Nave Studio Las Condes",
+    description: "Recorre nuestras instalaciones: sala de Yoga, zona de Ice Bath, camarines y espacio de comunidad en Antares 259, Las Condes.",
+    canonical: "https://studiolanave.com/conoce-el-lugar",
+    ogTitle: "Conoce Nave Studio Las Condes",
+    ogDescription: "Sala de Yoga, zona de Ice Bath y comunidad en Antares 259, Las Condes.",
+    ogImage: "https://studiolanave.com/og-image.png",
+    ogType: "website"
+  },
+  "/icefest": {
+    title: "IceFest | Festival de Ice Bath y Wim Hof | Nave Studio",
+    description: "Vive IceFest en Nave Studio: sesiones grupales de Ice Bath, Wim Hof y comunidad en Las Condes. Cupos limitados.",
+    canonical: "https://studiolanave.com/icefest",
+    ogTitle: "IceFest — Festival de Ice Bath | Nave Studio",
+    ogDescription: "Sesiones grupales de Ice Bath, Wim Hof y comunidad en Las Condes.",
+    ogImage: "https://studiolanave.com/og-image.png",
+    ogType: "website"
+  },
+  "/bautizo-hielo": {
+    title: "Bautizo de hielo | Tu primera sesión de Ice Bath | Nave Studio",
+    description: "Vive tu primer baño de hielo con guía experta en Nave Studio Las Condes. Sesión introductoria segura y transformadora.",
+    canonical: "https://studiolanave.com/bautizo-hielo",
+    ogTitle: "Bautizo de hielo — Tu primer Ice Bath | Nave Studio",
+    ogDescription: "Sesión introductoria de Ice Bath con guía experta en Las Condes.",
+    ogImage: "https://studiolanave.com/og-image.png",
+    ogType: "website"
+  },
+  "/tienda": {
+    title: "Tienda | Merchandising y productos Nave Studio",
+    description: "Compra productos oficiales de Nave Studio: ropa, accesorios y equipamiento para tu práctica de Ice Bath, Wim Hof y Yoga.",
+    canonical: "https://studiolanave.com/tienda",
+    ogTitle: "Tienda Nave Studio",
+    ogDescription: "Productos oficiales de Nave Studio para tu práctica de bienestar.",
     ogImage: "https://studiolanave.com/og-image.png",
     ogType: "website"
   }
