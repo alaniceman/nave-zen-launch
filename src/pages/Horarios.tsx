@@ -38,8 +38,11 @@ export default function Horarios() {
           </div>
         </section>
 
+        <AskNaveBar />
+
         {/* Schedule Day Cards */}
         <ScheduleDayCards />
+
 
         {/* Important Notices */}
         <section className="py-12 px-4 bg-[#C49A6C1F] border-t">
