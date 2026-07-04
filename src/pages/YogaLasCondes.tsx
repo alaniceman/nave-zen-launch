@@ -262,6 +262,34 @@ const YogaLasCondes = () => {
     }).filter(Boolean) as { day: string; dayName: string; items: typeof scheduleData.scheduleData[string] }[];
   }, [scheduleData]);
 
+  // Próxima clase de yoga (hoy o el siguiente día con clases) — timezone Chile
+  const nextClass = useMemo(() => {
+    if (!scheduleData) return null;
+    const nowCL = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Santiago" }));
+    // JS: 0=domingo..6=sábado. Nuestro DAY_KEYS_YOGA: 0=lunes..6=domingo
+    const jsDay = nowCL.getDay();
+    const todayIdx = jsDay === 0 ? 6 : jsDay - 1;
+    const nowMin = nowCL.getHours() * 60 + nowCL.getMinutes();
+    for (let offset = 0; offset < 7; offset++) {
+      const idx = (todayIdx + offset) % 7;
+      const dayKey = DAY_KEYS_YOGA[idx];
+      const items = (scheduleData.scheduleData[dayKey] || [])
+        .filter(i => i.color_tag === 'yoga')
+        .sort((a, b) => a.time.localeCompare(b.time));
+      for (const item of items) {
+        const [h, m] = item.time.split(":").map(Number);
+        const itemMin = h * 60 + m;
+        if (offset > 0 || itemMin > nowMin) {
+          return {
+            item,
+            when: offset === 0 ? "hoy" : offset === 1 ? "mañana" : DAY_NAMES_YOGA[dayKey].toLowerCase(),
+          };
+        }
+      }
+    }
+    return null;
+  }, [scheduleData]);
+
   useEffect(() => {
     trackViewContent({ content_name: "Yoga Las Condes", content_category: "landing_page" });
   }, [trackViewContent]);
