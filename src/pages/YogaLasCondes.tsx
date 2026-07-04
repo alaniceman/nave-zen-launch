@@ -180,6 +180,70 @@ const structuredDataYoga = {
   }
 };
 
+const faqs = [
+  {
+    q: "¿Necesito experiencia previa para tomar clases de yoga?",
+    a: "No. Todas nuestras clases ofrecen variaciones y progresiones para principiantes y practicantes avanzados. Si es tu primera vez, te recomendamos Yin, Yoga Integral o Vinyasa como punto de partida.",
+  },
+  {
+    q: "¿Qué debo llevar a mi primera clase?",
+    a: "Solo ropa cómoda y una botella de agua. Tenemos mats, cojines, mantas y bloques disponibles sin costo. Llega 10 minutos antes para instalarte con calma.",
+  },
+  {
+    q: "¿Cuál estilo de yoga es mejor para mí?",
+    a: "Depende de tu objetivo: Yin y Vinyasa Somático para relajar y soltar tensión; Vinyasa e Integral para equilibrio cuerpo-mente; Yang, Power y Power Vinyasa si buscas fuerza e intensidad. Puedes probar varios con el Plan de Prueba.",
+  },
+  {
+    q: "¿El Ice Bath es obligatorio si vengo a yoga?",
+    a: "No, es completamente opcional. Puedes practicar solo yoga con nuestras Membresías Solo Yoga. Si quieres complementar con Ice Bath, requerirás una sesión previa guiada de Método Wim Hof por seguridad.",
+  },
+  {
+    q: "¿Cuánto duran las clases y con qué frecuencia debería practicar?",
+    a: "Cada clase dura 60 minutos. Para notar cambios en flexibilidad y bienestar recomendamos al menos 2 clases por semana. Con nuestro plan Yoga Continuo o Universo puedes practicar todos los días.",
+  },
+  {
+    q: "¿Dónde están ubicados?",
+    a: "En Antares 259, Las Condes, Santiago — a pasos del Metro Los Domínicos. Contamos con estacionamiento en el sector.",
+  },
+];
+
+const structuredDataFAQ = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map(f => ({
+    "@type": "Question",
+    "name": f.q,
+    "acceptedAnswer": { "@type": "Answer", "text": f.a },
+  })),
+};
+
+const blogLinks = [
+  {
+    style: "Yin Yoga",
+    title: "Yin Yoga: beneficios para movilidad y flexibilidad",
+    href: "/blog/yin-yoga-beneficios-movilidad-flexibilidad",
+    icon: Flower2,
+  },
+  {
+    style: "Vinyasa Yoga",
+    title: "Vinyasa Yoga: el flujo entre respiración y movimiento",
+    href: "/blog/vinyasa-yoga-flujo-respiracion-las-condes",
+    icon: Wind,
+  },
+  {
+    style: "Power Yoga",
+    title: "Power Yoga: construir fuerza y resistencia sobre el mat",
+    href: "/blog/power-yoga-fuerza-resistencia",
+    icon: Zap,
+  },
+  {
+    style: "Yoga Integral",
+    title: "Yoga Integral: equilibrio entre práctica física y meditación",
+    href: "/blog/integral-yoga-equilibrio-meditacion",
+    icon: Sun,
+  },
+];
+
 const YogaLasCondes = () => {
   const { trackViewContent, trackLead, trackInitiateCheckout } = useFacebookPixel();
   const { data: scheduleData, isLoading: isScheduleLoading } = useScheduleEntries();
