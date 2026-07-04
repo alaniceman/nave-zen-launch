@@ -14,6 +14,7 @@ import { CoachesSection } from "@/components/CoachesSection";
 import { ReviewsTrustBar } from "@/components/ReviewsTrustBar";
  import { GiftCardSection } from "@/components/GiftCardSection";
  import { StickyMobileCTA } from "@/components/StickyMobileCTA";
+ import { NextClassAutoWidget } from "@/components/NextClassAutoWidget";
  import { supabase } from "@/integrations/supabase/client";
  import { scheduleData, dayNames, type ClassItem } from "@/data/schedule";
  import { useIsMobile } from "@/hooks/use-mobile";
@@ -796,6 +797,7 @@ import { ReviewsTrustBar } from "@/components/ReviewsTrustBar";
  
        <Footer />
        <StickyMobileCTA />
+       <NextClassAutoWidget tags={["wim-hof"]} labelPrefix="Próxima sesión" href="/agenda-nave-studio" storageKey="crio-ads" />
      </>
    );
  };

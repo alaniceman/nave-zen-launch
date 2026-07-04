@@ -3,6 +3,7 @@ import { CheckoutRedirectButton } from "@/components/CheckoutRedirectButton";
 import { Footer } from "@/components/Footer";
 import { ReviewsTrustBar } from "@/components/ReviewsTrustBar";
 import { weeklyByExperience } from "@/lib/scheduleByExperience";
+import { NextClassAutoWidget } from "@/components/NextClassAutoWidget";
 
 const CriomedicinIceBathEnGrupo = () => {
   const wimHofSchedule = weeklyByExperience("wim-hof-group");
@@ -254,6 +255,7 @@ const CriomedicinIceBathEnGrupo = () => {
       </main>
 
       <Footer />
+      <NextClassAutoWidget tags={["wim-hof"]} labelPrefix="Próxima sesión" href="/agenda-nave-studio" storageKey="crio-grupo" />
     </div>
   );
 };

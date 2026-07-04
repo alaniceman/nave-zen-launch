@@ -9,6 +9,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
+import { NextClassAutoWidget } from "@/components/NextClassAutoWidget";
 
 interface SessionPackage {
   id: string;
@@ -444,6 +445,7 @@ const CriomedicinMetodoWimHof = () => {
 
       <GiftCardSection />
       <Footer />
+      <NextClassAutoWidget tags={["wim-hof"]} labelPrefix="Próxima sesión" href="/agenda-nave-studio" storageKey="wim-hof" />
     </div>;
 };
 export default CriomedicinMetodoWimHof;
