@@ -784,6 +784,72 @@ const YogaLasCondes = () => {
           </div>
         </section>
 
+        {/* Cross-links a blog — internal linking SEO */}
+        <section className="py-20 md:py-24 bg-background">
+          <div className="container mx-auto px-6 max-w-6xl">
+            <div className="text-center mb-12">
+              <p className="text-accent font-medium font-inter text-sm uppercase tracking-widest mb-3">Aprende más</p>
+              <h2 className="text-3xl md:text-4xl font-bold text-primary font-space mb-4">
+                Profundiza en tu estilo de yoga
+              </h2>
+              <p className="text-muted-foreground font-inter max-w-2xl mx-auto">
+                Guías detalladas para conocer los beneficios, la técnica y qué esperar de cada práctica.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              {blogLinks.map((b) => {
+                const Icon = b.icon;
+                return (
+                  <a
+                    key={b.href}
+                    href={b.href}
+                    className="group bg-card rounded-2xl p-6 border border-border/50 hover:border-accent/30 hover:shadow-lg transition-all duration-300 flex flex-col"
+                  >
+                    <div className="w-11 h-11 rounded-xl bg-accent/10 flex items-center justify-center mb-4 group-hover:bg-accent/20 transition-colors">
+                      <Icon className="w-5 h-5 text-accent" />
+                    </div>
+                    <p className="text-xs uppercase tracking-wider text-accent font-medium font-inter mb-2">{b.style}</p>
+                    <h3 className="text-base font-bold text-primary font-space leading-snug mb-4 flex-grow">{b.title}</h3>
+                    <span className="text-sm text-accent font-inter font-medium inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+                      Leer artículo <ArrowRight className="w-4 h-4" />
+                    </span>
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section className="py-20 md:py-28 bg-muted">
+          <div className="container mx-auto px-6 max-w-3xl">
+            <div className="text-center mb-12">
+              <p className="text-accent font-medium font-inter text-sm uppercase tracking-widest mb-3">Preguntas frecuentes</p>
+              <h2 className="text-3xl md:text-5xl font-bold text-primary font-space mb-4">
+                Resolvemos tus dudas
+              </h2>
+            </div>
+            <div className="space-y-3">
+              {faqs.map((f, i) => (
+                <details
+                  key={i}
+                  className="group bg-card rounded-2xl border border-border/50 hover:border-accent/30 transition-colors overflow-hidden"
+                >
+                  <summary className="cursor-pointer list-none p-6 flex items-start justify-between gap-4 font-space font-semibold text-primary text-base md:text-lg">
+                    <span className="flex-1">{f.q}</span>
+                    <span className="flex-shrink-0 w-7 h-7 rounded-full bg-accent/10 text-accent flex items-center justify-center text-lg leading-none group-open:rotate-45 transition-transform duration-300">
+                      +
+                    </span>
+                  </summary>
+                  <div className="px-6 pb-6 text-muted-foreground font-inter leading-relaxed">
+                    {f.a}
+                  </div>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* Clase de prueba */}
         <TrialYogaSection />
 
