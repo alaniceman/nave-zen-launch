@@ -14,7 +14,7 @@ const DISMISS_KEY = "nextClassWidgetDismissed";
 const SCROLL_TRIGGER = 400;
 const SWIPE_THRESHOLD = 60;
 
-export const NextClassWidget = ({ when, time, title, instructor, href = "#horarios-yoga" }: NextClassWidgetProps) => {
+export const NextClassWidget = ({ when, time, title, instructor, href = "#horarios-yoga", labelPrefix = "Próxima clase" }: NextClassWidgetProps) => {
   const [visible, setVisible] = useState(false);
   const [dismissed, setDismissed] = useState(false);
   const [drag, setDrag] = useState({ x: 0, y: 0 });
