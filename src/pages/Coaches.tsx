@@ -113,6 +113,15 @@ const Coaches = () => {
       description: "A través del movimiento, la regulación y la nutrición, te acompaño a volver a ti, y desde ahí, construir una vida más coherente y viva.",
       image: "/lovable-uploads/vianny-macero.webp",
       tags: ["Movimiento", "Terapia"]
+    },
+    {
+      id: 10,
+      name: "Karim Campusano",
+      title: "Instructora de Power Vinyasa · Vinyasa Yoga Master Teacher",
+      credentials: "Vinyasa Yoga Master Teacher (500hrs RYT) — Federación Internacional de Yoga · Antropóloga Social U. de Chile",
+      description: "Apasionada por el movimiento, la exploración y el aprendizaje progresivo. Me gusta crear espacios desafiantes y accesibles a la vez, donde cada persona pueda desarrollar su práctica a su propio ritmo.",
+      image: "/__l5e/assets-v1/6b85aa3f-927c-4fdb-a41e-b6d69c2b59dd/karim.webp",
+      tags: ["Movimiento"]
     }
   ]
 

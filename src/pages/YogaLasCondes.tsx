@@ -49,6 +49,12 @@ const yogaStyles = [
     description: "Regulá tu sistema nervioso a través del flujo de movimiento, respiración, vibración y quietud. Una invitación a habitar tu cuerpo y soltar lo rígido.",
     benefits: ["Regulación nerviosa", "Soltar tensión profunda", "Conexión cuerpo-mente"],
   },
+  {
+    name: "Power Vinyasa",
+    icon: Zap,
+    description: "Una práctica dinámica y energizante para desarrollar fuerza, movilidad y conciencia corporal, con opciones y progresiones para adaptar cada postura a tu nivel sin perder el disfrute del proceso.",
+    benefits: ["Fuerza y movilidad", "Progresiones adaptables", "Conciencia corporal"],
+  },
 ];
 
 const galleryImages = [
@@ -289,7 +295,7 @@ const YogaLasCondes = () => {
         </section>
 
         {/* Instructores de Yoga */}
-        <CoachesSection filterIds={["maral", "amanda", "mar", "vianny"]} />
+        <CoachesSection filterIds={["maral", "amanda", "mar", "vianny", "karim"]} />
 
         {/* Horarios */}
         <section id="horarios-yoga" className="py-20 md:py-28 bg-muted">
