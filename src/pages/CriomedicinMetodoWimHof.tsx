@@ -445,6 +445,7 @@ const CriomedicinMetodoWimHof = () => {
 
       <GiftCardSection />
       <Footer />
+      <NextClassAutoWidget tags={["wim-hof"]} labelPrefix="Próxima sesión" href="/agenda-nave-studio" storageKey="wim-hof" />
     </div>;
 };
 export default CriomedicinMetodoWimHof;
