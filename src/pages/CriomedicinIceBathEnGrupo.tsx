@@ -92,7 +92,10 @@ const CriomedicinIceBathEnGrupo = () => {
           </p>
         </section>
 
+        <AskNaveBar />
+
         {/* Reseñas reales de Ice Bath */}
+
         <section className="py-10 md:py-14 bg-neutral-light">
           <div className="container mx-auto px-6">
             <ReviewsTrustBar category="Ice Bath" title="Lo que dicen quienes ya entraron al hielo" />
