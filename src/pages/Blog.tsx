@@ -1,5 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import { Footer } from "@/components/Footer";
+import { AskNaveBar } from "@/components/AskNaveBar";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar, User, Tag } from "lucide-react";
