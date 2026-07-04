@@ -205,6 +205,18 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://studiolanave.com/promo-invierno</loc>
+    <lastmod>2026-07-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://studiolanave.com/tienda</loc>
+    <lastmod>2026-07-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://studiolanave.com/yoga/yin-yoga-las-condes</loc>
     <lastmod>2026-07-04</lastmod>
     <changefreq>monthly</changefreq>
