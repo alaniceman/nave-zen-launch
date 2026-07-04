@@ -10,7 +10,7 @@ import { TrialYogaSection } from "@/components/TrialYogaSection";
 import { Footer } from "@/components/Footer";
 import { ReviewsTrustBar } from "@/components/ReviewsTrustBar";
 import { Badge } from "@/components/ui/badge";
-import { Flower2, Flame, Wind, Sun, Zap, Heart, Check, Star, Sparkles } from "lucide-react";
+import { Flower2, Flame, Wind, Sun, Zap, Heart, Check, Star, Sparkles, ArrowRight } from "lucide-react";
 
 const yogaStyles = [
   {
