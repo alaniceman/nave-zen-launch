@@ -10,7 +10,18 @@ import { TrialYogaSection } from "@/components/TrialYogaSection";
 import { Footer } from "@/components/Footer";
 import { ReviewsTrustBar } from "@/components/ReviewsTrustBar";
 import { Badge } from "@/components/ui/badge";
-import { Flower2, Flame, Wind, Sun, Zap, Heart, Check, Star, Sparkles, ArrowRight } from "lucide-react";
+import { Flower2, Flame, Wind, Sun, Zap, Heart, Check, Star, Sparkles, ArrowRight, Snowflake } from "lucide-react";
+
+import studioCorazon from "@/assets/studio-corazon.webp.asset.json";
+import studioIceSonrisa from "@/assets/studio-ice-sonrisa.webp.asset.json";
+import studioMeditacionGrupo from "@/assets/studio-meditacion-grupo.webp.asset.json";
+import studioSavasana from "@/assets/studio-savasana.webp.asset.json";
+import studioMeditacionLoto from "@/assets/studio-meditacion-loto.webp.asset.json";
+import studioRespiraCirculo from "@/assets/studio-respira-circulo.webp.asset.json";
+import studioYogaPerro from "@/assets/studio-yoga-perro.webp.asset.json";
+import studioIceSereno from "@/assets/studio-ice-sereno.webp.asset.json";
+import studioIceMedicina from "@/assets/studio-ice-medicina.webp.asset.json";
+import studioSoundBath from "@/assets/studio-sound-bath.webp.asset.json";
 
 const yogaStyles = [
   {
@@ -62,10 +73,18 @@ const yogaStyles = [
 ];
 
 const galleryImages = [
-  { src: "/lovable-uploads/yoga-sala-1.webp", alt: "Sala de yoga Nave Studio Las Condes con mats y cojines" },
-  { src: "/lovable-uploads/yoga-sala-2.webp", alt: "Vista amplia del estudio de yoga en Las Condes" },
-  { src: "/lovable-uploads/yoga-sala-3.webp", alt: "Estudio de yoga con luz natural y vista a la cordillera" },
-  { src: "/lovable-uploads/yoga-sala-4.webp", alt: "Rincón de meditación con vista a los Andes" },
+  { src: "/lovable-uploads/yoga-sala-1.webp", alt: "Sala principal de yoga en Nave Studio Las Condes" },
+  { src: studioSavasana.url, alt: "Savasana en sala de yoga de Nave Studio" },
+  { src: studioYogaPerro.url, alt: "Clase de yoga con mascota en Nave Studio" },
+  { src: studioMeditacionLoto.url, alt: "Meditación en postura de loto en Nave Studio" },
+  { src: "/lovable-uploads/yoga-sala-2.webp", alt: "Vista amplia del estudio con luz natural" },
+  { src: studioSoundBath.url, alt: "Sound bath con luces inmersivas en Nave Studio" },
+  { src: studioMeditacionGrupo.url, alt: "Sesión grupal de respiración y relajación" },
+  { src: studioRespiraCirculo.url, alt: "Círculo de breathwork bajo claraboya 'Respira'" },
+  { src: studioCorazon.url, alt: "Gratitud tras sesión de bienestar en Nave Studio" },
+  { src: "/lovable-uploads/yoga-sala-3.webp", alt: "Estudio con vista a la cordillera de los Andes" },
+  { src: studioIceSereno.url, alt: "Ice Bath opcional para complementar tu yoga" },
+  { src: studioIceSonrisa.url, alt: "Sonrisa durante baño de hielo en Nave Studio" },
 ];
 
 const membershipPlans = [
@@ -226,9 +245,13 @@ const YogaLasCondes = () => {
             <p className="text-lg md:text-xl text-white/80 font-inter mb-2 font-light">
               Nave Studio
             </p>
-            <p className="text-base md:text-lg text-white/60 font-inter mb-10 tracking-wide">
+            <p className="text-base md:text-lg text-white/60 font-inter mb-6 tracking-wide">
               Yin · Yang · Vinyasa · Vinyasa Somático · Integral · Power · Power Vinyasa
             </p>
+            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-white/85 text-xs md:text-sm px-4 py-1.5 rounded-full mb-10 border border-white/15">
+              <Snowflake className="w-3.5 h-3.5" />
+              Complementa tu práctica con Ice Bath a 3°C (opcional)
+            </div>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
                 href="/plan-de-prueba"
@@ -304,6 +327,67 @@ const YogaLasCondes = () => {
                   <div key={style.name}>{card}</div>
                 );
               })}
+            </div>
+          </div>
+        </section>
+
+
+        {/* Ice Bath opcional — complemento del yoga */}
+        <section className="py-16 md:py-20 bg-gradient-to-b from-background via-primary/5 to-background">
+          <div className="container mx-auto px-6 max-w-5xl">
+            <div className="bg-card rounded-3xl border border-primary/15 overflow-hidden shadow-lg">
+              <div className="grid md:grid-cols-2 gap-0">
+                <div className="relative min-h-[260px] md:min-h-full">
+                  <img
+                    src={studioIceSereno.url}
+                    alt="Ice Bath a 3°C opcional en Nave Studio para complementar el yoga"
+                    className="absolute inset-0 w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-primary/40 to-transparent" />
+                </div>
+                <div className="p-8 md:p-12 flex flex-col justify-center">
+                  <div className="inline-flex items-center gap-2 bg-primary/10 text-primary text-xs px-3 py-1.5 rounded-full mb-4 self-start">
+                    <Snowflake className="w-3.5 h-3.5" />
+                    Opcional · Incluido en Membresías Completas
+                  </div>
+                  <h2 className="text-2xl md:text-4xl font-bold text-primary font-space mb-4 leading-tight">
+                    Cierra tu práctica con un<br />Ice Bath a 3°C
+                  </h2>
+                  <p className="text-muted-foreground font-inter text-base md:text-lg mb-6 leading-relaxed">
+                    Después de tu clase de yoga, sumérgete 2 minutos en agua a 3°C guiado por el Método Wim Hof. Reduce inflamación, acelera la recuperación y potencia la sensación de calma que ya trajo tu práctica.
+                  </p>
+                  <ul className="space-y-2.5 mb-8">
+                    <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">
+                      <Check className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                      Efecto anti-inflamatorio y recuperación muscular
+                    </li>
+                    <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">
+                      <Check className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                      Regula el sistema nervioso y libera endorfinas
+                    </li>
+                    <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">
+                      <Check className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                      Requiere 1 sesión previa guiada de Wim Hof (por seguridad)
+                    </li>
+                  </ul>
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <a
+                      href="/criomedicina-metodo-wim-hof"
+                      className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white rounded-full px-6 py-3 font-semibold font-inter text-sm transition-all hover:scale-105"
+                    >
+                      Conocer Ice Bath
+                      <ArrowRight className="w-4 h-4" />
+                    </a>
+                    <a
+                      href="#planes-completas"
+                      className="inline-flex items-center justify-center gap-2 border border-primary/30 text-primary hover:bg-primary/5 rounded-full px-6 py-3 font-medium font-inter text-sm transition-all"
+                    >
+                      Ver membresías completas
+                    </a>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -490,7 +574,7 @@ const YogaLasCondes = () => {
         </section>
 
         {/* Membresías completas — Eclipse, Órbita, Universo */}
-        <section className="py-20 md:py-28 bg-background">
+        <section id="planes-completas" className="py-20 md:py-28 bg-background">
           <div className="container mx-auto px-6 max-w-6xl">
             <div className="text-center mb-16">
               <p className="text-accent font-medium font-inter text-sm uppercase tracking-widest mb-3">Todas las experiencias</p>
