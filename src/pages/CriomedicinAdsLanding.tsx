@@ -797,6 +797,7 @@ import { ReviewsTrustBar } from "@/components/ReviewsTrustBar";
  
        <Footer />
        <StickyMobileCTA />
+       <NextClassAutoWidget tags={["wim-hof"]} labelPrefix="Próxima sesión" href="/agenda-nave-studio" storageKey="crio-ads" />
      </>
    );
  };
