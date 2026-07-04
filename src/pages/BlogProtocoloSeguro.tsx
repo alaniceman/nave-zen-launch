@@ -127,6 +127,15 @@ export default function BlogProtocoloSeguro() {
             </div>
 
             {/* Back to Blog */}
+            {/* Related */}
+            <div className="mt-12 pt-8 border-t">
+              <p className="text-sm text-neutral-mid mb-2">Lectura relacionada:</p>
+              <a href="/blog/beneficios-del-ice-bath" className="text-secondary hover:text-primary underline">
+                Beneficios del Ice Bath: cuerpo, mente y ciencia →
+              </a>
+            </div>
+
+            {/* Back to Blog */}
             <div className="mt-16 pt-8 border-t">
               <Link to="/blog">
                 <Button variant="outline" size="lg">
