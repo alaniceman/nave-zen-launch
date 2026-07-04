@@ -488,6 +488,10 @@ const Planes = () => {
                     <Check className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
                     Yoga (Yin · Yang · Integral · Vinyasa · Power)
                   </li>
+                  <li className="text-sm font-inter text-accent font-medium flex items-start gap-2.5">
+                    <Check className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                    Bonus: Agenda hasta 2 clases el mismo día
+                  </li>
                   <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">
                     <Check className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
                     Sin límites, practica todos los días
