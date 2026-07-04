@@ -56,7 +56,29 @@ const InstructorProfile = () => {
           content={`Conoce a ${coach.name}, ${coach.role} en Nave Studio. ${coach.purpose}`}
         />
         <link rel="canonical" href={`https://studiolanave.com/instructor/${coach.slug}`} />
+        <meta property="og:title" content={`${coach.name} — ${coach.role} en Nave Studio`} />
+        <meta property="og:description" content={`Conoce a ${coach.name}, ${coach.role} en Nave Studio. ${coach.purpose}`} />
+        <meta property="og:url" content={`https://studiolanave.com/instructor/${coach.slug}`} />
+        <meta property="og:image" content={coach.image?.startsWith("http") ? coach.image : `https://studiolanave.com${coach.image}`} />
+        <meta property="og:type" content="profile" />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Person",
+            "name": coach.name,
+            "jobTitle": coach.role,
+            "description": coach.bio || coach.purpose,
+            "image": coach.image?.startsWith("http") ? coach.image : `https://studiolanave.com${coach.image}`,
+            "url": `https://studiolanave.com/instructor/${coach.slug}`,
+            "worksFor": {
+              "@type": "Organization",
+              "name": "Nave Studio",
+              "url": "https://studiolanave.com"
+            }
+          })}
+        </script>
       </Helmet>
+
 
       <main className="min-h-screen bg-background">
         {/* Hero */}
