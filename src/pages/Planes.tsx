@@ -11,6 +11,8 @@ import { PricingTrialYogaSection } from "@/components/PricingTrialYogaSection";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
 import { PlanesAnualesPromo } from "@/components/PlanesAnualesPromo";
 import { MembershipFormModal, type MembershipGroup } from "@/components/membership/MembershipFormModal";
+import { AskNaveBar } from "@/components/AskNaveBar";
+
 
 const TooltipLabel = ({ label }: { label: string }) => (
   <Popover>
