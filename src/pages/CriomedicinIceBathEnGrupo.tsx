@@ -255,6 +255,7 @@ const CriomedicinIceBathEnGrupo = () => {
       </main>
 
       <Footer />
+      <NextClassAutoWidget tags={["wim-hof"]} labelPrefix="Próxima sesión" href="/agenda-nave-studio" storageKey="crio-grupo" />
     </div>
   );
 };
