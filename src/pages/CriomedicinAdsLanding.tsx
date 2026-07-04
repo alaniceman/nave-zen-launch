@@ -15,6 +15,8 @@ import { ReviewsTrustBar } from "@/components/ReviewsTrustBar";
  import { GiftCardSection } from "@/components/GiftCardSection";
  import { StickyMobileCTA } from "@/components/StickyMobileCTA";
  import { NextClassAutoWidget } from "@/components/NextClassAutoWidget";
+ import { AskNaveBar } from "@/components/AskNaveBar";
+
  import { supabase } from "@/integrations/supabase/client";
  import { scheduleData, dayNames, type ClassItem } from "@/data/schedule";
  import { useIsMobile } from "@/hooks/use-mobile";
