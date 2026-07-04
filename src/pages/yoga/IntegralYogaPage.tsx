@@ -83,7 +83,7 @@ export default function IntegralYogaPage() {
 
       <main>
         <section className="relative min-h-[75vh] flex items-center justify-center overflow-hidden">
-          <img src={HERO_IMAGE} alt={`Sala de ${STYLE_NAME} en Nave Studio Las Condes`} className="absolute inset-0 w-full h-full object-cover scale-105" fetchPriority="high" />
+          <img src={HERO_IMAGE} alt={`Sala de ${STYLE_NAME} en Nave Studio Las Condes`} className="absolute inset-0 w-full h-full object-cover scale-105" fetchpriority="high" />
           <div className="absolute inset-0 bg-gradient-to-b from-primary/70 via-primary/50 to-primary/80" />
           <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
             <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm text-white/90 text-sm px-4 py-1.5 rounded-full mb-6 border border-white/20">
