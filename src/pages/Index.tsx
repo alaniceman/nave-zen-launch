@@ -13,6 +13,8 @@ import { GiftCardSection } from "@/components/GiftCardSection"
 import { StickyMobileCTA } from "@/components/StickyMobileCTA"
 import { BautizoHieloPromo } from "@/components/BautizoHieloPromo"
 import { NextClassAutoWidget } from "@/components/NextClassAutoWidget"
+import { AskNaveBar } from "@/components/AskNaveBar"
+
 
 const Index = () => {
   return (
@@ -30,7 +32,9 @@ const Index = () => {
       <main className="overflow-x-hidden" id="home">
       <HeroSection />
       <TrialMiniBar />
+      <AskNaveBar />
       <SocialProofSection />
+
       <MethodologiesSection />
       <TrialYogaSection />
       <PricingSection />

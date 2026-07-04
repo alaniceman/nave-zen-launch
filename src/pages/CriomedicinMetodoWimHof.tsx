@@ -10,6 +10,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { NextClassAutoWidget } from "@/components/NextClassAutoWidget";
+import { AskNaveBar } from "@/components/AskNaveBar";
+
 
 interface SessionPackage {
   id: string;
@@ -197,7 +199,10 @@ const CriomedicinMetodoWimHof = () => {
           </div>
         </section>
 
+        <AskNaveBar />
+
         {/* Promo Bautizo de Hielo */}
+
         <BautizoHieloPromo />
 
         <section className="py-12 md:py-16 bg-neutral-light">

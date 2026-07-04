@@ -9,6 +9,8 @@ import { useTrialModal } from "@/hooks/useTrialModal"
 import { useFacebookPixel } from "@/hooks/useFacebookPixel"
 import { StickyMobileCTA } from "@/components/StickyMobileCTA"
 import { NextClassAutoWidget } from "@/components/NextClassAutoWidget"
+import { AskNaveBar } from "@/components/AskNaveBar"
+
 import { ReviewsTrustBar } from "@/components/ReviewsTrustBar"
 import { Snowflake, Wind, Dumbbell, Brain } from "lucide-react"
 
@@ -167,7 +169,10 @@ const Experiencias = () => {
         </div>
       </section>
 
+      <AskNaveBar />
+
       {/* Reseñas reales */}
+
       <section className="py-12 md:py-16 bg-neutral-light">
         <div className="container mx-auto px-6">
           <ReviewsTrustBar />

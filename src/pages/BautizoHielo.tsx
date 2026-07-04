@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Footer } from "@/components/Footer";
+import { AskNaveBar } from "@/components/AskNaveBar";
+
 import {
   Snowflake,
   Wind,
@@ -154,8 +156,11 @@ const BautizoHielo = () => {
           </div>
         </section>
 
+        <AskNaveBar />
+
         {/* STORYTELLING */}
         <section className="py-20 px-4">
+
           <div className="container mx-auto max-w-3xl text-center">
             <h2 className="font-space text-3xl md:text-5xl font-bold mb-6 text-primary">
               Lo más difícil del agua fría es decidirse

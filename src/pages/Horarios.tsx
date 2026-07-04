@@ -4,6 +4,8 @@ import { Footer } from "../components/Footer";
 import { OpenTrialModalButton } from "../components/OpenTrialModalButton";
 import ScheduleDayCards from "../components/ScheduleDayCards";
 import { getTodayInSantiago } from "../data/schedule";
+import { AskNaveBar } from "../components/AskNaveBar";
+
 
 export default function Horarios() {
   const scrollToSchedule = () => {
@@ -36,8 +38,11 @@ export default function Horarios() {
           </div>
         </section>
 
+        <AskNaveBar />
+
         {/* Schedule Day Cards */}
         <ScheduleDayCards />
+
 
         {/* Important Notices */}
         <section className="py-12 px-4 bg-[#C49A6C1F] border-t">

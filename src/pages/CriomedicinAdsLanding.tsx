@@ -15,6 +15,8 @@ import { ReviewsTrustBar } from "@/components/ReviewsTrustBar";
  import { GiftCardSection } from "@/components/GiftCardSection";
  import { StickyMobileCTA } from "@/components/StickyMobileCTA";
  import { NextClassAutoWidget } from "@/components/NextClassAutoWidget";
+ import { AskNaveBar } from "@/components/AskNaveBar";
+
  import { supabase } from "@/integrations/supabase/client";
  import { scheduleData, dayNames, type ClassItem } from "@/data/schedule";
  import { useIsMobile } from "@/hooks/use-mobile";
@@ -251,7 +253,10 @@ import { ReviewsTrustBar } from "@/components/ReviewsTrustBar";
            </div>
          </section>
 
+      <AskNaveBar />
+
       {/* Reseñas reales de Ice Bath */}
+
       <section className="py-12 md:py-16 bg-neutral-light">
         <div className="container mx-auto px-6">
           <ReviewsTrustBar category="Ice Bath" title="Lo que dicen quienes ya entraron al hielo" />

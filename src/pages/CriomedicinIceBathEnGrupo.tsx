@@ -4,6 +4,8 @@ import { Footer } from "@/components/Footer";
 import { ReviewsTrustBar } from "@/components/ReviewsTrustBar";
 import { weeklyByExperience } from "@/lib/scheduleByExperience";
 import { NextClassAutoWidget } from "@/components/NextClassAutoWidget";
+import { AskNaveBar } from "@/components/AskNaveBar";
+
 
 const CriomedicinIceBathEnGrupo = () => {
   const wimHofSchedule = weeklyByExperience("wim-hof-group");
@@ -90,7 +92,10 @@ const CriomedicinIceBathEnGrupo = () => {
           </p>
         </section>
 
+        <AskNaveBar />
+
         {/* Reseñas reales de Ice Bath */}
+
         <section className="py-10 md:py-14 bg-neutral-light">
           <div className="container mx-auto px-6">
             <ReviewsTrustBar category="Ice Bath" title="Lo que dicen quienes ya entraron al hielo" />
