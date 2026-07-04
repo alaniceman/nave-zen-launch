@@ -3,6 +3,7 @@ import { CheckoutRedirectButton } from "@/components/CheckoutRedirectButton";
 import { Footer } from "@/components/Footer";
 import { ReviewsTrustBar } from "@/components/ReviewsTrustBar";
 import { weeklyByExperience } from "@/lib/scheduleByExperience";
+import { NextClassAutoWidget } from "@/components/NextClassAutoWidget";
 
 const CriomedicinIceBathEnGrupo = () => {
   const wimHofSchedule = weeklyByExperience("wim-hof-group");
