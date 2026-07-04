@@ -35,6 +35,7 @@ const BlogHabitosDisciplina = lazy(() => import("./pages/BlogHabitosDisciplina")
 const BlogAguaFriaGuiado = lazy(() => import("./pages/BlogAguaFriaGuiado"));
 const BlogProtocoloSeguro = lazy(() => import("./pages/BlogProtocoloSeguro"));
 const BlogProtocolo15Minutos = lazy(() => import("./pages/BlogProtocolo15Minutos"));
+const BlogBeneficiosIceBath = lazy(() => import("./pages/BlogBeneficiosIceBath"));
 const Cyber2025 = lazy(() => import("./pages/Cyber2025"));
 const PlanAnual2026 = lazy(() => import("./pages/PlanAnual2026"));
 const SanValentin = lazy(() => import("./pages/SanValentin"));
@@ -158,6 +159,7 @@ const App = () => {
             <Route path="/blog/agua-fria-guiado-vs-solo-experiencia-wim-hof" element={<BlogAguaFriaGuiado />} />
             <Route path="/blog/protocolo-seguro-agua-fria-respiracion" element={<BlogProtocoloSeguro />} />
             <Route path="/blog/protocolo-15-minutos-respiracion-agua-fria" element={<BlogProtocolo15Minutos />} />
+            <Route path="/blog/beneficios-del-ice-bath" element={<BlogBeneficiosIceBath />} />
             <Route path="/cyber-2025" element={<Cyber2025 />} />
             <Route path="/anual" element={<PlanAnual2026 />} />
             <Route path="/san-valentin" element={<SanValentin />} />

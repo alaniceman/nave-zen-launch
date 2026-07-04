@@ -10,6 +10,7 @@ import habitosDisciplinaHeroImage from "@/assets/blog-habitos-disciplina-hero.jp
 import aguaFriaGuiadoHeroImage from "@/assets/blog-agua-fria-guiado-hero.jpg";
 import protocoloSeguroHeroImage from "@/assets/blog-protocolo-seguro-hero.jpg";
 import protocolo15MinutosHeroImage from "@/assets/blog-protocolo-15-minutos-hero.jpg";
+import beneficiosIceBathHeroImage from "@/assets/blog-beneficios-ice-bath-hero.jpg";
 import yinHeroAsset from "@/assets/studio-savasana.webp.asset.json";
 import vinyasaHeroAsset from "@/assets/studio-yoga-perro.webp.asset.json";
 import powerHeroAsset from "@/assets/studio-corazon.webp.asset.json";
@@ -17,6 +18,16 @@ import integralHeroAsset from "@/assets/studio-meditacion-loto.webp.asset.json";
 
 const Blog = () => {
   const blogPosts = [
+    {
+      title: "Beneficios del Ice Bath: cuerpo, mente y ciencia",
+      slug: "/blog/beneficios-del-ice-bath",
+      excerpt: "Recuperación muscular, más energía y foco, mejor sueño y menos estrés: qué hace el frío en tu cuerpo y cómo empezar hoy con un protocolo seguro.",
+      author: "Alan Iceman Earle",
+      date: "4 de julio, 2026",
+      categories: ["Ice Bath", "Agua fría", "Wim Hof Method", "Recuperación"],
+      image: beneficiosIceBathHeroImage,
+      imageAlt: "Persona en baño de hielo (ice bath) en tina de madera en Nave Studio Las Condes",
+    },
     {
       title: "Yin Yoga: qué es, beneficios y por qué cambia tu cuerpo desde la primera clase",
       slug: "/blog/yin-yoga-beneficios-movilidad-flexibilidad",
