@@ -32,7 +32,9 @@ const Index = () => {
       <main className="overflow-x-hidden" id="home">
       <HeroSection />
       <TrialMiniBar />
+      <AskNaveBar />
       <SocialProofSection />
+
       <MethodologiesSection />
       <TrialYogaSection />
       <PricingSection />
