@@ -57,6 +57,7 @@ export const NextClassAutoWidget = ({ tags, labelPrefix, href, storageKey }: Pro
       instructor={next.item.instructor}
       href={href}
       labelPrefix={labelPrefix}
+      storageKey={storageKey}
     />
   );
 };
