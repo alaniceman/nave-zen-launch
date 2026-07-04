@@ -196,6 +196,14 @@ const App = () => {
             <Route path="/agenda-nave-studio/:professionalSlug/:dateParam/:timeParam" element={<AgendaNaveStudio />} />
             
             <Route path="/yoga-las-condes" element={<YogaLasCondes />} />
+            <Route path="/yoga/yin-yoga-las-condes" element={<YinYogaPage />} />
+            <Route path="/yoga/vinyasa-yoga-las-condes" element={<VinyasaYogaPage />} />
+            <Route path="/yoga/power-yoga-las-condes" element={<PowerYogaPage />} />
+            <Route path="/yoga/integral-yoga-las-condes" element={<IntegralYogaPage />} />
+            <Route path="/blog/yin-yoga-beneficios-movilidad-flexibilidad" element={<BlogYinYoga />} />
+            <Route path="/blog/vinyasa-yoga-flujo-respiracion-las-condes" element={<BlogVinyasaYoga />} />
+            <Route path="/blog/power-yoga-fuerza-resistencia" element={<BlogPowerYoga />} />
+            <Route path="/blog/integral-yoga-equilibrio-meditacion" element={<BlogIntegralYoga />} />
             <Route path="/icefest" element={<Icefest />} />
             <Route path="/bautizo-hielo" element={<BautizoHielo />} />
             <Route path="/instructor/:slug" element={<InstructorProfile />} />
