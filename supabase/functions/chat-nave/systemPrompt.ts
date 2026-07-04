@@ -13,37 +13,13 @@ interface Promo {
 
 const PROMOS: Promo[] = [
   {
-    id: "icefest",
-    expiresAt: "2026-04-01",
-    content: `### Promo actual: Icefest 🧊
-6 sesiones de Criomedicina por $60.000 ($10.000/sesión). Válido por tiempo limitado. Info en [Icefest](https://studiolanave.com/icefest)`,
-  },
-  {
-    id: "marzo-reset",
-    expiresAt: "2026-04-01",
-    content: `### Promo Marzo Reset
-- 2 sesiones de Criomedicina: $40.000
-- 3 sesiones de Criomedicina: $50.000
-Válido 6 meses, compartible. Solo hasta el 31 de marzo. Info en [Bonos](https://studiolanave.com/bonos)`,
-  },
-  {
-    id: "planes-anuales-2026",
-    expiresAt: "2026-05-01",
-    content: `### Planes Anuales 2026 (oferta vigente)
-- Compromiso anual con hasta 2 meses gratis
-- Entradas Icefest incluidas
-- 12 cuotas sin interés
-Info en: [Ver planes anuales](https://studiolanave.com/anual)`,
-  },
-  {
-    id: "bautizo-hielo",
-    expiresAt: "2026-06-01",
-    content: `### 🧊 Promo Bautizo de Hielo (¡NUEVO!)
-- **Tu primera sesión de Criomedicina por $15.000** (antes $30.000, 50% OFF)
-- 1 sesión guiada de Método Wim Hof: Breathwork + 2 min en agua a 3°C
-- Ideal para quienes nunca han hecho una sesión con nosotros
-- Válido 60 días, también disponible como Gift Card para regalar
-Info y compra en: [Bautizo de Hielo](https://studiolanave.com/bautizo-hielo)`,
+    id: "promo-invierno",
+    expiresAt: "2026-09-30",
+    content: `### ❄️ Promo Invierno (¡vigente!)
+- **6 sesiones por $60.000** ($10.000 c/u) — intercambiables entre Yoga (Vinyasa, Yin, Integral, Power) y Criomedicina / Método Wim Hof.
+- Validez **3 meses**, compartibles con quien tú quieras.
+- Está comprobado: 6 sesiones te ayudan a tolerar el frío el doble. El invierno deja de ser tema.
+- Info y compra: [Promo Invierno](https://studiolanave.com/promo-invierno)`,
   },
 ];
 
