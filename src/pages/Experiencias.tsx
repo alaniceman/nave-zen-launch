@@ -169,7 +169,10 @@ const Experiencias = () => {
         </div>
       </section>
 
+      <AskNaveBar />
+
       {/* Reseñas reales */}
+
       <section className="py-12 md:py-16 bg-neutral-light">
         <div className="container mx-auto px-6">
           <ReviewsTrustBar />
