@@ -134,7 +134,7 @@ const Experiencias = () => {
         <meta property="og:type" content="website" />
       </Helmet>
       <main className="min-h-screen" id="experiencias">
-      <TrialMiniBar />
+      
 
       {/* Hero */}
       <section
