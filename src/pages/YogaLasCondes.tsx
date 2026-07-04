@@ -865,6 +865,7 @@ const YogaLasCondes = () => {
           time={nextClass.item.time}
           title={nextClass.item.title}
           instructor={nextClass.item.instructor}
+          storageKey="yoga-las-condes"
         />
       )}
 
