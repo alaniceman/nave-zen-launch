@@ -314,6 +314,7 @@ const YogaLasCondes = () => {
         <meta property="og:image" content="https://studiolanave.com/lovable-uploads/82672388-9723-4aee-a1f2-ac72618cd26a.png" />
         <meta property="og:type" content="website" />
         <script type="application/ld+json">{JSON.stringify(structuredDataYoga)}</script>
+        <script type="application/ld+json">{JSON.stringify(structuredDataFAQ)}</script>
       </Helmet>
 
       <main>
