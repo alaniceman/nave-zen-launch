@@ -199,7 +199,10 @@ const CriomedicinMetodoWimHof = () => {
           </div>
         </section>
 
+        <AskNaveBar />
+
         {/* Promo Bautizo de Hielo */}
+
         <BautizoHieloPromo />
 
         <section className="py-12 md:py-16 bg-neutral-light">
