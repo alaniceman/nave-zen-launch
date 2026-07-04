@@ -24,7 +24,7 @@ const Blog = () => {
       author: "Nave Studio",
       date: "4 de julio, 2026",
       categories: ["Yoga", "Yin", "Flexibilidad", "Bienestar"],
-      image: yinVinyasaHeroImage,
+      image: yinHeroAsset.url,
       imageAlt: "Práctica de Yin Yoga en Nave Studio Las Condes"
     },
     {
@@ -34,7 +34,7 @@ const Blog = () => {
       author: "Nave Studio",
       date: "4 de julio, 2026",
       categories: ["Yoga", "Vinyasa", "Respiración", "Bienestar"],
-      image: yinVinyasaHeroImage,
+      image: vinyasaHeroAsset.url,
       imageAlt: "Práctica de Vinyasa Yoga en Nave Studio Las Condes"
     },
     {
@@ -44,7 +44,7 @@ const Blog = () => {
       author: "Nave Studio",
       date: "4 de julio, 2026",
       categories: ["Yoga", "Power Yoga", "Fuerza", "Bienestar"],
-      image: yinVinyasaHeroImage,
+      image: powerHeroAsset.url,
       imageAlt: "Práctica de Power Yoga en Nave Studio Las Condes"
     },
     {
@@ -54,7 +54,7 @@ const Blog = () => {
       author: "Nave Studio",
       date: "4 de julio, 2026",
       categories: ["Yoga", "Integral", "Meditación", "Bienestar"],
-      image: yinVinyasaHeroImage,
+      image: integralHeroAsset.url,
       imageAlt: "Práctica de Integral Yoga en Nave Studio Las Condes"
     },
     {
