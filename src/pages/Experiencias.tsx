@@ -9,6 +9,8 @@ import { useTrialModal } from "@/hooks/useTrialModal"
 import { useFacebookPixel } from "@/hooks/useFacebookPixel"
 import { StickyMobileCTA } from "@/components/StickyMobileCTA"
 import { NextClassAutoWidget } from "@/components/NextClassAutoWidget"
+import { AskNaveBar } from "@/components/AskNaveBar"
+
 import { ReviewsTrustBar } from "@/components/ReviewsTrustBar"
 import { Snowflake, Wind, Dumbbell, Brain } from "lucide-react"
 
