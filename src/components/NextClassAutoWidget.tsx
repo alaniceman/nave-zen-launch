@@ -12,12 +12,12 @@ interface Props {
   /** Filter by service color_tag(s), e.g. ['wim-hof'] or ['yoga'] */
   tags: string[];
   /** Label prefix — default "Próxima clase" */
-  label?: string;
+  labelPrefix?: string;
   /** Anchor / href when tapping the card */
   href?: string;
 }
 
-export const NextClassAutoWidget = ({ tags, label, href }: Props) => {
+export const NextClassAutoWidget = ({ tags, labelPrefix, href }: Props) => {
   const { data: scheduleData } = useScheduleEntries();
 
   const next = useMemo(() => {
