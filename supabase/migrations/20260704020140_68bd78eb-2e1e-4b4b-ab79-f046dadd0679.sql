@@ -1,0 +1,1 @@
+DROP POLICY IF EXISTS "Anyone can view active professionals" ON public.professionals;
