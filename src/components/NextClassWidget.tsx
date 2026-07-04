@@ -7,6 +7,7 @@ interface NextClassWidgetProps {
   title: string;
   instructor?: string;
   href?: string;
+  labelPrefix?: string;
 }
 
 const DISMISS_KEY = "nextClassWidgetDismissed";
