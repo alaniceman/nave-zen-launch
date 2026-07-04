@@ -245,9 +245,13 @@ const YogaLasCondes = () => {
             <p className="text-lg md:text-xl text-white/80 font-inter mb-2 font-light">
               Nave Studio
             </p>
-            <p className="text-base md:text-lg text-white/60 font-inter mb-10 tracking-wide">
+            <p className="text-base md:text-lg text-white/60 font-inter mb-6 tracking-wide">
               Yin · Yang · Vinyasa · Vinyasa Somático · Integral · Power · Power Vinyasa
             </p>
+            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-white/85 text-xs md:text-sm px-4 py-1.5 rounded-full mb-10 border border-white/15">
+              <Snowflake className="w-3.5 h-3.5" />
+              Complementa tu práctica con Ice Bath a 3°C (opcional)
+            </div>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
                 href="/plan-de-prueba"
