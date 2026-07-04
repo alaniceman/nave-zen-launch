@@ -200,15 +200,6 @@ const seoData = {
     ogImage: "https://studiolanave.com/og-image.png",
     ogType: "website"
   },
-  "/conoce-nuestro-lugar-placeholder-remove": {
-    title: "",
-    description: "",
-    canonical: "",
-    ogTitle: "",
-    ogDescription: "",
-    ogImage: "",
-    ogType: "website"
-  },
   "/conoce-el-lugar": {
     title: "Conoce el estudio | Nave Studio Las Condes",
     description: "Recorre nuestras instalaciones: sala de Yoga, zona de Ice Bath, camarines y espacio de comunidad en Antares 259, Las Condes.",
