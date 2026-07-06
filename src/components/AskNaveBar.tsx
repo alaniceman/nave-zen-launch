@@ -99,8 +99,10 @@ export const AskNaveBar = ({ placeholder, overlap = true, className = "" }: AskN
     setValue("");
   };
 
+  const Tag = overlap ? "div" : "section";
+
   return (
-    <section
+    <Tag
       className={`w-full px-4 sm:px-6 ${
         overlap ? "relative z-20 -mt-10 md:-mt-16 pb-0" : "py-5 sm:py-6"
       } ${className}`}
@@ -137,7 +139,7 @@ export const AskNaveBar = ({ placeholder, overlap = true, className = "" }: AskN
           </form>
         </div>
       </div>
-    </section>
+    </Tag>
   );
 };
 

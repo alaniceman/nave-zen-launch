@@ -30,8 +30,10 @@ const Index = () => {
         <meta property="og:type" content="website" />
       </Helmet>
       <main className="overflow-x-hidden" id="home">
-      <HeroSection />
-      <AskNaveBar />
+      <div className="relative">
+        <HeroSection />
+        <AskNaveBar overlap className="absolute bottom-0 left-0 right-0 translate-y-1/2 z-30" />
+      </div>
       <SocialProofSection />
 
       <MethodologiesSection />
