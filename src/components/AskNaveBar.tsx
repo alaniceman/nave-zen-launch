@@ -102,39 +102,40 @@ export const AskNaveBar = ({ placeholder, overlap = true, className = "" }: AskN
   return (
     <section
       className={`w-full px-4 sm:px-6 ${
-        overlap ? "relative z-20 -mt-10 md:-mt-16" : "py-5 sm:py-6"
+        overlap ? "relative z-20 -mt-10 md:-mt-16 pb-2 md:pb-4" : "py-5 sm:py-6"
       } ${className}`}
       aria-label="Preguntar a Nave AI"
     >
       <div className="max-w-2xl mx-auto">
-        <div className="flex items-center gap-2 mb-2 pl-1">
-          <Sparkles className="w-4 h-4 text-primary" />
-          <span className="text-[11px] sm:text-xs uppercase tracking-[0.18em] font-semibold text-foreground/90 drop-shadow-sm">
-            Pregúntale a Nave AI
-          </span>
-        </div>
-        <form
-          onSubmit={submit}
-          className="flex items-stretch gap-2 p-1.5 bg-background/95 backdrop-blur border border-border/60 rounded-2xl shadow-xl focus-within:ring-2 focus-within:ring-primary/40 transition-shadow"
-        >
-          <input
-            type="text"
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            placeholder={contextual}
-            aria-label="Escribe tu pregunta"
-            className="flex-1 bg-transparent outline-none text-foreground placeholder:text-muted-foreground rounded-xl px-3 py-3 text-sm"
-            style={{ fontSize: "16px" }}
-            maxLength={300}
-          />
-          <button
-            type="submit"
-            aria-label="Enviar pregunta a Nave AI"
-            className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold uppercase tracking-wider text-xs sm:text-sm px-4 sm:px-6 py-3 rounded-xl whitespace-nowrap transition-colors"
+        <div className="bg-background/95 backdrop-blur border border-border/60 rounded-2xl shadow-xl p-3 sm:p-4">
+          <div className="flex items-center gap-2 mb-2 pl-1">
+            <Sparkles className="w-4 h-4 text-primary" />
+            <span className="text-[11px] sm:text-xs uppercase tracking-[0.18em] font-semibold text-foreground/90 drop-shadow-sm">
+              Pregúntale a Nave AI
+            </span>
+          </div>
+          <form
+            onSubmit={submit}
+            className="flex items-stretch gap-2"
           >
-            Enviar
-          </button>
-        </form>
+            <input
+              type="text"
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              placeholder={contextual}
+              aria-label="Escribe tu pregunta"
+              className="flex-1 bg-muted/50 outline-none text-foreground placeholder:text-muted-foreground rounded-xl px-3 py-3 text-xs sm:text-sm truncate"
+              maxLength={300}
+            />
+            <button
+              type="submit"
+              aria-label="Enviar pregunta a Nave AI"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold uppercase tracking-wider text-xs sm:text-sm px-4 sm:px-6 py-3 rounded-xl whitespace-nowrap transition-colors"
+            >
+              Enviar
+            </button>
+          </form>
+        </div>
       </div>
     </section>
   );
