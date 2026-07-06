@@ -5,7 +5,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { cn } from "@/lib/utils";
 import planPruebaHero from "@/assets/plan-prueba-hero.webp";
-import promoInviernoHero from "@/assets/promo-invierno-hero.jpg";
+
 
 // Día de la Madre (Chile: 10 mayo 2026) — banner activo hasta fin del 10 mayo
 const DIA_MADRE_END_DATE = new Date("2026-05-11T03:00:00Z");
