@@ -10,7 +10,7 @@ export const SocialProofSection = () => {
     name: "YogaAlliance",
     logo: yogaAllianceLogo
   }];
-  return <section className="pt-14 md:pt-16 pb-16 md:pb-24 bg-neutral-light">
+  return <section className="pt-16 md:pt-20 pb-16 md:pb-24 bg-neutral-light">
       <div className="container mx-auto px-6">
         {/* Hook métrico */}
         <div className="text-center mb-16">
