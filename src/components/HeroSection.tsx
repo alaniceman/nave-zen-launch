@@ -196,14 +196,25 @@ const HeroSlideDiaMadre = () => {
 const HeroSlidePromoInvierno = () => {
   const navigate = useNavigate();
   return (
-    <div className="relative min-h-screen flex items-start md:items-center justify-center pt-20 md:pt-0">
-      <img
-        src={promoInviernoHero}
-        alt="Promo Invierno — Ice Bath y Yoga en Nave Studio"
-        className="absolute inset-0 w-full h-full object-cover"
-        fetchPriority="high"
-      />
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900/80 via-slate-900/60 to-sky-900/70" />
+    <div className="relative min-h-screen flex items-start md:items-center justify-center pt-20 md:pt-0 bg-gradient-to-br from-slate-950 via-sky-900 to-cyan-700 overflow-hidden">
+      {/* Radial glows */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute -top-32 -left-32 w-[500px] h-[500px] rounded-full bg-cyan-400/20 blur-3xl" />
+        <div className="absolute -bottom-40 -right-24 w-[600px] h-[600px] rounded-full bg-sky-500/20 blur-3xl" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[400px] h-[400px] rounded-full bg-white/5 blur-3xl" />
+      </div>
+
+      {/* Decorative snowflakes */}
+      <div className="absolute inset-0 pointer-events-none opacity-40">
+        <div className="absolute top-16 left-10 text-white/40 text-3xl">❄</div>
+        <div className="absolute top-32 right-16 text-white/30 text-5xl">❄</div>
+        <div className="absolute bottom-24 left-1/4 text-white/20 text-4xl">❄</div>
+        <div className="absolute bottom-40 right-1/3 text-white/30 text-2xl">❄</div>
+        <div className="absolute top-1/2 left-8 text-white/20 text-2xl">❄</div>
+        <div className="absolute top-1/4 right-1/4 text-white/25 text-3xl">❄</div>
+      </div>
+
+      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent" />
       <div className="relative z-10 container mx-auto px-6 text-center text-white">
         <div className="max-w-3xl mx-auto space-y-5 md:space-y-7">
           <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md text-white px-5 py-2.5 rounded-full text-sm md:text-base font-semibold border border-white/25">
