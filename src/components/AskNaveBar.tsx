@@ -102,7 +102,7 @@ export const AskNaveBar = ({ placeholder, overlap = true, className = "" }: AskN
   return (
     <section
       className={`w-full px-4 sm:px-6 ${
-        overlap ? "relative z-20 -mt-10 md:-mt-16 pb-6 md:pb-10" : "py-5 sm:py-6"
+        overlap ? "relative z-20 -mt-10 md:-mt-16" : "py-5 sm:py-6"
       } ${className}`}
       aria-label="Preguntar a Nave AI"
     >
