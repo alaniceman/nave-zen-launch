@@ -109,7 +109,7 @@ export const AskNaveBar = ({ placeholder, overlap = true, className = "" }: AskN
       aria-label="Preguntar a Nave AI"
     >
       <div className="max-w-2xl mx-auto">
-        <div className="bg-background border border-border shadow-2xl rounded-2xl p-3 sm:p-4">
+        <div className="bg-neutral-light rounded-2xl p-3 sm:p-4">
           <div className="flex items-center gap-2 mb-2 pl-1">
             <Sparkles className="w-4 h-4 text-primary" />
             <span className="text-[11px] sm:text-xs uppercase tracking-[0.18em] font-semibold text-foreground">
