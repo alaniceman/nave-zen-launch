@@ -301,13 +301,13 @@ export default function AdminBookings() {
                     <TableHead>
                       <SortButton column="customer_name" label="Cliente" />
                     </TableHead>
+                    <TableHead>
+                      <SortButton column="status" label="Estado" />
+                    </TableHead>
                     <TableHead>Instructor</TableHead>
                     <TableHead>Servicio</TableHead>
                     <TableHead>
                       <SortButton column="date_time_start" label="Fecha y Hora Sesión" />
-                    </TableHead>
-                    <TableHead>
-                      <SortButton column="status" label="Estado" />
                     </TableHead>
                     <TableHead>
                       <SortButton column="final_price" label="Precio" />
