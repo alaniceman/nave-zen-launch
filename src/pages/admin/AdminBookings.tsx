@@ -301,13 +301,13 @@ export default function AdminBookings() {
                     <TableHead>
                       <SortButton column="customer_name" label="Cliente" />
                     </TableHead>
+                    <TableHead>
+                      <SortButton column="status" label="Estado" />
+                    </TableHead>
                     <TableHead>Instructor</TableHead>
                     <TableHead>Servicio</TableHead>
                     <TableHead>
                       <SortButton column="date_time_start" label="Fecha y Hora Sesión" />
-                    </TableHead>
-                    <TableHead>
-                      <SortButton column="status" label="Estado" />
                     </TableHead>
                     <TableHead>
                       <SortButton column="final_price" label="Precio" />
@@ -336,15 +336,15 @@ export default function AdminBookings() {
                             <div className="text-sm text-muted-foreground">{booking.customer_phone}</div>
                           </div>
                         </TableCell>
-                        <TableCell className="text-foreground">{booking.professionals.name}</TableCell>
-                        <TableCell className="text-foreground">{booking.services.name}</TableCell>
-                        <TableCell className="text-foreground">
-                          {formatInTimeZone(booking.date_time_start, 'America/Santiago', "d 'de' MMMM, yyyy 'a las' HH:mm", { locale: es })}
-                        </TableCell>
                         <TableCell>
                           <Badge className={statusColors[booking.status as keyof typeof statusColors]}>
                             {statusLabels[booking.status as keyof typeof statusLabels]}
                           </Badge>
+                        </TableCell>
+                        <TableCell className="text-foreground">{booking.professionals.name}</TableCell>
+                        <TableCell className="text-foreground">{booking.services.name}</TableCell>
+                        <TableCell className="text-foreground">
+                          {formatInTimeZone(booking.date_time_start, 'America/Santiago', "d 'de' MMMM, yyyy 'a las' HH:mm", { locale: es })}
                         </TableCell>
                         <TableCell className="text-foreground font-medium">
                           {booking.discount_amount && booking.discount_amount > 0 ? (
