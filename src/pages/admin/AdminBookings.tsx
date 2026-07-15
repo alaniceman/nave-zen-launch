@@ -229,10 +229,137 @@ export default function AdminBookings() {
     </Button>
   );
 
+  const [isExporting, setIsExporting] = useState(false);
+
+  const handleExportCSV = async () => {
+    if (!session?.access_token) return;
+    setIsExporting(true);
+    try {
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const allBookings: any[] = [];
+      let currentPage = 1;
+      const pageSize = 500;
+
+      // Fetch all pages honoring current filters
+      while (true) {
+        const params = new URLSearchParams({
+          page: currentPage.toString(),
+          limit: pageSize.toString(),
+          sortBy,
+          sortOrder,
+        });
+        if (status !== 'all') params.append('status', status);
+        if (professionalFilter !== 'all') params.append('professionalId', professionalFilter);
+        if (debouncedSearch) params.append('search', debouncedSearch);
+
+        const res = await fetch(`${supabaseUrl}/functions/v1/admin-bookings?${params.toString()}`, {
+          headers: {
+            Authorization: `Bearer ${session.access_token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+        if (!res.ok) throw new Error('Error al exportar');
+        const json = await res.json();
+        const batch = json.bookings || [];
+        allBookings.push(...batch);
+        if (batch.length < pageSize || allBookings.length >= (json.count || 0)) break;
+        currentPage++;
+        if (currentPage > 200) break; // hard safety
+      }
+
+      const headers = [
+        'ID Reserva',
+        'Fecha de Pago',
+        'Estado',
+        'Nombre Cliente',
+        'Email',
+        'Teléfono',
+        'Instructor',
+        'Email Instructor',
+        'Servicio',
+        'Fecha Sesión',
+        'Hora Sesión',
+        'Día Semana',
+        'Precio Original (CLP)',
+        'Descuento (CLP)',
+        'Precio Final (CLP)',
+        'Cupón',
+        'Código de Sesión',
+        'Paquete',
+        'Fuente Reserva',
+        'ID Pago MP',
+      ];
+
+      const escape = (v: any) => {
+        if (v === null || v === undefined) return '';
+        const s = String(v).replace(/"/g, '""');
+        return /[",\n;]/.test(s) ? `"${s}"` : s;
+      };
+
+      const rows = allBookings.map((b: any) => {
+        const dateSession = b.date_time_start ? formatInTimeZone(b.date_time_start, 'America/Santiago', 'yyyy-MM-dd') : '';
+        const timeSession = b.date_time_start ? formatInTimeZone(b.date_time_start, 'America/Santiago', 'HH:mm') : '';
+        const weekday = b.date_time_start ? formatInTimeZone(b.date_time_start, 'America/Santiago', 'EEEE', { locale: es }) : '';
+        const paidAt = b.created_at ? formatInTimeZone(b.created_at, 'America/Santiago', "yyyy-MM-dd HH:mm") : '';
+        const origPrice = b.original_price ?? b.final_price ?? b.services?.price_clp ?? '';
+        const finalPrice = b.final_price ?? b.services?.price_clp ?? '';
+        const discount = b.discount_amount ?? '';
+        const fuente = b.session_codes ? 'Código de Sesión' : b.discount_coupons ? 'Cupón' : 'Directa';
+        return [
+          b.id,
+          paidAt,
+          statusLabels[b.status] || b.status,
+          b.customer_name,
+          b.customer_email,
+          b.customer_phone,
+          b.professionals?.name,
+          b.professionals?.email,
+          b.services?.name,
+          dateSession,
+          timeSession,
+          weekday,
+          origPrice,
+          discount,
+          finalPrice,
+          b.discount_coupons?.code || '',
+          b.session_codes?.code || '',
+          b.session_codes?.session_packages?.name || '',
+          fuente,
+          b.mp_payment_id || '',
+        ].map(escape).join(',');
+      });
+
+      const csv = '\ufeff' + [headers.join(','), ...rows].join('\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      const stamp = formatInTimeZone(new Date(), 'America/Santiago', 'yyyy-MM-dd_HHmm');
+      link.href = url;
+      link.download = `reservas_${stamp}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      toast.success(`Exportadas ${allBookings.length} reservas`);
+    } catch (err: any) {
+      toast.error(`Error al exportar: ${err.message}`);
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold text-foreground">Gestión de Reservas</h1>
+        <Button onClick={handleExportCSV} disabled={isExporting} variant="outline">
+          {isExporting ? (
+            <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Exportando...</>
+          ) : (
+            <><Download className="h-4 w-4 mr-2" />Exportar CSV</>
+          )}
+        </Button>
       </div>
 
       <Card>
