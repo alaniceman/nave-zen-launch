@@ -163,7 +163,7 @@ serve(async (req) => {
 
     const totalDays = totalPlanDays(lead.plan_type);
     const dayNumber = daysBetween(lead.actual_start_date, tomorrowISO) + 1;
-    if (dayNumber < 1 || dayNumber > totalDays) {
+    if (dayNumber < 1) {
       return new Response(
         JSON.stringify({ skipped: true, reason: "day_out_of_range", dayNumber }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } },
