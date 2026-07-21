@@ -32,7 +32,8 @@ export interface ScheduleClassItem {
   service_id: string;
 }
 
-const DAY_KEYS = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo'] as const;
+// day_of_week convention (unified): 0=Domingo .. 6=Sábado (Postgres/JS estándar)
+const DAY_KEYS = ['domingo', 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado'] as const;
 
 const colorTagToTags: Record<string, string[]> = {
   'yoga': ['Yoga'],
