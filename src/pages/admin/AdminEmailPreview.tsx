@@ -286,26 +286,9 @@ export default function AdminEmailPreview() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between gap-3 flex-wrap">
               <CardTitle className="text-base">Vista previa</CardTitle>
-              <div className="flex items-end gap-2">
-                <div>
-                  <Label className="text-xs">Enviar prueba a</Label>
-                  <Input
-                    type="email"
-                    placeholder="tu@email.com"
-                    value={sendTo}
-                    onChange={(e) => setSendTo(e.target.value)}
-                    className="w-64"
-                  />
-                </div>
-                <Button
-                  variant="outline"
-                  onClick={sendTestEmail}
-                  disabled={sending}
-                >
-                  {sending && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
-                  Enviar prueba
-                </Button>
-              </div>
+              <Button variant="outline" onClick={openInNewTab}>
+                Abrir en pestaña nueva
+              </Button>
             </CardHeader>
             <CardContent>
               <iframe
