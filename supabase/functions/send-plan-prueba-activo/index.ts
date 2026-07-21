@@ -43,12 +43,19 @@ body{margin:0;padding:0;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
 <p><strong>Fecha de inicio:</strong> <span style="text-transform:capitalize">${p.start}</span></p>
 <p><strong>Fecha de término:</strong> <span style="text-transform:capitalize">${p.end}</span></p>
 </div>
-<p>Para ver los horarios y agendar tus clases, descarga o entra a la app de BoxMagic:</p>
-<div class="cta-row"><a class="btn" href="https://cualesmi.boxmagic.app/members">Entrar a BoxMagic</a></div>
+<p>Para ver los horarios y reservar tus clases, entra a BoxMagic:</p>
+<div class="cta-row"><a class="btn" href="https://members.boxmagic.app/">Ver horarios y reservar</a></div>
+<p style="font-size:14px;color:#4A4A4A;text-align:center;margin:0 0 12px">Entra a BoxMagic para revisar todos los horarios disponibles y reservar las clases que prefieras.</p>
+<p style="font-size:13px;color:#6B7280;text-align:center;margin:0 0 22px">
+Web: <a href="https://members.boxmagic.app/" style="color:#2E4D3A">members.boxmagic.app</a><br>
+<a href="https://apps.apple.com/cl/app/boxmagic-members/id6479632550" style="color:#2E4D3A">Descargar en App Store</a>
+&nbsp;·&nbsp;
+<a href="https://play.google.com/store/apps/details?id=app.boxmagic.members" style="color:#2E4D3A">Descargar en Google Play</a>
+</p>
 <div class="card">
 <p><strong>Tus datos de acceso:</strong></p>
 <p>Email: ${p.email}</p>
-<p>Contraseña: <strong>Nave7</strong></p>
+<p>Contraseña: <strong>Nave7</strong> (solo si aún no la cambiaste)</p>
 </div>
 <p>Durante estos días puedes venir a probar la Nave y vivir nuestras clases de Yoga, Criomedicina y Método Wim Hof.</p>
 <p>Aprovecha tu plan al máximo. Agenda tus clases, ven con curiosidad y permítete conocer lo que pasa cuando entrenas tu cuerpo, tu respiración y tu mente en un espacio diseñado para que te sientas sano, fuerte y feliz.</p>
