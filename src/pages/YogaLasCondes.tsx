@@ -144,7 +144,7 @@ const membershipPlans = [
   },
 ];
 
-const DAY_KEYS_YOGA = ['lunes','martes','miercoles','jueves','viernes','sabado','domingo'] as const;
+const DAY_KEYS_YOGA = ['domingo','lunes','martes','miercoles','jueves','viernes','sabado'] as const;
 const DAY_NAMES_YOGA: Record<string, string> = {
   lunes: 'Lunes', martes: 'Martes', miercoles: 'Miércoles',
   jueves: 'Jueves', viernes: 'Viernes', sabado: 'Sábado', domingo: 'Domingo',
