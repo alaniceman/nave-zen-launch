@@ -2,10 +2,11 @@ import { useMemo } from "react";
 import { useScheduleEntries } from "@/hooks/useScheduleEntries";
 import { NextClassWidget } from "@/components/NextClassWidget";
 
-const DAY_KEYS = ['lunes','martes','miercoles','jueves','viernes','sabado','domingo'] as const;
+// day_of_week convention (unified): 0=Domingo .. 6=Sábado
+const DAY_KEYS = ['domingo','lunes','martes','miercoles','jueves','viernes','sabado'] as const;
 const DAY_NAMES: Record<string, string> = {
-  lunes: 'Lunes', martes: 'Martes', miercoles: 'Miércoles',
-  jueves: 'Jueves', viernes: 'Viernes', sabado: 'Sábado', domingo: 'Domingo',
+  domingo: 'Domingo', lunes: 'Lunes', martes: 'Martes', miercoles: 'Miércoles',
+  jueves: 'Jueves', viernes: 'Viernes', sabado: 'Sábado',
 };
 
 interface Props {
@@ -26,7 +27,7 @@ export const NextClassAutoWidget = ({ tags, labelPrefix, href, storageKey }: Pro
     if (!scheduleData) return null;
     const nowCL = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Santiago" }));
     const jsDay = nowCL.getDay();
-    const todayIdx = jsDay === 0 ? 6 : jsDay - 1;
+    const todayIdx = jsDay;
     const nowMin = nowCL.getHours() * 60 + nowCL.getMinutes();
     for (let offset = 0; offset < 7; offset++) {
       const idx = (todayIdx + offset) % 7;

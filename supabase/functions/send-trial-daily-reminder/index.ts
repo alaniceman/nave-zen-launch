@@ -222,9 +222,8 @@ serve(async (req) => {
     }
 
     // Fetch tomorrow's classes from schedule_entries (source: /admin/horarios).
-    // day_of_week convention: 0=lunes .. 6=domingo. JS getUTCDay: 0=Sun..6=Sat.
-    const jsDay = new Date(tomorrowISO + "T12:00:00-03:00").getUTCDay();
-    const scheduleDay = (jsDay + 6) % 7;
+    // day_of_week convention (unified): 0=Domingo .. 6=Sábado (Postgres/JS estándar).
+    const scheduleDay = new Date(tomorrowISO + "T12:00:00-03:00").getUTCDay();
 
     const { data: entries } = await supabase
       .from("schedule_entries")
