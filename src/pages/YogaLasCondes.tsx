@@ -269,9 +269,9 @@ const YogaLasCondes = () => {
   const nextClass = useMemo(() => {
     if (!scheduleData) return null;
     const nowCL = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Santiago" }));
-    // JS: 0=domingo..6=sábado. Nuestro DAY_KEYS_YOGA: 0=lunes..6=domingo
+    // Unified: 0=domingo..6=sábado (Postgres/JS estándar)
     const jsDay = nowCL.getDay();
-    const todayIdx = jsDay === 0 ? 6 : jsDay - 1;
+    const todayIdx = jsDay;
     const nowMin = nowCL.getHours() * 60 + nowCL.getMinutes();
     for (let offset = 0; offset < 7; offset++) {
       const idx = (todayIdx + offset) % 7;
