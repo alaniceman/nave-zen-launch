@@ -27,7 +27,7 @@ export const NextClassAutoWidget = ({ tags, labelPrefix, href, storageKey }: Pro
     if (!scheduleData) return null;
     const nowCL = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Santiago" }));
     const jsDay = nowCL.getDay();
-    const todayIdx = jsDay === 0 ? 6 : jsDay - 1;
+    const todayIdx = jsDay;
     const nowMin = nowCL.getHours() * 60 + nowCL.getMinutes();
     for (let offset = 0; offset < 7; offset++) {
       const idx = (todayIdx + offset) % 7;
