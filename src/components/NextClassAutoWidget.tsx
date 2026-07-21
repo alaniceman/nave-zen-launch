@@ -2,10 +2,11 @@ import { useMemo } from "react";
 import { useScheduleEntries } from "@/hooks/useScheduleEntries";
 import { NextClassWidget } from "@/components/NextClassWidget";
 
-const DAY_KEYS = ['lunes','martes','miercoles','jueves','viernes','sabado','domingo'] as const;
+// day_of_week convention (unified): 0=Domingo .. 6=Sábado
+const DAY_KEYS = ['domingo','lunes','martes','miercoles','jueves','viernes','sabado'] as const;
 const DAY_NAMES: Record<string, string> = {
-  lunes: 'Lunes', martes: 'Martes', miercoles: 'Miércoles',
-  jueves: 'Jueves', viernes: 'Viernes', sabado: 'Sábado', domingo: 'Domingo',
+  domingo: 'Domingo', lunes: 'Lunes', martes: 'Martes', miercoles: 'Miércoles',
+  jueves: 'Jueves', viernes: 'Viernes', sabado: 'Sábado',
 };
 
 interface Props {
