@@ -52,8 +52,6 @@ export default function AdminEmailPreview() {
   const [dayNumber, setDayNumber] = useState<number>(1);
   const [preview, setPreview] = useState<PreviewResult | null>(null);
   const [loadingPreview, setLoadingPreview] = useState(false);
-  const [sendTo, setSendTo] = useState("");
-  const [sending, setSending] = useState(false);
 
   useEffect(() => {
     (async () => {
