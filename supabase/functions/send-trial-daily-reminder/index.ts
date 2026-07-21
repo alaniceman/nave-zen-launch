@@ -9,102 +9,138 @@ import {
   credentialsBlockHtml,
 } from "../_shared/boxmagicBlock.ts";
 import {
+  TIMEZONE,
   chileDateString,
   addDaysISO,
   daysBetween,
-  formatChileLongDate,
-  formatChileTime,
 } from "../_shared/chileTime.ts";
+import { getTrialCopy } from "../_shared/trialCopy.ts";
 
 const bodySchema = z.object({
   leadId: z.string().uuid(),
-  // Optional override for testing. If omitted, function decides D+1 from "today Chile".
   targetClassDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
   dryRun: z.boolean().optional(),
 });
 
-const MOTIVATIONAL = [
-  "El cuerpo alcanza lo que la mente cree.",
-  "Cada respiración es una nueva oportunidad de volver a ti.",
-  "La fuerza no viene de la capacidad física, viene de una voluntad indomable.",
-  "El frío no es tu enemigo, es tu maestro.",
-  "Donde va la atención, va la energía.",
-  "Un paso a la vez, una respiración a la vez.",
-  "El poder está en el presente.",
-  "Confía en el proceso, confía en tu cuerpo.",
-  "Somos capaces de mucho más de lo que creemos.",
-  "La constancia es más importante que la intensidad.",
-];
-
-function pickPhrase(day: number): string {
-  return MOTIVATIONAL[(day - 1) % MOTIVATIONAL.length];
-}
+const WHATSAPP_URL =
+  "https://wa.me/56946120426?text=Hola%21%20quiero%20que%20me%20recomienden%20un%20plan%20despu%C3%A9s%20de%20mi%20Plan%20de%20Prueba";
+const PLANS_URL = "https://studiolanave.com/planes";
 
 function totalPlanDays(planType: string | null): number {
   if (planType === "trial_15d") return 15;
   return 7;
 }
 
-function classesListHtml(
-  classes: Array<{ title: string; time: string; instructor: string | null }>,
-): string {
+// Format like "lunes 24 de noviembre" (no year), Chile timezone.
+function formatDayAndDateNoYear(isoDate: string): string {
+  const d = new Date(isoDate + "T12:00:00Z");
+  const parts = new Intl.DateTimeFormat("es-CL", {
+    timeZone: TIMEZONE,
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  }).formatToParts(d);
+  const weekday = parts.find((p) => p.type === "weekday")?.value ?? "";
+  const day = parts.find((p) => p.type === "day")?.value ?? "";
+  const month = parts.find((p) => p.type === "month")?.value ?? "";
+  return `${weekday} ${day} de ${month}`;
+}
+
+interface ClassItem {
+  title: string;
+  time: string;
+  instructor: string | null;
+}
+
+function classesBlockHtml(dateLabel: string, classes: ClassItem[]): string {
+  const title = `<p style="margin:0 0 12px;color:#2E4D3A;font-size:13px;font-weight:700;letter-spacing:0.6px;text-transform:uppercase">Clases disponibles para mañana</p>`;
+
   if (classes.length === 0) {
-    return `<p style="margin:0 0 12px;color:#4A4A4A;font-size:15px;line-height:1.6">
-      Mañana no vemos clases fijas en agenda todavía — te invitamos igualmente a entrar a BoxMagic para revisar posibles actualizaciones.
-    </p>`;
+    return (
+      title +
+      `<p style="margin:0 0 20px;color:#4A4A4A;font-size:15px;line-height:1.7">Mañana no tenemos clases programadas por el momento. Entra a BoxMagic para revisar posibles actualizaciones y organizar tus próximas reservas.</p>`
+    );
   }
-  const items = classes
+
+  const rows = classes
+    .slice(0, 6)
     .map(
-      (c) =>
-        `<li style="margin:0 0 6px;font-size:15px;color:#2A2A2A;line-height:1.6">
-          <strong>${c.title}</strong> — ${c.time}${c.instructor ? ` · ${c.instructor}` : ""}
-        </li>`,
+      (c) => `
+      <tr>
+        <td style="padding:10px 0;border-bottom:1px solid #EEF1F4;color:#2A2A2A;font-size:15px;line-height:1.5">
+          <strong style="color:#1F2937">${c.title}</strong><br>
+          <span style="color:#4A4A4A;font-size:14px;text-transform:capitalize">${dateLabel}</span>
+          <span style="color:#9CA3AF"> · </span>
+          <span style="color:#2E4D3A;font-weight:600">${c.time}</span>${
+        c.instructor
+          ? ` <span style="color:#9CA3AF"> · </span><span style="color:#4A4A4A">${c.instructor}</span>`
+          : ""
+      }
+        </td>
+      </tr>`,
     )
     .join("");
-  return `<ul style="margin:0 0 12px;padding:0 0 0 20px">${items}</ul>`;
+
+  return (
+    title +
+    `<table role="presentation" width="100%" style="border-collapse:collapse;margin:0 0 20px">${rows}</table>`
+  );
+}
+
+function conversionCtasHtml(): string {
+  return `
+<div style="margin:24px 0 12px">
+  <table role="presentation" width="100%" style="border-collapse:collapse">
+    <tr><td style="padding:0 0 10px;text-align:center">
+      <a href="${PLANS_URL}" style="display:inline-block;width:100%;max-width:320px;background:#2E4D3A;color:#fff!important;padding:14px 24px;border-radius:10px;text-decoration:none;font-weight:600;font-size:15px;box-sizing:border-box">Ver planes para continuar</a>
+    </td></tr>
+    <tr><td style="padding:0;text-align:center">
+      <a href="${WHATSAPP_URL}" style="display:inline-block;width:100%;max-width:320px;background:#fff;color:#2E4D3A!important;padding:13px 24px;border-radius:10px;text-decoration:none;font-weight:600;font-size:15px;border:1.5px solid #2E4D3A;box-sizing:border-box">Quiero que me recomienden un plan</a>
+    </td></tr>
+  </table>
+</div>`;
 }
 
 function buildHtml(p: {
   name: string;
-  dayNumber: number;
-  totalDays: number;
-  tomorrowLabel: string;
-  classes: Array<{ title: string; time: string; instructor: string | null }>;
+  preview: string;
+  bodyHtml: string;
+  dateLabel: string;
+  classes: ClassItem[];
   showCredentials: boolean;
   email: string;
-  phrase: string;
+  cta: "reserve" | "convert";
 }): string {
+  const cta =
+    p.cta === "convert" ? conversionCtasHtml() : boxmagicBlockHtml();
+  const supportLinks =
+    p.cta === "convert"
+      ? `<p style="font-size:13px;color:#6B7280;line-height:1.7;text-align:center;margin:0 0 14px">
+          También puedes seguir revisando horarios en
+          <a href="${BOXMAGIC_WEB}" style="color:#2E4D3A">BoxMagic</a>.
+        </p>`
+      : "";
+
   return `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <style>
 body{margin:0;padding:0;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;background:#F4F4F5;line-height:1.7;-webkit-font-smoothing:antialiased}
 .wrap{max-width:580px;margin:0 auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
 .hdr{background:#2E4D3A;padding:32px 28px;text-align:center}
-.hdr h1{margin:0;color:#fff;font-size:22px;font-weight:700}
+.hdr h1{margin:0;color:#fff;font-size:22px;font-weight:700;letter-spacing:0.3px}
 .body{padding:32px 28px;color:#2A2A2A;font-size:15px}
-.body p{margin:0 0 16px}
-.section-title{margin:0 0 10px;color:#2E4D3A;font-size:15px;font-weight:700}
-.card{background:#F7F9FB;border-radius:12px;padding:18px 22px;margin:0 0 22px;border:1px solid #E2E8F0}
 .footer{padding:20px;text-align:center;color:#9CA3AF;font-size:12px;border-top:1px solid #F0F0F0}
 </style></head><body>
-<span style="display:none;max-height:0;overflow:hidden">Revisa las clases de mañana y reserva tu horario en BoxMagic.</span>
+<span style="display:none;max-height:0;overflow:hidden">${p.preview}</span>
 <div class="wrap">
   <div class="hdr"><h1>Nave Studio</h1></div>
   <div class="body">
-    <p>Hola <strong>${p.name}</strong>!</p>
-    <p>Mañana comienza tu <strong>día ${p.dayNumber}</strong> del plan de prueba de ${p.totalDays} días.</p>
-
-    <p class="section-title">Clases de mañana (<span style="text-transform:capitalize">${p.tomorrowLabel}</span>)</p>
-    ${classesListHtml(p.classes)}
-
-    ${boxmagicBlockHtml()}
-
+    <p style="margin:0 0 18px;color:#2A2A2A;font-size:15px">Hola <strong>${p.name}</strong>,</p>
+    ${p.bodyHtml}
+    ${classesBlockHtml(p.dateLabel, p.classes)}
+    ${cta}
+    ${supportLinks}
     ${p.showCredentials ? credentialsBlockHtml(p.email) : ""}
-
-    <div class="card">
-      <p style="margin:0;font-style:italic;color:#2E4D3A">"${p.phrase}"</p>
-    </div>
-
-    <p style="margin-bottom:0">Nos vemos en la Nave ❄️🛸<br><strong>Equipo Nave Studio</strong></p>
+    <p style="margin:22px 0 0;color:#2A2A2A;font-size:15px">Nos vemos en la Nave ❄️🛸<br><strong>Equipo Nave Studio</strong></p>
   </div>
   <div class="footer">Nave Studio · Antares 259, Las Condes</div>
 </div></body></html>`;
@@ -139,11 +175,9 @@ serve(async (req) => {
       throw new Error("Plan sin fechas activas");
     }
 
-    // targetClassDate = the class date being shown = D+1 from today Chile
     const tomorrowISO =
       targetClassDate || addDaysISO(chileDateString(new Date()), 1);
 
-    // Guard: tomorrow must fall inside [start, end]
     if (
       tomorrowISO < lead.actual_start_date ||
       tomorrowISO > lead.actual_end_date
@@ -168,6 +202,10 @@ serve(async (req) => {
         { headers: { ...corsHeaders, "Content-Type": "application/json" } },
       );
     }
+    const remainingDays = Math.max(
+      0,
+      daysBetween(tomorrowISO, lead.actual_end_date),
+    );
 
     // Dedupe
     const { data: existing } = await supabase
@@ -209,7 +247,7 @@ serve(async (req) => {
     const svcMap = new Map((svcs || []).map((s: any) => [s.id, s.name]));
     const proMap = new Map((pros || []).map((p: any) => [p.id, p.name]));
 
-    const classes = rows.map((r: any) => ({
+    const classes: ClassItem[] = rows.map((r: any) => ({
       title: r.display_name || svcMap.get(r.service_id) || "Clase",
       time: (r.start_time || "").slice(0, 5),
       instructor: proMap.get(r.professional_id) || null,
@@ -218,21 +256,42 @@ serve(async (req) => {
     const halfway = totalDays === 15 ? 8 : 4;
     const showCredentials = dayNumber <= halfway;
 
-    const subject = `Nave Studio — Tu día ${dayNumber} comienza mañana`;
-    const html = buildHtml({
-      name: lead.customer_name,
+    const firstName = (lead.customer_name || "").split(" ")[0] || lead.customer_name || "";
+    const copy = getTrialCopy({
+      firstName,
       dayNumber,
       totalDays,
-      tomorrowLabel: formatChileLongDate(tomorrowISO),
+      remainingDays,
+      completedReservations: null,
+    });
+
+    const dateLabel = formatDayAndDateNoYear(tomorrowISO);
+
+    const html = buildHtml({
+      name: firstName,
+      preview: copy.preview,
+      bodyHtml: copy.bodyHtml,
+      dateLabel,
       classes,
       showCredentials,
       email: lead.customer_email,
-      phrase: pickPhrase(dayNumber),
+      cta: copy.cta,
     });
 
     if (dryRun) {
       return new Response(
-        JSON.stringify({ dryRun: true, subject, dayNumber, tomorrowISO, classes, showCredentials, html }),
+        JSON.stringify({
+          dryRun: true,
+          subject: copy.subject,
+          dayNumber,
+          totalDays,
+          tomorrowISO,
+          dateLabel,
+          remainingDays,
+          classes,
+          showCredentials,
+          html,
+        }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } },
       );
     }
@@ -247,7 +306,7 @@ serve(async (req) => {
         from: "Nave Studio <no-reply@studiolanave.com>",
         reply_to: "lanave@alaniceman.com",
         to: [lead.customer_email],
-        subject,
+        subject: copy.subject,
         html,
       });
     } catch (e: any) {
