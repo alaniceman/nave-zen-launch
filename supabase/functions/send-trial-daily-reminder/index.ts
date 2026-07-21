@@ -54,7 +54,6 @@ function classesListHtml(
     </p>`;
   }
   const items = classes
-    .slice(0, 3)
     .map(
       (c) =>
         `<li style="margin:0 0 6px;font-size:15px;color:#2A2A2A;line-height:1.6">
@@ -184,30 +183,21 @@ serve(async (req) => {
       );
     }
 
-    // Fetch tomorrow's classes from generated_slots (Chile day)
-    // Query full day range in UTC that covers the Chile calendar day.
-    const dayStartUtc = new Date(tomorrowISO + "T00:00:00-03:00"); // roughly Chile; adjust
-    // Safer: use Chile boundaries via formatter — pull a wide 26h window and filter.
-    const wideStart = new Date(tomorrowISO + "T00:00:00Z");
-    wideStart.setUTCHours(wideStart.getUTCHours() - 6); // start earlier to include late UTC
-    const wideEnd = new Date(tomorrowISO + "T23:59:59Z");
-    wideEnd.setUTCHours(wideEnd.getUTCHours() + 6);
+    // Fetch tomorrow's classes from schedule_entries (source: /admin/horarios).
+    // day_of_week convention: 0=lunes .. 6=domingo. JS getUTCDay: 0=Sun..6=Sat.
+    const jsDay = new Date(tomorrowISO + "T12:00:00-03:00").getUTCDay();
+    const scheduleDay = (jsDay + 6) % 7;
 
-    const { data: slots } = await supabase
-      .from("generated_slots")
-      .select("date_time_start, service_id, professional_id, is_active")
+    const { data: entries } = await supabase
+      .from("schedule_entries")
+      .select("start_time, display_name, service_id, professional_id, sort_order")
       .eq("is_active", true)
-      .gte("date_time_start", wideStart.toISOString())
-      .lte("date_time_start", wideEnd.toISOString())
-      .order("date_time_start", { ascending: true });
+      .eq("day_of_week", scheduleDay)
+      .order("start_time", { ascending: true });
 
-    const filtered = (slots || []).filter(
-      (s) => chileDateString(new Date(s.date_time_start)) === tomorrowISO,
-    );
-
-    // Resolve service/professional names
-    const svcIds = [...new Set(filtered.map((s) => s.service_id).filter(Boolean))];
-    const proIds = [...new Set(filtered.map((s) => s.professional_id).filter(Boolean))];
+    const rows = entries || [];
+    const svcIds = [...new Set(rows.map((s: any) => s.service_id).filter(Boolean))];
+    const proIds = [...new Set(rows.map((s: any) => s.professional_id).filter(Boolean))];
     const [{ data: svcs }, { data: pros }] = await Promise.all([
       svcIds.length
         ? supabase.from("services").select("id, name").in("id", svcIds)
@@ -219,10 +209,10 @@ serve(async (req) => {
     const svcMap = new Map((svcs || []).map((s: any) => [s.id, s.name]));
     const proMap = new Map((pros || []).map((p: any) => [p.id, p.name]));
 
-    const classes = filtered.map((s) => ({
-      title: svcMap.get(s.service_id) || "Clase",
-      time: formatChileTime(s.date_time_start),
-      instructor: proMap.get(s.professional_id) || null,
+    const classes = rows.map((r: any) => ({
+      title: r.display_name || svcMap.get(r.service_id) || "Clase",
+      time: (r.start_time || "").slice(0, 5),
+      instructor: proMap.get(r.professional_id) || null,
     }));
 
     const halfway = totalDays === 15 ? 8 : 4;
