@@ -239,6 +239,7 @@ const App = () => {
               <Route path="codigos-sesiones" element={<AdminSessionCodes />} />
               <Route path="clases-prueba" element={<AdminTrialBookings />} />
               <Route path="planes-prueba" element={<AdminPlanesPrueba />} />
+              <Route path="planes-prueba/emails" element={<AdminEmailPreview />} />
               <Route path="clientes" element={<AdminCustomers />} />
               <Route path="clientes/:id" element={<AdminCustomerDetail />} />
               <Route path="membresias" element={<AdminMembershipPlans />} />
