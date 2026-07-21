@@ -54,7 +54,6 @@ function classesListHtml(
     </p>`;
   }
   const items = classes
-    .slice(0, 3)
     .map(
       (c) =>
         `<li style="margin:0 0 6px;font-size:15px;color:#2A2A2A;line-height:1.6">
