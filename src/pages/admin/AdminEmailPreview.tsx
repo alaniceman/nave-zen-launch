@@ -130,38 +130,16 @@ export default function AdminEmailPreview() {
     }
   };
 
-  const sendTestEmail = async () => {
+  const openInNewTab = () => {
     if (!preview) return;
-    const to = sendTo.trim();
-    if (!to || !/.+@.+\..+/.test(to)) {
-      toast.error("Ingresa un email válido");
-      return;
-    }
-    setSending(true);
-    try {
-      const { data, error } = await supabase.functions.invoke(
-        "send-test-email",
-        {
-          body: {
-            to,
-            subject: `[PREVIEW] ${preview.subject}`,
-            html: preview.html,
-          },
-        },
-      );
-      if (error) throw error;
-      toast.success(`Correo de prueba enviado a ${to}`);
-    } catch (e: any) {
-      // Fallback: fetch alternative simple send is not guaranteed to exist,
-      // so surface the underlying error.
-      toast.error(
-        e?.message ||
-          "No se pudo enviar. Puedes copiar el HTML y probar manualmente.",
-      );
-    } finally {
-      setSending(false);
+    const w = window.open("", "_blank");
+    if (w) {
+      w.document.open();
+      w.document.write(preview.html);
+      w.document.close();
     }
   };
+
 
   return (
     <div className="p-6 space-y-6 max-w-[1400px] mx-auto">
