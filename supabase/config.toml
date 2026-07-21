@@ -66,3 +66,9 @@ verify_jwt = false
 [functions.submit-membership-lead]
 verify_jwt = false
 
+[functions.send-trial-daily-reminder]
+verify_jwt = false
+
+[functions.process-trial-reminders]
+verify_jwt = false
+
