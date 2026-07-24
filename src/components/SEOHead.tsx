@@ -3,8 +3,8 @@ import { Helmet } from "react-helmet-async";
 
 const seoData = {
   "/": {
-    title: "Nave Studio | Ice Bath, Wim Hof y Yoga en Las Condes",
-    description: "Ice Bath, Breathwork Wim Hof, Yoga y biohacking en Las Condes. Reserva tu clase y regula tu sistema nervioso.",
+    title: "Centro de bienestar basado en ciencia | Nave Studio",
+    description: "Ice Bath, Método Wim Hof, Yoga y Breathwork en Las Condes. Reserva tu clase y regula tu sistema nervioso en Nave Studio.",
     canonical: "https://studiolanave.com/",
     ogTitle: "Nave Studio | Ice Bath, Breathwork y Yoga en Las Condes",
     ogDescription: "Centro de bienestar basado en ciencia. Regula tu sistema nervioso con Método Wim Hof, baños de hielo y yoga. Plan de prueba 7 días por $9.900.",
@@ -271,7 +271,7 @@ const structuredData = {
     "@context": "https://schema.org",
     "@type": "HealthAndBeautyBusiness",
     "name": "Nave Studio",
-    "description": "Centro de bienestar basado en ciencia especializado en Ice Bath, Breathwork Wim Hof, Yoga y biohacking",
+    "description": "Centro de bienestar basado en ciencia especializado en Ice Bath, Breathwork Wim Hof y Yoga",
     "url": "https://studiolanave.com",
     "telephone": "+56987654321",
     "address": {
@@ -323,8 +323,8 @@ const structuredData = {
         },
         {
           "@type": "Service",
-          "name": "Biohacking",
-          "description": "Optimización del rendimiento físico y mental"
+          "name": "Método Wim Hof",
+          "description": "Respiración guiada e inmersión en hielo con instructores certificados"
         }
       ]
     },

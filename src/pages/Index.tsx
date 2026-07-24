@@ -20,8 +20,8 @@ const Index = () => {
   return (
     <>
       <Helmet>
-        <title>Nave Studio | Centro de bienestar basado en ciencia en Las Condes</title>
-        <meta name="description" content="Ice Bath, Método Wim Hof, Yoga y Breathwork en Las Condes. Reserva tu clase y regula tu sistema nervioso." />
+        <title>Centro de bienestar basado en ciencia | Nave Studio</title>
+        <meta name="description" content="Ice Bath, Método Wim Hof, Yoga y Breathwork en Las Condes. Reserva tu clase y regula tu sistema nervioso en Nave Studio." />
         <link rel="canonical" href="https://studiolanave.com/" />
         <meta property="og:title" content="Nave Studio | Ice Bath, Método Wim Hof y Yoga en Las Condes" />
         <meta property="og:description" content="Centro de bienestar basado en ciencia. Regula tu sistema nervioso con Método Wim Hof, baños de hielo y yoga. Plan de prueba 7 días por $9.900." />
