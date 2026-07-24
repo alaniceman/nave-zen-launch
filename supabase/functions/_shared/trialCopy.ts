@@ -9,7 +9,36 @@ export interface TrialCopy {
   // HTML body copy (paragraphs). Rendered between greeting and classes block.
   bodyHtml: string;
   cta: TrialCta;
+  quote?: string;
 }
+
+const QUOTES_7: Record<number, string> = {
+  1: "Algún día… o día uno. Tú decides.",
+  2: "El primer paso inicia el camino. Volver comienza la transformación.",
+  3: "Hay cosas que solo puedes descubrir cuando te atreves a probarlas.",
+  4: "No es lo que haces una vez, sino lo que eliges repetir, lo que te transforma.",
+  5: "Escucha cómo te sientes después de hacer algo bueno por ti.",
+  6: "La mejor práctica no es la más perfecta, sino la que puedes sostener.",
+  7: "El final de esta prueba puede ser el comienzo de una nueva práctica.",
+};
+
+const QUOTES_15: Record<number, string> = {
+  1: "Algún día… o día uno. Tú decides.",
+  2: "El primer paso te muestra el camino. El segundo demuestra que quieres recorrerlo.",
+  3: "Lo que reservas en tu agenda también lo estás eligiendo para tu vida.",
+  4: "Hay cosas que solo puedes descubrir cuando te atreves a probarlas.",
+  5: "Una experiencia inspira. La constancia transforma.",
+  6: "Tu cuerpo siempre te cuenta cómo se siente. Aprende a escucharlo.",
+  7: "No necesitas hacerlo perfecto. Necesitas volver.",
+  8: "Ya comenzaste. Ahora descubre hasta dónde puedes llegar.",
+  9: "Cada vez que repites una práctica, la experimentas desde un lugar diferente.",
+  10: "Una rutina se construye cuando haces espacio para lo que te hace bien.",
+  11: "No busques la práctica correcta para todos. Encuentra la correcta para ti.",
+  12: "La mejor frecuencia es aquella que puedes sostener.",
+  13: "Todavía estás a tiempo de vivir aquello que viniste a buscar.",
+  14: "No dejes para después aquello que ya descubriste que te hace bien.",
+  15: "El final de esta prueba puede ser el comienzo de una nueva práctica.",
+};
 
 function p(html: string): string {
   return `<p style="margin:0 0 16px;color:#2A2A2A;font-size:15px;line-height:1.7">${html}</p>`;
