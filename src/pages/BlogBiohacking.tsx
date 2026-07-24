@@ -6,7 +6,7 @@ import heroImage from "@/assets/blog-biohacking-hero.jpg";
 const BlogBiohacking = () => {
   const jsonLdData = {
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": "BlogPosting",
     "headline": "Biohacking para longevidad: HIIT + Breathwork + Agua fría (la tríada que entrena tu futuro)",
     "author": {
       "@type": "Person",

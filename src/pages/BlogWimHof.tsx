@@ -6,7 +6,7 @@ import heroImage from "@/assets/blog-wim-hof-hero.jpg";
 const BlogWimHof = () => {
   const jsonLdData = {
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": "BlogPosting",
     "headline": "Método Wim Hof: respiración, frío y mente — lo esencial (y cómo empezar hoy)",
     "author": {
       "@type": "Person",
