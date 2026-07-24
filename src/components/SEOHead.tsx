@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { useEffect } from "react";
+import { Helmet } from "react-helmet-async";
 
 const seoData = {
   "/": {
