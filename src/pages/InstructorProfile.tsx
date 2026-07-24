@@ -53,11 +53,11 @@ const InstructorProfile = () => {
         <title>{coach.name} — {coach.role} | Nave Studio</title>
         <meta
           name="description"
-          content={`${coach.name}, ${coach.role} en Nave Studio, Las Condes. Reserva una sesión guiada de ${coach.specialty || coach.role}. Método Wim Hof, Ice Bath y Yoga.`}
+          content={`${coach.name}, ${coach.role} en Nave Studio, Las Condes. Reserva una sesión guiada con ${coach.name.split(" ")[0]}. Método Wim Hof, Ice Bath y Yoga.`}
         />
         <link rel="canonical" href={`https://studiolanave.com/instructor/${coach.slug}`} />
         <meta property="og:title" content={`${coach.name} — ${coach.role} | Nave Studio`} />
-        <meta property="og:description" content={`${coach.name}, ${coach.role} en Nave Studio, Las Condes. Reserva una sesión guiada de ${coach.specialty || coach.role}.`} />
+        <meta property="og:description" content={`${coach.name}, ${coach.role} en Nave Studio, Las Condes. Reserva una sesión guiada. Método Wim Hof, Ice Bath y Yoga.`} />
         <meta property="og:url" content={`https://studiolanave.com/instructor/${coach.slug}`} />
         <meta property="og:image" content={coach.image?.startsWith("http") ? coach.image : `https://studiolanave.com${coach.image}`} />
         <meta property="og:type" content="profile" />
