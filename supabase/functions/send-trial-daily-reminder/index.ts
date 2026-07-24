@@ -286,6 +286,7 @@ serve(async (req) => {
       showCredentials,
       email: lead.customer_email,
       cta: copy.cta,
+      quote: copy.quote,
     });
 
     if (dryRun) {
