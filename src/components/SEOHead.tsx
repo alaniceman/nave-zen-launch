@@ -22,7 +22,7 @@ const seoData = {
   },
   "/planes-precios": {
     title: "Planes y precios: membresías y sesiones | Nave Studio Las Condes",
-    description: "Elige 1/semana, 2/semana o ilimitado. Ahorra con membresía. Reserva en línea en minutos.",
+    description: "Compara planes y precios de Nave Studio: membresías de 1x, 2x o ilimitado, paquetes de Criomedicina y solo Yoga en Las Condes. Reserva online en minutos.",
     canonical: "https://studiolanave.com/planes-precios",
     ogTitle: "Planes desde 1x/semana hasta ilimitado | Nave Studio",
     ogDescription: "Membresías flexibles y sesiones individuales. Ahorra hasta 40% con suscripción. Reserva online en minutos.",
@@ -31,7 +31,7 @@ const seoData = {
   },
   "/coaches": {
     title: "Coaches certificados y equipo | Nave Studio",
-    description: "Guías certificados en WHM, Yoga y movimiento. Conócenos y agenda con tu coach ideal.",
+    description: "Conoce al equipo de Nave Studio: guías certificados en Método Wim Hof, Ice Bath, Yoga y movimiento consciente en Las Condes. Agenda con tu coach ideal.",
     canonical: "https://studiolanave.com/coaches",
     ogTitle: "Coaches certificados en Wim Hof, Yoga y Bienestar | Nave Studio",
     ogDescription: "Guías certificados en Método Wim Hof, Yoga Alliance y movimiento consciente. Conoce a tu coach ideal.",
