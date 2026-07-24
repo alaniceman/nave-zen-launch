@@ -51,6 +51,16 @@ const PLAN_LABELS: Record<string, string> = {
   trial_15d: "15 días",
 };
 
+// Rank estados: mayor = más avanzado en el funnel.
+const STATUS_RANK: Record<string, number> = {
+  interesado_plan_prueba: 1,
+  redirigido_a_boxmagic: 2,
+  pagado_plan_prueba: 3,
+  plan_prueba_activo: 4,
+  plan_prueba_finalizado: 5,
+  convertido_a_membresia: 6,
+};
+
 export default function AdminPlanesPrueba() {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
@@ -61,37 +71,56 @@ export default function AdminPlanesPrueba() {
 
   const fetch = async () => {
     setLoading(true);
-    let q = supabase
+    // Traemos TODO lo que sea plan de prueba: leads con plan_type asignado
+    // o leads que quedaron en el paso 1 (interesado_plan_prueba, sin plan aún).
+    const { data, error } = await supabase
       .from("trial_bookings")
       .select("*")
-      .in("plan_type", ["trial_7d", "trial_15d"])
-      .order("created_at", { ascending: false });
-    if (statusFilter !== "all") q = q.eq("status", statusFilter);
-    const { data, error } = await q.limit(200);
-    if (error) toast.error("Error cargando leads");
-    else setLeads((data as any) || []);
+      .or(
+        "plan_type.in.(trial_7d,trial_15d),and(status.eq.interesado_plan_prueba,source.eq.web-plan-prueba)",
+      )
+      .order("created_at", { ascending: false })
+      .limit(500);
+
+    if (error) {
+      toast.error("Error cargando leads");
+      setLoading(false);
+      return;
+    }
+
+    // Deduplicar por email: para cada persona quedarnos con la fila
+    // de estado más avanzado (y si empatan, la más reciente).
+    const byEmail = new Map<string, Lead>();
+    for (const row of (data as Lead[]) || []) {
+      const key = (row.customer_email || "").toLowerCase().trim();
+      if (!key) continue;
+      const current = byEmail.get(key);
+      if (!current) {
+        byEmail.set(key, row);
+        continue;
+      }
+      const currRank = STATUS_RANK[current.status] ?? 0;
+      const newRank = STATUS_RANK[row.status] ?? 0;
+      if (
+        newRank > currRank ||
+        (newRank === currRank && row.created_at > current.created_at)
+      ) {
+        byEmail.set(key, row);
+      }
+    }
+
+    let deduped = Array.from(byEmail.values()).sort((a, b) =>
+      a.created_at < b.created_at ? 1 : -1,
+    );
+    if (statusFilter !== "all") {
+      deduped = deduped.filter((l) => l.status === statusFilter);
+    }
+    setLeads(deduped);
     setLoading(false);
   };
 
   useEffect(() => {
     fetch();
-    // also include leads where status starts with 'interesado_plan_prueba' but no plan yet
-    (async () => {
-      const { data } = await supabase
-        .from("trial_bookings")
-        .select("*")
-        .eq("status", "interesado_plan_prueba")
-        .is("plan_type", null)
-        .order("created_at", { ascending: false })
-        .limit(100);
-      if (data && data.length) {
-        setLeads((prev) => {
-          const ids = new Set(prev.map((l) => l.id));
-          const fresh = (data as any[]).filter((d) => !ids.has(d.id));
-          return [...fresh, ...prev];
-        });
-      }
-    })();
   }, [statusFilter]);
 
   const filtered = leads.filter((l) => {
