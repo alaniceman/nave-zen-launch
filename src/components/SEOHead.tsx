@@ -335,125 +335,77 @@ const structuredData = {
 export const SEOHead = () => {
   const location = useLocation();
   const currentPath = location.pathname;
-  const pageData = seoData[currentPath as keyof typeof seoData] || seoData["/"];
+  const pageData = seoData[currentPath as keyof typeof seoData];
 
-  useEffect(() => {
-    // Update page title and meta description
-    document.title = pageData.title;
-    
-    // Update meta description
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute('content', pageData.description);
-    }
+  // If this route isn't in the map, do nothing — let the page's own <Helmet>
+  // set title / description / canonical / og tags. Prevents home metadata from
+  // leaking to routes like /horarios, /instructor/:slug, /blog/:slug.
+  if (!pageData) return null;
 
-    // Update canonical URL
-    let canonical = document.querySelector('link[rel="canonical"]');
-    if (!canonical) {
-      canonical = document.createElement('link');
-      canonical.setAttribute('rel', 'canonical');
-      document.head.appendChild(canonical);
-    }
-    canonical.setAttribute('href', pageData.canonical);
+  const ogTitle = pageData.ogTitle || pageData.title;
+  const ogDescription = pageData.ogDescription || pageData.description;
+  const ogImage = pageData.ogImage || "https://studiolanave.com/og-image.png";
+  const ogType = pageData.ogType || "website";
 
-    // Update Open Graph meta tags
-    const ogTitle = pageData.ogTitle || pageData.title;
-    const ogDescription = pageData.ogDescription || pageData.description;
-    const ogImage = pageData.ogImage || "https://studiolanave.com/og-image.png";
-    const ogType = pageData.ogType || "website";
+  const breadcrumb = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://studiolanave.com/" },
+      { "@type": "ListItem", "position": 2, "name": pageData.title.split(" | ")[0], "item": pageData.canonical }
+    ]
+  };
 
-    const updateOrCreateMeta = (property: string, content: string, isProperty = true) => {
-      const selector = isProperty ? `meta[property="${property}"]` : `meta[name="${property}"]`;
-      let meta = document.querySelector(selector);
-      if (!meta) {
-        meta = document.createElement('meta');
-        if (isProperty) {
-          meta.setAttribute('property', property);
-        } else {
-          meta.setAttribute('name', property);
-        }
-        document.head.appendChild(meta);
-      }
-      meta.setAttribute('content', content);
-    };
+  const faqPage = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "¿Es seguro el Ice Bath?", "acceptedAnswer": { "@type": "Answer", "text": "El Ice Bath es seguro cuando se practica bajo supervisión de coaches certificados. Contraindicaciones: embarazo, problemas cardíacos graves, presión arterial descontrolada." } },
+      { "@type": "Question", "name": "¿Tienen clase de prueba gratis?", "acceptedAnswer": { "@type": "Answer", "text": "No ofrecemos clases gratuitas. Contamos con Planes de Prueba pagados con acceso ilimitado por 7 días ($9.900) o 15 días ($19.900)." } },
+      { "@type": "Question", "name": "¿El plan de prueba incluye agua fría (Ice Bath)?", "acceptedAnswer": { "@type": "Answer", "text": "Sí, incluye Yoga, Breathwork, Criomedicina y Método Wim Hof. Para entrar al agua fría necesitas una sesión guiada de Wim Hof previa (puede ser dentro del mismo plan)." } },
+      { "@type": "Question", "name": "¿Qué debo llevar a mi primera clase?", "acceptedAnswer": { "@type": "Answer", "text": "Para Ice Bath o Wim Hof: traje de baño, toalla y bolsa para ropa mojada. Para Yoga: ropa deportiva cómoda. Nosotros proporcionamos mats." } },
+      { "@type": "Question", "name": "¿Puedo cancelar o reagendar mi sesión?", "acceptedAnswer": { "@type": "Answer", "text": "Packs: cancelar/reagendar con 24h de anticipación. Membresías mensuales: cancelar con 6h desde la app, si no la clase se considera utilizada." } },
+      { "@type": "Question", "name": "¿Qué temperatura tiene el agua del Ice Bath?", "acceptedAnswer": { "@type": "Answer", "text": "Mantenemos el agua entre 3-12°C, temperatura óptima para beneficios terapéuticos sin riesgo." } }
+    ]
+  };
 
-    // Open Graph tags
-    updateOrCreateMeta('og:title', ogTitle);
-    updateOrCreateMeta('og:description', ogDescription);
-    updateOrCreateMeta('og:url', pageData.canonical);
-    updateOrCreateMeta('og:image', ogImage);
-    updateOrCreateMeta('og:type', ogType);
+  const membershipList = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Membresías Nave Studio",
+    "itemListElement": [
+      { "@type": "Product", "name": "Membresía Solo Yoga", "description": "Yoga ilimitado en Nave Studio Las Condes.", "brand": { "@type": "Brand", "name": "Nave Studio" }, "offers": { "@type": "Offer", "priceCurrency": "CLP", "price": "69000", "availability": "https://schema.org/InStock", "url": "https://studiolanave.com/planes-precios" } },
+      { "@type": "Product", "name": "Membresía Universo (Completa)", "description": "Yoga, Ice Bath y Wim Hof ilimitados en Las Condes.", "brand": { "@type": "Brand", "name": "Nave Studio" }, "offers": { "@type": "Offer", "priceCurrency": "CLP", "price": "129000", "availability": "https://schema.org/InStock", "url": "https://studiolanave.com/planes-precios" } },
+      { "@type": "Product", "name": "Plan de Prueba 7 días", "description": "Acceso ilimitado por 7 días a Yoga, Ice Bath y Wim Hof.", "brand": { "@type": "Brand", "name": "Nave Studio" }, "offers": { "@type": "Offer", "priceCurrency": "CLP", "price": "9900", "availability": "https://schema.org/InStock", "url": "https://studiolanave.com/plan-de-prueba" } }
+    ]
+  };
 
-    // Twitter Card tags
-    updateOrCreateMeta('twitter:card', 'summary_large_image', false);
-    updateOrCreateMeta('twitter:title', ogTitle, false);
-    updateOrCreateMeta('twitter:description', ogDescription, false);
-    updateOrCreateMeta('twitter:image', ogImage, false);
+  let ldPayload: unknown;
+  if (currentPath === "/") {
+    ldPayload = [structuredData.organization, structuredData.localBusiness];
+  } else if (currentPath === "/faq") {
+    ldPayload = [structuredData.organization, breadcrumb, faqPage];
+  } else if (currentPath === "/planes-precios") {
+    ldPayload = [structuredData.organization, breadcrumb, membershipList];
+  } else {
+    ldPayload = [structuredData.organization, breadcrumb];
+  }
 
-    // Add structured data for current page
-    const existingScript = document.querySelector('#seo-structured-data');
-    if (existingScript) {
-      existingScript.remove();
-    }
-
-    const script = document.createElement('script');
-    script.id = 'seo-structured-data';
-    script.type = 'application/ld+json';
-    
-    const breadcrumb = {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://studiolanave.com/" },
-        { "@type": "ListItem", "position": 2, "name": pageData.title.split(" | ")[0], "item": pageData.canonical }
-      ]
-    };
-
-    const faqPage = {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        { "@type": "Question", "name": "¿Es seguro el Ice Bath?", "acceptedAnswer": { "@type": "Answer", "text": "El Ice Bath es seguro cuando se practica bajo supervisión de coaches certificados. Contraindicaciones: embarazo, problemas cardíacos graves, presión arterial descontrolada." } },
-        { "@type": "Question", "name": "¿Tienen clase de prueba gratis?", "acceptedAnswer": { "@type": "Answer", "text": "No ofrecemos clases gratuitas. Contamos con Planes de Prueba pagados con acceso ilimitado por 7 días ($9.900) o 15 días ($19.900)." } },
-        { "@type": "Question", "name": "¿El plan de prueba incluye agua fría (Ice Bath)?", "acceptedAnswer": { "@type": "Answer", "text": "Sí, incluye Yoga, Breathwork, Criomedicina y Método Wim Hof. Para entrar al agua fría necesitas una sesión guiada de Wim Hof previa (puede ser dentro del mismo plan)." } },
-        { "@type": "Question", "name": "¿Qué debo llevar a mi primera clase?", "acceptedAnswer": { "@type": "Answer", "text": "Para Ice Bath o Wim Hof: traje de baño, toalla y bolsa para ropa mojada. Para Yoga: ropa deportiva cómoda. Nosotros proporcionamos mats." } },
-        { "@type": "Question", "name": "¿Puedo cancelar o reagendar mi sesión?", "acceptedAnswer": { "@type": "Answer", "text": "Packs: cancelar/reagendar con 24h de anticipación. Membresías mensuales: cancelar con 6h desde la app, si no la clase se considera utilizada." } },
-        { "@type": "Question", "name": "¿Qué temperatura tiene el agua del Ice Bath?", "acceptedAnswer": { "@type": "Answer", "text": "Mantenemos el agua entre 3-12°C, temperatura óptima para beneficios terapéuticos sin riesgo." } }
-      ]
-    };
-
-    const membershipList = {
-      "@context": "https://schema.org",
-      "@type": "ItemList",
-      "name": "Membresías Nave Studio",
-      "itemListElement": [
-        { "@type": "Product", "name": "Membresía Solo Yoga", "description": "Yoga ilimitado en Nave Studio Las Condes.", "brand": { "@type": "Brand", "name": "Nave Studio" }, "offers": { "@type": "Offer", "priceCurrency": "CLP", "price": "69000", "availability": "https://schema.org/InStock", "url": "https://studiolanave.com/planes-precios" } },
-        { "@type": "Product", "name": "Membresía Universo (Completa)", "description": "Yoga, Ice Bath y Wim Hof ilimitados en Las Condes.", "brand": { "@type": "Brand", "name": "Nave Studio" }, "offers": { "@type": "Offer", "priceCurrency": "CLP", "price": "129000", "availability": "https://schema.org/InStock", "url": "https://studiolanave.com/planes-precios" } },
-        { "@type": "Product", "name": "Plan de Prueba 7 días", "description": "Acceso ilimitado por 7 días a Yoga, Ice Bath y Wim Hof.", "brand": { "@type": "Brand", "name": "Nave Studio" }, "offers": { "@type": "Offer", "priceCurrency": "CLP", "price": "9900", "availability": "https://schema.org/InStock", "url": "https://studiolanave.com/plan-de-prueba" } }
-      ]
-    };
-
-    const shopList = {
-      "@context": "https://schema.org",
-      "@type": "ItemList",
-      "name": "Tienda Nave Studio",
-      "description": "Merchandising oficial y productos de bienestar de Nave Studio."
-    };
-
-    if (currentPath === "/") {
-      script.textContent = JSON.stringify([structuredData.organization, structuredData.localBusiness]);
-    } else if (currentPath === "/faq") {
-      script.textContent = JSON.stringify([structuredData.organization, breadcrumb, faqPage]);
-    } else if (currentPath === "/planes-precios") {
-      script.textContent = JSON.stringify([structuredData.organization, breadcrumb, membershipList]);
-    } else if (currentPath === "/tienda") {
-      script.textContent = JSON.stringify([structuredData.organization, breadcrumb, shopList]);
-    } else {
-      script.textContent = JSON.stringify([structuredData.organization, breadcrumb]);
-    }
-    
-    document.head.appendChild(script);
-  }, [currentPath, pageData]);
-
-  return null;
+  return (
+    <Helmet>
+      <title>{pageData.title}</title>
+      <meta name="description" content={pageData.description} />
+      <link rel="canonical" href={pageData.canonical} />
+      <meta property="og:title" content={ogTitle} />
+      <meta property="og:description" content={ogDescription} />
+      <meta property="og:url" content={pageData.canonical} />
+      <meta property="og:image" content={ogImage} />
+      <meta property="og:type" content={ogType} />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={ogTitle} />
+      <meta name="twitter:description" content={ogDescription} />
+      <meta name="twitter:image" content={ogImage} />
+      <script type="application/ld+json">{JSON.stringify(ldPayload)}</script>
+    </Helmet>
+  );
 };
