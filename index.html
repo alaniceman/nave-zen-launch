@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title data-rh="true">Nave Studio | Ice Bath, Wim Hof y Yoga en Las Condes</title>
-    <meta name="description" data-rh="true" content="Ice Bath, Breathwork Wim Hof, Yoga y biohacking en Las Condes. Reserva tu clase y regula tu sistema nervioso." />
+    <title data-rh="true">Centro de bienestar basado en ciencia | Nave Studio</title>
+    <meta name="description" data-rh="true" content="Ice Bath, Método Wim Hof, Yoga y Breathwork en Las Condes. Reserva tu clase y regula tu sistema nervioso en Nave Studio." />
     <!-- Per-route canonical is set via react-helmet-async in each page -->
 
 
@@ -56,6 +56,224 @@
     <meta name="twitter:title" data-rh="true" content="Nave Studio | Ice Bath, Wim Hof y Yoga en Las Condes" />
     <meta name="twitter:description" data-rh="true" content="Ice Bath, Breathwork Wim Hof, Yoga y biohacking. Reserva tu clase en Las Condes y regula tu sistema nervioso." />
     <meta name="twitter:image" content="https://studiolanave.com/og-image.png" />
+
+    <script>
+      (function () {
+        var origin = "https://studiolanave.com";
+        var path = window.location.pathname.replace(/\/$/, "") || "/";
+        var instructors = {
+          "/instructor/alan": {
+            title: "Alan Iceman Earle — Fundador y Crioguía | Nave Studio",
+            description: "Alan Iceman Earle, fundador y crioguía en Nave Studio. Instructor certificado Método Wim Hof, breathwork e inmersiones en hielo en Las Condes.",
+            image: origin + "/lovable-uploads/alan.webp",
+            name: "Alan Iceman Earle",
+            jobTitle: "Fundador – Crioguía de Inmersiones y Breathwork"
+          },
+          "/instructor/maral": {
+            title: "Maral Hekmat — Instructora de Yoga | Nave Studio",
+            description: "Maral Hekmat guía Yoga y movimiento consciente en Nave Studio. Integra biomecánica, fuerza y flexibilidad para una práctica segura.",
+            image: origin + "/lovable-uploads/maral.webp",
+            name: "Maral Hekmat",
+            jobTitle: "Instructora de Yoga y Movimiento Consciente"
+          },
+          "/instructor/sol": {
+            title: "Sol Evans — Instructora de Ice Yoga | Nave Studio",
+            description: "Sol Evans acompaña prácticas de Ice Yoga, respiración y energía en Nave Studio, integrando frío, calma y fortaleza interior.",
+            image: origin + "/lovable-uploads/sol.webp",
+            name: "Sol Evans",
+            jobTitle: "Instructora de Ice Yoga"
+          },
+          "/instructor/rolo": {
+            title: "Rolo Varela — Instructor Ice Yoga | Nave Studio",
+            description: "Rolo Varela guía sesiones de Ice Yoga, breathwork e inmersiones en Nave Studio para cultivar foco, resiliencia y movimiento consciente.",
+            image: origin + "/lovable-uploads/rolo.webp",
+            name: "Rolo Varela",
+            jobTitle: "Instructor Certificado – Ice Yoga Method"
+          },
+          "/instructor/mar": {
+            title: "Mar Carrasco — Instructora Vinyasa | Nave Studio",
+            description: "Mar Carrasco guía Vinyasa Yoga, Inside Flow y movimiento creativo en Nave Studio, conectando respiración, presencia corporal y danza.",
+            image: origin + "/lovable-uploads/mar.webp",
+            name: "Mar Carrasco",
+            jobTitle: "Instructora de Vinyasa Yoga, Inside Flow y Danza"
+          },
+          "/instructor/amanda": {
+            title: "Amanda Moutel — Profesora de Yoga | Nave Studio",
+            description: "Amanda Moutel guía Yoga, danza y prácticas somáticas en Nave Studio con enfoque en respiración consciente, cuidado y soberanía interior.",
+            image: origin + "/lovable-uploads/amanda-moutel.webp",
+            name: "Amanda Moutel",
+            jobTitle: "Bailarina y Profesora de Yoga y Danza"
+          },
+          "/instructor/amber": {
+            title: "Ámbar Vidal — Instructora de Yoga | Nave Studio",
+            description: "Ámbar Vidal guía Yoga Integral, círculos y prácticas de bienestar en Nave Studio, acompañando procesos de cambio con cuerpo y corazón.",
+            image: origin + "/lovable-uploads/amber.webp",
+            name: "Ámbar Vidal",
+            jobTitle: "Instructora de Yoga · Doula · Reikista"
+          },
+          "/instructor/vianny-macero": {
+            title: "Vianny Macero — Instructora Vinyasa | Nave Studio",
+            description: "Vianny Macero guía Vinyasa Somático y Yin Yoga en Nave Studio, integrando movimiento consciente, nutrición funcional y regulación nerviosa.",
+            image: origin + "/lovable-uploads/vianny-macero.webp",
+            name: "Vianny Macero",
+            jobTitle: "Instructora de Vinyasa Somático y Yin Yoga"
+          },
+          "/instructor/karim-campusano": {
+            title: "Karim Campusano — Power Vinyasa | Nave Studio",
+            description: "Karim Campusano guía Power Vinyasa en Nave Studio, combinando fuerza, movilidad y conciencia corporal con progresiones para cada nivel.",
+            image: origin + "/__l5e/assets-v1/6b85aa3f-927c-4fdb-a41e-b6d69c2b59dd/karim.webp",
+            name: "Karim Campusano",
+            jobTitle: "Instructora de Power Vinyasa"
+          }
+        };
+
+        var blogs = {
+          "/blog/protocolo-seguro-agua-fria-respiracion": {
+            title: "Protocolo Seguro: Agua Fría y Respiración | Nave Studio",
+            description: "Aprende un protocolo seguro para iniciar con agua fría y respiración Wim Hof sin forzar tu cuerpo, con guía y preparación consciente.",
+            image: origin + "/og-image.png",
+            datePublished: "2026-03-08T00:00:00-03:00"
+          },
+          "/blog/beneficios-del-ice-bath": {
+            title: "Beneficios del Ice Bath: cuerpo, mente y ciencia | Nave Studio",
+            description: "Conoce los beneficios del Ice Bath para el cuerpo y la mente, cómo practicarlo con seguridad y cuándo hacerlo con guía profesional.",
+            image: origin + "/og-image.png",
+            datePublished: "2026-07-04T00:00:00-04:00"
+          },
+          "/blog/metodo-wim-hof-respiracion-frio-mente": {
+            title: "Método Wim Hof: respiración, frío y mente | Nave Studio",
+            description: "Descubre cómo el Método Wim Hof combina respiración, frío y foco mental para regular el sistema nervioso con acompañamiento seguro.",
+            image: origin + "/og-image.png",
+            datePublished: "2026-03-08T00:00:00-03:00"
+          },
+          "/blog/agua-fria-guiado-vs-solo-experiencia-wim-hof": {
+            title: "Agua fría guiada vs solo: experiencia Wim Hof | Nave Studio",
+            description: "Compara una inmersión en agua fría guiada con practicar solo y entiende por qué la respiración, seguridad y contexto importan.",
+            image: origin + "/og-image.png",
+            datePublished: "2026-03-08T00:00:00-03:00"
+          },
+          "/blog/protocolo-15-minutos-respiracion-agua-fria": {
+            title: "Protocolo de 15 minutos: respiración y agua fría | Nave Studio",
+            description: "Un protocolo breve de respiración y agua fría para empezar con presencia, seguridad y una progresión realista junto a Nave Studio.",
+            image: origin + "/og-image.png",
+            datePublished: "2026-03-08T00:00:00-03:00"
+          },
+          "/blog/yin-yoga-beneficios-movilidad-flexibilidad": {
+            title: "Yin Yoga: beneficios, movilidad y calma | Nave Studio",
+            description: "Explora los beneficios del Yin Yoga para movilidad, flexibilidad y regulación del sistema nervioso en clases guiadas en Las Condes.",
+            image: origin + "/og-image.png",
+            datePublished: "2026-07-04T00:00:00-04:00"
+          },
+          "/blog/vinyasa-yoga-flujo-respiracion-las-condes": {
+            title: "Vinyasa Yoga: flujo y respiración en Las Condes | Nave Studio",
+            description: "Conoce el Vinyasa Yoga, una práctica fluida que une respiración y movimiento para desarrollar presencia, movilidad y energía.",
+            image: origin + "/og-image.png",
+            datePublished: "2026-07-04T00:00:00-04:00"
+          },
+          "/blog/power-yoga-fuerza-resistencia": {
+            title: "Power Yoga: fuerza, resistencia y foco | Nave Studio",
+            description: "Descubre cómo Power Yoga desarrolla fuerza, resistencia y movilidad con una práctica intensa, consciente y adaptable a tu nivel.",
+            image: origin + "/og-image.png",
+            datePublished: "2026-07-04T00:00:00-04:00"
+          },
+          "/blog/integral-yoga-equilibrio-meditacion": {
+            title: "Yoga Integral: equilibrio, respiración y meditación | Nave Studio",
+            description: "Aprende qué es Yoga Integral y cómo combina posturas, respiración y meditación para equilibrar cuerpo, mente y energía.",
+            image: origin + "/og-image.png",
+            datePublished: "2026-07-04T00:00:00-04:00"
+          }
+        };
+
+        var fixed = {
+          "/": {
+            title: "Centro de bienestar basado en ciencia | Nave Studio",
+            description: "Ice Bath, Método Wim Hof, Yoga y Breathwork en Las Condes. Reserva tu clase y regula tu sistema nervioso en Nave Studio.",
+            image: origin + "/og-image.png"
+          },
+          "/horarios": {
+            title: "Horarios de clases: Yoga, Ice Bath y Wim Hof | Nave Studio",
+            description: "Consulta los horarios de Yoga, Ice Bath, Breathwork y Método Wim Hof en Nave Studio, Las Condes. Reserva tu clase online en Antares 259.",
+            image: origin + "/og-image.png"
+          },
+          "/planes-precios": {
+            title: "Planes y precios | Membresías Nave Studio Las Condes",
+            description: "Compara planes y precios de Nave Studio: membresías de 1x, 2x o ilimitado, paquetes de Criomedicina y solo Yoga en Las Condes. Reserva online en minutos.",
+            image: origin + "/og-image.png"
+          },
+          "/coaches": {
+            title: "Coaches certificados y equipo | Nave Studio",
+            description: "Conoce al equipo de Nave Studio: guías certificados en Método Wim Hof, Ice Bath, Yoga y movimiento consciente en Las Condes. Agenda con tu coach ideal.",
+            image: origin + "/og-image.png"
+          }
+        };
+
+        var data = instructors[path] || blogs[path] || fixed[path];
+        if (!data) return;
+        var canonical = origin + (path === "/" ? "/" : path);
+
+        function upsertMeta(selector, attrs) {
+          var tag = document.head.querySelector(selector) || document.createElement("meta");
+          Object.keys(attrs).forEach(function (key) { tag.setAttribute(key, attrs[key]); });
+          if (!tag.parentNode) document.head.appendChild(tag);
+        }
+
+        function upsertCanonical(href) {
+          var tag = document.head.querySelector('link[rel="canonical"]') || document.createElement("link");
+          tag.setAttribute("rel", "canonical");
+          tag.setAttribute("href", href);
+          if (!tag.parentNode) document.head.appendChild(tag);
+        }
+
+        document.title = data.title;
+        upsertMeta('meta[name="description"]', { name: "description", content: data.description });
+        upsertCanonical(canonical);
+        upsertMeta('meta[property="og:title"]', { property: "og:title", content: data.title });
+        upsertMeta('meta[property="og:description"]', { property: "og:description", content: data.description });
+        upsertMeta('meta[property="og:url"]', { property: "og:url", content: canonical });
+        upsertMeta('meta[property="og:image"]', { property: "og:image", content: data.image || origin + "/og-image.png" });
+        upsertMeta('meta[property="og:type"]', { property: "og:type", content: blogs[path] ? "article" : "website" });
+        upsertMeta('meta[name="twitter:title"]', { name: "twitter:title", content: data.title });
+        upsertMeta('meta[name="twitter:description"]', { name: "twitter:description", content: data.description });
+        upsertMeta('meta[name="twitter:url"]', { name: "twitter:url", content: canonical });
+
+        var routeSchema;
+        if (instructors[path]) {
+          routeSchema = {
+            "@context": "https://schema.org",
+            "@type": "Person",
+            "name": data.name,
+            "jobTitle": data.jobTitle,
+            "description": data.description,
+            "image": data.image,
+            "url": canonical,
+            "worksFor": { "@type": "Organization", "name": "Nave Studio", "url": origin }
+          };
+        } else if (blogs[path]) {
+          upsertMeta('meta[property="article:published_time"]', { property: "article:published_time", content: data.datePublished });
+          routeSchema = {
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            "headline": data.title.replace(" | Nave Studio", ""),
+            "description": data.description,
+            "image": data.image,
+            "author": { "@type": "Organization", "name": "Nave Studio" },
+            "publisher": { "@type": "Organization", "name": "Nave Studio", "logo": { "@type": "ImageObject", "url": origin + "/lovable-uploads/79b55bf0-58ef-4275-a156-4523124bd6b8.png" } },
+            "datePublished": data.datePublished,
+            "dateModified": data.datePublished,
+            "mainEntityOfPage": { "@type": "WebPage", "@id": canonical },
+            "inLanguage": "es-CL"
+          };
+        }
+
+        if (routeSchema) {
+          var script = document.getElementById("prehydrate-route-schema") || document.createElement("script");
+          script.id = "prehydrate-route-schema";
+          script.type = "application/ld+json";
+          script.text = JSON.stringify(routeSchema);
+          if (!script.parentNode) document.head.appendChild(script);
+        }
+      })();
+    </script>
 
     <link rel="icon" href="/lovable-uploads/79b55bf0-58ef-4275-a156-4523124bd6b8.png" type="image/png">
 
