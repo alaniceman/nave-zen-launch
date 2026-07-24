@@ -1376,6 +1376,7 @@ export type Database = {
           paid_at: string | null
           paid_marked_by: string | null
           plan_type: string | null
+          recovery_email_sent_at: string | null
           redirected_to_boxmagic_at: string | null
           reminder_sent: string[]
           requested_start_date: string | null
@@ -1403,6 +1404,7 @@ export type Database = {
           paid_at?: string | null
           paid_marked_by?: string | null
           plan_type?: string | null
+          recovery_email_sent_at?: string | null
           redirected_to_boxmagic_at?: string | null
           reminder_sent?: string[]
           requested_start_date?: string | null
@@ -1430,6 +1432,7 @@ export type Database = {
           paid_at?: string | null
           paid_marked_by?: string | null
           plan_type?: string | null
+          recovery_email_sent_at?: string | null
           redirected_to_boxmagic_at?: string | null
           reminder_sent?: string[]
           requested_start_date?: string | null

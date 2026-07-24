@@ -1,0 +1,1 @@
+ALTER TABLE public.trial_bookings ADD COLUMN IF NOT EXISTS recovery_email_sent_at TIMESTAMPTZ;
