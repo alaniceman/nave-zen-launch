@@ -195,9 +195,30 @@ serve(async (req) => {
                 subject: "Estamos procesando tu plan de prueba en Nave Studio",
                 html: processingEmailHtml(data.name),
               });
-              // Nota: el aviso al admin con plan + fecha se envía en el paso "finalize"
             } catch (e) {
               console.error("[Resend lead]", e);
+            }
+
+            // Aviso al admin: completó paso 1 (aún no eligió plan/fecha)
+            try {
+              const phoneClean = (phone || "").replace("+", "");
+              await resend.emails.send({
+                from: "Nave Studio <no-reply@studiolanave.com>",
+                reply_to: "lanave@alaniceman.com",
+                to: ["lanave@alaniceman.com"],
+                bcc: ["flowithmaral@gmail.com"],
+                subject: `Paso 1 Plan de Prueba: ${data.name} (sin completar)`,
+                html: `<div style="font-family:Helvetica Neue,Arial,sans-serif;max-width:560px;margin:0 auto;padding:20px">
+                  <h2 style="color:#2E4D3A">Nuevo lead — Paso 1 Plan de Prueba</h2>
+                  <p>Este contacto completó el paso 1 pero <strong>aún no eligió plan ni fecha</strong>.</p>
+                  <p><strong>Nombre:</strong> ${data.name}</p>
+                  <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
+                  <p><strong>WhatsApp:</strong> <a href="https://wa.me/${phoneClean}">${phone}</a></p>
+                  <p style="color:#666;font-size:13px;margin-top:18px">Si en 1 hora no completa el flujo, se le enviará un correo de recuperación automáticamente.</p>
+                </div>`,
+              });
+            } catch (e) {
+              console.error("[Resend admin step1]", e);
             }
           }
 
