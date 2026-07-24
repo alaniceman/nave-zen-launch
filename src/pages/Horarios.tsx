@@ -18,10 +18,12 @@ export default function Horarios() {
   return (
     <>
       <Helmet>
-        <title>Horarios - Nave Studio</title>
-        <meta name="description" content="Horarios de clases de Método Wim Hof, Yoga, Breathwork y Biohacking. Programa tu semana y vive nuestras experiencias en Nave Studio." />
-        <meta property="og:title" content="Horarios - Nave Studio" />
-        <meta property="og:description" content="Horarios de clases de Método Wim Hof, Yoga, Breathwork y Biohacking. Programa tu semana y vive nuestras experiencias en Nave Studio." />
+        <title>Horarios de clases: Yoga, Ice Bath y Wim Hof | Nave Studio</title>
+        <meta name="description" content="Consulta los horarios de Yoga, Ice Bath, Breathwork y Método Wim Hof en Nave Studio, Las Condes. Reserva tu clase online en Antares 259." />
+        <meta property="og:title" content="Horarios de clases: Yoga, Ice Bath y Wim Hof | Nave Studio" />
+        <meta property="og:description" content="Consulta los horarios de Yoga, Ice Bath, Breathwork y Método Wim Hof en Nave Studio, Las Condes. Reserva tu clase online en Antares 259." />
+        <meta property="og:url" content="https://studiolanave.com/horarios" />
+        <meta property="og:type" content="website" />
         <link rel="canonical" href="https://studiolanave.com/horarios" />
       </Helmet>
 
