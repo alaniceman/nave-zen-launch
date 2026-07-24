@@ -4,6 +4,26 @@ import { Button } from "@/components/ui/button";
 import heroImage from "@/assets/blog-protocolo-seguro-hero.jpg";
 
 export default function BlogProtocoloSeguro() {
+  const url = "https://studiolanave.com/blog/protocolo-seguro-agua-fria-respiracion";
+  const image = "https://studiolanave.com" + heroImage;
+  const pubDate = "2026-03-08T00:00:00-03:00";
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Protocolo Seguro: Agua Fría y Respiración para Principiantes",
+    "description": "Lo que nadie te cuenta del agua fría y la respiración. Aprende el protocolo seguro para iniciar con el método Wim Hof sin traumas ni forzar nada.",
+    "datePublished": pubDate,
+    "dateModified": pubDate,
+    "image": image,
+    "author": { "@type": "Organization", "name": "Nave Studio" },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Nave Studio",
+      "logo": { "@type": "ImageObject", "url": "https://studiolanave.com/favicon.ico" }
+    },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": url },
+    "inLanguage": "es-CL"
+  };
   return (
     <>
       <Helmet>
@@ -12,12 +32,16 @@ export default function BlogProtocoloSeguro() {
           name="description"
           content="Lo que nadie te cuenta del agua fría y la respiración. Aprende el protocolo seguro para iniciar con el método Wim Hof sin traumas ni forzar nada."
         />
+        <link rel="canonical" href={url} />
         <meta property="og:title" content="Protocolo Seguro: Agua Fría y Respiración para Principiantes | Nave Studio" />
         <meta
           property="og:description"
           content="Lo que nadie te cuenta del agua fría y la respiración. Aprende el protocolo seguro para iniciar con el método Wim Hof sin traumas ni forzar nada."
         />
+        <meta property="og:url" content={url} />
+        <meta property="og:image" content={image} />
         <meta property="og:type" content="article" />
+        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       </Helmet>
 
       <article className="min-h-screen bg-background">
