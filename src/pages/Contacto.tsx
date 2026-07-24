@@ -219,6 +219,38 @@ Mensaje: ${formData.message}`
                   Conocer coaches
                 </Button>
               </div>
+
+              {/* Cómo llegar y qué esperar */}
+              <div className="mt-10 space-y-5 text-neutral-dark leading-relaxed">
+                <div>
+                  <h3 className="text-lg font-heading text-primary mb-2">Cómo llegar</h3>
+                  <p>
+                    Estamos en <strong>Antares 259, Las Condes</strong>, a <strong>5 minutos caminando desde Metro Los Dominicos</strong> (Línea 1). Si vienes en auto, hay estacionamiento en la calle y estacionamientos públicos cercanos. Uber y taxis llegan directo a la puerta del estudio.
+                  </p>
+                </div>
+                <div>
+                  <h3 className="text-lg font-heading text-primary mb-2">Horario de atención</h3>
+                  <p>
+                    Atendemos <strong>de lunes a domingo entre 07:00 y 20:00 h</strong>, con clases distribuidas en bloques de mañana, mediodía y tarde. Te recomendamos llegar 10 minutos antes de tu clase para acomodarte con calma, dejar tus cosas y prepararte para la práctica.
+                  </p>
+                </div>
+                <div>
+                  <h3 className="text-lg font-heading text-primary mb-2">Qué esperar en tu primera visita</h3>
+                  <p>
+                    Al llegar te recibimos, te mostramos los espacios (sala de yoga, zona de ice bath y camarines) y respondemos cualquier duda. Trae ropa cómoda para moverte, toalla y una traje de baño o ropa interior si vas a entrar al Ice Bath. Nosotros ponemos las mats, props y todo lo necesario para respirar y sumergirte de forma segura.
+                  </p>
+                </div>
+                <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                  <a
+                    href="https://wa.me/56946120426?text=Hola%21%20quiero%20agendar%20mi%20primera%20visita%20a%20Nave%20Studio"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center bg-secondary hover:bg-primary text-white py-3 px-6 rounded-[10px] transition-all duration-200 hover:scale-105 font-medium"
+                  >
+                    Escríbenos por WhatsApp
+                  </a>
+                </div>
+              </div>
             </div>
 
             {/* Map */}
