@@ -101,6 +101,15 @@ function conversionCtasHtml(): string {
 </div>`;
 }
 
+function quoteBlockHtml(quote?: string): string {
+  if (!quote) return "";
+  return `<div style="margin:8px 0 22px;padding:16px 20px;border-left:3px solid #2E4D3A;background:#F7F5F0;border-radius:6px">
+    <p style="margin:0;color:#2E4D3A;font-size:15px;line-height:1.6;font-style:italic">
+      "${quote}"
+    </p>
+  </div>`;
+}
+
 function buildHtml(p: {
   name: string;
   preview: string;
@@ -110,6 +119,7 @@ function buildHtml(p: {
   showCredentials: boolean;
   email: string;
   cta: "reserve" | "convert";
+  quote?: string;
 }): string {
   const cta =
     p.cta === "convert" ? conversionCtasHtml() : boxmagicBlockHtml();
@@ -136,6 +146,7 @@ body{margin:0;padding:0;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
   <div class="body">
     <p style="margin:0 0 18px;color:#2A2A2A;font-size:15px">Hola <strong>${p.name}</strong>,</p>
     ${p.bodyHtml}
+    ${quoteBlockHtml(p.quote)}
     ${classesBlockHtml(p.dateLabel, p.classes)}
     ${cta}
     ${supportLinks}
@@ -275,6 +286,7 @@ serve(async (req) => {
       showCredentials,
       email: lead.customer_email,
       cta: copy.cta,
+      quote: copy.quote,
     });
 
     if (dryRun) {
