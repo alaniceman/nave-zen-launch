@@ -272,7 +272,8 @@ export interface Vars {
 
 export function getTrialCopy(v: Vars): TrialCopy {
   const seq = v.totalDays === 15 ? SEQ_15 : SEQ_7;
+  const quotes = v.totalDays === 15 ? QUOTES_15 : QUOTES_7;
   const day = Math.min(Math.max(v.dayNumber, 1), v.totalDays);
   const fn = seq[day] || seq[v.totalDays];
-  return fn(v);
+  return { ...fn(v), quote: quotes[day] };
 }
