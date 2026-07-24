@@ -100,7 +100,7 @@ const Planes = () => {
   return <>
       <Helmet>
         <title>Planes y precios | Membresías Nave Studio Las Condes</title>
-        <meta name="description" content="Membresías mensuales y paquetes para Ice Bath, Wim Hof y Yoga en Las Condes. Desde 1 sesión por semana hasta acceso ilimitado. Reserva online." />
+        <meta name="description" content="Compara planes y precios de Nave Studio: membresías de 1x, 2x o ilimitado, paquetes de Criomedicina y solo Yoga en Las Condes. Reserva online en minutos." />
         <link rel="canonical" href="https://studiolanave.com/planes-precios" />
         <meta property="og:title" content="Planes y precios | Nave Studio" />
         <meta property="og:description" content="Membresías y paquetes para Ice Bath, Wim Hof y Yoga. Reserva tu plan en Las Condes." />
@@ -115,10 +115,13 @@ const Planes = () => {
       backgroundPosition: 'center'
     }}>
         <div className="absolute inset-0 bg-primary opacity-55"></div>
-        <div className="max-w-4xl mx-auto space-y-8 animate-fade-in relative z-10">
-          <h1 className="text-5xl md:text-7xl font-bold text-white font-space tracking-heading">
-            ¿Quieres vivir la experiencia?
+        <div className="max-w-4xl mx-auto space-y-6 animate-fade-in relative z-10">
+          <h1 className="text-4xl md:text-6xl font-bold text-white font-space tracking-heading">
+            Planes y Precios: Yoga, Ice Bath y Wim Hof en Las Condes
           </h1>
+          <p className="text-2xl md:text-3xl text-white/90 font-space">
+            ¿Quieres vivir la experiencia?
+          </p>
           <p className="text-xl md:text-2xl text-white/90 font-inter max-w-2xl mx-auto">
             Elige el plan que mejor se ajuste a tu ritmo, entra en la Nave y siente el cambio desde la primera sesión.
           </p>

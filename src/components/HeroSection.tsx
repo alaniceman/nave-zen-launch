@@ -38,8 +38,13 @@ const HeroSlideMain = () => {
         <div className="max-w-4xl mx-auto space-y-4 md:space-y-8">
           {/* Main Heading */}
           <h1 className="font-space-grotesk font-bold text-3xl md:text-6xl lg:text-7xl leading-tight">
-            El centro de bienestar basado en ciencia
+            Ice Bath, Breathwork Wim Hof y Yoga en Las Condes
           </h1>
+
+          {/* Tagline */}
+          <p className="font-inter font-medium text-lg md:text-2xl text-white/90 leading-relaxed">
+            El centro de bienestar basado en ciencia
+          </p>
 
           {/* Subheading */}
           <div className="space-y-4">
