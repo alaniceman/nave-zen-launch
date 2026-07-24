@@ -8,7 +8,7 @@ const pubDate = "2026-07-04T00:00:00-04:00";
 
 const jsonLdData = {
   "@context": "https://schema.org",
-  "@type": "Article",
+  "@type": "BlogPosting",
   "headline": "Vinyasa Yoga: el arte de moverte con la respiración en Las Condes",
   "author": { "@type": "Person", "name": "Nave Studio", "description": "Centro de bienestar en Las Condes" },
   "datePublished": pubDate,

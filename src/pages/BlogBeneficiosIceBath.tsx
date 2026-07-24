@@ -9,7 +9,7 @@ const BlogBeneficiosIceBath = () => {
 
   const articleLd = {
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": "BlogPosting",
     headline: "Beneficios del Ice Bath: qué le pasa a tu cuerpo y tu mente con el frío",
     description:
       "Guía completa sobre los beneficios del ice bath (baño de hielo): recuperación muscular, energía, foco, regulación del estrés y salud metabólica, con evidencia y protocolo seguro.",

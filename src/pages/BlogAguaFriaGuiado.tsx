@@ -5,7 +5,7 @@ import heroImage from "@/assets/blog-agua-fria-guiado-hero.jpg";
 const BlogAguaFriaGuiado = () => {
   const schema = {
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": "BlogPosting",
     "headline": "Agua fría: la diferencia entre hacerlo solo y vivirlo guiado (y por qué nunca es lo mismo)",
     "author": {
       "@type": "Person",

@@ -6,7 +6,7 @@ import heroImage from "@/assets/blog-protocolo-15-minutos-hero.jpg";
 const BlogProtocolo15Minutos = () => {
   const jsonLdData = {
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": "BlogPosting",
     "headline": "Protocolo 15 Minutos: Respiración + Agua Fría para uso diario",
     "author": {
       "@type": "Person",

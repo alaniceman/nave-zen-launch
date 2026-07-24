@@ -11,7 +11,7 @@ const BlogHabitosDisciplina = () => {
 
   const structuredData = {
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": "BlogPosting",
     "headline": "Hábitos y disciplina: el arte de construirte a ti mismo (paso a paso)",
     "author": {
       "@type": "Person",

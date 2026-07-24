@@ -6,7 +6,7 @@ import heroImage from "@/assets/blog-yin-vinyasa-hero.jpg";
 const BlogYinVinyasa = () => {
   const jsonLdData = {
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": "BlogPosting",
     "headline": "Yin Yoga y Vinyasa Yoga: dos caminos complementarios para regular tu cuerpo y tu mente",
     "author": {
       "@type": "Person",
