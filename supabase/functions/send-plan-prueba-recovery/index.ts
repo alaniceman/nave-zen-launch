@@ -55,7 +55,7 @@ serve(async (req) => {
 
     const { data: leads, error } = await supabase
       .from("trial_bookings")
-      .select("id, customer_name, customer_email")
+      .select("id, customer_name, customer_email, customer_phone, created_at")
       .eq("status", "interesado_plan_prueba")
       .is("recovery_email_sent_at", null)
       .lte("created_at", oneHourAgo)
@@ -70,6 +70,7 @@ serve(async (req) => {
     const results: Array<Record<string, unknown>> = [];
     for (const lead of leads || []) {
       try {
+        // 1) Email de recuperación al usuario
         await resend.emails.send({
           from: "Nave Studio <no-reply@studiolanave.com>",
           reply_to: "lanave@alaniceman.com",
@@ -77,6 +78,33 @@ serve(async (req) => {
           subject: "¿Te quedó pendiente algo? Completa tu plan de prueba 🧊",
           html: recoveryHtml(lead.customer_name || "amigo/a"),
         });
+        await new Promise((r) => setTimeout(r, 550)); // Resend rate limit
+
+        // 2) Aviso al admin: este lead completó paso 1 y no finalizó
+        const phone = lead.customer_phone || "";
+        const phoneClean = phone.replace("+", "");
+        const createdCL = new Date(lead.created_at).toLocaleString("es-CL", {
+          timeZone: "America/Santiago",
+        });
+        try {
+          await resend.emails.send({
+            from: "Nave Studio <no-reply@studiolanave.com>",
+            reply_to: "lanave@alaniceman.com",
+            to: ["lanave@alaniceman.com"],
+            bcc: ["flowithmaral@gmail.com"],
+            subject: `Paso 1 Plan de Prueba: ${lead.customer_name} (sin completar)`,
+            html: `<div style="font-family:Helvetica Neue,Arial,sans-serif;max-width:560px;margin:0 auto;padding:20px">
+              <h2 style="color:#2E4D3A">Lead — Paso 1 Plan de Prueba sin completar</h2>
+              <p>Este contacto completó el paso 1 hace más de 1 hora pero <strong>no eligió plan ni fecha</strong>. Se le acaba de enviar el correo de recuperación.</p>
+              <p><strong>Nombre:</strong> ${lead.customer_name}</p>
+              <p><strong>Email:</strong> <a href="mailto:${lead.customer_email}">${lead.customer_email}</a></p>
+              <p><strong>WhatsApp:</strong> <a href="https://wa.me/${phoneClean}">${phone}</a></p>
+              <p><strong>Paso 1 completado:</strong> ${createdCL}</p>
+            </div>`,
+          });
+        } catch (e) {
+          console.error("[recovery admin]", lead.id, e);
+        }
 
         await supabase
           .from("trial_bookings")
