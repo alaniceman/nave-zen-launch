@@ -203,7 +203,7 @@ export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) 
     <Dialog open={open} onOpenChange={onOpenChange} modal>
       <DialogContent
         style={dialogViewportStyle}
-        className="top-[calc(var(--dialog-viewport-top)+0.5rem)] flex h-[calc(var(--dialog-viewport-height)-1rem)] max-h-[calc(var(--dialog-viewport-height)-1rem)] w-[calc(100vw-1rem)] translate-y-0 flex-col gap-0 overflow-hidden p-0 sm:top-[50%] sm:h-auto sm:max-h-[90dvh] sm:w-full sm:max-w-md sm:translate-y-[-50%]"
+        className="top-[calc(var(--dialog-viewport-top)_+_0.5rem)] flex h-[calc(var(--dialog-viewport-height)_-_1rem)] max-h-[calc(var(--dialog-viewport-height)_-_1rem)] w-[calc(100vw_-_1rem)] translate-y-0 flex-col gap-0 overflow-hidden p-0 sm:top-[50%] sm:h-auto sm:max-h-[90dvh] sm:w-full sm:max-w-md sm:translate-y-[-50%]"
         onEscapeKeyDown={() => onOpenChange(false)}
       >
         <DialogHeader className="shrink-0 p-6 pb-4 pr-12">
