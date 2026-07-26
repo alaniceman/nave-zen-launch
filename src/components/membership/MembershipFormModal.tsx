@@ -144,7 +144,7 @@ export function MembershipFormModal({ open, onOpenChange, group, initialCode }: 
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md max-h-[92vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-md max-h-[90dvh] overflow-y-auto overscroll-contain">
         <DialogHeader>
           <DialogTitle className="font-bold text-xl text-[#2E4D3A]">
             {step === 1 ? "Tus datos" : "Plan y fecha de inicio"}
