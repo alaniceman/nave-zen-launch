@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type FocusEvent } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,7 +16,6 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
-import { useKeyboardAwareDialogViewport } from "@/hooks/useKeyboardAwareDialogViewport";
 
 export type MembershipGroup = "completa" | "yoga";
 
@@ -64,14 +63,12 @@ function getUtm() {
 }
 
 export function MembershipFormModal({ open, onOpenChange, group, initialCode }: Props) {
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [step, setStep] = useState<1 | 2>(1);
   const [submitting, setSubmitting] = useState(false);
   const [selectedCode, setSelectedCode] = useState<string>(initialCode);
   const [startDate, setStartDate] = useState<Date | undefined>(undefined);
   const [error, setError] = useState<string | null>(null);
   const [userInfo, setUserInfo] = useState<Step1Values | null>(null);
-  const [keyboardOpen, setKeyboardOpen] = useState(false);
   const { trackEvent } = useFacebookPixel();
 
   const options = MEMBERSHIP_OPTIONS[group];
@@ -82,65 +79,12 @@ export function MembershipFormModal({ open, onOpenChange, group, initialCode }: 
     defaultValues: { name: "", email: "", phone: "" },
   });
 
-  const scrollFocusedFieldIntoView = useCallback(() => {
-    if (typeof document === "undefined") return;
-
-    const scroller = scrollContainerRef.current;
-    const activeElement = document.activeElement;
-
-    if (!scroller || !(activeElement instanceof HTMLElement) || !scroller.contains(activeElement)) {
-      return;
-    }
-
-    activeElement.scrollIntoView({ block: "center", inline: "nearest", behavior: "smooth" });
-
-    window.requestAnimationFrame(() => {
-      const scrollerRect = scroller.getBoundingClientRect();
-      const activeRect = activeElement.getBoundingClientRect();
-      const topGap = 20;
-      const bottomGap = 28;
-
-      if (activeRect.bottom > scrollerRect.bottom - bottomGap) {
-        scroller.scrollTop += activeRect.bottom - scrollerRect.bottom + bottomGap;
-      } else if (activeRect.top < scrollerRect.top + topGap) {
-        scroller.scrollTop -= scrollerRect.top + topGap - activeRect.top;
-      }
-    });
-  }, []);
-
-  const handleFocusCapture = useCallback((event: FocusEvent<HTMLDivElement>) => {
-    const target = event.target;
-    if (
-      target instanceof HTMLInputElement ||
-      target instanceof HTMLTextAreaElement ||
-      target instanceof HTMLSelectElement
-    ) {
-      setKeyboardOpen(true);
-    }
-    window.setTimeout(scrollFocusedFieldIntoView, 120);
-    window.setTimeout(scrollFocusedFieldIntoView, 320);
-  }, [scrollFocusedFieldIntoView]);
-
-  const handleBlurCapture = useCallback(() => {
-    window.setTimeout(() => {
-      const scroller = scrollContainerRef.current;
-      const activeElement = document.activeElement;
-
-      if (!scroller || !(activeElement instanceof HTMLElement) || !scroller.contains(activeElement)) {
-        setKeyboardOpen(false);
-      }
-    }, 80);
-  }, []);
-
-  const dialogViewportStyle = useKeyboardAwareDialogViewport(open, scrollFocusedFieldIntoView, keyboardOpen);
-
   useEffect(() => {
     if (open) {
       setStep(1);
       setSelectedCode(initialCode);
       setStartDate(undefined);
       setError(null);
-      setKeyboardOpen(false);
       form.reset();
     }
   }, [open, initialCode, form]);
@@ -201,8 +145,7 @@ export function MembershipFormModal({ open, onOpenChange, group, initialCode }: 
   return (
     <Dialog open={open} onOpenChange={onOpenChange} modal>
       <DialogContent
-        style={dialogViewportStyle}
-        className="top-[calc(var(--dialog-viewport-top)_+_0.5rem)] flex h-[var(--dialog-active-height)] max-h-[var(--dialog-active-height)] w-[calc(100vw_-_1rem)] translate-y-0 flex-col gap-0 overflow-hidden p-0 sm:top-[50%] sm:h-auto sm:max-h-[90dvh] sm:w-full sm:max-w-md sm:translate-y-[-50%]"
+        className="top-2 flex max-h-[calc(100dvh-1rem)] w-[calc(100vw-1rem)] translate-y-0 flex-col gap-0 overflow-hidden p-0 sm:top-[50%] sm:max-h-[90dvh] sm:w-full sm:max-w-md sm:translate-y-[-50%]"
         onEscapeKeyDown={() => onOpenChange(false)}
       >
         <DialogHeader className="shrink-0 p-6 pb-4 pr-12">
@@ -216,12 +159,7 @@ export function MembershipFormModal({ open, onOpenChange, group, initialCode }: 
           </DialogDescription>
         </DialogHeader>
 
-        <div
-          ref={scrollContainerRef}
-          onFocusCapture={handleFocusCapture}
-          onBlurCapture={handleBlurCapture}
-          className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-6 pb-6 [touch-action:pan-y] [-webkit-overflow-scrolling:touch]"
-        >
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-6 pb-6 [touch-action:pan-y] [-webkit-overflow-scrolling:touch]">
           {error && (
             <div className="mb-4 bg-red-50 border border-red-200 text-red-700 text-sm rounded-md p-3">
               {error}
