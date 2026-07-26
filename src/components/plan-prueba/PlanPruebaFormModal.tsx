@@ -165,9 +165,12 @@ export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) 
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md max-h-[90dvh] overflow-y-auto overscroll-contain">
-        <DialogHeader>
+    <Dialog open={open} onOpenChange={onOpenChange} modal>
+      <DialogContent
+        className="flex max-h-[90dvh] w-[calc(100vw-1rem)] flex-col gap-0 overflow-hidden p-0 sm:max-w-md sm:w-full"
+        onEscapeKeyDown={() => onOpenChange(false)}
+      >
+        <DialogHeader className="shrink-0 p-6 pb-4 pr-12">
           <DialogTitle className="font-bold text-xl text-[#2E4D3A]">
             {step === 1 && "Tus datos"}
             {step === 2 && "Plan y fecha de inicio"}
@@ -178,50 +181,51 @@ export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) 
           </DialogDescription>
         </DialogHeader>
 
-        {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-md p-3">
-            {error}
-          </div>
-        )}
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-6 pb-6 [touch-action:pan-y] [-webkit-overflow-scrolling:touch]">
+          {error && (
+            <div className="mb-4 bg-red-50 border border-red-200 text-red-700 text-sm rounded-md p-3">
+              {error}
+            </div>
+          )}
 
-        {step === 1 && (
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmitStep1)} className="space-y-4">
-              <FormField control={form.control} name="name" render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Nombre</FormLabel>
-                  <FormControl><Input placeholder="Tu nombre" {...field} /></FormControl>
-                  <FormMessage />
-                </FormItem>
-              )} />
-              <FormField control={form.control} name="email" render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl><Input type="email" placeholder="tu@email.com" {...field} /></FormControl>
-                  <FormMessage />
-                </FormItem>
-              )} />
-              <FormField control={form.control} name="phone" render={({ field }) => (
-                <FormItem>
-                  <FormLabel>WhatsApp</FormLabel>
-                  <FormControl><Input type="tel" placeholder="912345678" {...field} /></FormControl>
-                  <FormMessage />
-                </FormItem>
-              )} />
-              <Button
-                type="submit"
-                disabled={submitting}
-                className="w-full bg-[#2E4D3A] hover:bg-[#2E4D3A]/90 text-white py-6 text-base"
-              >
-                {submitting && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-                Continuar
-              </Button>
-            </form>
-          </Form>
-        )}
+          {step === 1 && (
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmitStep1)} className="space-y-4">
+                <FormField control={form.control} name="name" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Nombre</FormLabel>
+                    <FormControl><Input placeholder="Tu nombre" {...field} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
+                <FormField control={form.control} name="email" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl><Input type="email" placeholder="tu@email.com" {...field} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
+                <FormField control={form.control} name="phone" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>WhatsApp</FormLabel>
+                    <FormControl><Input type="tel" placeholder="912345678" {...field} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
+                <Button
+                  type="submit"
+                  disabled={submitting}
+                  className="w-full bg-[#2E4D3A] hover:bg-[#2E4D3A]/90 text-white py-6 text-base"
+                >
+                  {submitting && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                  Continuar
+                </Button>
+              </form>
+            </Form>
+          )}
 
-        {step === 2 && (
-          <div className="space-y-5">
+          {step === 2 && (
+            <div className="space-y-5">
             <div>
               <label className="text-sm font-medium text-[#2E4D3A] mb-2 block">Plan seleccionado</label>
               <div className="grid grid-cols-1 gap-2">
@@ -296,8 +300,9 @@ export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) 
               {submitting && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
               Confirmar y pagar
             </Button>
-          </div>
-        )}
+            </div>
+          )}
+        </div>
 
       </DialogContent>
     </Dialog>
