@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type FocusEvent } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -60,6 +60,7 @@ export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) 
   const [error, setError] = useState<string | null>(null);
   const [userInfo, setUserInfo] = useState<Step1Values | null>(null);
   const [understood, setUnderstood] = useState(false);
+  const [keyboardOpen, setKeyboardOpen] = useState(false);
   const { trackEvent } = useFacebookPixel();
   const { trackServerEvent } = useFacebookConversionsAPI();
 
@@ -94,12 +95,31 @@ export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) 
     });
   }, []);
 
-  const handleFocusCapture = useCallback(() => {
+  const handleFocusCapture = useCallback((event: FocusEvent<HTMLDivElement>) => {
+    const target = event.target;
+    if (
+      target instanceof HTMLInputElement ||
+      target instanceof HTMLTextAreaElement ||
+      target instanceof HTMLSelectElement
+    ) {
+      setKeyboardOpen(true);
+    }
     window.setTimeout(scrollFocusedFieldIntoView, 120);
     window.setTimeout(scrollFocusedFieldIntoView, 320);
   }, [scrollFocusedFieldIntoView]);
 
-  const dialogViewportStyle = useKeyboardAwareDialogViewport(open, scrollFocusedFieldIntoView);
+  const handleBlurCapture = useCallback(() => {
+    window.setTimeout(() => {
+      const scroller = scrollContainerRef.current;
+      const activeElement = document.activeElement;
+
+      if (!scroller || !(activeElement instanceof HTMLElement) || !scroller.contains(activeElement)) {
+        setKeyboardOpen(false);
+      }
+    }, 80);
+  }, []);
+
+  const dialogViewportStyle = useKeyboardAwareDialogViewport(open, scrollFocusedFieldIntoView, keyboardOpen);
 
   useEffect(() => {
     if (open) {
@@ -110,6 +130,7 @@ export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) 
       setError(null);
       setStartDate(undefined);
       setUnderstood(false);
+      setKeyboardOpen(false);
       form.reset();
     }
   }, [open, initialPlan, form]);
@@ -203,7 +224,7 @@ export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) 
     <Dialog open={open} onOpenChange={onOpenChange} modal>
       <DialogContent
         style={dialogViewportStyle}
-        className="top-[calc(var(--dialog-viewport-top)_+_0.5rem)] flex h-[calc(var(--dialog-viewport-height)_-_1rem)] max-h-[calc(var(--dialog-viewport-height)_-_1rem)] w-[calc(100vw_-_1rem)] translate-y-0 flex-col gap-0 overflow-hidden p-0 sm:top-[50%] sm:h-auto sm:max-h-[90dvh] sm:w-full sm:max-w-md sm:translate-y-[-50%]"
+        className="top-[calc(var(--dialog-viewport-top)_+_0.5rem)] flex h-[var(--dialog-active-height)] max-h-[var(--dialog-active-height)] w-[calc(100vw_-_1rem)] translate-y-0 flex-col gap-0 overflow-hidden p-0 sm:top-[50%] sm:h-auto sm:max-h-[90dvh] sm:w-full sm:max-w-md sm:translate-y-[-50%]"
         onEscapeKeyDown={() => onOpenChange(false)}
       >
         <DialogHeader className="shrink-0 p-6 pb-4 pr-12">
@@ -220,6 +241,7 @@ export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) 
         <div
           ref={scrollContainerRef}
           onFocusCapture={handleFocusCapture}
+          onBlurCapture={handleBlurCapture}
           className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-6 pb-6 [touch-action:pan-y] [-webkit-overflow-scrolling:touch]"
         >
           {error && (

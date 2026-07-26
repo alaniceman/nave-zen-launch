@@ -8,6 +8,7 @@ type DialogViewportState = {
 type DialogViewportStyle = CSSProperties & {
   "--dialog-viewport-height": string;
   "--dialog-viewport-top": string;
+  "--dialog-active-height": string;
 };
 
 const getViewportState = (): DialogViewportState => {
@@ -26,6 +27,7 @@ const getViewportState = (): DialogViewportState => {
 export function useKeyboardAwareDialogViewport(
   open: boolean,
   onViewportChange?: () => void,
+  keyboardOpen = false,
 ): DialogViewportStyle {
   const [viewport, setViewport] = useState<DialogViewportState>(getViewportState);
   const callbackRef = useRef(onViewportChange);
@@ -73,7 +75,10 @@ export function useKeyboardAwareDialogViewport(
       ({
         "--dialog-viewport-height": `${viewport.height}px`,
         "--dialog-viewport-top": `${viewport.top}px`,
+        "--dialog-active-height": keyboardOpen
+          ? "min(calc(var(--dialog-viewport-height) - 1rem), 52svh)"
+          : "calc(var(--dialog-viewport-height) - 1rem)",
       }) as DialogViewportStyle,
-    [viewport.height, viewport.top],
+    [keyboardOpen, viewport.height, viewport.top],
   );
 }
