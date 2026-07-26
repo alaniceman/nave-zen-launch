@@ -145,7 +145,7 @@ export function MembershipFormModal({ open, onOpenChange, group, initialCode }: 
   return (
     <Dialog open={open} onOpenChange={onOpenChange} modal>
       <DialogContent
-        className="flex max-h-[90dvh] w-[calc(100vw-1rem)] flex-col gap-0 overflow-hidden p-0 sm:max-w-md sm:w-full"
+        className="top-2 flex max-h-[calc(100dvh-1rem)] w-[calc(100vw-1rem)] translate-y-0 flex-col gap-0 overflow-hidden p-0 sm:top-[50%] sm:max-h-[90dvh] sm:w-full sm:max-w-md sm:translate-y-[-50%]"
         onEscapeKeyDown={() => onOpenChange(false)}
       >
         <DialogHeader className="shrink-0 p-6 pb-4 pr-12">
