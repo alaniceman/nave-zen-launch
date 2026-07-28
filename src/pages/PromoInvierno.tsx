@@ -75,7 +75,7 @@ export default function PromoInvierno() {
 
   const features = [
     "6 códigos de sesión transferibles",
-    "Ice Bath, Método Wim Hof o Yoga · tú eliges",
+    "Ice Bath + Método Wim Hof o Yoga · tú eliges",
     "Compártelos con quien quieras",
     "Válidos por 3 meses desde la compra",
     "Pago seguro · entrega inmediata",
