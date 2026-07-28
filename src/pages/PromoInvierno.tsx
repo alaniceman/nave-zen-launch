@@ -75,7 +75,7 @@ export default function PromoInvierno() {
 
   const features = [
     "6 códigos de sesión transferibles",
-    "Ice Bath, Método Wim Hof o Yoga · tú eliges",
+    "Ice Bath + Método Wim Hof o Yoga · tú eliges",
     "Compártelos con quien quieras",
     "Válidos por 3 meses desde la compra",
     "Pago seguro · entrega inmediata",
@@ -120,7 +120,7 @@ export default function PromoInvierno() {
               </h1>
 
               <p className="text-lg md:text-xl text-gray-600 mb-4 leading-relaxed">
-                Está comprobado: <strong>6 sesiones</strong> de Ice Bath, Método Wim Hof
+                Está comprobado: <strong>6 sesiones</strong> de Ice Bath + Método Wim Hof
                 o Yoga te ayudan a tolerar el frío el doble. El invierno ya no será tema nunca más.
               </p>
               <p className="text-base text-gray-500 italic">
@@ -147,7 +147,7 @@ export default function PromoInvierno() {
                       6 Sesiones en Nave Studio
                     </CardTitle>
                   </div>
-                  <p className="text-gray-600">Ice Bath, Método Wim Hof o Yoga · tú eliges</p>
+                  <p className="text-gray-600">Ice Bath + Método Wim Hof o Yoga · tú eliges</p>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div className="bg-gradient-to-r from-slate-50 to-sky-50 rounded-xl p-4">
