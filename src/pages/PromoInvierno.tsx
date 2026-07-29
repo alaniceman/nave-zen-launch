@@ -9,6 +9,8 @@ import { Footer } from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
 import { toast } from "sonner";
+import { Navigate } from "react-router-dom";
+import { isPromoInviernoActive } from "@/lib/promoInvierno";
 
 const PACKAGE_ID = "577d13fc-590e-4e9f-a99e-18cc1e62e414";
 const PRICE = 60000;
@@ -26,6 +28,10 @@ export default function PromoInvierno() {
       currency: "CLP",
     });
   }, []);
+
+  if (!isPromoInviernoActive()) {
+    return <Navigate to="/bonos" replace />;
+  }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
