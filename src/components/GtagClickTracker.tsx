@@ -12,6 +12,17 @@ export function GtagClickTracker() {
     const handler = (e: MouseEvent) => {
       const target = e.target as HTMLElement | null;
       if (!target) return;
+
+      // Explicit opt-in via attribute (most reliable, copy-independent)
+      const explicit = target.closest("[data-gtag-conversion]") as HTMLElement | null;
+      if (explicit) {
+        const key = explicit.getAttribute("data-gtag-conversion") as ConversionKey | null;
+        if (key) {
+          trackConversion(key);
+          return;
+        }
+      }
+
       const interactive = target.closest("a, button") as HTMLElement | null;
       if (!interactive) return;
 
@@ -21,6 +32,7 @@ export function GtagClickTracker() {
         trackConversion("whatsapp_click");
         return;
       }
+
 
       const text = (interactive.innerText || interactive.textContent || "").trim();
       if (!text) return;
