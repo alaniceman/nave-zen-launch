@@ -18,6 +18,8 @@ export const CONVERSIONS = {
   lead_plan_prueba: `${GOOGLE_ADS_ID}/u-g1CJLfpMYcEOOEtYpE`,
   whatsapp_click: `${GOOGLE_ADS_ID}/4AroCNXdjcYcEOOEtYpE`,
   suscribirme_click: `${GOOGLE_ADS_ID}/Q80SCN-OpcYcEOOEtYpE`,
+  // Membresía: se dispara al completar los 2 pasos del modal (acción de compra)
+  membresia_purchase: `${GOOGLE_ADS_ID}/Q80SCN-OpcYcEOOEtYpE`,
   agendar_clase_click: `${GOOGLE_ADS_ID}/TODO_AGENDAR_CLICK`,
   contacto_form_submit: `${GOOGLE_ADS_ID}/TODO_CONTACTO_FORM`,
 } as const;
