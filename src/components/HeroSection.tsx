@@ -9,8 +9,8 @@ import planPruebaHero from "@/assets/plan-prueba-hero.webp";
 
 // Día de la Madre (Chile: 10 mayo 2026) — banner activo hasta fin del 10 mayo
 const DIA_MADRE_END_DATE = new Date("2026-05-11T03:00:00Z");
-// Promo Invierno — activa hasta fin de invierno (21 sept 2026)
-const PROMO_INVIERNO_END_DATE = new Date("2026-09-22T03:00:00Z");
+// Promo Invierno — activa hasta el 31 de julio 2026 (23:59 Chile)
+const PROMO_INVIERNO_END_DATE = new Date("2026-08-01T03:59:59Z");
 
 const HeroSlideMain = () => {
   const navigate = useNavigate();
