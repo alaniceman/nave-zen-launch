@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { trackConversion } from "@/lib/gtagConversions";
+import { trackConversion, type ConversionKey } from "@/lib/gtagConversions";
 
 /**
  * Global click delegation:
