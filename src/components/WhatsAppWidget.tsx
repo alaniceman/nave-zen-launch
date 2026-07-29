@@ -1,5 +1,6 @@
 import { MessageCircle, Bot, X } from "lucide-react";
 import { useState } from "react";
+import { trackConversion } from "@/lib/gtagConversions";
 
 interface WhatsAppWidgetProps {
   onOpenChat?: () => void;
@@ -12,6 +13,7 @@ const WhatsAppWidget = ({ onOpenChat }: WhatsAppWidgetProps) => {
     const phoneNumber = "56946120426";
     const message = "¡Hola! Me interesa conocer más sobre las clases en Nave Studio";
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    trackConversion("whatsapp_click");
     window.open(whatsappUrl, "_blank", "noopener,noreferrer");
     setIsExpanded(false);
   };

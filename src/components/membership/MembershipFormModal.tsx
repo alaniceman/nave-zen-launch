@@ -16,6 +16,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
+import { trackConversion } from "@/lib/gtagConversions";
 
 export type MembershipGroup = "completa" | "yoga";
 
@@ -122,6 +123,14 @@ export function MembershipFormModal({ open, onOpenChange, group, initialCode }: 
       if (error || !data?.boxmagicUrl) throw new Error(data?.error || "Error al confirmar");
 
       trackEvent("membership_form_completed", { plan_group: group, plan_code: selected.code });
+
+      // Google Ads: conversión de membresía (acción de compra), al completar los 2 pasos
+      trackConversion("membresia_purchase", {
+        value: Number(selected.price.replace(/[^0-9]/g, "")) || undefined,
+        currency: "CLP",
+        transaction_id: data.leadId ? String(data.leadId) : undefined,
+      });
+
 
       // Close & redirect via global RedirectModal (delegated [data-checkout-url])
       onOpenChange(false);
