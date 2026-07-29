@@ -30,20 +30,49 @@ interface ConversionParams {
   transaction_id?: string;
 }
 
+function isDebug() {
+  if (typeof window === "undefined") return false;
+  try {
+    return (
+      import.meta.env.DEV ||
+      new URLSearchParams(window.location.search).has("gtag_debug") ||
+      window.localStorage.getItem("gtag_debug") === "1"
+    );
+  } catch {
+    return false;
+  }
+}
+
 export function trackConversion(key: ConversionKey, params: ConversionParams = {}) {
-  if (typeof window === "undefined" || typeof window.gtag !== "function") return;
-  const send_to = CONVERSIONS[key];
-  if (!send_to || send_to.includes("TODO_")) {
-    // Label not configured yet — skip silently in production.
-    if (import.meta.env.DEV) {
-      console.info(`[gtag] Conversion "${key}" not configured yet (missing send_to label).`);
-    }
+  if (typeof window === "undefined") return;
+  const debug = isDebug();
+
+  if (typeof window.gtag !== "function") {
+    if (debug) console.warn(`[gtag] "${key}" NO enviado: window.gtag no está disponible (¿bloqueador?).`);
     return;
   }
+
+  // Always send a GA4 event so the action is measurable even if the
+  // Google Ads label is not created yet.
+  window.gtag("event", `nave_${key}`, {
+    value: params.value ?? undefined,
+    currency: params.currency ?? "CLP",
+    transaction_id: params.transaction_id ?? undefined,
+  });
+
+  const send_to = CONVERSIONS[key];
+  if (!send_to || send_to.includes("TODO_")) {
+    if (debug) console.warn(`[gtag] "${key}": falta el label de Google Ads (send_to). Solo se envió el evento GA4.`);
+    return;
+  }
+
   window.gtag("event", "conversion", {
     send_to,
     value: params.value ?? 1.0,
     currency: params.currency ?? "CLP",
     transaction_id: params.transaction_id ?? "",
   });
+
+  if (debug) console.info(`[gtag] conversion "${key}" enviada →`, send_to, params);
 }
+
