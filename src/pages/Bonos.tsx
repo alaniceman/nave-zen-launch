@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Loader2, Package, Calendar, CheckCircle2, Shield } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { PROMO_INVIERNO_PACKAGE_ID, isPromoInviernoActive } from "@/lib/promoInvierno";
 import { Footer } from "@/components/Footer";
 import { PurchaseFAQ } from "@/components/PurchaseFAQ";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
@@ -36,6 +37,11 @@ interface Service {
   name: string;
   price_clp: number;
 }
+function filterExpiredPromos<T extends { id: string }>(pkgs: T[]): T[] {
+  if (isPromoInviernoActive()) return pkgs;
+  return pkgs.filter((p) => p.id !== PROMO_INVIERNO_PACKAGE_ID);
+}
+
 export default function Bonos() {
   const { trackEvent } = useFacebookPixel();
   const { trackServerEvent } = useFacebookConversionsAPI();
@@ -105,7 +111,7 @@ export default function Bonos() {
         .order("sort_order", { ascending: true })
         .order("sessions_quantity", { ascending: true });
       if (error) throw error;
-      setPackages(data || []);
+      setPackages(filterExpiredPromos(data || []));
     } catch (error) {
       console.error("Error loading packages:", error);
       toast.error("Error al cargar los paquetes");
