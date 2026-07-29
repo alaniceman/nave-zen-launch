@@ -26,9 +26,10 @@ export function GtagClickTracker() {
       const interactive = target.closest("a, button") as HTMLElement | null;
       if (!interactive) return;
 
-      // WhatsApp links
+      // WhatsApp links (href) or buttons that open WhatsApp programmatically
       const href = (interactive as HTMLAnchorElement).href || "";
-      if (/wa\.me|api\.whatsapp\.com/i.test(href)) {
+      const aria = interactive.getAttribute("aria-label") || "";
+      if (/wa\.me|api\.whatsapp\.com/i.test(href) || /whatsapp/i.test(aria)) {
         trackConversion("whatsapp_click");
         return;
       }
@@ -37,8 +38,8 @@ export function GtagClickTracker() {
       const text = (interactive.innerText || interactive.textContent || "").trim();
       if (!text) return;
 
-      if (/suscribirme/i.test(text)) {
-        trackConversion("suscribirme_click");
+      if (/whatsapp/i.test(text)) {
+        trackConversion("whatsapp_click");
         return;
       }
       if (/^agendar\b/i.test(text)) {
