@@ -1,5 +1,6 @@
 import { MessageCircle, Bot, X } from "lucide-react";
 import { useState } from "react";
+import { trackConversion } from "@/lib/gtagConversions";
 
 interface WhatsAppWidgetProps {
   onOpenChat?: () => void;
