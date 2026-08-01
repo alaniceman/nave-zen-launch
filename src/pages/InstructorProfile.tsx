@@ -47,17 +47,26 @@ const InstructorProfile = () => {
     }
   }
 
+  // Título SEO compacto (<60 chars): recorta roles muy largos
+  const suffix = " | Nave Studio";
+  const roleBudget = 60 - suffix.length - coach.name.length - 3;
+  const shortRole =
+    coach.role.length > roleBudget ? `${coach.role.slice(0, Math.max(0, roleBudget - 1)).trimEnd()}…` : coach.role;
+  const seoTitle =
+    roleBudget > 6 ? `${coach.name} — ${shortRole}${suffix}` : `${coach.name}${suffix}`;
+
   return (
     <>
       <Helmet>
-        <title>{coach.name} — {coach.role} | Nave Studio</title>
+        <title>{seoTitle}</title>
         <meta
           name="description"
           content={`${coach.name}, ${coach.role} en Nave Studio, Las Condes. Reserva una sesión guiada con ${coach.name.split(" ")[0]}. Método Wim Hof, Ice Bath y Yoga.`}
         />
         <link rel="canonical" href={`https://studiolanave.com/instructor/${coach.slug}`} />
-        <meta property="og:title" content={`${coach.name} — ${coach.role} | Nave Studio`} />
+        <meta property="og:title" content={seoTitle} />
         <meta property="og:description" content={`${coach.name}, ${coach.role} en Nave Studio, Las Condes. Reserva una sesión guiada. Método Wim Hof, Ice Bath y Yoga.`} />
+
         <meta property="og:url" content={`https://studiolanave.com/instructor/${coach.slug}`} />
         <meta property="og:image" content={coach.image?.startsWith("http") ? coach.image : `https://studiolanave.com${coach.image}`} />
         <meta property="og:type" content="profile" />

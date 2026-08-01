@@ -327,7 +327,7 @@ const YogaLasCondes = () => {
             src="/lovable-uploads/82672388-9723-4aee-a1f2-ac72618cd26a.png"
             alt="Sala de Yoga de Nave Studio en Las Condes"
             className="absolute inset-0 w-full h-full object-cover scale-105"
-            fetchPriority="high"
+            {...({ fetchpriority: "high" } as any)}
           />
           <div className="absolute inset-0 bg-gradient-to-b from-primary/70 via-primary/50 to-primary/80" />
           <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
