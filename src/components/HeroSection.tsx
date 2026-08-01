@@ -27,7 +27,7 @@ const HeroSlideMain = () => {
         alt="Nave Studio wellness center hero background"
         className="absolute inset-0 w-full h-full object-cover"
         style={{ objectPosition: 'right 32% center' }}
-        fetchPriority="high"
+        {...({ fetchpriority: "high" } as any)}
       />
 
       {/* Green Overlay */}
@@ -98,7 +98,7 @@ const HeroSlidePlanPrueba = () => {
         src={planPruebaHero}
         alt="Plan de Prueba — Yoga en Nave Studio"
         className="absolute inset-0 w-full h-full object-cover"
-        fetchPriority="high"
+        {...({ fetchpriority: "high" } as any)}
       />
       <div className="absolute inset-0 bg-primary/65" />
 
