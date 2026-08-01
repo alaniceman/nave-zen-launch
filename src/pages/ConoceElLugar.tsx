@@ -22,7 +22,19 @@ const ConoceElLugar = () => {
       </Helmet>
 
       <main className="min-h-screen">
+        <section className="bg-background pt-24 pb-4 px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <h1 className="font-heading text-3xl md:text-5xl text-primary mb-4">
+              Conoce Nave Studio en Las Condes
+            </h1>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Un espacio cálido y cuidado en Antares 259 para Yoga, Ice Bath y Método Wim Hof.
+            </p>
+          </div>
+        </section>
+
         <LocationGallerySection />
+
 
         <Footer />
       </main>
