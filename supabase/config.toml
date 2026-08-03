@@ -78,3 +78,6 @@ verify_jwt = false
 [functions.send-invierno-promo-recovery]
 verify_jwt = false
 
+[functions.send-expiring-sessions-reminder]
+verify_jwt = false
+
