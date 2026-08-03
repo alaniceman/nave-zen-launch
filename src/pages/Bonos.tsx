@@ -11,7 +11,6 @@ import { Button } from "@/components/ui/button";
 import { Loader2, Package, Calendar, CheckCircle2, Shield } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { PROMO_INVIERNO_PACKAGE_ID, isPromoInviernoActive } from "@/lib/promoInvierno";
 import { Footer } from "@/components/Footer";
 import { PurchaseFAQ } from "@/components/PurchaseFAQ";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
@@ -37,9 +36,9 @@ interface Service {
   name: string;
   price_clp: number;
 }
+// La visibilidad de promos se controla desde el panel admin (is_active), sin forzar por fecha.
 function filterExpiredPromos<T extends { id: string }>(pkgs: T[]): T[] {
-  if (isPromoInviernoActive()) return pkgs;
-  return pkgs.filter((p) => p.id !== PROMO_INVIERNO_PACKAGE_ID);
+  return pkgs;
 }
 
 export default function Bonos() {
