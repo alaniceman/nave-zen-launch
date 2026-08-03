@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { Clock, User } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Clock, User, Sparkles } from "lucide-react";
 import { dayNames, getTodayInSantiago, CL_TZ } from "../data/schedule";
 import { EXPERIENCE_CATALOG } from "../lib/experiences";
 import { useScheduleEntries, type ScheduleClassItem } from "../hooks/useScheduleEntries";
