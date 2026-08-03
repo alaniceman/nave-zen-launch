@@ -33,6 +33,7 @@ const menuItems = [
   { title: 'Clases de Prueba', url: '/admin/clases-prueba', icon: User },
   { title: 'Planes de Prueba', url: '/admin/planes-prueba', icon: Sparkles },
   { title: 'Preview Emails Prueba', url: '/admin/planes-prueba/emails', icon: Mail },
+  { title: 'Recordatorio Semanal', url: '/admin/recordatorio-semanal', icon: Mail },
   { title: 'Horarios', url: '/admin/horarios', icon: Clock },
   { title: 'Disponibilidad', url: '/admin/disponibilidad', icon: Clock },
   { title: 'Agendas Futuras', url: '/admin/agendas-futuras', icon: Calendar },
