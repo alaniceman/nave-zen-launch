@@ -107,6 +107,7 @@ const AdminTrialBookings = lazy(() => import("./pages/admin/AdminTrialBookings")
 const AdminPlanesPrueba = lazy(() => import("./pages/admin/AdminPlanesPrueba"));
 const AdminEmailPreview = lazy(() => import("./pages/admin/AdminEmailPreview"));
 const BajaRecordatorios = lazy(() => import("./pages/BajaRecordatorios"));
+const AdminWeeklyReminder = lazy(() => import("./pages/admin/AdminWeeklyReminder"));
 const AdminCustomers = lazy(() => import("./pages/admin/AdminCustomers"));
 const AdminCustomerDetail = lazy(() => import("./pages/admin/AdminCustomerDetail"));
 const AdminMembershipPlans = lazy(() => import("./pages/admin/AdminMembershipPlans"));
