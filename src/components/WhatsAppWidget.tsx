@@ -43,7 +43,7 @@ const WhatsAppWidget = ({ onOpenChat }: WhatsAppWidgetProps) => {
             className="flex items-center gap-3 bg-[#25d366] hover:bg-[#128c7e] text-white pl-4 pr-5 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 whitespace-nowrap"
           >
             <MessageCircle className="w-5 h-5 flex-shrink-0" />
-            <span className="text-sm font-medium">Hablar con un humano</span>
+            <span className="text-sm font-medium">Hablar por Whatsapp</span>
           </button>
         </div>
       )}
