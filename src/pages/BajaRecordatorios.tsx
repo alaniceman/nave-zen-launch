@@ -38,11 +38,11 @@ const BajaRecordatorios = () => {
 
   return (
     <>
-      <SEOHead
-        title="Preferencias de correo | Nave Studio"
-        description="Administra tus recordatorios semanales de Nave Studio."
-        noindex
-      />
+      <Helmet>
+        <title>Preferencias de correo | Nave Studio</title>
+        <meta name="description" content="Administra tus recordatorios semanales de Nave Studio." />
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
       <main className="min-h-screen flex items-center justify-center bg-background px-6 py-24">
         <div className="w-full max-w-md rounded-2xl border border-border bg-card p-8 text-center shadow-sm">
           {state === "loading" && (
