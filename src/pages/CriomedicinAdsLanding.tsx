@@ -329,14 +329,14 @@ import { ReviewsTrustBar } from "@/components/ReviewsTrustBar";
                  description:
                    "Te recibimos, revisamos contraindicaciones y resolvemos dudas. Explicamos el objetivo: regulación del sistema nervioso, no resistencia bruta.",
                },
-               {
-                 step: 2,
-                 icon: Wind,
-                 title: "Respiración Método Wim Hof guiada",
-                 time: "20–30 min",
-                 description:
-                   "Rondas de respiración guiadas (a tu ritmo), con pausas y enfoque. El objetivo es preparar el cuerpo: energía, claridad y presencia.",
-               },
+                {
+                  step: 2,
+                  icon: Wind,
+                  title: "Respiración Método Wim Hof guiada",
+                  time: "20–30 min",
+                  description:
+                    "3 a 4 rondas de respiración Wim Hof guiadas. El objetivo es preparar el cuerpo: energía, claridad y presencia.",
+                },
                {
                  step: 3,
                  icon: Target,
@@ -345,14 +345,14 @@ import { ReviewsTrustBar } from "@/components/ReviewsTrustBar";
                  description:
                    'Te mostramos cómo entrar, cómo respirar y cómo "leer" el cuerpo. Ajustamos la inmersión según tu nivel.',
                },
-               {
-                 step: 4,
-                 icon: Snowflake,
-                 title: "Inmersión en agua fría en la Nave ❄️🛸",
-                 time: "1–3 min aprox.",
-                 description:
-                   "Agua aprox. 3°C. Entras con guía: respiración, postura, enfoque y control. La duración no es el 'premio': lo importante es la calidad de la regulación.",
-               },
+                {
+                  step: 4,
+                  icon: Snowflake,
+                  title: "Inmersión en agua fría en la Nave ❄️🛸",
+                  time: "2-5 min aprox.",
+                  description:
+                    "Agua aprox. 3°C. Entras con guía: respiración, postura, enfoque y control. La duración no es el 'premio': lo importante es la calidad de la regulación.\nPara más avanzados el tiempo puede extenderse.",
+                },
                {
                  step: 5,
                  icon: Heart,
