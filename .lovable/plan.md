@@ -1,66 +1,38 @@
-# Email masivo: Promo de Invierno a compradores de paquetes
+# Recordatorio semanal para compradores de paquetes
 
-## Audiencia (confirmado en BD)
-- **7 personas** con paquetes agotados en los últimos 60 días (todas sus sesiones marcadas `is_used`, último uso ≥ hoy - 60 días).
-- **32 personas** con 1 o 2 sesiones restantes en sus paquetes/giftcards vigentes.
-- Total ≈ **39 destinatarios únicos** (deduplicados por email; si alguien califica en ambos grupos se envía una sola vez, priorizando el mensaje de "agotado").
+Un email automático cada domingo a las 18:00 (hora Chile) para quienes tienen sesiones sin usar, con una frase de poder distinta cada semana, los horarios de la semana y link directo a la agenda.
 
-Fuente: `session_codes` con `mercado_pago_payment_id IS NOT NULL`, agrupado por `buyer_email`.
+## A quién le llega
 
-## Nuevo Edge Function: `send-invierno-promo-recovery`
-Basado en el patrón existente de `send-icefest-promo` / `send-marzo-reset-promo`:
+- Personas con al menos un código de paquete comprado, sin usar y no expirado.
+- Un solo email por persona (agrupando todos sus códigos), mostrando cuántas sesiones le quedan y cuándo expiran.
+- Dejan de recibirlo automáticamente cuando usan todas sus sesiones o cuando expiran.
+- No se envía dos veces la misma semana, aunque el job se ejecute de nuevo.
 
-- Endpoint POST con soporte `previewEmail` (para testeo) y modo producción.
-- Rate limit 600ms entre envíos (regla del proyecto: Resend 2 req/s).
-- From: `Nave Studio <agenda@studiolanave.com>`, reply-to: `lanave@alaniceman.com`.
-- Query única a `session_codes` que arma dos segmentos:
-  - `depleted`: total = usados y `MAX(used_at) >= now() - 60 días`.
-  - `lowRemaining`: (total - usados) entre 1 y 2.
-- Dedup por email; si aparece en ambos, gana `depleted`.
-- Log de enviados/errores en respuesta JSON.
+## Contenido del email
 
-## Copy del email (HTML, estilo Helvetica Neue, primary #2E4D3A + acentos hielo)
+- Asunto rotativo (ej. "Tu semana empieza en el agua fría", "Te quedan 3 sesiones esperándote").
+- Frase de poder distinta cada semana, tomada de un banco de ~15 frases que rota según el número de semana del año, así nadie recibe la misma dos domingos seguidos.
+- Recordatorio de sesiones restantes + fecha de expiración.
+- Horarios de la semana: Criomedicina/Wim Hof y Yoga, agrupados por día, tomados directamente de /admin/horarios (siempre actualizados).
+- Botón principal a https://studiolanave.com/agenda-nave-studio.
+- Recordatorio de que los códigos se pueden compartir con quien quieran.
+- Al pie: link para dejar de recibir estos recordatorios semanales.
 
-**Subject (agotados):** `❄️ Se te acabaron las sesiones — Promo de Invierno termina mañana`
-**Subject (1-2 restantes):** `❄️ Te quedan pocas sesiones — Promo de Invierno termina mañana`
+Diseño consistente con los demás emails del sitio: Helvetica Neue, verde #2E4D3A.
 
-**Preview:** `6 sesiones por $60.000 — úsalas en Wim Hof o Yoga, válidas 3 meses.`
+## Opt-out
 
-Estructura:
-1. Hero con gradiente hielo + título "Promo de Invierno".
-2. Saludo personalizado con primer nombre + frase específica según segmento (agotado vs por agotarse).
-3. **Bloque motivacional** sobre agua fría: enfoque, energía, recuperación, sistema inmune, resiliencia mental — 3-4 líneas potentes, sin claims médicos fuertes.
-4. **Urgencia**: "La promo termina mañana."
-5. **Card de la promo**: 6 sesiones · $60.000 · $10.000 por sesión.
-6. **Ventajas nuevas** (bullets):
-   - ✅ Ahora con más horarios disponibles (ampliamos la agenda).
-   - 🧘 Úsalas en **Wim Hof / Criomedicina** o **Yoga** — tú eliges.
-   - 📅 Válidas por **3 meses**.
-   - 🎁 Compártelas con quien quieras.
-7. **CTA principal**: "Aprovechar la Promo de Invierno" → `https://studiolanave.com/promo-invierno` (ruta existente `PromoInvierno.tsx`).
-8. Footer con WhatsApp y link a agenda.
+Link en el pie que marca la preferencia de la persona; a partir de ese momento queda excluida de este envío semanal (no afecta confirmaciones de reserva ni códigos de compra). Página de confirmación simple dentro del sitio.
 
-## Ejecución
-1. Crear `supabase/functions/send-invierno-promo-recovery/index.ts`.
-2. Añadir entrada `verify_jwt = false` en `supabase/config.toml`.
-3. Deploy del edge function.
-4. **Primero enviar preview** a `alan.earle@gmail.com` (o el email que confirmes) para validar copy y diseño.
-5. Tras tu OK, invocar en modo producción para disparar a los ~39 destinatarios.
+## Panel admin
 
-## Fuera de alcance
-- No se toca la promo en sí ni las páginas públicas.
-- No se registra en `email_send_log` (los envíos legacy tipo icefest/marzo-reset tampoco lo hacen; se mantiene consistencia).
-- No se marca a los destinatarios en BD; la deduplicación se basa en la query en cada corrida.
+En la sección de emails del admin: vista previa del email de la semana (frase + horarios reales) y el listado de envíos de la última semana con estado, para poder revisar antes/después de cada domingo.
 
 ## Detalles técnicos
-- Query base:
-```sql
-SELECT buyer_email, buyer_name, is_used, used_at
-FROM session_codes
-WHERE mercado_pago_payment_id IS NOT NULL;
-```
-Agregado en memoria por email → clasificación en `depleted` / `lowRemaining` / descarta.
-- Ventana de 60 días aplicada solo al segmento `depleted` mirando `MAX(used_at)`.
-- Nombres se toman del primer segmento del `buyer_name` para saludo personalizado con fallback "hola 👋".
 
-¿Confirmas que envíe primero un preview antes de disparar los 39?
+- Nueva Edge Function `send-weekly-package-reminder`: consulta `session_codes` paginado con `.range()`, agrupa por `buyer_email`, excluye opt-outs, arma horarios desde `schedule_entries` + `services` + `professionals` (`day_of_week` 0=domingo), y envía con Resend respetando el límite de 2 req/seg.
+- Nuevas tablas: `weekly_reminder_logs` (email, semana ISO, estado, timestamp) para idempotencia, y `email_optouts` (email, tipo, token) para el opt-out; ambas con RLS + GRANTs, escritura solo vía service role.
+- Edge Function pública `weekly-reminder-optout` para validar el token y registrar la baja.
+- `pg_cron` + `pg_net`: job semanal los domingos a las 18:00 Chile (ajustado en UTC según DST) que invoca la función.
+- Frases y asuntos en un módulo aparte para editarlos fácil después.
