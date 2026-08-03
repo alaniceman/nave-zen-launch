@@ -190,6 +190,7 @@ const App = () => {
             <Route path="/giftcards/success" element={<GiftCardsSuccess />} />
             <Route path="/giftcards/failure" element={<GiftCardsFailure />} />
             <Route path="/giftcard/:token" element={<GiftCardView />} />
+            <Route path="/baja-recordatorios" element={<BajaRecordatorios />} />
             <Route path="/agenda-nave-studio" element={<AgendaNaveStudio />} />
             <Route path="/agenda-nave-studio/success" element={<AgendaSuccess />} />
             <Route path="/agenda-nave-studio/failure" element={<AgendaFailure />} />
