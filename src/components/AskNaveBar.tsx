@@ -35,7 +35,7 @@ function getContextualQuestions(pathname: string): string[] {
   if (p.startsWith("/experiencias")) return ["¿Qué experiencia me recomiendas para empezar?"];
   if (p.startsWith("/planes-precios") || p.startsWith("/planes"))
     return ["¿Qué plan me conviene según cuántas veces voy?"];
-  if (p.startsWith("/horarios")) return ["¿Cuándo es la próxima clase disponible?"];
+  if (p.startsWith("/horarios")) return ["¿Qué clases hay disponibles hoy?"];
   if (p.startsWith("/plan-de-prueba")) return ["¿Qué incluye el plan de prueba?"];
   if (p.startsWith("/agenda")) return ["¿Cómo reservo mi clase?"];
   if (p.startsWith("/bonos")) return ["¿Cuál es el mejor bono para mí?"];
