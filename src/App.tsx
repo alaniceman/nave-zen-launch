@@ -106,6 +106,8 @@ const AdminScheduleEntries = lazy(() => import("./pages/admin/AdminScheduleEntri
 const AdminTrialBookings = lazy(() => import("./pages/admin/AdminTrialBookings"));
 const AdminPlanesPrueba = lazy(() => import("./pages/admin/AdminPlanesPrueba"));
 const AdminEmailPreview = lazy(() => import("./pages/admin/AdminEmailPreview"));
+const BajaRecordatorios = lazy(() => import("./pages/BajaRecordatorios"));
+const AdminWeeklyReminder = lazy(() => import("./pages/admin/AdminWeeklyReminder"));
 const AdminCustomers = lazy(() => import("./pages/admin/AdminCustomers"));
 const AdminCustomerDetail = lazy(() => import("./pages/admin/AdminCustomerDetail"));
 const AdminMembershipPlans = lazy(() => import("./pages/admin/AdminMembershipPlans"));
@@ -190,6 +192,7 @@ const App = () => {
             <Route path="/giftcards/success" element={<GiftCardsSuccess />} />
             <Route path="/giftcards/failure" element={<GiftCardsFailure />} />
             <Route path="/giftcard/:token" element={<GiftCardView />} />
+            <Route path="/baja-recordatorios" element={<BajaRecordatorios />} />
             <Route path="/agenda-nave-studio" element={<AgendaNaveStudio />} />
             <Route path="/agenda-nave-studio/success" element={<AgendaSuccess />} />
             <Route path="/agenda-nave-studio/failure" element={<AgendaFailure />} />
@@ -240,6 +243,7 @@ const App = () => {
               <Route path="clases-prueba" element={<AdminTrialBookings />} />
               <Route path="planes-prueba" element={<AdminPlanesPrueba />} />
               <Route path="planes-prueba/emails" element={<AdminEmailPreview />} />
+              <Route path="recordatorio-semanal" element={<AdminWeeklyReminder />} />
               <Route path="clientes" element={<AdminCustomers />} />
               <Route path="clientes/:id" element={<AdminCustomerDetail />} />
               <Route path="membresias" element={<AdminMembershipPlans />} />

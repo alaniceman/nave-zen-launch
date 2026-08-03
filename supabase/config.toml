@@ -81,3 +81,10 @@ verify_jwt = false
 [functions.send-expiring-sessions-reminder]
 verify_jwt = false
 
+[functions.send-weekly-package-reminder]
+verify_jwt = false
+
+[functions.weekly-reminder-optout]
+verify_jwt = false
+
+

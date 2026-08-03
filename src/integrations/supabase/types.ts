@@ -507,6 +507,33 @@ export type Database = {
         }
         Relationships: []
       }
+      email_optouts: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          list_type: string
+          opted_out_at: string | null
+          token: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          list_type?: string
+          opted_out_at?: string | null
+          token?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          list_type?: string
+          opted_out_at?: string | null
+          token?: string
+        }
+        Relationships: []
+      }
       email_subscribers: {
         Row: {
           created_at: string | null
@@ -1508,6 +1535,42 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      weekly_reminder_logs: {
+        Row: {
+          buyer_name: string | null
+          email: string
+          error_message: string | null
+          id: string
+          remaining: number | null
+          sent_at: string
+          status: string
+          subject: string | null
+          week_key: string
+        }
+        Insert: {
+          buyer_name?: string | null
+          email: string
+          error_message?: string | null
+          id?: string
+          remaining?: number | null
+          sent_at?: string
+          status?: string
+          subject?: string | null
+          week_key: string
+        }
+        Update: {
+          buyer_name?: string | null
+          email?: string
+          error_message?: string | null
+          id?: string
+          remaining?: number | null
+          sent_at?: string
+          status?: string
+          subject?: string | null
+          week_key?: string
         }
         Relationships: []
       }
