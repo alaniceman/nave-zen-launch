@@ -133,9 +133,13 @@ export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) 
       });
       if (error || !data?.boxmagicUrl) throw new Error(data?.error || "Error al confirmar");
 
-      // Google Ads conversion: lead_plan_prueba
+      // Google Ads conversion: plan de prueba (acción de compra con valor real)
       const { trackConversion } = await import("@/lib/gtagConversions");
-      trackConversion("lead_plan_prueba", { currency: "CLP" });
+      trackConversion("lead_plan_prueba", {
+        value: PLAN_PRICES[plan],
+        currency: "CLP",
+        transaction_id: leadId ? String(leadId) : undefined,
+      });
 
       // Track redirect event
       const redirectEventId = `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
