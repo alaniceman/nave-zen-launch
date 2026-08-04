@@ -206,17 +206,17 @@ Mensaje: ${formData.message}`
               {/* CTA Buttons */}
               <div className="flex flex-col md:flex-row gap-4 mt-10">
                 <Button
-                  onClick={() => scrollToSection('/planes')}
+                  onClick={() => scrollToSection('/planes-precios')}
                   className="bg-secondary hover:bg-primary text-white py-3 px-6 rounded-[10px] transition-all duration-200 hover:scale-105"
                 >
                   Ver planes
                 </Button>
                 <Button
-                  onClick={() => scrollToSection('/coaches')}
+                  onClick={() => scrollToSection('/conoce-el-lugar')}
                   variant="outline"
                   className="border-2 border-secondary text-secondary hover:bg-secondary hover:text-white py-3 px-6 rounded-[10px] transition-all duration-200 hover:scale-105"
                 >
-                  Conocer coaches
+                  Conoce el lugar
                 </Button>
               </div>
 
