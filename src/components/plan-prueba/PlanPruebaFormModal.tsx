@@ -32,6 +32,12 @@ const PLAN_LABELS: Record<PlanType, string> = {
   trial_15d: "Plan de prueba 15 días — $19.900",
 };
 
+// Valor real de compra (CLP) enviado a Google Ads / Meta
+const PLAN_PRICES: Record<PlanType, number> = {
+  trial_7d: 9900,
+  trial_15d: 19900,
+};
+
 const step1Schema = z.object({
   name: z.string().trim().min(2, "Ingresa tu nombre").max(100),
   email: z.string().trim().email("Email inválido").max(255),
