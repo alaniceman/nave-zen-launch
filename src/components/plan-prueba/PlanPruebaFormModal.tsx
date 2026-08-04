@@ -32,6 +32,12 @@ const PLAN_LABELS: Record<PlanType, string> = {
   trial_15d: "Plan de prueba 15 días — $19.900",
 };
 
+// Valor real de compra (CLP) enviado a Google Ads / Meta
+const PLAN_PRICES: Record<PlanType, number> = {
+  trial_7d: 9900,
+  trial_15d: 19900,
+};
+
 const step1Schema = z.object({
   name: z.string().trim().min(2, "Ingresa tu nombre").max(100),
   email: z.string().trim().email("Email inválido").max(255),
@@ -127,9 +133,13 @@ export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) 
       });
       if (error || !data?.boxmagicUrl) throw new Error(data?.error || "Error al confirmar");
 
-      // Google Ads conversion: lead_plan_prueba
+      // Google Ads conversion: plan de prueba (acción de compra con valor real)
       const { trackConversion } = await import("@/lib/gtagConversions");
-      trackConversion("lead_plan_prueba", { currency: "CLP" });
+      trackConversion("lead_plan_prueba", {
+        value: PLAN_PRICES[plan],
+        currency: "CLP",
+        transaction_id: leadId ? String(leadId) : undefined,
+      });
 
       // Track redirect event
       const redirectEventId = `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
