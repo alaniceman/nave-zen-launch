@@ -42,6 +42,12 @@ const Footer = () => {
               Planes & Precios
             </a>
             <a 
+              href="https://studiolanave.com/conoce-el-lugar" 
+              className="text-accent hover:text-warm transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
+            >
+              Conoce el lugar
+            </a>
+            <a 
               href="https://studiolanave.com/giftcards" 
               className="text-accent hover:text-warm transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
             >
