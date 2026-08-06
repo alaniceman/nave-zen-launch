@@ -8,21 +8,21 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-const MAPS_URL = "https://maps.app.goo.gl/oW6G58gLd5oYWmGn8";
+const MAPS_URL = "https://maps.app.goo.gl/4BvC7kC3JpVdQVkFA";
 const WHATSAPP = "https://wa.me/56946120426";
 
 const TALLERES = {
   fundamentos: {
-    nombre: "Fundamentos Wim Hof",
-    fecha: "Sábado 27 de junio de 2026",
+    nombre: "Fundamentos Método Wim Hof",
+    fecha: "Domingo 23 de agosto de 2026",
     horario: "11:30 a 15:00",
     valorTxt: "$50.000",
     pagoUrl: "https://mpago.la/2c9NhLM",
   },
   avanzado: {
-    nombre: "Avanzado Wim Hof",
-    fecha: "Domingo 28 de junio de 2026",
-    horario: "11:30 a 15:00",
+    nombre: "Avanzado Método Wim Hof",
+    fecha: "Domingo 23 de agosto de 2026",
+    horario: "15:30 a 19:00",
     valorTxt: "$60.000",
     pagoUrl: "https://mpago.la/1edQqad",
   },

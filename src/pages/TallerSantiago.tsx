@@ -46,52 +46,68 @@ type TallerKey = "fundamentos" | "avanzado";
 
 const TALLERES = {
   fundamentos: {
-    nombre: "Fundamentos Wim Hof",
+    nombre: "Taller Fundamentos Método Wim Hof",
     nombreCorto: "Fundamentos",
-    fecha: "Sábado 27 de junio",
-    fechaLarga: "Sábado 27 de junio de 2026",
+    fecha: "Domingo 23 de agosto",
+    fechaLarga: "Domingo 23 de agosto de 2026",
     horario: "11:30 a 15:00",
     duracion: "3 horas y media",
     valor: 50000,
     valorTxt: "$50.000",
     cupos: 15,
     nivel: "Principiante / intermedio",
-    eventId: "santiago_fundamentos_2026_06_27",
-    tabla: "taller_santiago_fundamentos" as const,
-    pagoUrl: "https://mpago.la/2c9NhLM",
-    isoStart: "2026-06-27T11:30:00-04:00",
-    isoEnd: "2026-06-27T15:00:00-04:00",
+    eventId: "santiago_fundamentos_2026_08_23",
+    isoStart: "2026-08-23T11:30:00-04:00",
+    isoEnd: "2026-08-23T15:00:00-04:00",
   },
   avanzado: {
-    nombre: "Avanzado Wim Hof",
+    nombre: "Taller Avanzado Método Wim Hof",
     nombreCorto: "Avanzado",
-    fecha: "Domingo 28 de junio",
-    fechaLarga: "Domingo 28 de junio de 2026",
-    horario: "11:30 a 15:00",
+    fecha: "Domingo 23 de agosto",
+    fechaLarga: "Domingo 23 de agosto de 2026",
+    horario: "15:30 a 19:00",
     duracion: "3 horas y media",
     valor: 60000,
     valorTxt: "$60.000",
     cupos: 15,
     nivel: "Avanzado · requiere experiencia previa",
-    eventId: "santiago_avanzado_2026_06_28",
-    tabla: "taller_santiago_avanzado" as const,
-    pagoUrl: "https://mpago.la/1edQqad",
-    isoStart: "2026-06-28T11:30:00-04:00",
-    isoEnd: "2026-06-28T15:00:00-04:00",
+    eventId: "santiago_avanzado_2026_08_23",
+    isoStart: "2026-08-23T15:30:00-04:00",
+    isoEnd: "2026-08-23T19:00:00-04:00",
   },
 };
 
-const MAPS_URL = "https://maps.app.goo.gl/oW6G58gLd5oYWmGn8";
+const MAPS_URL = "https://maps.app.goo.gl/4BvC7kC3JpVdQVkFA";
 const WHATSAPP_NUMBER = "56946120426";
-const WHATSAPP_TEXT =
-  "Hola, tengo una duda sobre los talleres Wim Hof de junio en Nave Studio.";
-const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_TEXT)}`;
+const waUrl = (text: string) =>
+  `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+const WHATSAPP_URL = waUrl(
+  "Hola! Quiero información sobre los talleres del Método Wim Hof del domingo 23 de agosto en Nave Studio."
+);
+const WHATSAPP_FUNDAMENTOS = waUrl(
+  "Hola! Quiero información sobre el Taller Fundamentos del Método Wim Hof del domingo 23 de agosto, de 11:30 a 15:00, en Nave Studio."
+);
+const WHATSAPP_AVANZADO = waUrl(
+  "Hola! Quiero información sobre el Taller Avanzado del Método Wim Hof del domingo 23 de agosto, de 15:30 a 19:00, en Nave Studio. Ya tengo experiencia previa."
+);
+
 
 const TallerSantiago = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [reservaTaller, setReservaTaller] = useState<TallerKey | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [pagoStatus, setPagoStatus] = useState<"approved" | "pending" | "rejected" | null>(() => {
+    if (typeof window === "undefined") return null;
+    const p = new URLSearchParams(window.location.search).get("pago");
+    return p === "approved" || p === "pending" || p === "rejected" ? p : null;
+  });
+  const pagoTallerNombre = (() => {
+    if (typeof window === "undefined") return null;
+    const n = new URLSearchParams(window.location.search).get("nivel");
+    return n === "fundamentos" || n === "avanzado" ? TALLERES[n].nombreCorto : null;
+  })();
+
   const [form, setForm] = useState({ nombre: "", apellido: "", celular: "", email: "" });
   const [cupos, setCupos] = useState<Record<TallerKey, { total: number; vendidos: number }>>({
     fundamentos: { total: 15, vendidos: 0 },
@@ -156,29 +172,34 @@ const TallerSantiago = () => {
       return;
     }
 
+    if (isSoldOut(reservaTaller)) {
+      toast({
+        title: "Cupos agotados",
+        description: "Este taller ya no tiene cupos disponibles. Escríbenos por WhatsApp para la lista de espera.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setSubmitting(true);
     try {
-      await supabase.from(t.tabla).insert({
-        name: `${nombre} ${apellido}`.slice(0, 200),
-        phone: celular.slice(0, 50),
-        email: email.slice(0, 255),
-        consent: true,
+      const { data, error } = await supabase.functions.invoke("create-taller-preference", {
+        body: { taller: reservaTaller, nombre, apellido, celular, email },
       });
-
-      try {
-        await supabase.functions.invoke("send-santiago-confirmation", {
-          body: { nombre, apellido, celular, email, taller: reservaTaller },
-        });
-      } catch (err) {
-        console.error("Email send failed:", err);
-      }
-    } catch (err) {
-      console.error(err);
-    } finally {
+      if (error) throw error;
+      if (!data?.initPoint) throw new Error(data?.error || "No se pudo iniciar el pago");
+      window.location.href = data.initPoint;
+    } catch (err: any) {
+      console.error("Taller checkout error:", err);
+      toast({
+        title: "No pudimos iniciar el pago",
+        description: `Intenta de nuevo o escríbenos por WhatsApp. (${t.nombreCorto})`,
+        variant: "destructive",
+      });
       setSubmitting(false);
-      window.location.href = t.pagoUrl;
     }
   };
+
 
   const faqs = [
     {
@@ -240,7 +261,8 @@ const TallerSantiago = () => {
         "@type": "Offer",
         price: "50000",
         priceCurrency: "CLP",
-        url: TALLERES.fundamentos.pagoUrl,
+        url: "https://studiolanave.com/taller-wim-hof-santiago-fundamentales-avanzado",
+        availability: "https://schema.org/InStock",
       },
     },
     {
@@ -269,7 +291,8 @@ const TallerSantiago = () => {
         "@type": "Offer",
         price: "60000",
         priceCurrency: "CLP",
-        url: TALLERES.avanzado.pagoUrl,
+        url: "https://studiolanave.com/taller-wim-hof-santiago-fundamentales-avanzado",
+        availability: "https://schema.org/InStock",
       },
     },
   ];
@@ -277,10 +300,15 @@ const TallerSantiago = () => {
   return (
     <div className="min-h-screen bg-background font-body">
       <Helmet>
-        <title>Taller Wim Hof Santiago · Fundamentos y Avanzado | Nave Studio</title>
+        <title>Taller Wim Hof Santiago 23 de agosto | Nave Studio</title>
+        <meta property="og:title" content="Taller Wim Hof Santiago · 23 de agosto | Nave Studio" />
+        <meta property="og:description" content="Fundamentos 11:30-15:00 y Avanzado 15:30-19:00. Domingo 23 de agosto en Nave Studio, Las Condes. 15 cupos por taller." />
+        <meta property="og:type" content="event" />
+        <meta property="og:url" content="https://studiolanave.com/taller-wim-hof-santiago-fundamentales-avanzado" />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta
           name="description"
-          content="Aprende o profundiza la técnica Wim Hof con respiración, hielo y guía presencial en Nave Studio. Taller Fundamentos sábado 27 de junio y Taller Avanzado domingo 28 de junio. Cupos limitados."
+          content="Talleres del Método Wim Hof en Santiago el domingo 23 de agosto de 2026: Fundamentos 11:30-15:00 y Avanzado 15:30-19:00 en Nave Studio, Las Condes. 15 cupos por taller."
         />
         <link
           rel="canonical"
@@ -288,6 +316,43 @@ const TallerSantiago = () => {
         />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       </Helmet>
+
+      {/* Estado de pago (retorno desde Mercado Pago) */}
+      {pagoStatus && (
+        <div className="fixed inset-x-0 top-0 z-[60] px-4 pt-20 pb-4 bg-background/95 backdrop-blur border-b">
+          <div className="max-w-2xl mx-auto flex items-start gap-3">
+            {pagoStatus === "approved" ? (
+              <Check className="w-6 h-6 text-primary flex-shrink-0 mt-0.5" />
+            ) : (
+              <AlertCircle className="w-6 h-6 text-primary flex-shrink-0 mt-0.5" />
+            )}
+            <div className="flex-1">
+              <p className="font-heading font-semibold">
+                {pagoStatus === "approved"
+                  ? `¡Reserva confirmada${pagoTallerNombre ? ` · ${pagoTallerNombre}` : ""}!`
+                  : pagoStatus === "pending"
+                  ? "Tu pago está en proceso"
+                  : "No pudimos confirmar tu pago"}
+              </p>
+              <p className="text-sm text-muted-foreground">
+                {pagoStatus === "approved"
+                  ? "Te esperamos el domingo 23 de agosto en Antares 259, Las Condes. Guarda este mensaje y cualquier duda escríbenos por WhatsApp."
+                  : pagoStatus === "pending"
+                  ? "Cuando Mercado Pago confirme el pago, tu cupo queda reservado. Si tienes dudas, escríbenos por WhatsApp."
+                  : "Tu cupo no quedó reservado. Puedes intentar de nuevo o escribirnos por WhatsApp."}
+              </p>
+            </div>
+            <button
+              onClick={() => setPagoStatus(null)}
+              aria-label="Cerrar aviso"
+              className="p-1 text-muted-foreground hover:text-foreground"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+      )}
+
 
       {/* Reserva Dialog */}
       <Dialog open={!!reservaTaller} onOpenChange={(open) => !open && setReservaTaller(null)}>
@@ -401,7 +466,7 @@ const TallerSantiago = () => {
         <div className="max-w-[1100px] mx-auto relative grid lg:grid-cols-2 gap-10 items-center">
           <div className="text-center lg:text-left animate-fade-in">
             <Badge variant="outline" className="mb-5 border-primary/30 text-primary">
-              Santiago · 27 y 28 de junio
+              Santiago · Domingo 23 de agosto
             </Badge>
             <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground mb-5 leading-[1.05]">
               Dos talleres Wim Hof.{" "}
@@ -531,7 +596,7 @@ const TallerSantiago = () => {
                       <Progress value={pctOcupado(k)} className="h-2" />
                     </div>
 
-                    <div className="mt-auto">
+                    <div className="mt-auto space-y-3">
                       <Button
                         className="w-full"
                         size="lg"
@@ -541,7 +606,17 @@ const TallerSantiago = () => {
                         {sold ? "Cupos agotados" : `Reservar ${t.nombreCorto} — ${t.valorTxt}`}
                         {!sold && <ChevronRight className="w-4 h-4 ml-1" />}
                       </Button>
+                      <a
+                        href={k === "fundamentos" ? WHATSAPP_FUNDAMENTOS : WHATSAPP_AVANZADO}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
+                      >
+                        <MessageCircle className="w-4 h-4" />
+                        {sold ? "Quiero entrar a la lista de espera" : `Dudas sobre ${t.nombreCorto} por WhatsApp`}
+                      </a>
                     </div>
+
                   </CardContent>
                 </Card>
               );
