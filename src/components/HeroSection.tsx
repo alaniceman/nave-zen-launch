@@ -11,6 +11,8 @@ import planPruebaHero from "@/assets/plan-prueba-hero.webp";
 const DIA_MADRE_END_DATE = new Date("2026-05-11T03:00:00Z");
 // Promo Invierno — activa hasta el 31 de julio 2026 (23:59 Chile)
 const PROMO_INVIERNO_END_DATE = new Date("2026-08-05T03:59:59Z");
+// Taller Wim Hof Santiago — domingo 23 de agosto 2026 (slide activo hasta esa fecha)
+const TALLER_WIM_HOF_END_DATE = new Date("2026-08-24T03:59:59Z");
 
 const HeroSlideMain = () => {
   const navigate = useNavigate();
