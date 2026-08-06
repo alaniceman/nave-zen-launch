@@ -10,6 +10,7 @@ const schema = z.object({
   apellido: z.string().min(1).max(100),
   email: z.string().email().max(255),
   celular: z.string().min(6).max(30),
+  couponCode: z.string().max(30).optional().nullable(),
 });
 
 function sanitizePhone(phone: string): string {
@@ -50,6 +51,46 @@ serve(async (req) => {
       );
     }
 
+    // Validate coupon (server-side) if provided
+    let couponId: string | null = null;
+    let couponCode: string | null = null;
+    let discountAmount = 0;
+    const rawCode = (data.couponCode || "").toUpperCase().trim();
+
+    if (rawCode) {
+      const { data: coupon } = await supabase
+        .from("discount_coupons")
+        .select("id, code, discount_type, discount_value, is_active, valid_from, valid_until, max_uses, current_uses, min_purchase_amount, applies_to_talleres")
+        .eq("code", rawCode)
+        .eq("is_active", true)
+        .maybeSingle();
+
+      const now = new Date();
+      const invalid =
+        !coupon ||
+        !coupon.applies_to_talleres ||
+        (coupon.valid_from && new Date(coupon.valid_from) > now) ||
+        (coupon.valid_until && new Date(coupon.valid_until) < now) ||
+        (coupon.max_uses && (coupon.current_uses ?? 0) >= coupon.max_uses) ||
+        (coupon.min_purchase_amount && t.valor < coupon.min_purchase_amount);
+
+      if (invalid) {
+        return new Response(
+          JSON.stringify({ error: "El cupón ingresado no es válido para este taller" }),
+          { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
+      couponId = coupon!.id;
+      couponCode = coupon!.code;
+      discountAmount =
+        coupon!.discount_type === "percentage"
+          ? Math.round((t.valor * coupon!.discount_value) / 100)
+          : Math.min(coupon!.discount_value, t.valor);
+    }
+
+    const finalAmount = Math.max(0, t.valor - discountAmount);
+
     const { data: inscripcion, error: insError } = await supabase
       .from("taller_inscripciones")
       .insert({
@@ -62,7 +103,11 @@ serve(async (req) => {
         phone: data.celular.trim(),
         fecha_evento: t.fechaISO,
         horario: t.horario,
-        amount: t.valor,
+        amount: finalAmount,
+        original_amount: t.valor,
+        discount_amount: discountAmount,
+        coupon_id: couponId,
+        coupon_code: couponCode,
         status: "pending",
       })
       .select()
@@ -89,9 +134,9 @@ serve(async (req) => {
     const preferenceData = {
       items: [
         {
-          title: `${t.nombre} — ${t.fechaLarga}`,
+          title: `${t.nombre} — ${t.fechaLarga}${couponCode ? ` (cupón ${couponCode})` : ""}`,
           quantity: 1,
-          unit_price: t.valor,
+          unit_price: finalAmount,
           currency_id: "CLP",
         },
       ],
