@@ -627,6 +627,7 @@ const TallerSantiago = () => {
 
       {/* Detalle Fundamentos */}
       <DetalleSection
+        taller="fundamentos"
         titulo="Fundamentos: aprende la técnica desde la base"
         texto="Este taller está diseñado para que entiendas y practiques la respiración Wim Hof de forma clara, segura y guiada. Vamos a revisar la técnica paso a paso, el rol de la respiración, la preparación mental y corporal para el frío, y cómo entrar al hielo sin pelear con la experiencia."
         cta="Reservar mi cupo en Fundamentos"
@@ -636,6 +637,7 @@ const TallerSantiago = () => {
 
       {/* Detalle Avanzado */}
       <DetalleSection
+        taller="avanzado"
         titulo="Avanzado: profundiza tu práctica"
         texto="Este taller es para quienes ya conocen la experiencia Wim Hof y quieren ir más profundo. No partiremos desde cero: iremos directo a prácticas más avanzadas de respiración y a un desafío mayor con el frío. Para participar, debes haber vivido antes alguna experiencia Wim Hof guiada, como sesiones en Nave Studio, retiros, Icefest o talleres anteriores."
         cta="Reservar mi cupo en Avanzado"
@@ -960,6 +962,7 @@ const TallerSantiago = () => {
 };
 
 interface DetalleProps {
+  taller: TallerKey;
   titulo: string;
   texto: string;
   cta: string;
@@ -968,17 +971,68 @@ interface DetalleProps {
   dark?: boolean;
 }
 
-const DetalleSection = ({ titulo, texto, cta, sold, onReserve, dark }: DetalleProps) => (
-  <section className={`py-16 px-4 ${dark ? "bg-primary/5" : ""}`}>
-    <div className="max-w-[900px] mx-auto text-center">
-      <h2 className="font-heading text-3xl md:text-4xl text-foreground mb-5">{titulo}</h2>
-      <p className="text-lg text-muted-foreground leading-relaxed mb-8">{texto}</p>
-      <Button size="lg" onClick={onReserve} disabled={sold}>
-        {sold ? "Cupos agotados" : cta}
-        {!sold && <ChevronRight className="w-4 h-4 ml-1" />}
-      </Button>
-    </div>
-  </section>
-);
+const DetalleSection = ({ taller, titulo, texto, cta, sold, onReserve, dark }: DetalleProps) => {
+  const t = TALLERES[taller];
+  const rows = [
+    { icon: Calendar, label: "Fecha", value: t.fechaLarga },
+    { icon: Clock, label: "Horario", value: `${t.horario} (${t.duracion})` },
+    { icon: Tag, label: "Valor", value: `${t.valorTxt} CLP` },
+    { icon: Shield, label: "Cupos", value: `${t.cupos} personas` },
+    { icon: Award, label: "Nivel", value: t.nivel },
+  ];
+
+  return (
+    <section className={`py-16 md:py-20 px-4 ${dark ? "bg-muted/30" : ""}`}>
+      <div className="max-w-[1100px] mx-auto grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+        <div>
+          <Badge variant="outline" className="mb-5 border-primary/30 text-primary">
+            {taller === "fundamentos" ? "Nivel 1 · Fundamentos" : "Nivel 2 · Avanzado"}
+          </Badge>
+          <h2 className="font-heading text-3xl md:text-4xl lg:text-[2.75rem] text-foreground mb-5 leading-[1.1]">
+            {titulo}
+          </h2>
+          <p className="text-lg text-muted-foreground leading-relaxed mb-8">{texto}</p>
+          <Button size="lg" onClick={onReserve} disabled={sold} className="shadow-lg">
+            {sold ? "Cupos agotados" : cta}
+            {!sold && <ChevronRight className="w-4 h-4 ml-1" />}
+          </Button>
+        </div>
+
+        <Card className="border-border/60 rounded-3xl shadow-sm bg-card">
+          <CardContent className="p-6 md:p-8 space-y-6">
+            {rows.map(({ icon: Icon, label, value }) => (
+              <div key={label} className="flex items-start gap-4">
+                <Icon className="w-5 h-5 text-primary mt-1 shrink-0" />
+                <div>
+                  <p className="text-xs uppercase tracking-wide text-muted-foreground mb-0.5">
+                    {label}
+                  </p>
+                  <p className="font-medium text-foreground">{value}</p>
+                </div>
+              </div>
+            ))}
+            <div className="flex items-start gap-4">
+              <MapPin className="w-5 h-5 text-primary mt-1 shrink-0" />
+              <div>
+                <p className="text-xs uppercase tracking-wide text-muted-foreground mb-0.5">
+                  Lugar
+                </p>
+                <p className="font-medium text-foreground">Nave Studio · Antares 259, Las Condes</p>
+                <a
+                  href={MAPS_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-primary hover:underline"
+                >
+                  Ver en Google Maps
+                </a>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </section>
+  );
+};
 
 export default TallerSantiago;
