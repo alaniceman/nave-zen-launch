@@ -95,8 +95,6 @@ const WHATSAPP_AVANZADO = waUrl(
 
 
 const TallerSantiago = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
   const [reservaTaller, setReservaTaller] = useState<TallerKey | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [pagoStatus, setPagoStatus] = useState<"approved" | "pending" | "rejected" | null>(() => {
@@ -117,9 +115,6 @@ const TallerSantiago = () => {
   });
 
   useEffect(() => {
-    const onScroll = () => setIsScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", onScroll);
-
     (async () => {
       const { data } = await supabase
         .from("event_cupos")
@@ -139,8 +134,6 @@ const TallerSantiago = () => {
         });
       }
     })();
-
-    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   const cuposDisponibles = (k: TallerKey) =>
@@ -396,72 +389,8 @@ const TallerSantiago = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Nav */}
-      <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled ? "bg-background/95 backdrop-blur-md shadow-sm" : "bg-transparent"
-        }`}
-      >
-        <nav className="max-w-[1100px] mx-auto px-4 py-4 flex items-center justify-between">
-          <a href="/" className="text-xl font-heading text-foreground">
-            Nave Studio
-          </a>
-          <div className="hidden md:flex items-center gap-3">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => openReserva("fundamentos")}
-              disabled={isSoldOut("fundamentos")}
-            >
-              {isSoldOut("fundamentos") ? "Fundamentos agotado" : "Fundamentos"}
-            </Button>
-            <Button
-              size="sm"
-              onClick={() => openReserva("avanzado")}
-              disabled={isSoldOut("avanzado")}
-            >
-              {isSoldOut("avanzado") ? "Avanzado agotado" : "Avanzado"}
-            </Button>
-          </div>
-          <button
-            className="md:hidden p-2 text-foreground"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Menú"
-          >
-            {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
-        </nav>
-        {mobileOpen && (
-          <div className="md:hidden bg-background border-t">
-            <div className="px-4 py-4 space-y-2">
-              <Button
-                className="w-full"
-                variant="outline"
-                onClick={() => {
-                  openReserva("fundamentos");
-                  setMobileOpen(false);
-                }}
-                disabled={isSoldOut("fundamentos")}
-              >
-                Reservar Fundamentos
-              </Button>
-              <Button
-                className="w-full"
-                onClick={() => {
-                  openReserva("avanzado");
-                  setMobileOpen(false);
-                }}
-                disabled={isSoldOut("avanzado")}
-              >
-                Reservar Avanzado
-              </Button>
-            </div>
-          </div>
-        )}
-      </header>
-
       {/* Hero */}
-      <section className="pt-28 pb-12 md:pt-32 md:pb-16 px-4 relative overflow-hidden">
+      <section className="pt-12 pb-12 md:pt-16 md:pb-16 px-4 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent pointer-events-none" />
         <div className="absolute top-1/4 -right-40 w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
 
