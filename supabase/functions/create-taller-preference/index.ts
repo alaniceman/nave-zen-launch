@@ -102,9 +102,9 @@ serve(async (req) => {
         ...(phone.length >= 8 && { phone: { number: phone } }),
       },
       back_urls: {
-        success: `${landing}?pago=approved&order=${inscripcion.id}`,
-        failure: `${landing}?pago=rejected&order=${inscripcion.id}`,
-        pending: `${landing}?pago=pending&order=${inscripcion.id}`,
+        success: `${landing}?pago=approved&order=${inscripcion.id}&nivel=${data.taller}`,
+        failure: `${landing}?pago=rejected&order=${inscripcion.id}&nivel=${data.taller}`,
+        pending: `${landing}?pago=pending&order=${inscripcion.id}&nivel=${data.taller}`,
       },
       auto_return: "approved",
       external_reference: inscripcion.id,
