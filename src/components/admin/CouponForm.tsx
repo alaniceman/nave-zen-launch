@@ -54,6 +54,7 @@ const couponSchema = z.object({
   valid_from: z.string().optional(),
   valid_until: z.string().nullable().optional(),
   applicable_package_ids: z.array(z.string()).optional(),
+  applies_to_talleres: z.boolean().default(false),
 }).refine((data) => {
   if (data.discount_type === 'percentage') {
     return data.discount_value <= 100;
@@ -102,6 +103,7 @@ export function CouponForm({ open, onClose, coupon }: CouponFormProps) {
       valid_from: new Date().toISOString().split('T')[0],
       valid_until: null,
       applicable_package_ids: [],
+      applies_to_talleres: false,
     },
   });
 
@@ -116,6 +118,7 @@ export function CouponForm({ open, onClose, coupon }: CouponFormProps) {
         valid_from: coupon.valid_from ? new Date(coupon.valid_from).toISOString().split('T')[0] : undefined,
         valid_until: coupon.valid_until ? new Date(coupon.valid_until).toISOString().split('T')[0] : null,
         applicable_package_ids: coupon.applicable_package_ids || [],
+        applies_to_talleres: !!coupon.applies_to_talleres,
       });
       setSelectedPackages(coupon.applicable_package_ids || []);
     } else {
@@ -128,6 +131,7 @@ export function CouponForm({ open, onClose, coupon }: CouponFormProps) {
         valid_from: new Date().toISOString().split('T')[0],
         valid_until: null,
         applicable_package_ids: [],
+        applies_to_talleres: false,
       });
       setSelectedPackages([]);
     }
@@ -144,6 +148,7 @@ export function CouponForm({ open, onClose, coupon }: CouponFormProps) {
         valid_from: data.valid_from || new Date().toISOString(),
         valid_until: data.valid_until || null,
         applicable_package_ids: selectedPackages.length > 0 ? selectedPackages : null,
+        applies_to_talleres: data.applies_to_talleres,
       };
 
       if (isEditing) {
@@ -341,6 +346,24 @@ export function CouponForm({ open, onClose, coupon }: CouponFormProps) {
               )}
             />
           </div>
+
+          <FormField
+            control={form.control}
+            name="applies_to_talleres"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start gap-3 rounded-lg border p-4">
+                <FormControl>
+                  <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel className="cursor-pointer">Válido para talleres y retiros</FormLabel>
+                  <FormDescription>
+                    Permite usar este cupón en la inscripción a talleres (ej: Taller Wim Hof).
+                  </FormDescription>
+                </div>
+              </FormItem>
+            )}
+          />
 
           <div className="space-y-3">
             <FormLabel>Aplicable a Bonos (opcional)</FormLabel>
