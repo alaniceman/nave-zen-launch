@@ -161,29 +161,34 @@ const TallerSantiago = () => {
       return;
     }
 
+    if (isSoldOut(reservaTaller)) {
+      toast({
+        title: "Cupos agotados",
+        description: "Este taller ya no tiene cupos disponibles. Escríbenos por WhatsApp para la lista de espera.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setSubmitting(true);
     try {
-      await supabase.from(t.tabla).insert({
-        name: `${nombre} ${apellido}`.slice(0, 200),
-        phone: celular.slice(0, 50),
-        email: email.slice(0, 255),
-        consent: true,
+      const { data, error } = await supabase.functions.invoke("create-taller-preference", {
+        body: { taller: reservaTaller, nombre, apellido, celular, email },
       });
-
-      try {
-        await supabase.functions.invoke("send-santiago-confirmation", {
-          body: { nombre, apellido, celular, email, taller: reservaTaller },
-        });
-      } catch (err) {
-        console.error("Email send failed:", err);
-      }
-    } catch (err) {
-      console.error(err);
-    } finally {
+      if (error) throw error;
+      if (!data?.initPoint) throw new Error(data?.error || "No se pudo iniciar el pago");
+      window.location.href = data.initPoint;
+    } catch (err: any) {
+      console.error("Taller checkout error:", err);
+      toast({
+        title: "No pudimos iniciar el pago",
+        description: `Intenta de nuevo o escríbenos por WhatsApp. (${t.nombreCorto})`,
+        variant: "destructive",
+      });
       setSubmitting(false);
-      window.location.href = t.pagoUrl;
     }
   };
+
 
   const faqs = [
     {
