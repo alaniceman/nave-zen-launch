@@ -637,6 +637,7 @@ const TallerSantiago = () => {
 
       {/* Detalle Avanzado */}
       <DetalleSection
+        taller="avanzado"
         titulo="Avanzado: profundiza tu práctica"
         texto="Este taller es para quienes ya conocen la experiencia Wim Hof y quieren ir más profundo. No partiremos desde cero: iremos directo a prácticas más avanzadas de respiración y a un desafío mayor con el frío. Para participar, debes haber vivido antes alguna experiencia Wim Hof guiada, como sesiones en Nave Studio, retiros, Icefest o talleres anteriores."
         cta="Reservar mi cupo en Avanzado"
