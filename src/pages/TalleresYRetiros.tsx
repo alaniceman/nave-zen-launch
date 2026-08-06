@@ -132,11 +132,19 @@ const TalleresYRetiros = () => {
                     size="lg"
                     className="bg-primary hover:bg-primary/90 text-primary-foreground"
                   >
-                    <a href={item.url} target="_blank" rel="noopener noreferrer">
-                      Ver más e inscribirme
-                      <ArrowRight className="ml-2 w-4 h-4" />
-                    </a>
+                    {item.url.startsWith("/") ? (
+                      <Link to={item.url}>
+                        Ver más e inscribirme
+                        <ArrowRight className="ml-2 w-4 h-4" />
+                      </Link>
+                    ) : (
+                      <a href={item.url} target="_blank" rel="noopener noreferrer">
+                        Ver más e inscribirme
+                        <ArrowRight className="ml-2 w-4 h-4" />
+                      </a>
+                    )}
                   </Button>
+
                 </CardContent>
               </Card>
             ))}
