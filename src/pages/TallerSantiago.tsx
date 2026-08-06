@@ -306,6 +306,43 @@ const TallerSantiago = () => {
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       </Helmet>
 
+      {/* Estado de pago (retorno desde Mercado Pago) */}
+      {pagoStatus && (
+        <div className="fixed inset-x-0 top-0 z-[60] px-4 pt-20 pb-4 bg-background/95 backdrop-blur border-b">
+          <div className="max-w-2xl mx-auto flex items-start gap-3">
+            {pagoStatus === "approved" ? (
+              <Check className="w-6 h-6 text-primary flex-shrink-0 mt-0.5" />
+            ) : (
+              <AlertCircle className="w-6 h-6 text-primary flex-shrink-0 mt-0.5" />
+            )}
+            <div className="flex-1">
+              <p className="font-heading font-semibold">
+                {pagoStatus === "approved"
+                  ? `¡Reserva confirmada${pagoTallerNombre ? ` · ${pagoTallerNombre}` : ""}!`
+                  : pagoStatus === "pending"
+                  ? "Tu pago está en proceso"
+                  : "No pudimos confirmar tu pago"}
+              </p>
+              <p className="text-sm text-muted-foreground">
+                {pagoStatus === "approved"
+                  ? "Te esperamos el domingo 23 de agosto en Antares 259, Las Condes. Guarda este mensaje y cualquier duda escríbenos por WhatsApp."
+                  : pagoStatus === "pending"
+                  ? "Cuando Mercado Pago confirme el pago, tu cupo queda reservado. Si tienes dudas, escríbenos por WhatsApp."
+                  : "Tu cupo no quedó reservado. Puedes intentar de nuevo o escribirnos por WhatsApp."}
+              </p>
+            </div>
+            <button
+              onClick={() => setPagoStatus(null)}
+              aria-label="Cerrar aviso"
+              className="p-1 text-muted-foreground hover:text-foreground"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+      )}
+
+
       {/* Reserva Dialog */}
       <Dialog open={!!reservaTaller} onOpenChange={(open) => !open && setReservaTaller(null)}>
         <DialogContent className="sm:max-w-md">
