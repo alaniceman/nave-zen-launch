@@ -250,7 +250,8 @@ const TallerSantiago = () => {
         "@type": "Offer",
         price: "50000",
         priceCurrency: "CLP",
-        url: TALLERES.fundamentos.pagoUrl,
+        url: "https://studiolanave.com/taller-wim-hof-santiago-fundamentales-avanzado",
+        availability: "https://schema.org/InStock",
       },
     },
     {
@@ -279,7 +280,8 @@ const TallerSantiago = () => {
         "@type": "Offer",
         price: "60000",
         priceCurrency: "CLP",
-        url: TALLERES.avanzado.pagoUrl,
+        url: "https://studiolanave.com/taller-wim-hof-santiago-fundamentales-avanzado",
+        availability: "https://schema.org/InStock",
       },
     },
   ];
