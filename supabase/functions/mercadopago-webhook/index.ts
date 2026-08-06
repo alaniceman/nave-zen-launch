@@ -277,8 +277,67 @@ async function handleTallerPayment(
       .eq("id", orderId);
   }
 
+  // Participant confirmation email (never blocks the inscription)
+  try {
+    const resendKey = Deno.env.get("RESEND_API_KEY");
+    if (resendKey) {
+      // Resend rate limit: max 2 req/sec
+      await new Promise((r) => setTimeout(r, 600));
+
+      const nivelTxt = insc.nivel === "avanzado" ? "Avanzado" : "Fundamentos";
+      const fechaLarga = insc.nivel === "avanzado"
+        ? "Domingo 23 de agosto de 2026"
+        : "Domingo 23 de agosto de 2026";
+      const mapsUrl = "https://maps.app.goo.gl/4BvC7kC3JpVdQVkFA";
+      const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
+<body style="margin:0;padding:24px 12px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;background:#F4F4F5;line-height:1.7">
+  <div style="max-width:580px;margin:0 auto;background:#ffffff;border-radius:16px;overflow:hidden">
+    <div style="background:#2E4D3A;padding:36px 28px;text-align:center;color:#ffffff">
+      <h1 style="margin:0;font-size:22px;font-weight:600">¡Tu cupo está confirmado!</h1>
+      <p style="margin:6px 0 0;font-size:14px;opacity:.85">Taller ${nivelTxt} · Método Wim Hof</p>
+    </div>
+    <div style="padding:28px">
+      <h2 style="font-size:18px;color:#1A1A1A;margin:0 0 12px">Hola ${insc.nombre} 👋</h2>
+      <p style="color:#3F3F46;font-size:15px;margin:0 0 14px">Recibimos tu pago y tu lugar en el <strong>${insc.taller_nombre}</strong> quedó reservado. Prepárate para respirar, entrar al hielo y conectar con tu poder.</p>
+      <div style="background:#F8FAFB;border-left:4px solid #2E4D3A;padding:16px 18px;border-radius:8px;margin:18px 0">
+        <p style="margin:4px 0;font-size:14px;color:#1A1A1A"><strong>📅 Fecha:</strong> ${fechaLarga}</p>
+        <p style="margin:4px 0;font-size:14px;color:#1A1A1A"><strong>⏰ Horario:</strong> ${insc.horario}</p>
+        <p style="margin:4px 0;font-size:14px;color:#1A1A1A"><strong>📍 Lugar:</strong> Nave Studio, Antares 259, Las Condes — <a href="${mapsUrl}" style="color:#2E4D3A">ver mapa</a></p>
+        <p style="margin:4px 0;font-size:14px;color:#1A1A1A"><strong>💸 Pagado:</strong> $${Number(payment.transaction_amount).toLocaleString("es-CL")} CLP</p>
+      </div>
+      <p style="color:#3F3F46;font-size:15px;margin:0 0 8px"><strong>Qué traer:</strong></p>
+      <ul style="color:#3F3F46;font-size:15px;margin:0 0 14px;padding-left:20px">
+        <li>Traje de baño y toalla grande</li>
+        <li>Bolsa para ropa mojada</li>
+        <li>Ropa cómoda y abrigada para después</li>
+        <li>Botella de agua</li>
+      </ul>
+      <p style="color:#3F3F46;font-size:15px;margin:0 0 14px">Te recomendamos llegar 15 minutos antes y venir con una comida ligera (idealmente 2 horas antes).</p>
+      <p style="color:#71717A;font-size:13px;margin:0">¿Dudas? Escríbenos por <a href="https://wa.me/56946120426" style="color:#2E4D3A">WhatsApp +56 9 4612 0426</a>.</p>
+    </div>
+    <div style="padding:20px 28px;text-align:center;background:#FAFAFA;color:#71717A;font-size:12px">Nave Studio · studiolanave.com</div>
+  </div>
+</body></html>`;
+
+      const r = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${resendKey}`, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          from: "Nave Studio <lanave@alaniceman.com>",
+          to: [insc.email],
+          subject: `Cupo confirmado · Taller ${nivelTxt} Método Wim Hof · 23 de agosto`,
+          html,
+        }),
+      });
+      if (!r.ok) console.error("Resend error (taller participante):", await r.text());
+    }
+  } catch (err) {
+    console.error("Taller participant email failed:", err);
+  }
+
   return json("taller_inscripcion_paid");
 }
+
 
 
 
