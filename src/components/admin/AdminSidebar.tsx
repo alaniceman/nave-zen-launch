@@ -44,6 +44,7 @@ const menuItems = [
   { title: 'Conocimiento Nave AI', url: '/admin/nave-ai', icon: Sparkles },
   { title: 'Tienda · Productos', url: '/admin/tienda', icon: Store },
   { title: 'Tienda · Compras', url: '/admin/tienda-ordenes', icon: ShoppingCart },
+  { title: 'Talleres · Inscripciones', url: '/admin/talleres-inscripciones', icon: Ticket },
 ];
 
 export function AdminSidebar() {
