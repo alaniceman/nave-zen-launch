@@ -173,25 +173,34 @@ export const ReviewsTrustBar = ({
         <h3 className="font-space-grotesk font-bold text-2xl md:text-3xl text-neutral-dark">
           {title}
         </h3>
+        {subtitle && (
+          <p className="font-inter text-sm md:text-base text-neutral-mid mt-2 max-w-2xl mx-auto px-4">
+            {subtitle}
+          </p>
+        )}
       </div>
 
       {showFilters && (
-        <div className="flex flex-wrap items-center justify-center gap-2 mb-6 px-4" role="tablist" aria-label="Filtrar reseñas por categoría">
-          {ALL_FILTERS.map((f) => {
-            const isActive = activeFilter === f.value;
+        <div
+          className="flex md:flex-wrap items-center md:justify-center gap-2 mb-6 px-4 overflow-x-auto reviews-strip"
+          role="tablist"
+          aria-label="Filtrar reseñas por categoría"
+        >
+          {filterValues.map((value) => {
+            const isActive = activeFilter === value;
             return (
               <button
-                key={f.value}
+                key={value}
                 role="tab"
                 aria-selected={isActive}
-                onClick={() => setActiveFilter(f.value)}
-                className={`px-4 py-1.5 rounded-full text-sm font-inter font-medium transition-all duration-200 border focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
+                onClick={() => setActiveFilter(value)}
+                className={`shrink-0 px-4 py-1.5 rounded-full text-sm font-inter font-medium transition-all duration-200 border focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
                   isActive
                     ? "bg-primary text-primary-foreground border-primary shadow-light"
                     : "bg-background text-neutral-dark border-primary/15 hover:border-primary/30 hover:bg-primary/5"
                 }`}
               >
-                {f.label}
+                {value}
               </button>
             );
           })}
