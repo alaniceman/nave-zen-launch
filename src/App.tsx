@@ -118,6 +118,7 @@ const AdminBrain = lazy(() => import("./pages/admin/AdminBrain"));
 const AdminAIKnowledge = lazy(() => import("./pages/admin/AdminAIKnowledge"));
 const AdminShopProducts = lazy(() => import("./pages/admin/AdminShopProducts"));
 const AdminShopOrders = lazy(() => import("./pages/admin/AdminShopOrders"));
+const AdminTallerInscripciones = lazy(() => import("./pages/admin/AdminTallerInscripciones"));
 
 const queryClient = new QueryClient();
 
@@ -256,6 +257,7 @@ const App = () => {
               <Route path="nave-ai" element={<AdminAIKnowledge />} />
               <Route path="tienda" element={<AdminShopProducts />} />
               <Route path="tienda-ordenes" element={<AdminShopOrders />} />
+              <Route path="talleres-inscripciones" element={<AdminTallerInscripciones />} />
             </Route>
             
             {/* Redirect legacy routes */}
