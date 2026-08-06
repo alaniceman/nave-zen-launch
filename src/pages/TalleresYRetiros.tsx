@@ -3,7 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Footer } from "@/components/Footer";
-import { Calendar, MapPin, ArrowRight, Snowflake, Wind, Mountain, Sun } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Calendar, MapPin, ArrowRight, Wind, Mountain, Sun } from "lucide-react";
 
 type Item = {
   tag: string;
