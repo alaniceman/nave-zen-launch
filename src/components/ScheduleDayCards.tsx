@@ -135,15 +135,14 @@ export default function ScheduleDayCards() {
           ))}
         </div>
       )}
-      {classItem.is_trial_enabled && (
-        <Link
-          to="/plan-de-prueba"
-          className="mt-3 w-full sm:w-auto inline-flex items-center justify-center gap-1.5 bg-white text-[#2E4D3A] font-semibold text-sm rounded-xl px-4 py-2.5 shadow-sm hover:bg-white/90 transition-colors"
-        >
-          <Sparkles className="w-4 h-4" />
-          Empieza por $9.900
-        </Link>
-      )}
+      <Link
+        to="/plan-de-prueba"
+        className="mt-3 w-full sm:w-auto inline-flex items-center justify-center gap-1.5 bg-white text-[#2E4D3A] font-semibold text-sm rounded-xl px-4 py-2.5 shadow-sm hover:bg-white/90 transition-colors"
+      >
+        <Sparkles className="w-4 h-4" />
+        Empieza por $9.900
+      </Link>
+
     </div>
   );
 
