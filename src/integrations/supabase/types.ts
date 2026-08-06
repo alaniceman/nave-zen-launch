@@ -462,6 +462,7 @@ export type Database = {
       discount_coupons: {
         Row: {
           applicable_package_ids: string[] | null
+          applies_to_talleres: boolean
           code: string
           created_at: string | null
           current_uses: number | null
@@ -477,6 +478,7 @@ export type Database = {
         }
         Insert: {
           applicable_package_ids?: string[] | null
+          applies_to_talleres?: boolean
           code: string
           created_at?: string | null
           current_uses?: number | null
@@ -492,6 +494,7 @@ export type Database = {
         }
         Update: {
           applicable_package_ids?: string[] | null
+          applies_to_talleres?: boolean
           code?: string
           created_at?: string | null
           current_uses?: number | null
@@ -1330,8 +1333,11 @@ export type Database = {
         Row: {
           amount: number
           apellido: string
+          coupon_code: string | null
+          coupon_id: string | null
           created_at: string
           cupo_reserved: boolean
+          discount_amount: number
           email: string
           event_id: string
           fecha_evento: string
@@ -1343,6 +1349,7 @@ export type Database = {
           nivel: string
           nombre: string
           notification_error: string | null
+          original_amount: number | null
           paid_at: string | null
           phone: string
           slug: string
@@ -1354,8 +1361,11 @@ export type Database = {
         Insert: {
           amount: number
           apellido: string
+          coupon_code?: string | null
+          coupon_id?: string | null
           created_at?: string
           cupo_reserved?: boolean
+          discount_amount?: number
           email: string
           event_id: string
           fecha_evento: string
@@ -1367,6 +1377,7 @@ export type Database = {
           nivel: string
           nombre: string
           notification_error?: string | null
+          original_amount?: number | null
           paid_at?: string | null
           phone: string
           slug?: string
@@ -1378,8 +1389,11 @@ export type Database = {
         Update: {
           amount?: number
           apellido?: string
+          coupon_code?: string | null
+          coupon_id?: string | null
           created_at?: string
           cupo_reserved?: boolean
+          discount_amount?: number
           email?: string
           event_id?: string
           fecha_evento?: string
@@ -1391,6 +1405,7 @@ export type Database = {
           nivel?: string
           nombre?: string
           notification_error?: string | null
+          original_amount?: number | null
           paid_at?: string | null
           phone?: string
           slug?: string
@@ -1399,7 +1414,15 @@ export type Database = {
           taller_nombre?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "taller_inscripciones_coupon_id_fkey"
+            columns: ["coupon_id"]
+            isOneToOne: false
+            referencedRelation: "discount_coupons"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       taller_santiago_avanzado: {
         Row: {
