@@ -108,6 +108,12 @@ const TallerSantiago = () => {
   })();
 
   const [form, setForm] = useState({ nombre: "", apellido: "", celular: "", email: "" });
+  const [couponInput, setCouponInput] = useState("");
+  const [couponChecking, setCouponChecking] = useState(false);
+  const [appliedCoupon, setAppliedCoupon] = useState<{
+    code: string;
+    discount: number;
+  } | null>(null);
   const [cupos, setCupos] = useState<Record<TallerKey, { total: number; vendidos: number }>>({
     fundamentos: { total: 15, vendidos: 0 },
     avanzado: { total: 15, vendidos: 0 },
