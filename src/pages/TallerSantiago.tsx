@@ -39,6 +39,8 @@ import {
   X,
 } from "lucide-react";
 import { Footer } from "@/components/Footer";
+import { ReviewsTrustBar } from "@/components/ReviewsTrustBar";
+import { tallerWimHofReviews, tallerWimHofReviewFilters } from "@/data/tallerWimHofReviews";
 import heroAsset from "@/assets/alan-ice-bath-smile.webp.asset.json";
 import alanWhmAsset from "@/assets/alan-wim-hof.webp.asset.json";
 
