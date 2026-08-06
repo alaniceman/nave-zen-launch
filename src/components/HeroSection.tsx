@@ -254,16 +254,76 @@ const HeroSlidePromoInvierno = () => {
   );
 };
 
+const HeroSlideTallerWimHof = () => {
+  const navigate = useNavigate();
+  return (
+    <div className="relative min-h-screen flex items-start md:items-center justify-center pt-20 md:pt-0 bg-gradient-to-br from-slate-950 via-teal-900 to-cyan-800 overflow-hidden">
+      {/* Glows */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute -top-40 -right-24 w-[520px] h-[520px] rounded-full bg-cyan-400/20 blur-3xl" />
+        <div className="absolute -bottom-32 -left-32 w-[560px] h-[560px] rounded-full bg-teal-400/15 blur-3xl" />
+      </div>
+      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent" />
+
+      <div className="relative z-10 container mx-auto px-6 text-center text-white">
+        <div className="max-w-3xl mx-auto space-y-5 md:space-y-7">
+          <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md text-white px-5 py-2.5 rounded-full text-sm md:text-base font-semibold border border-white/25">
+            🧊 Taller Método Wim Hof · Domingo 23 de agosto
+          </div>
+
+          <h2 className="font-space-grotesk font-bold text-4xl md:text-6xl lg:text-7xl leading-[1.05]">
+            Taller Wim Hof en Santiago
+            <span className="block text-xl md:text-3xl lg:text-4xl font-medium text-white/90 mt-3">
+              Fundamentos y Avanzado · cupos limitados
+            </span>
+          </h2>
+
+          <p className="font-inter text-base md:text-xl text-white/95 max-w-2xl mx-auto">
+            Respiración, hielo y teoría en una experiencia guiada de principio a fin. Solo 15 cupos por nivel.
+          </p>
+
+          <div className="flex items-center justify-center gap-4 pt-2 flex-wrap">
+            <div className="text-left">
+              <span className="font-space-grotesk text-4xl md:text-6xl font-bold">$50.000</span>
+              <p className="text-sm md:text-base text-white/80">Fundamentos</p>
+            </div>
+            <span className="text-3xl md:text-4xl text-white/50">·</span>
+            <div className="text-left">
+              <span className="font-space-grotesk text-4xl md:text-6xl font-bold">$60.000</span>
+              <p className="text-sm md:text-base text-white/80">Avanzado</p>
+            </div>
+          </div>
+
+          <div className="space-y-3 pt-2">
+            <Button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); navigate('/taller-wim-hof-santiago-fundamentales-avanzado'); }}
+              className="w-full md:w-auto min-w-[320px] bg-white text-teal-900 hover:bg-white/90 font-bold text-lg py-6 px-10 rounded-xl shadow-xl transition-all transform hover:scale-105"
+              size="xl"
+            >
+              Reservar mi cupo en el taller →
+            </Button>
+            <p className="font-inter text-xs text-white/80">Antares 259, Las Condes · Cupos limitados</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export const HeroSection = () => {
   const [showDiaMadre, setShowDiaMadre] = useState(false);
   const [showPromoInvierno, setShowPromoInvierno] = useState(false);
+  const [showTaller, setShowTaller] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   useEffect(() => {
     const now = new Date();
     setShowDiaMadre(now < DIA_MADRE_END_DATE);
     setShowPromoInvierno(now < PROMO_INVIERNO_END_DATE);
+    setShowTaller(now < TALLER_WIM_HOF_END_DATE);
   }, []);
+
 
   const autoplayPlugin = Autoplay({
     delay: 6000,
