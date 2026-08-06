@@ -289,10 +289,15 @@ const TallerSantiago = () => {
   return (
     <div className="min-h-screen bg-background font-body">
       <Helmet>
-        <title>Taller Wim Hof Santiago · Fundamentos y Avanzado | Nave Studio</title>
+        <title>Taller Wim Hof Santiago 23 de agosto | Nave Studio</title>
+        <meta property="og:title" content="Taller Wim Hof Santiago · 23 de agosto | Nave Studio" />
+        <meta property="og:description" content="Fundamentos 11:30-15:00 y Avanzado 15:30-19:00. Domingo 23 de agosto en Nave Studio, Las Condes. 15 cupos por taller." />
+        <meta property="og:type" content="event" />
+        <meta property="og:url" content="https://studiolanave.com/taller-wim-hof-santiago-fundamentales-avanzado" />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta
           name="description"
-          content="Aprende o profundiza la técnica Wim Hof con respiración, hielo y guía presencial en Nave Studio. Taller Fundamentos sábado 27 de junio y Taller Avanzado domingo 28 de junio. Cupos limitados."
+          content="Talleres del Método Wim Hof en Santiago el domingo 23 de agosto de 2026: Fundamentos 11:30-15:00 y Avanzado 15:30-19:00 en Nave Studio, Las Condes. 15 cupos por taller."
         />
         <link
           rel="canonical"
@@ -413,7 +418,7 @@ const TallerSantiago = () => {
         <div className="max-w-[1100px] mx-auto relative grid lg:grid-cols-2 gap-10 items-center">
           <div className="text-center lg:text-left animate-fade-in">
             <Badge variant="outline" className="mb-5 border-primary/30 text-primary">
-              Santiago · 27 y 28 de junio
+              Santiago · Domingo 23 de agosto
             </Badge>
             <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground mb-5 leading-[1.05]">
               Dos talleres Wim Hof.{" "}
