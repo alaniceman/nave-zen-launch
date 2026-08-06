@@ -97,6 +97,17 @@ const TallerSantiago = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [reservaTaller, setReservaTaller] = useState<TallerKey | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [pagoStatus, setPagoStatus] = useState<"approved" | "pending" | "rejected" | null>(() => {
+    if (typeof window === "undefined") return null;
+    const p = new URLSearchParams(window.location.search).get("pago");
+    return p === "approved" || p === "pending" || p === "rejected" ? p : null;
+  });
+  const pagoTallerNombre = (() => {
+    if (typeof window === "undefined") return null;
+    const n = new URLSearchParams(window.location.search).get("nivel");
+    return n === "fundamentos" || n === "avanzado" ? TALLERES[n].nombreCorto : null;
+  })();
+
   const [form, setForm] = useState({ nombre: "", apellido: "", celular: "", email: "" });
   const [cupos, setCupos] = useState<Record<TallerKey, { total: number; vendidos: number }>>({
     fundamentos: { total: 15, vendidos: 0 },
