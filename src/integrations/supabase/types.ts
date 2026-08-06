@@ -1326,6 +1326,81 @@ export type Database = {
         }
         Relationships: []
       }
+      taller_inscripciones: {
+        Row: {
+          amount: number
+          apellido: string
+          created_at: string
+          cupo_reserved: boolean
+          email: string
+          event_id: string
+          fecha_evento: string
+          horario: string
+          id: string
+          mercado_pago_payment_id: string | null
+          mercado_pago_preference_id: string | null
+          mercado_pago_status: string | null
+          nivel: string
+          nombre: string
+          notification_error: string | null
+          paid_at: string | null
+          phone: string
+          slug: string
+          source: string
+          status: string
+          taller_nombre: string
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          apellido: string
+          created_at?: string
+          cupo_reserved?: boolean
+          email: string
+          event_id: string
+          fecha_evento: string
+          horario: string
+          id?: string
+          mercado_pago_payment_id?: string | null
+          mercado_pago_preference_id?: string | null
+          mercado_pago_status?: string | null
+          nivel: string
+          nombre: string
+          notification_error?: string | null
+          paid_at?: string | null
+          phone: string
+          slug?: string
+          source?: string
+          status?: string
+          taller_nombre: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          apellido?: string
+          created_at?: string
+          cupo_reserved?: boolean
+          email?: string
+          event_id?: string
+          fecha_evento?: string
+          horario?: string
+          id?: string
+          mercado_pago_payment_id?: string | null
+          mercado_pago_preference_id?: string | null
+          mercado_pago_status?: string | null
+          nivel?: string
+          nombre?: string
+          notification_error?: string | null
+          paid_at?: string | null
+          phone?: string
+          slug?: string
+          source?: string
+          status?: string
+          taller_nombre?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       taller_santiago_avanzado: {
         Row: {
           consent: boolean
@@ -1599,6 +1674,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      reserve_event_cupo: { Args: { _event_id: string }; Returns: number }
     }
     Enums: {
       app_role: "admin" | "user"
