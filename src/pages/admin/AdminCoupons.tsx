@@ -177,7 +177,12 @@ export default function AdminCoupons() {
                   coupons?.map((coupon) => (
                     <TableRow key={coupon.id}>
                       <TableCell>
-                        <span className="font-mono font-bold text-primary">{coupon.code}</span>
+                        <div className="flex flex-col gap-1">
+                          <span className="font-mono font-bold text-primary">{coupon.code}</span>
+                          {(coupon as any).applies_to_talleres && (
+                            <Badge variant="outline" className="w-fit text-xs">Talleres</Badge>
+                          )}
+                        </div>
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
