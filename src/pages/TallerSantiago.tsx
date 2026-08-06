@@ -646,6 +646,40 @@ const TallerSantiago = () => {
         dark
       />
 
+      {/* Testimonios de talleres anteriores */}
+      <section className="py-16 md:py-20 px-4" aria-label="Testimonios del Taller Wim Hof">
+        <div className="max-w-[1100px] mx-auto">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+            {[
+              { valor: "100%", texto: "calificó la experiencia como excelente" },
+              { valor: "100%", texto: "se sintió conectado y contenido" },
+              { valor: "100%", texto: "calificó la organización con 5 estrellas" },
+              { valor: "10/10", texto: "recomendación promedio" },
+            ].map((r) => (
+              <div
+                key={r.texto}
+                className="rounded-2xl border border-border/60 bg-card p-5 text-center shadow-sm"
+              >
+                <p className="font-heading text-2xl md:text-3xl text-primary mb-1">{r.valor}</p>
+                <p className="text-sm text-muted-foreground leading-snug">{r.texto}</p>
+              </div>
+            ))}
+          </div>
+          <p className="text-xs text-muted-foreground text-center mb-12">
+            Resultados obtenidos de las respuestas recibidas después del último taller.
+          </p>
+
+          <ReviewsTrustBar
+            title="Lo que vivieron quienes ya participaron"
+            subtitle="Experiencias reales de respiración, hielo, aprendizaje y comunidad."
+            items={tallerWimHofReviews}
+            filters={tallerWimHofReviewFilters}
+          />
+        </div>
+      </section>
+
+
+
       {/* Quién te guía */}
       <section className="py-16 px-4 bg-muted/30">
         <div className="max-w-[1100px] mx-auto grid md:grid-cols-2 gap-10 items-center">
