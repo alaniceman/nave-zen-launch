@@ -35,7 +35,6 @@ import {
   Check,
   AlertCircle,
   MessageCircle,
-  Menu,
   X,
 } from "lucide-react";
 import { Footer } from "@/components/Footer";
