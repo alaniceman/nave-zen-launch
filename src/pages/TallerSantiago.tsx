@@ -596,7 +596,7 @@ const TallerSantiago = () => {
                       <Progress value={pctOcupado(k)} className="h-2" />
                     </div>
 
-                    <div className="mt-auto">
+                    <div className="mt-auto space-y-3">
                       <Button
                         className="w-full"
                         size="lg"
@@ -606,7 +606,17 @@ const TallerSantiago = () => {
                         {sold ? "Cupos agotados" : `Reservar ${t.nombreCorto} — ${t.valorTxt}`}
                         {!sold && <ChevronRight className="w-4 h-4 ml-1" />}
                       </Button>
+                      <a
+                        href={k === "fundamentos" ? WHATSAPP_FUNDAMENTOS : WHATSAPP_AVANZADO}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
+                      >
+                        <MessageCircle className="w-4 h-4" />
+                        {sold ? "Quiero entrar a la lista de espera" : `Dudas sobre ${t.nombreCorto} por WhatsApp`}
+                      </a>
                     </div>
+
                   </CardContent>
                 </Card>
               );
