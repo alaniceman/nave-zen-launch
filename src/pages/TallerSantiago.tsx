@@ -225,7 +225,14 @@ const TallerSantiago = () => {
     setSubmitting(true);
     try {
       const { data, error } = await supabase.functions.invoke("create-taller-preference", {
-        body: { taller: reservaTaller, nombre, apellido, celular, email },
+        body: {
+          taller: reservaTaller,
+          nombre,
+          apellido,
+          celular,
+          email,
+          couponCode: appliedCoupon?.code ?? null,
+        },
       });
       if (error) throw error;
       if (!data?.initPoint) throw new Error(data?.error || "No se pudo iniciar el pago");
@@ -424,6 +431,60 @@ const TallerSantiago = () => {
               <Label htmlFor="celular">Celular</Label>
               <Input id="celular" type="tel" value={form.celular} onChange={(e) => setForm({ ...form, celular: e.target.value })} placeholder="+56 9 1234 5678" maxLength={30} required />
             </div>
+            <div className="space-y-2">
+              <Label htmlFor="cupon">Cupón de descuento (opcional)</Label>
+              <div className="flex gap-2">
+                <Input
+                  id="cupon"
+                  value={couponInput}
+                  onChange={(e) => setCouponInput(e.target.value.replace(/\s/g, "").toUpperCase())}
+                  placeholder="EJ: CRIONAUTAS"
+                  className="font-mono uppercase"
+                  maxLength={30}
+                  disabled={!!appliedCoupon}
+                />
+                {appliedCoupon ? (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      setAppliedCoupon(null);
+                      setCouponInput("");
+                    }}
+                  >
+                    Quitar
+                  </Button>
+                ) : (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={applyCoupon}
+                    disabled={couponChecking || !couponInput}
+                  >
+                    {couponChecking ? "..." : "Aplicar"}
+                  </Button>
+                )}
+              </div>
+              {appliedCoupon && reservaActual && (
+                <div className="rounded-lg bg-primary/5 border border-primary/20 p-3 text-sm space-y-1">
+                  <div className="flex justify-between text-muted-foreground">
+                    <span>Valor taller</span>
+                    <span className="line-through">${reservaActual.valor.toLocaleString("es-CL")}</span>
+                  </div>
+                  <div className="flex justify-between text-primary">
+                    <span>Cupón {appliedCoupon.code}</span>
+                    <span>-${appliedCoupon.discount.toLocaleString("es-CL")}</span>
+                  </div>
+                  <div className="flex justify-between font-semibold">
+                    <span>Total a pagar</span>
+                    <span>
+                      ${Math.max(0, reservaActual.valor - appliedCoupon.discount).toLocaleString("es-CL")}
+                    </span>
+                  </div>
+                </div>
+              )}
+            </div>
+
             <Button type="submit" size="lg" className="w-full" disabled={submitting}>
               {submitting ? "Procesando..." : "Continuar al pago"}
               <ChevronRight className="w-4 h-4 ml-1" />
