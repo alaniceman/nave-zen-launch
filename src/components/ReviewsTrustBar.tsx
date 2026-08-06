@@ -30,11 +30,11 @@ const CategoryChip = ({ category }: { category: Review["category"] }) => (
   </span>
 );
 
-const ALL_FILTERS: Array<{ label: string; value: "Todas" | Review["category"] }> = [
-  { label: "Todas", value: "Todas" },
-  { label: "Yoga", value: "Yoga" },
-  { label: "Ice Bath", value: "Ice Bath" },
-  { label: "Experiencia", value: "Experiencia" },
+const DEFAULT_FILTERS: Array<"Todas" | Review["category"]> = [
+  "Todas",
+  "Yoga",
+  "Ice Bath",
+  "Experiencia",
 ];
 
 type ReviewsTrustBarProps = {
@@ -44,22 +44,37 @@ type ReviewsTrustBarProps = {
   coachesOnly?: boolean;
   /** Título personalizado de la sección */
   title?: string;
+  /** Línea breve bajo el título */
+  subtitle?: string;
   /** Oculta los chips de filtro (útil cuando se fija una categoría) */
   hideFilters?: boolean;
+  /** Reseñas propias de una landing (reemplazan el set global, sin mezclar) */
+  items?: Review[];
+  /** Categorías a mostrar como filtros (además de "Todas") */
+  filters?: ReadonlyArray<Review["category"]>;
 };
 
 export const ReviewsTrustBar = ({
   category,
   coachesOnly = false,
   title = "Lo que dice la comunidad",
+  subtitle,
   hideFilters = false,
+  items,
+  filters,
 }: ReviewsTrustBarProps = {}) => {
   const baseReviews = useMemo(() => {
+    if (items) return items;
     let list = sourceReviews;
     if (category) list = list.filter((r) => r.category === category);
     if (coachesOnly) list = list.filter((r) => /^Alumn[oa] de /i.test(r.author));
     return shuffleArray(list);
-  }, [category, coachesOnly]);
+  }, [category, coachesOnly, items]);
+
+  const filterValues = useMemo<Array<"Todas" | Review["category"]>>(
+    () => (filters ? ["Todas", ...filters] : DEFAULT_FILTERS),
+    [filters]
+  );
 
   const showFilters = !hideFilters && !category && !coachesOnly;
   const [activeFilter, setActiveFilter] = useState<"Todas" | Review["category"]>("Todas");
@@ -158,25 +173,34 @@ export const ReviewsTrustBar = ({
         <h3 className="font-space-grotesk font-bold text-2xl md:text-3xl text-neutral-dark">
           {title}
         </h3>
+        {subtitle && (
+          <p className="font-inter text-sm md:text-base text-neutral-mid mt-2 max-w-2xl mx-auto px-4">
+            {subtitle}
+          </p>
+        )}
       </div>
 
       {showFilters && (
-        <div className="flex flex-wrap items-center justify-center gap-2 mb-6 px-4" role="tablist" aria-label="Filtrar reseñas por categoría">
-          {ALL_FILTERS.map((f) => {
-            const isActive = activeFilter === f.value;
+        <div
+          className="flex md:flex-wrap items-center md:justify-center gap-2 mb-6 px-4 overflow-x-auto reviews-strip"
+          role="tablist"
+          aria-label="Filtrar reseñas por categoría"
+        >
+          {filterValues.map((value) => {
+            const isActive = activeFilter === value;
             return (
               <button
-                key={f.value}
+                key={value}
                 role="tab"
                 aria-selected={isActive}
-                onClick={() => setActiveFilter(f.value)}
-                className={`px-4 py-1.5 rounded-full text-sm font-inter font-medium transition-all duration-200 border focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
+                onClick={() => setActiveFilter(value)}
+                className={`shrink-0 px-4 py-1.5 rounded-full text-sm font-inter font-medium transition-all duration-200 border focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
                   isActive
                     ? "bg-primary text-primary-foreground border-primary shadow-light"
                     : "bg-background text-neutral-dark border-primary/15 hover:border-primary/30 hover:bg-primary/5"
                 }`}
               >
-                {f.label}
+                {value}
               </button>
             );
           })}
