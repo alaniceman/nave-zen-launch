@@ -941,6 +941,20 @@ serve(async (req) => {
         return await handleShopOrderPayment(payment, externalReference, supabase, corsHeaders);
       }
 
+      // Check if it's a Wim Hof workshop inscription
+      const { data: tallerInsc } = await supabase
+        .from("taller_inscripciones")
+        .select("id")
+        .eq("id", externalReference)
+        .maybeSingle();
+
+      if (tallerInsc) {
+        console.log("Processing as taller inscripcion");
+        return await handleTallerPayment(payment, externalReference, supabase, corsHeaders);
+      }
+
+
+
       // Check if it's a package_order (new flow)
       const { data: order } = await supabase
         .from("package_orders")
