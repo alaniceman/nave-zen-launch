@@ -649,7 +649,7 @@ const TallerSantiago = () => {
       />
 
       {/* Testimonios de talleres anteriores */}
-      <section className="py-16 md:py-20 px-4" aria-label="Testimonios del Taller Wim Hof">
+      <section className="py-16 md:py-20 px-4 bg-neutral-light" aria-label="Testimonios del Taller Wim Hof">
         <div className="max-w-[1100px] mx-auto">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
             {[
