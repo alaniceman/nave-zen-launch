@@ -30,11 +30,11 @@ const CategoryChip = ({ category }: { category: Review["category"] }) => (
   </span>
 );
 
-const ALL_FILTERS: Array<{ label: string; value: "Todas" | Review["category"] }> = [
-  { label: "Todas", value: "Todas" },
-  { label: "Yoga", value: "Yoga" },
-  { label: "Ice Bath", value: "Ice Bath" },
-  { label: "Experiencia", value: "Experiencia" },
+const DEFAULT_FILTERS: Array<"Todas" | Review["category"]> = [
+  "Todas",
+  "Yoga",
+  "Ice Bath",
+  "Experiencia",
 ];
 
 type ReviewsTrustBarProps = {
@@ -44,22 +44,37 @@ type ReviewsTrustBarProps = {
   coachesOnly?: boolean;
   /** Título personalizado de la sección */
   title?: string;
+  /** Línea breve bajo el título */
+  subtitle?: string;
   /** Oculta los chips de filtro (útil cuando se fija una categoría) */
   hideFilters?: boolean;
+  /** Reseñas propias de una landing (reemplazan el set global, sin mezclar) */
+  items?: Review[];
+  /** Categorías a mostrar como filtros (además de "Todas") */
+  filters?: ReadonlyArray<Review["category"]>;
 };
 
 export const ReviewsTrustBar = ({
   category,
   coachesOnly = false,
   title = "Lo que dice la comunidad",
+  subtitle,
   hideFilters = false,
+  items,
+  filters,
 }: ReviewsTrustBarProps = {}) => {
   const baseReviews = useMemo(() => {
+    if (items) return items;
     let list = sourceReviews;
     if (category) list = list.filter((r) => r.category === category);
     if (coachesOnly) list = list.filter((r) => /^Alumn[oa] de /i.test(r.author));
     return shuffleArray(list);
-  }, [category, coachesOnly]);
+  }, [category, coachesOnly, items]);
+
+  const filterValues = useMemo<Array<"Todas" | Review["category"]>>(
+    () => (filters ? ["Todas", ...filters] : DEFAULT_FILTERS),
+    [filters]
+  );
 
   const showFilters = !hideFilters && !category && !coachesOnly;
   const [activeFilter, setActiveFilter] = useState<"Todas" | Review["category"]>("Todas");
