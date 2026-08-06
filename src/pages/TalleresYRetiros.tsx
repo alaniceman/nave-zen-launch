@@ -21,35 +21,20 @@ const ITEMS: Item[] = [
   {
     tag: "Taller · Santiago",
     title: "Taller Wim Hof · Fundamentos y Avanzado",
-    date: "27 y 28 de junio de 2026",
+    date: "Domingo 23 de agosto de 2026",
     location: "Nave Studio · Antares 259, Las Condes",
     description:
-      "Dos días para integrar los tres pilares del Método Wim Hof: respiración, exposición al frío y mentalidad. Elige Fundamentos (sábado) si estás partiendo, o Avanzado (domingo) si ya tienes práctica previa.",
+      "Un domingo para integrar los tres pilares del Método Wim Hof: respiración, exposición al frío y mentalidad. Elige Fundamentos si estás partiendo, o Avanzado si ya tienes práctica previa. Puedes hacer ambos el mismo día.",
     highlights: [
-      "Sábado 27 · Fundamentos · 11:30 a 15:00 · $50.000",
-      "Domingo 28 · Avanzado · 11:30 a 15:00 · $60.000",
-      "Cupos limitados — grupo íntimo de 15 personas",
+      "Fundamentos · 11:30 a 15:00 · $50.000",
+      "Avanzado · 15:30 a 19:00 · $60.000",
+      "Solo 15 cupos por taller — grupo íntimo",
     ],
-    url: "https://alaniceman.com/taller-wim-hof-santiago-fundamentales-avanzado",
+    url: "/taller-wim-hof-santiago-fundamentales-avanzado",
     icon: <Wind className="w-5 h-5" />,
     accent: "from-primary/10 to-primary/5",
   },
-  {
-    tag: "Retiro · Chile",
-    title: "Retiro de Invierno · Invierno Profundo",
-    date: "31 de julio – 2 de agosto de 2026",
-    location: "Cajón del Maipo, Chile",
-    description:
-      "Tres días de respiración, inmersión en frío y conexión con la montaña. Una experiencia de inmersión profunda con el invierno chileno como aliado para reconectar con tu fuerza interior.",
-    highlights: [
-      "3 días · 2 noches en cordillera",
-      "Sesiones diarias de respiración y hielo",
-      "Yoga, naturaleza y comunidad",
-    ],
-    url: "https://retiro.criomedicina.com",
-    icon: <Snowflake className="w-5 h-5" />,
-    accent: "from-secondary/15 to-secondary/5",
-  },
+
   {
     tag: "Retiro · Guatemala",
     title: "Retiro Wim Hof · Atitlán Reset",
