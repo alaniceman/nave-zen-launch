@@ -234,15 +234,14 @@ export default function ScheduleDayCards() {
                         {item.badges.map((badge, i) => (
                           <span key={i} className="bg-[#35C7D2]/10 text-[#35C7D2] rounded-full px-2 py-1 text-xs">{badge}</span>
                         ))}
-                        {item.is_trial_enabled && (
-                          <Link
-                            to="/plan-de-prueba"
-                            className="inline-flex items-center gap-1.5 bg-[#2E4D3A] text-white font-semibold text-xs rounded-lg px-3 py-2 hover:bg-[#2E4D3A]/90 transition-colors"
-                          >
-                            <Sparkles className="w-3.5 h-3.5" />
-                            Empieza por $9.900
-                          </Link>
-                        )}
+                        <Link
+                          to="/plan-de-prueba"
+                          className="inline-flex items-center gap-1.5 bg-[#2E4D3A] text-white font-semibold text-xs rounded-lg px-3 py-2 hover:bg-[#2E4D3A]/90 transition-colors"
+                        >
+                          <Sparkles className="w-3.5 h-3.5" />
+                          Empieza por $9.900
+                        </Link>
+
                       </div>
 
                     </li>
