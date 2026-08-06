@@ -149,6 +149,139 @@ async function handleShopOrderPayment(
   });
 }
 
+// Handle Wim Hof workshop inscriptions (taller_inscripciones)
+async function handleTallerPayment(
+  payment: any,
+  orderId: string,
+  supabase: any,
+  corsHeaders: any
+) {
+  const paymentIdStr = payment.id.toString();
+  const json = (status: string) =>
+    new Response(JSON.stringify({ status }), {
+      status: 200,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+
+  const { data: insc } = await supabase
+    .from("taller_inscripciones")
+    .select("*")
+    .eq("id", orderId)
+    .maybeSingle();
+
+  if (!insc) return json("inscripcion_not_found");
+
+  // Idempotency: already processed
+  if (insc.status === "paid" || insc.cupo_reserved) return json("already_processed");
+
+  if (payment.status === "pending" || payment.status === "in_process") {
+    await supabase
+      .from("taller_inscripciones")
+      .update({ status: "pending", mercado_pago_payment_id: paymentIdStr, mercado_pago_status: payment.status })
+      .eq("id", orderId);
+    return json("payment_pending");
+  }
+
+  if (payment.status !== "approved") {
+    await supabase
+      .from("taller_inscripciones")
+      .update({
+        status: payment.status === "cancelled" ? "cancelled" : "failed",
+        mercado_pago_payment_id: paymentIdStr,
+        mercado_pago_status: payment.status,
+      })
+      .eq("id", orderId);
+    return json("payment_not_approved");
+  }
+
+  if (Math.abs(payment.transaction_amount - insc.amount) > 1) {
+    await supabase
+      .from("taller_inscripciones")
+      .update({ status: "failed", mercado_pago_payment_id: paymentIdStr, mercado_pago_status: payment.status })
+      .eq("id", orderId);
+    return json("amount_mismatch");
+  }
+
+  // Atomic claim: only one webhook run can flip pending -> paid
+  const { data: claimed } = await supabase
+    .from("taller_inscripciones")
+    .update({
+      status: "paid",
+      mercado_pago_payment_id: paymentIdStr,
+      mercado_pago_status: payment.status,
+      paid_at: new Date().toISOString(),
+    })
+    .eq("id", orderId)
+    .in("status", ["pending", "failed", "cancelled"])
+    .select()
+    .maybeSingle();
+
+  if (!claimed) return json("already_processed");
+
+  // Reserve the cupo atomically
+  let remaining: number | null = null;
+  const { data: reserved, error: reserveError } = await supabase.rpc("reserve_event_cupo", {
+    _event_id: insc.event_id,
+  });
+  if (reserveError) {
+    console.error("Error reserving cupo:", reserveError);
+  } else {
+    remaining = reserved as number;
+    await supabase
+      .from("taller_inscripciones")
+      .update({ cupo_reserved: remaining >= 0 })
+      .eq("id", orderId);
+  }
+
+  // Admin notification (never blocks the inscription)
+  try {
+    const resendKey = Deno.env.get("RESEND_API_KEY");
+    const adminEmail = Deno.env.get("ADMIN_NOTIFICATION_EMAIL") || "flowithmaral@gmail.com";
+    if (resendKey) {
+      const nivelTxt = insc.nivel === "avanzado" ? "Avanzado" : "Fundamentos";
+      const html = `
+        <div style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1A1A1A;line-height:1.7">
+          <h2 style="color:#2E4D3A;margin:0 0 12px">Nueva inscripción Taller Wim Hof — ${nivelTxt}</h2>
+          <p><strong>Participante:</strong> ${insc.nombre} ${insc.apellido}</p>
+          <p><strong>Email:</strong> ${insc.email}</p>
+          <p><strong>Teléfono:</strong> ${insc.phone}</p>
+          <p><strong>Taller:</strong> ${insc.taller_nombre}</p>
+          <p><strong>Fecha:</strong> ${insc.fecha_evento}</p>
+          <p><strong>Horario:</strong> ${insc.horario}</p>
+          <p><strong>Valor pagado:</strong> $${Number(payment.transaction_amount).toLocaleString("es-CL")} CLP</p>
+          <p><strong>Payment ID:</strong> ${paymentIdStr}</p>
+          <p><strong>Cupos restantes:</strong> ${remaining === null || remaining < 0 ? "revisar" : remaining}</p>
+          <p><strong>Fecha de compra:</strong> ${new Date().toLocaleString("es-CL", { timeZone: "America/Santiago" })}</p>
+        </div>`;
+      const r = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${resendKey}`, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          from: "Nave Studio <lanave@alaniceman.com>",
+          to: [adminEmail],
+          subject: `Nueva inscripción Taller Wim Hof — ${nivelTxt}`,
+          html,
+        }),
+      });
+      if (!r.ok) {
+        const errTxt = await r.text();
+        console.error("Resend error (taller):", errTxt);
+        await supabase.from("taller_inscripciones").update({ notification_error: errTxt.slice(0, 500) }).eq("id", orderId);
+      }
+    }
+  } catch (err) {
+    console.error("Taller notification failed:", err);
+    await supabase
+      .from("taller_inscripciones")
+      .update({ notification_error: String(err).slice(0, 500) })
+      .eq("id", orderId);
+  }
+
+  return json("taller_inscripcion_paid");
+}
+
+
+
 
 // Handle session package/giftcard order payments using package_orders table
 async function handlePackageOrderPayment(
