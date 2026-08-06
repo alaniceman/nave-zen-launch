@@ -1,4 +1,13 @@
-export type ReviewCategory = "Yoga" | "Método Wim Hof" | "Ice Bath" | "Experiencia";
+export type ReviewCategory =
+  | "Yoga"
+  | "Método Wim Hof"
+  | "Ice Bath"
+  | "Experiencia"
+  // Categorías usadas solo por los testimonios del Taller Wim Hof
+  | "Respiración"
+  | "Hielo"
+  | "Comunidad"
+  | "Lugar";
 
 export type Review = {
   id: number;
