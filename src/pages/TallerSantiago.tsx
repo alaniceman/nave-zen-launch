@@ -46,46 +46,51 @@ type TallerKey = "fundamentos" | "avanzado";
 
 const TALLERES = {
   fundamentos: {
-    nombre: "Fundamentos Wim Hof",
+    nombre: "Taller Fundamentos Método Wim Hof",
     nombreCorto: "Fundamentos",
-    fecha: "Sábado 27 de junio",
-    fechaLarga: "Sábado 27 de junio de 2026",
+    fecha: "Domingo 23 de agosto",
+    fechaLarga: "Domingo 23 de agosto de 2026",
     horario: "11:30 a 15:00",
     duracion: "3 horas y media",
     valor: 50000,
     valorTxt: "$50.000",
     cupos: 15,
     nivel: "Principiante / intermedio",
-    eventId: "santiago_fundamentos_2026_06_27",
-    tabla: "taller_santiago_fundamentos" as const,
-    pagoUrl: "https://mpago.la/2c9NhLM",
-    isoStart: "2026-06-27T11:30:00-04:00",
-    isoEnd: "2026-06-27T15:00:00-04:00",
+    eventId: "santiago_fundamentos_2026_08_23",
+    isoStart: "2026-08-23T11:30:00-04:00",
+    isoEnd: "2026-08-23T15:00:00-04:00",
   },
   avanzado: {
-    nombre: "Avanzado Wim Hof",
+    nombre: "Taller Avanzado Método Wim Hof",
     nombreCorto: "Avanzado",
-    fecha: "Domingo 28 de junio",
-    fechaLarga: "Domingo 28 de junio de 2026",
-    horario: "11:30 a 15:00",
+    fecha: "Domingo 23 de agosto",
+    fechaLarga: "Domingo 23 de agosto de 2026",
+    horario: "15:30 a 19:00",
     duracion: "3 horas y media",
     valor: 60000,
     valorTxt: "$60.000",
     cupos: 15,
     nivel: "Avanzado · requiere experiencia previa",
-    eventId: "santiago_avanzado_2026_06_28",
-    tabla: "taller_santiago_avanzado" as const,
-    pagoUrl: "https://mpago.la/1edQqad",
-    isoStart: "2026-06-28T11:30:00-04:00",
-    isoEnd: "2026-06-28T15:00:00-04:00",
+    eventId: "santiago_avanzado_2026_08_23",
+    isoStart: "2026-08-23T15:30:00-04:00",
+    isoEnd: "2026-08-23T19:00:00-04:00",
   },
 };
 
-const MAPS_URL = "https://maps.app.goo.gl/oW6G58gLd5oYWmGn8";
+const MAPS_URL = "https://maps.app.goo.gl/4BvC7kC3JpVdQVkFA";
 const WHATSAPP_NUMBER = "56946120426";
-const WHATSAPP_TEXT =
-  "Hola, tengo una duda sobre los talleres Wim Hof de junio en Nave Studio.";
-const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_TEXT)}`;
+const waUrl = (text: string) =>
+  `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+const WHATSAPP_URL = waUrl(
+  "Hola! Quiero información sobre los talleres del Método Wim Hof del domingo 23 de agosto en Nave Studio."
+);
+const WHATSAPP_FUNDAMENTOS = waUrl(
+  "Hola! Quiero información sobre el Taller Fundamentos del Método Wim Hof del domingo 23 de agosto, de 11:30 a 15:00, en Nave Studio."
+);
+const WHATSAPP_AVANZADO = waUrl(
+  "Hola! Quiero información sobre el Taller Avanzado del Método Wim Hof del domingo 23 de agosto, de 15:30 a 19:00, en Nave Studio. Ya tengo experiencia previa."
+);
+
 
 const TallerSantiago = () => {
   const [isScrolled, setIsScrolled] = useState(false);
