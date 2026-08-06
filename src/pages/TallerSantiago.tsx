@@ -627,6 +627,7 @@ const TallerSantiago = () => {
 
       {/* Detalle Fundamentos */}
       <DetalleSection
+        taller="fundamentos"
         titulo="Fundamentos: aprende la técnica desde la base"
         texto="Este taller está diseñado para que entiendas y practiques la respiración Wim Hof de forma clara, segura y guiada. Vamos a revisar la técnica paso a paso, el rol de la respiración, la preparación mental y corporal para el frío, y cómo entrar al hielo sin pelear con la experiencia."
         cta="Reservar mi cupo en Fundamentos"
