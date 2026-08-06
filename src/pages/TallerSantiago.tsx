@@ -150,7 +150,48 @@ const TallerSantiago = () => {
   const openReserva = (k: TallerKey) => {
     setReservaTaller(k);
     setForm({ nombre: "", apellido: "", celular: "", email: "" });
+    setCouponInput("");
+    setAppliedCoupon(null);
   };
+
+  const applyCoupon = async () => {
+    if (!reservaTaller) return;
+    const code = couponInput.replace(/\s/g, "").toUpperCase();
+    if (!code) return;
+    const valor = TALLERES[reservaTaller].valor;
+    setCouponChecking(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("validate-coupon", {
+        body: { code, context: "taller", purchaseAmount: valor },
+      });
+      if (error) throw error;
+      if (!data?.valid) {
+        setAppliedCoupon(null);
+        toast({
+          title: "Cupón no válido",
+          description: data?.error || "Revisa el código e intenta de nuevo.",
+          variant: "destructive",
+        });
+        return;
+      }
+      const c = data.coupon;
+      const discount =
+        c.discount_type === "percentage"
+          ? Math.round((valor * c.discount_value) / 100)
+          : Math.min(c.discount_value, valor);
+      setAppliedCoupon({ code: c.code, discount });
+      toast({
+        title: `Cupón ${c.code} aplicado`,
+        description: `Descuento de $${discount.toLocaleString("es-CL")}.`,
+      });
+    } catch (err) {
+      console.error("Coupon validation error:", err);
+      toast({ title: "No pudimos validar el cupón", variant: "destructive" });
+    } finally {
+      setCouponChecking(false);
+    }
+  };
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
