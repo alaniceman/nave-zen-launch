@@ -12,7 +12,7 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { code, packageId, serviceId, purchaseAmount } = await req.json();
+    const { code, packageId, serviceId, purchaseAmount, context } = await req.json();
 
     if (!code || typeof code !== "string" || code.trim().length === 0) {
       return new Response(
@@ -29,7 +29,7 @@ Deno.serve(async (req) => {
 
     const { data: coupon, error } = await supabase
       .from("discount_coupons")
-      .select("id, code, discount_type, discount_value, is_active, valid_from, valid_until, max_uses, current_uses, min_purchase_amount, applicable_package_ids")
+      .select("id, code, discount_type, discount_value, is_active, valid_from, valid_until, max_uses, current_uses, min_purchase_amount, applicable_package_ids, applies_to_talleres")
       .eq("code", code.toUpperCase().trim())
       .eq("is_active", true)
       .maybeSingle();
@@ -64,8 +64,16 @@ Deno.serve(async (req) => {
       );
     }
 
+    // Talleres context: coupon must be explicitly enabled for talleres
+    if (context === "taller" && !coupon.applies_to_talleres) {
+      return new Response(
+        JSON.stringify({ valid: false, error: "Este cupón no aplica a talleres" }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     // Validate applicable packages
-    if (packageId && coupon.applicable_package_ids && coupon.applicable_package_ids.length > 0) {
+    if (context !== "taller" && packageId && coupon.applicable_package_ids && coupon.applicable_package_ids.length > 0) {
       if (!coupon.applicable_package_ids.includes(packageId)) {
         return new Response(
           JSON.stringify({ valid: false, error: "Este cupón no aplica a este producto" }),
@@ -95,6 +103,7 @@ Deno.serve(async (req) => {
           discount_type: coupon.discount_type,
           discount_value: coupon.discount_value,
           applicable_package_ids: coupon.applicable_package_ids,
+          applies_to_talleres: coupon.applies_to_talleres,
           min_purchase_amount: coupon.min_purchase_amount,
         },
       }),
