@@ -61,7 +61,7 @@ const TalleresYRetiros = () => {
         <title>Talleres y Retiros · Nave Studio</title>
         <meta
           name="description"
-          content="Próximos talleres y retiros de Nave Studio: Taller Wim Hof en Santiago, Retiro de Invierno en Cajón del Maipo y Retiro Wim Hof en Lago Atitlán, Guatemala."
+          content="Próximos talleres y retiros de Nave Studio: Taller Wim Hof en Santiago (23 de agosto 2026) y Retiro Wim Hof en Lago Atitlán, Guatemala."
         />
         <link rel="canonical" href="https://studiolanave.com/talleres-y-retiros" />
       </Helmet>
