@@ -8,7 +8,13 @@ serve(async (req) => {
 
   try {
     const url = new URL(req.url);
-    const orderId = url.searchParams.get("orderId") ?? "";
+    let orderId = url.searchParams.get("orderId") ?? "";
+    if (!orderId && req.method === "POST") {
+      try {
+        const body = await req.json();
+        orderId = typeof body?.orderId === "string" ? body.orderId : "";
+      } catch { /* body vacío */ }
+    }
 
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
     if (!uuidRegex.test(orderId)) {
