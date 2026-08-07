@@ -335,6 +335,31 @@ async function handleTallerPayment(
     console.error("Taller participant email failed:", err);
   }
 
+  // Meta Conversions API (server-side) — deduped with client pixel via event_id
+  try {
+    const eventId = `purchase-taller-${orderId}`;
+    const siteUrl = (Deno.env.get("SITE_URL") || "https://studiolanave.com").replace(/\/$/, "");
+    await supabase.functions.invoke("facebook-conversions", {
+      body: {
+        event_name: "Purchase",
+        event_id: eventId,
+        event_source_url: `${siteUrl}/taller-wim-hof-santiago-fundamentales-avanzado?pago=approved&order=${orderId}&nivel=${insc.nivel}`,
+        user_email: insc.email,
+        user_phone: insc.phone || undefined,
+        user_name: insc.nombre,
+        value: Number(payment.transaction_amount) || insc.amount,
+        currency: "CLP",
+        content_name: insc.taller_nombre,
+        content_type: "product",
+        content_ids: [orderId],
+        order_id: orderId,
+      },
+    });
+    console.log("Meta CAPI Purchase sent for taller inscripcion:", orderId);
+  } catch (fbError) {
+    console.error("Taller Meta CAPI event failed (non-blocking):", fbError);
+  }
+
   return json("taller_inscripcion_paid");
 }
 
