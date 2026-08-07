@@ -21,6 +21,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
+import { useFacebookPixel } from "@/hooks/useFacebookPixel";
+import { trackConversion } from "@/lib/gtagConversions";
 import {
   Calendar,
   Clock,
