@@ -96,6 +96,7 @@ const WHATSAPP_AVANZADO = waUrl(
 
 
 const TallerSantiago = () => {
+  const { trackEvent } = useFacebookPixel();
   const [reservaTaller, setReservaTaller] = useState<TallerKey | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [pagoStatus, setPagoStatus] = useState<"approved" | "pending" | "rejected" | null>(() => {
