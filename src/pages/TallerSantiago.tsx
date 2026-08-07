@@ -163,11 +163,9 @@ const TallerSantiago = () => {
     const run = async () => {
       // El webhook puede tardar unos segundos en marcar la inscripción como pagada
       for (let attempt = 0; attempt < 6 && !cancelled; attempt++) {
-        const { data, error } = await supabase.functions.invoke("get-taller-status", {
-          method: "GET",
-          body: undefined,
-          headers: {},
-        }).catch(() => ({ data: null, error: true as unknown }));
+        const { data, error } = await supabase.functions
+          .invoke("get-taller-status", { body: { orderId } })
+          .catch(() => ({ data: null, error: true as unknown }));
 
         let status: string | undefined;
         let amount: number | undefined;
