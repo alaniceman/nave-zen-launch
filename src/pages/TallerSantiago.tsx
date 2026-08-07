@@ -21,6 +21,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
+import { useFacebookPixel } from "@/hooks/useFacebookPixel";
+import { trackConversion } from "@/lib/gtagConversions";
 import {
   Calendar,
   Clock,
@@ -94,6 +96,7 @@ const WHATSAPP_AVANZADO = waUrl(
 
 
 const TallerSantiago = () => {
+  const { trackEvent } = useFacebookPixel();
   const [reservaTaller, setReservaTaller] = useState<TallerKey | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [pagoStatus, setPagoStatus] = useState<"approved" | "pending" | "rejected" | null>(() => {
@@ -140,6 +143,72 @@ const TallerSantiago = () => {
       }
     })();
   }, []);
+
+  // Conversión de compra del taller (Meta Pixel + Google Ads/GA4).
+  // El evento server-side (CAPI) lo dispara el webhook con el mismo event_id.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("pago") !== "approved") return;
+    const orderId = params.get("order");
+    if (!orderId) return;
+
+    const trackedKey = `taller_purchase_tracked_${orderId}`;
+    try {
+      if (window.sessionStorage.getItem(trackedKey)) return;
+    } catch { /* sessionStorage no disponible */ }
+
+    let cancelled = false;
+
+    const run = async () => {
+      // El webhook puede tardar unos segundos en marcar la inscripción como pagada
+      for (let attempt = 0; attempt < 6 && !cancelled; attempt++) {
+        const { data, error } = await supabase.functions
+          .invoke("get-taller-status", { body: { orderId } })
+          .catch(() => ({ data: null, error: true as unknown }));
+
+        let status: string | undefined;
+        let amount: number | undefined;
+        let nombre: string | undefined;
+        if (!error && data) {
+          status = (data as any).status;
+          amount = Number((data as any).amount);
+          nombre = (data as any).tallerNombre;
+        }
+
+        if (status === "paid" && amount) {
+          const eventId = `purchase-taller-${orderId}`;
+          trackEvent(
+            "Purchase",
+            {
+              value: amount,
+              currency: "CLP",
+              content_name: nombre || "Taller Método Wim Hof",
+              content_type: "product",
+              content_ids: [orderId],
+            },
+            eventId
+          );
+          trackConversion("purchase_paquete", {
+            value: amount,
+            currency: "CLP",
+            transaction_id: orderId,
+          });
+          try {
+            window.sessionStorage.setItem(trackedKey, "1");
+          } catch { /* noop */ }
+          return;
+        }
+
+        await new Promise((r) => setTimeout(r, 2500));
+      }
+    };
+
+    run();
+    return () => {
+      cancelled = true;
+    };
+  }, [trackEvent]);
 
   const cuposDisponibles = (k: TallerKey) =>
     Math.max(0, cupos[k].total - cupos[k].vendidos);
