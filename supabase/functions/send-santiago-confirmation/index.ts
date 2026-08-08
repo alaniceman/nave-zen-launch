@@ -101,7 +101,7 @@ serve(async (req) => {
     const html = buildHtml(payload);
 
     const result = await resend.emails.send({
-      from: "Nave Studio <lanave@alaniceman.com>",
+      from: "Nave Studio <agenda@studiolanave.com>",
       to: [payload.email],
       bcc: ["flowithmaral@gmail.com"],
       subject: `Tu reserva del Taller ${t.nombre} · Nave Studio`,
