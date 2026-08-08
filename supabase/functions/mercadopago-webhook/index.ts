@@ -233,10 +233,10 @@ async function handleTallerPayment(
       .eq("id", orderId);
   }
 
-  // Admin notification (never blocks the inscription)
+  // Admin notification — Talleres Wim Hof solo a lanave@alaniceman.com
   try {
     const resendKey = Deno.env.get("RESEND_API_KEY");
-    const adminEmail = Deno.env.get("ADMIN_NOTIFICATION_EMAIL") || "flowithmaral@gmail.com";
+    const adminEmail = "lanave@alaniceman.com";
     if (resendKey) {
       const nivelTxt = insc.nivel === "avanzado" ? "Avanzado" : "Fundamentos";
       const html = `
