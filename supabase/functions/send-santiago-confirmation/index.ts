@@ -34,13 +34,15 @@ interface Payload {
   nombre: string;
   apellido?: string;
   email: string;
-  celular: string;
+  celular?: string;
   taller: TallerKey;
+  pagado?: boolean;
 }
 
 function buildHtml(p: Payload) {
   const t = TALLERES[p.taller];
   const fullName = [p.nombre, p.apellido].filter(Boolean).join(" ");
+  const pagado = p.pagado === true;
   return `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <style>
 body{margin:0;padding:0;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;background:#F4F4F5;line-height:1.7;-webkit-font-smoothing:antialiased}
@@ -61,29 +63,41 @@ a{color:#2E4D3A}
 <body>
 <div class="wrap">
   <div class="hdr">
-    <h1>Reserva en proceso · ${t.nombre}</h1>
+    <h1>${pagado ? "¡Cupo confirmado!" : "Reserva en proceso"} · ${t.nombre}</h1>
     <p>Nave Studio · Antares 259, Las Condes</p>
   </div>
   <div class="body">
     <h2>Hola ${fullName || "Aliada"} 👋</h2>
-    <p>Recibimos tu reserva para el taller <strong>${t.nombre}</strong>. Para confirmar tu cupo necesitamos que completes el pago.</p>
+    ${pagado
+      ? `<p>Confirmamos tu pago y tu cupo en el taller <strong>${t.nombre}</strong>. ¡Nos vemos pronto!</p>`
+      : `<p>Recibimos tu reserva para el taller <strong>${t.nombre}</strong>. Para confirmar tu cupo necesitamos que completes el pago.</p>`}
 
     <div class="box">
       <p><strong>📅 Fecha:</strong> ${t.fecha}</p>
       <p><strong>⏰ Horario:</strong> ${t.horario}</p>
-      <p><strong>💸 Valor:</strong> ${t.valorTxt}</p>
+      <p><strong>💸 Valor:</strong> ${t.valorTxt}${pagado ? " (pagado)" : ""}</p>
       <p><strong>📍 Lugar:</strong> Nave Studio, Antares 259, Las Condes — <a href="${MAPS_URL}">ver mapa</a></p>
     </div>
 
-    <p>Si aún no completaste el pago, puedes hacerlo desde aquí:</p>
+    ${pagado
+      ? `<div class="box">
+      <p><strong>Qué traer:</strong></p>
+      <p>• Traje de baño y toalla</p>
+      <p>• Ropa cómoda para respiración y movimiento</p>
+      <p>• Botella de agua</p>
+      <p>• Llegar 15 minutos antes</p>
+      <p>• Idealmente venir con estómago liviano (2-3 hrs sin comida pesada)</p>
+    </div>
+    <p class="muted">Cualquier duda escríbenos a <a href="${WHATSAPP}">WhatsApp +56 9 4612 0426</a>.</p>`
+      : `<p>Si aún no completaste el pago, puedes hacerlo desde aquí:</p>
     <p><a href="${t.pagoUrl}" class="cta">Ir al pago seguro →</a></p>
-
-    <p class="muted">El cupo se confirma una vez recibido el pago. Si tienes cualquier duda escríbenos a <a href="${WHATSAPP}">WhatsApp +56 9 4612 0426</a>.</p>
+    <p class="muted">El cupo se confirma una vez recibido el pago. Si tienes cualquier duda escríbenos a <a href="${WHATSAPP}">WhatsApp +56 9 4612 0426</a>.</p>`}
   </div>
   <div class="foot">Nave Studio · studiolanave.com</div>
 </div>
 </body></html>`;
 }
+
 
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
@@ -103,10 +117,13 @@ serve(async (req) => {
     const result = await resend.emails.send({
       from: "Nave Studio <agenda@studiolanave.com>",
       to: [payload.email],
-      bcc: ["flowithmaral@gmail.com"],
-      subject: `Tu reserva del Taller ${t.nombre} · Nave Studio`,
+      bcc: ["lanave@alaniceman.com"],
+      subject: payload.pagado
+        ? `Cupo confirmado · Taller ${t.nombre} · Nave Studio`
+        : `Tu reserva del Taller ${t.nombre} · Nave Studio`,
       html,
     });
+
 
     return new Response(JSON.stringify({ ok: true, result }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
