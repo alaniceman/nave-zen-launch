@@ -117,10 +117,13 @@ serve(async (req) => {
     const result = await resend.emails.send({
       from: "Nave Studio <agenda@studiolanave.com>",
       to: [payload.email],
-      bcc: ["flowithmaral@gmail.com"],
-      subject: `Tu reserva del Taller ${t.nombre} · Nave Studio`,
+      bcc: ["lanave@alaniceman.com"],
+      subject: payload.pagado
+        ? `Cupo confirmado · Taller ${t.nombre} · Nave Studio`
+        : `Tu reserva del Taller ${t.nombre} · Nave Studio`,
       html,
     });
+
 
     return new Response(JSON.stringify({ ok: true, result }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
