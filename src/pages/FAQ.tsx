@@ -61,7 +61,7 @@ const FAQ = () => {
     },
     {
       question: "¿Los beneficios del Ice Bath son inmediatos?",
-      answer: "Muchas personas reportan cambios en cómo se sienten desde la primera sesión. La experiencia puede variar: mayor energía, claridad mental y sensación de logro son de los más mencionados. Los beneficios a largo plazo (mejor sueño, menos estrés, mayor resistencia) se desarrollan con práctica regular." // : mayor energía, claridad mental y sensación de logro. Los beneficios a largo plazo (mejor sueño, menos estrés, mayor resistencia) se desarrollan con práctica regular."
+      answer: "Muchas personas reportan cambios en cómo se sienten desde la primera sesión. La experiencia puede variar: mayor energía, claridad mental y sensación de logro son de los más mencionados. Los beneficios a largo plazo (mejor sueño, menos estrés, mayor resistencia) se desarrollan con práctica regular."
     },
     {
       question: "¿Cuánto tiempo puedo estar en el agua fría?",
