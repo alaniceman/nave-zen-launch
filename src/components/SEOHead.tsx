@@ -13,7 +13,7 @@ const seoData = {
   },
   "/experiencias": {
     title: "Experiencias: Ice Bath, Breathwork y Yoga | Nave Studio",
-    description: "Explora nuestras sesiones guiadas: baño de hielo, respiración Wim Hof y Yoga. Resultados visibles desde la primera sesión.",
+    description: "Explora nuestras sesiones guiadas: baño de hielo a 3 °C, respiración Wim Hof y Yoga. Muchas personas reportan cambios desde la primera sesión.",
     canonical: "https://studiolanave.com/experiencias",
     ogTitle: "Ice Bath, Breathwork Wim Hof y Yoga | Nave Studio",
     ogDescription: "Sesiones guiadas de inmersión en frío, respiración consciente y yoga. Resultados desde la primera clase. Reserva tu experiencia.",

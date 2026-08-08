@@ -18,13 +18,12 @@ export const MethodologiesSection = () => {
     {
       icon: Wind,
       title: "Breathwork Wim Hof",
-      description: "30-40 respiraciones profundas con retención que oxigenan cada célula, elevan tu pH a alcalino y activan el sistema nervioso parasimpático para devolverte calma y energía en minutos.",
+      description: "30-40 respiraciones profundas con retención que activan el sistema nervioso parasimpático. La respiración guiada puede ayudarte a sentir mayor claridad y presencia, calma y energía en minutos.",
       benefits: "Beneficios primeros 11 min",
       benefitsList: [
         "Disuelve el estrés y te lleva al modo \"reposo-y-digestión\"",
         "Mejora la concentración y la claridad mental al aumentar la perfusión cerebral",
-        "Alcaliniza la sangre y neutraliza la acidez metabólica",
-        "Libera la ansiedad al regular hormonas y bioquímica cerebral"
+        "Puede ayudar a disminuir la sensación de estrés y tensión"
       ],
     },
     {

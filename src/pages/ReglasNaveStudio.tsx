@@ -22,7 +22,7 @@ const rules = [
   },
   {
     icon: Thermometer,
-    text: "Para entrar al hielo después de yoga, debes haber realizado al menos una clase del Método Wim Hof antes.",
+    text: "Para entrar al hielo después de Yoga debes haber realizado previamente una sesión guiada del Método Wim Hof en Nave Studio. Si estás con Plan de Prueba, puedes realizar esa sesión dentro del mismo plan.",
   },
   {
     icon: Clock,

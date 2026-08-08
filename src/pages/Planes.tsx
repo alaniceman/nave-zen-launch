@@ -156,7 +156,7 @@ const Planes = () => {
             
             {/* Solo Yoga */}
             <a href="#solo-yoga" className="group rounded-2xl p-6 bg-white hover:bg-gradient-to-br hover:from-white hover:to-neutral-50 hover:shadow-lg transition-all duration-300 border border-neutral-200 hover:border-accent">
-              <h3 className="font-semibold text-primary font-space text-lg">Solo Yoga</h3>
+              <h3 className="font-semibold text-primary font-space text-lg">Planes de Yoga</h3>
               <p className="text-sm text-muted-foreground mt-2 font-inter">Busco practicar Yoga sin compromiso.</p>
               <span className="inline-block mt-4 text-accent group-hover:underline font-medium">Ver Yoga →</span>
             </a>
@@ -415,7 +415,7 @@ const Planes = () => {
           {/* SOLO YOGA - Planes de Yoga */}
           <section id="solo-yoga" className="mb-24">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-primary font-space">Solo Yoga</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-primary font-space">Planes de Yoga</h2>
               <p className="text-muted-foreground mt-2 font-inter text-lg">Planes exclusivos para tu práctica de Yoga.</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
@@ -512,11 +512,6 @@ const Planes = () => {
 
           {/* Guarantee & Final CTA */}
           <div className="text-center space-y-6 animate-fade-in">
-            <div className="bg-neutral-50 rounded-lg p-6 max-w-2xl mx-auto">
-              <p className="text-foreground font-medium font-inter">
-                <strong>Garantía Nave:</strong> si en los primeros 14 días no sientes la diferencia, te devolvemos tu inversión.
-              </p>
-            </div>
             <Button size="lg" className="bg-accent hover:bg-primary text-white font-inter font-medium hover:scale-105 transition-transform duration-300 h-14 px-10 text-base" asChild>
               <a href="/plan-de-prueba">
                 Empieza hoy con tu Plan de Prueba

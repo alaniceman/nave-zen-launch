@@ -93,11 +93,11 @@ export default function PromoInvierno() {
         <title>Promo Invierno · 6 Sesiones en Nave Studio</title>
         <meta
           name="description"
-          content="6 sesiones de Yoga o Criomedicina por $60.000 en Nave Studio. Está comprobado: 6 sesiones te ayudan a tolerar el frío el doble. El invierno deja de ser tema. Validez 3 meses."
+          content="6 sesiones de Yoga o Criomedicina por $60.000 en Nave Studio. La práctica constante puede ayudarte a desarrollar una mejor respuesta al frío y al estrés. Validez 3 meses."
         />
         <link rel="canonical" href="https://studiolanave.com/promo-invierno" />
         <meta property="og:title" content="Promo Invierno · 6 Sesiones en Nave Studio" />
-        <meta property="og:description" content="6 sesiones de Yoga o Criomedicina por $60.000. Tolera el frío el doble. Validez 3 meses." />
+        <meta property="og:description" content="6 sesiones de Yoga o Criomedicina por $60.000. Entrena progresivamente tu tolerancia al frío. Validez 3 meses." />
         <meta property="og:type" content="product" />
       </Helmet>
 
@@ -119,15 +119,15 @@ export default function PromoInvierno() {
               </div>
 
               <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-                Tolera el frío{" "}
+                Entrena tu{" "}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-700 to-sky-600">
-                  el doble
+                  tolerancia al frío
                 </span>
               </h1>
 
               <p className="text-lg md:text-xl text-gray-600 mb-4 leading-relaxed">
-                Está comprobado: <strong>6 sesiones</strong> de Ice Bath + Método Wim Hof
-                o Yoga te ayudan a tolerar el frío el doble. El invierno ya no será tema nunca más.
+                <strong>6 sesiones</strong> de Ice Bath + Método Wim Hof o Yoga. La práctica
+                constante puede ayudarte a desarrollar una mejor respuesta al frío y al estrés.
               </p>
               <p className="text-base text-gray-500 italic">
                 6 sesiones por $60.000 · vigencia 3 meses · puedes compartirlas.
@@ -234,7 +234,7 @@ export default function PromoInvierno() {
             </h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
               {[
-                { icon: Snowflake, title: "Adaptación real", text: "6 inmersiones entrenan al cuerpo a tolerar el frío el doble." },
+                { icon: Snowflake, title: "Adaptación real", text: "6 inmersiones te ayudan a entrenar progresivamente tu tolerancia al frío." },
                 { icon: Wind, title: "Sistema nervioso", text: "Respiración Wim Hof regula estrés y mejora el sueño." },
                 { icon: Mountain, title: "Energía estable", text: "Yoga + frío = más foco, mejor humor, menos fatiga invernal." },
                 { icon: Sparkles, title: "El invierno cambia", text: "Dejas de sufrir el frío y empiezas a usarlo a tu favor." },

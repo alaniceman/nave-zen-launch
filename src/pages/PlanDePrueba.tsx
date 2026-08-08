@@ -323,7 +323,7 @@ export default function PlanDePrueba() {
               {
                 title: "Reglas de seguridad — Criomedicina / Método Wim Hof",
                 content:
-                  "Las clases de yoga de prueba no incluyen inmersión en hielo. Para terminar una clase de yoga en agua fría debes haber realizado previamente una sesión guiada del Método Wim Hof con nosotros. Tiempo máximo de inmersión después de yoga: 2 minutos. En sesiones completas del Método Wim Hof se sigue siempre la guía del instructor.",
+                  "Para entrar al hielo después de Yoga durante tu Plan de Prueba, primero debes haber realizado una sesión guiada del Método Wim Hof en Nave Studio. Puedes realizar esa sesión dentro del mismo Plan de Prueba. Después de Yoga, el tiempo máximo de inmersión es de 2 minutos. En sesiones completas del Método Wim Hof se sigue siempre la guía del instructor.",
               },
             ].map((item) => (
               <details
