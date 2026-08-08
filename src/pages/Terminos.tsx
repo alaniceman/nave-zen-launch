@@ -131,7 +131,7 @@ const Terminos = () => {
                 <p className="text-neutral-mid leading-relaxed">
                   Para consultas sobre estos términos, contáctanos en:
                   <br />
-                  WhatsApp: +56 9 1234 5678
+                  WhatsApp: +56 9 4612 0426
                   <br />
                   Dirección: Antares 259, Las Condes, Chile
                 </p>

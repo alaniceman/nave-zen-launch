@@ -498,7 +498,7 @@ const TallerSantiago = () => {
             </div>
             <div className="space-y-2">
               <Label htmlFor="celular">Celular</Label>
-              <Input id="celular" type="tel" value={form.celular} onChange={(e) => setForm({ ...form, celular: e.target.value })} placeholder="+56 9 1234 5678" maxLength={30} required />
+              <Input id="celular" type="tel" value={form.celular} onChange={(e) => setForm({ ...form, celular: e.target.value })} placeholder="+56 9 4612 0426" maxLength={30} required />
             </div>
             <div className="space-y-2">
               <Label htmlFor="cupon">Cupón de descuento (opcional)</Label>

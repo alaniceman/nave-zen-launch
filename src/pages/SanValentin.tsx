@@ -266,7 +266,7 @@ export default function SanValentin() {
                         id="phone"
                         name="phone"
                         type="tel"
-                        placeholder="+56 9 1234 5678"
+                        placeholder="+56 9 4612 0426"
                         value={formData.phone}
                         onChange={handleInputChange}
                         required

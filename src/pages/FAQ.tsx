@@ -158,7 +158,7 @@ const FAQ = () => {
             Nuestro equipo está disponible para resolver cualquier duda específica sobre tu situación.
           </p>
           <a
-            href="https://wa.me/56912345678"
+            href="https://wa.me/56946120426"
             className="inline-flex items-center justify-center px-8 py-3 bg-secondary hover:bg-primary text-white font-medium rounded-lg transition-colors"
             target="_blank"
             rel="noopener noreferrer"

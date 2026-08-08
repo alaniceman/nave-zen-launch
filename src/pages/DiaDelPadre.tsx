@@ -196,7 +196,7 @@ export default function DiaDelPadre() {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="phone">Celular</Label>
-                      <Input id="phone" name="phone" type="tel" placeholder="+56 9 1234 5678"
+                      <Input id="phone" name="phone" type="tel" placeholder="+56 9 4612 0426"
                         value={formData.phone} onChange={handleInputChange} required disabled={isLoading} />
                     </div>
 
