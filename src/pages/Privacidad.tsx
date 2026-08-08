@@ -11,7 +11,7 @@ const Privacidad = () => {
               Política de Privacidad
             </h1>
             <p className="text-lg text-neutral-mid">
-              Última actualización: Enero 2025
+              Última actualización: agosto de 2026
             </p>
           </div>
         </div>
