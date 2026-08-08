@@ -202,7 +202,7 @@ const BlogAguaFriaGuiado = () => {
                 <li>Quieres profundizar en la experiencia y entender la fisiología.</li>
                 <li>Buscas un espacio emocional y simbólico más profundo.</li>
                 <li>Deseas compartirlo con otros o conectar desde la respiración.</li>
-                <li>Quieres hacerlo de forma segura, en agua a temperatura controlada (2–5 °C) con supervisión y recuperación consciente.</li>
+                <li>Quieres hacerlo de forma segura, en agua a temperatura controlada (3 °C en Nave Studio) con supervisión y recuperación consciente.</li>
               </ul>
 
               <h2 className="text-3xl font-heading text-primary mt-12 mb-6">
@@ -219,7 +219,7 @@ const BlogAguaFriaGuiado = () => {
               </h3>
               <ol className="space-y-2">
                 <li><strong>Preparación:</strong> respiración Wim Hof guiada + enfoque mental.</li>
-                <li><strong>Inmersión:</strong> agua a 3–5 °C, con acompañamiento constante.</li>
+                <li><strong>Inmersión:</strong> agua a 3 °C, con acompañamiento constante.</li>
                 <li><strong>Integración:</strong> respiración, té caliente y movimiento consciente.</li>
               </ol>
 
