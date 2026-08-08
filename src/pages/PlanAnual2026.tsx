@@ -126,17 +126,17 @@ const PlanAnual2026 = () => {
                     Plan 1 vez por semana
                   </p>
                   <p className="text-lg line-through text-muted-foreground">
-                    $588.000 anual
+                    $708.000 anual
                   </p>
                   <p className="font-space text-4xl font-bold text-foreground">
-                    $490.000
+                    $590.000
                   </p>
                   <p className="text-sm text-muted-foreground">anual</p>
                   <Badge
                     variant="secondary"
                     className="mt-3 bg-primary/10 text-primary"
                   >
-                    2 meses gratis · $98.000 de ahorro
+                    2 meses gratis · $118.000 de ahorro
                   </Badge>
                 </CardHeader>
                 <CardContent className="space-y-6">

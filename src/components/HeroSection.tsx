@@ -228,10 +228,10 @@ const HeroSlidePromoInvierno = () => {
             ❄️ Promo Invierno · Edición limitada
           </div>
           <h2 className="font-space-grotesk font-bold text-4xl md:text-6xl lg:text-7xl leading-[1.05]">
-            Tolera el frío el doble
+            Entrena tu tolerancia al frío
           </h2>
           <p className="font-inter text-base md:text-xl text-white/95 max-w-2xl mx-auto">
-            6 sesiones de Yoga o Criomedicina. Está comprobado: 6 sesiones te ayudan a tolerar el frío el doble. El invierno deja de ser tema.
+            6 sesiones de Yoga o Criomedicina. La práctica constante puede ayudarte a desarrollar una mejor respuesta al frío y al estrés.
           </p>
           <div className="flex items-center justify-center gap-3 pt-2">
             <span className="font-space-grotesk text-5xl md:text-7xl font-bold">$60.000</span>

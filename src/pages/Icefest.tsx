@@ -241,7 +241,7 @@ export default function Icefest() {
                   <div className="space-y-2">
                     <Label htmlFor="phone" className="text-cyan-100">Celular</Label>
                     <Input
-                      id="phone" name="phone" type="tel" placeholder="+56 9 1234 5678"
+                      id="phone" name="phone" type="tel" placeholder="+56 9 4612 0426"
                       value={formData.phone} onChange={handleInputChange} required disabled={isLoading}
                       className="bg-white/10 border-white/20 text-white placeholder:text-white/40 focus-visible:ring-cyan-400"
                     />

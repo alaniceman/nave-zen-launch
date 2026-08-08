@@ -11,7 +11,7 @@ const Terminos = () => {
               Términos de Servicio
             </h1>
             <p className="text-lg text-neutral-mid">
-              Última actualización: Enero 2025
+              Última actualización: agosto de 2026
             </p>
           </div>
         </div>
@@ -38,10 +38,10 @@ const Terminos = () => {
                   Nave Studio ofrece servicios de bienestar que incluyen:
                 </p>
                 <ul className="list-disc pl-6 text-neutral-mid space-y-2">
-                  <li>Sesiones de Ice Bath (inmersión en frío)</li>
+                  <li>Sesiones de Ice Bath (inmersión en agua a 3 °C)</li>
                   <li>Clases de Breathwork y método Wim Hof</li>
                   <li>Clases de Yoga</li>
-                  <li>Programas de biohacking y optimización del rendimiento</li>
+                  <li>Planes de Prueba, membresías mensuales y paquetes de sesiones</li>
                 </ul>
               </div>
 
@@ -131,7 +131,7 @@ const Terminos = () => {
                 <p className="text-neutral-mid leading-relaxed">
                   Para consultas sobre estos términos, contáctanos en:
                   <br />
-                  WhatsApp: +56 9 1234 5678
+                  WhatsApp: +56 9 4612 0426
                   <br />
                   Dirección: Antares 259, Las Condes, Chile
                 </p>

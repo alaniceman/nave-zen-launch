@@ -13,7 +13,7 @@ const seoData = {
   },
   "/experiencias": {
     title: "Experiencias: Ice Bath, Breathwork y Yoga | Nave Studio",
-    description: "Explora nuestras sesiones guiadas: baño de hielo, respiración Wim Hof y Yoga. Resultados visibles desde la primera sesión.",
+    description: "Explora nuestras sesiones guiadas: baño de hielo a 3 °C, respiración Wim Hof y Yoga. Muchas personas reportan cambios desde la primera sesión.",
     canonical: "https://studiolanave.com/experiencias",
     ogTitle: "Ice Bath, Breathwork Wim Hof y Yoga | Nave Studio",
     ogDescription: "Sesiones guiadas de inmersión en frío, respiración consciente y yoga. Resultados desde la primera clase. Reserva tu experiencia.",
@@ -246,7 +246,7 @@ const structuredData = {
     "url": "https://studiolanave.com",
     "logo": "https://studiolanave.com/lovable-uploads/79b55bf0-58ef-4275-a156-4523124bd6b8.png",
     "sameAs": [
-      "https://instagram.com/navestudio.cl"
+      "https://www.instagram.com/nave.icestudio"
     ],
     "address": {
       "@type": "PostalAddress",
@@ -273,7 +273,7 @@ const structuredData = {
     "name": "Nave Studio",
     "description": "Centro de bienestar basado en ciencia especializado en Ice Bath, Breathwork Wim Hof y Yoga",
     "url": "https://studiolanave.com",
-    "telephone": "+56987654321",
+    "telephone": "+56946120426",
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "Antares 259",
@@ -287,14 +287,10 @@ const structuredData = {
       "latitude": -33.4172,
       "longitude": -70.5885
     },
-    "openingHours": [
-      "Mo-Fr 06:00-22:00",
-      "Sa-Su 07:00-20:00"
-    ],
     "priceRange": "$$",
     "areaServed": "Las Condes, Chile",
     "sameAs": [
-      "https://instagram.com/navestudio.cl"
+      "https://www.instagram.com/nave.icestudio"
     ],
     "hasOfferCatalog": {
       "@type": "OfferCatalog",
@@ -362,10 +358,10 @@ export const SEOHead = () => {
     "mainEntity": [
       { "@type": "Question", "name": "¿Es seguro el Ice Bath?", "acceptedAnswer": { "@type": "Answer", "text": "El Ice Bath es seguro cuando se practica bajo supervisión de coaches certificados. Contraindicaciones: embarazo, problemas cardíacos graves, presión arterial descontrolada." } },
       { "@type": "Question", "name": "¿Tienen clase de prueba gratis?", "acceptedAnswer": { "@type": "Answer", "text": "No ofrecemos clases gratuitas. Contamos con Planes de Prueba pagados con acceso ilimitado por 7 días ($9.900) o 15 días ($19.900)." } },
-      { "@type": "Question", "name": "¿El plan de prueba incluye agua fría (Ice Bath)?", "acceptedAnswer": { "@type": "Answer", "text": "Sí, incluye Yoga, Breathwork, Criomedicina y Método Wim Hof. Para entrar al agua fría necesitas una sesión guiada de Wim Hof previa (puede ser dentro del mismo plan)." } },
+      { "@type": "Question", "name": "¿El plan de prueba incluye agua fría (Ice Bath)?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. Para entrar al hielo después de Yoga durante tu Plan de Prueba, primero debes haber realizado una sesión guiada del Método Wim Hof en Nave Studio. Puedes realizar esa sesión dentro del mismo Plan de Prueba. Después de Yoga, el tiempo máximo de inmersión es de 2 minutos." } },
       { "@type": "Question", "name": "¿Qué debo llevar a mi primera clase?", "acceptedAnswer": { "@type": "Answer", "text": "Para Ice Bath o Wim Hof: traje de baño, toalla y bolsa para ropa mojada. Para Yoga: ropa deportiva cómoda. Nosotros proporcionamos mats." } },
       { "@type": "Question", "name": "¿Puedo cancelar o reagendar mi sesión?", "acceptedAnswer": { "@type": "Answer", "text": "Packs: cancelar/reagendar con 24h de anticipación. Membresías mensuales: cancelar con 6h desde la app, si no la clase se considera utilizada." } },
-      { "@type": "Question", "name": "¿Qué temperatura tiene el agua del Ice Bath?", "acceptedAnswer": { "@type": "Answer", "text": "Mantenemos el agua entre 3-12°C, temperatura óptima para beneficios terapéuticos sin riesgo." } }
+      { "@type": "Question", "name": "¿Qué temperatura tiene el agua del Ice Bath?", "acceptedAnswer": { "@type": "Answer", "text": "Nuestras inmersiones se realizan en agua a 3 °C. La duración se adapta a la experiencia de cada persona y la inmersión siempre es guiada." } }
     ]
   };
 
@@ -374,9 +370,14 @@ export const SEOHead = () => {
     "@type": "ItemList",
     "name": "Membresías Nave Studio",
     "itemListElement": [
-      { "@type": "Product", "name": "Membresía Solo Yoga", "description": "Yoga ilimitado en Nave Studio Las Condes.", "brand": { "@type": "Brand", "name": "Nave Studio" }, "offers": { "@type": "Offer", "priceCurrency": "CLP", "price": "69000", "availability": "https://schema.org/InStock", "url": "https://studiolanave.com/planes-precios" } },
-      { "@type": "Product", "name": "Membresía Universo (Completa)", "description": "Yoga, Ice Bath y Wim Hof ilimitados en Las Condes.", "brand": { "@type": "Brand", "name": "Nave Studio" }, "offers": { "@type": "Offer", "priceCurrency": "CLP", "price": "129000", "availability": "https://schema.org/InStock", "url": "https://studiolanave.com/planes-precios" } },
-      { "@type": "Product", "name": "Plan de Prueba 7 días", "description": "Acceso ilimitado por 7 días a Yoga, Ice Bath y Wim Hof.", "brand": { "@type": "Brand", "name": "Nave Studio" }, "offers": { "@type": "Offer", "priceCurrency": "CLP", "price": "9900", "availability": "https://schema.org/InStock", "url": "https://studiolanave.com/plan-de-prueba" } }
+      { "@type": "Product", "name": "Membresía Eclipse", "description": "1 sesión semanal de Yoga, Ice Bath y Método Wim Hof en Nave Studio Las Condes.", "brand": { "@type": "Brand", "name": "Nave Studio" }, "offers": { "@type": "Offer", "priceCurrency": "CLP", "price": "59000", "availability": "https://schema.org/InStock", "url": "https://studiolanave.com/planes-precios" } },
+      { "@type": "Product", "name": "Membresía Órbita", "description": "2 sesiones semanales de Yoga, Ice Bath y Método Wim Hof en Las Condes.", "brand": { "@type": "Brand", "name": "Nave Studio" }, "offers": { "@type": "Offer", "priceCurrency": "CLP", "price": "79000", "availability": "https://schema.org/InStock", "url": "https://studiolanave.com/planes-precios" } },
+      { "@type": "Product", "name": "Membresía Universo", "description": "Acceso completo a Yoga, Ice Bath y Método Wim Hof en Las Condes.", "brand": { "@type": "Brand", "name": "Nave Studio" }, "offers": { "@type": "Offer", "priceCurrency": "CLP", "price": "95000", "availability": "https://schema.org/InStock", "url": "https://studiolanave.com/planes-precios" } },
+      { "@type": "Product", "name": "Membresía Yoga Esencial", "description": "1 clase de Yoga por semana en Nave Studio Las Condes.", "brand": { "@type": "Brand", "name": "Nave Studio" }, "offers": { "@type": "Offer", "priceCurrency": "CLP", "price": "49000", "availability": "https://schema.org/InStock", "url": "https://studiolanave.com/planes-precios" } },
+      { "@type": "Product", "name": "Membresía Yoga Continuo", "description": "2 clases de Yoga por semana en Nave Studio Las Condes.", "brand": { "@type": "Brand", "name": "Nave Studio" }, "offers": { "@type": "Offer", "priceCurrency": "CLP", "price": "69000", "availability": "https://schema.org/InStock", "url": "https://studiolanave.com/planes-precios" } },
+      { "@type": "Product", "name": "Membresía Yoga Libre", "description": "Clases de Yoga ilimitadas en Nave Studio Las Condes.", "brand": { "@type": "Brand", "name": "Nave Studio" }, "offers": { "@type": "Offer", "priceCurrency": "CLP", "price": "85000", "availability": "https://schema.org/InStock", "url": "https://studiolanave.com/planes-precios" } },
+      { "@type": "Product", "name": "Plan de Prueba 7 días", "description": "Acceso ilimitado por 7 días a Yoga, Ice Bath y Método Wim Hof.", "brand": { "@type": "Brand", "name": "Nave Studio" }, "offers": { "@type": "Offer", "priceCurrency": "CLP", "price": "9900", "availability": "https://schema.org/InStock", "url": "https://studiolanave.com/plan-de-prueba" } },
+      { "@type": "Product", "name": "Plan de Prueba 15 días", "description": "Acceso ilimitado por 15 días a Yoga, Ice Bath y Método Wim Hof.", "brand": { "@type": "Brand", "name": "Nave Studio" }, "offers": { "@type": "Offer", "priceCurrency": "CLP", "price": "19900", "availability": "https://schema.org/InStock", "url": "https://studiolanave.com/plan-de-prueba" } }
     ]
   };
 

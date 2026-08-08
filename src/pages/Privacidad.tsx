@@ -11,7 +11,7 @@ const Privacidad = () => {
               Política de Privacidad
             </h1>
             <p className="text-lg text-neutral-mid">
-              Última actualización: Enero 2025
+              Última actualización: agosto de 2026
             </p>
           </div>
         </div>
@@ -136,7 +136,7 @@ const Privacidad = () => {
                 <p className="text-neutral-mid leading-relaxed">
                   Si tienes preguntas sobre esta política de privacidad o quieres ejercer tus derechos, contáctanos:
                   <br />
-                  WhatsApp: +56 9 1234 5678
+                  WhatsApp: +56 9 4612 0426
                   <br />
                   Email: privacidad@navestudio.cl
                   <br />

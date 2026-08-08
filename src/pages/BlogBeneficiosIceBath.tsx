@@ -66,7 +66,7 @@ const BlogBeneficiosIceBath = () => {
         name: "¿A qué temperatura debe estar el agua?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Entre 2°C y 10°C. En Nave Studio la tina llega a 3°C, considerado el rango óptimo para activar los beneficios hormonales y neurofisiológicos del frío.",
+          text: "En Nave Studio nuestras inmersiones se realizan en agua a 3 °C. La duración se adapta a la experiencia de cada persona y la inmersión siempre es guiada.",
         },
       },
       {
@@ -174,7 +174,7 @@ const BlogBeneficiosIceBath = () => {
               </h2>
               <p className="mb-6">
                 Un <strong>baño de hielo</strong> es una inmersión breve y controlada en agua
-                fría (idealmente entre <strong>2°C y 10°C</strong>) durante 1 a 3 minutos. En
+                fría (en Nave Studio, <strong>3 °C</strong>) durante 1 a 3 minutos. En
                 <a href="/" className="text-secondary hover:text-primary underline"> Nave Studio </a>
                 trabajamos con tinas a <strong>3°C</strong>, con un máximo de <strong>2
                 minutos</strong> por inmersión y siempre acompañado por un instructor

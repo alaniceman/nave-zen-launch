@@ -70,8 +70,8 @@ export const CoachesSection = ({ filterIds }: { filterIds?: string[] } = {}) => 
         <div className="text-center mt-12">
           <p className="text-lg text-neutral-mid font-inter">
             ¿No sabes con quién empezar?{" "}
-            <a href="https://wa.link/wh4f79" target="_blank" rel="noopener noreferrer" className="text-secondary underline hover:text-primary font-medium transition-colors duration-300">
-              Agenda una llamada de descubrimiento gratuita →
+            <a href="/plan-de-prueba" className="text-secondary underline hover:text-primary font-medium transition-colors duration-300">
+              Empieza con el Plan de Prueba desde $9.900 →
             </a>
           </p>
         </div>

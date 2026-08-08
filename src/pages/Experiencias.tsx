@@ -125,7 +125,7 @@ const Experiencias = () => {
     <>
       <Helmet>
         <title>Experiencias: Ice Bath, Breathwork y Yoga | Nave Studio</title>
-        <meta name="description" content="Explora nuestras sesiones guiadas: baño de hielo, respiración Wim Hof y Yoga. Resultados visibles desde la primera sesión." />
+        <meta name="description" content="Explora nuestras sesiones guiadas: baño de hielo a 3 °C, respiración Wim Hof y Yoga. Muchas personas reportan cambios desde la primera sesión." />
         <link rel="canonical" href="https://studiolanave.com/experiencias" />
         <meta property="og:title" content="Ice Bath, Breathwork Wim Hof y Yoga | Nave Studio" />
         <meta property="og:description" content="Sesiones guiadas de inmersión en frío, respiración consciente y yoga. Resultados desde la primera clase." />
@@ -361,7 +361,7 @@ const Experiencias = () => {
               size="lg"
               className="border-2 border-secondary text-secondary hover:bg-secondary hover:text-white py-3 px-8 rounded-[10px] transition-all duration-200 hover:scale-105 text-base"
             >
-              <Link to="/planes-precios">Ver planes desde $39.990/mes</Link>
+              <Link to="/planes-precios">Ver membresías desde $49.000/mes</Link>
             </Button>
           </div>
           <div className="mt-6">

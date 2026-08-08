@@ -25,7 +25,7 @@ const FAQ = () => {
     },
     {
       question: "¿El plan de prueba incluye agua fría (Ice Bath)?",
-      answer: "Sí, el Plan de Prueba incluye acceso a Yoga, Breathwork, Criomedicina y Método Wim Hof. Para entrar al agua fría necesitas haber hecho una sesión guiada de Wim Hof previamente; puede ser dentro del mismo plan de prueba."
+      answer: "Sí. El Plan de Prueba incluye acceso a Yoga, Breathwork, Criomedicina y Método Wim Hof. Para entrar al hielo después de Yoga durante tu Plan de Prueba, primero debes haber realizado una sesión guiada del Método Wim Hof en Nave Studio. Puedes realizar esa sesión dentro del mismo Plan de Prueba. Después de Yoga, el tiempo máximo de inmersión es de 2 minutos."
     },
     {
       question: "¿Puedo acceder al agua fría después de una clase de yoga pagada?",
@@ -61,7 +61,7 @@ const FAQ = () => {
     },
     {
       question: "¿Los beneficios del Ice Bath son inmediatos?",
-      answer: "Muchas personas sienten beneficios desde la primera sesión: mayor energía, claridad mental y sensación de logro. Los beneficios a largo plazo (mejor sueño, menos estrés, mayor resistencia) se desarrollan con práctica regular."
+      answer: "Muchas personas reportan cambios en cómo se sienten desde la primera sesión. La experiencia puede variar: mayor energía, claridad mental y sensación de logro son de los más mencionados. Los beneficios a largo plazo (mejor sueño, menos estrés, mayor resistencia) se desarrollan con práctica regular."
     },
     {
       question: "¿Cuánto tiempo puedo estar en el agua fría?",
@@ -69,7 +69,7 @@ const FAQ = () => {
     },
     {
       question: "¿Qué temperatura tiene el agua del Ice Bath?",
-      answer: "Mantenemos el agua entre 8-12°C, temperatura óptima para obtener beneficios terapéuticos sin riesgo. Los principiantes comienzan con exposiciones más cortas y gradualmente aumentan el tiempo."
+      answer: "Nuestras inmersiones se realizan en agua a 3 °C. La duración se adapta a la experiencia de cada persona y la inmersión siempre es guiada."
     },
     {
       question: "¿Cómo me ayuda el breathwork en mi día a día?",
@@ -77,7 +77,7 @@ const FAQ = () => {
     },
     {
       question: "¿Ofrecen clases privadas o solo grupales?",
-      answer: "Ofrecemos ambas modalidades. Las clases grupales (máximo 8 personas) crean una energía especial de comunidad. Las sesiones privadas permiten atención 100% personalizada. Contáctanos para más información sobre tarifas privadas."
+      answer: "Ofrecemos ambas modalidades. Trabajamos con grupos reducidos: Método Wim Hof, máximo 6 personas por sesión; Yoga, máximo 12 personas por clase. Las sesiones privadas permiten atención 100% personalizada. Contáctanos para más información sobre tarifas privadas."
     },
     {
       question: "¿Qué pasa si tengo una lesión o limitación física?",
@@ -158,7 +158,7 @@ const FAQ = () => {
             Nuestro equipo está disponible para resolver cualquier duda específica sobre tu situación.
           </p>
           <a
-            href="https://wa.me/56912345678"
+            href="https://wa.me/56946120426"
             className="inline-flex items-center justify-center px-8 py-3 bg-secondary hover:bg-primary text-white font-medium rounded-lg transition-colors"
             target="_blank"
             rel="noopener noreferrer"

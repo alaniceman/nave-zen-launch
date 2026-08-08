@@ -276,7 +276,7 @@ const BlogBiohacking = () => {
               <ul className="space-y-2 mb-8">
                 <li>• <strong>HIIT inteligente</strong> (adaptado a tu nivel).</li>
                 <li>• <strong>Breathwork</strong> para activar o calmar según el momento.</li>
-                <li>• <strong>Inmersión en frío</strong> a <strong>3–5 °C</strong> con seguridad, salida consciente y calentamiento natural.</li>
+                <li>• <strong>Inmersión en frío</strong> a <strong>3 °C</strong> con seguridad, salida consciente y calentamiento natural.</li>
               </ul>
 
               {/* CTAs */}
