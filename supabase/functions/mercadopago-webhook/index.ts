@@ -257,7 +257,7 @@ async function handleTallerPayment(
         method: "POST",
         headers: { Authorization: `Bearer ${resendKey}`, "Content-Type": "application/json" },
         body: JSON.stringify({
-          from: "Nave Studio <lanave@alaniceman.com>",
+          from: "Nave Studio <agenda@studiolanave.com>",
           to: [adminEmail],
           subject: `Nueva inscripción Taller Wim Hof — ${nivelTxt}`,
           html,
@@ -323,7 +323,7 @@ async function handleTallerPayment(
         method: "POST",
         headers: { Authorization: `Bearer ${resendKey}`, "Content-Type": "application/json" },
         body: JSON.stringify({
-          from: "Nave Studio <lanave@alaniceman.com>",
+          from: "Nave Studio <agenda@studiolanave.com>",
           to: [insc.email],
           subject: `Cupo confirmado · Taller ${nivelTxt} Método Wim Hof · 23 de agosto`,
           html,
