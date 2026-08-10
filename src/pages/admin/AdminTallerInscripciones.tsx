@@ -86,10 +86,16 @@ export default function AdminTallerInscripciones() {
     return Array.from(map.entries());
   }, [rows]);
 
+  const isAbandoned = (r: Inscripcion) =>
+    r.status !== "paid" &&
+    Date.now() - new Date(r.created_at).getTime() > 30 * 60 * 1000;
+
   const filtered = useMemo(() => {
     return rows.filter((r) => {
       if (tallerFilter !== "all" && r.event_id !== tallerFilter) return false;
-      if (statusFilter !== "all" && r.status !== statusFilter) return false;
+      if (statusFilter === "abandoned") {
+        if (!isAbandoned(r)) return false;
+      } else if (statusFilter !== "all" && r.status !== statusFilter) return false;
       if (confirmFilter !== "all") {
         const label = confirmacionInfo(r).label;
         if (confirmFilter === "sent" && label !== "Enviada") return false;
