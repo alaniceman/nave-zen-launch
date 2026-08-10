@@ -86,10 +86,16 @@ export default function AdminTallerInscripciones() {
     return Array.from(map.entries());
   }, [rows]);
 
+  const isAbandoned = (r: Inscripcion) =>
+    r.status !== "paid" &&
+    Date.now() - new Date(r.created_at).getTime() > 30 * 60 * 1000;
+
   const filtered = useMemo(() => {
     return rows.filter((r) => {
       if (tallerFilter !== "all" && r.event_id !== tallerFilter) return false;
-      if (statusFilter !== "all" && r.status !== statusFilter) return false;
+      if (statusFilter === "abandoned") {
+        if (!isAbandoned(r)) return false;
+      } else if (statusFilter !== "all" && r.status !== statusFilter) return false;
       if (confirmFilter !== "all") {
         const label = confirmacionInfo(r).label;
         if (confirmFilter === "sent" && label !== "Enviada") return false;
@@ -218,6 +224,7 @@ export default function AdminTallerInscripciones() {
             <SelectContent>
               <SelectItem value="all">Todos</SelectItem>
               <SelectItem value="paid">Pagados</SelectItem>
+              <SelectItem value="abandoned">Carros abandonados (+30 min sin pagar)</SelectItem>
               <SelectItem value="pending">Pendientes</SelectItem>
               <SelectItem value="rejected">Rechazados</SelectItem>
               <SelectItem value="cancelled">Cancelados</SelectItem>
@@ -240,7 +247,7 @@ export default function AdminTallerInscripciones() {
         </div>
       </Card>
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-4">
         <Card className="p-4">
           <p className="text-xs text-muted-foreground">Inscripciones</p>
           <p className="text-2xl font-bold">{filtered.length}</p>
@@ -252,10 +259,15 @@ export default function AdminTallerInscripciones() {
           </p>
         </Card>
         <Card className="p-4">
+          <p className="text-xs text-muted-foreground">Carros abandonados</p>
+          <p className="text-2xl font-bold">{rows.filter(isAbandoned).length}</p>
+        </Card>
+        <Card className="p-4">
           <p className="text-xs text-muted-foreground">Recaudado</p>
           <p className="text-2xl font-bold">${totalPagado.toLocaleString("es-CL")}</p>
         </Card>
       </div>
+
 
       {loading ? (
         <div className="flex justify-center py-20">
