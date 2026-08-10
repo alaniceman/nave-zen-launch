@@ -247,7 +247,7 @@ export default function AdminTallerInscripciones() {
         </div>
       </Card>
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-4">
         <Card className="p-4">
           <p className="text-xs text-muted-foreground">Inscripciones</p>
           <p className="text-2xl font-bold">{filtered.length}</p>
@@ -259,10 +259,15 @@ export default function AdminTallerInscripciones() {
           </p>
         </Card>
         <Card className="p-4">
+          <p className="text-xs text-muted-foreground">Carros abandonados</p>
+          <p className="text-2xl font-bold">{rows.filter(isAbandoned).length}</p>
+        </Card>
+        <Card className="p-4">
           <p className="text-xs text-muted-foreground">Recaudado</p>
           <p className="text-2xl font-bold">${totalPagado.toLocaleString("es-CL")}</p>
         </Card>
       </div>
+
 
       {loading ? (
         <div className="flex justify-center py-20">
