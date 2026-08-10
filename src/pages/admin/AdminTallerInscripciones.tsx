@@ -224,6 +224,7 @@ export default function AdminTallerInscripciones() {
             <SelectContent>
               <SelectItem value="all">Todos</SelectItem>
               <SelectItem value="paid">Pagados</SelectItem>
+              <SelectItem value="abandoned">Carros abandonados (+30 min sin pagar)</SelectItem>
               <SelectItem value="pending">Pendientes</SelectItem>
               <SelectItem value="rejected">Rechazados</SelectItem>
               <SelectItem value="cancelled">Cancelados</SelectItem>
