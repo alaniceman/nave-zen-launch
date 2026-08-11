@@ -44,7 +44,7 @@ export const SocialProofStrip = ({
           <div className="flex items-center gap-3 flex-shrink-0">
             <Stars />
             <p className="text-sm font-inter text-primary font-semibold whitespace-nowrap">
-              {reviewTotal}+ reseñas de la comunidad
+              64+ reseñas de la comunidad
             </p>
           </div>
 
