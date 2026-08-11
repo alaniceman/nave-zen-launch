@@ -12,8 +12,9 @@ import { NextClassWidget } from "@/components/NextClassWidget";
 import { AskNaveBar } from "@/components/AskNaveBar";
 
 import { ReviewsTrustBar } from "@/components/ReviewsTrustBar";
+import { SocialProofStrip } from "@/components/SocialProofStrip";
 import { Badge } from "@/components/ui/badge";
-import { Flower2, Flame, Wind, Sun, Zap, Heart, Check, Star, Sparkles, ArrowRight, Snowflake } from "lucide-react";
+import { Flower2, Flame, Wind, Sun, Zap, Heart, Check, Star, Sparkles, ArrowRight, Snowflake, MapPin, Clock } from "lucide-react";
 
 import studioCorazon from "@/assets/studio-corazon.webp.asset.json";
 import studioIceSonrisa from "@/assets/studio-ice-sonrisa.webp.asset.json";
@@ -321,61 +322,63 @@ const YogaLasCondes = () => {
       </Helmet>
 
       <main>
-        {/* Hero — full viewport with gradient overlay */}
-        <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
+        {/* Hero compacto — respuesta directa a la intención de búsqueda */}
+        <section className="relative flex items-center justify-center overflow-hidden min-h-[62vh] md:min-h-[70vh]">
           <img
             src="/lovable-uploads/82672388-9723-4aee-a1f2-ac72618cd26a.png"
             alt="Sala de Yoga de Nave Studio en Las Condes"
-            className="absolute inset-0 w-full h-full object-cover scale-105"
+            className="absolute inset-0 w-full h-full object-cover"
+            width={1600}
+            height={900}
             {...({ fetchpriority: "high" } as any)}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-primary/70 via-primary/50 to-primary/80" />
-          <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-            <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm text-white/90 text-sm px-4 py-1.5 rounded-full mb-6 border border-white/20">
-              <Sparkles className="w-4 h-4" />
-              Clases de lunes a domingo · Plan de prueba 7 días $9.900
-            </div>
-            <h1 className="text-5xl md:text-7xl font-bold text-white font-space mb-5 leading-tight tracking-tight">
-              Yoga en<br />Las Condes
+          <div className="absolute inset-0 bg-gradient-to-b from-primary/75 via-primary/55 to-primary/80" />
+          <div className="relative z-10 text-center px-6 max-w-3xl mx-auto py-16 md:py-20">
+            <h1 className="text-4xl md:text-6xl font-bold text-white font-space mb-4 leading-[1.1] tracking-tight">
+              Yoga en Las Condes
             </h1>
-            <p className="text-lg md:text-xl text-white/80 font-inter mb-2 font-light">
-              Nave Studio
+            <p className="text-base md:text-lg text-white/80 font-inter mb-6">
+              Yin · Vinyasa · Vinyasa Somático · Integral · Power · Power Vinyasa
             </p>
-            <p className="text-base md:text-lg text-white/60 font-inter mb-6 tracking-wide">
-              Yin · Yang · Vinyasa · Vinyasa Somático · Integral · Power · Power Vinyasa
-            </p>
-            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-white/85 text-xs md:text-sm px-4 py-1.5 rounded-full mb-10 border border-white/15">
-              <Snowflake className="w-3.5 h-3.5" />
-              Complementa tu práctica con Ice Bath a 3°C (opcional)
-            </div>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+
+            {/* Datos duros: presencial, duración, oferta de entrada */}
+            <ul className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 mb-8 text-white/85 font-inter text-xs md:text-sm">
+              <li className="inline-flex items-center gap-1.5">
+                <MapPin className="w-4 h-4" /> Antares 259, Las Condes
+              </li>
+              <li className="inline-flex items-center gap-1.5">
+                <Clock className="w-4 h-4" /> Clases presenciales de 60 min
+              </li>
+              <li className="inline-flex items-center gap-1.5">
+                <Snowflake className="w-4 h-4" /> Ice Bath a 3 °C opcional
+              </li>
+            </ul>
+
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <a
                 href="/plan-de-prueba"
-                className="bg-accent hover:bg-accent/90 text-white rounded-full px-10 py-4 font-semibold transition-all duration-300 hover:scale-105 hover:shadow-xl shadow-lg font-inter inline-flex items-center justify-center text-lg"
+                onClick={handleTrialClick}
+                className="bg-accent hover:bg-accent/90 text-white rounded-full px-8 py-3.5 font-semibold transition-all duration-300 hover:scale-105 shadow-lg font-inter inline-flex items-center justify-center"
               >
-                Activa tu plan de prueba
+                Plan de prueba desde $9.900
               </a>
               <a
                 href="#horarios-yoga"
-                className="border-2 border-white/40 text-white hover:bg-white/10 rounded-full px-10 py-4 font-medium transition-all duration-300 font-inter inline-flex items-center justify-center backdrop-blur-sm"
+                className="border-2 border-white/40 text-white hover:bg-white/10 rounded-full px-8 py-3.5 font-medium transition-all duration-300 font-inter inline-flex items-center justify-center backdrop-blur-sm"
               >
-                Ver horarios
+                Ver horarios reales
               </a>
             </div>
           </div>
-          {/* Bottom fade */}
-          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-background to-transparent" />
         </section>
+
 
         <AskNaveBar />
 
-        {/* Reseñas reales de Yoga */}
 
-        <section className="py-12 md:py-16 bg-neutral-light">
-          <div className="container mx-auto px-6">
-            <ReviewsTrustBar category="Yoga" title="Lo que dicen nuestras alumnas de Yoga" />
-          </div>
-        </section>
+        {/* Prueba social alta en la página */}
+        <SocialProofStrip />
 
         {/* Estilos de Yoga */}
         <section className="py-20 md:py-28 bg-background">
@@ -430,6 +433,89 @@ const YogaLasCondes = () => {
           </div>
         </section>
 
+
+        {/* Horarios */}
+        <section id="horarios-yoga" className="py-20 md:py-28 bg-muted">
+          <div className="container mx-auto px-6 max-w-7xl">
+            <div className="text-center mb-16">
+              <p className="text-accent font-medium font-inter text-sm uppercase tracking-widest mb-3">Planifica tu semana</p>
+              <h2 className="text-3xl md:text-5xl font-bold text-primary font-space mb-5">
+                Horarios de Yoga
+              </h2>
+              <p className="text-muted-foreground font-inter text-lg">Clases de lunes a domingo en Las Condes</p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            {isScheduleLoading ? (
+              <div className="col-span-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-48 w-full rounded-2xl" />)}
+              </div>
+            ) : yogaSchedule.map((block) => (
+              <div key={block.day} className="bg-card rounded-2xl p-6 border border-border/50 hover:shadow-lg transition-all duration-300">
+                <h3 className="text-lg font-bold text-primary font-space mb-4 capitalize pb-3 border-b border-border/50">
+                  {block.dayName}
+                </h3>
+                <ul className="space-y-3">
+                  {block.items.map((item, i) => (
+                    <li key={i} className="text-sm font-inter flex items-start gap-3">
+                      <span className="font-bold text-accent min-w-[48px]">{item.time}</span>
+                      <div>
+                        <span className="text-foreground font-medium">{item.title}</span>
+                        {item.instructor && (
+                          <span className="text-muted-foreground text-xs block mt-0.5">{item.instructor}</span>
+                        )}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+            </div>
+            <div className="text-center mt-10">
+              <a
+                href="/horarios"
+                className="inline-flex items-center gap-2 text-accent hover:text-primary transition-colors font-inter font-semibold text-lg group"
+              >
+                Ver todos los horarios
+                <span className="group-hover:translate-x-1 transition-transform">→</span>
+              </a>
+            </div>
+          </div>
+        </section>
+
+
+        {/* Centro presencial en Las Condes */}
+        <section className="py-16 md:py-20 bg-background">
+          <div className="container mx-auto px-6 max-w-4xl">
+            <div className="bg-card rounded-3xl border border-border/50 p-8 md:p-10">
+              <h2 className="text-2xl md:text-3xl font-bold text-primary font-space mb-4">
+                Un centro presencial en Las Condes, no una app
+              </h2>
+              <p className="text-muted-foreground font-inter leading-relaxed mb-4">
+                Practicas en sala, en Antares 259, Las Condes — a pasos del Metro Los Domínicos y con
+                estacionamiento en el sector. Grupos reducidos (hasta 12 personas en yoga), mats, bloques,
+                cojines y mantas incluidos, y una instructora corrigiendo tu postura en vivo.
+              </p>
+              <p className="text-muted-foreground font-inter leading-relaxed mb-6">
+                Si nunca has hecho yoga, no necesitas experiencia ni flexibilidad previa: cada clase tiene
+                variaciones para principiantes y progresiones para quienes ya practican.
+              </p>
+              <div className="flex flex-wrap gap-5">
+                <a
+                  href="/conoce-el-lugar"
+                  className="inline-flex items-center gap-2 text-accent hover:text-primary font-inter font-semibold transition-colors"
+                >
+                  Conoce el lugar <ArrowRight className="w-4 h-4" />
+                </a>
+                <a
+                  href="/contacto"
+                  className="inline-flex items-center gap-2 text-primary hover:text-accent font-inter font-medium transition-colors"
+                >
+                  Cómo llegar
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
 
         {/* Ice Bath opcional — complemento del yoga */}
         <section className="py-16 md:py-20 bg-gradient-to-b from-background via-primary/5 to-background">
@@ -494,56 +580,16 @@ const YogaLasCondes = () => {
         {/* Instructores de Yoga */}
         <CoachesSection filterIds={["maral", "amanda", "mar", "vianny", "karim"]} />
 
-        {/* Horarios */}
-        <section id="horarios-yoga" className="py-20 md:py-28 bg-muted">
-          <div className="container mx-auto px-6 max-w-7xl">
-            <div className="text-center mb-16">
-              <p className="text-accent font-medium font-inter text-sm uppercase tracking-widest mb-3">Planifica tu semana</p>
-              <h2 className="text-3xl md:text-5xl font-bold text-primary font-space mb-5">
-                Horarios de Yoga
-              </h2>
-              <p className="text-muted-foreground font-inter text-lg">Clases de lunes a domingo en Las Condes</p>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-            {isScheduleLoading ? (
-              <div className="col-span-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-48 w-full rounded-2xl" />)}
-              </div>
-            ) : yogaSchedule.map((block) => (
-              <div key={block.day} className="bg-card rounded-2xl p-6 border border-border/50 hover:shadow-lg transition-all duration-300">
-                <h3 className="text-lg font-bold text-primary font-space mb-4 capitalize pb-3 border-b border-border/50">
-                  {block.dayName}
-                </h3>
-                <ul className="space-y-3">
-                  {block.items.map((item, i) => (
-                    <li key={i} className="text-sm font-inter flex items-start gap-3">
-                      <span className="font-bold text-accent min-w-[48px]">{item.time}</span>
-                      <div>
-                        <span className="text-foreground font-medium">{item.title}</span>
-                        {item.instructor && (
-                          <span className="text-muted-foreground text-xs block mt-0.5">{item.instructor}</span>
-                        )}
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-            </div>
-            <div className="text-center mt-10">
-              <a
-                href="/horarios"
-                className="inline-flex items-center gap-2 text-accent hover:text-primary transition-colors font-inter font-semibold text-lg group"
-              >
-                Ver todos los horarios
-                <span className="group-hover:translate-x-1 transition-transform">→</span>
-              </a>
-            </div>
+        {/* Reseñas reales de Yoga */}
+
+        <section className="py-12 md:py-16 bg-neutral-light">
+          <div className="container mx-auto px-6">
+            <ReviewsTrustBar category="Yoga" title="Lo que dicen nuestras alumnas de Yoga" />
           </div>
         </section>
 
         {/* Membresías Solo Yoga */}
-        <section className="py-20 md:py-28 bg-background">
+        <section id="membresias-yoga" className="py-20 md:py-28 bg-background">
           <div className="container mx-auto px-6 max-w-6xl">
             <div className="text-center mb-16">
               <p className="text-accent font-medium font-inter text-sm uppercase tracking-widest mb-3">Planes exclusivos de Yoga</p>
