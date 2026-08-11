@@ -1,5 +1,7 @@
 import { Star } from "lucide-react";
 import { ReviewsTrustBar } from "@/components/ReviewsTrustBar";
+import { REVIEWS_COUNT } from "@/data/reviews";
+
 const wimHofLogo = "/lovable-uploads/wim-hof.webp";
 const yogaAllianceLogo = "/lovable-uploads/yoga-alliance.webp";
 export const SocialProofSection = () => {
