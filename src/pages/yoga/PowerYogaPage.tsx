@@ -15,6 +15,8 @@ const DAY_NAMES: Record<string, string> = {
   jueves: "Jueves", viernes: "Viernes", sabado: "Sábado", domingo: "Domingo",
 };
 
+const FALLBACK_COACH_IDS = ["maral","amanda"];
+
 const STYLE_NAME = "Power Yoga";
 const PAGE_TITLE = "Power Yoga en Las Condes — Fuerza y Desafío | Nave Studio";
 const META_DESC = "Clases de Power Yoga en Las Condes, Santiago. Yoga de alta intensidad enfocado en fuerza, resistencia muscular y foco mental. Plan de prueba 7 días $9.900.";

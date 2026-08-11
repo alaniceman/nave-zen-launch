@@ -15,6 +15,8 @@ const DAY_NAMES: Record<string, string> = {
   jueves: "Jueves", viernes: "Viernes", sabado: "Sábado", domingo: "Domingo",
 };
 
+const FALLBACK_COACH_IDS = ["amanda","maral"];
+
 const STYLE_NAME = "Yin Yoga";
 const PAGE_TITLE = "Yin Yoga en Las Condes — Flexibilidad y Calma | Nave Studio";
 const META_DESC = "Clases de Yin Yoga en Las Condes, Santiago. Posturas pasivas y prolongadas para soltar tensión profunda, ganar flexibilidad y regular el sistema nervioso. Plan de prueba 7 días por $9.900.";

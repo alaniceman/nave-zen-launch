@@ -15,6 +15,8 @@ const DAY_NAMES: Record<string, string> = {
   jueves: "Jueves", viernes: "Viernes", sabado: "Sábado", domingo: "Domingo",
 };
 
+const FALLBACK_COACH_IDS = ["mar","maral"];
+
 const STYLE_NAME = "Vinyasa Yoga";
 const PAGE_TITLE = "Vinyasa Yoga en Las Condes — Flujo y Respiración | Nave Studio";
 const META_DESC = "Clases de Vinyasa Yoga en Las Condes, Santiago. Flujo continuo de posturas sincronizado con la respiración para ganar fuerza, resistencia y claridad mental. Plan de prueba 7 días $9.900.";

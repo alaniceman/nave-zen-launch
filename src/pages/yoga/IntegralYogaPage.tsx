@@ -15,6 +15,8 @@ const DAY_NAMES: Record<string, string> = {
   jueves: "Jueves", viernes: "Viernes", sabado: "Sábado", domingo: "Domingo",
 };
 
+const FALLBACK_COACH_IDS = ["maral","amanda"];
+
 const STYLE_NAME = "Integral Yoga";
 const PAGE_TITLE = "Integral Yoga en Las Condes — Equilibrio Completo | Nave Studio";
 const META_DESC = "Clases de Integral Yoga en Las Condes, Santiago. Combina fuerza, flexibilidad y meditación en una práctica completa para todos los niveles. Plan de prueba 7 días $9.900.";
