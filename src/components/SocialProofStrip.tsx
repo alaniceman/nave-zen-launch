@@ -17,6 +17,8 @@ type SocialProofStripProps = {
   items?: Review[];
   /** Cantidad de citas visibles */
   count?: number;
+  /** Total de reseñas a comunicar (por defecto, el largo del set) */
+  total?: number;
   className?: string;
 };
 
@@ -27,11 +29,12 @@ type SocialProofStripProps = {
 export const SocialProofStrip = ({
   items,
   count = 3,
+  total,
   className = "",
 }: SocialProofStripProps) => {
   const source = items ?? allReviews.filter((r) => r.category === "Yoga");
   const quotes = source.slice(0, count);
-  const total = source.length;
+  const reviewTotal = total ?? source.length;
 
   return (
     <section className={`bg-neutral-light border-y border-border/50 ${className}`}>
@@ -41,7 +44,7 @@ export const SocialProofStrip = ({
           <div className="flex items-center gap-3 flex-shrink-0">
             <Stars />
             <p className="text-sm font-inter text-primary font-semibold whitespace-nowrap">
-              {total}+ reseñas de la comunidad
+              {reviewTotal}+ reseñas de la comunidad
             </p>
           </div>
 

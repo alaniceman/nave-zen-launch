@@ -25,13 +25,22 @@ export function coachIdFromReviewAuthor(author: string): string | null {
  * Si no hay suficientes, completa con reseñas generales de yoga para que la
  * franja de prueba social nunca quede vacía.
  */
-export function yogaReviewsForCoaches(coachIds: string[], min = 3): Review[] {
+export function yogaReviewsForCoaches(
+  coachIds: string[],
+  min = 3
+): { items: Review[]; matched: number; total: number } {
   const yoga = allReviews.filter((r) => r.category === "Yoga");
   const matched = yoga.filter((r) => {
     const id = coachIdFromReviewAuthor(r.author);
     return id ? coachIds.includes(id) : false;
   });
-  if (matched.length >= min) return matched;
+  if (matched.length >= min) {
+    return { items: matched, matched: matched.length, total: yoga.length };
+  }
   const rest = yoga.filter((r) => !matched.includes(r));
-  return [...matched, ...rest.slice(0, min - matched.length)];
+  return {
+    items: [...matched, ...rest.slice(0, min - matched.length)],
+    matched: matched.length,
+    total: yoga.length,
+  };
 }

@@ -10,7 +10,6 @@ import { Footer } from "@/components/Footer";
 import { Skeleton } from "@/components/ui/skeleton";
 import { coachIdsFromScheduleItems } from "@/lib/coachSync";
 import { yogaReviewsForCoaches } from "@/lib/reviewFilters";
-import { reviews as allReviews } from "@/data/reviews";
 import {
   YOGA_HERO_IMAGE,
   YOGA_OG_IMAGE,
@@ -60,11 +59,9 @@ export const YogaStyleTemplate = ({ style }: { style: YogaStyle }) => {
     [schedule, style.fallbackCoachIds]
   );
 
-  const styleReviews = useMemo(() => yogaReviewsForCoaches(coachIds, 6), [coachIds]);
-  const yogaReviewCount = useMemo(
-    () => allReviews.filter((r) => r.category === "Yoga").length,
-    []
-  );
+  const reviewSet = useMemo(() => yogaReviewsForCoaches(coachIds, 6), [coachIds]);
+  const styleReviews = reviewSet.items;
+  const yogaReviewCount = reviewSet.total;
 
   const coachNames = useMemo(
     () =>
@@ -235,7 +232,7 @@ export const YogaStyleTemplate = ({ style }: { style: YogaStyle }) => {
         </section>
 
         {/* Prueba social alta en la página */}
-        <SocialProofStrip items={styleReviews} />
+        <SocialProofStrip items={styleReviews} total={yogaReviewCount} />
 
         {/* Qué es */}
         <section className="py-16 md:py-20 bg-background">
@@ -421,9 +418,9 @@ export const YogaStyleTemplate = ({ style }: { style: YogaStyle }) => {
               items={styleReviews}
               hideFilters
               title={
-                coachNames.length > 0
+                reviewSet.matched >= 3 && coachNames.length > 0
                   ? `Lo que dicen las alumnas de ${coachNames.slice(0, 2).join(" y ")}`
-                  : `Lo que dicen nuestras alumnas de ${style.name}`
+                  : `Lo que dicen nuestras alumnas de yoga`
               }
               subtitle="Reseñas reales de nuestra comunidad en Las Condes"
             />
