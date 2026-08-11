@@ -46,8 +46,9 @@ export const SocialProofSection = () => {
                 ))}
               </div>
               <p className="font-inter text-neutral-mid font-medium">
-                +200 reseñas reales
+                {REVIEWS_COUNT}+ reseñas reales
               </p>
+
             </div>
           </div>
         </div>
