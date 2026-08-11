@@ -63,7 +63,7 @@ export default function VinyasaYogaPage() {
     if (!scheduleData) return [];
     return DAY_ORDER.map((day) => {
       const items = (scheduleData.scheduleData[day] || [])
-        .filter((item: any) => /Vinyasa Yoga/i.test(item.title) && !/Somático|Power Vinyasa/i.test(item.title))
+        .filter((item: any) => /Vinyasa/i.test(item.title) && !/Power Vinyasa/i.test(item.title))
         .sort((a: any, b: any) => a.time.localeCompare(b.time));
       if (items.length === 0) return null;
       return { day, dayName: DAY_NAMES[day], items };
