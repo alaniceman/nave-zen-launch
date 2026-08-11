@@ -29,12 +29,12 @@ export const StickyMobileCTA = ({
   if (!visible) return null;
 
   return (
-    <div className="fixed bottom-0 inset-x-0 z-40 md:hidden p-3 bg-gradient-to-t from-background via-background/95 to-transparent pointer-events-none">
-      {/* pr-16 deja libre la esquina del botón flotante de WhatsApp */}
-      <div className="flex items-center pr-16">
+    // bottom-6 + pr-[5.25rem] alinea el CTA con el botón flotante de WhatsApp (right-6, 56px)
+    <div className="fixed bottom-6 inset-x-0 z-40 md:hidden px-4 pr-[5.25rem] pointer-events-none">
+      <div className="flex items-center">
         <Link
           to={to}
-          className="pointer-events-auto flex-1 text-center bg-accent hover:bg-accent/90 text-white font-inter font-semibold py-3.5 rounded-full shadow-lg transition-all duration-200 active:scale-95"
+          className="pointer-events-auto flex-1 h-14 flex items-center justify-center text-center bg-accent hover:bg-accent/90 text-white font-inter font-semibold rounded-full shadow-lg transition-all duration-200 active:scale-95"
         >
           {label}
         </Link>
