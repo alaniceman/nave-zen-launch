@@ -1,5 +1,7 @@
 import { Star } from "lucide-react";
 import { ReviewsTrustBar } from "@/components/ReviewsTrustBar";
+import { REVIEWS_COUNT } from "@/data/reviews";
+
 const wimHofLogo = "/lovable-uploads/wim-hof.webp";
 const yogaAllianceLogo = "/lovable-uploads/yoga-alliance.webp";
 export const SocialProofSection = () => {
@@ -46,8 +48,9 @@ export const SocialProofSection = () => {
                 ))}
               </div>
               <p className="font-inter text-neutral-mid font-medium">
-                +200 reseñas reales
+                {REVIEWS_COUNT}+ reseñas reales
               </p>
+
             </div>
           </div>
         </div>

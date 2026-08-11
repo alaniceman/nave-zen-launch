@@ -11,6 +11,8 @@ import { NextClassAutoWidget } from "@/components/NextClassAutoWidget"
 import { AskNaveBar } from "@/components/AskNaveBar"
 
 import { ReviewsTrustBar } from "@/components/ReviewsTrustBar"
+import { REVIEWS_COUNT } from "@/data/reviews"
+
 import { Snowflake, Wind, Dumbbell, Brain } from "lucide-react"
 
 const Experiencias = () => {
@@ -117,7 +119,7 @@ const Experiencias = () => {
   ]
 
   const stats = [
-    { number: "5.0", caption: "+200 reseñas reales" },
+    { number: "5.0", caption: `${REVIEWS_COUNT}+ reseñas reales` },
     { number: "+2.000", caption: "participantes guiados" }
   ]
 
