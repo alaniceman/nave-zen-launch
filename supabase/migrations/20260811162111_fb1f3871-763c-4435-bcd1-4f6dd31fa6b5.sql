@@ -1,0 +1,1 @@
+UPDATE public.professionals SET name = 'Mar Carrasco' WHERE name ILIKE 'Mariela Carrasco';
