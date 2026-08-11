@@ -18,8 +18,10 @@ Objetivo: subir el nivel de calidad en Google Ads para búsquedas genéricas de 
 - Auditar imágenes de instructoras, galería y reseñas: `loading="lazy"` + `width`/`height` explícitos. Hero de cada landing: `loading="eager"` + `fetchPriority="high"`.
 - Carruseles de instructoras: generar la duplicación del loop en runtime (no en el HTML inicial) para no renderizar tarjetas repetidas.
 
-**Tracking 503**
-- Reproducir en navegador y clasificar cada endpoint. Si el 503 viene del módulo "smart setup" del pixel de Meta (`mpc-prod`), se desactiva ese módulo dejando el pixel base + CAPI, que es el que sí mide. El `rmkt/collect` de Google Ads se revisa junto al `gtag` de `AW-18275451491`; si es una llamada redundante del remarketing dinámico se elimina la configuración que la dispara, cuidando no romper las conversiones actuales.
+**Tracking — fuera de esta tanda (solo diagnóstico)**
+- No se toca el pixel de Meta ni la configuración de gtag / `AW-18275451491`, y no se elimina nada que dispare `rmkt/collect`: la llamada principal del tag responde 200, así que el tag mide bien y ese 503 es de un endpoint secundario. Se revisa aparte, con verificación.
+- Si se confirma que la fuente AlbertSans desde `lf16-web-buz.capcut.com` la inyecta el módulo de Meta, solo se reporta el hallazgo; no se desactiva nada en este trabajo. Por eso el objetivo de fuentes en esta tanda es: cero peticiones de fuentes a terceros originadas por el código del sitio (Google Fonts auto-alojadas).
+
 
 **CTA fijo móvil**
 - Extender `StickyMobileCTA` a dos botones: "Plan de prueba $9.900" (primario, `/plan-de-prueba`) y "Escríbenos por WhatsApp" (secundario, `wa.me/56946120426`), con `padding-bottom` en el documento y oculto en desktop.
@@ -41,6 +43,8 @@ Se extrae un template compartido para no repetir 7 veces la misma estructura; ca
 - **Metadata**: title `"[Estilo] en Las Condes — Clases Presenciales | Nave Studio"`, description con el beneficio del estilo + "Plan de prueba 7 días $9.900. Antares 259.", canonical propio y Open Graph. Además, entrada por ruta en el script de pre-hidratación de `index.html` para que el título correcto exista también sin JS.
 - **Hero**: H1 actual + línea de datos desde la parrilla real ("Próxima clase: [día] [hora] con [instructora] · Antares 259 · 60 min · desde $49.000/mes"). Un solo CTA primario; "Ver horarios" como link de texto.
 - **Prueba social**: franja 1.4 bajo el hero, con reseñas reales filtradas por la instructora del estilo según el mapeo indicado; fallback a reseñas "Yoga" de Comunidad Nave. Texto de reseñas sin editar.
+- **Unificación de identidad previa al filtro**: Mariela Carrasco y Mar Carrasco son la misma persona. Antes de aplicar el filtro de reseñas se unifica el nombre en todo el sitio a **Mar Carrasco** (reseñas con autora "Alumna de Mariela" pasan a "Alumna de Mar", alias en `coachSync`, y cualquier otra mención en páginas o datos), sin editar el texto de las reseñas.
+
 - **Horarios**: formato hora · nombre de clase · instructora; primero coincidencias exactas del estilo y debajo un subgrupo "También con [estilo] en la clase" con las clases relacionadas. Botón "Reservar" por bloque que abre WhatsApp con mensaje prellenado.
 - **Nuevas secciones**: "Tu primera clase de [Estilo]" (4 datos), precios Solo Yoga ($49.000 / $69.000 "Más popular" / $85.000 con la nota del Plan de Prueba, reutilizando el bloque de /yoga-las-condes), FAQ del estilo en el mismo acordeón (4 preguntas, incluida la del Ice Bath opcional con el requisito de una sesión guiada previa de Método Wim Hof) y ubicación con Antares 259, Metro Los Dominicos, estacionamiento y link a Google Maps.
 - **Instructoras**: encabezado "Quién guía tu clase de [Estilo]" con subtítulo basado en las credenciales reales de su ficha.
@@ -54,10 +58,9 @@ En /yoga-las-condes y en cada página de estilo: `LocalBusiness`/`HealthClub` (N
 
 ## Verificación antes de entregar
 
+- `/yoga-las-condes` mantiene su ruta exacta y queda funcional en cada deploy (tiene campañas activas apuntando ahí): se verifica que carga correctamente después de los cambios.
 - Navegar en el navegador entre las 7 páginas de estilo y confirmar que el título de la pestaña y la meta description cambian.
-- Confirmar en la pestaña de red que no queda ninguna petición de fuentes a dominios de terceros.
-- Reportar qué eran los dos endpoints con 503 y qué se hizo con cada uno.
+- Confirmar en la pestaña de red que no queda ninguna petición de fuentes a terceros originada por el sitio.
+- Reportar el hallazgo de los dos endpoints con 503 y del origen de AlbertSans, sin cambios en tracking.
+- Sin migración a SSR / TanStack Start en este trabajo.
 
-## Nota honesta
-
-La metadata por ruta seguirá aplicándose en el cliente (más el pre-render del script de `index.html`). Para que cada página entregue su head y su contenido ya renderizados en el servidor, la app puede pasarse a la plantilla más nueva de Lovable con SSR — [lo que gana con ese cambio](https://lovable.dev/blog/building-apps-using-tanstack-start). No es obligatorio para este trabajo.
