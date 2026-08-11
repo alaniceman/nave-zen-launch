@@ -49,14 +49,22 @@ export function useScheduleEntries() {
     queryKey: ['schedule-entries'],
     queryFn: async () => {
       // We need to do a manual join since the types don't know about schedule_entries yet
-      const { data, error } = await supabase
-        .from('schedule_entries' as any)
-        .select('*, services!inner(name, description, is_trial_enabled, color_tag, duration_minutes), professionals(name)')
-        .eq('is_active', true)
-        .order('day_of_week', { ascending: true })
-        .order('start_time', { ascending: true });
+      const [{ data, error }, { data: pros }] = await Promise.all([
+        supabase
+          .from('schedule_entries' as any)
+          .select('*, services!inner(name, description, is_trial_enabled, color_tag, duration_minutes)')
+          .eq('is_active', true)
+          .order('day_of_week', { ascending: true })
+          .order('start_time', { ascending: true }),
+        // professionals is not publicly readable; use the secure RPC for id -> name
+        supabase.rpc('get_active_professionals' as any),
+      ]);
 
       if (error) throw error;
+
+      const proNames = new Map<string, string>(
+        ((pros as any[]) || []).map((p: any) => [p.id, p.name])
+      );
 
       const entries: ScheduleEntry[] = (data || []).map((row: any) => ({
         id: row.id,
@@ -72,7 +80,7 @@ export function useScheduleEntries() {
         service_description: row.services?.description || null,
         is_trial_enabled: row.services?.is_trial_enabled || false,
         color_tag: row.services?.color_tag || 'default',
-        professional_name: row.professionals?.name || null,
+        professional_name: row.professional_id ? proNames.get(row.professional_id) || null : null,
       }));
 
       // Transform to schedule data format

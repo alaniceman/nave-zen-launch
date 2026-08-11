@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { Helmet } from "react-helmet-async";
 import { useScheduleEntries } from "@/hooks/useScheduleEntries";
 import { CoachesSection } from "@/components/CoachesSection";
+import { coachIdsFromScheduleItems } from "@/lib/coachSync";
 import { Footer } from "@/components/Footer";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Zap, Check, ArrowRight } from "lucide-react";
@@ -13,6 +14,8 @@ const DAY_NAMES: Record<string, string> = {
   lunes: "Lunes", martes: "Martes", miercoles: "Miércoles",
   jueves: "Jueves", viernes: "Viernes", sabado: "Sábado", domingo: "Domingo",
 };
+
+const FALLBACK_COACH_IDS = ["maral","amanda"];
 
 const STYLE_NAME = "Power Yoga";
 const PAGE_TITLE = "Power Yoga en Las Condes — Fuerza y Desafío | Nave Studio";
@@ -66,6 +69,11 @@ export default function PowerYogaPage() {
       return { day, dayName: DAY_NAMES[day], items };
     }).filter(Boolean) as { day: string; dayName: string; items: any[] }[];
   }, [scheduleData]);
+
+  const coachIds = useMemo(
+    () => coachIdsFromScheduleItems(schedule.flatMap((b) => b.items), FALLBACK_COACH_IDS),
+    [schedule]
+  );
 
   return (
     <>
@@ -180,7 +188,7 @@ export default function PowerYogaPage() {
           </div>
         </section>
 
-        <CoachesSection filterIds={["maral"]} />
+        <CoachesSection filterIds={coachIds} />
 
         <section className="py-20 md:py-28 bg-background">
           <div className="container mx-auto px-6 max-w-3xl text-center">

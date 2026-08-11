@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { Helmet } from "react-helmet-async";
 import { useScheduleEntries } from "@/hooks/useScheduleEntries";
 import { CoachesSection } from "@/components/CoachesSection";
+import { coachIdsFromScheduleItems } from "@/lib/coachSync";
 import { Footer } from "@/components/Footer";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Wind, Check, ArrowRight } from "lucide-react";
@@ -13,6 +14,8 @@ const DAY_NAMES: Record<string, string> = {
   lunes: "Lunes", martes: "Martes", miercoles: "Miércoles",
   jueves: "Jueves", viernes: "Viernes", sabado: "Sábado", domingo: "Domingo",
 };
+
+const FALLBACK_COACH_IDS = ["mar","maral"];
 
 const STYLE_NAME = "Vinyasa Yoga";
 const PAGE_TITLE = "Vinyasa Yoga en Las Condes — Flujo y Respiración | Nave Studio";
@@ -60,12 +63,17 @@ export default function VinyasaYogaPage() {
     if (!scheduleData) return [];
     return DAY_ORDER.map((day) => {
       const items = (scheduleData.scheduleData[day] || [])
-        .filter((item: any) => /Vinyasa Yoga/i.test(item.title) && !/Somático|Power Vinyasa/i.test(item.title))
+        .filter((item: any) => /Vinyasa/i.test(item.title) && !/Power Vinyasa/i.test(item.title))
         .sort((a: any, b: any) => a.time.localeCompare(b.time));
       if (items.length === 0) return null;
       return { day, dayName: DAY_NAMES[day], items };
     }).filter(Boolean) as { day: string; dayName: string; items: any[] }[];
   }, [scheduleData]);
+
+  const coachIds = useMemo(
+    () => coachIdsFromScheduleItems(schedule.flatMap((b) => b.items), FALLBACK_COACH_IDS),
+    [schedule]
+  );
 
   return (
     <>
@@ -180,7 +188,7 @@ export default function VinyasaYogaPage() {
           </div>
         </section>
 
-        <CoachesSection filterIds={["mar"]} />
+        <CoachesSection filterIds={coachIds} />
 
         <section className="py-20 md:py-28 bg-background">
           <div className="container mx-auto px-6 max-w-3xl text-center">

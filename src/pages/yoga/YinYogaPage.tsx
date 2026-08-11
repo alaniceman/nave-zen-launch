@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { Helmet } from "react-helmet-async";
 import { useScheduleEntries } from "@/hooks/useScheduleEntries";
 import { CoachesSection } from "@/components/CoachesSection";
+import { coachIdsFromScheduleItems } from "@/lib/coachSync";
 import { Footer } from "@/components/Footer";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Flower2, Check, ArrowRight } from "lucide-react";
@@ -13,6 +14,8 @@ const DAY_NAMES: Record<string, string> = {
   lunes: "Lunes", martes: "Martes", miercoles: "Miércoles",
   jueves: "Jueves", viernes: "Viernes", sabado: "Sábado", domingo: "Domingo",
 };
+
+const FALLBACK_COACH_IDS = ["amanda","maral"];
 
 const STYLE_NAME = "Yin Yoga";
 const PAGE_TITLE = "Yin Yoga en Las Condes — Flexibilidad y Calma | Nave Studio";
@@ -66,6 +69,11 @@ export default function YinYogaPage() {
       return { day, dayName: DAY_NAMES[day], items };
     }).filter(Boolean) as { day: string; dayName: string; items: any[] }[];
   }, [scheduleData]);
+
+  const coachIds = useMemo(
+    () => coachIdsFromScheduleItems(schedule.flatMap((b) => b.items), FALLBACK_COACH_IDS),
+    [schedule]
+  );
 
   return (
     <>
@@ -188,7 +196,7 @@ export default function YinYogaPage() {
         </section>
 
         {/* Instructor */}
-        <CoachesSection filterIds={["amanda", "maral"]} />
+        <CoachesSection filterIds={coachIds} />
 
         {/* CTA */}
         <section className="py-20 md:py-28 bg-background">
