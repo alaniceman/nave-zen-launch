@@ -58,10 +58,9 @@ En /yoga-las-condes y en cada página de estilo: `LocalBusiness`/`HealthClub` (N
 
 ## Verificación antes de entregar
 
+- `/yoga-las-condes` mantiene su ruta exacta y queda funcional en cada deploy (tiene campañas activas apuntando ahí): se verifica que carga correctamente después de los cambios.
 - Navegar en el navegador entre las 7 páginas de estilo y confirmar que el título de la pestaña y la meta description cambian.
-- Confirmar en la pestaña de red que no queda ninguna petición de fuentes a dominios de terceros.
-- Reportar qué eran los dos endpoints con 503 y qué se hizo con cada uno.
+- Confirmar en la pestaña de red que no queda ninguna petición de fuentes a terceros originada por el sitio.
+- Reportar el hallazgo de los dos endpoints con 503 y del origen de AlbertSans, sin cambios en tracking.
+- Sin migración a SSR / TanStack Start en este trabajo.
 
-## Nota honesta
-
-La metadata por ruta seguirá aplicándose en el cliente (más el pre-render del script de `index.html`). Para que cada página entregue su head y su contenido ya renderizados en el servidor, la app puede pasarse a la plantilla más nueva de Lovable con SSR — [lo que gana con ese cambio](https://lovable.dev/blog/building-apps-using-tanstack-start). No es obligatorio para este trabajo.
