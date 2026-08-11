@@ -11,6 +11,8 @@ import { NextClassAutoWidget } from "@/components/NextClassAutoWidget"
 import { AskNaveBar } from "@/components/AskNaveBar"
 
 import { ReviewsTrustBar } from "@/components/ReviewsTrustBar"
+import { REVIEWS_COUNT } from "@/data/reviews"
+
 import { Snowflake, Wind, Dumbbell, Brain } from "lucide-react"
 
 const Experiencias = () => {
