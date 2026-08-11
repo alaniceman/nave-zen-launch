@@ -80,7 +80,7 @@ export function useScheduleEntries() {
         service_description: row.services?.description || null,
         is_trial_enabled: row.services?.is_trial_enabled || false,
         color_tag: row.services?.color_tag || 'default',
-        professional_name: row.professionals?.name || null,
+        professional_name: row.professional_id ? proNames.get(row.professional_id) || null : null,
       }));
 
       // Transform to schedule data format
