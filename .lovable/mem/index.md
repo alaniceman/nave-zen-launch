@@ -1,0 +1,1 @@
+- [architecture/schedule-instructor-names-rpc](mem://architecture/schedule-instructor-names-rpc) — Instructores vía RPC get_active_professionals; landings de yoga derivan coaches del horario real
