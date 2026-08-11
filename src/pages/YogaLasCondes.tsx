@@ -13,6 +13,7 @@ import { AskNaveBar } from "@/components/AskNaveBar";
 
 import { ReviewsTrustBar } from "@/components/ReviewsTrustBar";
 import { SocialProofStrip } from "@/components/SocialProofStrip";
+import { reviews as allReviews } from "@/data/reviews";
 import { Badge } from "@/components/ui/badge";
 import { Flower2, Flame, Wind, Sun, Zap, Heart, Check, Star, Sparkles, ArrowRight, Snowflake, MapPin, Clock } from "lucide-react";
 
@@ -65,14 +66,16 @@ const yogaStyles = [
   {
     name: "Vinyasa Somático",
     icon: Heart,
-    description: "Regulá tu sistema nervioso a través del flujo de movimiento, respiración, vibración y quietud. Una invitación a habitar tu cuerpo y soltar lo rígido.",
+    description: "Regula tu sistema nervioso a través del flujo de movimiento, respiración, vibración y quietud. Una invitación a habitar tu cuerpo y soltar lo rígido.",
     benefits: ["Regulación nerviosa", "Soltar tensión profunda", "Conexión cuerpo-mente"],
+    href: "/yoga/vinyasa-somatico-las-condes",
   },
   {
     name: "Power Vinyasa",
     icon: Zap,
     description: "Una práctica dinámica y energizante para desarrollar fuerza, movilidad y conciencia corporal, con opciones y progresiones para adaptar cada postura a tu nivel sin perder el disfrute del proceso.",
     benefits: ["Fuerza y movilidad", "Progresiones adaptables", "Conciencia corporal"],
+    href: "/yoga/power-vinyasa-las-condes",
   },
 ];
 
@@ -151,9 +154,14 @@ const DAY_NAMES_YOGA: Record<string, string> = {
   jueves: 'Jueves', viernes: 'Viernes', sabado: 'Sábado', domingo: 'Domingo',
 };
 
+const yogaReviewsAll = allReviews.filter(r => r.category === "Yoga");
+const yogaReviewsCount = yogaReviewsAll.length;
+const topYogaReviews = yogaReviewsAll.slice(0, 3);
+
 const structuredDataYoga = {
   "@context": "https://schema.org",
-  "@type": "SportsActivityLocation",
+  "@type": ["LocalBusiness", "SportsActivityLocation"],
+  "@id": "https://studiolanave.com/#organization",
   "name": "Nave Studio — Yoga en Las Condes",
   "description": "Clases de Yoga en Las Condes: Yin, Yang, Vinyasa, Vinyasa Somático, Integral y Power Yoga. Plan de prueba 7 días por $9.900.",
   "url": "https://studiolanave.com/yoga-las-condes",
@@ -174,6 +182,18 @@ const structuredDataYoga = {
   "openingHours": ["Mo-Fr 06:00-22:00", "Sa-Su 07:00-20:00"],
   "priceRange": "$$",
   "image": "https://studiolanave.com/lovable-uploads/82672388-9723-4aee-a1f2-ac72618cd26a.png",
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "5",
+    "bestRating": "5",
+    "reviewCount": yogaReviewsCount
+  },
+  "review": topYogaReviews.map(r => ({
+    "@type": "Review",
+    "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+    "author": { "@type": "Person", "name": r.author },
+    "reviewBody": r.text
+  })),
   "hasOfferCatalog": {
     "@type": "OfferCatalog",
     "name": "Clases de Yoga",
