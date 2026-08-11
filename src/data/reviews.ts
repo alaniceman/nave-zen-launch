@@ -21,7 +21,7 @@ export const reviews: Review[] = [
   { id: 2, text: "Una calma desde la entrada a la salida. La Sol lo hace todo por convencerte de que puedes hacerlo y mas. Y efectivamente lo hice y mas!", author: "Alumna de Sol", category: "Ice Bath" },
   { id: 3, text: "Amanda fue un amor de persona y la clase conjunto al lugar es hermoso ; muchas gracias seguro volveré 💌❤️", author: "Alumna de Amanda", category: "Yoga" },
   { id: 4, text: "Maravillosa clase, Maral es la mejor!", author: "Alumna de Maral", category: "Yoga" },
-  { id: 5, text: "Excelente clase! Mariela es seca, muy buena profesora, sus clases son dinámicas y desafiantes", author: "Alumna de Mariela", category: "Yoga" },
+  { id: 5, text: "Excelente clase! Mar es seca, muy buena profesora, sus clases son dinámicas y desafiantes", author: "Alumna de Mar", category: "Yoga" },
   { id: 6, text: "Buena clase y muy buen lugar, recomiendo", author: "Comunidad Nave", category: "Experiencia" },
   { id: 7, text: "me gusto mucho! muy relajante, lindo y limpio el lugar, la profesora muy simpática", author: "Comunidad Nave", category: "Yoga" },
   { id: 8, text: "Preciosisima clase con Amanda!! de inicio a fin 💖 totalmente recomendada", author: "Alumna de Amanda", category: "Yoga" },

@@ -63,10 +63,7 @@ const AgendaSuccess = lazy(() => import("./pages/AgendaSuccess"));
 const AgendaFailure = lazy(() => import("./pages/AgendaFailure"));
 const AgendaPending = lazy(() => import("./pages/AgendaPending"));
 const YogaLasCondes = lazy(() => import("./pages/YogaLasCondes"));
-const YinYogaPage = lazy(() => import("./pages/yoga/YinYogaPage"));
-const VinyasaYogaPage = lazy(() => import("./pages/yoga/VinyasaYogaPage"));
-const PowerYogaPage = lazy(() => import("./pages/yoga/PowerYogaPage"));
-const IntegralYogaPage = lazy(() => import("./pages/yoga/IntegralYogaPage"));
+const YogaStylePage = lazy(() => import("./pages/yoga/YogaStylePage"));
 const BlogYinYoga = lazy(() => import("./pages/blog/BlogYinYoga"));
 const BlogVinyasaYoga = lazy(() => import("./pages/blog/BlogVinyasaYoga"));
 const BlogPowerYoga = lazy(() => import("./pages/blog/BlogPowerYoga"));
@@ -203,10 +200,7 @@ const App = () => {
             <Route path="/agenda-nave-studio/:professionalSlug/:dateParam/:timeParam" element={<AgendaNaveStudio />} />
             
             <Route path="/yoga-las-condes" element={<YogaLasCondes />} />
-            <Route path="/yoga/yin-yoga-las-condes" element={<YinYogaPage />} />
-            <Route path="/yoga/vinyasa-yoga-las-condes" element={<VinyasaYogaPage />} />
-            <Route path="/yoga/power-yoga-las-condes" element={<PowerYogaPage />} />
-            <Route path="/yoga/integral-yoga-las-condes" element={<IntegralYogaPage />} />
+            <Route path="/yoga/:slug" element={<YogaStylePage />} />
             <Route path="/blog/yin-yoga-beneficios-movilidad-flexibilidad" element={<BlogYinYoga />} />
             <Route path="/blog/vinyasa-yoga-flujo-respiracion-las-condes" element={<BlogVinyasaYoga />} />
             <Route path="/blog/power-yoga-fuerza-resistencia" element={<BlogPowerYoga />} />
