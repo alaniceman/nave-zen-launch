@@ -18,8 +18,10 @@ Objetivo: subir el nivel de calidad en Google Ads para búsquedas genéricas de 
 - Auditar imágenes de instructoras, galería y reseñas: `loading="lazy"` + `width`/`height` explícitos. Hero de cada landing: `loading="eager"` + `fetchPriority="high"`.
 - Carruseles de instructoras: generar la duplicación del loop en runtime (no en el HTML inicial) para no renderizar tarjetas repetidas.
 
-**Tracking 503**
-- Reproducir en navegador y clasificar cada endpoint. Si el 503 viene del módulo "smart setup" del pixel de Meta (`mpc-prod`), se desactiva ese módulo dejando el pixel base + CAPI, que es el que sí mide. El `rmkt/collect` de Google Ads se revisa junto al `gtag` de `AW-18275451491`; si es una llamada redundante del remarketing dinámico se elimina la configuración que la dispara, cuidando no romper las conversiones actuales.
+**Tracking — fuera de esta tanda (solo diagnóstico)**
+- No se toca el pixel de Meta ni la configuración de gtag / `AW-18275451491`, y no se elimina nada que dispare `rmkt/collect`: la llamada principal del tag responde 200, así que el tag mide bien y ese 503 es de un endpoint secundario. Se revisa aparte, con verificación.
+- Si se confirma que la fuente AlbertSans desde `lf16-web-buz.capcut.com` la inyecta el módulo de Meta, solo se reporta el hallazgo; no se desactiva nada en este trabajo. Por eso el objetivo de fuentes en esta tanda es: cero peticiones de fuentes a terceros originadas por el código del sitio (Google Fonts auto-alojadas).
+
 
 **CTA fijo móvil**
 - Extender `StickyMobileCTA` a dos botones: "Plan de prueba $9.900" (primario, `/plan-de-prueba`) y "Escríbenos por WhatsApp" (secundario, `wa.me/56946120426`), con `padding-bottom` en el documento y oculto en desktop.
