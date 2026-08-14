@@ -193,6 +193,8 @@ export default function PlanDePrueba() {
             <p className="text-[#4A4A4A] text-sm leading-relaxed">
               Válido solo una vez por persona. Creado para quienes quieren conocer Nave Studio, probar nuestras clases de forma ilimitada y decidir si una membresía es el siguiente paso para su práctica.
               <br />
+              <span className="text-[#2E4D3A] font-medium">Días corridos — incluye fines de semana (hay clases sábado y domingo).</span>
+              <br />
               <span className="text-[#4A4A4A]/80 text-xs">No aplica para alumnos activos o personas que ya hayan utilizado un plan de prueba anteriormente.</span>
             </p>
           </div>
@@ -288,6 +290,11 @@ export default function PlanDePrueba() {
                     <span className="text-[#4A4A4A]/90">No aplica para alumnos activos o personas que ya hayan utilizado un plan de prueba anteriormente. Si tienes dudas sobre tu caso, escríbenos por WhatsApp antes de comprar.</span>
                   </>
                 ),
+              },
+              {
+                title: "¿Los días son corridos? ¿Incluye fines de semana?",
+                content:
+                  "Sí. El plan de prueba se cuenta en días corridos: si activas un plan de 7 días un lunes, vence el domingo siguiente. Incluye sábados y domingos, porque tenemos clases los fines de semana también — así puedes aprovechar tu prueba al máximo.",
               },
               {
                 title: "Qué es Nave Studio",
