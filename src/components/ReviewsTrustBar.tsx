@@ -68,8 +68,13 @@ export const ReviewsTrustBar = ({
     let list = sourceReviews;
     if (category) list = list.filter((r) => r.category === category);
     if (coachesOnly) list = list.filter((r) => /^Alumn[oa] de /i.test(r.author));
-    return shuffleArray(list);
+    // Destacadas primero (rotando dentro de cada grupo), luego el resto
+    return [
+      ...shuffleArray(list.filter((r) => r.featured)),
+      ...shuffleArray(list.filter((r) => !r.featured)),
+    ];
   }, [category, coachesOnly, items]);
+
 
   const filterValues = useMemo<Array<"Todas" | Review["category"]>>(
     () => (filters ? ["Todas", ...filters] : DEFAULT_FILTERS),

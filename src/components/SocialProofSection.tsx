@@ -21,7 +21,12 @@ export const SocialProofSection = () => {
           </h2>
         </div>
 
-        <ReviewsTrustBar />
+        <ReviewsTrustBar
+          title="Lo que dice la comunidad"
+          subtitle={`${REVIEWS_COUNT}+ reseñas reales de Yoga, Ice Bath y experiencias completas en Antares 259, Las Condes. Filtra por lo que quieras vivir.`}
+          filters={["Yoga", "Ice Bath", "Experiencia"]}
+        />
+
 
         {/* Certificaciones */}
         <div className="text-center mb-8 md:mb-16">
