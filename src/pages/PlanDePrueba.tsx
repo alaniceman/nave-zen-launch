@@ -126,6 +126,7 @@ export default function PlanDePrueba() {
               "Acceso a todas las clases disponibles durante tu período de prueba.",
               "Yoga + Criomedicina / Método Wim Hof.",
               "Tú eliges la fecha de inicio.",
+              "7 o 15 días corridos — incluye fines de semana (hay clases sábado y domingo).",
               "Ideal para conocer la Nave antes de elegir una membresía.",
             ].map((t) => (
               <li
@@ -150,7 +151,7 @@ export default function PlanDePrueba() {
             <p className="text-sm font-semibold tracking-widest text-[#2E4D3A] uppercase mb-3">Planes</p>
             <h2 className="text-3xl md:text-5xl font-bold text-[#1F3A2A] mb-4">Elige tu plan de prueba</h2>
             <p className="text-[#4A4A4A] max-w-xl mx-auto text-lg">
-              Acceso ilimitado durante tu período. Eliges cuándo empezar.
+              Acceso ilimitado durante tu período — días corridos, con clases también los fines de semana.
             </p>
           </div>
 
@@ -165,7 +166,7 @@ export default function PlanDePrueba() {
               features={[
                 "Todas las clases de Yoga",
                 "Criomedicina / Método Wim Hof",
-                "Acceso por 7 días",
+                "Acceso por 7 días corridos (incluye fines de semana)",
                 "Elige la fecha de inicio",
               ]}
             />
@@ -180,7 +181,7 @@ export default function PlanDePrueba() {
               features={[
                 "Todas las clases de Yoga",
                 "Criomedicina / Método Wim Hof",
-                "Acceso por 15 días",
+                "Acceso por 15 días corridos (incluye fines de semana)",
                 "Elige la fecha de inicio",
               ]}
             />
