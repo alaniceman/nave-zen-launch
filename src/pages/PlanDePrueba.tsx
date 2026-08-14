@@ -126,6 +126,7 @@ export default function PlanDePrueba() {
               "Acceso a todas las clases disponibles durante tu período de prueba.",
               "Yoga + Criomedicina / Método Wim Hof.",
               "Tú eliges la fecha de inicio.",
+              "7 o 15 días corridos — incluye fines de semana (hay clases sábado y domingo).",
               "Ideal para conocer la Nave antes de elegir una membresía.",
             ].map((t) => (
               <li
@@ -150,7 +151,7 @@ export default function PlanDePrueba() {
             <p className="text-sm font-semibold tracking-widest text-[#2E4D3A] uppercase mb-3">Planes</p>
             <h2 className="text-3xl md:text-5xl font-bold text-[#1F3A2A] mb-4">Elige tu plan de prueba</h2>
             <p className="text-[#4A4A4A] max-w-xl mx-auto text-lg">
-              Acceso ilimitado durante tu período. Eliges cuándo empezar.
+              Acceso ilimitado durante tu período — días corridos, con clases también los fines de semana.
             </p>
           </div>
 
@@ -165,7 +166,7 @@ export default function PlanDePrueba() {
               features={[
                 "Todas las clases de Yoga",
                 "Criomedicina / Método Wim Hof",
-                "Acceso por 7 días",
+                "Acceso por 7 días corridos (incluye fines de semana)",
                 "Elige la fecha de inicio",
               ]}
             />
@@ -180,7 +181,7 @@ export default function PlanDePrueba() {
               features={[
                 "Todas las clases de Yoga",
                 "Criomedicina / Método Wim Hof",
-                "Acceso por 15 días",
+                "Acceso por 15 días corridos (incluye fines de semana)",
                 "Elige la fecha de inicio",
               ]}
             />
@@ -191,6 +192,8 @@ export default function PlanDePrueba() {
             <p className="text-[#1F3A2A] font-semibold mb-1">Plan de prueba para nuevos alumnos</p>
             <p className="text-[#4A4A4A] text-sm leading-relaxed">
               Válido solo una vez por persona. Creado para quienes quieren conocer Nave Studio, probar nuestras clases de forma ilimitada y decidir si una membresía es el siguiente paso para su práctica.
+              <br />
+              <span className="text-[#2E4D3A] font-medium">Días corridos — incluye fines de semana (hay clases sábado y domingo).</span>
               <br />
               <span className="text-[#4A4A4A]/80 text-xs">No aplica para alumnos activos o personas que ya hayan utilizado un plan de prueba anteriormente.</span>
             </p>
@@ -287,6 +290,11 @@ export default function PlanDePrueba() {
                     <span className="text-[#4A4A4A]/90">No aplica para alumnos activos o personas que ya hayan utilizado un plan de prueba anteriormente. Si tienes dudas sobre tu caso, escríbenos por WhatsApp antes de comprar.</span>
                   </>
                 ),
+              },
+              {
+                title: "¿Los días son corridos? ¿Incluye fines de semana?",
+                content:
+                  "Sí. El plan de prueba se cuenta en días corridos: si activas un plan de 7 días un lunes, vence el domingo siguiente. Incluye sábados y domingos, porque tenemos clases los fines de semana también — así puedes aprovechar tu prueba al máximo.",
               },
               {
                 title: "Qué es Nave Studio",
