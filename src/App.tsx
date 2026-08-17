@@ -220,8 +220,13 @@ const App = () => {
             <Route path="/tienda/failure" element={<TiendaFailure />} />
             <Route path="/tienda/pending" element={<TiendaPending />} />
 
+            {/* OAuth (agent integrations) */}
+            <Route path="/.lovable/oauth/consent" element={<OAuthConsent />} />
+            <Route path="/login" element={<Login />} />
+
             {/* Admin Routes */}
             <Route path="/admin/login" element={<AdminLogin />} />
+
             <Route path="/admin" element={<ProtectedRoute requireAdmin><AdminLayout /></ProtectedRoute>}>
               <Route index element={<AdminDashboard />} />
               <Route path="dashboard" element={<AdminDashboard />} />
