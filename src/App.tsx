@@ -81,6 +81,8 @@ const Tienda = lazy(() => import("./pages/Tienda"));
 const TiendaSuccess = lazy(() => import("./pages/TiendaSuccess"));
 const TiendaFailure = lazy(() => import("./pages/TiendaFailure"));
 const TiendaPending = lazy(() => import("./pages/TiendaPending"));
+const OAuthConsent = lazy(() => import("./pages/OAuthConsent"));
+const Login = lazy(() => import("./pages/Login"));
 
 // Lazy-loaded admin pages
 const AdminLogin = lazy(() => import("./pages/admin/Login"));
