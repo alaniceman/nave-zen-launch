@@ -18,7 +18,7 @@ const PROMO_PRICE = 40000;
 const SAVINGS = ORIGINAL_PRICE - PROMO_PRICE;
 
 export default function SanValentin() {
-  const { trackViewContent, trackInitiateCheckout } = useFacebookPixel();
+  const { trackViewContent } = useFacebookPixel();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",

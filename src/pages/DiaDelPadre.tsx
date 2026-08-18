@@ -15,7 +15,7 @@ const DIA_PADRE_PACKAGE_ID = "569236af-95ba-4515-8e85-f5c8c6e2a53a";
 const PRICE = 45000;
 
 export default function DiaDelPadre() {
-  const { trackViewContent, trackInitiateCheckout } = useFacebookPixel();
+  const { trackViewContent } = useFacebookPixel();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({ name: "", email: "", phone: "" });
 

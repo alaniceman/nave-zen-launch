@@ -15,7 +15,7 @@ const DIA_MADRE_PACKAGE_ID = "438912c4-213d-43a9-b0e5-d952540f1ff9";
 const PRICE = 45000;
 
 export default function DiaDeLaMadre() {
-  const { trackViewContent, trackInitiateCheckout } = useFacebookPixel();
+  const { trackViewContent } = useFacebookPixel();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({ name: "", email: "", phone: "" });
 

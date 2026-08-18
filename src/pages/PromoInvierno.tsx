@@ -17,7 +17,7 @@ const PACKAGE_ID = "577d13fc-590e-4e9f-a99e-18cc1e62e414";
 const PRICE = 60000;
 
 export default function PromoInvierno() {
-  const { trackViewContent, trackInitiateCheckout } = useFacebookPixel();
+  const { trackViewContent } = useFacebookPixel();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({ name: "", email: "", phone: "" });
 

@@ -27,7 +27,7 @@ function getTimeLeft() {
 }
 
 export default function Icefest() {
-  const { trackViewContent, trackInitiateCheckout } = useFacebookPixel();
+  const { trackViewContent } = useFacebookPixel();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({ name: "", email: "", phone: "" });
   const [timeLeft, setTimeLeft] = useState(getTimeLeft());

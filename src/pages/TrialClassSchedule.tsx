@@ -23,21 +23,6 @@ export default function TrialClassSchedule() {
   }, []);
 
   const goToForm = () => {
-    if (selectedClass) {
-      trackMetaClientEvent('InitiateCheckout', {
-        contentName: selectedClass.title,
-        contentCategory: 'trial_class',
-        value: 0,
-        currency: 'CLP',
-        funnel: 'trial_class',
-        pixelParams: {
-          content_name: selectedClass.title,
-          content_category: 'trial_class',
-          currency: 'CLP',
-          value: 0,
-        },
-      });
-    }
     setStep("form");
   };
 

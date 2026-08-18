@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Footer } from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
+import { trackMetaClientEvent, deterministicEventId } from "@/lib/metaTracking";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
@@ -38,7 +39,7 @@ const packages = [
 
 
 export default function MarzoReset() {
-  const { trackViewContent, trackInitiateCheckout } = useFacebookPixel();
+  const { trackViewContent } = useFacebookPixel();
   const [isLoading, setIsLoading] = useState<string | null>(null);
   const [selectedPackage, setSelectedPackage] = useState(PACKAGE_3_ID);
   const [formData, setFormData] = useState({ name: "", email: "", phone: "" });
@@ -67,13 +68,6 @@ export default function MarzoReset() {
     const pkg = packages.find((p) => p.id === selectedPackage)!;
     setIsLoading(pkg.id);
 
-    trackInitiateCheckout({
-      content_name: `Marzo Reset - ${pkg.sessions} Sesiones`,
-      content_type: "product",
-      value: pkg.price,
-      currency: "CLP"
-    });
-
     try {
       const { data, error } = await supabase.functions.invoke("purchase-session-package", {
         body: {
@@ -92,6 +86,36 @@ export default function MarzoReset() {
         window.location.href = `/giftcards/success?order=${data.orderId}`;
         return;
       }
+      // InitiateCheckout: sólo con orden de pago real creada (valor final > 0).
+      if (data?.orderId && data?.initPoint) {
+        const finalValue = typeof data.finalPrice === "number" ? data.finalPrice : pkg.price;
+        if (finalValue > 0) {
+          trackMetaClientEvent("InitiateCheckout", {
+            eventId: deterministicEventId("initiatecheckout-package", data.orderId),
+            userEmail: formData.email,
+            userName: formData.name,
+            userPhone: formData.phone,
+            contentName: `Marzo Reset - ${pkg.sessions} Sesiones`,
+            contentType: "product",
+            contentCategory: "package",
+            contentIds: [pkg.id],
+            numItems: 1,
+            value: finalValue,
+            currency: "CLP",
+            funnel: "package",
+            entityType: "package_order",
+            entityId: data.orderId,
+            pixelParams: {
+              content_name: `Marzo Reset - ${pkg.sessions} Sesiones`,
+              content_category: "package",
+              content_ids: [pkg.id],
+              currency: "CLP",
+              value: finalValue,
+            },
+          });
+        }
+      }
+
 
       if (data?.initPoint) {
         window.location.href = data.initPoint;
