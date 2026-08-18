@@ -525,7 +525,13 @@ const Planes = () => {
                 27 sesiones en 90 días · 2/sem · plan trimestral con ahorro — ¡la mejor oferta!
               </p>
               <div className="text-3xl font-bold text-foreground">$199.000</div>
-              <Button className="w-full bg-primary hover:bg-primary/90 text-white font-inter font-medium" data-checkout-url="https://boxmagic.cl/market/plan/WkD17d743z" data-plan="Misión 90 Órbita">
+              <Button
+                className="w-full bg-primary hover:bg-primary/90 text-white font-inter font-medium"
+                data-checkout-url="https://boxmagic.cl/market/plan/WkD17d743z"
+                data-plan="Misión 90 Órbita"
+                onClick={() => trackPlanCheckout("Misión 90 Órbita", "https://boxmagic.cl/market/plan/WkD17d743z", 199000)}
+              >
+
                 Comenzar misión
               </Button>
             </CardContent>
