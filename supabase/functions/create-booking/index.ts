@@ -53,6 +53,9 @@ const bookingSchema = z.object({
   customerComments: z.string().max(500).optional(),
   couponCode: z.string().optional().nullable(),
   sessionCode: z.string().optional().nullable(),
+  fbp: z.string().max(255).optional(),
+  fbc: z.string().max(500).optional(),
+  eventSourceUrl: z.string().max(2000).optional(),
 });
 
 serve(async (req) => {
@@ -394,6 +397,16 @@ serve(async (req) => {
         original_price: originalPrice,
         final_price: finalPrice,
         session_code_id: sessionCodeId,
+        meta_context: {
+          fbp: validatedData.fbp ?? null,
+          fbc: validatedData.fbc ?? null,
+          event_source_url: validatedData.eventSourceUrl ?? null,
+          client_ip_address:
+            req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+            req.headers.get("cf-connecting-ip") ||
+            null,
+          client_user_agent: req.headers.get("user-agent") || null,
+        },
       })
       .select()
       .single();
