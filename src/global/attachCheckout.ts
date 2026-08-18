@@ -3,9 +3,14 @@ import { toast } from "@/components/ui/use-toast";
 export type CheckoutClickDetails = {
   url: string;
   plan?: string | null;
+  /** valor del plan en CLP, si el botón lo declara vía data-checkout-value */
+  value?: number;
+  /** true si el origen ya emitió su propio InitiateCheckout (data-no-meta-track) */
+  skipTracking: boolean;
   element: HTMLElement;
   event: MouseEvent;
 };
+
 
 // Attaches a delegated click handler for any element matching [data-checkout-url]
 export function attachCheckoutRedirect(
