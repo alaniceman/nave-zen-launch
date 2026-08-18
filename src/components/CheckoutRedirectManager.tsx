@@ -9,26 +9,28 @@ export function CheckoutRedirectManager() {
   const { isOpen, checkoutUrl, plan, start, cancel, onOpenChange } = useCheckoutRedirect();
 
   useEffect(() => {
-    const detach = attachCheckoutRedirect(({ url, plan, value, skipTracking }) => {
+    const detach = attachCheckoutRedirect(({ url, plan, value, contentId, skipTracking }) => {
       // InitiateCheckout exactamente una vez, al activarse el redirect real.
       // Los flujos que ya lo emiten (formularios) marcan data-no-meta-track.
       if (!skipTracking) {
         const name = plan || "Checkout BoxMagic";
+        // content_id semántico y estable cuando existe; la URL es el último recurso.
+        const stableId = contentId || plan || url;
         trackMetaClientEvent("InitiateCheckout", {
           contentName: name,
           contentType: "product",
           contentCategory: "membership",
-          contentIds: [url],
+          contentIds: [stableId],
           numItems: 1,
           value,
           currency: "CLP",
           funnel: "membership",
           entityType: "membership_plan",
-          entityId: name,
+          entityId: stableId,
           pixelParams: {
             content_name: name,
             content_category: "membership",
-            content_ids: [url],
+            content_ids: [stableId],
             value,
             currency: "CLP",
           },
