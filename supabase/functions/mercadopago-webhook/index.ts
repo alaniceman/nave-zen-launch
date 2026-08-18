@@ -5,6 +5,23 @@ import { syncOrderToMailerLite, addSubscriberToGroups } from "../_shared/mailerl
 import { upsertCustomerAndLogEvent } from "../_shared/crm.ts";
 import { sendMetaEvent } from "../_shared/metaCapi.ts";
 
+/**
+ * Contexto de navegador capturado al crear la orden (fbp/fbc/IP/UA/url).
+ * Mejora la atribución de los eventos CAPI emitidos desde el webhook,
+ * donde el request viene de Mercado Pago y no del usuario.
+ */
+function metaCtx(raw: any) {
+  const c = (raw && typeof raw === "object") ? raw : {};
+  return {
+    fbp: c.fbp ?? undefined,
+    fbc: c.fbc ?? undefined,
+    clientIpAddress: c.client_ip_address ?? undefined,
+    clientUserAgent: c.client_user_agent ?? undefined,
+    eventSourceUrl: (typeof c.event_source_url === "string" && c.event_source_url) || undefined,
+  };
+}
+
+
 // Helper function to verify Mercado Pago webhook signature
 async function verifyMercadoPagoSignature(
   xSignature: string | null,
@@ -147,10 +164,11 @@ async function handleShopOrderPayment(
   // Meta CAPI Purchase de tienda (autoritativo tras pago approved).
   try {
     const siteUrl = (Deno.env.get("SITE_URL") || "https://studiolanave.com").replace(/\/$/, "");
+    const shopCtx = metaCtx(order.meta_context);
     await sendMetaEvent({
       eventName: "Purchase",
       eventId: `purchase-shop-${orderId}`,
-      eventSourceUrl: `${siteUrl}/tienda/success?external_reference=${orderId}`,
+      eventSourceUrl: shopCtx.eventSourceUrl || `${siteUrl}/tienda/success?external_reference=${orderId}`,
       funnel: "shop",
       entityType: "shop_order",
       entityId: orderId,
@@ -159,6 +177,10 @@ async function handleShopOrderPayment(
         phone: order.customer_phone || undefined,
         fullName: order.customer_name,
         externalId: order.customer_email,
+        fbp: shopCtx.fbp,
+        fbc: shopCtx.fbc,
+        clientIpAddress: shopCtx.clientIpAddress,
+        clientUserAgent: shopCtx.clientUserAgent,
       },
       custom: {
         value: Number(payment.transaction_amount) || order.product_price,
@@ -373,6 +395,7 @@ async function handleTallerPayment(
   // vía event_id determinista. Sólo se llega aquí con pago approved y monto validado.
   try {
     const siteUrl = (Deno.env.get("SITE_URL") || "https://studiolanave.com").replace(/\/$/, "");
+    const tallerCtx = metaCtx(insc.meta_context);
     await sendMetaEvent({
       eventName: "Purchase",
       eventId: `purchase-taller-${orderId}`,
@@ -386,6 +409,10 @@ async function handleTallerPayment(
         firstName: insc.nombre,
         lastName: insc.apellido,
         externalId: insc.email,
+        fbp: tallerCtx.fbp,
+        fbc: tallerCtx.fbc,
+        clientIpAddress: tallerCtx.clientIpAddress,
+        clientUserAgent: tallerCtx.clientUserAgent,
       },
       custom: {
         value: Number(payment.transaction_amount) || insc.amount,
@@ -723,10 +750,11 @@ async function handlePackageOrderPayment(
   try {
     const siteUrl = (Deno.env.get("SITE_URL") || "https://studiolanave.com").replace(/\/$/, "");
     const successPath = isGiftCard ? "/giftcards/success" : "/bonos/success";
+    const pkgCtx = metaCtx(order.meta_context);
     await sendMetaEvent({
       eventName: "Purchase",
       eventId: `purchase-${orderId}`,
-      eventSourceUrl: `${siteUrl}${successPath}?order=${orderId}`,
+      eventSourceUrl: pkgCtx.eventSourceUrl || `${siteUrl}${successPath}?order=${orderId}`,
       funnel: isGiftCard ? "gift_card" : "package",
       entityType: "package_order",
       entityId: orderId,
@@ -735,6 +763,10 @@ async function handlePackageOrderPayment(
         phone: order.buyer_phone || undefined,
         fullName: order.buyer_name,
         externalId: order.buyer_email,
+        fbp: pkgCtx.fbp,
+        fbc: pkgCtx.fbc,
+        clientIpAddress: pkgCtx.clientIpAddress,
+        clientUserAgent: pkgCtx.clientUserAgent,
       },
       custom: {
         value: order.final_price,
