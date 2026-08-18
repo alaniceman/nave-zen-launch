@@ -14,6 +14,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { Footer } from "@/components/Footer";
 import { PurchaseFAQ } from "@/components/PurchaseFAQ";
 import { trackMetaClientEvent, trackViewContentOnce } from "@/lib/metaTracking";
+import { deterministicEventId, getMetaBrowserContext } from "@/lib/metaPixel";
+
 const purchaseSchema = z.object({
   buyerName: z.string().min(2, "El nombre debe tener al menos 2 caracteres").max(100),
   buyerEmail: z.string().email("Email inválido").max(255),
