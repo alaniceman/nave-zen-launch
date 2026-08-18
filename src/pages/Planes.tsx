@@ -59,30 +59,10 @@ const Planes = () => {
     });
   }, []);
 
-  // InitiateCheckout sólo cuando se activa un redirect real a BoxMagic.
-  // Los checkouts con formulario (Eclipse/Órbita/Universo y Solo Yoga) lo emiten
-  // dentro de MembershipFormModal, así que aquí no se escuchan clics globales.
-  const trackPlanCheckout = (planName: string, url: string, value?: number) => {
-    trackMetaClientEvent("InitiateCheckout", {
-      contentName: planName,
-      contentType: "product",
-      contentCategory: "membership",
-      contentIds: [url],
-      numItems: 1,
-      value,
-      currency: "CLP",
-      funnel: "membership",
-      entityType: "membership_plan",
-      entityId: planName,
-      pixelParams: {
-        content_name: planName,
-        content_category: "membership",
-        content_ids: [url],
-        value,
-        currency: "CLP",
-      },
-    });
-  };
+  // InitiateCheckout se emite una sola vez al activarse el redirect real
+  // (CheckoutRedirectManager para los links directos a BoxMagic; MembershipFormModal
+  // para los flujos con formulario). Aquí no se escuchan clics globales.
+
 
   return <>
       <Helmet>
