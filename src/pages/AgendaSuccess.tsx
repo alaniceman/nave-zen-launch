@@ -15,6 +15,7 @@ interface BookingData {
   customer_name: string;
   customer_phone: string;
   final_price: number | null;
+  service_id: string;
   services: { name: string } | null;
 }
 
@@ -33,7 +34,7 @@ export default function AgendaSuccess() {
       if (externalReference) {
         const { data, error } = await supabase
           .from("bookings")
-          .select("status, customer_email, customer_name, customer_phone, final_price, services(name)")
+          .select("status, customer_email, customer_name, customer_phone, final_price, service_id, services(name)")
           .eq("id", externalReference)
           .maybeSingle();
 
@@ -50,18 +51,22 @@ export default function AgendaSuccess() {
             // (el CAPI autoritativo vive en mercadopago-webhook, no aquí).
             const eventId = deterministicEventId("purchase-booking", externalReference);
 
+            // content_ids estable: el servicio, no la reserva (igual que el CAPI).
             trackMetaEvent('Purchase', {
               value: price,
               currency: "CLP",
               content_name: serviceName,
               content_type: "product",
-              content_ids: [externalReference],
+              content_category: "booking",
+              content_ids: [bookingData.service_id],
               num_items: 1,
+              order_id: externalReference,
             }, eventId);
 
             trackMetaEvent('Schedule', {
               content_name: serviceName,
               content_category: "booking",
+              content_ids: [bookingData.service_id],
             }, deterministicEventId("schedule-booking", externalReference));
 
             trackConversion("purchase_paquete", {
