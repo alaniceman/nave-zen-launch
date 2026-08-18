@@ -208,45 +208,55 @@ export default function GiftCards() {
       return;
     }
 
-    // Track InitiateCheckout
     const pkg = packages.find(p => p.id === selectedPackage);
-    trackMetaClientEvent('InitiateCheckout', {
-      userEmail: data.buyerEmail,
-      userName: data.buyerName,
-      userPhone: data.buyerPhone,
-      contentName: pkg?.name || 'Gift Card',
-      contentType: 'product',
-      contentCategory: 'gift_card',
-      contentIds: pkg ? [pkg.id] : undefined,
-      numItems: 1,
-      value: pkg?.price_clp || 0,
-      currency: 'CLP',
-      funnel: 'gift_card',
-      entityType: 'session_package',
-      entityId: pkg?.id,
-      pixelParams: {
-        content_name: pkg?.name || 'Gift Card',
-        content_category: 'gift_card',
-        content_ids: pkg ? [pkg.id] : undefined,
-        currency: 'CLP',
-        value: pkg?.price_clp || 0,
-      },
-    });
 
     setIsSubmitting(true);
 
     try {
+      const ctx = getMetaBrowserContext();
       const { data: result, error } = await supabase.functions.invoke("purchase-session-package", {
         body: {
           packageId: selectedPackage,
           couponCode: appliedCoupon?.code,
           isGiftCard: true,
+          fbp: ctx.fbp,
+          fbc: ctx.fbc,
+          eventSourceUrl: ctx.eventSourceUrl,
           ...data,
         },
       });
 
       if (error) {
         throw new Error(error.message || "Error al procesar la compra");
+      }
+
+      // InitiateCheckout: sólo con orden creada, valor final post-cupón,
+      // event_id determinista por orden (dedupe con CAPI).
+      if (result?.orderId) {
+        const finalValue = typeof result.finalPrice === "number" ? result.finalPrice : (pkg?.price_clp || 0);
+        trackMetaClientEvent('InitiateCheckout', {
+          eventId: deterministicEventId('initiatecheckout-giftcard', result.orderId),
+          userEmail: data.buyerEmail,
+          userName: data.buyerName,
+          userPhone: data.buyerPhone,
+          contentName: pkg?.name || 'Gift Card',
+          contentType: 'product',
+          contentCategory: 'gift_card',
+          contentIds: pkg ? [pkg.id] : undefined,
+          numItems: 1,
+          value: finalValue,
+          currency: 'CLP',
+          funnel: 'gift_card',
+          entityType: 'package_order',
+          entityId: result.orderId,
+          pixelParams: {
+            content_name: pkg?.name || 'Gift Card',
+            content_category: 'gift_card',
+            content_ids: pkg ? [pkg.id] : undefined,
+            currency: 'CLP',
+            value: finalValue,
+          },
+        });
       }
 
       // Handle free order (100% discount)
@@ -261,6 +271,7 @@ export default function GiftCards() {
       } else {
         throw new Error("No se pudo generar el link de pago");
       }
+
     } catch (error: any) {
       console.error("Error purchasing gift card:", error);
       toast.error(error.message || "Error al procesar la compra");
