@@ -25,6 +25,9 @@ export function attachCheckoutRedirect(
 
     const url = el.getAttribute("data-checkout-url");
     const plan = el.getAttribute("data-plan");
+    const rawValue = el.getAttribute("data-checkout-value");
+    const parsedValue = rawValue ? Number(rawValue) : NaN;
+    const skipTracking = el.hasAttribute("data-no-meta-track");
 
     event.preventDefault();
     event.stopPropagation();
@@ -38,7 +41,15 @@ export function attachCheckoutRedirect(
       return;
     }
 
-    onFound({ url, plan, element: el, event });
+    onFound({
+      url,
+      plan,
+      value: Number.isFinite(parsedValue) && parsedValue >= 0 ? parsedValue : undefined,
+      skipTracking,
+      element: el,
+      event,
+    });
+
   };
 
   document.addEventListener("click", handleClick, true);
