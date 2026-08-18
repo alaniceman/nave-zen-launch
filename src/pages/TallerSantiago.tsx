@@ -20,6 +20,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
+import { trackMetaClientEvent } from "@/lib/metaTracking";
+import { deterministicEventId, getMetaBrowserContext } from "@/lib/metaPixel";
 import { toast } from "@/hooks/use-toast";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
 import { trackConversion } from "@/lib/gtagConversions";
@@ -297,6 +299,7 @@ const TallerSantiago = () => {
 
     setSubmitting(true);
     try {
+      const ctx = getMetaBrowserContext();
       const { data, error } = await supabase.functions.invoke("create-taller-preference", {
         body: {
           taller: reservaTaller,
@@ -305,10 +308,40 @@ const TallerSantiago = () => {
           celular,
           email,
           couponCode: appliedCoupon?.code ?? null,
+          fbp: ctx.fbp,
+          fbc: ctx.fbc,
+          eventSourceUrl: ctx.eventSourceUrl,
         },
       });
       if (error) throw error;
       if (!data?.initPoint) throw new Error(data?.error || "No se pudo iniciar el pago");
+
+      // InitiateCheckout: sólo con preferencia creada, con el monto confirmado
+      // por el servidor y content_id estable del taller.
+      trackMetaClientEvent("InitiateCheckout", {
+        eventId: deterministicEventId("initiatecheckout-taller", data.orderId),
+        userEmail: email,
+        userPhone: celular,
+        userName: `${nombre} ${apellido}`.trim(),
+        contentName: t.nombre,
+        contentType: "product",
+        contentCategory: "workshop",
+        contentIds: [`taller-whm-santiago-${reservaTaller}`],
+        numItems: 1,
+        value: typeof data.amount === "number" ? data.amount : undefined,
+        currency: "CLP",
+        funnel: "workshop",
+        entityType: "taller_inscripcion",
+        entityId: data.orderId,
+        pixelParams: {
+          content_name: t.nombre,
+          content_category: "workshop",
+          content_ids: [`taller-whm-santiago-${reservaTaller}`],
+          value: typeof data.amount === "number" ? data.amount : undefined,
+          currency: "CLP",
+        },
+      });
+
       window.location.href = data.initPoint;
     } catch (err: any) {
       console.error("Taller checkout error:", err);
