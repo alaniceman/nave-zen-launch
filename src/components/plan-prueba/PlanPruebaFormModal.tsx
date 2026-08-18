@@ -192,6 +192,7 @@ export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) 
         trigger.href = data.boxmagicUrl;
         trigger.setAttribute("data-checkout-url", data.boxmagicUrl);
         trigger.setAttribute("data-plan", PLAN_LABELS[plan]);
+        trigger.setAttribute("data-no-meta-track", "true");
         trigger.style.display = "none";
         document.body.appendChild(trigger);
         trigger.click();
