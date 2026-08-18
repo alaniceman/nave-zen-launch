@@ -13,6 +13,9 @@ const purchaseSchema = z.object({
   couponCode: z.string().optional(),
   isGiftCard: z.boolean().optional().default(false),
   promoType: z.string().optional(),
+  fbp: z.string().max(255).optional(),
+  fbc: z.string().max(500).optional(),
+  eventSourceUrl: z.string().max(2000).optional(),
 });
 
 // Sanitize phone number - keep only digits
@@ -341,6 +344,7 @@ serve(async (req) => {
           success: true,
           freeOrder: true,
           orderId: order.id,
+          finalPrice,
           message: "Compra completada con cupón de descuento 100%",
         }),
         {
@@ -430,6 +434,7 @@ serve(async (req) => {
       JSON.stringify({
         initPoint: preference.init_point,
         orderId: order.id,
+        finalPrice,
       }),
       {
         status: 200,
