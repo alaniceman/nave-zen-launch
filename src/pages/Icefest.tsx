@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Footer } from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
+import { trackMetaClientEvent, deterministicEventId } from "@/lib/metaTracking";
 import { toast } from "sonner";
 import { Navigate } from "react-router-dom";
 
@@ -65,13 +66,6 @@ export default function Icefest() {
 
     setIsLoading(true);
 
-    trackInitiateCheckout({
-      content_name: "Icefest — 6 Sesiones",
-      content_type: "product",
-      value: 60000,
-      currency: "CLP",
-    });
-
     try {
       const { data, error } = await supabase.functions.invoke("purchase-session-package", {
         body: {
@@ -90,6 +84,36 @@ export default function Icefest() {
         window.location.href = `/giftcards/success?order=${data.orderId}`;
         return;
       }
+      // InitiateCheckout: sólo con orden de pago real creada (valor final > 0).
+      if (data?.orderId && data?.initPoint) {
+        const finalValue = typeof data.finalPrice === "number" ? data.finalPrice : 60000;
+        if (finalValue > 0) {
+          trackMetaClientEvent("InitiateCheckout", {
+            eventId: deterministicEventId("initiatecheckout-package", data.orderId),
+            userEmail: formData.email,
+            userName: formData.name,
+            userPhone: formData.phone,
+            contentName: "Icefest — 6 Sesiones",
+            contentType: "product",
+            contentCategory: "package",
+            contentIds: [PACKAGE_ID],
+            numItems: 1,
+            value: finalValue,
+            currency: "CLP",
+            funnel: "package",
+            entityType: "package_order",
+            entityId: data.orderId,
+            pixelParams: {
+              content_name: "Icefest — 6 Sesiones",
+              content_category: "package",
+              content_ids: [PACKAGE_ID],
+              currency: "CLP",
+              value: finalValue,
+            },
+          });
+        }
+      }
+
 
       if (data?.initPoint) {
         window.location.href = data.initPoint;
