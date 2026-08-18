@@ -7,6 +7,8 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Loader2 } from "lucide-react";
 import type { ShopProduct } from "./ProductCard";
+import { trackMetaClientEvent } from "@/lib/metaTracking";
+import { deterministicEventId, getMetaBrowserContext } from "@/lib/metaPixel";
 
 const formatCLP = (n: number) => `$${n.toLocaleString("es-CL")}`;
 
@@ -33,16 +35,44 @@ export const BuyFormModal = ({ product, open, onOpenChange }: Props) => {
     }
     setLoading(true);
     try {
+      const ctx = getMetaBrowserContext();
       const { data, error } = await supabase.functions.invoke("create-shop-preference", {
         body: {
           productId: product.id,
           buyerName: name.trim(),
           buyerEmail: email.trim(),
           buyerPhone: phone.trim() || undefined,
+          fbp: ctx.fbp,
+          fbc: ctx.fbc,
+          eventSourceUrl: ctx.eventSourceUrl,
         },
       });
       if (error) throw error;
       if (data?.initPoint) {
+        // InitiateCheckout sólo con orden creada y link de pago real.
+        trackMetaClientEvent("InitiateCheckout", {
+          eventId: deterministicEventId("initiatecheckout-shop", data.orderId),
+          userEmail: email.trim(),
+          userName: name.trim(),
+          userPhone: phone.trim() || undefined,
+          contentName: product.name,
+          contentType: "product",
+          contentCategory: "shop",
+          contentIds: [product.id],
+          numItems: 1,
+          value: product.price,
+          currency: "CLP",
+          funnel: "shop",
+          entityType: "shop_order",
+          entityId: data.orderId,
+          pixelParams: {
+            content_name: product.name,
+            content_category: "shop",
+            content_ids: [product.id],
+            value: product.price,
+            currency: "CLP",
+          },
+        });
         window.location.href = data.initPoint;
       } else {
         throw new Error(data?.error || "No se pudo iniciar el pago");

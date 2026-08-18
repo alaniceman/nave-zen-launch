@@ -192,7 +192,7 @@ serve(async (req) => {
       .eq("id", inscripcion.id);
 
     return new Response(
-      JSON.stringify({ initPoint: preference.init_point, orderId: inscripcion.id }),
+      JSON.stringify({ initPoint: preference.init_point, orderId: inscripcion.id, amount: finalAmount }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error: any) {
