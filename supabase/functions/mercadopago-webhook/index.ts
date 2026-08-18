@@ -860,6 +860,71 @@ async function handlePackageOrderPayment(
   });
 }
 
+/**
+ * Purchase + Schedule de reserva pagada. Idempotente vía outbox (event_name,event_id).
+ */
+async function sendBookingPurchaseCapi(booking: any, payment: any, bookingId: string, supabase: any) {
+  if (!isApproved(payment)) return;
+  // Meta CAPI (autoritativo): reserva pagada => Purchase + Schedule.
+  // event_id determinista, igual al del pixel en /agenda/success.
+  try {
+    const siteUrl = (Deno.env.get("SITE_URL") || "https://studiolanave.com").replace(/\/$/, "");
+    const bookingValue = booking.final_price ?? booking.services?.price_clp ?? 0;
+    const bookingCtx = metaCtx(booking.meta_context);
+    const metaUser = {
+      email: booking.customer_email,
+      phone: booking.customer_phone || undefined,
+      fullName: booking.customer_name,
+      externalId: booking.customer_email,
+      fbp: bookingCtx.fbp,
+      fbc: bookingCtx.fbc,
+      clientIpAddress: bookingCtx.clientIpAddress,
+      clientUserAgent: bookingCtx.clientUserAgent,
+    };
+    if (bookingValue > 0) {
+      await sendMetaEvent({
+        eventName: "Purchase",
+        eventId: `purchase-booking-${bookingId}`,
+        eventTime: stableEventTime(payment),
+        eventSourceUrl: bookingCtx.eventSourceUrl || `${siteUrl}/agenda/success?external_reference=${bookingId}`,
+        funnel: "booking",
+        entityType: "booking",
+        entityId: bookingId,
+        user: metaUser,
+        custom: {
+          value: bookingValue,
+          currency: "CLP",
+          contentName: booking.services?.name,
+          contentType: "product",
+          contentCategory: "booking",
+          contentIds: [booking.service_id],
+          numItems: 1,
+          orderId: bookingId,
+        },
+        supabase,
+      });
+    }
+    await sendMetaEvent({
+      eventName: "Schedule",
+      eventId: `schedule-booking-${bookingId}`,
+      eventTime: stableEventTime(payment),
+      eventSourceUrl: bookingCtx.eventSourceUrl || `${siteUrl}/agenda/success?external_reference=${bookingId}`,
+      funnel: "booking",
+      entityType: "booking",
+      entityId: bookingId,
+      user: metaUser,
+      custom: {
+        contentName: booking.services?.name,
+        contentCategory: "booking",
+        contentIds: [booking.service_id],
+      },
+      supabase,
+    });
+  } catch (fbError) {
+    console.error("Booking Meta CAPI event failed (non-blocking):", (fbError as Error).message);
+  }
+}
+
 // Handle booking payments (legacy flow)
 async function handleBookingPayment(
   payment: any,
@@ -951,6 +1016,10 @@ async function handleBookingPayment(
 
     if (!updatedBooking) {
       console.log("Booking already processed");
+      // Reconciliación CAPI: sin tocar capacidad, cupones ni emails.
+      if (booking.status === "CONFIRMED") {
+        await sendBookingPurchaseCapi(booking, payment, bookingId, supabase);
+      }
       return new Response(JSON.stringify({ status: "already_processed" }), {
         status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -1040,62 +1109,7 @@ async function handleBookingPayment(
       "180841311274796302",
     ]);
 
-    // Meta CAPI (autoritativo): reserva pagada => Purchase + Schedule.
-    // event_id determinista, igual al del pixel en /agenda/success.
-    try {
-      const siteUrl = (Deno.env.get("SITE_URL") || "https://studiolanave.com").replace(/\/$/, "");
-      const bookingValue = booking.final_price ?? booking.services?.price_clp ?? 0;
-      const bookingCtx = metaCtx(booking.meta_context);
-      const metaUser = {
-        email: booking.customer_email,
-        phone: booking.customer_phone || undefined,
-        fullName: booking.customer_name,
-        externalId: booking.customer_email,
-        fbp: bookingCtx.fbp,
-        fbc: bookingCtx.fbc,
-        clientIpAddress: bookingCtx.clientIpAddress,
-        clientUserAgent: bookingCtx.clientUserAgent,
-      };
-      if (bookingValue > 0) {
-        await sendMetaEvent({
-          eventName: "Purchase",
-          eventId: `purchase-booking-${bookingId}`,
-          eventSourceUrl: bookingCtx.eventSourceUrl || `${siteUrl}/agenda/success?external_reference=${bookingId}`,
-          funnel: "booking",
-          entityType: "booking",
-          entityId: bookingId,
-          user: metaUser,
-          custom: {
-            value: bookingValue,
-            currency: "CLP",
-            contentName: booking.services?.name,
-            contentType: "product",
-            contentCategory: "booking",
-            contentIds: [booking.service_id],
-            numItems: 1,
-            orderId: bookingId,
-          },
-          supabase,
-        });
-      }
-      await sendMetaEvent({
-        eventName: "Schedule",
-        eventId: `schedule-booking-${bookingId}`,
-        eventSourceUrl: bookingCtx.eventSourceUrl || `${siteUrl}/agenda/success?external_reference=${bookingId}`,
-        funnel: "booking",
-        entityType: "booking",
-        entityId: bookingId,
-        user: metaUser,
-        custom: {
-          contentName: booking.services?.name,
-          contentCategory: "booking",
-          contentIds: [booking.service_id],
-        },
-        supabase,
-      });
-    } catch (fbError) {
-      console.error("Booking Meta CAPI event failed (non-blocking):", (fbError as Error).message);
-    }
+    await sendBookingPurchaseCapi(booking, payment, bookingId, supabase);
 
     return new Response(JSON.stringify({ status: "confirmed" }), {
       status: 200,
