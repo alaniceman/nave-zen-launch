@@ -232,41 +232,44 @@ export default function GiftCards() {
         throw new Error(error.message || "Error al procesar la compra");
       }
 
-      // InitiateCheckout: sólo con orden creada, valor final post-cupón,
-      // event_id determinista por orden (dedupe con CAPI).
-      if (result?.orderId) {
-        const finalValue = typeof result.finalPrice === "number" ? result.finalPrice : (pkg?.price_clp || 0);
-        trackMetaClientEvent('InitiateCheckout', {
-          eventId: deterministicEventId('initiatecheckout-giftcard', result.orderId),
-          userEmail: data.buyerEmail,
-          userName: data.buyerName,
-          userPhone: data.buyerPhone,
-          contentName: pkg?.name || 'Gift Card',
-          contentType: 'product',
-          contentCategory: 'gift_card',
-          contentIds: pkg ? [pkg.id] : undefined,
-          numItems: 1,
-          value: finalValue,
-          currency: 'CLP',
-          funnel: 'gift_card',
-          entityType: 'package_order',
-          entityId: result.orderId,
-          pixelParams: {
-            content_name: pkg?.name || 'Gift Card',
-            content_category: 'gift_card',
-            content_ids: pkg ? [pkg.id] : undefined,
-            currency: 'CLP',
-            value: finalValue,
-          },
-        });
-      }
-
       // Handle free order (100% discount)
       if (result.freeOrder) {
         toast.success("¡Compra completada! Revisa tu email para obtener tus códigos.");
         window.location.href = "/bonos/success?free=true";
         return;
       }
+
+      // InitiateCheckout: sólo con orden creada, valor final post-cupón,
+      // event_id determinista por orden (dedupe con CAPI).
+      if (result?.orderId && result?.initPoint && !result?.freeOrder) {
+        const finalValue = typeof result.finalPrice === "number" ? result.finalPrice : (pkg?.price_clp || 0);
+        if (finalValue > 0) {
+          trackMetaClientEvent('InitiateCheckout', {
+            eventId: deterministicEventId('initiatecheckout-giftcard', result.orderId),
+            userEmail: data.buyerEmail,
+            userName: data.buyerName,
+            userPhone: data.buyerPhone,
+            contentName: pkg?.name || 'Gift Card',
+            contentType: 'product',
+            contentCategory: 'gift_card',
+            contentIds: pkg ? [pkg.id] : undefined,
+            numItems: 1,
+            value: finalValue,
+            currency: 'CLP',
+            funnel: 'gift_card',
+            entityType: 'package_order',
+            entityId: result.orderId,
+            pixelParams: {
+              content_name: pkg?.name || 'Gift Card',
+              content_category: 'gift_card',
+              content_ids: pkg ? [pkg.id] : undefined,
+              currency: 'CLP',
+              value: finalValue,
+            },
+          });
+        }
+      }
+
 
       if (result.initPoint) {
         window.location.href = result.initPoint;

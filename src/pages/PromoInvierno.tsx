@@ -8,6 +8,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Footer } from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
+import { trackMetaClientEvent } from "@/lib/metaTracking";
+import { deterministicEventId } from "@/lib/metaPixel";
 import { toast } from "sonner";
 import { Navigate } from "react-router-dom";
 import { isPromoInviernoActive } from "@/lib/promoInvierno";
@@ -16,7 +18,7 @@ const PACKAGE_ID = "577d13fc-590e-4e9f-a99e-18cc1e62e414";
 const PRICE = 60000;
 
 export default function PromoInvierno() {
-  const { trackViewContent, trackInitiateCheckout } = useFacebookPixel();
+  const { trackViewContent } = useFacebookPixel();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({ name: "", email: "", phone: "" });
 
@@ -45,12 +47,6 @@ export default function PromoInvierno() {
       return;
     }
     setIsLoading(true);
-    trackInitiateCheckout({
-      content_name: "Promo Invierno - 6 Sesiones",
-      content_type: "product",
-      value: PRICE,
-      currency: "CLP",
-    });
     try {
       const { data, error } = await supabase.functions.invoke("purchase-session-package", {
         body: {
@@ -67,6 +63,36 @@ export default function PromoInvierno() {
         window.location.href = `/giftcards/success?order=${data.orderId}`;
         return;
       }
+      // InitiateCheckout: sólo con orden de pago real creada (valor final > 0).
+      if (data?.orderId && data?.initPoint) {
+        const finalValue = typeof data.finalPrice === "number" ? data.finalPrice : PRICE;
+        if (finalValue > 0) {
+          trackMetaClientEvent("InitiateCheckout", {
+            eventId: deterministicEventId("initiatecheckout-package", data.orderId),
+            userEmail: formData.email,
+            userName: formData.name,
+            userPhone: formData.phone,
+            contentName: "Promo Invierno - 6 Sesiones",
+            contentType: "product",
+            contentCategory: "package",
+            contentIds: [PACKAGE_ID],
+            numItems: 1,
+            value: finalValue,
+            currency: "CLP",
+            funnel: "package",
+            entityType: "package_order",
+            entityId: data.orderId,
+            pixelParams: {
+              content_name: "Promo Invierno - 6 Sesiones",
+              content_category: "package",
+              content_ids: [PACKAGE_ID],
+              currency: "CLP",
+              value: finalValue,
+            },
+          });
+        }
+      }
+
       if (data?.initPoint) {
         window.location.href = data.initPoint;
       } else {

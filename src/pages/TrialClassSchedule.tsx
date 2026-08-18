@@ -7,7 +7,7 @@ import TrialBookingForm from "@/components/trial/TrialBookingForm";
 import TrialAlreadyAttended from "@/components/trial/TrialAlreadyAttended";
 import { CheckCircle, Calendar, Clock, MapPin, Instagram } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { trackMetaClientEvent, trackViewContentOnce } from "@/lib/metaTracking";
+import { trackViewContentOnce } from "@/lib/metaTracking";
 
 type Step = "calendar" | "detail" | "form" | "blocked" | "success";
 
@@ -23,21 +23,6 @@ export default function TrialClassSchedule() {
   }, []);
 
   const goToForm = () => {
-    if (selectedClass) {
-      trackMetaClientEvent('InitiateCheckout', {
-        contentName: selectedClass.title,
-        contentCategory: 'trial_class',
-        value: 0,
-        currency: 'CLP',
-        funnel: 'trial_class',
-        pixelParams: {
-          content_name: selectedClass.title,
-          content_category: 'trial_class',
-          currency: 'CLP',
-          value: 0,
-        },
-      });
-    }
     setStep("form");
   };
 

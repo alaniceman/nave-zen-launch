@@ -12,7 +12,7 @@ import { BookingForm } from "@/components/agenda/BookingForm";
 import { toast } from "sonner";
 import { GiftCardSection } from "@/components/GiftCardSection";
 import { SessionPackagePromo } from "@/components/SessionPackagePromo";
-import { trackMetaClientEvent, trackViewContentOnce } from "@/lib/metaTracking";
+import { trackViewContentOnce } from "@/lib/metaTracking";
 import { useAvailabilityCache } from "@/hooks/useAvailabilityCache";
 
 interface Branch {
@@ -208,28 +208,8 @@ export default function AgendaNaveStudio() {
   const handleTimeSlotSelect = (slot: TimeSlot) => {
     setSelectedTimeSlot(slot);
 
-    // Track InitiateCheckout when user selects a time slot (enters booking form)
-    const slotService = services.find((s) => s.id === slot.serviceId);
-    trackMetaClientEvent("InitiateCheckout", {
-      contentName: slotService?.name || slot.serviceName,
-      contentType: "product",
-      contentCategory: "booking",
-      contentIds: [slot.serviceId],
-      numItems: 1,
-      value: slotService?.price_clp || 0,
-      currency: "CLP",
-      funnel: "booking",
-      entityType: "service",
-      entityId: slot.serviceId,
-      pixelParams: {
-        content_name: slotService?.name || slot.serviceName,
-        content_category: "booking",
-        content_ids: [slot.serviceId],
-        currency: "CLP",
-        value: slotService?.price_clp || 0,
-      },
-    });
-
+    // InitiateCheckout NO se emite aquí: seleccionar horario no es checkout.
+    // Única fuente: BookingForm, tras create-booking (bookingId + initPoint).
     const prof = professionals.find((p) => p.id === slot.professionalId);
     const dateStr = format(selectedDate!, "yyyy-MM-dd");
     const timeStr = format(parseISO(slot.dateTimeStart), "HH:mm");

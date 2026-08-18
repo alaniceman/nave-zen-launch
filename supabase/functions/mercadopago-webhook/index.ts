@@ -85,6 +85,69 @@ function isValidUUID(str: string): boolean {
   return uuidRegex.test(str);
 }
 
+
+/**
+ * event_time estable entre reintentos: usa la fecha de aprobación del pago
+ * (idéntica en cada reenvío de Mercado Pago) y no el "ahora" del webhook.
+ */
+function stableEventTime(payment: any): number | undefined {
+  const raw = payment?.date_approved || payment?.date_created;
+  if (!raw) return undefined;
+  const ms = Date.parse(raw);
+  if (!Number.isFinite(ms)) return undefined;
+  return Math.floor(ms / 1000);
+}
+
+/** True sólo si el pago está realmente aprobado. Nunca enviar Purchase si no. */
+function isApproved(payment: any): boolean {
+  return payment?.status === "approved";
+}
+
+/**
+ * Purchase de tienda. Idempotente: el outbox deduplica por (event_name,event_id),
+ * así un delivery `sent` se salta y uno `failed/pending` se reintenta.
+ */
+async function sendShopPurchaseCapi(order: any, payment: any, orderId: string, supabase: any) {
+  if (!isApproved(payment)) return;
+  try {
+    const siteUrl = (Deno.env.get("SITE_URL") || "https://studiolanave.com").replace(/\/$/, "");
+    const shopCtx = metaCtx(order.meta_context);
+    await sendMetaEvent({
+      eventName: "Purchase",
+      eventId: `purchase-shop-${orderId}`,
+      eventTime: stableEventTime(payment),
+      eventSourceUrl: shopCtx.eventSourceUrl || `${siteUrl}/tienda/success?external_reference=${orderId}`,
+      funnel: "shop",
+      entityType: "shop_order",
+      entityId: orderId,
+      user: {
+        email: order.customer_email,
+        phone: order.customer_phone || undefined,
+        fullName: order.customer_name,
+        externalId: order.customer_email,
+        fbp: shopCtx.fbp,
+        fbc: shopCtx.fbc,
+        clientIpAddress: shopCtx.clientIpAddress,
+        clientUserAgent: shopCtx.clientUserAgent,
+      },
+      custom: {
+        value: Number(payment.transaction_amount) || order.product_price,
+        currency: "CLP",
+        contentName: order.product_name,
+        contentType: "product",
+        contentCategory: "shop",
+        contentIds: [order.product_id ?? orderId],
+        numItems: 1,
+        orderId,
+        extra: { product_type: "shop_product" },
+      },
+      supabase,
+    });
+  } catch (fbError) {
+    console.error("Shop Meta CAPI event failed (non-blocking):", (fbError as Error).message);
+  }
+}
+
 // Handle shop product order payments (physical store)
 async function handleShopOrderPayment(
   payment: any,
@@ -109,6 +172,10 @@ async function handleShopOrderPayment(
   }
 
   if (order.status === "paid" || order.mercado_pago_payment_id === paymentIdStr) {
+    // Reconciliación CAPI: sin re-ejecutar efectos de negocio.
+    if (order.status === "paid" && isApproved(payment)) {
+      await sendShopPurchaseCapi(order, payment, orderId, supabase);
+    }
     return new Response(JSON.stringify({ status: "already_processed" }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -161,48 +228,57 @@ async function handleShopOrderPayment(
 
   console.log(`Shop order ${orderId} marked as paid`);
 
-  // Meta CAPI Purchase de tienda (autoritativo tras pago approved).
-  try {
-    const siteUrl = (Deno.env.get("SITE_URL") || "https://studiolanave.com").replace(/\/$/, "");
-    const shopCtx = metaCtx(order.meta_context);
-    await sendMetaEvent({
-      eventName: "Purchase",
-      eventId: `purchase-shop-${orderId}`,
-      eventSourceUrl: shopCtx.eventSourceUrl || `${siteUrl}/tienda/success?external_reference=${orderId}`,
-      funnel: "shop",
-      entityType: "shop_order",
-      entityId: orderId,
-      user: {
-        email: order.customer_email,
-        phone: order.customer_phone || undefined,
-        fullName: order.customer_name,
-        externalId: order.customer_email,
-        fbp: shopCtx.fbp,
-        fbc: shopCtx.fbc,
-        clientIpAddress: shopCtx.clientIpAddress,
-        clientUserAgent: shopCtx.clientUserAgent,
-      },
-      custom: {
-        value: Number(payment.transaction_amount) || order.product_price,
-        currency: "CLP",
-        contentName: order.product_name,
-        contentType: "product",
-        contentCategory: "shop",
-        contentIds: [order.product_id ?? orderId],
-        numItems: 1,
-        orderId,
-        extra: { product_type: "shop_product" },
-      },
-      supabase,
-    });
-  } catch (fbError) {
-    console.error("Shop Meta CAPI event failed (non-blocking):", (fbError as Error).message);
-  }
+  await sendShopPurchaseCapi(order, payment, orderId, supabase);
 
   return new Response(JSON.stringify({ status: "shop_order_paid" }), {
     status: 200,
     headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
+}
+
+/**
+ * Purchase de taller. Idempotente vía outbox (event_name,event_id).
+ */
+async function sendTallerPurchaseCapi(insc: any, payment: any, orderId: string, supabase: any) {
+  if (!isApproved(payment)) return;
+  try {
+    const siteUrl = (Deno.env.get("SITE_URL") || "https://studiolanave.com").replace(/\/$/, "");
+    const tallerCtx = metaCtx(insc.meta_context);
+    await sendMetaEvent({
+      eventName: "Purchase",
+      eventId: `purchase-taller-${orderId}`,
+      eventTime: stableEventTime(payment),
+      eventSourceUrl: tallerCtx.eventSourceUrl || `${siteUrl}/taller-wim-hof-santiago-fundamentales-avanzado?pago=approved&order=${orderId}`,
+      funnel: "workshop",
+      entityType: "taller_inscripcion",
+      entityId: orderId,
+      user: {
+        email: insc.email,
+        phone: insc.phone || undefined,
+        firstName: insc.nombre,
+        lastName: insc.apellido,
+        externalId: insc.email,
+        fbp: tallerCtx.fbp,
+        fbc: tallerCtx.fbc,
+        clientIpAddress: tallerCtx.clientIpAddress,
+        clientUserAgent: tallerCtx.clientUserAgent,
+      },
+      custom: {
+        value: Number(payment.transaction_amount) || insc.amount,
+        currency: "CLP",
+        contentName: insc.taller_nombre,
+        contentType: "product",
+        contentCategory: "workshop",
+        // id estable del taller, no de la orden
+        contentIds: [`taller-whm-santiago-${insc.nivel}`],
+        numItems: 1,
+        orderId,
+      },
+      supabase,
+    });
+  } catch (fbError) {
+    console.error("Taller Meta CAPI event failed (non-blocking):", (fbError as Error).message);
+  }
 }
 
 // Handle Wim Hof workshop inscriptions (taller_inscripciones)
@@ -228,7 +304,13 @@ async function handleTallerPayment(
   if (!insc) return json("inscripcion_not_found");
 
   // Idempotency: already processed
-  if (insc.status === "paid" || insc.cupo_reserved) return json("already_processed");
+  if (insc.status === "paid" || insc.cupo_reserved) {
+    // Reconciliación CAPI únicamente; sin reservar cupo ni reenviar emails.
+    if (insc.status === "paid" && isApproved(payment)) {
+      await sendTallerPurchaseCapi(insc, payment, orderId, supabase);
+    }
+    return json("already_processed");
+  }
 
   if (payment.status === "pending" || payment.status === "in_process") {
     await supabase
@@ -272,7 +354,13 @@ async function handleTallerPayment(
     .select()
     .maybeSingle();
 
-  if (!claimed) return json("already_processed");
+  if (!claimed) {
+    // Otro webhook ganó el claim: sólo reconciliamos CAPI.
+    if (isApproved(payment)) {
+      await sendTallerPurchaseCapi(insc, payment, orderId, supabase);
+    }
+    return json("already_processed");
+  }
 
   // Reserve the cupo atomically
   let remaining: number | null = null;
@@ -393,43 +481,7 @@ async function handleTallerPayment(
 
   // Meta Conversions API (server-side, autoritativo) — deduped con el pixel
   // vía event_id determinista. Sólo se llega aquí con pago approved y monto validado.
-  try {
-    const siteUrl = (Deno.env.get("SITE_URL") || "https://studiolanave.com").replace(/\/$/, "");
-    const tallerCtx = metaCtx(insc.meta_context);
-    await sendMetaEvent({
-      eventName: "Purchase",
-      eventId: `purchase-taller-${orderId}`,
-      eventSourceUrl: tallerCtx.eventSourceUrl || `${siteUrl}/taller-wim-hof-santiago-fundamentales-avanzado?pago=approved&order=${orderId}`,
-      funnel: "workshop",
-      entityType: "taller_inscripcion",
-      entityId: orderId,
-      user: {
-        email: insc.email,
-        phone: insc.phone || undefined,
-        firstName: insc.nombre,
-        lastName: insc.apellido,
-        externalId: insc.email,
-        fbp: tallerCtx.fbp,
-        fbc: tallerCtx.fbc,
-        clientIpAddress: tallerCtx.clientIpAddress,
-        clientUserAgent: tallerCtx.clientUserAgent,
-      },
-      custom: {
-        value: Number(payment.transaction_amount) || insc.amount,
-        currency: "CLP",
-        contentName: insc.taller_nombre,
-        contentType: "product",
-        contentCategory: "workshop",
-        // id estable del taller, no de la orden
-        contentIds: [`taller-whm-santiago-${insc.nivel}`],
-        numItems: 1,
-        orderId,
-      },
-      supabase,
-    });
-  } catch (fbError) {
-    console.error("Taller Meta CAPI event failed (non-blocking):", (fbError as Error).message);
-  }
+  await sendTallerPurchaseCapi(insc, payment, orderId, supabase);
 
   return json("taller_inscripcion_paid");
 }
@@ -437,6 +489,53 @@ async function handleTallerPayment(
 
 
 
+
+/**
+ * Purchase de paquete / gift card. Idempotente vía outbox (event_name,event_id).
+ */
+async function sendPackagePurchaseCapi(order: any, pkg: any, payment: any, orderId: string, supabase: any) {
+  if (!isApproved(payment)) return;
+  const isGiftCard = order.is_giftcard === true;
+  try {
+    const siteUrl = (Deno.env.get("SITE_URL") || "https://studiolanave.com").replace(/\/$/, "");
+    const successPath = isGiftCard ? "/giftcards/success" : "/bonos/success";
+    const pkgCtx = metaCtx(order.meta_context);
+    await sendMetaEvent({
+      eventName: "Purchase",
+      eventId: `purchase-package-${orderId}`,
+      eventTime: stableEventTime(payment),
+      eventSourceUrl: pkgCtx.eventSourceUrl || `${siteUrl}${successPath}?order=${orderId}`,
+      funnel: isGiftCard ? "gift_card" : "package",
+      entityType: "package_order",
+      entityId: orderId,
+      user: {
+        email: order.buyer_email,
+        phone: order.buyer_phone || undefined,
+        fullName: order.buyer_name,
+        externalId: order.buyer_email,
+        fbp: pkgCtx.fbp,
+        fbc: pkgCtx.fbc,
+        clientIpAddress: pkgCtx.clientIpAddress,
+        clientUserAgent: pkgCtx.clientUserAgent,
+      },
+      custom: {
+        value: order.final_price,
+        currency: "CLP",
+        contentName: pkg.name,
+        contentType: "product",
+        contentCategory: isGiftCard ? "gift_card" : "package",
+        // id estable del paquete, no de la orden
+        contentIds: [pkg.id],
+        numItems: 1,
+        orderId,
+        extra: { product_type: isGiftCard ? "gift_card" : "package" },
+      },
+      supabase,
+    });
+  } catch (fbError) {
+    console.error("Package Meta CAPI event failed (non-blocking):", (fbError as Error).message);
+  }
+}
 
 // Handle session package/giftcard order payments using package_orders table
 async function handlePackageOrderPayment(
@@ -468,6 +567,10 @@ async function handlePackageOrderPayment(
   // IDEMPOTENCY: Check if this order was already processed
   if (order.status === "paid") {
     console.log(`Order ${orderId} already paid - skipping duplicate webhook`);
+    // Reconciliación CAPI: no se regeneran códigos ni se reenvían emails.
+    if (isApproved(payment) && order.session_packages) {
+      await sendPackagePurchaseCapi(order, order.session_packages, payment, orderId, supabase);
+    }
     return new Response(JSON.stringify({ status: "already_processed" }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -570,6 +673,10 @@ async function handlePackageOrderPayment(
 
   if (!updatedOrder) {
     console.log(`Order ${orderId} was already processed by another webhook`);
+    // Otro webhook ganó el claim: sólo reconciliamos CAPI.
+    if (isApproved(payment) && order.session_packages) {
+      await sendPackagePurchaseCapi(order, order.session_packages, payment, orderId, supabase);
+    }
     return new Response(JSON.stringify({ status: "already_processed" }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -745,51 +852,77 @@ async function handlePackageOrderPayment(
     "180841311274796302",
   ]);
 
-  // Meta CAPI Purchase (server-side, autoritativo) tras pago confirmado.
-  // En gift cards se usan los datos del COMPRADOR para matching.
-  try {
-    const siteUrl = (Deno.env.get("SITE_URL") || "https://studiolanave.com").replace(/\/$/, "");
-    const successPath = isGiftCard ? "/giftcards/success" : "/bonos/success";
-    const pkgCtx = metaCtx(order.meta_context);
-    await sendMetaEvent({
-      eventName: "Purchase",
-      eventId: `purchase-${orderId}`,
-      eventSourceUrl: pkgCtx.eventSourceUrl || `${siteUrl}${successPath}?order=${orderId}`,
-      funnel: isGiftCard ? "gift_card" : "package",
-      entityType: "package_order",
-      entityId: orderId,
-      user: {
-        email: order.buyer_email,
-        phone: order.buyer_phone || undefined,
-        fullName: order.buyer_name,
-        externalId: order.buyer_email,
-        fbp: pkgCtx.fbp,
-        fbc: pkgCtx.fbc,
-        clientIpAddress: pkgCtx.clientIpAddress,
-        clientUserAgent: pkgCtx.clientUserAgent,
-      },
-      custom: {
-        value: order.final_price,
-        currency: "CLP",
-        contentName: package_.name,
-        contentType: "product",
-        contentCategory: isGiftCard ? "gift_card" : "package",
-        // id estable del paquete, no de la orden
-        contentIds: [package_.id],
-        numItems: 1,
-        orderId,
-        extra: { product_type: isGiftCard ? "gift_card" : "package" },
-      },
-      supabase,
-    });
-  } catch (fbError) {
-    console.error("Package Meta CAPI event failed (non-blocking):", (fbError as Error).message);
-  }
+  await sendPackagePurchaseCapi(order, package_, payment, orderId, supabase);
 
   return new Response(JSON.stringify({ status: "codes_generated", count: codes.length }), {
     status: 200,
     headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
+}
+
+/**
+ * Purchase + Schedule de reserva pagada. Idempotente vía outbox (event_name,event_id).
+ */
+async function sendBookingPurchaseCapi(booking: any, payment: any, bookingId: string, supabase: any) {
+  if (!isApproved(payment)) return;
+  // Meta CAPI (autoritativo): reserva pagada => Purchase + Schedule.
+  // event_id determinista, igual al del pixel en /agenda/success.
+  try {
+    const siteUrl = (Deno.env.get("SITE_URL") || "https://studiolanave.com").replace(/\/$/, "");
+    const bookingValue = booking.final_price ?? booking.services?.price_clp ?? 0;
+    const bookingCtx = metaCtx(booking.meta_context);
+    const metaUser = {
+      email: booking.customer_email,
+      phone: booking.customer_phone || undefined,
+      fullName: booking.customer_name,
+      externalId: booking.customer_email,
+      fbp: bookingCtx.fbp,
+      fbc: bookingCtx.fbc,
+      clientIpAddress: bookingCtx.clientIpAddress,
+      clientUserAgent: bookingCtx.clientUserAgent,
+    };
+    if (bookingValue > 0) {
+      await sendMetaEvent({
+        eventName: "Purchase",
+        eventId: `purchase-booking-${bookingId}`,
+        eventTime: stableEventTime(payment),
+        eventSourceUrl: bookingCtx.eventSourceUrl || `${siteUrl}/agenda/success?external_reference=${bookingId}`,
+        funnel: "booking",
+        entityType: "booking",
+        entityId: bookingId,
+        user: metaUser,
+        custom: {
+          value: bookingValue,
+          currency: "CLP",
+          contentName: booking.services?.name,
+          contentType: "product",
+          contentCategory: "booking",
+          contentIds: [booking.service_id],
+          numItems: 1,
+          orderId: bookingId,
+        },
+        supabase,
+      });
+    }
+    await sendMetaEvent({
+      eventName: "Schedule",
+      eventId: `schedule-booking-${bookingId}`,
+      eventTime: stableEventTime(payment),
+      eventSourceUrl: bookingCtx.eventSourceUrl || `${siteUrl}/agenda/success?external_reference=${bookingId}`,
+      funnel: "booking",
+      entityType: "booking",
+      entityId: bookingId,
+      user: metaUser,
+      custom: {
+        contentName: booking.services?.name,
+        contentCategory: "booking",
+        contentIds: [booking.service_id],
+      },
+      supabase,
+    });
+  } catch (fbError) {
+    console.error("Booking Meta CAPI event failed (non-blocking):", (fbError as Error).message);
+  }
 }
 
 // Handle booking payments (legacy flow)
@@ -883,6 +1016,10 @@ async function handleBookingPayment(
 
     if (!updatedBooking) {
       console.log("Booking already processed");
+      // Reconciliación CAPI: sin tocar capacidad, cupones ni emails.
+      if (booking.status === "CONFIRMED") {
+        await sendBookingPurchaseCapi(booking, payment, bookingId, supabase);
+      }
       return new Response(JSON.stringify({ status: "already_processed" }), {
         status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -972,62 +1109,7 @@ async function handleBookingPayment(
       "180841311274796302",
     ]);
 
-    // Meta CAPI (autoritativo): reserva pagada => Purchase + Schedule.
-    // event_id determinista, igual al del pixel en /agenda/success.
-    try {
-      const siteUrl = (Deno.env.get("SITE_URL") || "https://studiolanave.com").replace(/\/$/, "");
-      const bookingValue = booking.final_price ?? booking.services?.price_clp ?? 0;
-      const bookingCtx = metaCtx(booking.meta_context);
-      const metaUser = {
-        email: booking.customer_email,
-        phone: booking.customer_phone || undefined,
-        fullName: booking.customer_name,
-        externalId: booking.customer_email,
-        fbp: bookingCtx.fbp,
-        fbc: bookingCtx.fbc,
-        clientIpAddress: bookingCtx.clientIpAddress,
-        clientUserAgent: bookingCtx.clientUserAgent,
-      };
-      if (bookingValue > 0) {
-        await sendMetaEvent({
-          eventName: "Purchase",
-          eventId: `purchase-booking-${bookingId}`,
-          eventSourceUrl: bookingCtx.eventSourceUrl || `${siteUrl}/agenda/success?external_reference=${bookingId}`,
-          funnel: "booking",
-          entityType: "booking",
-          entityId: bookingId,
-          user: metaUser,
-          custom: {
-            value: bookingValue,
-            currency: "CLP",
-            contentName: booking.services?.name,
-            contentType: "product",
-            contentCategory: "booking",
-            contentIds: [booking.service_id],
-            numItems: 1,
-            orderId: bookingId,
-          },
-          supabase,
-        });
-      }
-      await sendMetaEvent({
-        eventName: "Schedule",
-        eventId: `schedule-booking-${bookingId}`,
-        eventSourceUrl: bookingCtx.eventSourceUrl || `${siteUrl}/agenda/success?external_reference=${bookingId}`,
-        funnel: "booking",
-        entityType: "booking",
-        entityId: bookingId,
-        user: metaUser,
-        custom: {
-          contentName: booking.services?.name,
-          contentCategory: "booking",
-          contentIds: [booking.service_id],
-        },
-        supabase,
-      });
-    } catch (fbError) {
-      console.error("Booking Meta CAPI event failed (non-blocking):", (fbError as Error).message);
-    }
+    await sendBookingPurchaseCapi(booking, payment, bookingId, supabase);
 
     return new Response(JSON.stringify({ status: "confirmed" }), {
       status: 200,

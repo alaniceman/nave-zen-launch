@@ -1,0 +1,1 @@
+DROP INDEX IF EXISTS public.meta_event_deliveries_event_id_key;

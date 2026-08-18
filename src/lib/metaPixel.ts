@@ -71,13 +71,57 @@ export function getFbp(): string | undefined {
   return m ? decodeURIComponent(m[1]) : undefined;
 }
 
-/** _fbc desde cookie, o derivado de fbclid en la URL. */
+/**
+ * Persistencia first-touch (sessionStorage, sin PII).
+ * Guardamos sólo identificadores de click/campaña: fbc y UTMs.
+ */
+const FBC_KEY = "nave_meta_fbc";
+const UTM_KEY = "nave_meta_utm";
+
+function readStore(key: string): string | null {
+  try {
+    if (typeof window === "undefined" || !window.sessionStorage) return null;
+    return window.sessionStorage.getItem(key);
+  } catch {
+    return null; // Safari privado / storage bloqueado
+  }
+}
+
+function writeStore(key: string, value: string): void {
+  try {
+    if (typeof window === "undefined" || !window.sessionStorage) return;
+    window.sessionStorage.setItem(key, value);
+  } catch {
+    // no-op: el tracking nunca debe romper la app
+  }
+}
+
+/**
+ * _fbc: cookie > valor persistido > derivado una única vez de un fbclid nuevo.
+ * Nunca regenera el timestamp en llamadas sucesivas.
+ */
 export function getFbc(): string | undefined {
   if (typeof document === "undefined") return undefined;
-  const m = document.cookie.match(/_fbc=([^;]+)/);
-  if (m) return decodeURIComponent(m[1]);
+
+  const cookie = document.cookie.match(/_fbc=([^;]+)/);
+  if (cookie) {
+    const value = decodeURIComponent(cookie[1]);
+    writeStore(FBC_KEY, value);
+    return value;
+  }
+
+  const stored = readStore(FBC_KEY) || undefined;
   const fbclid = new URLSearchParams(window.location.search).get("fbclid");
-  return fbclid ? `fb.1.${Date.now()}.${fbclid}` : undefined;
+
+  // Si el fbclid de la URL ya es el que tenemos guardado, reutilizamos el valor.
+  if (fbclid) {
+    if (stored && stored.endsWith(`.${fbclid}`)) return stored;
+    const derived = `fb.1.${Date.now()}.${fbclid}`;
+    writeStore(FBC_KEY, derived);
+    return derived;
+  }
+
+  return stored;
 }
 
 export type UtmParams = {
@@ -88,17 +132,46 @@ export type UtmParams = {
   utm_term?: string;
 };
 
+const UTM_KEYS: (keyof UtmParams)[] = [
+  "utm_source",
+  "utm_medium",
+  "utm_campaign",
+  "utm_content",
+  "utm_term",
+];
+
+/**
+ * UTMs de la URL actual si existen (y se persisten); si no, las guardadas
+ * en la sesión, para que rutas posteriores conserven la atribución.
+ */
 export function getUtmParams(): UtmParams {
   if (typeof window === "undefined") return {};
-  const p = new URLSearchParams(window.location.search);
-  const pick = (k: keyof UtmParams) => p.get(k) || undefined;
-  return {
-    utm_source: pick("utm_source"),
-    utm_medium: pick("utm_medium"),
-    utm_campaign: pick("utm_campaign"),
-    utm_content: pick("utm_content"),
-    utm_term: pick("utm_term"),
-  };
+
+  const search = new URLSearchParams(window.location.search);
+  const fromUrl: UtmParams = {};
+  for (const key of UTM_KEYS) {
+    const value = search.get(key);
+    if (value) fromUrl[key] = value;
+  }
+
+  if (Object.keys(fromUrl).length > 0) {
+    writeStore(UTM_KEY, JSON.stringify(fromUrl));
+    return fromUrl;
+  }
+
+  const raw = readStore(UTM_KEY);
+  if (!raw) return {};
+  try {
+    const parsed = JSON.parse(raw) as UtmParams;
+    const out: UtmParams = {};
+    for (const key of UTM_KEYS) {
+      const value = parsed?.[key];
+      if (typeof value === "string" && value) out[key] = value;
+    }
+    return out;
+  } catch {
+    return {};
+  }
 }
 
 export type MetaBrowserContext = {

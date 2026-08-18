@@ -93,7 +93,7 @@ export default function GiftCardsSuccess() {
   useEffect(() => {
     if (orderStatus?.statusType === "success" && !hasFiredPixel && orderId) {
       // Deterministic event_id shared with server-side CAPI for Meta deduplication
-      const eventId = `purchase-${orderId}`;
+      const eventId = `purchase-package-${orderId}`;
       trackEvent('Purchase', {
         value: orderStatus.finalPrice || 0,
         currency: "CLP",

@@ -9,6 +9,8 @@ import { Footer } from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
 import { useEffect } from "react";
+import { trackMetaClientEvent } from "@/lib/metaTracking";
+import { deterministicEventId } from "@/lib/metaPixel";
 import { toast } from "sonner";
 
 const SAN_VALENTIN_PACKAGE_ID = "9c870d12-f9cc-40c4-968b-fbbe3d0fc4ca";
@@ -17,7 +19,7 @@ const PROMO_PRICE = 40000;
 const SAVINGS = ORIGINAL_PRICE - PROMO_PRICE;
 
 export default function SanValentin() {
-  const { trackViewContent, trackInitiateCheckout } = useFacebookPixel();
+  const { trackViewContent } = useFacebookPixel();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -49,13 +51,6 @@ export default function SanValentin() {
 
     setIsLoading(true);
 
-    trackInitiateCheckout({
-      content_name: "Promo San Valentín - 2 Sesiones",
-      content_type: "product",
-      value: PROMO_PRICE,
-      currency: "CLP",
-    });
-
     try {
       const { data, error } = await supabase.functions.invoke(
         "purchase-session-package",
@@ -79,6 +74,36 @@ export default function SanValentin() {
         window.location.href = `/giftcards/success?order=${data.orderId}`;
         return;
       }
+      // InitiateCheckout: sólo con orden de pago real creada (valor final > 0).
+      if (data?.orderId && data?.initPoint) {
+        const finalValue = typeof data.finalPrice === "number" ? data.finalPrice : PROMO_PRICE;
+        if (finalValue > 0) {
+          trackMetaClientEvent("InitiateCheckout", {
+            eventId: deterministicEventId("initiatecheckout-package", data.orderId),
+            userEmail: formData.email,
+            userName: formData.name,
+            userPhone: formData.phone,
+            contentName: "Promo San Valentín - 2 Sesiones",
+            contentType: "product",
+            contentCategory: "package",
+            contentIds: [SAN_VALENTIN_PACKAGE_ID],
+            numItems: 1,
+            value: finalValue,
+            currency: "CLP",
+            funnel: "package",
+            entityType: "package_order",
+            entityId: data.orderId,
+            pixelParams: {
+              content_name: "Promo San Valentín - 2 Sesiones",
+              content_category: "package",
+              content_ids: [SAN_VALENTIN_PACKAGE_ID],
+              currency: "CLP",
+              value: finalValue,
+            },
+          });
+        }
+      }
+
 
       if (data?.initPoint) {
         window.location.href = data.initPoint;

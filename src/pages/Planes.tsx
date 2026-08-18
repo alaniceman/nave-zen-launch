@@ -510,6 +510,7 @@ const Planes = () => {
                 data-checkout-url="https://boxmagic.cl/market/plan/WkD17d743z"
                 data-plan="Misión 90 Órbita"
                 data-checkout-value="199000"
+                data-meta-content-id="mision-90-orbita"
               >
 
 
