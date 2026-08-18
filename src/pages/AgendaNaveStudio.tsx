@@ -12,8 +12,7 @@ import { BookingForm } from "@/components/agenda/BookingForm";
 import { toast } from "sonner";
 import { GiftCardSection } from "@/components/GiftCardSection";
 import { SessionPackagePromo } from "@/components/SessionPackagePromo";
-import { useFacebookPixel } from "@/hooks/useFacebookPixel";
-import { useFacebookConversionsAPI } from "@/hooks/useFacebookConversionsAPI";
+import { trackMetaClientEvent, trackViewContentOnce } from "@/lib/metaTracking";
 import { useAvailabilityCache } from "@/hooks/useAvailabilityCache";
 
 interface Branch {
@@ -53,8 +52,6 @@ interface TimeSlot {
 
 export default function AgendaNaveStudio() {
   const { professionalSlug, dateParam } = useParams();
-  const { trackEvent } = useFacebookPixel();
-  const { trackServerEvent } = useFacebookConversionsAPI();
 
   const bookingFormRef = useRef<HTMLDivElement>(null);
   const latestAvailabilityRequestKeyRef = useRef<string | null>(null);
@@ -74,11 +71,9 @@ export default function AgendaNaveStudio() {
   const [loading, setLoading] = useState(true);
   const [loadingSlots, setLoadingSlots] = useState(false);
 
-  // Track ViewContent on mount
+  // ViewContent: una sola vez por vista (Pixel + CAPI con el mismo event_id)
   useEffect(() => {
-    const eventId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-    trackEvent("ViewContent", { content_name: "Agenda Nave Studio", content_category: "Booking" }, eventId);
-    trackServerEvent({ eventName: "ViewContent", eventId, contentName: "Agenda Nave Studio" }).catch(() => {});
+    trackViewContentOnce("Agenda Nave Studio", { contentCategory: "booking" });
   }, []);
 
   // Load branches, professionals and services
@@ -215,23 +210,25 @@ export default function AgendaNaveStudio() {
 
     // Track InitiateCheckout when user selects a time slot (enters booking form)
     const slotService = services.find((s) => s.id === slot.serviceId);
-    const eventId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-    trackEvent(
-      "InitiateCheckout",
-      {
+    trackMetaClientEvent("InitiateCheckout", {
+      contentName: slotService?.name || slot.serviceName,
+      contentType: "product",
+      contentCategory: "booking",
+      contentIds: [slot.serviceId],
+      numItems: 1,
+      value: slotService?.price_clp || 0,
+      currency: "CLP",
+      funnel: "booking",
+      entityType: "service",
+      entityId: slot.serviceId,
+      pixelParams: {
         content_name: slotService?.name || slot.serviceName,
+        content_category: "booking",
+        content_ids: [slot.serviceId],
         currency: "CLP",
         value: slotService?.price_clp || 0,
       },
-      eventId
-    );
-    trackServerEvent({
-      eventName: "InitiateCheckout",
-      eventId,
-      contentName: slotService?.name || slot.serviceName,
-      value: slotService?.price_clp || 0,
-      currency: "CLP",
-    }).catch(() => {});
+    });
 
     const prof = professionals.find((p) => p.id === slot.professionalId);
     const dateStr = format(selectedDate!, "yyyy-MM-dd");

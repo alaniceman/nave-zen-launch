@@ -13,8 +13,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Footer } from "@/components/Footer";
 import { PurchaseFAQ } from "@/components/PurchaseFAQ";
-import { useFacebookPixel } from "@/hooks/useFacebookPixel";
-import { useFacebookConversionsAPI } from "@/hooks/useFacebookConversionsAPI";
+import { trackMetaClientEvent, trackViewContentOnce } from "@/lib/metaTracking";
 const purchaseSchema = z.object({
   buyerName: z.string().min(2, "El nombre debe tener al menos 2 caracteres").max(100),
   buyerEmail: z.string().email("Email inválido").max(255),
@@ -42,19 +41,15 @@ function filterExpiredPromos<T extends { id: string }>(pkgs: T[]): T[] {
 }
 
 export default function Bonos() {
-  const { trackEvent } = useFacebookPixel();
-  const { trackServerEvent } = useFacebookConversionsAPI();
   const [packages, setPackages] = useState<SessionPackage[]>([]);
   const [services, setServices] = useState<Service[]>([]);
   const [selectedPackage, setSelectedPackage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Track ViewContent on mount
+  // ViewContent: una sola vez por vista (Pixel + CAPI con el mismo event_id)
   useEffect(() => {
-    const eventId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-    trackEvent('ViewContent', { content_name: 'Bonos de Sesiones', content_category: 'Package' }, eventId);
-    trackServerEvent({ eventName: 'ViewContent', eventId, contentName: 'Bonos de Sesiones' }).catch(() => {});
+    trackViewContentOnce('Bonos de Sesiones', { contentCategory: 'package' });
   }, []);
 
   // Coupon state
@@ -190,22 +185,28 @@ export default function Bonos() {
 
     // Track InitiateCheckout
     const pkg = packages.find(p => p.id === selectedPackage);
-    const eventId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-    trackEvent('InitiateCheckout', {
-      content_name: pkg?.name || 'Paquete de sesiones',
-      currency: 'CLP',
-      value: pkg?.price_clp || 0,
-    }, eventId);
-    trackServerEvent({
-      eventName: 'InitiateCheckout',
-      eventId,
+    trackMetaClientEvent('InitiateCheckout', {
       userEmail: data.buyerEmail,
       userName: data.buyerName,
       userPhone: data.buyerPhone,
       contentName: pkg?.name || 'Paquete de sesiones',
+      contentType: 'product',
+      contentCategory: 'package',
+      contentIds: pkg ? [pkg.id] : undefined,
+      numItems: 1,
       value: pkg?.price_clp || 0,
       currency: 'CLP',
-    }).catch(() => {});
+      funnel: 'package',
+      entityType: 'session_package',
+      entityId: pkg?.id,
+      pixelParams: {
+        content_name: pkg?.name || 'Paquete de sesiones',
+        content_category: 'package',
+        content_ids: pkg ? [pkg.id] : undefined,
+        currency: 'CLP',
+        value: pkg?.price_clp || 0,
+      },
+    });
 
     setIsSubmitting(true);
     try {
