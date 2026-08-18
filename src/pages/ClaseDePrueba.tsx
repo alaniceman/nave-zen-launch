@@ -1,21 +1,12 @@
 import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { Footer } from "@/components/Footer";
-import { useFacebookPixel } from "@/hooks/useFacebookPixel";
 import { MapPin, Phone, Instagram, Clock } from "lucide-react";
 
 const ClaseDePrueba = () => {
-  const { trackLead } = useFacebookPixel();
-
-  useEffect(() => {
-    // Track Lead event when iframe loads (trial form submission intent)
-    const iframe = document.querySelector('iframe[src="https://boxmagic.cl/sp/NaveStudio"]');
-    if (iframe) {
-      iframe.addEventListener('load', () => {
-        trackLead({ content_name: 'Trial Class Form', content_category: 'Lead Generation' });
-      });
-    }
-  }, [trackLead]);
+  // Nota: cargar el iframe de BoxMagic NO es un Lead — no se emite ninguna
+  // conversión aquí. El Lead se registra server-side cuando se guardan datos
+  // de contacto reales.
 
   useEffect(() => {
     const el = document.querySelector('#trial-embed iframe[src="https://boxmagic.cl/sp/NaveStudio"]') as HTMLIFrameElement;

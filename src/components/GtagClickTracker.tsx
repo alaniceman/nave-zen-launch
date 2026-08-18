@@ -1,9 +1,11 @@
 import { useEffect } from "react";
 import { trackConversion, type ConversionKey } from "@/lib/gtagConversions";
+import { trackWhatsAppContact } from "@/lib/metaTracking";
 
 /**
  * Global click delegation:
- * - WhatsApp links (wa.me / api.whatsapp.com) → whatsapp_click conversion
+ * - WhatsApp links (wa.me / api.whatsapp.com) → whatsapp_click conversion (Google)
+ *   + Meta Contact / whatsapp_click (nunca Lead ni InitiateCheckout)
  * - Buttons/links whose visible text contains "Suscribirme" → suscribirme_click conversion
  * - Links/buttons whose visible text starts with "Agendar" → agendar_clase_click conversion
  */
@@ -29,8 +31,15 @@ export function GtagClickTracker() {
       // WhatsApp links (href) or buttons that open WhatsApp programmatically
       const href = (interactive as HTMLAnchorElement).href || "";
       const aria = interactive.getAttribute("aria-label") || "";
+      const describeLocation = () =>
+        interactive.getAttribute("data-meta-location") ||
+        aria ||
+        (interactive.innerText || interactive.textContent || "").trim().slice(0, 60) ||
+        "unknown";
+
       if (/wa\.me|api\.whatsapp\.com/i.test(href) || /whatsapp/i.test(aria)) {
         trackConversion("whatsapp_click");
+        trackWhatsAppContact({ buttonLocation: describeLocation() });
         return;
       }
 
@@ -40,6 +49,7 @@ export function GtagClickTracker() {
 
       if (/whatsapp/i.test(text)) {
         trackConversion("whatsapp_click");
+        trackWhatsAppContact({ buttonLocation: describeLocation() });
         return;
       }
       if (/^agendar\b/i.test(text)) {

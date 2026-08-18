@@ -16,8 +16,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
-import { useFacebookPixel } from "@/hooks/useFacebookPixel";
-import { useFacebookConversionsAPI } from "@/hooks/useFacebookConversionsAPI";
+import { trackMetaClientEvent, trackMetaClientEventOnce } from "@/lib/metaTracking";
+import { deterministicEventId, getMetaBrowserContext, trackMetaEvent } from "@/lib/metaPixel";
 
 type PlanType = "trial_7d" | "trial_15d";
 
@@ -64,8 +64,6 @@ export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) 
   const [error, setError] = useState<string | null>(null);
   const [userInfo, setUserInfo] = useState<Step1Values | null>(null);
   const [understood, setUnderstood] = useState(false);
-  const { trackEvent } = useFacebookPixel();
-  const { trackServerEvent } = useFacebookConversionsAPI();
 
   const form = useForm<Step1Values>({
     resolver: zodResolver(step1Schema),
@@ -85,6 +83,15 @@ export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) 
     }
   }, [open, initialPlan, form]);
 
+  // Primera interacción real con el formulario (no en el submit)
+  const handleFirstInteraction = () => {
+    trackMetaClientEventOnce(`plan_trial_form_started:${plan}`, "plan_trial_form_started", {
+      contentName: PLAN_LABELS[plan],
+      funnel: "plan_trial",
+      pixelParams: { plan_type: plan },
+    });
+  };
+
   const today = new Date(); today.setHours(0, 0, 0, 0);
   const max = new Date(); max.setDate(max.getDate() + 30); max.setHours(23, 59, 59, 999);
 
@@ -92,11 +99,28 @@ export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) 
     setSubmitting(true);
     setError(null);
     try {
-      trackEvent("plan_trial_form_started", { plan_type: plan });
       const { data, error } = await supabase.functions.invoke("submit-plan-prueba-lead", {
-        body: { step: "lead", name: values.name, email: values.email, phone: values.phone, ...getUtm() },
+        body: {
+          step: "lead",
+          name: values.name,
+          email: values.email,
+          phone: values.phone,
+          ...getUtm(),
+          ...(() => {
+            const ctx = getMetaBrowserContext();
+            return { fbp: ctx.fbp, fbc: ctx.fbc, eventSourceUrl: ctx.eventSourceUrl };
+          })(),
+        },
       });
       if (error || !data?.leadId) throw new Error(data?.error || "Error al guardar");
+      // Lead: sólo después de que el servidor confirmó la persistencia.
+      // El CAPI autoritativo lo emite submit-plan-prueba-lead con el mismo
+      // event_id determinista, por lo que aquí sólo va el Pixel.
+      trackMetaEvent(
+        "Lead",
+        { content_name: PLAN_LABELS[plan], lead_type: "plan_trial" },
+        deterministicEventId("lead", String(data.leadId))
+      );
       setLeadId(data.leadId);
       setUserInfo(values);
       setStep(2);
@@ -116,22 +140,17 @@ export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) 
     setError(null);
     try {
       const startDateStr = format(startDate, "yyyy-MM-dd");
-      const eventId = `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
-      trackEvent("plan_trial_form_completed", { plan_type: plan }, eventId);
-      if (userInfo) {
-        trackServerEvent({
-          eventName: "plan_trial_form_completed",
-          eventId,
-          userEmail: userInfo.email,
-          userName: userInfo.name,
-          userPhone: userInfo.phone,
-          contentName: PLAN_LABELS[plan],
-        }).catch(() => {});
-      }
       const { data, error } = await supabase.functions.invoke("submit-plan-prueba-lead", {
         body: { step: "finalize", leadId, planType: plan, startDate: startDateStr },
       });
       if (error || !data?.boxmagicUrl) throw new Error(data?.error || "Error al confirmar");
+
+      // Sólo después de que finalize (server-side) fue exitoso
+      trackMetaEvent(
+        "plan_trial_form_completed",
+        { plan_type: plan },
+        deterministicEventId("plan-trial-completed", String(leadId))
+      );
 
       // Google Ads conversion: plan de prueba (acción de compra con valor real)
       const { trackConversion } = await import("@/lib/gtagConversions");
@@ -141,19 +160,30 @@ export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) 
         transaction_id: leadId ? String(leadId) : undefined,
       });
 
-      // Track redirect event
-      const redirectEventId = `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
-      trackEvent("plan_trial_redirect_payment", { plan_type: plan }, redirectEventId);
-      if (userInfo) {
-        trackServerEvent({
-          eventName: "plan_trial_redirect_payment",
-          eventId: redirectEventId,
-          userEmail: userInfo.email,
-          userName: userInfo.name,
-          userPhone: userInfo.phone,
-          contentName: PLAN_LABELS[plan],
-        }).catch(() => {});
-      }
+      // InitiateCheckout: sólo con URL de checkout válida, justo antes de redirigir.
+      // (Reemplaza a plan_trial_redirect_payment, que era redundante.)
+      // No se envía StartTrial ni Purchase: la activación/pago ocurre en BoxMagic.
+      trackMetaClientEvent("InitiateCheckout", {
+        eventId: deterministicEventId("plan-trial-checkout", String(leadId)),
+        userEmail: userInfo?.email,
+        userName: userInfo?.name,
+        userPhone: userInfo?.phone,
+        contentName: PLAN_LABELS[plan],
+        contentType: "product",
+        contentIds: [plan],
+        value: PLAN_PRICES[plan],
+        currency: "CLP",
+        funnel: "plan_trial",
+        entityType: "plan_trial_lead",
+        entityId: String(leadId),
+        pixelParams: {
+          funnel: "plan_trial",
+          plan_type: plan,
+          content_name: PLAN_LABELS[plan],
+          value: PLAN_PRICES[plan],
+          currency: "CLP",
+        },
+      });
 
       // Close form modal and trigger global RedirectModal via delegated [data-checkout-url]
       onOpenChange(false);
@@ -200,7 +230,12 @@ export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) 
 
           {step === 1 && (
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmitStep1)} className="space-y-4">
+              <form
+                onSubmit={form.handleSubmit(onSubmitStep1)}
+                onFocusCapture={handleFirstInteraction}
+                onInput={handleFirstInteraction}
+                className="space-y-4"
+              >
                 <FormField control={form.control} name="name" render={({ field }) => (
                   <FormItem>
                     <FormLabel>Nombre</FormLabel>

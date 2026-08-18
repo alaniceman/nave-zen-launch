@@ -178,6 +178,7 @@ const TallerSantiago = () => {
 
         if (status === "paid" && amount) {
           const eventId = `purchase-taller-${orderId}`;
+          const nivel = (data as any)?.nivel as string | undefined;
           trackEvent(
             "Purchase",
             {
@@ -185,7 +186,10 @@ const TallerSantiago = () => {
               currency: "CLP",
               content_name: nombre || "Taller Método Wim Hof",
               content_type: "product",
-              content_ids: [orderId],
+              // content_ids identifica el taller (estable), no la orden
+              content_ids: [`taller-whm-santiago-${nivel || "general"}`],
+              content_category: "workshop",
+              num_items: 1,
             },
             eventId
           );

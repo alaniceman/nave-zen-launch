@@ -5,6 +5,7 @@ import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { getCorsHeaders } from "../_shared/cors.ts";
 import { upsertCustomerAndLogEvent } from "../_shared/crm.ts";
 import { appendToSheet } from "../_shared/googleSheets.ts";
+import { sanitizePublicIp, sendMetaEvent } from "../_shared/metaCapi.ts";
 
 const BOXMAGIC_URLS: Record<string, string> = {
   trial_7d: "https://boxmagic.cl/market/plan/Kp0M3Z7L8x",
@@ -24,6 +25,9 @@ const leadSchema = z.object({
   utm_source: z.string().max(100).optional(),
   utm_medium: z.string().max(100).optional(),
   utm_campaign: z.string().max(100).optional(),
+  fbp: z.string().max(200).optional(),
+  fbc: z.string().max(300).optional(),
+  eventSourceUrl: z.string().url().max(500).optional(),
 });
 
 const finalizeSchema = z.object({
@@ -138,9 +142,40 @@ serve(async (req) => {
         throw new Error("Failed to create lead");
       }
 
+      const clientIp = sanitizePublicIp(
+        req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || req.headers.get("cf-connecting-ip"),
+      );
+      const clientUserAgent = req.headers.get("user-agent") ?? undefined;
+
       // ===== Background work — do NOT block the HTTP response =====
       const backgroundWork = async () => {
         try {
+          // Meta CAPI Lead — autoritativo, sólo tras persistir datos de contacto
+          await sendMetaEvent({
+            eventName: "Lead",
+            eventId: `lead-${lead.id}`,
+            eventSourceUrl: data.eventSourceUrl,
+            funnel: "plan_trial",
+            entityType: "plan_trial_lead",
+            entityId: String(lead.id),
+            user: {
+              email,
+              phone,
+              fullName: data.name,
+              externalId: email,
+              fbp: data.fbp,
+              fbc: data.fbc,
+              clientIpAddress: clientIp,
+              clientUserAgent,
+            },
+            custom: {
+              contentName: "Plan de prueba",
+              contentCategory: "plan_trial",
+              extra: { lead_type: "plan_trial" },
+            },
+            supabase,
+          });
+
           // Google Sheets
           const now = new Date().toLocaleString("es-CL", { timeZone: "America/Santiago" });
           appendToSheet([[now, data.name, email, phone, "PLAN_PRUEBA_LEAD", "", ""]])
