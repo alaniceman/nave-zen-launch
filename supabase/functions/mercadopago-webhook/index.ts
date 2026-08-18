@@ -85,6 +85,69 @@ function isValidUUID(str: string): boolean {
   return uuidRegex.test(str);
 }
 
+
+/**
+ * event_time estable entre reintentos: usa la fecha de aprobación del pago
+ * (idéntica en cada reenvío de Mercado Pago) y no el "ahora" del webhook.
+ */
+function stableEventTime(payment: any): number | undefined {
+  const raw = payment?.date_approved || payment?.date_created;
+  if (!raw) return undefined;
+  const ms = Date.parse(raw);
+  if (!Number.isFinite(ms)) return undefined;
+  return Math.floor(ms / 1000);
+}
+
+/** True sólo si el pago está realmente aprobado. Nunca enviar Purchase si no. */
+function isApproved(payment: any): boolean {
+  return payment?.status === "approved";
+}
+
+/**
+ * Purchase de tienda. Idempotente: el outbox deduplica por (event_name,event_id),
+ * así un delivery `sent` se salta y uno `failed/pending` se reintenta.
+ */
+async function sendShopPurchaseCapi(order: any, payment: any, orderId: string, supabase: any) {
+  if (!isApproved(payment)) return;
+  try {
+    const siteUrl = (Deno.env.get("SITE_URL") || "https://studiolanave.com").replace(/\/$/, "");
+    const shopCtx = metaCtx(order.meta_context);
+    await sendMetaEvent({
+      eventName: "Purchase",
+      eventId: `purchase-shop-${orderId}`,
+      eventTime: stableEventTime(payment),
+      eventSourceUrl: shopCtx.eventSourceUrl || `${siteUrl}/tienda/success?external_reference=${orderId}`,
+      funnel: "shop",
+      entityType: "shop_order",
+      entityId: orderId,
+      user: {
+        email: order.customer_email,
+        phone: order.customer_phone || undefined,
+        fullName: order.customer_name,
+        externalId: order.customer_email,
+        fbp: shopCtx.fbp,
+        fbc: shopCtx.fbc,
+        clientIpAddress: shopCtx.clientIpAddress,
+        clientUserAgent: shopCtx.clientUserAgent,
+      },
+      custom: {
+        value: Number(payment.transaction_amount) || order.product_price,
+        currency: "CLP",
+        contentName: order.product_name,
+        contentType: "product",
+        contentCategory: "shop",
+        contentIds: [order.product_id ?? orderId],
+        numItems: 1,
+        orderId,
+        extra: { product_type: "shop_product" },
+      },
+      supabase,
+    });
+  } catch (fbError) {
+    console.error("Shop Meta CAPI event failed (non-blocking):", (fbError as Error).message);
+  }
+}
+
 // Handle shop product order payments (physical store)
 async function handleShopOrderPayment(
   payment: any,
@@ -109,6 +172,10 @@ async function handleShopOrderPayment(
   }
 
   if (order.status === "paid" || order.mercado_pago_payment_id === paymentIdStr) {
+    // Reconciliación CAPI: sin re-ejecutar efectos de negocio.
+    if (order.status === "paid" && isApproved(payment)) {
+      await sendShopPurchaseCapi(order, payment, orderId, supabase);
+    }
     return new Response(JSON.stringify({ status: "already_processed" }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -161,43 +228,7 @@ async function handleShopOrderPayment(
 
   console.log(`Shop order ${orderId} marked as paid`);
 
-  // Meta CAPI Purchase de tienda (autoritativo tras pago approved).
-  try {
-    const siteUrl = (Deno.env.get("SITE_URL") || "https://studiolanave.com").replace(/\/$/, "");
-    const shopCtx = metaCtx(order.meta_context);
-    await sendMetaEvent({
-      eventName: "Purchase",
-      eventId: `purchase-shop-${orderId}`,
-      eventSourceUrl: shopCtx.eventSourceUrl || `${siteUrl}/tienda/success?external_reference=${orderId}`,
-      funnel: "shop",
-      entityType: "shop_order",
-      entityId: orderId,
-      user: {
-        email: order.customer_email,
-        phone: order.customer_phone || undefined,
-        fullName: order.customer_name,
-        externalId: order.customer_email,
-        fbp: shopCtx.fbp,
-        fbc: shopCtx.fbc,
-        clientIpAddress: shopCtx.clientIpAddress,
-        clientUserAgent: shopCtx.clientUserAgent,
-      },
-      custom: {
-        value: Number(payment.transaction_amount) || order.product_price,
-        currency: "CLP",
-        contentName: order.product_name,
-        contentType: "product",
-        contentCategory: "shop",
-        contentIds: [order.product_id ?? orderId],
-        numItems: 1,
-        orderId,
-        extra: { product_type: "shop_product" },
-      },
-      supabase,
-    });
-  } catch (fbError) {
-    console.error("Shop Meta CAPI event failed (non-blocking):", (fbError as Error).message);
-  }
+  await sendShopPurchaseCapi(order, payment, orderId, supabase);
 
   return new Response(JSON.stringify({ status: "shop_order_paid" }), {
     status: 200,
