@@ -8,7 +8,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Footer } from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
-import { trackMetaClientEvent, deterministicEventId } from "@/lib/metaTracking";
+import { trackMetaClientEvent } from "@/lib/metaTracking";
+import { deterministicEventId } from "@/lib/metaPixel";
 import { toast } from "sonner";
 
 const DIA_MADRE_PACKAGE_ID = "438912c4-213d-43a9-b0e5-d952540f1ff9";

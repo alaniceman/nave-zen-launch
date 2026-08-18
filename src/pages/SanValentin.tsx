@@ -9,7 +9,8 @@ import { Footer } from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
 import { useEffect } from "react";
-import { trackMetaClientEvent, deterministicEventId } from "@/lib/metaTracking";
+import { trackMetaClientEvent } from "@/lib/metaTracking";
+import { deterministicEventId } from "@/lib/metaPixel";
 import { toast } from "sonner";
 
 const SAN_VALENTIN_PACKAGE_ID = "9c870d12-f9cc-40c4-968b-fbbe3d0fc4ca";
