@@ -218,8 +218,10 @@ async function claimDelivery(input: SendMetaEventInput, eventTime: number) {
     const { data: existing } = await supabase
       .from("meta_event_deliveries")
       .select("id, status, attempts, event_time")
+      .eq("event_name", input.eventName)
       .eq("event_id", input.eventId)
       .maybeSingle();
+
 
     if (existing) {
       if (existing.status === "sent") {
