@@ -24,14 +24,43 @@ const ALLOWED_ORIGIN_SUFFIXES = [
   "127.0.0.1",
 ];
 
+/** Sólo host exacto o subdominio real. Nunca prefijos (evita `localhost.evil.com`). */
 function isAllowedOrigin(origin: string | null): boolean {
   if (!origin) return false;
   try {
-    const host = new URL(origin).hostname;
-    return ALLOWED_ORIGIN_SUFFIXES.some((s) => host === s || host.endsWith(`.${s}`) || host.startsWith(s));
+    const host = new URL(origin).hostname.toLowerCase();
+    return ALLOWED_ORIGIN_SUFFIXES.some((s) => host === s || host.endsWith(`.${s}`));
   } catch {
     return false;
   }
+}
+
+/**
+ * Rate limit best-effort en memoria por origen + hash no reversible de IP.
+ * No persiste IP ni PII; sólo aplica a llamadas client-side.
+ */
+const RATE_LIMIT_WINDOW_MS = 60_000;
+const RATE_LIMIT_MAX_EVENTS = 60;
+const rateBuckets = new Map<string, { count: number; resetAt: number }>();
+
+async function rateLimitKey(origin: string | null, ip: string | null): Promise<string> {
+  const raw = `${origin ?? "none"}|${ip ?? "none"}`;
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(raw));
+  return Array.from(new Uint8Array(digest).slice(0, 8))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+function isRateLimited(key: string): boolean {
+  const now = Date.now();
+  if (rateBuckets.size > 5000) rateBuckets.clear(); // techo de memoria
+  const bucket = rateBuckets.get(key);
+  if (!bucket || bucket.resetAt <= now) {
+    rateBuckets.set(key, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+    return false;
+  }
+  bucket.count += 1;
+  return bucket.count > RATE_LIMIT_MAX_EVENTS;
 }
 
 function corsFor(req: Request) {
@@ -86,6 +115,20 @@ serve(async (req) => {
     const authHeader = req.headers.get("authorization") ?? "";
     const isServiceCall = serviceRoleKey.length > 0 && authHeader === `Bearer ${serviceRoleKey}`;
 
+    const origin = req.headers.get("origin");
+    const forwardedIp =
+      req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || req.headers.get("cf-connecting-ip");
+
+    // Llamadas del navegador: Origin obligatorio y permitido (CORS no basta).
+    if (!isServiceCall) {
+      if (!isAllowedOrigin(origin)) {
+        return json({ error: "origin_not_allowed" }, 403);
+      }
+      if (isRateLimited(await rateLimitKey(origin, forwardedIp))) {
+        return json({ error: "rate_limited" }, 429);
+      }
+    }
+
     let body: RequestBody;
     try {
       body = await req.json();
@@ -116,8 +159,6 @@ serve(async (req) => {
     }
 
     const supabase = createClient(Deno.env.get("SUPABASE_URL") ?? "", serviceRoleKey);
-
-    const forwardedIp = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || req.headers.get("cf-connecting-ip");
 
     const result = await sendMetaEvent({
       eventName,
