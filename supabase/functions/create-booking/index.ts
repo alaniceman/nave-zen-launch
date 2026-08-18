@@ -17,10 +17,12 @@ async function sendScheduleEvent(
 ) {
   try {
     const siteUrl = (Deno.env.get("SITE_URL") || "https://studiolanave.com").replace(/\/$/, "");
+    // Contexto de navegador capturado al crear la reserva (mejora la atribución).
+    const c = (booking.meta_context && typeof booking.meta_context === "object") ? booking.meta_context : {};
     await sendMetaEvent({
       eventName: "Schedule",
       eventId: `schedule-booking-${booking.id}`,
-      eventSourceUrl: `${siteUrl}/agenda-nave-studio`,
+      eventSourceUrl: (typeof c.event_source_url === "string" && c.event_source_url) || `${siteUrl}/agenda-nave-studio`,
       funnel: "booking",
       entityType: "booking",
       entityId: String(booking.id),
@@ -29,6 +31,10 @@ async function sendScheduleEvent(
         phone: booking.customer_phone || undefined,
         fullName: booking.customer_name,
         externalId: booking.customer_email,
+        fbp: c.fbp ?? undefined,
+        fbc: c.fbc ?? undefined,
+        clientIpAddress: c.client_ip_address ?? undefined,
+        clientUserAgent: c.client_user_agent ?? undefined,
       },
       custom: {
         contentName: serviceName,
