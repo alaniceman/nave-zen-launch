@@ -399,7 +399,7 @@ async function handleTallerPayment(
     await sendMetaEvent({
       eventName: "Purchase",
       eventId: `purchase-taller-${orderId}`,
-      eventSourceUrl: `${siteUrl}/taller-wim-hof-santiago-fundamentales-avanzado?pago=approved&order=${orderId}`,
+      eventSourceUrl: tallerCtx.eventSourceUrl || `${siteUrl}/taller-wim-hof-santiago-fundamentales-avanzado?pago=approved&order=${orderId}`,
       funnel: "workshop",
       entityType: "taller_inscripcion",
       entityId: orderId,
@@ -977,17 +977,22 @@ async function handleBookingPayment(
     try {
       const siteUrl = (Deno.env.get("SITE_URL") || "https://studiolanave.com").replace(/\/$/, "");
       const bookingValue = booking.final_price ?? booking.services?.price_clp ?? 0;
+      const bookingCtx = metaCtx(booking.meta_context);
       const metaUser = {
         email: booking.customer_email,
         phone: booking.customer_phone || undefined,
         fullName: booking.customer_name,
         externalId: booking.customer_email,
+        fbp: bookingCtx.fbp,
+        fbc: bookingCtx.fbc,
+        clientIpAddress: bookingCtx.clientIpAddress,
+        clientUserAgent: bookingCtx.clientUserAgent,
       };
       if (bookingValue > 0) {
         await sendMetaEvent({
           eventName: "Purchase",
           eventId: `purchase-booking-${bookingId}`,
-          eventSourceUrl: `${siteUrl}/agenda/success?external_reference=${bookingId}`,
+          eventSourceUrl: bookingCtx.eventSourceUrl || `${siteUrl}/agenda/success?external_reference=${bookingId}`,
           funnel: "booking",
           entityType: "booking",
           entityId: bookingId,
@@ -1008,7 +1013,7 @@ async function handleBookingPayment(
       await sendMetaEvent({
         eventName: "Schedule",
         eventId: `schedule-booking-${bookingId}`,
-        eventSourceUrl: `${siteUrl}/agenda/success?external_reference=${bookingId}`,
+        eventSourceUrl: bookingCtx.eventSourceUrl || `${siteUrl}/agenda/success?external_reference=${bookingId}`,
         funnel: "booking",
         entityType: "booking",
         entityId: bookingId,
