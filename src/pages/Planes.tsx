@@ -529,8 +529,9 @@ const Planes = () => {
                 className="w-full bg-primary hover:bg-primary/90 text-white font-inter font-medium"
                 data-checkout-url="https://boxmagic.cl/market/plan/WkD17d743z"
                 data-plan="Misión 90 Órbita"
-                onClick={() => trackPlanCheckout("Misión 90 Órbita", "https://boxmagic.cl/market/plan/WkD17d743z", 199000)}
+                data-checkout-value="199000"
               >
+
 
                 Comenzar misión
               </Button>
