@@ -188,6 +188,18 @@ serve(async (req) => {
         final_price: finalPrice,
         is_giftcard: validatedData.isGiftCard,
         status: "created",
+        // Contexto de navegador para atribución server-side de Meta CAPI.
+        meta_context: {
+          fbp: validatedData.fbp ?? null,
+          fbc: validatedData.fbc ?? null,
+          event_source_url: validatedData.eventSourceUrl ?? null,
+          client_ip_address:
+            req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+            req.headers.get("cf-connecting-ip") ||
+            null,
+          client_user_agent: req.headers.get("user-agent") || null,
+        },
+
       })
       .select()
       .single();
