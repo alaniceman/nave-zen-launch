@@ -7,7 +7,7 @@ import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover
 import { Info, Check, Star } from "lucide-react";
 import { Footer } from "@/components/Footer";
 import { PricingTrialYogaSection } from "@/components/PricingTrialYogaSection";
-import { useFacebookPixel } from "@/hooks/useFacebookPixel";
+import { trackMetaClientEvent, trackViewContentOnce } from "@/lib/metaTracking";
 import { PlanesAnualesPromo } from "@/components/PlanesAnualesPromo";
 import { MembershipFormModal, type MembershipGroup } from "@/components/membership/MembershipFormModal";
 import { AskNaveBar } from "@/components/AskNaveBar";
