@@ -43,7 +43,7 @@ const TooltipLabel = ({ label }: { label: string }) => (
   </Popover>
 );
 const Planes = () => {
-const Planes = () => {
+
 
   const [membershipModal, setMembershipModal] = useState<{ open: boolean; group: MembershipGroup; code: string }>({
     open: false, group: "completa", code: "orbita",
