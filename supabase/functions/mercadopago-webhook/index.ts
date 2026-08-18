@@ -104,11 +104,27 @@ function isApproved(payment: any): boolean {
 }
 
 /**
+ * Monto del pago vs. monto esperado de la orden, con tolerancia de 1 CLP.
+ * Guard duro para no enviar Purchase con montos que no cuadran.
+ */
+function amountMatches(payment: any, expected: unknown): boolean {
+  const received = Number(payment?.transaction_amount);
+  const exp = Number(expected);
+  if (!Number.isFinite(received) || !Number.isFinite(exp)) return false;
+  return Math.abs(received - exp) <= 1;
+}
+
+
+/**
  * Purchase de tienda. Idempotente: el outbox deduplica por (event_name,event_id),
  * así un delivery `sent` se salta y uno `failed/pending` se reintenta.
  */
 async function sendShopPurchaseCapi(order: any, payment: any, orderId: string, supabase: any) {
   if (!isApproved(payment)) return;
+  if (!amountMatches(payment, order?.product_price)) {
+    console.error(`Shop CAPI skipped: amount mismatch for order ${orderId}`);
+    return;
+  }
   try {
     const siteUrl = (Deno.env.get("SITE_URL") || "https://studiolanave.com").replace(/\/$/, "");
     const shopCtx = metaCtx(order.meta_context);
@@ -171,11 +187,12 @@ async function handleShopOrderPayment(
     });
   }
 
-  if (order.status === "paid" || order.mercado_pago_payment_id === paymentIdStr) {
+  // Sólo una orden REALMENTE paid usa la rama de reconciliación. Un approved sobre
+  // una orden pending/failed debe seguir a validación de monto + atomic update,
+  // incluso si el payment ID ya quedó guardado en la fase pending.
+  if (order.status === "paid") {
     // Reconciliación CAPI: sin re-ejecutar efectos de negocio.
-    if (order.status === "paid" && isApproved(payment)) {
-      await sendShopPurchaseCapi(order, payment, orderId, supabase);
-    }
+    await sendShopPurchaseCapi(order, payment, orderId, supabase);
     return new Response(JSON.stringify({ status: "already_processed" }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -216,7 +233,7 @@ async function handleShopOrderPayment(
     });
   }
 
-  await supabase
+  const { data: claimedShop } = await supabase
     .from("shop_orders")
     .update({
       status: "paid",
@@ -224,11 +241,36 @@ async function handleShopOrderPayment(
       paid_at: new Date().toISOString(),
     })
     .eq("id", orderId)
-    .in("status", ["pending", "failed"]);
+    .in("status", ["created", "pending", "failed"])
+    .select()
+    .maybeSingle();
+
+  if (!claimedShop) {
+    // Carrera: otro webhook pudo haber marcado la orden. Releemos antes de afirmar nada.
+    const { data: fresh } = await supabase
+      .from("shop_orders")
+      .select("*")
+      .eq("id", orderId)
+      .maybeSingle();
+
+    if (fresh?.status === "paid") {
+      await sendShopPurchaseCapi(fresh, payment, orderId, supabase);
+      return new Response(JSON.stringify({ status: "already_processed" }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    console.error(`Shop order ${orderId} not claimed and not paid after re-read`);
+    return new Response(JSON.stringify({ status: "not_claimed" }), {
+      status: 200,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
 
   console.log(`Shop order ${orderId} marked as paid`);
 
-  await sendShopPurchaseCapi(order, payment, orderId, supabase);
+  await sendShopPurchaseCapi(claimedShop, payment, orderId, supabase);
 
   return new Response(JSON.stringify({ status: "shop_order_paid" }), {
     status: 200,
@@ -241,6 +283,10 @@ async function handleShopOrderPayment(
  */
 async function sendTallerPurchaseCapi(insc: any, payment: any, orderId: string, supabase: any) {
   if (!isApproved(payment)) return;
+  if (!amountMatches(payment, insc?.amount)) {
+    console.error(`Taller CAPI skipped: amount mismatch for inscripcion ${orderId}`);
+    return;
+  }
   try {
     const siteUrl = (Deno.env.get("SITE_URL") || "https://studiolanave.com").replace(/\/$/, "");
     const tallerCtx = metaCtx(insc.meta_context);
@@ -495,6 +541,10 @@ async function handleTallerPayment(
  */
 async function sendPackagePurchaseCapi(order: any, pkg: any, payment: any, orderId: string, supabase: any) {
   if (!isApproved(payment)) return;
+  if (!amountMatches(payment, order?.final_price)) {
+    console.error(`Package CAPI skipped: amount mismatch for order ${orderId}`);
+    return;
+  }
   const isGiftCard = order.is_giftcard === true;
   try {
     const siteUrl = (Deno.env.get("SITE_URL") || "https://studiolanave.com").replace(/\/$/, "");
@@ -568,7 +618,8 @@ async function handlePackageOrderPayment(
   if (order.status === "paid") {
     console.log(`Order ${orderId} already paid - skipping duplicate webhook`);
     // Reconciliación CAPI: no se regeneran códigos ni se reenvían emails.
-    if (isApproved(payment) && order.session_packages) {
+    // El helper valida approved + monto contra order.final_price.
+    if (order.session_packages) {
       await sendPackagePurchaseCapi(order, order.session_packages, payment, orderId, supabase);
     }
     return new Response(JSON.stringify({ status: "already_processed" }), {
@@ -577,14 +628,10 @@ async function handlePackageOrderPayment(
     });
   }
 
-  // Check if payment was already processed (by payment ID)
-  if (order.mercado_pago_payment_id === paymentIdStr) {
-    console.log(`Payment ${paymentIdStr} already recorded for order ${orderId}`);
-    return new Response(JSON.stringify({ status: "already_processed" }), {
-      status: 200,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
-  }
+  // Nota: NO se hace early return por payment ID coincidente. Mercado Pago guarda el
+  // mismo ID en la fase pending y luego lo reenvía como approved; bloquearlo dejaba la
+  // orden atascada en pending_payment. Las ramas pending/rejected de abajo son
+  // idempotentes por sí mismas (updates del mismo estado).
 
   // Handle pending payments (e.g., bank transfer awaiting confirmation)
   if (payment.status === "pending") {
@@ -865,6 +912,10 @@ async function handlePackageOrderPayment(
  */
 async function sendBookingPurchaseCapi(booking: any, payment: any, bookingId: string, supabase: any) {
   if (!isApproved(payment)) return;
+  if (!amountMatches(payment, booking?.final_price ?? booking?.services?.price_clp)) {
+    console.error(`Booking CAPI skipped: amount mismatch for booking ${bookingId}`);
+    return;
+  }
   // Meta CAPI (autoritativo): reserva pagada => Purchase + Schedule.
   // event_id determinista, igual al del pixel en /agenda/success.
   try {
