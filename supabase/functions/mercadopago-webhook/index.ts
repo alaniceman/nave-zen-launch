@@ -490,6 +490,53 @@ async function handleTallerPayment(
 
 
 
+/**
+ * Purchase de paquete / gift card. Idempotente vía outbox (event_name,event_id).
+ */
+async function sendPackagePurchaseCapi(order: any, pkg: any, payment: any, orderId: string, supabase: any) {
+  if (!isApproved(payment)) return;
+  const isGiftCard = order.is_giftcard === true;
+  try {
+    const siteUrl = (Deno.env.get("SITE_URL") || "https://studiolanave.com").replace(/\/$/, "");
+    const successPath = isGiftCard ? "/giftcards/success" : "/bonos/success";
+    const pkgCtx = metaCtx(order.meta_context);
+    await sendMetaEvent({
+      eventName: "Purchase",
+      eventId: `purchase-package-${orderId}`,
+      eventTime: stableEventTime(payment),
+      eventSourceUrl: pkgCtx.eventSourceUrl || `${siteUrl}${successPath}?order=${orderId}`,
+      funnel: isGiftCard ? "gift_card" : "package",
+      entityType: "package_order",
+      entityId: orderId,
+      user: {
+        email: order.buyer_email,
+        phone: order.buyer_phone || undefined,
+        fullName: order.buyer_name,
+        externalId: order.buyer_email,
+        fbp: pkgCtx.fbp,
+        fbc: pkgCtx.fbc,
+        clientIpAddress: pkgCtx.clientIpAddress,
+        clientUserAgent: pkgCtx.clientUserAgent,
+      },
+      custom: {
+        value: order.final_price,
+        currency: "CLP",
+        contentName: pkg.name,
+        contentType: "product",
+        contentCategory: isGiftCard ? "gift_card" : "package",
+        // id estable del paquete, no de la orden
+        contentIds: [pkg.id],
+        numItems: 1,
+        orderId,
+        extra: { product_type: isGiftCard ? "gift_card" : "package" },
+      },
+      supabase,
+    });
+  } catch (fbError) {
+    console.error("Package Meta CAPI event failed (non-blocking):", (fbError as Error).message);
+  }
+}
+
 // Handle session package/giftcard order payments using package_orders table
 async function handlePackageOrderPayment(
   payment: any,
@@ -520,6 +567,10 @@ async function handlePackageOrderPayment(
   // IDEMPOTENCY: Check if this order was already processed
   if (order.status === "paid") {
     console.log(`Order ${orderId} already paid - skipping duplicate webhook`);
+    // Reconciliación CAPI: no se regeneran códigos ni se reenvían emails.
+    if (isApproved(payment) && order.session_packages) {
+      await sendPackagePurchaseCapi(order, order.session_packages, payment, orderId, supabase);
+    }
     return new Response(JSON.stringify({ status: "already_processed" }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -622,6 +673,10 @@ async function handlePackageOrderPayment(
 
   if (!updatedOrder) {
     console.log(`Order ${orderId} was already processed by another webhook`);
+    // Otro webhook ganó el claim: sólo reconciliamos CAPI.
+    if (isApproved(payment) && order.session_packages) {
+      await sendPackagePurchaseCapi(order, order.session_packages, payment, orderId, supabase);
+    }
     return new Response(JSON.stringify({ status: "already_processed" }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -797,46 +852,7 @@ async function handlePackageOrderPayment(
     "180841311274796302",
   ]);
 
-  // Meta CAPI Purchase (server-side, autoritativo) tras pago confirmado.
-  // En gift cards se usan los datos del COMPRADOR para matching.
-  try {
-    const siteUrl = (Deno.env.get("SITE_URL") || "https://studiolanave.com").replace(/\/$/, "");
-    const successPath = isGiftCard ? "/giftcards/success" : "/bonos/success";
-    const pkgCtx = metaCtx(order.meta_context);
-    await sendMetaEvent({
-      eventName: "Purchase",
-      eventId: `purchase-${orderId}`,
-      eventSourceUrl: pkgCtx.eventSourceUrl || `${siteUrl}${successPath}?order=${orderId}`,
-      funnel: isGiftCard ? "gift_card" : "package",
-      entityType: "package_order",
-      entityId: orderId,
-      user: {
-        email: order.buyer_email,
-        phone: order.buyer_phone || undefined,
-        fullName: order.buyer_name,
-        externalId: order.buyer_email,
-        fbp: pkgCtx.fbp,
-        fbc: pkgCtx.fbc,
-        clientIpAddress: pkgCtx.clientIpAddress,
-        clientUserAgent: pkgCtx.clientUserAgent,
-      },
-      custom: {
-        value: order.final_price,
-        currency: "CLP",
-        contentName: package_.name,
-        contentType: "product",
-        contentCategory: isGiftCard ? "gift_card" : "package",
-        // id estable del paquete, no de la orden
-        contentIds: [package_.id],
-        numItems: 1,
-        orderId,
-        extra: { product_type: isGiftCard ? "gift_card" : "package" },
-      },
-      supabase,
-    });
-  } catch (fbError) {
-    console.error("Package Meta CAPI event failed (non-blocking):", (fbError as Error).message);
-  }
+  await sendPackagePurchaseCapi(order, package_, payment, orderId, supabase);
 
   return new Response(JSON.stringify({ status: "codes_generated", count: codes.length }), {
     status: 200,
