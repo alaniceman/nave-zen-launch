@@ -54,49 +54,38 @@ const Planes = () => {
     setMembershipModal({ open: true, group, code });
   };
   useEffect(() => {
-    // Track ViewContent event for pricing page
-    trackViewContent({
-      content_name: 'Pricing Plans',
-      content_category: 'E-commerce',
-      content_ids: ['eclipse', 'orbita', 'universo'],
-      content_type: 'product_group'
+    // ViewContent de la página de precios (una sola vez por vista).
+    trackViewContentOnce("Pricing Plans", {
+      contentCategory: "membership",
+      contentIds: ["eclipse", "orbita", "universo"],
     });
+  }, []);
 
-    // Add event listeners for InitiateCheckout on all buttons
-    const handleCheckoutClick = (event: Event) => {
-      const target = event.target as HTMLElement;
-      const button = target.closest('[data-checkout-url]') as HTMLElement;
-      if (button) {
-        const plan = button.getAttribute('data-plan') || 'Unknown Plan';
-        trackInitiateCheckout({
-          content_name: plan,
-          content_category: 'Subscription',
-          currency: 'CLP'
-        });
-      }
-    };
-
-    // Add listeners to WhatsApp links
-    const handleWhatsAppClick = () => {
-      trackInitiateCheckout({
-        content_name: 'WhatsApp Contact',
-        content_category: 'Lead Generation'
-      });
-    };
-    document.addEventListener('click', handleCheckoutClick);
-
-    // WhatsApp links
-    const whatsappLinks = document.querySelectorAll('a[href*="wa.me"]');
-    whatsappLinks.forEach(link => {
-      link.addEventListener('click', handleWhatsAppClick);
+  // InitiateCheckout sólo cuando se activa un redirect real a BoxMagic.
+  // Los checkouts con formulario (Eclipse/Órbita/Universo y Solo Yoga) lo emiten
+  // dentro de MembershipFormModal, así que aquí no se escuchan clics globales.
+  const trackPlanCheckout = (planName: string, url: string, value?: number) => {
+    trackMetaClientEvent("InitiateCheckout", {
+      contentName: planName,
+      contentType: "product",
+      contentCategory: "membership",
+      contentIds: [url],
+      numItems: 1,
+      value,
+      currency: "CLP",
+      funnel: "membership",
+      entityType: "membership_plan",
+      entityId: planName,
+      pixelParams: {
+        content_name: planName,
+        content_category: "membership",
+        content_ids: [url],
+        value,
+        currency: "CLP",
+      },
     });
-    return () => {
-      document.removeEventListener('click', handleCheckoutClick);
-      whatsappLinks.forEach(link => {
-        link.removeEventListener('click', handleWhatsAppClick);
-      });
-    };
-  }, [trackViewContent, trackInitiateCheckout]);
+  };
+
   return <>
       <Helmet>
         <title>Planes y precios | Membresías Nave Studio Las Condes</title>
