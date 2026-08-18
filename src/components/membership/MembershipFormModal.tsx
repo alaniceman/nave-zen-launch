@@ -15,7 +15,8 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
-import { useFacebookPixel } from "@/hooks/useFacebookPixel";
+import { trackMetaClientEvent, trackMetaClientEventOnce } from "@/lib/metaTracking";
+import { deterministicEventId, getMetaBrowserContext, trackMetaEvent } from "@/lib/metaPixel";
 import { trackConversion } from "@/lib/gtagConversions";
 
 export type MembershipGroup = "completa" | "yoga";
@@ -70,7 +71,6 @@ export function MembershipFormModal({ open, onOpenChange, group, initialCode }: 
   const [startDate, setStartDate] = useState<Date | undefined>(undefined);
   const [error, setError] = useState<string | null>(null);
   const [userInfo, setUserInfo] = useState<Step1Values | null>(null);
-  const { trackEvent } = useFacebookPixel();
 
   const options = MEMBERSHIP_OPTIONS[group];
   const selected = options.find((o) => o.code === selectedCode) ?? options[0];
@@ -90,13 +90,21 @@ export function MembershipFormModal({ open, onOpenChange, group, initialCode }: 
     }
   }, [open, initialCode, form]);
 
+  // membership_form_started: una sola vez, en la primera interacción real
+  const handleFirstInteraction = () => {
+    trackMetaClientEventOnce(`membership_form_started:${group}`, "membership_form_started", {
+      contentName: selected?.label,
+      funnel: "membership",
+      pixelParams: { plan_group: group, plan_code: selectedCode },
+    });
+  };
+
   const today = new Date(); today.setHours(0, 0, 0, 0);
   const max = new Date(); max.setDate(max.getDate() + 30); max.setHours(23, 59, 59, 999);
 
   const onSubmitStep1 = (values: Step1Values) => {
     setError(null);
     setUserInfo(values);
-    trackEvent("membership_form_started", { plan_group: group, plan_code: selectedCode });
     setStep(2);
   };
 
@@ -118,11 +126,31 @@ export function MembershipFormModal({ open, onOpenChange, group, initialCode }: 
           boxmagicUrl: selected.boxmagicUrl,
           startDate: startDateStr,
           ...getUtm(),
+          ...(() => {
+            const ctx = getMetaBrowserContext();
+            return { fbp: ctx.fbp, fbc: ctx.fbc, eventSourceUrl: ctx.eventSourceUrl };
+          })(),
         },
       });
       if (error || !data?.boxmagicUrl) throw new Error(data?.error || "Error al confirmar");
 
-      trackEvent("membership_form_completed", { plan_group: group, plan_code: selected.code });
+      const leadId = data.leadId ? String(data.leadId) : undefined;
+      const planValue = Number(selected.price.replace(/[^0-9]/g, "")) || undefined;
+
+      // Lead: sólo tras persistencia confirmada. El CAPI autoritativo lo emite
+      // submit-membership-lead con el mismo event_id determinista.
+      if (leadId) {
+        trackMetaEvent(
+          "Lead",
+          { content_name: selected.label, lead_type: "membership" },
+          deterministicEventId("lead", leadId)
+        );
+        trackMetaEvent(
+          "membership_form_completed",
+          { plan_group: group, plan_code: selected.code },
+          deterministicEventId("membership-completed", leadId)
+        );
+      }
 
       // Google Ads: conversión de membresía (acción de compra), al completar los 2 pasos
       trackConversion("membresia_purchase", {
@@ -131,6 +159,31 @@ export function MembershipFormModal({ open, onOpenChange, group, initialCode }: 
         transaction_id: data.leadId ? String(data.leadId) : undefined,
       });
 
+
+      // InitiateCheckout: sólo con URL válida de BoxMagic, antes del redirect.
+      // No enviamos Purchase/Subscribe: el alta/pago lo confirma BoxMagic.
+      trackMetaClientEvent("InitiateCheckout", {
+        eventId: leadId ? deterministicEventId("membership-checkout", leadId) : undefined,
+        userEmail: userInfo.email,
+        userName: userInfo.name,
+        userPhone: userInfo.phone,
+        contentName: selected.label,
+        contentType: "product",
+        contentIds: [selected.code],
+        value: planValue,
+        currency: "CLP",
+        funnel: "membership",
+        entityType: "membership_lead",
+        entityId: leadId,
+        pixelParams: {
+          funnel: "membership",
+          plan_code: selected.code,
+          plan_group: group,
+          content_name: selected.label,
+          value: planValue,
+          currency: "CLP",
+        },
+      });
 
       // Close & redirect via global RedirectModal (delegated [data-checkout-url])
       onOpenChange(false);
@@ -177,7 +230,12 @@ export function MembershipFormModal({ open, onOpenChange, group, initialCode }: 
 
           {step === 1 && (
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmitStep1)} className="space-y-4">
+              <form
+                onSubmit={form.handleSubmit(onSubmitStep1)}
+                onFocusCapture={handleFirstInteraction}
+                onInput={handleFirstInteraction}
+                className="space-y-4"
+              >
                 <FormField control={form.control} name="name" render={({ field }) => (
                   <FormItem>
                     <FormLabel>Nombre</FormLabel>

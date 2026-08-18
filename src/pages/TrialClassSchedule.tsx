@@ -7,41 +7,36 @@ import TrialBookingForm from "@/components/trial/TrialBookingForm";
 import TrialAlreadyAttended from "@/components/trial/TrialAlreadyAttended";
 import { CheckCircle, Calendar, Clock, MapPin, Instagram } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useFacebookPixel } from "@/hooks/useFacebookPixel";
-import { useFacebookConversionsAPI } from "@/hooks/useFacebookConversionsAPI";
+import { trackMetaClientEvent, trackViewContentOnce } from "@/lib/metaTracking";
 
 type Step = "calendar" | "detail" | "form" | "blocked" | "success";
 
 export default function TrialClassSchedule() {
   const navigate = useNavigate();
-  const { trackEvent } = useFacebookPixel();
-  const { trackServerEvent } = useFacebookConversionsAPI();
   const [step, setStep] = useState<Step>("calendar");
   const [selectedClass, setSelectedClass] = useState<ScheduleClassItem | null>(null);
   const [selectedDay, setSelectedDay] = useState<string>("");
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
   useEffect(() => {
-    const eventId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-    trackEvent('ViewContent', { content_name: 'Clase de prueba', content_category: 'Trial' }, eventId);
-    trackServerEvent({
-      eventName: 'ViewContent',
-      eventId,
-      contentName: 'Clase de prueba',
-    }).catch(() => {});
+    trackViewContentOnce('Clase de prueba', { contentCategory: 'trial_class' });
   }, []);
 
   const goToForm = () => {
     if (selectedClass) {
-      const eventId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-      trackEvent('InitiateCheckout', { content_name: selectedClass.title, currency: 'CLP', value: 0 }, eventId);
-      trackServerEvent({
-        eventName: 'InitiateCheckout',
-        eventId,
+      trackMetaClientEvent('InitiateCheckout', {
         contentName: selectedClass.title,
+        contentCategory: 'trial_class',
         value: 0,
         currency: 'CLP',
-      }).catch(() => {});
+        funnel: 'trial_class',
+        pixelParams: {
+          content_name: selectedClass.title,
+          content_category: 'trial_class',
+          currency: 'CLP',
+          value: 0,
+        },
+      });
     }
     setStep("form");
   };

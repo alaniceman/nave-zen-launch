@@ -4,8 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Clock, Loader2, XCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { useFacebookPixel } from "@/hooks/useFacebookPixel";
-import { useFacebookConversionsAPI } from "@/hooks/useFacebookConversionsAPI";
+import { deterministicEventId, trackMetaEvent } from "@/lib/metaPixel";
 import { trackConversion } from "@/lib/gtagConversions";
 
 type BookingStatus = "CONFIRMED" | "PENDING_PAYMENT" | "CANCELLED" | null;
@@ -25,8 +24,6 @@ export default function AgendaSuccess() {
   const [bookingStatus, setBookingStatus] = useState<BookingStatus>(null);
   const [loading, setLoading] = useState(true);
   const [hasFiredPixel, setHasFiredPixel] = useState(false);
-  const { trackEvent } = useFacebookPixel();
-  const { trackPurchase: trackServerPurchase } = useFacebookConversionsAPI();
 
   useEffect(() => {
     const checkBookingStatus = async () => {
@@ -49,29 +46,23 @@ export default function AgendaSuccess() {
             const serviceName = bookingData.services?.name || "Sesión";
             const price = bookingData.final_price || 0;
             
-            // Deterministic event_id shared with server-side CAPI for Meta deduplication
-            const eventId = `purchase-${externalReference}`;
-            
-            // Client-side pixel
-            trackEvent('Purchase', {
+            // event_id determinista, idéntico al que envía el webhook por CAPI
+            // (el CAPI autoritativo vive en mercadopago-webhook, no aquí).
+            const eventId = deterministicEventId("purchase-booking", externalReference);
+
+            trackMetaEvent('Purchase', {
               value: price,
               currency: "CLP",
               content_name: serviceName,
               content_type: "product",
               content_ids: [externalReference],
+              num_items: 1,
             }, eventId);
-            
-            // Server-side Conversions API
-            trackServerPurchase({
-              userEmail: bookingData.customer_email,
-              userName: bookingData.customer_name,
-              userPhone: bookingData.customer_phone || undefined,
-              value: price,
-              currency: "CLP",
-              contentName: serviceName,
-              orderId: externalReference,
-              eventId,
-            });
+
+            trackMetaEvent('Schedule', {
+              content_name: serviceName,
+              content_category: "booking",
+            }, deterministicEventId("schedule-booking", externalReference));
 
             trackConversion("purchase_paquete", {
               value: price,
@@ -93,7 +84,7 @@ export default function AgendaSuccess() {
     };
 
     checkBookingStatus();
-  }, [searchParams, hasFiredPixel, trackEvent, trackServerPurchase]);
+  }, [searchParams, hasFiredPixel]);
 
   if (loading) {
     return (

@@ -6,14 +6,24 @@ serve(async (req) => {
   const corsHeaders = getCorsHeaders(req);
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
+  if (req.method !== "GET" && req.method !== "POST") {
+    return new Response(JSON.stringify({ error: "method_not_allowed" }), {
+      status: 405,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
   try {
-    const url = new URL(req.url);
-    let orderId = url.searchParams.get("orderId") ?? "";
-    if (!orderId && req.method === "POST") {
+    // Contrato: POST { orderId } (preferido) o GET ?orderId=
+    let orderId = "";
+    if (req.method === "POST") {
       try {
         const body = await req.json();
-        orderId = typeof body?.orderId === "string" ? body.orderId : "";
+        orderId = typeof body?.orderId === "string" ? body.orderId.trim() : "";
       } catch { /* body vacío */ }
+    }
+    if (!orderId) {
+      orderId = (new URL(req.url).searchParams.get("orderId") ?? "").trim();
     }
 
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;

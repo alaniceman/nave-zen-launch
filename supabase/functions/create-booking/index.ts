@@ -3,6 +3,45 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 import { getCorsHeaders } from "../_shared/cors.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { generateSlotsFromRules } from "../_shared/slotGenerator.ts";
+import { sendMetaEvent } from "../_shared/metaCapi.ts";
+
+/**
+ * Reserva confirmada SIN cobro nuevo (código prepagado, gift card o cupón 100%)
+ * => Schedule, nunca Purchase.
+ */
+async function sendScheduleEvent(
+  supabase: any,
+  booking: any,
+  serviceName: string | undefined,
+  redemptionType: string,
+) {
+  try {
+    const siteUrl = (Deno.env.get("SITE_URL") || "https://studiolanave.com").replace(/\/$/, "");
+    await sendMetaEvent({
+      eventName: "Schedule",
+      eventId: `schedule-booking-${booking.id}`,
+      eventSourceUrl: `${siteUrl}/agenda-nave-studio`,
+      funnel: "booking",
+      entityType: "booking",
+      entityId: String(booking.id),
+      user: {
+        email: booking.customer_email,
+        phone: booking.customer_phone || undefined,
+        fullName: booking.customer_name,
+        externalId: booking.customer_email,
+      },
+      custom: {
+        contentName: serviceName,
+        contentCategory: "booking",
+        contentIds: [booking.service_id],
+        extra: { redemption_type: redemptionType },
+      },
+      supabase,
+    });
+  } catch (e) {
+    console.error("Booking Schedule Meta CAPI failed (non-blocking):", (e as Error).message);
+  }
+}
 
 const bookingSchema = z.object({
   professionalId: z.string().uuid(),
@@ -454,6 +493,9 @@ serve(async (req) => {
         console.error("Failed to invoke send-booking-confirmation:", emailError);
       }
 
+      // Meta: canje de código/gift card => Schedule (no es una compra nueva)
+      await sendScheduleEvent(supabase, booking, service?.name, "session_code");
+
       // Return success without payment link
       return new Response(
         JSON.stringify({
@@ -566,6 +608,9 @@ serve(async (req) => {
       } catch (emailError) {
         console.error("Failed to invoke send-booking-confirmation:", emailError);
       }
+
+      // Meta: cupón 100% => Schedule (no hay cobro, no es Purchase)
+      await sendScheduleEvent(supabase, booking, service?.name, "free_coupon");
 
       return new Response(
         JSON.stringify({

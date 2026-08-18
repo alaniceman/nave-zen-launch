@@ -4,6 +4,7 @@ import { Resend } from "npm:resend@2.0.0";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { getCorsHeaders } from "../_shared/cors.ts";
 import { upsertCustomerAndLogEvent } from "../_shared/crm.ts";
+import { sanitizePublicIp, sendMetaEvent } from "../_shared/metaCapi.ts";
 
 const bodySchema = z.object({
   name: z.string().trim().min(1).max(100),
@@ -17,6 +18,9 @@ const bodySchema = z.object({
   utm_source: z.string().max(100).optional(),
   utm_medium: z.string().max(100).optional(),
   utm_campaign: z.string().max(100).optional(),
+  fbp: z.string().max(200).optional(),
+  fbc: z.string().max(300).optional(),
+  eventSourceUrl: z.string().url().max(500).optional(),
 });
 
 function normalizePhone(raw: string): string {
@@ -68,8 +72,40 @@ serve(async (req) => {
       throw new Error("Failed to create lead");
     }
 
+    const clientIp = sanitizePublicIp(
+      req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || req.headers.get("cf-connecting-ip"),
+    );
+    const clientUserAgent = req.headers.get("user-agent") ?? undefined;
+
     const background = async () => {
       try {
+        // Meta CAPI Lead — autoritativo, sólo después de persistir el lead
+        await sendMetaEvent({
+          eventName: "Lead",
+          eventId: `lead-${lead.id}`,
+          eventSourceUrl: data.eventSourceUrl,
+          funnel: "membership",
+          entityType: "membership_lead",
+          entityId: String(lead.id),
+          user: {
+            email,
+            phone,
+            fullName: data.name,
+            externalId: email,
+            fbp: data.fbp,
+            fbc: data.fbc,
+            clientIpAddress: clientIp,
+            clientUserAgent,
+          },
+          custom: {
+            contentName: data.planLabel,
+            contentCategory: "membership",
+            contentIds: [data.planCode],
+            extra: { lead_type: "membership", plan_group: data.planGroup },
+          },
+          supabase,
+        });
+
         // CRM
         await upsertCustomerAndLogEvent(supabase, {
           email,

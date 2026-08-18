@@ -3,6 +3,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 import { getCorsHeaders } from "../_shared/cors.ts";
 import { syncOrderToMailerLite, addSubscriberToGroups } from "../_shared/mailerlite.ts";
 import { upsertCustomerAndLogEvent } from "../_shared/crm.ts";
+import { sendMetaEvent } from "../_shared/metaCapi.ts";
 
 // Helper function to verify Mercado Pago webhook signature
 async function verifyMercadoPagoSignature(
@@ -142,6 +143,39 @@ async function handleShopOrderPayment(
     .in("status", ["pending", "failed"]);
 
   console.log(`Shop order ${orderId} marked as paid`);
+
+  // Meta CAPI Purchase de tienda (autoritativo tras pago approved).
+  try {
+    const siteUrl = (Deno.env.get("SITE_URL") || "https://studiolanave.com").replace(/\/$/, "");
+    await sendMetaEvent({
+      eventName: "Purchase",
+      eventId: `purchase-shop-${orderId}`,
+      eventSourceUrl: `${siteUrl}/tienda/success?external_reference=${orderId}`,
+      funnel: "shop",
+      entityType: "shop_order",
+      entityId: orderId,
+      user: {
+        email: order.customer_email,
+        phone: order.customer_phone || undefined,
+        fullName: order.customer_name,
+        externalId: order.customer_email,
+      },
+      custom: {
+        value: Number(payment.transaction_amount) || order.product_price,
+        currency: "CLP",
+        contentName: order.product_name,
+        contentType: "product",
+        contentCategory: "shop",
+        contentIds: [order.product_id ?? orderId],
+        numItems: 1,
+        orderId,
+        extra: { product_type: "shop_product" },
+      },
+      supabase,
+    });
+  } catch (fbError) {
+    console.error("Shop Meta CAPI event failed (non-blocking):", (fbError as Error).message);
+  }
 
   return new Response(JSON.stringify({ status: "shop_order_paid" }), {
     status: 200,
@@ -335,29 +369,39 @@ async function handleTallerPayment(
     console.error("Taller participant email failed:", err);
   }
 
-  // Meta Conversions API (server-side) — deduped with client pixel via event_id
+  // Meta Conversions API (server-side, autoritativo) — deduped con el pixel
+  // vía event_id determinista. Sólo se llega aquí con pago approved y monto validado.
   try {
-    const eventId = `purchase-taller-${orderId}`;
     const siteUrl = (Deno.env.get("SITE_URL") || "https://studiolanave.com").replace(/\/$/, "");
-    await supabase.functions.invoke("facebook-conversions", {
-      body: {
-        event_name: "Purchase",
-        event_id: eventId,
-        event_source_url: `${siteUrl}/taller-wim-hof-santiago-fundamentales-avanzado?pago=approved&order=${orderId}&nivel=${insc.nivel}`,
-        user_email: insc.email,
-        user_phone: insc.phone || undefined,
-        user_name: insc.nombre,
+    await sendMetaEvent({
+      eventName: "Purchase",
+      eventId: `purchase-taller-${orderId}`,
+      eventSourceUrl: `${siteUrl}/taller-wim-hof-santiago-fundamentales-avanzado?pago=approved&order=${orderId}`,
+      funnel: "workshop",
+      entityType: "taller_inscripcion",
+      entityId: orderId,
+      user: {
+        email: insc.email,
+        phone: insc.phone || undefined,
+        firstName: insc.nombre,
+        lastName: insc.apellido,
+        externalId: insc.email,
+      },
+      custom: {
         value: Number(payment.transaction_amount) || insc.amount,
         currency: "CLP",
-        content_name: insc.taller_nombre,
-        content_type: "product",
-        content_ids: [orderId],
-        order_id: orderId,
+        contentName: insc.taller_nombre,
+        contentType: "product",
+        contentCategory: "workshop",
+        // id estable del taller, no de la orden
+        contentIds: [`taller-whm-santiago-${insc.nivel}`],
+        numItems: 1,
+        orderId,
       },
+      supabase,
     });
-    console.log("Meta CAPI Purchase sent for taller inscripcion:", orderId);
   } catch (fbError) {
-    console.error("Taller Meta CAPI event failed (non-blocking):", fbError);
+    console.error("Taller Meta CAPI event failed (non-blocking):", (fbError as Error).message);
   }
 
   return json("taller_inscripcion_paid");
@@ -674,32 +718,40 @@ async function handlePackageOrderPayment(
     "180841311274796302",
   ]);
 
-  // Fire Facebook Conversions API Purchase event server-side (non-blocking)
-  // PII stays server-side; client pages no longer need to read package_orders.
+  // Meta CAPI Purchase (server-side, autoritativo) tras pago confirmado.
+  // En gift cards se usan los datos del COMPRADOR para matching.
   try {
-    // Deterministic event_id shared with client-side pixel for Meta deduplication
-    const eventId = `purchase-${orderId}`;
     const siteUrl = (Deno.env.get("SITE_URL") || "https://studiolanave.com").replace(/\/$/, "");
     const successPath = isGiftCard ? "/giftcards/success" : "/bonos/success";
-    await supabase.functions.invoke("facebook-conversions", {
-      body: {
-        event_name: "Purchase",
-        event_id: eventId,
-        event_source_url: `${siteUrl}${successPath}?order=${orderId}`,
-        user_email: order.buyer_email,
-        user_phone: order.buyer_phone || undefined,
-        user_name: order.buyer_name,
+    await sendMetaEvent({
+      eventName: "Purchase",
+      eventId: `purchase-${orderId}`,
+      eventSourceUrl: `${siteUrl}${successPath}?order=${orderId}`,
+      funnel: isGiftCard ? "gift_card" : "package",
+      entityType: "package_order",
+      entityId: orderId,
+      user: {
+        email: order.buyer_email,
+        phone: order.buyer_phone || undefined,
+        fullName: order.buyer_name,
+        externalId: order.buyer_email,
+      },
+      custom: {
         value: order.final_price,
         currency: "CLP",
-        content_name: package_.name,
-        content_type: "product",
-        content_ids: [orderId],
-        order_id: orderId,
+        contentName: package_.name,
+        contentType: "product",
+        contentCategory: isGiftCard ? "gift_card" : "package",
+        // id estable del paquete, no de la orden
+        contentIds: [package_.id],
+        numItems: 1,
+        orderId,
+        extra: { product_type: isGiftCard ? "gift_card" : "package" },
       },
+      supabase,
     });
-    console.log("Facebook Conversions API Purchase event sent server-side for order:", orderId);
   } catch (fbError) {
-    console.error("Failed to send Facebook Conversions API event (non-blocking):", fbError);
+    console.error("Package Meta CAPI event failed (non-blocking):", (fbError as Error).message);
   }
 
   return new Response(JSON.stringify({ status: "codes_generated", count: codes.length }), {
@@ -887,6 +939,58 @@ async function handleBookingPayment(
       "168517368312498017",
       "180841311274796302",
     ]);
+
+    // Meta CAPI (autoritativo): reserva pagada => Purchase + Schedule.
+    // event_id determinista, igual al del pixel en /agenda/success.
+    try {
+      const siteUrl = (Deno.env.get("SITE_URL") || "https://studiolanave.com").replace(/\/$/, "");
+      const bookingValue = booking.final_price ?? booking.services?.price_clp ?? 0;
+      const metaUser = {
+        email: booking.customer_email,
+        phone: booking.customer_phone || undefined,
+        fullName: booking.customer_name,
+        externalId: booking.customer_email,
+      };
+      if (bookingValue > 0) {
+        await sendMetaEvent({
+          eventName: "Purchase",
+          eventId: `purchase-booking-${bookingId}`,
+          eventSourceUrl: `${siteUrl}/agenda/success?external_reference=${bookingId}`,
+          funnel: "booking",
+          entityType: "booking",
+          entityId: bookingId,
+          user: metaUser,
+          custom: {
+            value: bookingValue,
+            currency: "CLP",
+            contentName: booking.services?.name,
+            contentType: "product",
+            contentCategory: "booking",
+            contentIds: [booking.service_id],
+            numItems: 1,
+            orderId: bookingId,
+          },
+          supabase,
+        });
+      }
+      await sendMetaEvent({
+        eventName: "Schedule",
+        eventId: `schedule-booking-${bookingId}`,
+        eventSourceUrl: `${siteUrl}/agenda/success?external_reference=${bookingId}`,
+        funnel: "booking",
+        entityType: "booking",
+        entityId: bookingId,
+        user: metaUser,
+        custom: {
+          contentName: booking.services?.name,
+          contentCategory: "booking",
+          contentIds: [booking.service_id],
+        },
+        supabase,
+      });
+    } catch (fbError) {
+      console.error("Booking Meta CAPI event failed (non-blocking):", (fbError as Error).message);
+    }
 
     return new Response(JSON.stringify({ status: "confirmed" }), {
       status: 200,

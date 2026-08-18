@@ -5,6 +5,7 @@ import { getCorsHeaders } from "../_shared/cors.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { upsertCustomerAndLogEvent } from "../_shared/crm.ts";
 import { appendToSheet } from "../_shared/googleSheets.ts";
+import { sanitizePublicIp, sendMetaEvent } from "../_shared/metaCapi.ts";
 
 const bookingSchema = z.object({
   customerName: z.string().trim().min(1).max(100),
@@ -17,6 +18,8 @@ const bookingSchema = z.object({
   utm_source: z.string().max(100).optional(),
   utm_medium: z.string().max(100).optional(),
   utm_campaign: z.string().max(100).optional(),
+  fbp: z.string().max(200).optional(),
+  fbc: z.string().max(300).optional(),
 });
 
 /** Normalize Chilean phone to E.164 */
@@ -328,7 +331,43 @@ serve(async (req) => {
       statusIfNew: "trial_booked",
     });
 
-    return new Response(JSON.stringify({ success: true, bookingId: booking.id }), {
+    // Meta CAPI (autoritativo): la clase de prueba quedó agendada en BD.
+    // El pixel del cliente usa el mismo event_id devuelto abajo para deduplicar.
+    const leadEventId = `lead-trial-${booking.id}`;
+    try {
+      const siteUrl = (Deno.env.get("SITE_URL") || "https://studiolanave.com").replace(/\/$/, "");
+      await sendMetaEvent({
+        eventName: "Lead",
+        eventId: leadEventId,
+        eventSourceUrl: `${siteUrl}/agendar`,
+        funnel: "trial_class",
+        entityType: "trial_booking",
+        entityId: String(booking.id),
+        user: {
+          email: data.customerEmail,
+          phone,
+          fullName: data.customerName,
+          externalId: data.customerEmail.toLowerCase(),
+          fbp: data.fbp,
+          fbc: data.fbc,
+          clientIpAddress: sanitizePublicIp(
+            req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+              req.headers.get("cf-connecting-ip"),
+          ),
+          clientUserAgent: req.headers.get("user-agent"),
+        },
+        custom: {
+          contentName: data.classTitle,
+          contentCategory: "trial_class",
+          extra: { lead_type: "trial_class", scheduled_date: data.selectedDate },
+        },
+        supabase,
+      });
+    } catch (e) {
+      console.error("Trial Lead Meta CAPI failed (non-blocking):", (e as Error).message);
+    }
+
+    return new Response(JSON.stringify({ success: true, bookingId: booking.id, leadEventId }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" }
     });
   } catch (err) {

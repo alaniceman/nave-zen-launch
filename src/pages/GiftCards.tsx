@@ -13,8 +13,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Footer } from "@/components/Footer";
 import { PurchaseFAQ } from "@/components/PurchaseFAQ";
-import { useFacebookPixel } from "@/hooks/useFacebookPixel";
-import { useFacebookConversionsAPI } from "@/hooks/useFacebookConversionsAPI";
+import { trackMetaClientEvent, trackViewContentOnce } from "@/lib/metaTracking";
 
 const purchaseSchema = z.object({
   buyerName: z.string().min(2, "El nombre debe tener al menos 2 caracteres").max(100),
@@ -48,19 +47,15 @@ function filterExpiredPromos<T extends { id: string }>(pkgs: T[]): T[] {
 }
 
 export default function GiftCards() {
-  const { trackEvent } = useFacebookPixel();
-  const { trackServerEvent } = useFacebookConversionsAPI();
   const [packages, setPackages] = useState<SessionPackage[]>([]);
   const [services, setServices] = useState<Service[]>([]);
   const [selectedPackage, setSelectedPackage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Track ViewContent on mount
+  // ViewContent: una sola vez por vista (Pixel + CAPI con el mismo event_id)
   useEffect(() => {
-    const eventId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-    trackEvent('ViewContent', { content_name: 'Gift Cards', content_category: 'GiftCard' }, eventId);
-    trackServerEvent({ eventName: 'ViewContent', eventId, contentName: 'Gift Cards' }).catch(() => {});
+    trackViewContentOnce('Gift Cards', { contentCategory: 'gift_card' });
   }, []);
   
   // Coupon state
@@ -215,22 +210,28 @@ export default function GiftCards() {
 
     // Track InitiateCheckout
     const pkg = packages.find(p => p.id === selectedPackage);
-    const eventId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-    trackEvent('InitiateCheckout', {
-      content_name: pkg?.name || 'Gift Card',
-      currency: 'CLP',
-      value: pkg?.price_clp || 0,
-    }, eventId);
-    trackServerEvent({
-      eventName: 'InitiateCheckout',
-      eventId,
+    trackMetaClientEvent('InitiateCheckout', {
       userEmail: data.buyerEmail,
       userName: data.buyerName,
       userPhone: data.buyerPhone,
       contentName: pkg?.name || 'Gift Card',
+      contentType: 'product',
+      contentCategory: 'gift_card',
+      contentIds: pkg ? [pkg.id] : undefined,
+      numItems: 1,
       value: pkg?.price_clp || 0,
       currency: 'CLP',
-    }).catch(() => {});
+      funnel: 'gift_card',
+      entityType: 'session_package',
+      entityId: pkg?.id,
+      pixelParams: {
+        content_name: pkg?.name || 'Gift Card',
+        content_category: 'gift_card',
+        content_ids: pkg ? [pkg.id] : undefined,
+        currency: 'CLP',
+        value: pkg?.price_clp || 0,
+      },
+    });
 
     setIsSubmitting(true);
 

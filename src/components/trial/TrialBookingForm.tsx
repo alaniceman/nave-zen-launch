@@ -8,8 +8,7 @@ import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { dayNames } from "@/data/schedule";
 import type { ScheduleClassItem } from "@/hooks/useScheduleEntries";
-import { useFacebookPixel } from "@/hooks/useFacebookPixel";
-import { useFacebookConversionsAPI } from "@/hooks/useFacebookConversionsAPI";
+import { getFbc, getFbp, trackMetaEvent } from "@/lib/metaPixel";
 
 const formSchema = z.object({
   name: z.string().trim().min(2, "Ingresa tu nombre").max(100),
@@ -37,8 +36,6 @@ export default function TrialBookingForm({
   onSuccess
 }: TrialBookingFormProps) {
   const [submitting, setSubmitting] = useState(false);
-  const { trackEvent } = useFacebookPixel();
-  const { trackServerEvent } = useFacebookConversionsAPI();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -68,6 +65,8 @@ export default function TrialBookingForm({
           dayKey,
           time: classItem.time,
           selectedDate,
+          fbp: getFbp(),
+          fbc: getFbc(),
           ...utm
         }
       });
@@ -84,27 +83,20 @@ export default function TrialBookingForm({
         return;
       }
 
-      // Generate shared event ID for deduplication between Pixel and CAPI
-      const eventId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-
-      // Client-side pixel with eventID
-      trackEvent('TrialClass', {
-        content_name: classItem.title,
-        value: 0,
-        currency: 'CLP'
-      }, eventId);
-
-      // Server-side CAPI with same eventId for deduplication
-      trackServerEvent({
-        eventName: 'TrialClass',
-        eventId,
-        userEmail: values.email,
-        userName: values.name,
-        userPhone: values.phone,
-        value: 0,
-        currency: 'CLP',
-        contentName: classItem.title,
-      }).catch(() => {}); // don't block on CAPI failure
+      // Meta: el Lead server-side ya se envió en la edge function (autoritativo).
+      // Aquí sólo espejamos el pixel con el MISMO event_id para deduplicar.
+      const leadEventId = (data as { leadEventId?: string } | null)?.leadEventId;
+      if (leadEventId) {
+        trackMetaEvent(
+          "Lead",
+          {
+            content_name: classItem.title,
+            content_category: "trial_class",
+            lead_type: "trial_class",
+          },
+          leadEventId,
+        );
+      }
 
       onSuccess();
     } catch (err) {

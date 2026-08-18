@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from "react";
 import { Helmet } from "react-helmet-async";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
+import { trackMetaClientEventOnce, trackViewContentOnce } from "@/lib/metaTracking";
 import { useScheduleEntries } from "@/hooks/useScheduleEntries";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CoachesSection } from "@/components/CoachesSection";
@@ -269,7 +270,7 @@ const blogLinks = [
 ];
 
 const YogaLasCondes = () => {
-  const { trackViewContent, trackLead, trackInitiateCheckout } = useFacebookPixel();
+  const { trackInitiateCheckout } = useFacebookPixel();
   const { data: scheduleData, isLoading: isScheduleLoading } = useScheduleEntries();
 
   const yogaSchedule = useMemo(() => {
@@ -315,11 +316,17 @@ const YogaLasCondes = () => {
   }, [scheduleData]);
 
   useEffect(() => {
-    trackViewContent({ content_name: "Yoga Las Condes", content_category: "landing_page" });
-  }, [trackViewContent]);
+    trackViewContentOnce("Yoga Las Condes", { contentCategory: "landing_page" });
+  }, []);
 
+  // Un clic en el CTA de clase de prueba NO es un Lead: el Lead se registra
+  // server-side cuando el formulario guarda datos de contacto reales.
   const handleTrialClick = () => {
-    trackLead({ content_name: "Yoga Las Condes — Clase de prueba" });
+    trackMetaClientEventOnce("plan_trial_page_view:yoga-las-condes", "plan_trial_page_view", {
+      contentName: "Yoga Las Condes — Clase de prueba",
+      funnel: "plan_trial",
+      pixelParams: { content_name: "Yoga Las Condes — Clase de prueba" },
+    });
   };
 
   const handleMembershipClick = (planName: string) => {

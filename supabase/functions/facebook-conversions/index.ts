@@ -1,195 +1,170 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
-import { getCorsHeaders } from "../_shared/cors.ts";
+import {
+  ALL_ALLOWED_EVENTS,
+  CLIENT_ALLOWED_EVENTS,
+  sanitizePublicIp,
+  sendMetaEvent,
+} from "../_shared/metaCapi.ts";
 
-const FACEBOOK_API_VERSION = "v21.0";
-const FACEBOOK_GRAPH_URL = `https://graph.facebook.com/${FACEBOOK_API_VERSION}`;
+/**
+ * Endpoint CAPI para eventos NO conversivos del navegador
+ * (ViewContent, InitiateCheckout, Contact y customs de embudo).
+ *
+ * Las conversiones (Purchase, Lead, Schedule, ...) sólo se aceptan cuando el
+ * llamador presenta el service role key, es decir cuando el evento se origina
+ * en una función server-side que ya confirmó la acción.
+ */
 
-interface ConversionEvent {
-  event_name: string;
-  event_time: number;
-  event_id: string;
-  event_source_url?: string;
-  action_source: "website";
-  user_data: {
-    em?: string[]; // hashed email
-    ph?: string[]; // hashed phone
-    fn?: string[]; // hashed first name
-    client_ip_address?: string;
-    client_user_agent?: string;
-    fbc?: string; // Facebook click ID
-    fbp?: string; // Facebook browser ID
-  };
-  custom_data?: {
-    value?: number;
-    currency?: string;
-    content_name?: string;
-    content_type?: string;
-    content_ids?: string[];
-    order_id?: string;
+const ALLOWED_ORIGIN_SUFFIXES = [
+  "studiolanave.com",
+  "lovable.app",
+  "lovableproject.com",
+  "localhost",
+  "127.0.0.1",
+];
+
+function isAllowedOrigin(origin: string | null): boolean {
+  if (!origin) return false;
+  try {
+    const host = new URL(origin).hostname;
+    return ALLOWED_ORIGIN_SUFFIXES.some((s) => host === s || host.endsWith(`.${s}`) || host.startsWith(s));
+  } catch {
+    return false;
+  }
+}
+
+function corsFor(req: Request) {
+  const origin = req.headers.get("origin");
+  return {
+    "Access-Control-Allow-Origin": isAllowedOrigin(origin) ? (origin as string) : "https://studiolanave.com",
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    Vary: "Origin",
   };
 }
 
-interface RequestBody {
-  event_name: string;
-  event_id: string;
+type RequestBody = {
+  event_name?: string;
+  event_id?: string;
   event_source_url?: string;
+  event_time?: number;
   user_email?: string;
   user_phone?: string;
   user_name?: string;
+  external_id?: string;
   value?: number;
   currency?: string;
   content_name?: string;
   content_type?: string;
+  content_category?: string;
   content_ids?: string[];
+  num_items?: number;
   order_id?: string;
+  funnel?: string;
+  entity_type?: string;
+  entity_id?: string;
   fbc?: string;
   fbp?: string;
-}
+};
 
-// SHA-256 hash function for PII
-async function hashData(data: string): Promise<string> {
-  const encoder = new TextEncoder();
-  const dataBuffer = encoder.encode(data.toLowerCase().trim());
-  const hashBuffer = await crypto.subtle.digest("SHA-256", dataBuffer);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
-}
+const isStr = (v: unknown) => typeof v === "string" && v.trim().length > 0;
 
 serve(async (req) => {
-  const corsHeaders = getCorsHeaders(req);
+  const corsHeaders = corsFor(req);
+  const json = (body: unknown, status: number) =>
+    new Response(JSON.stringify(body), {
+      status,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
 
-  if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
-  }
+  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+  if (req.method !== "POST") return json({ error: "method_not_allowed" }, 405);
 
   try {
-    const PIXEL_ID = Deno.env.get("FACEBOOK_PIXEL_ID");
-    const ACCESS_TOKEN = Deno.env.get("FACEBOOK_ACCESS_TOKEN");
+    const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+    const authHeader = req.headers.get("authorization") ?? "";
+    const isServiceCall = serviceRoleKey.length > 0 && authHeader === `Bearer ${serviceRoleKey}`;
 
-    if (!PIXEL_ID || !ACCESS_TOKEN) {
-      console.error("Missing Facebook credentials");
-      return new Response(
-        JSON.stringify({ error: "Facebook credentials not configured" }),
-        { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
-      );
+    let body: RequestBody;
+    try {
+      body = await req.json();
+    } catch {
+      return json({ error: "invalid_json" }, 400);
     }
 
-    const body: RequestBody = await req.json();
-    console.log("Received conversion event:", body.event_name, "event_id:", body.event_id);
+    // --- validación estricta de schema ---
+    const errors: string[] = [];
+    if (!isStr(body.event_name)) errors.push("event_name");
+    if (!isStr(body.event_id)) errors.push("event_id");
+    if (body.value !== undefined && (typeof body.value !== "number" || !Number.isFinite(body.value) || body.value < 0))
+      errors.push("value");
+    if (body.currency !== undefined && !isStr(body.currency)) errors.push("currency");
+    if (body.content_ids !== undefined && (!Array.isArray(body.content_ids) || body.content_ids.some((c) => typeof c !== "string")))
+      errors.push("content_ids");
+    if (body.num_items !== undefined && (typeof body.num_items !== "number" || body.num_items <= 0)) errors.push("num_items");
+    if (body.event_time !== undefined && (typeof body.event_time !== "number" || body.event_time <= 0)) errors.push("event_time");
+    if (errors.length) return json({ error: "invalid_payload", fields: errors }, 400);
 
-    // Build user_data with hashed PII
-    // Validate IP: accept valid public IPv4 or IPv6 (prefer IPv6 per Meta docs)
-    const rawIp = (req.headers.get("x-forwarded-for")?.split(",")[0]?.trim()) || req.headers.get("cf-connecting-ip") || undefined;
-    const isIPv4 = (ip: string) => /^(\d{1,3}\.){3}\d{1,3}$/.test(ip);
-    const isIPv6 = (ip: string) => /^[0-9a-fA-F:]+$/.test(ip) && ip.includes(":");
-    const isPrivateIPv4 = (ip: string) => ip.startsWith("10.") || ip.startsWith("172.") || ip.startsWith("192.168.") || ip === "127.0.0.1";
-    const isPrivateIPv6 = (ip: string) => ip === "::1" || ip.toLowerCase().startsWith("fe80") || ip.toLowerCase().startsWith("fc") || ip.toLowerCase().startsWith("fd");
-    const isValidPublicIp = rawIp && (
-      (isIPv4(rawIp) && !isPrivateIPv4(rawIp)) ||
-      (isIPv6(rawIp) && !isPrivateIPv6(rawIp))
-    );
-
-    const userData: ConversionEvent["user_data"] = {
-      client_ip_address: isValidPublicIp ? rawIp : undefined,
-      client_user_agent: req.headers.get("user-agent") || undefined,
-    };
-
-    if (body.user_email) {
-      userData.em = [await hashData(body.user_email)];
+    const eventName = body.event_name as string;
+    if (!ALL_ALLOWED_EVENTS.includes(eventName)) {
+      return json({ error: "event_not_allowed", event_name: eventName }, 400);
+    }
+    if (!isServiceCall && !(CLIENT_ALLOWED_EVENTS as readonly string[]).includes(eventName)) {
+      console.warn("Rejected client-originated conversion event:", eventName);
+      return json({ error: "event_requires_server_origin", event_name: eventName }, 403);
     }
 
-    if (body.user_phone) {
-      // Remove all non-numeric characters and hash
-      const cleanPhone = body.user_phone.replace(/\D/g, "");
-      userData.ph = [await hashData(cleanPhone)];
-    }
+    const supabase = createClient(Deno.env.get("SUPABASE_URL") ?? "", serviceRoleKey);
 
-    if (body.user_name) {
-      // Hash first name only (first word)
-      const firstName = body.user_name.split(" ")[0];
-      userData.fn = [await hashData(firstName)];
-    }
+    const forwardedIp = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || req.headers.get("cf-connecting-ip");
 
-    if (body.fbc) {
-      userData.fbc = body.fbc;
-    }
+    const result = await sendMetaEvent({
+      eventName,
+      eventId: body.event_id as string,
+      eventSourceUrl: body.event_source_url,
+      eventTime: body.event_time,
+      funnel: body.funnel,
+      entityType: body.entity_type,
+      entityId: body.entity_id,
+      user: {
+        email: body.user_email,
+        phone: body.user_phone,
+        fullName: body.user_name,
+        externalId: body.external_id,
+        fbp: body.fbp,
+        fbc: body.fbc,
+        clientIpAddress: sanitizePublicIp(forwardedIp),
+        clientUserAgent: req.headers.get("user-agent"),
+      },
+      custom: {
+        value: body.value,
+        currency: body.currency,
+        contentName: body.content_name,
+        contentType: body.content_type,
+        contentCategory: body.content_category,
+        contentIds: body.content_ids,
+        numItems: body.num_items,
+        orderId: body.order_id,
+      },
+      supabase,
+    });
 
-    if (body.fbp) {
-      userData.fbp = body.fbp;
-    }
-
-    // Build the event
-    const event: ConversionEvent = {
-      event_name: body.event_name,
-      event_time: Math.floor(Date.now() / 1000),
-      event_id: body.event_id,
-      event_source_url: body.event_source_url,
-      action_source: "website",
-      user_data: userData,
-    };
-
-    // Add custom data for purchase events
-    if (body.value !== undefined || body.content_name || body.content_ids) {
-      event.custom_data = {};
-      
-      if (body.value !== undefined) {
-        event.custom_data.value = body.value;
-        event.custom_data.currency = body.currency || "CLP";
-      }
-      
-      if (body.content_name) {
-        event.custom_data.content_name = body.content_name;
-      }
-      
-      if (body.content_type) {
-        event.custom_data.content_type = body.content_type;
-      }
-      
-      if (body.content_ids) {
-        event.custom_data.content_ids = body.content_ids;
-      }
-      
-      if (body.order_id) {
-        event.custom_data.order_id = body.order_id;
-      }
-    }
-
-    // Send to Facebook Conversions API
-    const fbResponse = await fetch(
-      `${FACEBOOK_GRAPH_URL}/${PIXEL_ID}/events?access_token=${ACCESS_TOKEN}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+    if (!result.success) {
+      return json(
+        {
+          success: false,
+          error: result.errorCode ?? result.reason ?? "meta_error",
+          message: result.errorMessage,
+          trace_id: result.traceId,
         },
-        body: JSON.stringify({
-          data: [event],
-        }),
-      }
-    );
-
-    const fbResult = await fbResponse.json();
-    console.log("Facebook API response:", fbResult);
-
-    if (!fbResponse.ok) {
-      console.error("Facebook API error:", fbResult);
-      // Return 200 to client anyway — tracking failures should not break the UI
-      return new Response(
-        JSON.stringify({ success: false, warning: "Facebook API rejected event", details: fbResult }),
-        { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
+        502
       );
     }
 
-    return new Response(
-      JSON.stringify({ success: true, ...fbResult }),
-      { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
-    );
-  } catch (error: any) {
-    console.error("Error in facebook-conversions:", error);
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
-    );
+    return json({ success: true, skipped: result.skipped ?? false, trace_id: result.traceId }, 200);
+  } catch (error) {
+    console.error("facebook-conversions unexpected error:", (error as Error).message);
+    return json({ success: false, error: "unexpected_error" }, 500);
   }
 });

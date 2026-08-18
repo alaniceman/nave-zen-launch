@@ -807,6 +807,60 @@ export type Database = {
         }
         Relationships: []
       }
+      meta_event_deliveries: {
+        Row: {
+          attempts: number
+          created_at: string
+          entity_id: string | null
+          entity_type: string | null
+          error_code: string | null
+          error_message: string | null
+          event_id: string
+          event_name: string
+          event_time: string
+          funnel: string | null
+          id: string
+          meta_trace_id: string | null
+          sent_at: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          attempts?: number
+          created_at?: string
+          entity_id?: string | null
+          entity_type?: string | null
+          error_code?: string | null
+          error_message?: string | null
+          event_id: string
+          event_name: string
+          event_time?: string
+          funnel?: string | null
+          id?: string
+          meta_trace_id?: string | null
+          sent_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          attempts?: number
+          created_at?: string
+          entity_id?: string | null
+          entity_type?: string | null
+          error_code?: string | null
+          error_message?: string | null
+          event_id?: string
+          event_name?: string
+          event_time?: string
+          funnel?: string | null
+          id?: string
+          meta_trace_id?: string | null
+          sent_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       orders_sync_log: {
         Row: {
           created_at: string
