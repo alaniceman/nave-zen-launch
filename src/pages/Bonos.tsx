@@ -207,43 +207,46 @@ export default function Bonos() {
         throw new Error(error.message || "Error al procesar la compra");
       }
 
-      // InitiateCheckout: sólo con orden creada, con el valor final post-cupón
-      // y event_id determinista por orden (dedupe con CAPI).
-      if (result?.orderId) {
-        const finalValue = typeof result.finalPrice === "number"
-          ? result.finalPrice
-          : calculateFinalPrice(pkg?.price_clp || 0);
-        trackMetaClientEvent('InitiateCheckout', {
-          eventId: deterministicEventId('initiatecheckout-package', result.orderId),
-          userEmail: data.buyerEmail,
-          userName: data.buyerName,
-          userPhone: data.buyerPhone,
-          contentName: pkg?.name || 'Paquete de sesiones',
-          contentType: 'product',
-          contentCategory: 'package',
-          contentIds: pkg ? [pkg.id] : undefined,
-          numItems: 1,
-          value: finalValue,
-          currency: 'CLP',
-          funnel: 'package',
-          entityType: 'package_order',
-          entityId: result.orderId,
-          pixelParams: {
-            content_name: pkg?.name || 'Paquete de sesiones',
-            content_category: 'package',
-            content_ids: pkg ? [pkg.id] : undefined,
-            currency: 'CLP',
-            value: finalValue,
-          },
-        });
-      }
-
       // Handle free order (100% discount)
       if (result.freeOrder) {
         toast.success("¡Compra completada! Revisa tu email para obtener tus códigos.");
         window.location.href = "/bonos/success?free=true";
         return;
       }
+
+      // InitiateCheckout: sólo con orden creada, con el valor final post-cupón
+      // y event_id determinista por orden (dedupe con CAPI).
+      if (result?.orderId && result?.initPoint && !result?.freeOrder) {
+        const finalValue = typeof result.finalPrice === "number"
+          ? result.finalPrice
+          : calculateFinalPrice(pkg?.price_clp || 0);
+        if (finalValue > 0) {
+          trackMetaClientEvent('InitiateCheckout', {
+            eventId: deterministicEventId('initiatecheckout-package', result.orderId),
+            userEmail: data.buyerEmail,
+            userName: data.buyerName,
+            userPhone: data.buyerPhone,
+            contentName: pkg?.name || 'Paquete de sesiones',
+            contentType: 'product',
+            contentCategory: 'package',
+            contentIds: pkg ? [pkg.id] : undefined,
+            numItems: 1,
+            value: finalValue,
+            currency: 'CLP',
+            funnel: 'package',
+            entityType: 'package_order',
+            entityId: result.orderId,
+            pixelParams: {
+              content_name: pkg?.name || 'Paquete de sesiones',
+              content_category: 'package',
+              content_ids: pkg ? [pkg.id] : undefined,
+              currency: 'CLP',
+              value: finalValue,
+            },
+          });
+        }
+      }
+
 
       // Redirect to Mercado Pago
       if (result.initPoint) {
