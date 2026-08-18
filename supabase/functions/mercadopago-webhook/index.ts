@@ -104,6 +104,18 @@ function isApproved(payment: any): boolean {
 }
 
 /**
+ * Monto del pago vs. monto esperado de la orden, con tolerancia de 1 CLP.
+ * Guard duro para no enviar Purchase con montos que no cuadran.
+ */
+function amountMatches(payment: any, expected: unknown): boolean {
+  const received = Number(payment?.transaction_amount);
+  const exp = Number(expected);
+  if (!Number.isFinite(received) || !Number.isFinite(exp)) return false;
+  return Math.abs(received - exp) <= 1;
+}
+
+
+/**
  * Purchase de tienda. Idempotente: el outbox deduplica por (event_name,event_id),
  * así un delivery `sent` se salta y uno `failed/pending` se reintenta.
  */
