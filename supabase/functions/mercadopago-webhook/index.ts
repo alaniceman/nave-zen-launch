@@ -236,6 +236,51 @@ async function handleShopOrderPayment(
   });
 }
 
+/**
+ * Purchase de taller. Idempotente vía outbox (event_name,event_id).
+ */
+async function sendTallerPurchaseCapi(insc: any, payment: any, orderId: string, supabase: any) {
+  if (!isApproved(payment)) return;
+  try {
+    const siteUrl = (Deno.env.get("SITE_URL") || "https://studiolanave.com").replace(/\/$/, "");
+    const tallerCtx = metaCtx(insc.meta_context);
+    await sendMetaEvent({
+      eventName: "Purchase",
+      eventId: `purchase-taller-${orderId}`,
+      eventTime: stableEventTime(payment),
+      eventSourceUrl: tallerCtx.eventSourceUrl || `${siteUrl}/taller-wim-hof-santiago-fundamentales-avanzado?pago=approved&order=${orderId}`,
+      funnel: "workshop",
+      entityType: "taller_inscripcion",
+      entityId: orderId,
+      user: {
+        email: insc.email,
+        phone: insc.phone || undefined,
+        firstName: insc.nombre,
+        lastName: insc.apellido,
+        externalId: insc.email,
+        fbp: tallerCtx.fbp,
+        fbc: tallerCtx.fbc,
+        clientIpAddress: tallerCtx.clientIpAddress,
+        clientUserAgent: tallerCtx.clientUserAgent,
+      },
+      custom: {
+        value: Number(payment.transaction_amount) || insc.amount,
+        currency: "CLP",
+        contentName: insc.taller_nombre,
+        contentType: "product",
+        contentCategory: "workshop",
+        // id estable del taller, no de la orden
+        contentIds: [`taller-whm-santiago-${insc.nivel}`],
+        numItems: 1,
+        orderId,
+      },
+      supabase,
+    });
+  } catch (fbError) {
+    console.error("Taller Meta CAPI event failed (non-blocking):", (fbError as Error).message);
+  }
+}
+
 // Handle Wim Hof workshop inscriptions (taller_inscripciones)
 async function handleTallerPayment(
   payment: any,
@@ -259,7 +304,13 @@ async function handleTallerPayment(
   if (!insc) return json("inscripcion_not_found");
 
   // Idempotency: already processed
-  if (insc.status === "paid" || insc.cupo_reserved) return json("already_processed");
+  if (insc.status === "paid" || insc.cupo_reserved) {
+    // Reconciliación CAPI únicamente; sin reservar cupo ni reenviar emails.
+    if (insc.status === "paid" && isApproved(payment)) {
+      await sendTallerPurchaseCapi(insc, payment, orderId, supabase);
+    }
+    return json("already_processed");
+  }
 
   if (payment.status === "pending" || payment.status === "in_process") {
     await supabase
@@ -303,7 +354,13 @@ async function handleTallerPayment(
     .select()
     .maybeSingle();
 
-  if (!claimed) return json("already_processed");
+  if (!claimed) {
+    // Otro webhook ganó el claim: sólo reconciliamos CAPI.
+    if (isApproved(payment)) {
+      await sendTallerPurchaseCapi(insc, payment, orderId, supabase);
+    }
+    return json("already_processed");
+  }
 
   // Reserve the cupo atomically
   let remaining: number | null = null;
@@ -424,43 +481,7 @@ async function handleTallerPayment(
 
   // Meta Conversions API (server-side, autoritativo) — deduped con el pixel
   // vía event_id determinista. Sólo se llega aquí con pago approved y monto validado.
-  try {
-    const siteUrl = (Deno.env.get("SITE_URL") || "https://studiolanave.com").replace(/\/$/, "");
-    const tallerCtx = metaCtx(insc.meta_context);
-    await sendMetaEvent({
-      eventName: "Purchase",
-      eventId: `purchase-taller-${orderId}`,
-      eventSourceUrl: tallerCtx.eventSourceUrl || `${siteUrl}/taller-wim-hof-santiago-fundamentales-avanzado?pago=approved&order=${orderId}`,
-      funnel: "workshop",
-      entityType: "taller_inscripcion",
-      entityId: orderId,
-      user: {
-        email: insc.email,
-        phone: insc.phone || undefined,
-        firstName: insc.nombre,
-        lastName: insc.apellido,
-        externalId: insc.email,
-        fbp: tallerCtx.fbp,
-        fbc: tallerCtx.fbc,
-        clientIpAddress: tallerCtx.clientIpAddress,
-        clientUserAgent: tallerCtx.clientUserAgent,
-      },
-      custom: {
-        value: Number(payment.transaction_amount) || insc.amount,
-        currency: "CLP",
-        contentName: insc.taller_nombre,
-        contentType: "product",
-        contentCategory: "workshop",
-        // id estable del taller, no de la orden
-        contentIds: [`taller-whm-santiago-${insc.nivel}`],
-        numItems: 1,
-        orderId,
-      },
-      supabase,
-    });
-  } catch (fbError) {
-    console.error("Taller Meta CAPI event failed (non-blocking):", (fbError as Error).message);
-  }
+  await sendTallerPurchaseCapi(insc, payment, orderId, supabase);
 
   return json("taller_inscripcion_paid");
 }
