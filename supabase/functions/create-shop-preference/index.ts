@@ -8,6 +8,9 @@ const schema = z.object({
   buyerName: z.string().min(2).max(100),
   buyerEmail: z.string().email().max(255),
   buyerPhone: z.string().min(8).max(20).optional(),
+  fbp: z.string().max(255).optional(),
+  fbc: z.string().max(500).optional(),
+  eventSourceUrl: z.string().max(2000).optional(),
 });
 
 function sanitizePhone(phone: string): string {
@@ -62,6 +65,16 @@ serve(async (req) => {
         customer_email: data.buyerEmail.toLowerCase().trim(),
         customer_phone: data.buyerPhone || null,
         status: "pending",
+        meta_context: {
+          fbp: data.fbp ?? null,
+          fbc: data.fbc ?? null,
+          event_source_url: data.eventSourceUrl ?? null,
+          client_ip_address:
+            req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+            req.headers.get("cf-connecting-ip") ||
+            null,
+          client_user_agent: req.headers.get("user-agent") || null,
+        },
       })
       .select()
       .single();

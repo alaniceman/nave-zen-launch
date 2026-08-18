@@ -192,6 +192,7 @@ export function MembershipFormModal({ open, onOpenChange, group, initialCode }: 
         trigger.href = data.boxmagicUrl;
         trigger.setAttribute("data-checkout-url", data.boxmagicUrl);
         trigger.setAttribute("data-plan", selected.label);
+        trigger.setAttribute("data-no-meta-track", "true");
         trigger.style.display = "none";
         document.body.appendChild(trigger);
         trigger.click();

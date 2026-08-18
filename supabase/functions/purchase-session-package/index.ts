@@ -13,6 +13,9 @@ const purchaseSchema = z.object({
   couponCode: z.string().optional(),
   isGiftCard: z.boolean().optional().default(false),
   promoType: z.string().optional(),
+  fbp: z.string().max(255).optional(),
+  fbc: z.string().max(500).optional(),
+  eventSourceUrl: z.string().max(2000).optional(),
 });
 
 // Sanitize phone number - keep only digits
@@ -185,6 +188,18 @@ serve(async (req) => {
         final_price: finalPrice,
         is_giftcard: validatedData.isGiftCard,
         status: "created",
+        // Contexto de navegador para atribución server-side de Meta CAPI.
+        meta_context: {
+          fbp: validatedData.fbp ?? null,
+          fbc: validatedData.fbc ?? null,
+          event_source_url: validatedData.eventSourceUrl ?? null,
+          client_ip_address:
+            req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+            req.headers.get("cf-connecting-ip") ||
+            null,
+          client_user_agent: req.headers.get("user-agent") || null,
+        },
+
       })
       .select()
       .single();
@@ -341,6 +356,7 @@ serve(async (req) => {
           success: true,
           freeOrder: true,
           orderId: order.id,
+          finalPrice,
           message: "Compra completada con cupón de descuento 100%",
         }),
         {
@@ -430,6 +446,7 @@ serve(async (req) => {
       JSON.stringify({
         initPoint: preference.init_point,
         orderId: order.id,
+        finalPrice,
       }),
       {
         status: 200,

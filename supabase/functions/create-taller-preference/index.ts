@@ -11,6 +11,9 @@ const schema = z.object({
   email: z.string().email().max(255),
   celular: z.string().min(6).max(30),
   couponCode: z.string().max(30).optional().nullable(),
+  fbp: z.string().max(255).optional(),
+  fbc: z.string().max(500).optional(),
+  eventSourceUrl: z.string().max(2000).optional(),
 });
 
 function sanitizePhone(phone: string): string {
@@ -109,6 +112,16 @@ serve(async (req) => {
         coupon_id: couponId,
         coupon_code: couponCode,
         status: "pending",
+        meta_context: {
+          fbp: data.fbp ?? null,
+          fbc: data.fbc ?? null,
+          event_source_url: data.eventSourceUrl ?? null,
+          client_ip_address:
+            req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+            req.headers.get("cf-connecting-ip") ||
+            null,
+          client_user_agent: req.headers.get("user-agent") || null,
+        },
       })
       .select()
       .single();
@@ -179,7 +192,7 @@ serve(async (req) => {
       .eq("id", inscripcion.id);
 
     return new Response(
-      JSON.stringify({ initPoint: preference.init_point, orderId: inscripcion.id }),
+      JSON.stringify({ initPoint: preference.init_point, orderId: inscripcion.id, amount: finalAmount }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error: any) {

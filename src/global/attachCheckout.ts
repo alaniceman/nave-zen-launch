@@ -3,9 +3,14 @@ import { toast } from "@/components/ui/use-toast";
 export type CheckoutClickDetails = {
   url: string;
   plan?: string | null;
+  /** valor del plan en CLP, si el botón lo declara vía data-checkout-value */
+  value?: number;
+  /** true si el origen ya emitió su propio InitiateCheckout (data-no-meta-track) */
+  skipTracking: boolean;
   element: HTMLElement;
   event: MouseEvent;
 };
+
 
 // Attaches a delegated click handler for any element matching [data-checkout-url]
 export function attachCheckoutRedirect(
@@ -20,6 +25,9 @@ export function attachCheckoutRedirect(
 
     const url = el.getAttribute("data-checkout-url");
     const plan = el.getAttribute("data-plan");
+    const rawValue = el.getAttribute("data-checkout-value");
+    const parsedValue = rawValue ? Number(rawValue) : NaN;
+    const skipTracking = el.hasAttribute("data-no-meta-track");
 
     event.preventDefault();
     event.stopPropagation();
@@ -33,7 +41,15 @@ export function attachCheckoutRedirect(
       return;
     }
 
-    onFound({ url, plan, element: el, event });
+    onFound({
+      url,
+      plan,
+      value: Number.isFinite(parsedValue) && parsedValue >= 0 ? parsedValue : undefined,
+      skipTracking,
+      element: el,
+      event,
+    });
+
   };
 
   document.addEventListener("click", handleClick, true);

@@ -129,6 +129,7 @@ export type Database = {
           id: string
           mercado_pago_payment_id: string | null
           mercado_pago_preference_id: string | null
+          meta_context: Json | null
           original_price: number | null
           professional_id: string
           service_id: string
@@ -151,6 +152,7 @@ export type Database = {
           id?: string
           mercado_pago_payment_id?: string | null
           mercado_pago_preference_id?: string | null
+          meta_context?: Json | null
           original_price?: number | null
           professional_id: string
           service_id: string
@@ -173,6 +175,7 @@ export type Database = {
           id?: string
           mercado_pago_payment_id?: string | null
           mercado_pago_preference_id?: string | null
+          meta_context?: Json | null
           original_price?: number | null
           professional_id?: string
           service_id?: string
@@ -915,6 +918,7 @@ export type Database = {
           mercado_pago_preference_id: string | null
           mercado_pago_status: string | null
           mercado_pago_status_detail: string | null
+          meta_context: Json | null
           order_type: string
           original_price: number
           package_id: string
@@ -938,6 +942,7 @@ export type Database = {
           mercado_pago_preference_id?: string | null
           mercado_pago_status?: string | null
           mercado_pago_status_detail?: string | null
+          meta_context?: Json | null
           order_type: string
           original_price: number
           package_id: string
@@ -961,6 +966,7 @@ export type Database = {
           mercado_pago_preference_id?: string | null
           mercado_pago_status?: string | null
           mercado_pago_status_detail?: string | null
+          meta_context?: Json | null
           order_type?: string
           original_price?: number
           package_id?: string
@@ -1294,6 +1300,7 @@ export type Database = {
           id: string
           mercado_pago_payment_id: string | null
           mercado_pago_preference_id: string | null
+          meta_context: Json | null
           paid_at: string | null
           product_id: string | null
           product_name: string
@@ -1309,6 +1316,7 @@ export type Database = {
           id?: string
           mercado_pago_payment_id?: string | null
           mercado_pago_preference_id?: string | null
+          meta_context?: Json | null
           paid_at?: string | null
           product_id?: string | null
           product_name: string
@@ -1324,6 +1332,7 @@ export type Database = {
           id?: string
           mercado_pago_payment_id?: string | null
           mercado_pago_preference_id?: string | null
+          meta_context?: Json | null
           paid_at?: string | null
           product_id?: string | null
           product_name?: string
@@ -1400,6 +1409,7 @@ export type Database = {
           mercado_pago_payment_id: string | null
           mercado_pago_preference_id: string | null
           mercado_pago_status: string | null
+          meta_context: Json | null
           nivel: string
           nombre: string
           notification_error: string | null
@@ -1428,6 +1438,7 @@ export type Database = {
           mercado_pago_payment_id?: string | null
           mercado_pago_preference_id?: string | null
           mercado_pago_status?: string | null
+          meta_context?: Json | null
           nivel: string
           nombre: string
           notification_error?: string | null
@@ -1456,6 +1467,7 @@ export type Database = {
           mercado_pago_payment_id?: string | null
           mercado_pago_preference_id?: string | null
           mercado_pago_status?: string | null
+          meta_context?: Json | null
           nivel?: string
           nombre?: string
           notification_error?: string | null

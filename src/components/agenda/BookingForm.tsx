@@ -13,6 +13,8 @@ import { Button } from "@/components/ui/button";
 import { Loader2, Calendar, Clock, User, DollarSign, Tag, Check, X } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { trackMetaClientEvent } from "@/lib/metaTracking";
+import { deterministicEventId, getMetaBrowserContext } from "@/lib/metaPixel";
 import { UpsellModal } from "./UpsellModal";
 
 const bookingSchema = z.object({
@@ -166,6 +168,7 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
     setIsSubmitting(true);
     
     try {
+      const ctx = getMetaBrowserContext();
       const { data: result, error } = await supabase.functions.invoke("create-booking", {
         body: {
           professionalId: timeSlot.professionalId,
@@ -173,6 +176,9 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
           dateTimeStart: timeSlot.dateTimeStart,
           couponCode: appliedCode?.type === "coupon" ? appliedCode.data.code : null,
           sessionCode: appliedCode?.type === "session" ? appliedCode.data.code : null,
+          fbp: ctx.fbp,
+          fbc: ctx.fbc,
+          eventSourceUrl: ctx.eventSourceUrl,
           ...data,
         },
       });
@@ -202,6 +208,31 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
 
       // Redirect to Mercado Pago
       if (result.initPoint) {
+        // InitiateCheckout: sólo cuando existe link de pago real, con el precio
+        // final post-descuento y content_id estable (service_id).
+        trackMetaClientEvent("InitiateCheckout", {
+          eventId: deterministicEventId("initiatecheckout-booking", result.bookingId),
+          userEmail: data.customerEmail,
+          userName: data.customerName,
+          userPhone: data.customerPhone,
+          contentName: service.name,
+          contentType: "product",
+          contentCategory: "booking",
+          contentIds: [service.id],
+          numItems: 1,
+          value: finalPrice,
+          currency: "CLP",
+          funnel: "booking",
+          entityType: "booking",
+          entityId: result.bookingId,
+          pixelParams: {
+            content_name: service.name,
+            content_category: "booking",
+            content_ids: [service.id],
+            value: finalPrice,
+            currency: "CLP",
+          },
+        });
         window.location.href = result.initPoint;
       } else {
         throw new Error("No se pudo generar el link de pago");

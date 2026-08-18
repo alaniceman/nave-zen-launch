@@ -218,8 +218,10 @@ async function claimDelivery(input: SendMetaEventInput, eventTime: number) {
     const { data: existing } = await supabase
       .from("meta_event_deliveries")
       .select("id, status, attempts, event_time")
+      .eq("event_name", input.eventName)
       .eq("event_id", input.eventId)
       .maybeSingle();
+
 
     if (existing) {
       if (existing.status === "sent") {
@@ -343,6 +345,26 @@ export async function sendMetaEvent(input: SendMetaEventInput): Promise<SendMeta
       };
     }
 
+    // Meta puede responder 200 sin haber aceptado el evento.
+    const received = Number(result?.events_received ?? 0);
+    if (!Number.isFinite(received) || received < 1) {
+      const errMsg = sanitizeError(result?.error?.message ?? "Meta accepted the request but received 0 events");
+      console.error("Meta CAPI events_received=0", input.eventName, input.eventId);
+      await finishDelivery(input.supabase, claim.rowId, {
+        status: "failed",
+        error_code: "no_events_received",
+        error_message: errMsg,
+        meta_trace_id: result?.fbtrace_id ?? null,
+      });
+      return {
+        success: false,
+        errorCode: "no_events_received",
+        errorMessage: errMsg ?? undefined,
+        traceId: result?.fbtrace_id,
+        httpStatus: res.status,
+      };
+    }
+
     console.log("Meta CAPI event sent:", input.eventName, input.eventId);
     await finishDelivery(input.supabase, claim.rowId, {
       status: "sent",
@@ -352,6 +374,7 @@ export async function sendMetaEvent(input: SendMetaEventInput): Promise<SendMeta
       meta_trace_id: result?.fbtrace_id ?? null,
     });
     return { success: true, traceId: result?.fbtrace_id, httpStatus: res.status };
+
   } catch (e) {
     const errMsg = sanitizeError((e as Error).message);
     console.error("Meta CAPI network error:", input.eventName, input.eventId, errMsg);

@@ -7,7 +7,7 @@ import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover
 import { Info, Check, Star } from "lucide-react";
 import { Footer } from "@/components/Footer";
 import { PricingTrialYogaSection } from "@/components/PricingTrialYogaSection";
-import { useFacebookPixel } from "@/hooks/useFacebookPixel";
+import { trackViewContentOnce } from "@/lib/metaTracking";
 import { PlanesAnualesPromo } from "@/components/PlanesAnualesPromo";
 import { MembershipFormModal, type MembershipGroup } from "@/components/membership/MembershipFormModal";
 import { AskNaveBar } from "@/components/AskNaveBar";
@@ -43,10 +43,8 @@ const TooltipLabel = ({ label }: { label: string }) => (
   </Popover>
 );
 const Planes = () => {
-  const {
-    trackViewContent,
-    trackInitiateCheckout
-  } = useFacebookPixel();
+
+
   const [membershipModal, setMembershipModal] = useState<{ open: boolean; group: MembershipGroup; code: string }>({
     open: false, group: "completa", code: "orbita",
   });
@@ -54,49 +52,18 @@ const Planes = () => {
     setMembershipModal({ open: true, group, code });
   };
   useEffect(() => {
-    // Track ViewContent event for pricing page
-    trackViewContent({
-      content_name: 'Pricing Plans',
-      content_category: 'E-commerce',
-      content_ids: ['eclipse', 'orbita', 'universo'],
-      content_type: 'product_group'
+    // ViewContent de la página de precios (una sola vez por vista).
+    trackViewContentOnce("Pricing Plans", {
+      contentCategory: "membership",
+      contentIds: ["eclipse", "orbita", "universo"],
     });
+  }, []);
 
-    // Add event listeners for InitiateCheckout on all buttons
-    const handleCheckoutClick = (event: Event) => {
-      const target = event.target as HTMLElement;
-      const button = target.closest('[data-checkout-url]') as HTMLElement;
-      if (button) {
-        const plan = button.getAttribute('data-plan') || 'Unknown Plan';
-        trackInitiateCheckout({
-          content_name: plan,
-          content_category: 'Subscription',
-          currency: 'CLP'
-        });
-      }
-    };
+  // InitiateCheckout se emite una sola vez al activarse el redirect real
+  // (CheckoutRedirectManager para los links directos a BoxMagic; MembershipFormModal
+  // para los flujos con formulario). Aquí no se escuchan clics globales.
 
-    // Add listeners to WhatsApp links
-    const handleWhatsAppClick = () => {
-      trackInitiateCheckout({
-        content_name: 'WhatsApp Contact',
-        content_category: 'Lead Generation'
-      });
-    };
-    document.addEventListener('click', handleCheckoutClick);
 
-    // WhatsApp links
-    const whatsappLinks = document.querySelectorAll('a[href*="wa.me"]');
-    whatsappLinks.forEach(link => {
-      link.addEventListener('click', handleWhatsAppClick);
-    });
-    return () => {
-      document.removeEventListener('click', handleCheckoutClick);
-      whatsappLinks.forEach(link => {
-        link.removeEventListener('click', handleWhatsAppClick);
-      });
-    };
-  }, [trackViewContent, trackInitiateCheckout]);
   return <>
       <Helmet>
         <title>Planes y precios | Membresías Nave Studio Las Condes</title>
@@ -538,7 +505,14 @@ const Planes = () => {
                 27 sesiones en 90 días · 2/sem · plan trimestral con ahorro — ¡la mejor oferta!
               </p>
               <div className="text-3xl font-bold text-foreground">$199.000</div>
-              <Button className="w-full bg-primary hover:bg-primary/90 text-white font-inter font-medium" data-checkout-url="https://boxmagic.cl/market/plan/WkD17d743z" data-plan="Misión 90 Órbita">
+              <Button
+                className="w-full bg-primary hover:bg-primary/90 text-white font-inter font-medium"
+                data-checkout-url="https://boxmagic.cl/market/plan/WkD17d743z"
+                data-plan="Misión 90 Órbita"
+                data-checkout-value="199000"
+              >
+
+
                 Comenzar misión
               </Button>
             </CardContent>
