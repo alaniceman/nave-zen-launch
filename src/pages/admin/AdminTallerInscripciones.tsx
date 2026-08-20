@@ -13,6 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Download, Loader2, Search } from "lucide-react";
+import EventCuposManager from "@/components/admin/EventCuposManager";
 
 type Inscripcion = {
   id: string;
@@ -184,6 +185,8 @@ export default function AdminTallerInscripciones() {
           Exportar CSV
         </Button>
       </div>
+
+      <EventCuposManager />
 
       <Card className="p-4 grid gap-4 md:grid-cols-4">
         <div>
