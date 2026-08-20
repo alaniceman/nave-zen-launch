@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
 import planPruebaHero from "@/assets/plan-prueba-hero.webp";
 
 
