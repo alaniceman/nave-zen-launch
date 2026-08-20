@@ -315,7 +315,7 @@ const HeroSlideTallerWimHof = () => {
             <span className="text-3xl md:text-4xl text-white/50">·</span>
             <div className="text-left">
               <span className="font-space-grotesk text-4xl md:text-6xl font-bold">$60.000</span>
-              <p className="text-sm md:text-base text-white/80">Avanzado</p>
+              <p className="text-sm md:text-base text-white/80">Avanzado (Últimos cupos)</p>
             </div>
           </div>
 
