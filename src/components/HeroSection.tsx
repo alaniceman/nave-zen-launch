@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
 import planPruebaHero from "@/assets/plan-prueba-hero.webp";
 
 
@@ -256,6 +257,21 @@ const HeroSlidePromoInvierno = () => {
 
 const HeroSlideTallerWimHof = () => {
   const navigate = useNavigate();
+  const [fundamentosAgotado, setFundamentosAgotado] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const { data } = await supabase
+        .from("event_cupos")
+        .select("event_id, cupos_total, cupos_vendidos")
+        .eq("event_id", "santiago_fundamentos_2026_08_23")
+        .maybeSingle();
+      if (data && data.cupos_vendidos >= data.cupos_total) {
+        setFundamentosAgotado(true);
+      }
+    })();
+  }, []);
+
   return (
     <div className="relative min-h-screen flex items-start md:items-center justify-center pt-20 md:pt-0 bg-gradient-to-br from-slate-950 via-teal-900 to-cyan-800 overflow-hidden">
       {/* Glows */}
@@ -274,7 +290,7 @@ const HeroSlideTallerWimHof = () => {
           <h2 className="font-space-grotesk font-bold text-4xl md:text-6xl lg:text-7xl leading-[1.05]">
             Taller Wim Hof en Santiago
             <span className="block text-xl md:text-3xl lg:text-4xl font-medium text-white/90 mt-3">
-              Fundamentos y Avanzado · cupos limitados
+              {fundamentosAgotado ? "Avanzado · cupos limitados" : "Fundamentos y Avanzado · cupos limitados"}
             </span>
           </h2>
 
@@ -284,8 +300,17 @@ const HeroSlideTallerWimHof = () => {
 
           <div className="flex items-center justify-center gap-4 pt-2 flex-wrap">
             <div className="text-left">
-              <span className="font-space-grotesk text-4xl md:text-6xl font-bold">$50.000</span>
-              <p className="text-sm md:text-base text-white/80">Fundamentos</p>
+              {fundamentosAgotado ? (
+                <>
+                  <span className="font-space-grotesk text-3xl md:text-5xl font-bold line-through text-white/40">$50.000</span>
+                  <p className="text-sm md:text-base text-rose-300 font-semibold">Fundamentos · Agotado</p>
+                </>
+              ) : (
+                <>
+                  <span className="font-space-grotesk text-4xl md:text-6xl font-bold">$50.000</span>
+                  <p className="text-sm md:text-base text-white/80">Fundamentos</p>
+                </>
+              )}
             </div>
             <span className="text-3xl md:text-4xl text-white/50">·</span>
             <div className="text-left">
@@ -301,7 +326,7 @@ const HeroSlideTallerWimHof = () => {
               className="w-full md:w-auto min-w-[320px] bg-white text-teal-900 hover:bg-white/90 font-bold text-lg py-6 px-10 rounded-xl shadow-xl transition-all transform hover:scale-105"
               size="xl"
             >
-              Reservar mi cupo en el taller →
+              {fundamentosAgotado ? "Reservar Avanzado →" : "Reservar mi cupo en el taller →"}
             </Button>
             <p className="font-inter text-xs text-white/80">Antares 259, Las Condes · Cupos limitados</p>
           </div>
