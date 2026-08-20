@@ -186,6 +186,8 @@ export default function AdminTallerInscripciones() {
         </Button>
       </div>
 
+      <EventCuposManager />
+
       <Card className="p-4 grid gap-4 md:grid-cols-4">
         <div>
           <Label htmlFor="search">Buscar</Label>
