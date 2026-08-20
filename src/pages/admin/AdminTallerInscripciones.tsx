@@ -13,6 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Download, Loader2, Search } from "lucide-react";
+import EventCuposManager from "@/components/admin/EventCuposManager";
 
 type Inscripcion = {
   id: string;
