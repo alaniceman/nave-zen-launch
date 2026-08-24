@@ -1248,6 +1248,7 @@ export type Database = {
           description: string | null
           id: string
           is_active: boolean | null
+          is_private: boolean
           name: string
           price_clp: number
           sessions_quantity: number
@@ -1264,6 +1265,7 @@ export type Database = {
           description?: string | null
           id?: string
           is_active?: boolean | null
+          is_private?: boolean
           name: string
           price_clp: number
           sessions_quantity: number
@@ -1280,6 +1282,7 @@ export type Database = {
           description?: string | null
           id?: string
           is_active?: boolean | null
+          is_private?: boolean
           name?: string
           price_clp?: number
           sessions_quantity?: number

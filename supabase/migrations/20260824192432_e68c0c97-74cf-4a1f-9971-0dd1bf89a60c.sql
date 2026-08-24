@@ -1,0 +1,1 @@
+ALTER TABLE public.session_packages ADD COLUMN IF NOT EXISTS is_private boolean NOT NULL DEFAULT false;
