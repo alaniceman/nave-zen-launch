@@ -472,7 +472,7 @@ export default function PromoTalleres() {
 
         <section className="py-12 md:py-16">
           <div className="container mx-auto px-4 max-w-3xl">
-            <PurchaseFAQ />
+            <PurchaseFAQ type="bonos" />
           </div>
         </section>
       </main>
