@@ -264,6 +264,36 @@ export default function PromoTalleres() {
                 <strong className="text-foreground">$10.000 cada una</strong>, para seguir el
                 proceso que empezaste en el taller. Y si quieres, compártelas.
               </p>
+
+              {/* Countdown timer */}
+              <div className="mt-8 flex flex-col items-center gap-3">
+                <div className="inline-flex items-center gap-2 text-rose-600 font-semibold text-sm uppercase tracking-wide">
+                  <Timer className="w-4 h-4" />
+                  {expired ? "La promo ha terminado" : "La promo termina en"}
+                </div>
+                {!expired && (
+                  <div className="flex items-center gap-2 md:gap-3">
+                    {[
+                      { label: "Días", value: timeLeft.days },
+                      { label: "Horas", value: timeLeft.hours },
+                      { label: "Min", value: timeLeft.minutes },
+                      { label: "Seg", value: timeLeft.seconds },
+                    ].map((unit, i) => (
+                      <div
+                        key={i}
+                        className="flex flex-col items-center bg-card border border-rose-200 rounded-xl px-3 py-2 min-w-[64px] shadow-sm"
+                      >
+                        <span className="text-2xl md:text-3xl font-bold tabular-nums text-rose-600">
+                          {String(unit.value).padStart(2, "0")}
+                        </span>
+                        <span className="text-[10px] uppercase tracking-wide text-muted-foreground">
+                          {unit.label}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </section>
