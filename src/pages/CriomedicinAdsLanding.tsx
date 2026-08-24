@@ -66,6 +66,7 @@ import { ReviewsTrustBar } from "@/components/ReviewsTrustBar";
          .select("id, name, description, sessions_quantity, price_clp, validity_days")
          .eq("is_active", true)
          .eq("show_in_criomedicina", true)
+        .eq("is_private", false)
          .order("sessions_quantity", { ascending: true });
  
        if (!error && data) {

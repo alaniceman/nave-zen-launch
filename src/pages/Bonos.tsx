@@ -104,6 +104,7 @@ export default function Bonos() {
         .from("session_packages")
         .select("*")
         .eq("is_active", true)
+        .eq("is_private", false)
         .order("sort_order", { ascending: true })
         .order("sessions_quantity", { ascending: true });
       if (error) throw error;

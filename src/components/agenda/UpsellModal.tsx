@@ -61,6 +61,7 @@ export function UpsellModal({
         .select("*")
         .eq("is_active", true)
         .eq("show_in_upsell_modal", true)
+        .eq("is_private", false)
         .contains("applicable_service_ids", [serviceId])
         .order("sessions_quantity", { ascending: true });
 
