@@ -69,9 +69,34 @@ export default function PromoTalleres() {
   const [couponError, setCouponError] = useState("");
   const [isValidatingCoupon, setIsValidatingCoupon] = useState(false);
 
+  // Countdown: 7 days from first component mount
+  const [deadline] = useState(() => Date.now() + 7 * 24 * 60 * 60 * 1000);
+  const [timeLeft, setTimeLeft] = useState({ days: 7, hours: 0, minutes: 0, seconds: 0 });
+  const [expired, setExpired] = useState(false);
+
   useEffect(() => {
     trackViewContentOnce(PACKAGE_NAME, { contentCategory: "package" });
   }, []);
+
+  useEffect(() => {
+    const tick = () => {
+      const diff = deadline - Date.now();
+      if (diff <= 0) {
+        setExpired(true);
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        return;
+      }
+      setTimeLeft({
+        days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+        minutes: Math.floor((diff / (1000 * 60)) % 60),
+        seconds: Math.floor((diff / 1000) % 60),
+      });
+    };
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, [deadline]);
 
   const finalPrice = (() => {
     if (!appliedCoupon) return PRICE;
