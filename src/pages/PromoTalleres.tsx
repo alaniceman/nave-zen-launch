@@ -428,57 +428,6 @@ export default function PromoTalleres() {
           </div>
         </section>
 
-        {/* Benefits */}
-        <section className="py-12 md:py-16 bg-card/60">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-2xl md:text-3xl font-bold text-center text-foreground mb-3">
-                El taller fue el inicio. El cambio está en la constancia.
-              </h2>
-              <p className="text-center text-muted-foreground mb-10 max-w-2xl mx-auto">
-                Seis sesiones en tres meses es el ritmo justo para que tu cuerpo aprenda a
-                responder distinto al estrés.
-              </p>
-
-              <div className="grid sm:grid-cols-2 gap-5">
-                {benefits.map((b) => (
-                  <div
-                    key={b.title}
-                    className="flex items-start gap-4 p-5 rounded-2xl border border-muted bg-background"
-                  >
-                    <div className="p-2.5 rounded-xl bg-cyan-100 text-cyan-700 flex-shrink-0">
-                      <b.icon className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-foreground mb-1">{b.title}</h3>
-                      <p className="text-sm text-muted-foreground">{b.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="text-center mt-10">
-                <Button
-                  onClick={() =>
-                    document.getElementById("comprar")?.scrollIntoView({ behavior: "smooth" })
-                  }
-                  className="bg-gradient-to-r from-cyan-500 to-sky-600 hover:from-cyan-600 hover:to-sky-700 text-primary-foreground font-semibold px-8 py-6 text-lg"
-                >
-                  Quiero mis 6 sesiones
-                </Button>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <ReviewsTrustBar />
-
-        <section className="py-12 md:py-16">
-          <div className="container mx-auto px-4 max-w-3xl">
-            <PurchaseFAQ type="bonos" />
-          </div>
-        </section>
-
         {/* Cómo seguir profundizando */}
         <section className="py-12 md:py-16 bg-gradient-to-b from-cyan-50/40 to-sky-50/60">
           <div className="container mx-auto px-4 max-w-5xl">
@@ -567,6 +516,57 @@ export default function PromoTalleres() {
                 </span>
               </a>
             </div>
+          </div>
+        </section>
+
+        {/* Benefits */}
+        <section className="py-12 md:py-16 bg-card/60">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-2xl md:text-3xl font-bold text-center text-foreground mb-3">
+                El taller fue el inicio. El cambio está en la constancia.
+              </h2>
+              <p className="text-center text-muted-foreground mb-10 max-w-2xl mx-auto">
+                Seis sesiones en tres meses es el ritmo justo para que tu cuerpo aprenda a
+                responder distinto al estrés.
+              </p>
+
+              <div className="grid sm:grid-cols-2 gap-5">
+                {benefits.map((b) => (
+                  <div
+                    key={b.title}
+                    className="flex items-start gap-4 p-5 rounded-2xl border border-muted bg-background"
+                  >
+                    <div className="p-2.5 rounded-xl bg-cyan-100 text-cyan-700 flex-shrink-0">
+                      <b.icon className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-foreground mb-1">{b.title}</h3>
+                      <p className="text-sm text-muted-foreground">{b.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="text-center mt-10">
+                <Button
+                  onClick={() =>
+                    document.getElementById("comprar")?.scrollIntoView({ behavior: "smooth" })
+                  }
+                  className="bg-gradient-to-r from-cyan-500 to-sky-600 hover:from-cyan-600 hover:to-sky-700 text-primary-foreground font-semibold px-8 py-6 text-lg"
+                >
+                  Quiero mis 6 sesiones
+                </Button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <ReviewsTrustBar />
+
+        <section className="py-12 md:py-16">
+          <div className="container mx-auto px-4 max-w-3xl">
+            <PurchaseFAQ type="bonos" />
           </div>
         </section>
       </main>
