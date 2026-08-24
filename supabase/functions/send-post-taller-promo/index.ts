@@ -57,7 +57,7 @@ serve(async (req) => {
 
     <!-- 2. Retiro Guatemala -->
     <div style="background: #F7F9FB; border-radius: 12px; padding: 22px; margin: 25px 0; border: 1px solid #e8ecf0;">
-      <p style="margin: 0 0 8px 0; font-size: 18px; font-weight: bold; color: #0e7490;">�volcán Retiro Criomedicina · Guatemala</p>
+      <p style="margin: 0 0 8px 0; font-size: 18px; font-weight: bold; color: #0e7490;">🌋 Retiro Criomedicina · Guatemala</p>
       <p style="margin: 0 0 14px 0; font-size: 15px;">Varios días de respiración, hielo, naturaleza y comunidad. Es el salto de la clase al viaje: donde el método se vuelve una experiencia que recuerdas por años. Cupos muy limitados.</p>
       <a href="https://guatemala.criomedicina.com/" style="display: inline-block; background: #0e7490; color: white; text-decoration: none; padding: 12px 26px; border-radius: 8px; font-size: 15px; font-weight: bold;">Conocer el retiro</a>
     </div>
