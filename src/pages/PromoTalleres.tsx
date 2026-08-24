@@ -11,6 +11,9 @@ import {
   Zap,
   Heart,
   ShieldCheck,
+  MapPin,
+  ShoppingBag,
+  ArrowRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -473,6 +476,97 @@ export default function PromoTalleres() {
         <section className="py-12 md:py-16">
           <div className="container mx-auto px-4 max-w-3xl">
             <PurchaseFAQ type="bonos" />
+          </div>
+        </section>
+
+        {/* Cómo seguir profundizando */}
+        <section className="py-12 md:py-16 bg-gradient-to-b from-cyan-50/40 to-sky-50/60">
+          <div className="container mx-auto px-4 max-w-5xl">
+            <div className="text-center max-w-2xl mx-auto mb-10">
+              <div className="inline-flex items-center gap-2 bg-cyan-100 text-cyan-700 px-4 py-1.5 rounded-full text-xs font-medium mb-4">
+                <ArrowRight className="w-3.5 h-3.5" />
+                <span>El siguiente paso</span>
+              </div>
+              <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-3">
+                Cómo seguir profundizando
+              </h2>
+              <p className="text-muted-foreground">
+                El taller encendió la chispa. Estas son tres formas de no dejarla apagar — cada
+                una pensada para un nivel de compromiso distinto.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-6">
+              {/* Pack 6 sesiones Wim Hof */}
+              <a
+                href="/bonos"
+                className="group rounded-2xl border border-cyan-200 bg-card p-6 shadow-sm hover:shadow-lg hover:border-cyan-400 transition-all flex flex-col"
+              >
+                <div className="p-3 bg-gradient-to-br from-cyan-500 to-sky-500 rounded-xl text-primary-foreground w-fit mb-4">
+                  <Snowflake className="w-6 h-6" />
+                </div>
+                <h3 className="font-bold text-foreground text-lg mb-2">
+                  Pack 6 sesiones Método Wim Hof
+                </h3>
+                <p className="text-sm text-muted-foreground flex-1">
+                  El mismo pack que tienes arriba, pero para quienes todavía no asistieron al
+                  taller. Seis sesiones guiadas a 3 °C, compartibles, con 3 meses de vigencia. La
+                  forma más accesible de hacer del hielo un hábito real.
+                </p>
+                <span className="mt-4 inline-flex items-center gap-1.5 text-cyan-600 font-semibold text-sm group-hover:gap-2.5 transition-all">
+                  Ver packs
+                  <ArrowRight className="w-4 h-4" />
+                </span>
+              </a>
+
+              {/* Retiro Guatemala */}
+              <a
+                href="https://guatemala.criomedicina.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group rounded-2xl border border-cyan-200 bg-card p-6 shadow-sm hover:shadow-lg hover:border-cyan-400 transition-all flex flex-col"
+              >
+                <div className="p-3 bg-gradient-to-br from-sky-500 to-indigo-500 rounded-xl text-primary-foreground w-fit mb-4">
+                  <MapPin className="w-6 h-6" />
+                </div>
+                <h3 className="font-bold text-foreground text-lg mb-2">
+                  Retiro Criomedicina · Guatemala
+                </h3>
+                <p className="text-sm text-muted-foreground flex-1">
+                  Lleva la inmersión al siguiente nivel: varios días de respiración, hielo y
+                  naturaleza en un retiro presencial. Pensado para quienes ya probaron el frío y
+                  quieren una transformación profunda, no una clase más.
+                </p>
+                <span className="mt-4 inline-flex items-center gap-1.5 text-cyan-600 font-semibold text-sm group-hover:gap-2.5 transition-all">
+                  Conocer el retiro
+                  <ArrowRight className="w-4 h-4" />
+                </span>
+              </a>
+
+              {/* Comprar una Nave */}
+              <a
+                href="https://crionave.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group rounded-2xl border border-cyan-200 bg-card p-6 shadow-sm hover:shadow-lg hover:border-cyan-400 transition-all flex flex-col"
+              >
+                <div className="p-3 bg-gradient-to-br from-indigo-500 to-cyan-500 rounded-xl text-primary-foreground w-fit mb-4">
+                  <ShoppingBag className="w-6 h-6" />
+                </div>
+                <h3 className="font-bold text-foreground text-lg mb-2">
+                  Comprar una Nave
+                </h3>
+                <p className="text-sm text-muted-foreground flex-1">
+                  ¿Y si pudieras hacer criomedicina en casa? Crionave es el baño de hielo
+                  portátil que diseñamos para que el método no dependa de ir al estudio. Para los
+                  que ya decidieron que el frío es parte de su vida.
+                </p>
+                <span className="mt-4 inline-flex items-center gap-1.5 text-cyan-600 font-semibold text-sm group-hover:gap-2.5 transition-all">
+                  Ver Crionave
+                  <ArrowRight className="w-4 h-4" />
+                </span>
+              </a>
+            </div>
           </div>
         </section>
       </main>
