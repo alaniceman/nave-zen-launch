@@ -1,1 +1,2 @@
 - [architecture/schedule-instructor-names-rpc](mem://architecture/schedule-instructor-names-rpc) — Instructores vía RPC get_active_professionals; landings de yoga derivan coaches del horario real
+- [features/promo-talleres-private-pack](mem://features/promo-talleres-private-pack) — Landing privada /promo-talleres y flag is_private para packs ocultos
