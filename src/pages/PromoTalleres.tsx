@@ -564,6 +564,37 @@ export default function PromoTalleres() {
 
         <ReviewsTrustBar />
 
+        {/* Grupo Crionautas */}
+        <section className="pt-12 md:pt-16">
+          <div className="container mx-auto px-4 max-w-3xl">
+            <div className="rounded-2xl border border-emerald-200 bg-emerald-50/70 p-6 md:p-8 text-center">
+              <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-700 px-4 py-1.5 rounded-full text-xs font-medium mb-4">
+                <Users className="w-3.5 h-3.5" />
+                <span>Comunidad</span>
+              </div>
+              <h2 className="text-xl md:text-2xl font-bold text-foreground mb-3">
+                Únanse al grupo de WhatsApp: los Crionautas
+              </h2>
+              <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
+                Un grupo de solo gente que se ha metido al agua fría: avisos de sesiones,
+                desafíos, dudas y mucha motivación para no soltar el hábito.
+              </p>
+              <Button
+                asChild
+                className="bg-emerald-600 hover:bg-emerald-700 text-primary-foreground font-semibold px-8 py-6 text-base"
+              >
+                <a
+                  href="https://chat.whatsapp.com/HdTFY3RryAMA5e7GAleMHq?mode=gi_t"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Entrar al grupo de los Crionautas
+                </a>
+              </Button>
+            </div>
+          </div>
+        </section>
+
         <section className="py-12 md:py-16">
           <div className="container mx-auto px-4 max-w-3xl">
             <PurchaseFAQ type="bonos" />
