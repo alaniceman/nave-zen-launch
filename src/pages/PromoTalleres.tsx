@@ -69,9 +69,9 @@ export default function PromoTalleres() {
   const [couponError, setCouponError] = useState("");
   const [isValidatingCoupon, setIsValidatingCoupon] = useState(false);
 
-  // Countdown: 7 days from first component mount
-  const [deadline] = useState(() => Date.now() + 7 * 24 * 60 * 60 * 1000);
-  const [timeLeft, setTimeLeft] = useState({ days: 7, hours: 0, minutes: 0, seconds: 0 });
+  // Countdown: la promo cierra el 31 de agosto 2026 a las 23:59 (Chile, UTC-4)
+  const [deadline] = useState(() => new Date("2026-09-01T03:59:00Z").getTime());
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [expired, setExpired] = useState(false);
 
   useEffect(() => {
