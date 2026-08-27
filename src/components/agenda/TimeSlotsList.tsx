@@ -1,6 +1,6 @@
 import { parseISO } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
-import { Clock, User } from "lucide-react";
+import { Clock } from "lucide-react";
 
 interface TimeSlot {
   dateTimeStart: string;
@@ -20,65 +20,86 @@ interface TimeSlotsListProps {
   onSelectSlot: (slot: TimeSlot) => void;
 }
 
-export function TimeSlotsList({ slots, selectedDate, onSelectSlot }: TimeSlotsListProps) {
+/**
+ * Display-only label normalization. Never mutates the stored service name.
+ * Cold-session variants (Sesión Criomedicina / Método Wim Hof, Método Wim Hof:
+ * Breathwork + Ice Bath, etc.) are shown simply as "Criomedicina".
+ */
+export function getDisplayServiceName(serviceName: string): string {
+  const name = (serviceName || "").trim();
+  const normalized = name
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+
+  // Never touch yoga variants or workshops/retreats/other products
+  if (/\byoga\b|\byin\b|\byang\b|vinyasa|integral|power|somatic/.test(normalized)) return name;
+  if (/taller|retiro|workshop|curso|evento|masaje|sound/.test(normalized)) return name;
+
+  const isCriomedicina = /criomedicina/.test(normalized);
+  const isWimHof = /wim\s*hof/.test(normalized);
+  const isColdSession = /(ice\s*bath|inmersion|agua\s*fria|breathwork|respiracion)/.test(normalized);
+
+  if (isCriomedicina || (isWimHof && (isColdSession || /sesion|metodo/.test(normalized)))) {
+    return "Criomedicina";
+  }
+
+  return name;
+}
+
+export function TimeSlotsList({ slots, onSelectSlot }: TimeSlotsListProps) {
   if (slots.length === 0) {
     return (
-      <div className="text-center py-12 text-muted-foreground">
-        <Clock className="h-12 w-12 mx-auto mb-4 opacity-50" />
+      <div className="text-center py-10 text-muted-foreground">
+        <Clock className="h-10 w-10 mx-auto mb-3 opacity-50" />
         <p>No hay horarios disponibles para esta fecha</p>
         <p className="text-sm mt-2">Intenta con otra fecha o profesional</p>
       </div>
     );
   }
 
-  // Group slots by service
-  const groupedByService = slots
-    .sort((a, b) => a.dateTimeStart.localeCompare(b.dateTimeStart))
-    .reduce((acc, slot) => {
-      const key = slot.serviceName;
-      if (!acc[key]) acc[key] = { slots: [], sortOrder: slot.serviceSortOrder ?? 0 };
-      acc[key].slots.push(slot);
-      return acc;
-    }, {} as Record<string, { slots: TimeSlot[]; sortOrder: number }>);
-
-  // Sort service groups by sort_order
-  const sortedServiceGroups = Object.entries(groupedByService).sort(
-    ([, a], [, b]) => a.sortOrder - b.sortOrder
-  );
+  // Strict chronological order; stable tie-breakers by service then instructor.
+  const orderedSlots = [...slots].sort((a, b) => {
+    const byTime = a.dateTimeStart.localeCompare(b.dateTimeStart);
+    if (byTime !== 0) return byTime;
+    const byService = a.serviceName.localeCompare(b.serviceName, "es");
+    if (byService !== 0) return byService;
+    return a.professionalName.localeCompare(b.professionalName, "es");
+  });
 
   return (
-    <div className="space-y-6">
-      <div className="max-h-[480px] overflow-y-auto space-y-6 pr-1">
-        {sortedServiceGroups.map(([serviceName, { slots: serviceSlots }]) => (
-          <div key={serviceName} className="space-y-3">
-            <h4 className="font-semibold text-xs text-muted-foreground uppercase tracking-widest">
-              {serviceName}
-            </h4>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-              {serviceSlots.map((slot, index) => (
-                <button
-                  key={index}
-                  className="group flex flex-col items-center justify-center rounded-2xl border border-border bg-card px-4 py-5 text-center shadow-sm transition-all hover:border-primary/40 hover:shadow-md hover:scale-[1.02] active:scale-[0.98]"
-                  onClick={() => onSelectSlot(slot)}
-                >
-                  <span className="font-bold text-2xl tracking-tight text-foreground group-hover:text-primary transition-colors">
-                    {formatInTimeZone(parseISO(slot.dateTimeStart), "America/Santiago", "HH:mm")}
-                  </span>
-                  <div className="flex items-center gap-1.5 text-xs text-muted-foreground mt-2">
-                    <User className="h-3.5 w-3.5 shrink-0" />
-                    <span className="truncate max-w-[120px]">{slot.professionalName}</span>
-                  </div>
-                  {slot.availableCapacity != null && slot.availableCapacity > 0 && (
-                    <span className="text-[11px] text-muted-foreground/70 mt-1.5">
-                      {slot.availableCapacity} {slot.availableCapacity === 1 ? "cupo" : "cupos"}
-                    </span>
-                  )}
-                </button>
-              ))}
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-2.5 sm:gap-3">
+      {orderedSlots.map((slot) => {
+        const title = getDisplayServiceName(slot.serviceName);
+        const capacity = slot.availableCapacity;
+
+        return (
+          <button
+            type="button"
+            key={`${slot.dateTimeStart}-${slot.serviceId}-${slot.professionalId}`}
+            onClick={() => onSelectSlot(slot)}
+            className="group flex w-full items-stretch gap-3 rounded-xl border border-border bg-card p-3 text-left shadow-sm transition-all min-h-[64px] hover:border-primary/40 hover:shadow-md active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          >
+            <div className="flex w-[64px] shrink-0 flex-col items-center justify-center rounded-lg bg-muted/60 px-2 py-2">
+              <span className="font-bold text-lg leading-none tracking-tight text-foreground group-hover:text-primary transition-colors">
+                {formatInTimeZone(parseISO(slot.dateTimeStart), "America/Santiago", "HH:mm")}
+              </span>
             </div>
-          </div>
-        ))}
-      </div>
+
+            <div className="min-w-0 flex-1 flex flex-col justify-center">
+              <span className="text-sm font-semibold leading-snug text-foreground line-clamp-2">
+                {title}
+              </span>
+              <span className="mt-1 text-xs text-muted-foreground truncate">
+                {slot.professionalName}
+                {capacity != null && capacity > 0 && (
+                  <> · {capacity} {capacity === 1 ? "cupo" : "cupos"}</>
+                )}
+              </span>
+            </div>
+          </button>
+        );
+      })}
     </div>
   );
 }
