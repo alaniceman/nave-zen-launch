@@ -295,7 +295,7 @@ export default function AgendaNaveStudio() {
               </div>
 
               {/* Weekly calendar */}
-              <Card className="p-6">
+              <Card className="p-3 sm:p-6">
                 <WeeklyCalendar
                   selectedDate={selectedDate}
                   onDateSelect={handleDateSelect}
@@ -308,10 +308,10 @@ export default function AgendaNaveStudio() {
               </Card>
 
               {/* Available time slots */}
-              <Card className="p-6">
+              <Card className="p-3 sm:p-6">
                 {!selectedDate ? (
-                  <div className="text-center py-12 text-muted-foreground">
-                    <User className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                  <div className="text-center py-10 text-muted-foreground">
+                    <User className="h-10 w-10 mx-auto mb-3 opacity-50" />
                     <p>Selecciona una fecha para ver horarios disponibles</p>
                   </div>
                 ) : loadingSlots ? (
@@ -319,12 +319,13 @@ export default function AgendaNaveStudio() {
                     <Loader2 className="h-8 w-8 animate-spin text-primary" />
                   </div>
                 ) : (
-                  <div className="space-y-4">
-                    <h3 className="text-lg font-semibold">¿A qué hora?</h3>
+                  <div className="space-y-3">
+                    <h3 className="text-base sm:text-lg font-semibold">¿A qué hora?</h3>
                     <TimeSlotsList slots={filteredSlots} selectedDate={selectedDate} onSelectSlot={handleTimeSlotSelect} />
                   </div>
                 )}
               </Card>
+
             </div>
           ) : (
             <div ref={bookingFormRef} className="max-w-2xl mx-auto">
