@@ -39,33 +39,35 @@ export function WeeklyCalendar({ selectedDate, onDateSelect, onVisibleDatesChang
   };
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold">¿Qué día?</h2>
+    <div className="space-y-3">
+      <div className="flex items-center justify-between gap-2">
+        <h2 className="text-base sm:text-lg font-semibold">¿Qué día?</h2>
         <div className="flex items-center gap-1">
           <Button
             variant="ghost"
             size="sm"
             onClick={handlePrevious}
             disabled={!canGoPrevious}
-            className="h-8 w-8 p-0"
+            className="h-9 w-9 p-0"
+            aria-label="Semana anterior"
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
-          <span className="text-sm font-medium px-2">{format(startDate, "MMMM yyyy", { locale: es })}</span>
+          <span className="text-xs sm:text-sm font-medium px-1 capitalize">{format(startDate, "MMMM yyyy", { locale: es })}</span>
           <Button
             variant="ghost"
             size="sm"
             onClick={handleNext}
             disabled={!canGoNext}
-            className="h-8 w-8 p-0"
+            className="h-9 w-9 p-0"
+            aria-label="Semana siguiente"
           >
             <ChevronRight className="h-4 w-4" />
           </Button>
         </div>
       </div>
 
-      <div className="flex gap-2 overflow-x-auto pb-2">
+      <div className="flex gap-1.5 sm:gap-2 overflow-x-auto pb-1 -mx-1 px-1">
         {dates.map((date) => {
           const isSelected = selectedDate && isSameDay(date, selectedDate);
           const isDisabled = disabled?.(date) ?? false;
@@ -77,7 +79,7 @@ export function WeeklyCalendar({ selectedDate, onDateSelect, onVisibleDatesChang
               variant={isSelected ? "default" : "outline"}
               onClick={() => onDateSelect(date)}
               disabled={isDisabled || isPast}
-              className={`min-w-[80px] flex-shrink-0 flex flex-col py-3 h-auto ${
+              className={`min-w-[52px] sm:min-w-[72px] flex-shrink-0 flex flex-col gap-0.5 py-2 h-auto min-h-[56px] ${
                 isSelected
                   ? "bg-primary text-primary-foreground"
                   : isPast
@@ -85,12 +87,13 @@ export function WeeklyCalendar({ selectedDate, onDateSelect, onVisibleDatesChang
                     : "bg-background hover:bg-muted"
               }`}
             >
-              <span className="text-xs font-medium uppercase">{format(date, "EEE", { locale: es })}</span>
-              <span className="text-lg font-bold">{format(date, "dd")}</span>
+              <span className="text-[10px] sm:text-xs font-medium uppercase">{format(date, "EEE", { locale: es })}</span>
+              <span className="text-base sm:text-lg font-bold">{format(date, "dd")}</span>
             </Button>
           );
         })}
       </div>
     </div>
   );
+
 }
