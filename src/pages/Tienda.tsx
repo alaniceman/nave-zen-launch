@@ -108,6 +108,7 @@ const TiendaContent = () => {
                   product={p}
                   onDetails={() => setDetailProduct(p)}
                   onBuy={() => setBuyProduct(p)}
+                  onAddToCart={() => handleAddToCart(p)}
                 />
               ))}
             </div>
@@ -122,6 +123,10 @@ const TiendaContent = () => {
             setDetailProduct(null);
             setBuyProduct(p);
           }}
+          onAddToCart={(p) => {
+            setDetailProduct(null);
+            handleAddToCart(p);
+          }}
         />
 
         <BuyFormModal
@@ -129,11 +134,32 @@ const TiendaContent = () => {
           open={!!buyProduct}
           onOpenChange={(o) => !o && setBuyProduct(null)}
         />
+
+        <CartSheet />
+
+        {totalItems > 0 && (
+          <Button
+            type="button"
+            size="lg"
+            onClick={() => setOpen(true)}
+            className="fixed bottom-5 right-5 z-40 rounded-full shadow-lg h-14 px-5"
+            aria-label={`Ver carrito (${totalItems})`}
+          >
+            <ShoppingCart className="h-5 w-5 mr-2" />
+            Carrito ({totalItems})
+          </Button>
+        )}
       </main>
 
       <Footer />
     </>
   );
 };
+
+const Tienda = () => (
+  <CartProvider>
+    <TiendaContent />
+  </CartProvider>
+);
 
 export default Tienda;
