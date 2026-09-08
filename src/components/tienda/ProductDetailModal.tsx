@@ -35,9 +35,16 @@ export const ProductDetailModal = ({ product, open, onOpenChange, onBuy, onAddTo
           </div>
         )}
 
-        <Button onClick={() => onBuy(product)} size="lg" className="w-full mt-2">
-          Comprar
-        </Button>
+        <div className="flex flex-col gap-2 mt-2">
+          {onAddToCart && (
+            <Button onClick={() => onAddToCart(product)} size="lg" className="w-full">
+              Agregar al carrito
+            </Button>
+          )}
+          <Button onClick={() => onBuy(product)} variant={onAddToCart ? "outline" : "default"} size="lg" className="w-full">
+            Comprar ahora
+          </Button>
+        </div>
       </DialogContent>
     </Dialog>
   );
