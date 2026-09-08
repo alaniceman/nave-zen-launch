@@ -13,7 +13,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Loader2, ShoppingBag } from "lucide-react";
 
 const TiendaContent = () => {
-  const { add, totalItems } = useCart();
+  const { add } = useCart();
   const { toast } = useToast();
 
   const handleAddToCart = (p: ShopProduct) => {
