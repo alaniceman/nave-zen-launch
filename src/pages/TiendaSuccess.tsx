@@ -11,6 +11,9 @@ const TiendaSuccess = () => {
     searchParams.get("external_reference") || searchParams.get("order") || "";
 
   useEffect(() => {
+    try {
+      localStorage.removeItem("nave-tienda-cart");
+    } catch {}
     trackConversion("purchase_paquete", {
       currency: "CLP",
       transaction_id: orderId,
