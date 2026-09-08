@@ -44,28 +44,52 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
 
-    // Load product
-    const { data: product, error: productError } = await supabase
+    // Normalize input: single product or cart items
+    const requested = data.items?.length
+      ? data.items
+      : data.productId
+      ? [{ productId: data.productId, quantity: 1 }]
+      : [];
+
+    if (requested.length === 0) {
+      return new Response(
+        JSON.stringify({ error: "No hay productos en la compra" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // Load products
+    const { data: products, error: productError } = await supabase
       .from("shop_products")
       .select("*")
-      .eq("id", data.productId)
-      .eq("is_active", true)
-      .maybeSingle();
+      .in("id", requested.map((i) => i.productId))
+      .eq("is_active", true);
 
-    if (productError || !product) {
+    if (productError || !products || products.length !== new Set(requested.map((i) => i.productId)).size) {
       return new Response(
         JSON.stringify({ error: "Producto no encontrado" }),
         { status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
+    const lineItems = requested.map((i) => {
+      const p = products.find((pr: any) => pr.id === i.productId)!;
+      return { product: p, quantity: i.quantity };
+    });
+
+    const totalPrice = lineItems.reduce((s, li) => s + li.product.price * li.quantity, 0);
+    const orderName =
+      lineItems.length === 1 && lineItems[0].quantity === 1
+        ? lineItems[0].product.name
+        : lineItems.map((li) => `${li.product.name} x${li.quantity}`).join(" + ").slice(0, 300);
+
     // Create order
     const { data: order, error: orderError } = await supabase
       .from("shop_orders")
       .insert({
-        product_id: product.id,
-        product_name: product.name,
-        product_price: product.price,
+        product_id: lineItems.length === 1 ? lineItems[0].product.id : null,
+        product_name: orderName,
+        product_price: totalPrice,
         customer_name: data.buyerName,
         customer_email: data.buyerEmail.toLowerCase().trim(),
         customer_phone: data.buyerPhone || null,
