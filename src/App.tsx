@@ -129,6 +129,17 @@ const LoadingSpinner = () => (
   </div>
 );
 
+const WhatsAppWidgetWrapper = () => {
+  const { pathname } = useLocation();
+  // Hide WhatsApp FAB on mobile in /tienda so it doesn't overlap the cart bottom bar
+  const hideOnMobile = pathname === "/tienda";
+  return (
+    <div className={hideOnMobile ? "hidden md:block" : ""}>
+      <WhatsAppWidget onOpenChat={() => chatRefSingleton.current?.open()} />
+    </div>
+  );
+};
+
 const App = () => {
   const chatRef = useRef<ChatWidgetHandle>(null);
   return (
