@@ -1,4 +1,5 @@
 import { lazy, Suspense, useRef } from "react";
+import { useLocation } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -130,6 +131,17 @@ const LoadingSpinner = () => (
 
 const App = () => {
   const chatRef = useRef<ChatWidgetHandle>(null);
+
+  const WhatsAppWidgetWrapper = () => {
+    const { pathname } = useLocation();
+    // Hide WhatsApp FAB on mobile in /tienda so it doesn't overlap the cart bottom bar
+    const hideOnMobile = pathname === "/tienda";
+    return (
+      <div className={hideOnMobile ? "hidden md:block" : ""}>
+        <WhatsAppWidget onOpenChat={() => chatRef.current?.open()} />
+      </div>
+    );
+  };
   return (
   <HelmetProvider>
     <QueryClientProvider client={queryClient}>
@@ -271,7 +283,7 @@ const App = () => {
             <Route path="*" element={<NotFound />} />
           </Routes>
           </Suspense>
-          <WhatsAppWidget onOpenChat={() => chatRef.current?.open()} />
+          <WhatsAppWidgetWrapper />
           <ChatWidget ref={chatRef} />
           </EmailCaptureModalProvider>
             </TrialModalProvider>
