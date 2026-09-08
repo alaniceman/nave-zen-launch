@@ -5,9 +5,20 @@ import { Footer } from "@/components/Footer";
 import { ProductCard, ShopProduct } from "@/components/tienda/ProductCard";
 import { ProductDetailModal } from "@/components/tienda/ProductDetailModal";
 import { BuyFormModal } from "@/components/tienda/BuyFormModal";
-import { Loader2, ShoppingBag } from "lucide-react";
+import { CartProvider, useCart } from "@/components/tienda/CartContext";
+import { CartSheet } from "@/components/tienda/CartSheet";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
+import { Loader2, ShoppingBag, ShoppingCart } from "lucide-react";
 
-const Tienda = () => {
+const TiendaContent = () => {
+  const { add, totalItems, setOpen } = useCart();
+  const { toast } = useToast();
+
+  const handleAddToCart = (p: ShopProduct) => {
+    add(p);
+    toast({ title: "Agregado al carrito", description: p.name });
+  };
   const [products, setProducts] = useState<ShopProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [detailProduct, setDetailProduct] = useState<ShopProduct | null>(null);
