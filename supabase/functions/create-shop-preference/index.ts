@@ -131,14 +131,12 @@ serve(async (req) => {
     const siteUrl = (Deno.env.get("SITE_URL") || "https://studiolanave.com").replace(/\/$/, "");
 
     const preferenceData = {
-      items: [
-        {
-          title: product.name,
-          quantity: 1,
-          unit_price: product.price,
-          currency_id: "CLP",
-        },
-      ],
+      items: lineItems.map((li) => ({
+        title: li.product.name,
+        quantity: li.quantity,
+        unit_price: li.product.price,
+        currency_id: "CLP",
+      })),
       payer: {
         name: data.buyerName,
         email: data.buyerEmail,
