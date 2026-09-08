@@ -25,9 +25,10 @@ type Props = {
   product: ShopProduct;
   onDetails: () => void;
   onBuy: () => void;
+  onAddToCart?: () => void;
 };
 
-export const ProductCard = ({ product, onDetails, onBuy }: Props) => {
+export const ProductCard = ({ product, onDetails, onBuy, onAddToCart }: Props) => {
   const images = getProductImages(product);
   return (
     <article className="group flex flex-col rounded-2xl border border-border bg-background overflow-hidden hover:shadow-md transition-shadow">
