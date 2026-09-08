@@ -81,7 +81,7 @@ const TiendaContent = () => {
         })}</script>
       </Helmet>
 
-      <main className="min-h-screen bg-background pt-24 pb-16">
+      <main className="min-h-screen bg-background pt-24 pb-24">
         <div className="container mx-auto px-4 max-w-5xl">
           <header className="text-center mb-10">
             <div className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 mb-4">
@@ -137,19 +137,7 @@ const TiendaContent = () => {
         />
 
         <CartSheet />
-
-        {totalItems > 0 && (
-          <Button
-            type="button"
-            size="lg"
-            onClick={() => setOpen(true)}
-            className="fixed bottom-5 right-5 z-40 rounded-full shadow-lg h-14 px-5"
-            aria-label={`Ver carrito (${totalItems})`}
-          >
-            <ShoppingCart className="h-5 w-5 mr-2" />
-            Carrito ({totalItems})
-          </Button>
-        )}
+        <CartBottomBar />
       </main>
 
       <Footer />
