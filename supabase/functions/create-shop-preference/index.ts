@@ -4,7 +4,12 @@ import { getCorsHeaders } from "../_shared/cors.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const schema = z.object({
-  productId: z.string().uuid(),
+  productId: z.string().uuid().optional(),
+  items: z
+    .array(z.object({ productId: z.string().uuid(), quantity: z.number().int().min(1).max(20) }))
+    .min(1)
+    .max(20)
+    .optional(),
   buyerName: z.string().min(2).max(100),
   buyerEmail: z.string().email().max(255),
   buyerPhone: z.string().min(8).max(20).optional(),
