@@ -46,10 +46,16 @@ export const ProductCard = ({ product, onDetails, onBuy, onAddToCart }: Props) =
           {formatCLP(product.price)}
         </p>
         <div className="flex flex-col gap-2">
-          <Button onClick={onBuy} className="w-full" size="lg">
-            Comprar
+          {onAddToCart && (
+            <Button onClick={onAddToCart} className="w-full" size="lg">
+              <ShoppingCart className="h-4 w-4 mr-2" />
+              Agregar al carrito
+            </Button>
+          )}
+          <Button onClick={onBuy} variant={onAddToCart ? "outline" : "default"} className="w-full" size={onAddToCart ? "default" : "lg"}>
+            Comprar ahora
           </Button>
-          <Button onClick={onDetails} variant="outline" className="w-full" size="sm">
+          <Button onClick={onDetails} variant="ghost" className="w-full" size="sm">
             Más detalles
           </Button>
         </div>
