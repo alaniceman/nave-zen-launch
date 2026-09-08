@@ -283,7 +283,7 @@ const App = () => {
             <Route path="*" element={<NotFound />} />
           </Routes>
           </Suspense>
-          <WhatsAppWidget onOpenChat={() => chatRef.current?.open()} />
+          <WhatsAppWidgetWrapper />
           <ChatWidget ref={chatRef} />
           </EmailCaptureModalProvider>
             </TrialModalProvider>
