@@ -5,9 +5,20 @@ import { Footer } from "@/components/Footer";
 import { ProductCard, ShopProduct } from "@/components/tienda/ProductCard";
 import { ProductDetailModal } from "@/components/tienda/ProductDetailModal";
 import { BuyFormModal } from "@/components/tienda/BuyFormModal";
-import { Loader2, ShoppingBag } from "lucide-react";
+import { CartProvider, useCart } from "@/components/tienda/CartContext";
+import { CartSheet } from "@/components/tienda/CartSheet";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
+import { Loader2, ShoppingBag, ShoppingCart } from "lucide-react";
 
-const Tienda = () => {
+const TiendaContent = () => {
+  const { add, totalItems, setOpen } = useCart();
+  const { toast } = useToast();
+
+  const handleAddToCart = (p: ShopProduct) => {
+    add(p);
+    toast({ title: "Agregado al carrito", description: p.name });
+  };
   const [products, setProducts] = useState<ShopProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [detailProduct, setDetailProduct] = useState<ShopProduct | null>(null);
@@ -97,6 +108,7 @@ const Tienda = () => {
                   product={p}
                   onDetails={() => setDetailProduct(p)}
                   onBuy={() => setBuyProduct(p)}
+                  onAddToCart={() => handleAddToCart(p)}
                 />
               ))}
             </div>
@@ -111,6 +123,10 @@ const Tienda = () => {
             setDetailProduct(null);
             setBuyProduct(p);
           }}
+          onAddToCart={(p) => {
+            setDetailProduct(null);
+            handleAddToCart(p);
+          }}
         />
 
         <BuyFormModal
@@ -118,11 +134,32 @@ const Tienda = () => {
           open={!!buyProduct}
           onOpenChange={(o) => !o && setBuyProduct(null)}
         />
+
+        <CartSheet />
+
+        {totalItems > 0 && (
+          <Button
+            type="button"
+            size="lg"
+            onClick={() => setOpen(true)}
+            className="fixed bottom-5 right-5 z-40 rounded-full shadow-lg h-14 px-5"
+            aria-label={`Ver carrito (${totalItems})`}
+          >
+            <ShoppingCart className="h-5 w-5 mr-2" />
+            Carrito ({totalItems})
+          </Button>
+        )}
       </main>
 
       <Footer />
     </>
   );
 };
+
+const Tienda = () => (
+  <CartProvider>
+    <TiendaContent />
+  </CartProvider>
+);
 
 export default Tienda;

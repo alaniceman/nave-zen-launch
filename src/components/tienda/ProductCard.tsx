@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { ShoppingCart } from "lucide-react";
 import { ProductGallery } from "./ProductGallery";
 
 export type ShopProduct = {
@@ -25,9 +26,10 @@ type Props = {
   product: ShopProduct;
   onDetails: () => void;
   onBuy: () => void;
+  onAddToCart?: () => void;
 };
 
-export const ProductCard = ({ product, onDetails, onBuy }: Props) => {
+export const ProductCard = ({ product, onDetails, onBuy, onAddToCart }: Props) => {
   const images = getProductImages(product);
   return (
     <article className="group flex flex-col rounded-2xl border border-border bg-background overflow-hidden hover:shadow-md transition-shadow">
@@ -45,10 +47,16 @@ export const ProductCard = ({ product, onDetails, onBuy }: Props) => {
           {formatCLP(product.price)}
         </p>
         <div className="flex flex-col gap-2">
-          <Button onClick={onBuy} className="w-full" size="lg">
-            Comprar
+          {onAddToCart && (
+            <Button onClick={onAddToCart} className="w-full" size="lg">
+              <ShoppingCart className="h-4 w-4 mr-2" />
+              Agregar al carrito
+            </Button>
+          )}
+          <Button onClick={onBuy} variant={onAddToCart ? "outline" : "default"} className="w-full" size={onAddToCart ? "default" : "lg"}>
+            Comprar ahora
           </Button>
-          <Button onClick={onDetails} variant="outline" className="w-full" size="sm">
+          <Button onClick={onDetails} variant="ghost" className="w-full" size="sm">
             Más detalles
           </Button>
         </div>
