@@ -10,9 +10,10 @@ type Props = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onBuy: (p: ShopProduct) => void;
+  onAddToCart?: (p: ShopProduct) => void;
 };
 
-export const ProductDetailModal = ({ product, open, onOpenChange, onBuy }: Props) => {
+export const ProductDetailModal = ({ product, open, onOpenChange, onBuy, onAddToCart }: Props) => {
   if (!product) return null;
   const images = getProductImages(product);
   return (
