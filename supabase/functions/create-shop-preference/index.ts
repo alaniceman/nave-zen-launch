@@ -95,6 +95,12 @@ serve(async (req) => {
         customer_phone: data.buyerPhone || null,
         status: "pending",
         meta_context: {
+          items: lineItems.map((li) => ({
+            product_id: li.product.id,
+            name: li.product.name,
+            unit_price: li.product.price,
+            quantity: li.quantity,
+          })),
           fbp: data.fbp ?? null,
           fbc: data.fbc ?? null,
           event_source_url: data.eventSourceUrl ?? null,
