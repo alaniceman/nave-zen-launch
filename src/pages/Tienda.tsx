@@ -7,9 +7,10 @@ import { ProductDetailModal } from "@/components/tienda/ProductDetailModal";
 import { BuyFormModal } from "@/components/tienda/BuyFormModal";
 import { CartProvider, useCart } from "@/components/tienda/CartContext";
 import { CartSheet } from "@/components/tienda/CartSheet";
+import { CartBottomBar } from "@/components/tienda/CartBottomBar";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, ShoppingBag, ShoppingCart } from "lucide-react";
+import { Loader2, ShoppingBag } from "lucide-react";
 
 const TiendaContent = () => {
   const { add, totalItems, setOpen } = useCart();
