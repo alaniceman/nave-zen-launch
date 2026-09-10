@@ -257,6 +257,9 @@ import { Promo18Section } from "@/components/Promo18Section";
 
       <AskNaveBar />
 
+      <Promo18Section />
+
+
       {/* Reseñas reales de Ice Bath */}
 
       <section className="py-12 md:py-16 bg-neutral-light">
