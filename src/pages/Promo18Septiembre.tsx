@@ -66,10 +66,6 @@ export default function Promo18Septiembre() {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({ name: "", email: "", phone: "" });
 
-  const [couponCode, setCouponCode] = useState("");
-  const [appliedCoupon, setAppliedCoupon] = useState<any>(null);
-  const [couponError, setCouponError] = useState("");
-  const [isValidatingCoupon, setIsValidatingCoupon] = useState(false);
 
   const [deadline] = useState(() => PROMO_18_END_DATE.getTime());
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
@@ -99,14 +95,7 @@ export default function Promo18Septiembre() {
     return () => clearInterval(id);
   }, [deadline]);
 
-  const finalPrice = (() => {
-    if (!appliedCoupon) return PROMO_18_PRICE;
-    const discount =
-      appliedCoupon.discount_type === "percentage"
-        ? Math.floor(PROMO_18_PRICE * (appliedCoupon.discount_value / 100))
-        : appliedCoupon.discount_value;
-    return Math.max(0, PROMO_18_PRICE - discount);
-  })();
+  const finalPrice = PROMO_18_PRICE;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
