@@ -1244,6 +1244,7 @@ export type Database = {
         Row: {
           applicable_service_ids: string[]
           available_as_giftcard: boolean | null
+          code_composition: Json | null
           created_at: string | null
           description: string | null
           id: string
@@ -1261,6 +1262,7 @@ export type Database = {
         Insert: {
           applicable_service_ids: string[]
           available_as_giftcard?: boolean | null
+          code_composition?: Json | null
           created_at?: string | null
           description?: string | null
           id?: string
@@ -1278,6 +1280,7 @@ export type Database = {
         Update: {
           applicable_service_ids?: string[]
           available_as_giftcard?: boolean | null
+          code_composition?: Json | null
           created_at?: string | null
           description?: string | null
           id?: string

@@ -4,6 +4,7 @@ import { getCorsHeaders } from "../_shared/cors.ts";
 import { syncOrderToMailerLite, addSubscriberToGroups } from "../_shared/mailerlite.ts";
 import { upsertCustomerAndLogEvent } from "../_shared/crm.ts";
 import { sendMetaEvent } from "../_shared/metaCapi.ts";
+import { buildCodePlan, buildCodeGroups } from "../_shared/codeComposition.ts";
 
 /**
  * Contexto de navegador capturado al crear la orden (fbp/fbc/IP/UA/url).
@@ -760,7 +761,9 @@ async function handlePackageOrderPayment(
     giftcardAccessToken = token;
   }
 
-  for (let i = 0; i < package_.sessions_quantity; i++) {
+  const codePlan = buildCodePlan(package_);
+
+  for (let i = 0; i < codePlan.length; i++) {
     let code = generateSessionCode();
     let isUnique = false;
     
@@ -781,7 +784,7 @@ async function handlePackageOrderPayment(
     codes.push({
       package_id: package_.id,
       code: code,
-      applicable_service_ids: package_.applicable_service_ids,
+      applicable_service_ids: codePlan[i].serviceIds,
       buyer_email: order.buyer_email,
       buyer_name: order.buyer_name,
       buyer_phone: order.buyer_phone,
@@ -843,6 +846,7 @@ async function handlePackageOrderPayment(
         buyerName: order.buyer_name,
         packageName: package_.name,
         codes: codes.map(c => c.code),
+        codeGroups: buildCodeGroups(codePlan, codes.map(c => c.code)),
         expiresAt: expiresAt.toISOString(),
         isGiftCard: isGiftCard,
         giftcardLink: giftcardLink,

@@ -9,6 +9,8 @@ import {
   Rocket, UserPlus, LogIn, Store,
   type LucideIcon,
 } from "lucide-react"
+import { Promo18Banner } from "@/components/Promo18Banner"
+import { PROMO_18_BANNER_HEIGHT, usePromo18Banner } from "@/lib/promo18"
 
 type NavLink = { label: string; href: string; icon: LucideIcon }
 type NavDropdown = { label: string; type: "dropdown"; children: NavLink[]; icon: LucideIcon }
@@ -96,6 +98,7 @@ export const Header = () => {
   }, [])
 
   const navigate = useNavigate()
+  const showPromo18 = usePromo18Banner()
 
   const navigateTo = (href: string) => {
     if (href.startsWith("http")) {
@@ -117,9 +120,11 @@ export const Header = () => {
 
   return (
     <>
+      <Promo18Banner />
       <header
+        style={{ top: showPromo18 ? PROMO_18_BANNER_HEIGHT : 0 }}
         className={`
-          fixed top-0 left-0 right-0 z-50 bg-background transition-all duration-300 ease-out
+          fixed left-0 right-0 z-50 bg-background transition-all duration-300 ease-out
           ${isScrolled ? 'h-16 shadow-[0_4px_10px_rgba(0,0,0,0.08)]' : 'h-22'}
         `}
       >

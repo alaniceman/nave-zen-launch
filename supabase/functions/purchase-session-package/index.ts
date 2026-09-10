@@ -4,6 +4,7 @@ import { getCorsHeaders } from "../_shared/cors.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { upsertCustomerAndLogEvent } from "../_shared/crm.ts";
 import { addSubscriberToGroups } from "../_shared/mailerlite.ts";
+import { buildCodePlan, buildCodeGroups } from "../_shared/codeComposition.ts";
 
 const purchaseSchema = z.object({
   packageId: z.string().uuid(),
@@ -244,7 +245,8 @@ serve(async (req) => {
 
       // Generate session codes directly
       const codes = [];
-      for (let i = 0; i < package_.sessions_quantity; i++) {
+      const codePlan = buildCodePlan(package_);
+      for (let i = 0; i < codePlan.length; i++) {
         let code: string;
         let isUnique = false;
         
@@ -267,13 +269,13 @@ serve(async (req) => {
       const giftcardAccessToken = validatedData.isGiftCard ? crypto.randomUUID() : null;
 
       // Insert all session codes
-      const sessionCodesData = codes.map((code) => ({
+      const sessionCodesData = codes.map((code, idx) => ({
         code,
         package_id: package_.id,
         buyer_email: validatedData.buyerEmail,
         buyer_name: validatedData.buyerName,
         buyer_phone: validatedData.buyerPhone,
-        applicable_service_ids: package_.applicable_service_ids,
+        applicable_service_ids: codePlan[idx].serviceIds,
         expires_at: expiresAt.toISOString(),
         mercado_pago_payment_id: `FREE_ORDER_${order.id}`,
         giftcard_access_token: giftcardAccessToken,
@@ -321,6 +323,7 @@ serve(async (req) => {
             packageName: package_.name,
             sessionsQuantity: package_.sessions_quantity,
             codes: codes,
+            codeGroups: buildCodeGroups(codePlan, codes),
             expiresAt: expiresAt.toISOString(),
             isGiftCard: validatedData.isGiftCard,
             giftcardLink: giftcardLink,

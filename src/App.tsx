@@ -21,6 +21,7 @@ import { ProtectedRoute } from "@/components/admin/ProtectedRoute";
 import { MailerLiteUniversal } from "@/components/MailerLiteUniversal";
 import { GtagClickTracker } from "@/components/GtagClickTracker";
 import { Loader2 } from "lucide-react";
+import { Promo18Offset } from "@/components/Promo18Banner";
 
 // Lazy-loaded pages
 const Index = lazy(() => import("./pages/Index"));
@@ -44,6 +45,7 @@ const MarzoReset = lazy(() => import("./pages/MarzoReset"));
 const DiaDeLaMadre = lazy(() => import("./pages/DiaDeLaMadre"));
 const PromoInvierno = lazy(() => import("./pages/PromoInvierno"));
 const PromoTalleres = lazy(() => import("./pages/PromoTalleres"));
+const Promo18Septiembre = lazy(() => import("./pages/Promo18Septiembre"));
 const Horarios = lazy(() => import("./pages/Horarios"));
 const ConoceElLugar = lazy(() => import("./pages/ConoceElLugar"));
 const FAQ = lazy(() => import("./pages/FAQ"));
@@ -160,6 +162,7 @@ const App = () => {
               <MailerLiteUniversal />
               <TrialDelegationHandler />
               <Header />
+            <Promo18Offset />
             <Suspense fallback={<LoadingSpinner />}>
             <Routes>
             <Route path="/" element={<Index />} />
@@ -184,6 +187,8 @@ const App = () => {
             <Route path="/diadelamadre" element={<Navigate to="/dia-de-la-madre" replace />} />
             <Route path="/promo-invierno" element={<PromoInvierno />} />
             <Route path="/promo-talleres" element={<PromoTalleres />} />
+            <Route path="/promo-18-septiembre" element={<Promo18Septiembre />} />
+            <Route path="/promo-18" element={<Navigate to="/promo-18-septiembre" replace />} />
             <Route path="/dia-del-padre" element={<Navigate to="/promo-invierno" replace />} />
             <Route path="/diadelpadre" element={<Navigate to="/promo-invierno" replace />} />
             <Route path="/horarios" element={<Horarios />} />
