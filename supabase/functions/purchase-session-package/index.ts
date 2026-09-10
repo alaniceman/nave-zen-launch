@@ -323,6 +323,7 @@ serve(async (req) => {
             packageName: package_.name,
             sessionsQuantity: package_.sessions_quantity,
             codes: codes,
+            codeGroups: buildCodeGroups(codePlan, codes),
             expiresAt: expiresAt.toISOString(),
             isGiftCard: validatedData.isGiftCard,
             giftcardLink: giftcardLink,
