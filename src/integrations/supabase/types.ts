@@ -513,6 +513,27 @@ export type Database = {
         }
         Relationships: []
       }
+      email_campaign_sends: {
+        Row: {
+          campaign: string
+          email: string
+          id: string
+          sent_at: string
+        }
+        Insert: {
+          campaign: string
+          email: string
+          id?: string
+          sent_at?: string
+        }
+        Update: {
+          campaign?: string
+          email?: string
+          id?: string
+          sent_at?: string
+        }
+        Relationships: []
+      }
       email_optouts: {
         Row: {
           created_at: string
