@@ -4,6 +4,7 @@ import { getCorsHeaders } from "../_shared/cors.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { upsertCustomerAndLogEvent } from "../_shared/crm.ts";
 import { addSubscriberToGroups } from "../_shared/mailerlite.ts";
+import { buildCodePlan, buildCodeGroups } from "../_shared/codeComposition.ts";
 
 const purchaseSchema = z.object({
   packageId: z.string().uuid(),
