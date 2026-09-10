@@ -144,19 +144,35 @@ const handler = async (req: Request): Promise<Response> => {
       const renderCode = (code: string) =>
         `<div style="background: #f5f5f5; border: 2px dashed #333; padding: 15px; margin: 10px 0; text-align: center; font-family: monospace; font-size: 24px; font-weight: bold; letter-spacing: 3px;">${code}</div>`;
 
-      const codesHtml = (codeGroups && codeGroups.length > 0)
-        ? codeGroups.map(group => `
-            <div style="margin: 24px 0;">
-              <p style="margin: 0 0 6px 0; font-size: 15px; font-weight: bold; color: #2E4D3A;">
-                ${group.label} · ${group.codes.length} ${group.codes.length === 1 ? "sesión" : "sesiones"}
-              </p>
-              <p style="margin: 0 0 8px 0; font-size: 13px; color: #666;">
-                Estos códigos sólo sirven para reservar clases de ${group.label}.
-              </p>
-              ${group.codes.map(renderCode).join('')}
+      const isGrouped = !!(codeGroups && codeGroups.length > 0);
+
+      const codesHtml = isGrouped
+        ? codeGroups!.map((group, i) => `
+            <div style="margin: 24px 0; border: 1px solid #d7e3dc; border-radius: 12px; overflow: hidden;">
+              <div style="background: #2E4D3A; padding: 12px 16px;">
+                <p style="margin: 0; font-size: 16px; font-weight: bold; color: #ffffff;">
+                  ${i + 1}. ${group.label}
+                </p>
+                <p style="margin: 4px 0 0 0; font-size: 13px; color: #d8e6dd;">
+                  ${group.codes.length} ${group.codes.length === 1 ? "código" : "códigos"} · sólo para reservar clases de ${group.label}
+                </p>
+              </div>
+              <div style="padding: 8px 16px 16px 16px;">
+                ${group.codes.map(renderCode).join('')}
+              </div>
             </div>
           `).join('')
         : codes.map(renderCode).join('');
+
+      const groupedIntro = isGrouped
+        ? `<div style="background: #eef6f1; border-left: 4px solid #2E4D3A; padding: 15px; margin: 20px 0;">
+             <p style="margin: 0; font-size: 14px;">
+               <strong>Tus códigos vienen separados por tipo de clase.</strong>
+               ${codeGroups!.map(g => `${g.codes.length} para <strong>${g.label}</strong>`).join(" y ")}.
+               Cada código sirve únicamente para reservar el tipo de clase de su grupo, así que fíjate en el título antes de usarlo.
+             </p>
+           </div>`
+        : "";
 
       emailHtml = `
         <!DOCTYPE html>
@@ -181,6 +197,8 @@ const handler = async (req: Request): Promise<Response> => {
                 Aquí están tus códigos de sesión:
               </p>
               
+              ${groupedIntro}
+
               ${codesHtml}
               
               <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0;">
@@ -188,14 +206,29 @@ const handler = async (req: Request): Promise<Response> => {
                   <strong>⏰ Importante:</strong> Estos códigos son válidos hasta el <strong>${expiryDate}</strong>
                 </p>
               </div>
+
+              <div style="text-align: center; margin: 30px 0;">
+                <a href="https://studiolanave.com/agenda-nave-studio"
+                   style="display: inline-block; background: #2E4D3A; color: #ffffff; text-decoration: none; font-size: 16px; font-weight: bold; padding: 16px 28px; border-radius: 10px;">
+                  Reservar en la agenda →
+                </a>
+                <p style="font-size: 13px; color: #666; margin: 10px 0 0 0;">
+                  <a href="https://studiolanave.com/agenda-nave-studio" style="color: #2E4D3A;">studiolanave.com/agenda-nave-studio</a>
+                </p>
+              </div>
               
               <h3 style="color: #333; margin-top: 30px;">¿Cómo usar tus códigos?</h3>
               <ol style="font-size: 15px; padding-left: 20px;">
                 <li>Ve a <a href="https://studiolanave.com/agenda-nave-studio" style="color: #667eea;">studiolanave.com/agenda-nave-studio</a></li>
-                <li>Selecciona el profesional, fecha y hora</li>
+                <li>Elige la clase, fecha y hora${isGrouped ? " que corresponda al grupo del código que vas a usar" : ""}</li>
                 <li>Ingresa uno de tus códigos en el formulario de reserva</li>
                 <li>¡Listo! Tu sesión quedará confirmada sin costo adicional</li>
               </ol>
+              ${isGrouped ? `
+              <p style="font-size: 14px; color: #666;">
+                Si usas un código en el tipo de clase equivocado, el sistema no lo aceptará: cada grupo está limitado a sus propias clases.
+              </p>
+              ` : ""}
               
               <p style="font-size: 14px; color: #666; margin-top: 30px;">
                 Cada código puede usarse una sola vez. Guarda este email para tener tus códigos siempre a mano.
