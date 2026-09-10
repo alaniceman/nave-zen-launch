@@ -86,7 +86,7 @@ const handler = async (req: Request): Promise<Response> => {
                 body {
                   margin: 0;
                   padding: 0;
-                  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+                  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
                   background-color: #f5f5f5;
                 }
                 .container {
@@ -95,15 +95,21 @@ const handler = async (req: Request): Promise<Response> => {
                   background-color: #ffffff;
                 }
                 .header {
-                  padding: 40px 30px;
+                  padding: 44px 30px 36px;
                   text-align: center;
-                  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                  background: #2E4D3A;
                   color: white;
                 }
                 .header h1 {
                   margin: 0;
                   font-size: 26px;
-                  font-weight: 600;
+                  font-weight: 700;
+                  letter-spacing: -0.01em;
+                }
+                .header .stars {
+                  font-size: 22px;
+                  margin-bottom: 8px;
+                  letter-spacing: 4px;
                 }
                 .content {
                   padding: 40px 30px;
@@ -115,37 +121,53 @@ const handler = async (req: Request): Promise<Response> => {
                   margin-bottom: 24px;
                 }
                 .highlight {
-                  background-color: #f0f4ff;
-                  border-radius: 8px;
+                  background-color: #EEF3F0;
+                  border-radius: 10px;
                   padding: 20px;
                   margin: 24px 0;
                   text-align: center;
                 }
                 .highlight p {
                   margin: 0;
-                  color: #555;
+                  color: #2E4D3A;
                   font-size: 15px;
                 }
                 .cta-button {
                   display: inline-block;
-                  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                  background: #2E4D3A;
                   color: white !important;
                   text-decoration: none;
                   padding: 16px 40px;
-                  border-radius: 8px;
+                  border-radius: 10px;
                   font-size: 16px;
                   font-weight: 600;
-                  margin: 24px 0;
+                  margin: 8px 0;
+                }
+                .cta-button-google {
+                  display: inline-block;
+                  background: #4285F4;
+                  color: white !important;
+                  text-decoration: none;
+                  padding: 18px 44px;
+                  border-radius: 10px;
+                  font-size: 17px;
+                  font-weight: 700;
+                  margin: 8px 0;
                 }
                 .cta-container {
                   text-align: center;
-                  margin: 32px 0;
+                  margin: 28px 0;
                 }
                 .note {
                   font-size: 14px;
                   color: #888;
                   text-align: center;
                   margin-top: 16px;
+                }
+                .section {
+                  margin-top: 36px;
+                  padding-top: 32px;
+                  border-top: 1px solid #e0e0e0;
                 }
                 .footer {
                   padding: 30px;
@@ -159,37 +181,52 @@ const handler = async (req: Request): Promise<Response> => {
             <body>
               <div class="container">
                 <div class="header">
-                  <h1>🛸 ¿Cómo estuvo tu sesión?</h1>
+                  <div class="stars">⭐⭐⭐⭐⭐</div>
+                  <h1>¿Cómo estuvo tu sesión?</h1>
                 </div>
-                
+
                 <div class="content">
                   <p class="message">
                     Hola <strong>${booking.customer_name}</strong>,
                   </p>
-                  
+
                   <p class="message">
-                    ¡Gracias por venir hoy a tu sesión de <strong>${booking.service?.name || 'La Nave'}</strong>! Esperamos que haya sido una experiencia transformadora. 🙌
+                    ¡Gracias por venir a tu sesión de <strong>${booking.service?.name || 'Nave Studio'}</strong>! Esperamos que haya sido una experiencia transformadora. 🙌
                   </p>
-                  
+
                   <p class="message">
-                    Tu opinión es súper valiosa para nosotros. <strong>Leemos cada respuesta</strong> y gracias al feedback de nuestra comunidad hemos podido mejorar muchísimo la experiencia.
+                    Si te gustó la experiencia, <strong>la mejor forma de ayudarnos es dejando una reseña en Google</strong>. Tu opinión ayuda a que más personas descubran Nave Studio y se animen a sumergirse en el agua fría. ¡Nos encantaría leer tu experiencia!
                   </p>
-                  
+
                   <div class="highlight">
-                    <p>⏱️ Solo te tomará <strong>1 minuto</strong> completar el formulario</p>
+                    <p>⏱️ Solo te toma <strong>1 minuto</strong> y significa muchísimo para nosotros</p>
                   </div>
-                  
+
                   <div class="cta-container">
-                    <a href="https://tally.so/r/wa0RZW" class="cta-button">
-                      Dar mi feedback
+                    <a href="https://g.page/r/Cfv8WYiprWfvECE/review" class="cta-button-google">
+                      ⭐ Dejar mi reseña en Google
                     </a>
                   </div>
-                  
+
                   <p class="note">
-                    Cada respuesta nos ayuda a seguir mejorando para ti y toda la comunidad 💜
+                    Cada reseña nos ayuda a seguir creciendo como comunidad 💜
                   </p>
-                  
-                  <div style="margin-top: 40px; padding-top: 32px; border-top: 1px solid #e0e0e0;">
+
+                  <div class="section">
+                    <p class="message" style="text-align: center;">
+                      <strong>¿Tienes algo más que contarnos?</strong>
+                    </p>
+                    <p class="message" style="text-align: center; color: #666;">
+                      Si quieres compartir feedback detallado (qué mejoró tu experiencia, qué sugerencias tienes), cuéntanos en este breve formulario.
+                    </p>
+                    <div class="cta-container">
+                      <a href="https://tally.so/r/wa0RZW" class="cta-button">
+                        Dar feedback interno
+                      </a>
+                    </div>
+                  </div>
+
+                  <div class="section">
                     <p class="message" style="text-align: center;">
                       <strong>🧊 ¡Únete a los Crionautas!</strong>
                     </p>
@@ -197,40 +234,22 @@ const handler = async (req: Request): Promise<Response> => {
                       Nuestra comunidad de WhatsApp donde compartimos tips, experiencias y nos motivamos mutuamente en el camino del hielo.
                     </p>
                     <div class="cta-container">
-                      <a href="https://chat.whatsapp.com/HdTFY3RryAMA5e7GAleMHq?mode=gi_t" style="display: inline-block; background: #25D366; color: white !important; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-size: 15px; font-weight: 600;">
+                      <a href="https://chat.whatsapp.com/HdTFY3RryAMA5e7GAleMHq?mode=gi_t" style="display: inline-block; background: #25D366; color: white !important; text-decoration: none; padding: 14px 32px; border-radius: 10px; font-size: 15px; font-weight: 600;">
                         💬 Unirme a los Crionautas
                       </a>
                     </div>
                   </div>
-                  
-                  <div style="margin-top: 32px; padding-top: 32px; border-top: 1px solid #e0e0e0;">
-                    <p class="message" style="text-align: center;">
-                      <strong>¿Te gustó la experiencia?</strong> 🌟
-                    </p>
-                    <p class="message" style="text-align: center; color: #666;">
-                      Tu reseña en Google ayuda a que más personas descubran La Nave y se unan a esta comunidad increíble. ¡Nos encantaría leer tu experiencia!
-                    </p>
-                    <div class="cta-container">
-                      <a href="https://g.page/r/CbKj7T4h3cYeEBM/review" style="display: inline-block; background: #4285F4; color: white !important; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-size: 15px; font-weight: 600;">
-                        ⭐ Dejar reseña en Google
-                      </a>
-                    </div>
-                  </div>
-                  
-                  <p class="note" style="margin-top: 8px;">
-                    Cada respuesta nos ayuda a seguir mejorando para ti y toda la comunidad 💜
-                  </p>
-                  
+
                   <p class="message" style="margin-top: 32px;">
-                    ¡Gracias por ser parte de La Nave!
+                    ¡Gracias por ser parte de Nave Studio!
                   </p>
-                  
+
                   <p class="message">
                     Con cariño,<br>
                     <strong>El equipo de Nave Studio</strong> 🛸
                   </p>
                 </div>
-                
+
                 <div class="footer">
                   <p>Nave Studio - Transformando cuerpo y mente</p>
                 </div>
