@@ -144,19 +144,35 @@ const handler = async (req: Request): Promise<Response> => {
       const renderCode = (code: string) =>
         `<div style="background: #f5f5f5; border: 2px dashed #333; padding: 15px; margin: 10px 0; text-align: center; font-family: monospace; font-size: 24px; font-weight: bold; letter-spacing: 3px;">${code}</div>`;
 
-      const codesHtml = (codeGroups && codeGroups.length > 0)
-        ? codeGroups.map(group => `
-            <div style="margin: 24px 0;">
-              <p style="margin: 0 0 6px 0; font-size: 15px; font-weight: bold; color: #2E4D3A;">
-                ${group.label} · ${group.codes.length} ${group.codes.length === 1 ? "sesión" : "sesiones"}
-              </p>
-              <p style="margin: 0 0 8px 0; font-size: 13px; color: #666;">
-                Estos códigos sólo sirven para reservar clases de ${group.label}.
-              </p>
-              ${group.codes.map(renderCode).join('')}
+      const isGrouped = !!(codeGroups && codeGroups.length > 0);
+
+      const codesHtml = isGrouped
+        ? codeGroups!.map((group, i) => `
+            <div style="margin: 24px 0; border: 1px solid #d7e3dc; border-radius: 12px; overflow: hidden;">
+              <div style="background: #2E4D3A; padding: 12px 16px;">
+                <p style="margin: 0; font-size: 16px; font-weight: bold; color: #ffffff;">
+                  ${i + 1}. ${group.label}
+                </p>
+                <p style="margin: 4px 0 0 0; font-size: 13px; color: #d8e6dd;">
+                  ${group.codes.length} ${group.codes.length === 1 ? "código" : "códigos"} · sólo para reservar clases de ${group.label}
+                </p>
+              </div>
+              <div style="padding: 8px 16px 16px 16px;">
+                ${group.codes.map(renderCode).join('')}
+              </div>
             </div>
           `).join('')
         : codes.map(renderCode).join('');
+
+      const groupedIntro = isGrouped
+        ? `<div style="background: #eef6f1; border-left: 4px solid #2E4D3A; padding: 15px; margin: 20px 0;">
+             <p style="margin: 0; font-size: 14px;">
+               <strong>Tus códigos vienen separados por tipo de clase.</strong>
+               ${codeGroups!.map(g => `${g.codes.length} para <strong>${g.label}</strong>`).join(" y ")}.
+               Cada código sirve únicamente para reservar el tipo de clase de su grupo, así que fíjate en el título antes de usarlo.
+             </p>
+           </div>`
+        : "";
 
       emailHtml = `
         <!DOCTYPE html>
