@@ -4,6 +4,7 @@ import { getCorsHeaders } from "../_shared/cors.ts";
 import { syncOrderToMailerLite, addSubscriberToGroups } from "../_shared/mailerlite.ts";
 import { upsertCustomerAndLogEvent } from "../_shared/crm.ts";
 import { sendMetaEvent } from "../_shared/metaCapi.ts";
+import { buildCodePlan, buildCodeGroups } from "../_shared/codeComposition.ts";
 
 /**
  * Contexto de navegador capturado al crear la orden (fbp/fbc/IP/UA/url).
@@ -845,6 +846,7 @@ async function handlePackageOrderPayment(
         buyerName: order.buyer_name,
         packageName: package_.name,
         codes: codes.map(c => c.code),
+        codeGroups: buildCodeGroups(codePlan, codes.map(c => c.code)),
         expiresAt: expiresAt.toISOString(),
         isGiftCard: isGiftCard,
         giftcardLink: giftcardLink,
