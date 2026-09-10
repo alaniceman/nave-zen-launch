@@ -102,33 +102,6 @@ export default function Promo18Septiembre() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const validateCoupon = async () => {
-    if (!couponCode.trim()) return;
-    setIsValidatingCoupon(true);
-    setCouponError("");
-    setAppliedCoupon(null);
-    try {
-      const { data: result, error } = await supabase.functions.invoke("validate-coupon", {
-        body: {
-          code: couponCode.trim().toUpperCase(),
-          packageId: PROMO_18_PACKAGE_ID,
-          purchaseAmount: PROMO_18_PRICE,
-        },
-      });
-      if (error || !result?.valid) {
-        setCouponError(result?.error || "Cupón no encontrado");
-        return;
-      }
-      setAppliedCoupon(result.coupon);
-      toast.success("¡Cupón aplicado!");
-    } catch (err) {
-      console.error("Error validating coupon:", err);
-      setCouponError("Error al validar cupón");
-    } finally {
-      setIsValidatingCoupon(false);
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.phone) {
@@ -145,7 +118,6 @@ export default function Promo18Septiembre() {
           buyerName: formData.name,
           buyerEmail: formData.email,
           buyerPhone: formData.phone,
-          couponCode: appliedCoupon?.code,
           isGiftCard: false,
           promoType: "promo_18_septiembre",
           fbp: ctx.fbp,
