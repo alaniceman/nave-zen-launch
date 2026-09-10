@@ -44,6 +44,7 @@ const MarzoReset = lazy(() => import("./pages/MarzoReset"));
 const DiaDeLaMadre = lazy(() => import("./pages/DiaDeLaMadre"));
 const PromoInvierno = lazy(() => import("./pages/PromoInvierno"));
 const PromoTalleres = lazy(() => import("./pages/PromoTalleres"));
+const Promo18Septiembre = lazy(() => import("./pages/Promo18Septiembre"));
 const Horarios = lazy(() => import("./pages/Horarios"));
 const ConoceElLugar = lazy(() => import("./pages/ConoceElLugar"));
 const FAQ = lazy(() => import("./pages/FAQ"));

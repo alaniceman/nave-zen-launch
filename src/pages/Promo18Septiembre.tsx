@@ -520,7 +520,7 @@ export default function Promo18Septiembre() {
         </section>
 
         <ReviewsTrustBar />
-        <PurchaseFAQ />
+        <PurchaseFAQ type="bonos" />
         <Footer />
       </main>
     </>

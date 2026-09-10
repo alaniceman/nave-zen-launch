@@ -14,6 +14,7 @@ import { StickyMobileCTA } from "@/components/StickyMobileCTA"
 import { BautizoHieloPromo } from "@/components/BautizoHieloPromo"
 import { NextClassAutoWidget } from "@/components/NextClassAutoWidget"
 import { AskNaveBar } from "@/components/AskNaveBar"
+import { Promo18Section } from "@/components/Promo18Section"
 
 
 const Index = () => {
@@ -36,6 +37,7 @@ const Index = () => {
         <HeroSection />
         <AskNaveBar overlap className="absolute bottom-0 left-0 right-0 translate-y-1/2 z-30" />
       </div>
+      <Promo18Section />
       <SocialProofSection />
 
       <MethodologiesSection />
