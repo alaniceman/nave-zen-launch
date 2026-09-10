@@ -15,7 +15,8 @@ import { ReviewsTrustBar } from "@/components/ReviewsTrustBar";
  import { GiftCardSection } from "@/components/GiftCardSection";
  import { StickyMobileCTA } from "@/components/StickyMobileCTA";
  import { NextClassAutoWidget } from "@/components/NextClassAutoWidget";
- import { AskNaveBar } from "@/components/AskNaveBar";
+import { AskNaveBar } from "@/components/AskNaveBar";
+import { Promo18Section } from "@/components/Promo18Section";
 
  import { supabase } from "@/integrations/supabase/client";
  import { scheduleData, dayNames, type ClassItem } from "@/data/schedule";
@@ -255,6 +256,9 @@ import { ReviewsTrustBar } from "@/components/ReviewsTrustBar";
          </section>
 
       <AskNaveBar />
+
+      <Promo18Section />
+
 
       {/* Reseñas reales de Ice Bath */}
 
