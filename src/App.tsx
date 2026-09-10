@@ -161,6 +161,7 @@ const App = () => {
               <MailerLiteUniversal />
               <TrialDelegationHandler />
               <Header />
+            <Promo18Offset />
             <Suspense fallback={<LoadingSpinner />}>
             <Routes>
             <Route path="/" element={<Index />} />
@@ -185,6 +186,8 @@ const App = () => {
             <Route path="/diadelamadre" element={<Navigate to="/dia-de-la-madre" replace />} />
             <Route path="/promo-invierno" element={<PromoInvierno />} />
             <Route path="/promo-talleres" element={<PromoTalleres />} />
+            <Route path="/promo-18-septiembre" element={<Promo18Septiembre />} />
+            <Route path="/promo-18" element={<Navigate to="/promo-18-septiembre" replace />} />
             <Route path="/dia-del-padre" element={<Navigate to="/promo-invierno" replace />} />
             <Route path="/diadelpadre" element={<Navigate to="/promo-invierno" replace />} />
             <Route path="/horarios" element={<Horarios />} />
