@@ -141,14 +141,25 @@ serve(async (req) => {
       recipients = [...map.entries()];
     }
 
+    // Skip anyone who already got this campaign
+    const campaign = `promo18_${mode}`;
+    const { data: alreadySent } = await supabase
+      .from("email_campaign_sends")
+      .select("email")
+      .eq("campaign", campaign)
+      .range(0, 4999);
+    const sentSet = new Set((alreadySent || []).map((r: any) => (r.email || "").toLowerCase()));
+    recipients = recipients.filter(([email]) => !sentSet.has(email));
+
     const total = recipients.length;
-    const slice = recipients.slice(offset, offset + batchSize);
+    const slice = recipients.slice(0, batchSize);
 
     let sent = 0;
     const errors: string[] = [];
     for (const [email, name] of slice) {
       try {
         await send(email, name, mode);
+        await supabase.from("email_campaign_sends").insert({ campaign, email });
         sent++;
       } catch (e: any) {
         errors.push(`${email}: ${e.message}`);
@@ -156,18 +167,18 @@ serve(async (req) => {
       await new Promise((r) => setTimeout(r, 600));
     }
 
-    const nextOffset = offset + slice.length;
+    const remaining = total - slice.length;
     return new Response(
       JSON.stringify({
         success: true,
         mode,
-        total,
-        offset,
+        pending: total,
         sent,
-        nextOffset: nextOffset < total ? nextOffset : null,
-        done: nextOffset >= total,
+        remaining,
+        done: remaining <= 0,
         errors,
       }),
+
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error: any) {
