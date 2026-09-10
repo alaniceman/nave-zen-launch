@@ -103,6 +103,22 @@ serve(async (req) => {
       });
     }
 
+    if (body?.auditResend) {
+      const res = await fetch("https://api.resend.com/emails?limit=100", {
+        headers: { Authorization: `Bearer ${resendApiKey}` },
+      });
+      const json = await res.json();
+      const items = (json?.data || []).map((e: any) => ({
+        to: e.to,
+        subject: e.subject,
+        created_at: e.created_at,
+      }));
+      return new Response(JSON.stringify({ status: res.status, count: items.length, items }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+
     // Attendees of the last workshop
     const { data: tallerRows, error: tallerErr } = await supabase
       .from("taller_inscripciones")
