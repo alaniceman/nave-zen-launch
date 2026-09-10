@@ -21,6 +21,7 @@ import { ProtectedRoute } from "@/components/admin/ProtectedRoute";
 import { MailerLiteUniversal } from "@/components/MailerLiteUniversal";
 import { GtagClickTracker } from "@/components/GtagClickTracker";
 import { Loader2 } from "lucide-react";
+import { Promo18Offset } from "@/components/Promo18Banner";
 
 // Lazy-loaded pages
 const Index = lazy(() => import("./pages/Index"));

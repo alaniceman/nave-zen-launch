@@ -1,6 +1,13 @@
 import { Link } from "react-router-dom";
 import { Snowflake, ArrowRight } from "lucide-react";
-import { PROMO_18_PATH, usePromo18Banner } from "@/lib/promo18";
+import { PROMO_18_BANNER_HEIGHT, PROMO_18_PATH, usePromo18Banner } from "@/lib/promo18";
+
+/** Espaciador para compensar la altura de la barra superior de la promo. */
+export const Promo18Offset = () => {
+  const show = usePromo18Banner();
+  if (!show) return null;
+  return <div style={{ height: PROMO_18_BANNER_HEIGHT }} aria-hidden="true" />;
+};
 
 export const Promo18Banner = () => {
   const show = usePromo18Banner();
