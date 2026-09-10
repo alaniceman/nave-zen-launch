@@ -117,9 +117,11 @@ export const Header = () => {
 
   return (
     <>
+      <Promo18Banner />
       <header
+        style={{ top: showPromo18 ? PROMO_18_BANNER_HEIGHT : 0 }}
         className={`
-          fixed top-0 left-0 right-0 z-50 bg-background transition-all duration-300 ease-out
+          fixed left-0 right-0 z-50 bg-background transition-all duration-300 ease-out
           ${isScrolled ? 'h-16 shadow-[0_4px_10px_rgba(0,0,0,0.08)]' : 'h-22'}
         `}
       >
