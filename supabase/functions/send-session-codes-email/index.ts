@@ -29,6 +29,7 @@ const handler = async (req: Request): Promise<Response> => {
       buyerName, 
       packageName, 
       codes, 
+      codeGroups,
       expiresAt,
       isGiftCard,
       giftcardLink,
