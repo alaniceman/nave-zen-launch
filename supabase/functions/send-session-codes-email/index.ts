@@ -11,6 +11,7 @@ interface SessionCodesEmailRequest {
   buyerName: string;
   packageName: string;
   codes: string[];
+  codeGroups?: { label: string; codes: string[] }[] | null;
   expiresAt: string;
   isGiftCard?: boolean;
   giftcardLink?: string | null;
@@ -139,9 +140,22 @@ const handler = async (req: Request): Promise<Response> => {
       `;
     } else {
       // Regular session codes email
-      const codesHtml = codes.map(code => 
-        `<div style="background: #f5f5f5; border: 2px dashed #333; padding: 15px; margin: 10px 0; text-align: center; font-family: monospace; font-size: 24px; font-weight: bold; letter-spacing: 3px;">${code}</div>`
-      ).join('');
+      const renderCode = (code: string) =>
+        `<div style="background: #f5f5f5; border: 2px dashed #333; padding: 15px; margin: 10px 0; text-align: center; font-family: monospace; font-size: 24px; font-weight: bold; letter-spacing: 3px;">${code}</div>`;
+
+      const codesHtml = (codeGroups && codeGroups.length > 0)
+        ? codeGroups.map(group => `
+            <div style="margin: 24px 0;">
+              <p style="margin: 0 0 6px 0; font-size: 15px; font-weight: bold; color: #2E4D3A;">
+                ${group.label} · ${group.codes.length} ${group.codes.length === 1 ? "sesión" : "sesiones"}
+              </p>
+              <p style="margin: 0 0 8px 0; font-size: 13px; color: #666;">
+                Estos códigos sólo sirven para reservar clases de ${group.label}.
+              </p>
+              ${group.codes.map(renderCode).join('')}
+            </div>
+          `).join('')
+        : codes.map(renderCode).join('');
 
       emailHtml = `
         <!DOCTYPE html>
