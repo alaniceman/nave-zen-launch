@@ -338,7 +338,8 @@ export default function Promo18Septiembre() {
                     <Snowflake className="w-5 h-5 text-cyan-600 flex-shrink-0 mt-0.5" />
                     <p className="text-sm text-foreground">
                       <strong>2 códigos de Método Wim Hof</strong> — breathwork + ice bath a 3 °C,
-                      tu bautizo de hielo guiado.
+                      guiado por instructores certificados. Sirve para tu primera vez o como sesión
+                      habitual si ya tienes experiencia.
                     </p>
                   </div>
                   <div className="flex items-start gap-3 rounded-xl bg-muted p-4">
@@ -426,42 +427,6 @@ export default function Promo18Septiembre() {
                         required
                         disabled={isLoading}
                       />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="coupon">Código de descuento (opcional)</Label>
-                      <div className="flex gap-2">
-                        <Input
-                          id="coupon"
-                          value={couponCode}
-                          onChange={(e) =>
-                            setCouponCode(e.target.value.replace(/\s/g, "").toUpperCase())
-                          }
-                          placeholder="CUPON"
-                          disabled={isLoading || !!appliedCoupon}
-                        />
-                        <Button
-                          type="button"
-                          variant="outline"
-                          onClick={validateCoupon}
-                          disabled={isValidatingCoupon || isLoading || !!appliedCoupon}
-                        >
-                          {isValidatingCoupon ? (
-                            <Loader2 className="w-4 h-4 animate-spin" />
-                          ) : appliedCoupon ? (
-                            <Check className="w-4 h-4" />
-                          ) : (
-                            "Aplicar"
-                          )}
-                        </Button>
-                      </div>
-                      {couponError && <p className="text-sm text-destructive">{couponError}</p>}
-                      {appliedCoupon && (
-                        <p className="text-sm text-green-600">
-                          Cupón {appliedCoupon.code} aplicado · Total $
-                          {finalPrice.toLocaleString("es-CL")}
-                        </p>
-                      )}
                     </div>
 
                     <Button
