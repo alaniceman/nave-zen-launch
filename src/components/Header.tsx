@@ -240,8 +240,9 @@ export const Header = () => {
 
       {/* Mobile Menu Drawer */}
       <div
+        style={{ top: showPromo18 ? PROMO_18_BANNER_HEIGHT : 0 }}
         className={`
-          fixed inset-0 z-40 md:hidden transition-opacity duration-250 ease-out
+          fixed left-0 right-0 bottom-0 z-[55] md:hidden transition-opacity duration-250 ease-out
           ${isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
         `}
       >
