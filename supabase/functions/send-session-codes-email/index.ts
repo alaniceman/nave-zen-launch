@@ -197,6 +197,8 @@ const handler = async (req: Request): Promise<Response> => {
                 Aquí están tus códigos de sesión:
               </p>
               
+              ${groupedIntro}
+
               ${codesHtml}
               
               <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0;">
@@ -204,14 +206,29 @@ const handler = async (req: Request): Promise<Response> => {
                   <strong>⏰ Importante:</strong> Estos códigos son válidos hasta el <strong>${expiryDate}</strong>
                 </p>
               </div>
+
+              <div style="text-align: center; margin: 30px 0;">
+                <a href="https://studiolanave.com/agenda-nave-studio"
+                   style="display: inline-block; background: #2E4D3A; color: #ffffff; text-decoration: none; font-size: 16px; font-weight: bold; padding: 16px 28px; border-radius: 10px;">
+                  Reservar en la agenda →
+                </a>
+                <p style="font-size: 13px; color: #666; margin: 10px 0 0 0;">
+                  <a href="https://studiolanave.com/agenda-nave-studio" style="color: #2E4D3A;">studiolanave.com/agenda-nave-studio</a>
+                </p>
+              </div>
               
               <h3 style="color: #333; margin-top: 30px;">¿Cómo usar tus códigos?</h3>
               <ol style="font-size: 15px; padding-left: 20px;">
                 <li>Ve a <a href="https://studiolanave.com/agenda-nave-studio" style="color: #667eea;">studiolanave.com/agenda-nave-studio</a></li>
-                <li>Selecciona el profesional, fecha y hora</li>
+                <li>Elige la clase, fecha y hora${isGrouped ? " que corresponda al grupo del código que vas a usar" : ""}</li>
                 <li>Ingresa uno de tus códigos en el formulario de reserva</li>
                 <li>¡Listo! Tu sesión quedará confirmada sin costo adicional</li>
               </ol>
+              ${isGrouped ? `
+              <p style="font-size: 14px; color: #666;">
+                Si usas un código en el tipo de clase equivocado, el sistema no lo aceptará: cada grupo está limitado a sus propias clases.
+              </p>
+              ` : ""}
               
               <p style="font-size: 14px; color: #666; margin-top: 30px;">
                 Cada código puede usarse una sola vez. Guarda este email para tener tus códigos siempre a mano.
