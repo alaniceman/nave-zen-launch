@@ -66,10 +66,6 @@ export default function Promo18Septiembre() {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({ name: "", email: "", phone: "" });
 
-  const [couponCode, setCouponCode] = useState("");
-  const [appliedCoupon, setAppliedCoupon] = useState<any>(null);
-  const [couponError, setCouponError] = useState("");
-  const [isValidatingCoupon, setIsValidatingCoupon] = useState(false);
 
   const [deadline] = useState(() => PROMO_18_END_DATE.getTime());
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
@@ -99,45 +95,11 @@ export default function Promo18Septiembre() {
     return () => clearInterval(id);
   }, [deadline]);
 
-  const finalPrice = (() => {
-    if (!appliedCoupon) return PROMO_18_PRICE;
-    const discount =
-      appliedCoupon.discount_type === "percentage"
-        ? Math.floor(PROMO_18_PRICE * (appliedCoupon.discount_value / 100))
-        : appliedCoupon.discount_value;
-    return Math.max(0, PROMO_18_PRICE - discount);
-  })();
+  const finalPrice = PROMO_18_PRICE;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const validateCoupon = async () => {
-    if (!couponCode.trim()) return;
-    setIsValidatingCoupon(true);
-    setCouponError("");
-    setAppliedCoupon(null);
-    try {
-      const { data: result, error } = await supabase.functions.invoke("validate-coupon", {
-        body: {
-          code: couponCode.trim().toUpperCase(),
-          packageId: PROMO_18_PACKAGE_ID,
-          purchaseAmount: PROMO_18_PRICE,
-        },
-      });
-      if (error || !result?.valid) {
-        setCouponError(result?.error || "Cupón no encontrado");
-        return;
-      }
-      setAppliedCoupon(result.coupon);
-      toast.success("¡Cupón aplicado!");
-    } catch (err) {
-      console.error("Error validating coupon:", err);
-      setCouponError("Error al validar cupón");
-    } finally {
-      setIsValidatingCoupon(false);
-    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -156,7 +118,6 @@ export default function Promo18Septiembre() {
           buyerName: formData.name,
           buyerEmail: formData.email,
           buyerPhone: formData.phone,
-          couponCode: appliedCoupon?.code,
           isGiftCard: false,
           promoType: "promo_18_septiembre",
           fbp: ctx.fbp,
@@ -338,7 +299,8 @@ export default function Promo18Septiembre() {
                     <Snowflake className="w-5 h-5 text-cyan-600 flex-shrink-0 mt-0.5" />
                     <p className="text-sm text-foreground">
                       <strong>2 códigos de Método Wim Hof</strong> — breathwork + ice bath a 3 °C,
-                      tu bautizo de hielo guiado.
+                      guiado por instructores certificados. Sirve para tu primera vez o como sesión
+                      habitual si ya tienes experiencia.
                     </p>
                   </div>
                   <div className="flex items-start gap-3 rounded-xl bg-muted p-4">
@@ -426,42 +388,6 @@ export default function Promo18Septiembre() {
                         required
                         disabled={isLoading}
                       />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="coupon">Código de descuento (opcional)</Label>
-                      <div className="flex gap-2">
-                        <Input
-                          id="coupon"
-                          value={couponCode}
-                          onChange={(e) =>
-                            setCouponCode(e.target.value.replace(/\s/g, "").toUpperCase())
-                          }
-                          placeholder="CUPON"
-                          disabled={isLoading || !!appliedCoupon}
-                        />
-                        <Button
-                          type="button"
-                          variant="outline"
-                          onClick={validateCoupon}
-                          disabled={isValidatingCoupon || isLoading || !!appliedCoupon}
-                        >
-                          {isValidatingCoupon ? (
-                            <Loader2 className="w-4 h-4 animate-spin" />
-                          ) : appliedCoupon ? (
-                            <Check className="w-4 h-4" />
-                          ) : (
-                            "Aplicar"
-                          )}
-                        </Button>
-                      </div>
-                      {couponError && <p className="text-sm text-destructive">{couponError}</p>}
-                      {appliedCoupon && (
-                        <p className="text-sm text-green-600">
-                          Cupón {appliedCoupon.code} aplicado · Total $
-                          {finalPrice.toLocaleString("es-CL")}
-                        </p>
-                      )}
                     </div>
 
                     <Button
