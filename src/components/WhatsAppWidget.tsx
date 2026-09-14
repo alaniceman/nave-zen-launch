@@ -1,6 +1,7 @@
 import { MessageCircle, Bot, X } from "lucide-react";
 import { useState } from "react";
 import { trackConversion } from "@/lib/gtagConversions";
+import { useScrolledPastHero } from "@/hooks/useScrolledPastHero";
 
 interface WhatsAppWidgetProps {
   onOpenChat?: () => void;
