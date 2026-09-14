@@ -76,6 +76,19 @@ function contactHtml(lead: Lead): string {
   return `<a href="mailto:${lead.customer_email}" style="color:#2E4D3A;text-decoration:none">${lead.customer_email}</a><br>${waLink}`;
 }
 
+const STATUS_LABELS: Record<string, string> = {
+  interesado_plan_prueba: "Interesado (por pagar)",
+  redirigido_a_boxmagic: "Redirigido a pago (por pagar)",
+  pagado_plan_prueba: "Pagado",
+  plan_prueba_activo: "Plan activo (pagado)",
+  plan_prueba_finalizado: "Plan finalizado",
+  convertido_a_membresia: "Convertido a membresía",
+};
+
+function statusLabel(status: string): string {
+  return STATUS_LABELS[status] || status;
+}
+
 function leadRows(leads: Lead[], highlight = false): string {
   if (leads.length === 0) {
     return `<tr><td style="padding:12px 0;color:#9CA3AF;font-size:14px">Nada por aquí hoy.</td></tr>`;
@@ -87,6 +100,7 @@ function leadRows(leads: Lead[], highlight = false): string {
       <td style="padding:14px 0;border-bottom:1px solid #EEF1F4;font-size:15px;color:#2A2A2A">
         <strong style="color:${highlight ? "#1F2937" : "#374151"};font-size:16px">${l.customer_name || "Sin nombre"}</strong>
         <span style="color:#9CA3AF"> · </span><span style="color:#4A4A4A">${planLabel(l.plan_type)}</span><br>
+        <span style="color:#4A4A4A;font-size:14px">${statusLabel(l.status)}</span><br>
         <span style="color:#4A4A4A;font-size:14px">Inicio ${formatDate(l.actual_start_date)} · Término ${formatDate(l.actual_end_date)}</span><br>
         <span style="font-size:14px">${contactHtml(l)}</span>
         ${l.admin_notes ? `<br><span style="color:#6B7280;font-size:13px">Nota: ${l.admin_notes}</span>` : ""}
