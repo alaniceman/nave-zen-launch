@@ -10,7 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { toast } from "sonner";
 import { format, parseISO, addDays } from "date-fns";
 import { es } from "date-fns/locale";
-import { RefreshCw, ExternalLink, MessageCircle, CheckCircle2 } from "lucide-react";
+import { RefreshCw, ExternalLink, MessageCircle, CheckCircle2, Download } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
 export type Lead = {
@@ -133,13 +133,53 @@ export default function AdminPlanesPrueba() {
     );
   });
 
+  const exportExcel = () => {
+    if (filtered.length === 0) {
+      toast.error("No hay datos para exportar");
+      return;
+    }
+    const headers = [
+      "Nombre", "Email", "WhatsApp", "Plan", "Fecha solicitada",
+      "Inicio real", "Término real", "Estado", "Pagado el", "Origen", "Creado",
+    ];
+    const fmtDate = (d: string | null) => (d ? format(parseISO(d), "dd/MM/yyyy") : "");
+    const rows = filtered.map((l) => [
+      l.customer_name || "",
+      l.customer_email || "",
+      l.customer_phone || "",
+      l.plan_type ? PLAN_LABELS[l.plan_type] || l.plan_type : "",
+      fmtDate(l.requested_start_date),
+      fmtDate(l.actual_start_date),
+      fmtDate(l.actual_end_date),
+      STATUS_LABELS[l.status] || l.status,
+      l.paid_at ? format(parseISO(l.paid_at), "dd/MM/yyyy HH:mm") : "",
+      l.utm_source || "",
+      format(parseISO(l.created_at), "dd/MM/yyyy HH:mm"),
+    ]);
+    const escape = (v: string) => `"${String(v).replace(/"/g, '""')}"`;
+    const csv = [headers, ...rows].map((r) => r.map(escape).join(";")).join("\r\n");
+    const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `planes-prueba-${format(new Date(), "yyyy-MM-dd")}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success(`${filtered.length} registros exportados`);
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Planes de Prueba</h1>
-        <Button variant="outline" size="sm" onClick={fetch}>
-          <RefreshCw className="h-4 w-4 mr-2" />Actualizar
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" size="sm" onClick={exportExcel}>
+            <Download className="h-4 w-4 mr-2" />Descargar Excel
+          </Button>
+          <Button variant="outline" size="sm" onClick={fetch}>
+            <RefreshCw className="h-4 w-4 mr-2" />Actualizar
+          </Button>
+        </div>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-3">
