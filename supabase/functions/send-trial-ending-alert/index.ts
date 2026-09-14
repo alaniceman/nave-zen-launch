@@ -226,19 +226,22 @@ body{margin:0;padding:0;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
 .body{padding:28px;color:#2A2A2A;font-size:15px}
 .footer{padding:18px;text-align:center;color:#9CA3AF;font-size:12px;border-top:1px solid #F0F0F0}
 </style></head><body>
-<span style="display:none;max-height:0;overflow:hidden">${endingTomorrow.length} terminan mañana · ${finished.length} ya terminaron sin membresía</span>
+<span style="display:none;max-height:0;overflow:hidden">${endingTomorrow.length} por terminar · ${nuevos.length} nuevos · ${finished.length} terminados</span>
 <div class="wrap">
   <div class="hdr"><h1>Seguimiento planes de prueba</h1></div>
   <div class="body">
-    <p style="margin:0 0 6px;color:#4A4A4A;font-size:14px">Resumen del ${formatDate(todayCL)} · solo personas que aún <strong>no</strong> están marcadas como convertidas a membresía en el panel.</p>
-    ${section("Termina mañana", "Momento ideal para ofrecer una membresía.", endingTomorrow, true)}
+    <p style="margin:0 0 6px;color:#4A4A4A;font-size:14px">Resumen del ${formatDate(todayCL)}${isMonday ? " · resumen semanal del lunes" : " · hubo cambios de estado"}.</p>
+    ${section("Nuevos pagados (últimos 7 días)", "Confirmar fechas de inicio y bienvenida.", nuevosPagados, true)}
+    ${section("Nuevos por pagar (últimos 7 días)", "Falta el pago: buen momento para escribirles.", nuevosPorPagar)}
+    ${section("Por terminar (próximos 2 días)", "Momento ideal para ofrecer una membresía.", endingTomorrow, true)}
     ${section("Por terminar (próximos 7 días)", "Preparar el seguimiento.", endingSoon)}
     ${section("Ya terminaron (últimos 30 días)", "Sin membresía registrada todavía.", finished)}
+    ${section("Pasaron a membresía (últimos 30 días)", "Conversiones marcadas en el panel.", convertidos)}
     <p style="margin:28px 0 0;text-align:center">
       <a href="https://studiolanave.com/admin/planes-prueba" style="display:inline-block;background:#2E4D3A;color:#fff!important;padding:13px 26px;border-radius:10px;text-decoration:none;font-weight:600;font-size:15px">Abrir panel de planes de prueba</a>
     </p>
   </div>
-  <div class="footer">Nave Studio · aviso automático diario</div>
+  <div class="footer">Nave Studio · aviso automático (lunes y cuando hay cambios)</div>
 </div></body></html>`;
 
     if (dryRun) {
@@ -247,9 +250,14 @@ body{margin:0;padding:0;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
           dryRun: true,
           subject,
           todayCL,
+          isMonday,
+          changed,
+          nuevosPagados: nuevosPagados.length,
+          nuevosPorPagar: nuevosPorPagar.length,
           endingTomorrow: endingTomorrow.length,
           endingSoon: endingSoon.length,
           finished: finished.length,
+          convertidos: convertidos.length,
           html,
         }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } },
