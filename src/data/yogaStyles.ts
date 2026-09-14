@@ -81,7 +81,7 @@ export const yogaStyles: YogaStyle[] = [
     ],
     title: "Yin Yoga en Las Condes — Clases Presenciales | Nave Studio",
     description:
-      "Clases presenciales de Yin Yoga en Las Condes, Santiago. Posturas pasivas para soltar tensión profunda y ganar flexibilidad. Horarios reales, 60 min, Antares 259. Plan de prueba $9.900.",
+      "Clases presenciales de Yin Yoga en Las Condes, Santiago. Posturas pasivas para soltar tensión profunda y ganar flexibilidad. Horarios reales, 60 min, Antares 259. Plan de prueba $14.900.",
     serviceMatch: /^Yin Yoga$/i,
     relatedMatch: /Vinyasa \+ Yin/i,
     fallbackCoachIds: ["amanda", "maral"],
@@ -117,7 +117,7 @@ export const yogaStyles: YogaStyle[] = [
     ],
     title: "Vinyasa Yoga en Las Condes — Clases Presenciales | Nave Studio",
     description:
-      "Clases presenciales de Vinyasa Yoga en Las Condes, Santiago. Flujo continuo sincronizado con la respiración para fuerza, resistencia y claridad mental. Antares 259. Plan de prueba $9.900.",
+      "Clases presenciales de Vinyasa Yoga en Las Condes, Santiago. Flujo continuo sincronizado con la respiración para fuerza, resistencia y claridad mental. Antares 259. Plan de prueba $14.900.",
     serviceMatch: /^Vinyasa Yoga$/i,
     relatedMatch: /Vinyasa \+ Yin|Vinyasa Som|Power Vinyasa/i,
     fallbackCoachIds: ["mar", "maral"],
@@ -153,7 +153,7 @@ export const yogaStyles: YogaStyle[] = [
     ],
     title: "Power Yoga en Las Condes — Clases Presenciales | Nave Studio",
     description:
-      "Clases presenciales de Power Yoga en Las Condes, Santiago. Yoga intenso para fuerza, resistencia muscular y foco mental. Horarios reales, 60 min, Antares 259. Plan de prueba $9.900.",
+      "Clases presenciales de Power Yoga en Las Condes, Santiago. Yoga intenso para fuerza, resistencia muscular y foco mental. Horarios reales, 60 min, Antares 259. Plan de prueba $14.900.",
     serviceMatch: /^Power Yoga$/i,
     relatedMatch: /Power Vinyasa/i,
     fallbackCoachIds: ["maral", "amanda"],
@@ -189,7 +189,7 @@ export const yogaStyles: YogaStyle[] = [
     ],
     title: "Yoga Integral en Las Condes — Clases Presenciales | Nave Studio",
     description:
-      "Clases presenciales de Yoga Integral en Las Condes, Santiago. Fuerza, flexibilidad, respiración y meditación en una práctica para todos los niveles. Antares 259. Plan de prueba $9.900.",
+      "Clases presenciales de Yoga Integral en Las Condes, Santiago. Fuerza, flexibilidad, respiración y meditación en una práctica para todos los niveles. Antares 259. Plan de prueba $14.900.",
     serviceMatch: /^Yoga Integral$/i,
     relatedMatch: /Vinyasa \+ Yin/i,
     fallbackCoachIds: ["maral", "amanda"],
@@ -225,7 +225,7 @@ export const yogaStyles: YogaStyle[] = [
     ],
     title: "Power Vinyasa en Las Condes — Clases Presenciales | Nave Studio",
     description:
-      "Clases presenciales de Power Vinyasa en Las Condes, Santiago. Flujo dinámico con trabajo de fuerza, movilidad y progresiones para cada nivel. Antares 259. Plan de prueba $9.900.",
+      "Clases presenciales de Power Vinyasa en Las Condes, Santiago. Flujo dinámico con trabajo de fuerza, movilidad y progresiones para cada nivel. Antares 259. Plan de prueba $14.900.",
     serviceMatch: /^Power Vinyasa/i,
     relatedMatch: /^Power Yoga$|^Vinyasa Yoga$/i,
     fallbackCoachIds: ["karim"],
@@ -257,7 +257,7 @@ export const yogaStyles: YogaStyle[] = [
     ],
     title: "Vinyasa Somático en Las Condes — Clases Presenciales | Nave Studio",
     description:
-      "Clases presenciales de Vinyasa Somático en Las Condes, Santiago. Movimiento, respiración y quietud para regular el sistema nervioso y soltar tensión. Antares 259. Plan de prueba $9.900.",
+      "Clases presenciales de Vinyasa Somático en Las Condes, Santiago. Movimiento, respiración y quietud para regular el sistema nervioso y soltar tensión. Antares 259. Plan de prueba $14.900.",
     serviceMatch: /^Vinyasa Som/i,
     relatedMatch: /^Yin Yoga$|^Vinyasa Yoga$/i,
     fallbackCoachIds: ["amanda"],

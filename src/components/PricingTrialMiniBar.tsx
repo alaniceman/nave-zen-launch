@@ -6,7 +6,7 @@ export const PricingTrialMiniBar = () => {
       <div className="container mx-auto px-6">
         <div className="h-12 md:h-14 flex items-center justify-center text-center">
           <p className="text-primary text-sm md:text-base">
-            ¿Primera vez en la Nave? Plan de prueba desde <strong className="text-accent font-semibold">$9.900</strong> (7 o 15 días).{" "}
+            ¿Primera vez en la Nave? Plan de prueba desde <strong className="text-accent font-semibold">$14.900</strong> (7 o 15 días).{" "}
             <a 
               href="/plan-de-prueba"
               className="ml-2 inline-flex items-center text-accent hover:text-primary underline-offset-4 hover:underline transition-colors"

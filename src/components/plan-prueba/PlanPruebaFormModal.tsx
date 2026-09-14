@@ -28,13 +28,13 @@ interface Props {
 }
 
 const PLAN_LABELS: Record<PlanType, string> = {
-  trial_7d: "Plan de prueba 7 días — $9.900",
+  trial_7d: "Plan de prueba 7 días — $14.900",
   trial_15d: "Plan de prueba 15 días — $19.900",
 };
 
 // Valor real de compra (CLP) enviado a Google Ads / Meta
 const PLAN_PRICES: Record<PlanType, number> = {
-  trial_7d: 9900,
+  trial_7d: 14900,
   trial_15d: 19900,
 };
 

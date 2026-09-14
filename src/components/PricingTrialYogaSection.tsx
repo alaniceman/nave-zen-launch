@@ -18,7 +18,7 @@ export const PricingTrialYogaSection = () => {
             <ul className="space-y-3 mb-6 md:mb-8">
               <li className="text-neutral-dark flex items-start font-inter">
                 <span className="w-2 h-2 rounded-full bg-accent mr-3 mt-2" />
-                7 días por $9.900 · 15 días por $19.900
+                7 días por $14.900 · 15 días por $19.900
               </li>
               <li className="text-neutral-dark flex items-start font-inter">
                 <span className="w-2 h-2 rounded-full bg-accent mr-3 mt-2" />

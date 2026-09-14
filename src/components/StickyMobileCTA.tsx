@@ -10,7 +10,7 @@ type StickyMobileCTAProps = {
 };
 
 export const StickyMobileCTA = ({
-  label = "Plan de prueba desde $9.900",
+  label = "Plan de prueba desde $14.900",
   to = "/plan-de-prueba",
 }: StickyMobileCTAProps = {}) => {
   const [visible, setVisible] = useState(true);

@@ -100,7 +100,7 @@ const membershipPlans = [
     name: "Eclipse",
     sessions: "1 / sem",
     price: "$59.000",
-    promo: "Prueba antes con Plan de Prueba desde $9.900",
+    promo: "Prueba antes con Plan de Prueba desde $14.900",
     features: [
       "Yoga (Yin · Yang · Integral · Vinyasa · Vinyasa Somático · Power)",
       "Método Wim Hof",
@@ -116,7 +116,7 @@ const membershipPlans = [
     name: "Órbita",
     sessions: "2 / sem",
     price: "$79.000",
-    promo: "Prueba antes con Plan de Prueba desde $9.900",
+    promo: "Prueba antes con Plan de Prueba desde $14.900",
     features: [
       "Yoga (Yin · Yang · Integral · Vinyasa · Vinyasa Somático · Power)",
       "Método Wim Hof",
@@ -133,7 +133,7 @@ const membershipPlans = [
     name: "Universo",
     sessions: "Ilimitadas",
     price: "$95.000",
-    promo: "Prueba antes con Plan de Prueba desde $9.900",
+    promo: "Prueba antes con Plan de Prueba desde $14.900",
     features: [
       "Yoga (Yin · Yang · Integral · Vinyasa · Vinyasa Somático · Power)",
       "Método Wim Hof",
@@ -164,7 +164,7 @@ const structuredDataYoga = {
   "@type": ["LocalBusiness", "SportsActivityLocation"],
   "@id": "https://studiolanave.com/#organization",
   "name": "Nave Studio — Yoga en Las Condes",
-  "description": "Clases de Yoga en Las Condes: Yin, Yang, Vinyasa, Vinyasa Somático, Integral y Power Yoga. Plan de prueba 7 días por $9.900.",
+  "description": "Clases de Yoga en Las Condes: Yin, Yang, Vinyasa, Vinyasa Somático, Integral y Power Yoga. Plan de prueba 7 días por $14.900.",
   "url": "https://studiolanave.com/yoga-las-condes",
   "telephone": "+56946120426",
   "address": {
@@ -337,10 +337,10 @@ const YogaLasCondes = () => {
     <>
       <Helmet>
         <title>Yoga en Las Condes — Yin, Vinyasa y Power | Nave Studio</title>
-        <meta name="description" content="Clases de Yoga en Las Condes, Santiago. Prueba Yin, Vinyasa, Vinyasa Somático, Power e Integral Yoga con instructores certificados. Plan de prueba 7 días por $9.900. Antares 259." />
+        <meta name="description" content="Clases de Yoga en Las Condes, Santiago. Prueba Yin, Vinyasa, Vinyasa Somático, Power e Integral Yoga con instructores certificados. Plan de prueba 7 días por $14.900. Antares 259." />
         <link rel="canonical" href="https://studiolanave.com/yoga-las-condes" />
         <meta property="og:title" content="Yoga en Las Condes — Yin, Vinyasa y Power | Nave Studio" />
-        <meta property="og:description" content="Clases de Yoga en Las Condes. Yin, Vinyasa, Vinyasa Somático, Power e Integral con instructores certificados. Plan de prueba 7 días por $9.900." />
+        <meta property="og:description" content="Clases de Yoga en Las Condes. Yin, Vinyasa, Vinyasa Somático, Power e Integral con instructores certificados. Plan de prueba 7 días por $14.900." />
         <meta property="og:url" content="https://studiolanave.com/yoga-las-condes" />
         <meta property="og:image" content="https://studiolanave.com/lovable-uploads/82672388-9723-4aee-a1f2-ac72618cd26a.png" />
         <meta property="og:type" content="website" />
@@ -387,7 +387,7 @@ const YogaLasCondes = () => {
                 onClick={handleTrialClick}
                 className="bg-accent hover:bg-accent/90 text-white rounded-full px-8 py-3.5 font-semibold transition-all duration-300 hover:scale-105 shadow-lg font-inter inline-flex items-center justify-center"
               >
-                Plan de prueba desde $9.900
+                Plan de prueba desde $14.900
               </a>
               <a
                 href="#horarios-yoga"
@@ -637,7 +637,7 @@ const YogaLasCondes = () => {
                   <span className="text-muted-foreground text-sm">/mes</span>
                 </div>
                 <a href="/plan-de-prueba" className="block mb-6 bg-warm/10 text-warm border border-warm/20 rounded-lg px-3 py-2 text-xs font-semibold text-center hover:bg-warm/20 transition-colors">
-                  Prueba antes con Plan de Prueba desde $9.900
+                  Prueba antes con Plan de Prueba desde $14.900
                 </a>
                 <ul className="space-y-3 mb-8">
                   <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">
@@ -674,7 +674,7 @@ const YogaLasCondes = () => {
                     <span className="text-muted-foreground text-sm">/mes</span>
                   </div>
                   <a href="/plan-de-prueba" className="block mb-6 bg-warm/10 text-warm border border-warm/20 rounded-lg px-3 py-2 text-xs font-semibold text-center hover:bg-warm/20 transition-colors">
-                    Prueba antes con Plan de Prueba desde $9.900
+                    Prueba antes con Plan de Prueba desde $14.900
                   </a>
                   <ul className="space-y-3 mb-8">
                     <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">
@@ -707,7 +707,7 @@ const YogaLasCondes = () => {
                   <span className="text-muted-foreground text-sm">/mes</span>
                 </div>
                 <a href="/plan-de-prueba" className="block mb-6 bg-warm/10 text-warm border border-warm/20 rounded-lg px-3 py-2 text-xs font-semibold text-center hover:bg-warm/20 transition-colors">
-                  Prueba antes con Plan de Prueba desde $9.900
+                  Prueba antes con Plan de Prueba desde $14.900
                 </a>
                 <ul className="space-y-3 mb-8">
                   <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">
@@ -826,7 +826,7 @@ const YogaLasCondes = () => {
             <p className="text-center text-sm text-muted-foreground font-inter mt-8">
               ¿Primera vez? Activa tu{" "}
               <a href="/plan-de-prueba" className="text-accent underline font-semibold hover:text-primary transition-colors">
-                Plan de Prueba (7 días por $9.900)
+                Plan de Prueba (7 días por $14.900)
               </a>
               .
             </p>

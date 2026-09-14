@@ -159,9 +159,9 @@ export default function PlanDePrueba() {
             <PlanCard
               title="7 días de prueba"
               normalPrice="$25.000"
-              salePrice="$9.900"
+              salePrice="$14.900"
               ctaLabel="Comprar prueba de 7 días"
-              badge="60% OFF"
+              badge="40% OFF"
               onClick={() => openPlan("trial_7d")}
               features={[
                 "Todas las clases de Yoga",
