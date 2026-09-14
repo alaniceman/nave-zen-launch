@@ -25,8 +25,10 @@ const WhatsAppWidget = ({ onOpenChat }: WhatsAppWidgetProps) => {
     setIsExpanded(false);
   };
 
+  if (!scrolledPastHero) return null;
+
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2">
+    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2 animate-in fade-in duration-200">
       {/* Expanded options */}
       {isExpanded && (
         <div className="flex flex-col gap-2 mb-1 animate-in fade-in slide-in-from-bottom-2 duration-200">
