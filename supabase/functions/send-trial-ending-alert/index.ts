@@ -276,17 +276,26 @@ body{margin:0;padding:0;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
       html,
     });
 
+    await supabase
+      .from("trial_alert_state")
+      .upsert({ id: STATE_ID, signature, sent_at: new Date().toISOString() });
+
     console.log(
-      `send-trial-ending-alert: mañana=${endingTomorrow.length} pronto=${endingSoon.length} terminados=${finished.length}`,
+      `send-trial-ending-alert: nuevos=${nuevos.length} porTerminar=${endingTomorrow.length} terminados=${finished.length} convertidos=${convertidos.length} lunes=${isMonday}`,
     );
 
     return new Response(
       JSON.stringify({
         success: true,
         todayCL,
+        isMonday,
+        changed,
+        nuevosPagados: nuevosPagados.length,
+        nuevosPorPagar: nuevosPorPagar.length,
         endingTomorrow: endingTomorrow.length,
         endingSoon: endingSoon.length,
         finished: finished.length,
+        convertidos: convertidos.length,
       }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } },
     );
