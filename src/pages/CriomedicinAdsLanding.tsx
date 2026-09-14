@@ -58,6 +58,7 @@ import { Promo18Section } from "@/components/Promo18Section";
    const [packages, setPackages] = useState<SessionPackage[]>([]);
    const [loading, setLoading] = useState(true);
    const isMobile = useIsMobile();
+   const scrolledPastHero = useScrolledPastHero();
   const navigate = useNavigate();
  
    useEffect(() => {
