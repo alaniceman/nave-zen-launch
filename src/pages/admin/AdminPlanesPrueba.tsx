@@ -10,7 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { toast } from "sonner";
 import { format, parseISO, addDays } from "date-fns";
 import { es } from "date-fns/locale";
-import { RefreshCw, ExternalLink, MessageCircle, CheckCircle2 } from "lucide-react";
+import { RefreshCw, ExternalLink, MessageCircle, CheckCircle2, Download } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
 export type Lead = {
