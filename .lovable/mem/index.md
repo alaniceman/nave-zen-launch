@@ -1,3 +1,4 @@
 - [architecture/schedule-instructor-names-rpc](mem://architecture/schedule-instructor-names-rpc) — Instructores vía RPC get_active_professionals; landings de yoga derivan coaches del horario real
 - [features/promo-talleres-private-pack](mem://features/promo-talleres-private-pack) — Landing privada /promo-talleres y flag is_private para packs ocultos
 - [features/trial-ending-alert](mem://features/trial-ending-alert) — Aviso diario interno de planes de prueba por terminar + hook useScrolledPastHero para botones flotantes
+- [integrations/notion-clientes-plan-prueba](mem://integrations/notion-clientes-plan-prueba) — Sync de plan de prueba con la tabla Clientes de Notion (estado, forma de pago, follow-up)
