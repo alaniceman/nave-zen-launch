@@ -124,6 +124,7 @@ serve(async (req) => {
   try {
     const body = await req.json().catch(() => ({} as any));
     const dryRun = body?.dryRun === true;
+    const force = body?.force === true;
 
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
@@ -132,41 +133,89 @@ serve(async (req) => {
 
     const todayCL = chileDateString(new Date());
     const tomorrowCL = addDaysISO(todayCL, 1);
+    const in2CL = addDaysISO(todayCL, 2);
     const in7CL = addDaysISO(todayCL, 7);
     const past30CL = addDaysISO(todayCL, -30);
+    const past7CL = addDaysISO(todayCL, -7);
+
+    // Lunes en Chile (0 = domingo).
+    const isMonday =
+      new Date(`${todayCL}T12:00:00Z`).getUTCDay() === 1;
 
     const { data, error } = await supabase
       .from("trial_bookings")
       .select(
-        "id, customer_name, customer_email, customer_phone, plan_type, status, actual_start_date, actual_end_date, admin_notes",
+        "id, customer_name, customer_email, customer_phone, plan_type, status, actual_start_date, actual_end_date, admin_notes, created_at, paid_at",
       )
-      .not("actual_end_date", "is", null)
-      .gte("actual_end_date", past30CL)
-      .lte("actual_end_date", in7CL)
-      .order("actual_end_date", { ascending: true });
+      .or(`created_at.gte.${past30CL}T00:00:00Z,actual_end_date.gte.${past30CL}`)
+      .order("created_at", { ascending: false })
+      .limit(500);
     if (error) throw error;
 
-    const leads = ((data || []) as Lead[]).filter(
-      (l) => !CONVERTED_STATUSES.includes(l.status),
+    const all = ((data || []) as Lead[]).filter(
+      (l) =>
+        (l.plan_type && l.plan_type.startsWith("trial_")) ||
+        TRIAL_STATUSES.includes(l.status),
     );
 
-    const endingTomorrow = leads.filter((l) => l.actual_end_date === tomorrowCL);
-    const endingSoon = leads.filter(
-      (l) => l.actual_end_date! > tomorrowCL && l.actual_end_date! <= in7CL,
-    );
-    const finished = leads.filter((l) => l.actual_end_date! < todayCL);
+    const pending = all.filter((l) => !CONVERTED_STATUSES.includes(l.status));
 
-    if (endingTomorrow.length === 0 && endingSoon.length === 0 && finished.length === 0) {
+    const withEnd = pending.filter((l) => !!l.actual_end_date);
+    const endingTomorrow = withEnd
+      .filter((l) => l.actual_end_date! >= todayCL && l.actual_end_date! <= in2CL)
+      .sort((a, b) => (a.actual_end_date! < b.actual_end_date! ? -1 : 1));
+    const endingSoon = withEnd
+      .filter((l) => l.actual_end_date! > in2CL && l.actual_end_date! <= in7CL)
+      .sort((a, b) => (a.actual_end_date! < b.actual_end_date! ? -1 : 1));
+    const finished = withEnd
+      .filter((l) => l.actual_end_date! < todayCL && l.actual_end_date! >= past30CL)
+      .sort((a, b) => (a.actual_end_date! > b.actual_end_date! ? -1 : 1));
+
+    // Registros nuevos (últimos 7 días), pagados o por pagar.
+    const nuevos = pending.filter((l) => l.created_at >= `${past7CL}T00:00:00`);
+    const nuevosPagados = nuevos.filter((l) => PAID_STATUSES.includes(l.status) || l.paid_at);
+    const nuevosPorPagar = nuevos.filter(
+      (l) => !PAID_STATUSES.includes(l.status) && !l.paid_at,
+    );
+
+    // Convertidos a membresía (últimos 30 días).
+    const convertidos = all.filter((l) => CONVERTED_STATUSES.includes(l.status));
+
+    // Firma de los eventos que gatillan un envío: nuevos registros,
+    // por expirar en ≤2 días y ya expirados.
+    const signature = [...nuevos, ...endingTomorrow, ...finished]
+      .map((l) => `${l.id}:${l.status}:${l.actual_end_date || ""}`)
+      .sort()
+      .join("|");
+
+    const { data: stateRow } = await supabase
+      .from("trial_alert_state")
+      .select("signature")
+      .eq("id", STATE_ID)
+      .maybeSingle();
+
+    const changed = (stateRow?.signature ?? "") !== signature;
+    const hasContent =
+      endingTomorrow.length + endingSoon.length + finished.length + nuevos.length > 0;
+
+    if (!force && !dryRun && (!hasContent || (!isMonday && !changed))) {
       return new Response(
-        JSON.stringify({ skipped: true, reason: "no_leads", todayCL }),
+        JSON.stringify({
+          skipped: true,
+          reason: !hasContent ? "no_leads" : "no_changes",
+          isMonday,
+          todayCL,
+        }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } },
       );
     }
 
     const subject =
       endingTomorrow.length > 0
-        ? `⏳ ${endingTomorrow.length} plan${endingTomorrow.length === 1 ? "" : "es"} de prueba termina${endingTomorrow.length === 1 ? "" : "n"} mañana`
-        : `Planes de prueba · seguimiento (${finished.length} terminados, ${endingSoon.length} por terminar)`;
+        ? `⏳ ${endingTomorrow.length} plan${endingTomorrow.length === 1 ? "" : "es"} de prueba por terminar (≤2 días)`
+        : nuevos.length > 0
+          ? `Planes de prueba · ${nuevos.length} registro${nuevos.length === 1 ? "" : "s"} nuevo${nuevos.length === 1 ? "" : "s"}`
+          : `Planes de prueba · resumen semanal (${finished.length} terminados)`;
 
     const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <style>
