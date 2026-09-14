@@ -111,7 +111,7 @@ function leadRows(leads: Lead[], highlight = false): string {
       (l) => `
     <tr>
       <td style="padding:14px 0;border-bottom:1px solid #EEF1F4;font-size:15px;color:#2A2A2A">
-        <strong style="color:${highlight ? "#1F2937" : "#374151"};font-size:16px">${l.customer_name || "Sin nombre"}</strong>
+        ${nameHtml(l, highlight)}
         <span style="color:#9CA3AF"> · </span><span style="color:#4A4A4A">${planLabel(l.plan_type)}</span><br>
         <span style="color:#4A4A4A;font-size:14px">${statusLabel(l.status)}</span><br>
         <span style="color:#4A4A4A;font-size:14px">Inicio ${formatDate(l.actual_start_date)} · Término ${formatDate(l.actual_end_date)}</span><br>
