@@ -17,6 +17,7 @@ import { ReviewsTrustBar } from "@/components/ReviewsTrustBar";
  import { NextClassAutoWidget } from "@/components/NextClassAutoWidget";
 import { AskNaveBar } from "@/components/AskNaveBar";
 import { Promo18Section } from "@/components/Promo18Section";
+import { useScrolledPastHero } from "@/hooks/useScrolledPastHero";
 
  import { supabase } from "@/integrations/supabase/client";
  import { scheduleData, dayNames, type ClassItem } from "@/data/schedule";
