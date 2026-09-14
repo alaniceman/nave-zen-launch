@@ -28,7 +28,7 @@ export const StickyMobileCTA = ({
     return () => observer.disconnect();
   }, []);
 
-  if (!visible) return null;
+  if (!visible || !scrolledPastHero) return null;
 
   return (
     // bottom-6 + pr-[5.25rem] alinea el CTA con el botón flotante de WhatsApp (right-6, 56px)
