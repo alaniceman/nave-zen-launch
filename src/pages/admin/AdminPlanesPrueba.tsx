@@ -301,6 +301,7 @@ export function MarkPaidModal({ lead, onClose, onSuccess }: { lead: Lead | null;
   const [plan, setPlan] = useState<"trial_7d" | "trial_15d">("trial_7d");
   const [start, setStart] = useState<string>("");
   const [notes, setNotes] = useState("");
+  const [payment, setPayment] = useState<"Pago online" | "Transferencia">("Pago online");
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -308,6 +309,7 @@ export function MarkPaidModal({ lead, onClose, onSuccess }: { lead: Lead | null;
       setPlan((lead.plan_type as any) || "trial_7d");
       setStart(lead.requested_start_date || format(new Date(), "yyyy-MM-dd"));
       setNotes("");
+      setPayment("Pago online");
     }
   }, [lead]);
 
