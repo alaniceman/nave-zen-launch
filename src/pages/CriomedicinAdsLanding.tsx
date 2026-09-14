@@ -793,7 +793,7 @@ import { Promo18Section } from "@/components/Promo18Section";
        </section>
  
        {/* Sticky CTA Mobile */}
-       {isMobile && (
+       {isMobile && scrolledPastHero && (
          <div className="fixed bottom-0 left-0 right-0 p-4 bg-background/95 backdrop-blur-sm border-t border-muted z-50">
            <Button
              className="w-full bg-secondary hover:bg-secondary/90 text-white font-semibold py-6"
