@@ -6,6 +6,7 @@ import { getCorsHeaders } from "../_shared/cors.ts";
 import { upsertCustomerAndLogEvent } from "../_shared/crm.ts";
 import { appendToSheet } from "../_shared/googleSheets.ts";
 import { sanitizePublicIp, sendMetaEvent } from "../_shared/metaCapi.ts";
+import { syncTrialClientToNotion } from "../_shared/notionClientes.ts";
 
 const BOXMAGIC_URLS: Record<string, string> = {
   trial_7d: "https://boxmagic.cl/market/plan/Kp0M3Z7L8x",
@@ -324,6 +325,23 @@ serve(async (req) => {
           eventDescription: `Fecha solicitada: ${data.startDate}`,
           metadata: { lead_id: data.leadId, plan_type: data.planType, requested_start_date: data.startDate },
           statusIfNew: "trial_booked",
+        });
+
+        // Notion → tabla Clientes. Aún no pagó: Estado = "Lead".
+        const days = data.planType === "trial_15d" ? 15 : 7;
+        const endDate = (() => {
+          const d = new Date(`${data.startDate}T12:00:00`);
+          d.setDate(d.getDate() + days);
+          return d.toISOString().split("T")[0];
+        })();
+        await syncTrialClientToNotion({
+          name: lead.customer_name,
+          email: lead.customer_email,
+          phone: lead.customer_phone,
+          planType: data.planType,
+          startDate: data.startDate,
+          endDate,
+          paid: false,
         });
       } catch (e) {
         console.error("[finalize background]", e);

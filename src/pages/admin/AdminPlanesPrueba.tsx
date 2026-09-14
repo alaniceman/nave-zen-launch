@@ -301,6 +301,7 @@ export function MarkPaidModal({ lead, onClose, onSuccess }: { lead: Lead | null;
   const [plan, setPlan] = useState<"trial_7d" | "trial_15d">("trial_7d");
   const [start, setStart] = useState<string>("");
   const [notes, setNotes] = useState("");
+  const [payment, setPayment] = useState<"Pago online" | "Transferencia">("Pago online");
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -308,6 +309,7 @@ export function MarkPaidModal({ lead, onClose, onSuccess }: { lead: Lead | null;
       setPlan((lead.plan_type as any) || "trial_7d");
       setStart(lead.requested_start_date || format(new Date(), "yyyy-MM-dd"));
       setNotes("");
+      setPayment("Pago online");
     }
   }, [lead]);
 
@@ -350,6 +352,11 @@ export function MarkPaidModal({ lead, onClose, onSuccess }: { lead: Lead | null;
       supabase.functions.invoke("send-plan-prueba-activo", { body: { leadId: lead.id } })
         .catch(() => toast.warning("Lead actualizado pero el email no se pudo enviar"));
 
+      // Sincronizar cliente en Notion con la forma de pago elegida
+      supabase.functions
+        .invoke("sync-notion-cliente", { body: { leadId: lead.id, paymentMethod: payment } })
+        .catch(() => toast.warning("Lead actualizado pero no se pudo sincronizar con Notion"));
+
       toast.success("Plan marcado como pagado y email enviado");
       onSuccess();
     } catch (e: any) {
@@ -387,6 +394,16 @@ export function MarkPaidModal({ lead, onClose, onSuccess }: { lead: Lead | null;
           <div>
             <label className="text-sm font-medium block mb-1">Fecha de término (auto)</label>
             <Input value={endDate} readOnly className="bg-muted" />
+          </div>
+          <div>
+            <label className="text-sm font-medium block mb-1">Forma de pago</label>
+            <Select value={payment} onValueChange={(v) => setPayment(v as any)}>
+              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Pago online">Pago online</SelectItem>
+                <SelectItem value="Transferencia">Transferencia</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           <div>
             <label className="text-sm font-medium block mb-1">Notas internas (opcional)</label>
