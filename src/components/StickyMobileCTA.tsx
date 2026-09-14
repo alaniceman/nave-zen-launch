@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useScrolledPastHero } from "@/hooks/useScrolledPastHero";
 
 type StickyMobileCTAProps = {
   /** Texto del botón principal */
@@ -13,6 +14,7 @@ export const StickyMobileCTA = ({
   to = "/plan-de-prueba",
 }: StickyMobileCTAProps = {}) => {
   const [visible, setVisible] = useState(true);
+  const scrolledPastHero = useScrolledPastHero();
 
   useEffect(() => {
     const footer = document.querySelector("footer");
@@ -26,7 +28,7 @@ export const StickyMobileCTA = ({
     return () => observer.disconnect();
   }, []);
 
-  if (!visible) return null;
+  if (!visible || !scrolledPastHero) return null;
 
   return (
     // bottom-6 + pr-[5.25rem] alinea el CTA con el botón flotante de WhatsApp (right-6, 56px)

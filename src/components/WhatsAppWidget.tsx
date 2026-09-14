@@ -1,6 +1,7 @@
 import { MessageCircle, Bot, X } from "lucide-react";
 import { useState } from "react";
 import { trackConversion } from "@/lib/gtagConversions";
+import { useScrolledPastHero } from "@/hooks/useScrolledPastHero";
 
 interface WhatsAppWidgetProps {
   onOpenChat?: () => void;
@@ -8,6 +9,7 @@ interface WhatsAppWidgetProps {
 
 const WhatsAppWidget = ({ onOpenChat }: WhatsAppWidgetProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const scrolledPastHero = useScrolledPastHero();
 
   const handleWhatsAppClick = () => {
     const phoneNumber = "56946120426";
@@ -23,8 +25,10 @@ const WhatsAppWidget = ({ onOpenChat }: WhatsAppWidgetProps) => {
     setIsExpanded(false);
   };
 
+  if (!scrolledPastHero) return null;
+
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2">
+    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2 animate-in fade-in duration-200">
       {/* Expanded options */}
       {isExpanded && (
         <div className="flex flex-col gap-2 mb-1 animate-in fade-in slide-in-from-bottom-2 duration-200">

@@ -1,0 +1,215 @@
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
+import { Resend } from "npm:resend@2.0.0";
+import { getCorsHeaders } from "../_shared/cors.ts";
+import { chileDateString, addDaysISO, TIMEZONE } from "../_shared/chileTime.ts";
+
+const TO = ["lanave@alaniceman.com", "flowithmaral@gmail.com"];
+
+// Estados que ya no requieren seguimiento comercial.
+const CONVERTED_STATUSES = ["convertido_a_membresia"];
+
+interface Lead {
+  id: string;
+  customer_name: string;
+  customer_email: string;
+  customer_phone: string | null;
+  plan_type: string | null;
+  status: string;
+  actual_start_date: string | null;
+  actual_end_date: string | null;
+  admin_notes: string | null;
+}
+
+const PLAN_LABELS: Record<string, string> = {
+  trial_7d: "Plan 7 días",
+  trial_15d: "Plan 15 días",
+};
+
+function planLabel(planType: string | null): string {
+  return (planType && PLAN_LABELS[planType]) || "Plan de prueba";
+}
+
+// Normaliza a E.164 chileno para wa.me (sin "+").
+function waNumber(phone: string | null): string | null {
+  if (!phone) return null;
+  const digits = phone.replace(/\D/g, "");
+  if (!digits) return null;
+  if (digits.startsWith("56")) return digits;
+  if (digits.length === 9) return `56${digits}`;
+  if (digits.length === 8) return `569${digits}`;
+  return digits;
+}
+
+function formatDate(iso: string | null): string {
+  if (!iso) return "—";
+  return new Intl.DateTimeFormat("es-CL", {
+    timeZone: TIMEZONE,
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+  }).format(new Date(iso + "T12:00:00Z"));
+}
+
+function contactHtml(lead: Lead): string {
+  const wa = waNumber(lead.customer_phone);
+  const waMsg = encodeURIComponent(
+    `Hola ${((lead.customer_name || "").split(" ")[0] || "")}! Soy del equipo de Nave Studio 🛸 ¿Cómo va tu plan de prueba? Quería contarte las opciones para seguir con nosotros.`,
+  );
+  const waLink = wa
+    ? `<a href="https://wa.me/${wa}?text=${waMsg}" style="color:#128C7E;font-weight:600;text-decoration:none">WhatsApp ${lead.customer_phone}</a>`
+    : `<span style="color:#9CA3AF">Sin teléfono</span>`;
+  return `<a href="mailto:${lead.customer_email}" style="color:#2E4D3A;text-decoration:none">${lead.customer_email}</a><br>${waLink}`;
+}
+
+function leadRows(leads: Lead[], highlight = false): string {
+  if (leads.length === 0) {
+    return `<tr><td style="padding:12px 0;color:#9CA3AF;font-size:14px">Nada por aquí hoy.</td></tr>`;
+  }
+  return leads
+    .map(
+      (l) => `
+    <tr>
+      <td style="padding:14px 0;border-bottom:1px solid #EEF1F4;font-size:15px;color:#2A2A2A">
+        <strong style="color:${highlight ? "#1F2937" : "#374151"};font-size:16px">${l.customer_name || "Sin nombre"}</strong>
+        <span style="color:#9CA3AF"> · </span><span style="color:#4A4A4A">${planLabel(l.plan_type)}</span><br>
+        <span style="color:#4A4A4A;font-size:14px">Inicio ${formatDate(l.actual_start_date)} · Término ${formatDate(l.actual_end_date)}</span><br>
+        <span style="font-size:14px">${contactHtml(l)}</span>
+        ${l.admin_notes ? `<br><span style="color:#6B7280;font-size:13px">Nota: ${l.admin_notes}</span>` : ""}
+      </td>
+    </tr>`,
+    )
+    .join("");
+}
+
+function section(title: string, subtitle: string, leads: Lead[], highlight = false): string {
+  return `
+  <p style="margin:26px 0 4px;color:#2E4D3A;font-size:13px;font-weight:700;letter-spacing:0.6px;text-transform:uppercase">${title} (${leads.length})</p>
+  <p style="margin:0 0 8px;color:#6B7280;font-size:13px">${subtitle}</p>
+  <table role="presentation" width="100%" style="border-collapse:collapse">${leadRows(leads, highlight)}</table>`;
+}
+
+serve(async (req) => {
+  const corsHeaders = getCorsHeaders(req);
+  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+
+  try {
+    const body = await req.json().catch(() => ({} as any));
+    const dryRun = body?.dryRun === true;
+
+    const supabase = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+    );
+
+    const todayCL = chileDateString(new Date());
+    const tomorrowCL = addDaysISO(todayCL, 1);
+    const in7CL = addDaysISO(todayCL, 7);
+    const past30CL = addDaysISO(todayCL, -30);
+
+    const { data, error } = await supabase
+      .from("trial_bookings")
+      .select(
+        "id, customer_name, customer_email, customer_phone, plan_type, status, actual_start_date, actual_end_date, admin_notes",
+      )
+      .not("actual_end_date", "is", null)
+      .gte("actual_end_date", past30CL)
+      .lte("actual_end_date", in7CL)
+      .order("actual_end_date", { ascending: true });
+    if (error) throw error;
+
+    const leads = ((data || []) as Lead[]).filter(
+      (l) => !CONVERTED_STATUSES.includes(l.status),
+    );
+
+    const endingTomorrow = leads.filter((l) => l.actual_end_date === tomorrowCL);
+    const endingSoon = leads.filter(
+      (l) => l.actual_end_date! > tomorrowCL && l.actual_end_date! <= in7CL,
+    );
+    const finished = leads.filter((l) => l.actual_end_date! < todayCL);
+
+    if (endingTomorrow.length === 0 && endingSoon.length === 0 && finished.length === 0) {
+      return new Response(
+        JSON.stringify({ skipped: true, reason: "no_leads", todayCL }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
+    }
+
+    const subject =
+      endingTomorrow.length > 0
+        ? `⏳ ${endingTomorrow.length} plan${endingTomorrow.length === 1 ? "" : "es"} de prueba termina${endingTomorrow.length === 1 ? "" : "n"} mañana`
+        : `Planes de prueba · seguimiento (${finished.length} terminados, ${endingSoon.length} por terminar)`;
+
+    const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<style>
+body{margin:0;padding:0;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;background:#F4F4F5;line-height:1.7;-webkit-font-smoothing:antialiased}
+.wrap{max-width:600px;margin:0 auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.hdr{background:#2E4D3A;padding:28px;text-align:center}
+.hdr h1{margin:0;color:#fff;font-size:20px;font-weight:700}
+.body{padding:28px;color:#2A2A2A;font-size:15px}
+.footer{padding:18px;text-align:center;color:#9CA3AF;font-size:12px;border-top:1px solid #F0F0F0}
+</style></head><body>
+<span style="display:none;max-height:0;overflow:hidden">${endingTomorrow.length} terminan mañana · ${finished.length} ya terminaron sin membresía</span>
+<div class="wrap">
+  <div class="hdr"><h1>Seguimiento planes de prueba</h1></div>
+  <div class="body">
+    <p style="margin:0 0 6px;color:#4A4A4A;font-size:14px">Resumen del ${formatDate(todayCL)} · solo personas que aún <strong>no</strong> están marcadas como convertidas a membresía en el panel.</p>
+    ${section("Termina mañana", "Momento ideal para ofrecer una membresía.", endingTomorrow, true)}
+    ${section("Por terminar (próximos 7 días)", "Preparar el seguimiento.", endingSoon)}
+    ${section("Ya terminaron (últimos 30 días)", "Sin membresía registrada todavía.", finished)}
+    <p style="margin:28px 0 0;text-align:center">
+      <a href="https://studiolanave.com/admin/planes-prueba" style="display:inline-block;background:#2E4D3A;color:#fff!important;padding:13px 26px;border-radius:10px;text-decoration:none;font-weight:600;font-size:15px">Abrir panel de planes de prueba</a>
+    </p>
+  </div>
+  <div class="footer">Nave Studio · aviso automático diario</div>
+</div></body></html>`;
+
+    if (dryRun) {
+      return new Response(
+        JSON.stringify({
+          dryRun: true,
+          subject,
+          todayCL,
+          endingTomorrow: endingTomorrow.length,
+          endingSoon: endingSoon.length,
+          finished: finished.length,
+          html,
+        }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
+    }
+
+    const RESEND = Deno.env.get("RESEND_API_KEY");
+    if (!RESEND) throw new Error("RESEND_API_KEY no configurado");
+    const resend = new Resend(RESEND);
+
+    await resend.emails.send({
+      from: "Nave Studio <agenda@studiolanave.com>",
+      reply_to: "lanave@alaniceman.com",
+      to: TO,
+      subject,
+      html,
+    });
+
+    console.log(
+      `send-trial-ending-alert: mañana=${endingTomorrow.length} pronto=${endingSoon.length} terminados=${finished.length}`,
+    );
+
+    return new Response(
+      JSON.stringify({
+        success: true,
+        todayCL,
+        endingTomorrow: endingTomorrow.length,
+        endingSoon: endingSoon.length,
+        finished: finished.length,
+      }),
+      { headers: { ...corsHeaders, "Content-Type": "application/json" } },
+    );
+  } catch (err) {
+    console.error("send-trial-ending-alert error:", err);
+    return new Response(JSON.stringify({ error: String(err) }), {
+      status: 500,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+});
