@@ -1577,6 +1577,24 @@ export type Database = {
         }
         Relationships: []
       }
+      trial_alert_state: {
+        Row: {
+          id: string
+          sent_at: string
+          signature: string
+        }
+        Insert: {
+          id: string
+          sent_at?: string
+          signature: string
+        }
+        Update: {
+          id?: string
+          sent_at?: string
+          signature?: string
+        }
+        Relationships: []
+      }
       trial_bookings: {
         Row: {
           actual_end_date: string | null
