@@ -9,6 +9,7 @@ interface WhatsAppWidgetProps {
 
 const WhatsAppWidget = ({ onOpenChat }: WhatsAppWidgetProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const scrolledPastHero = useScrolledPastHero();
 
   const handleWhatsAppClick = () => {
     const phoneNumber = "56946120426";
