@@ -600,7 +600,7 @@ import { useScrolledPastHero } from "@/hooks/useScrolledPastHero";
                      </li>
                      <li className="flex items-center gap-2">
                        <CheckCircle2 className="w-4 h-4 text-secondary flex-shrink-0" />
-                       Prueba antes con el Plan de Prueba desde $9.900
+                       Prueba antes con el Plan de Prueba desde $14.900
                      </li>
                    </ul>
                  </div>

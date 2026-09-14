@@ -219,7 +219,7 @@ export const YogaStyleTemplate = ({ style }: { style: YogaStyle }) => {
                 to="/plan-de-prueba"
                 className="bg-accent hover:bg-accent/90 text-white rounded-full px-8 py-3.5 font-semibold transition-all duration-300 hover:scale-105 shadow-lg font-inter inline-flex items-center justify-center"
               >
-                Plan de prueba desde $9.900
+                Plan de prueba desde $14.900
               </Link>
               <a
                 href="#horarios"
@@ -534,7 +534,7 @@ export const YogaStyleTemplate = ({ style }: { style: YogaStyle }) => {
               Prueba el {style.name} esta semana
             </h2>
             <p className="text-muted-foreground font-inter text-lg mb-8">
-              Tu primera semana desde $9.900, con acceso a todas nuestras clases de yoga.
+              Tu primera semana desde $14.900, con acceso a todas nuestras clases de yoga.
               Sin compromiso.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

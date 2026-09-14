@@ -45,7 +45,7 @@ const PricingSection = () => {
                className="group rounded-2xl p-5 bg-muted hover:bg-card hover:shadow-lg transition"
                aria-label="Ver planes y clases de Yoga">
               <h3 className="font-semibold text-primary font-space">Solo Yoga</h3>
-              <p className="text-sm text-muted-foreground mt-1 font-inter">Practica Yin, Yang, Vinyasa, Vinyasa Somático o Integral. Prueba 7 días por $9.900.</p>
+              <p className="text-sm text-muted-foreground mt-1 font-inter">Practica Yin, Yang, Vinyasa, Vinyasa Somático o Integral. Prueba 7 días por $14.900.</p>
               <span className="inline-block mt-3 text-secondary group-hover:underline font-inter">Ver Yoga →</span>
             </a>
           </div>
@@ -73,7 +73,7 @@ const PricingSection = () => {
           </a>
 
           <p className="text-xs text-muted-foreground mt-3 font-inter">
-            ¿Primera vez? Prueba todas las clases con el <a href="/plan-de-prueba" className="text-accent underline hover:text-primary">Plan de Prueba desde $9.900</a>.
+            ¿Primera vez? Prueba todas las clases con el <a href="/plan-de-prueba" className="text-accent underline hover:text-primary">Plan de Prueba desde $14.900</a>.
           </p>
         </div>
       </section>

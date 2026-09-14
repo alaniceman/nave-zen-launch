@@ -173,7 +173,7 @@ const Planes = () => {
                     <div className="text-center space-y-2">
                       <span className="text-3xl font-bold text-foreground">$59.000</span>
                       <a href="/plan-de-prueba" className="inline-block">
-                        <Badge className="bg-warm text-white cursor-pointer hover:bg-warm/90">Prueba antes con Plan de Prueba desde $9.900</Badge>
+                        <Badge className="bg-warm text-white cursor-pointer hover:bg-warm/90">Prueba antes con Plan de Prueba desde $14.900</Badge>
                       </a>
                     </div>
                   </div>
@@ -221,7 +221,7 @@ const Planes = () => {
                     <div className="text-center space-y-2">
                       <span className="text-3xl font-bold text-foreground">$79.000</span>
                       <a href="/plan-de-prueba" className="inline-block">
-                        <Badge className="bg-warm text-white cursor-pointer hover:bg-warm/90">Prueba antes con Plan de Prueba desde $9.900</Badge>
+                        <Badge className="bg-warm text-white cursor-pointer hover:bg-warm/90">Prueba antes con Plan de Prueba desde $14.900</Badge>
                       </a>
                     </div>
                   </div>
@@ -270,7 +270,7 @@ const Planes = () => {
                     <div className="text-center space-y-2">
                       <span className="text-3xl font-bold text-foreground">$95.000</span>
                       <a href="/plan-de-prueba" className="inline-block">
-                        <Badge className="bg-warm text-white cursor-pointer hover:bg-warm/90">Prueba antes con Plan de Prueba desde $9.900</Badge>
+                        <Badge className="bg-warm text-white cursor-pointer hover:bg-warm/90">Prueba antes con Plan de Prueba desde $14.900</Badge>
                       </a>
                     </div>
                   </div>
@@ -395,7 +395,7 @@ const Planes = () => {
                   <span className="text-muted-foreground text-sm">/mes</span>
                 </div>
                 <a href="/plan-de-prueba" className="block mb-6 bg-warm/10 text-warm border border-warm/20 rounded-lg px-3 py-2 text-xs font-semibold text-center hover:bg-warm/20 transition-colors">
-                  Prueba antes con Plan de Prueba desde $9.900
+                  Prueba antes con Plan de Prueba desde $14.900
                 </a>
                 <ul className="space-y-3 mb-8">
                   <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">
@@ -426,7 +426,7 @@ const Planes = () => {
                     <span className="text-muted-foreground text-sm">/mes</span>
                   </div>
                   <a href="/plan-de-prueba" className="block mb-6 bg-warm/10 text-warm border border-warm/20 rounded-lg px-3 py-2 text-xs font-semibold text-center hover:bg-warm/20 transition-colors">
-                    Prueba antes con Plan de Prueba desde $9.900
+                    Prueba antes con Plan de Prueba desde $14.900
                   </a>
                   <ul className="space-y-3 mb-8">
                     <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">
@@ -453,7 +453,7 @@ const Planes = () => {
                   <span className="text-muted-foreground text-sm">/mes</span>
                 </div>
                 <a href="/plan-de-prueba" className="block mb-6 bg-warm/10 text-warm border border-warm/20 rounded-lg px-3 py-2 text-xs font-semibold text-center hover:bg-warm/20 transition-colors">
-                  Prueba antes con Plan de Prueba desde $9.900
+                  Prueba antes con Plan de Prueba desde $14.900
                 </a>
                 <ul className="space-y-3 mb-8">
                   <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">

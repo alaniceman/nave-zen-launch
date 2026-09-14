@@ -20,7 +20,7 @@ const FreeYogaSection = () => {
           </a>
         </Button>
         <p className="text-xs text-muted-foreground mt-4 font-inter">
-          Desde $9.900 · 7 días · acceso a todas las experiencias
+          Desde $14.900 · 7 días · acceso a todas las experiencias
         </p>
       </div>
     </section>

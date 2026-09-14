@@ -71,7 +71,7 @@ export const CoachesSection = ({ filterIds }: { filterIds?: string[] } = {}) => 
           <p className="text-lg text-neutral-mid font-inter">
             ¿No sabes con quién empezar?{" "}
             <a href="/plan-de-prueba" className="text-secondary underline hover:text-primary font-medium transition-colors duration-300">
-              Empieza con el Plan de Prueba desde $9.900 →
+              Empieza con el Plan de Prueba desde $14.900 →
             </a>
           </p>
         </div>

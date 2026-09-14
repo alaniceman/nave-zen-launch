@@ -21,7 +21,7 @@ const FAQ = () => {
     },
     {
       question: "¿Tienen clase de prueba gratis?",
-      answer: "No, ya no ofrecemos clases de prueba gratuitas. Ahora tenemos Planes de Prueba pagados con acceso ilimitado por 7 días ($9.900) o 15 días ($19.900). Tú eliges la fecha de inicio (hasta 30 días en el futuro). Más info en /plan-de-prueba."
+      answer: "No, ya no ofrecemos clases de prueba gratuitas. Ahora tenemos Planes de Prueba pagados con acceso ilimitado por 7 días ($14.900) o 15 días ($19.900). Tú eliges la fecha de inicio (hasta 30 días en el futuro). Más info en /plan-de-prueba."
     },
     {
       question: "¿El plan de prueba incluye agua fría (Ice Bath)?",

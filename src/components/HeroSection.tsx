@@ -82,7 +82,7 @@ const HeroSlideMain = () => {
             </div>
 
             <p className="font-inter text-sm text-white/70">
-              Desde $9.900 · 7 o 15 días · acceso ilimitado a todas las clases.
+              Desde $14.900 · 7 o 15 días · acceso ilimitado a todas las clases.
             </p>
           </div>
         </div>
@@ -125,7 +125,7 @@ const HeroSlidePlanPrueba = () => {
           {/* Price */}
           <div className="flex items-center justify-center gap-4 pt-2 flex-wrap">
             <div className="text-left">
-              <span className="font-space-grotesk text-4xl md:text-6xl font-bold">$9.900</span>
+              <span className="font-space-grotesk text-4xl md:text-6xl font-bold">$14.900</span>
               <p className="text-sm md:text-base text-white/80">7 días</p>
             </div>
             <span className="text-3xl md:text-4xl text-white/50">·</span>
