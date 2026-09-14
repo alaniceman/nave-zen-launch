@@ -5,9 +5,21 @@ import { getCorsHeaders } from "../_shared/cors.ts";
 import { chileDateString, addDaysISO, TIMEZONE } from "../_shared/chileTime.ts";
 
 const TO = ["lanave@alaniceman.com", "flowithmaral@gmail.com"];
+const STATE_ID = "trial_ending_alert";
 
 // Estados que ya no requieren seguimiento comercial.
 const CONVERTED_STATUSES = ["convertido_a_membresia"];
+
+const TRIAL_STATUSES = [
+  "interesado_plan_prueba",
+  "redirigido_a_boxmagic",
+  "pagado_plan_prueba",
+  "plan_prueba_activo",
+  "plan_prueba_finalizado",
+  "convertido_a_membresia",
+];
+
+const PAID_STATUSES = ["pagado_plan_prueba", "plan_prueba_activo", "plan_prueba_finalizado"];
 
 interface Lead {
   id: string;
@@ -19,6 +31,8 @@ interface Lead {
   actual_start_date: string | null;
   actual_end_date: string | null;
   admin_notes: string | null;
+  created_at: string;
+  paid_at: string | null;
 }
 
 const PLAN_LABELS: Record<string, string> = {
