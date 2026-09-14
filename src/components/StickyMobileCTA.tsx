@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useScrolledPastHero } from "@/hooks/useScrolledPastHero";
 
 type StickyMobileCTAProps = {
   /** Texto del botón principal */
