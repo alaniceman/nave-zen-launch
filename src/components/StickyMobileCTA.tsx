@@ -14,6 +14,7 @@ export const StickyMobileCTA = ({
   to = "/plan-de-prueba",
 }: StickyMobileCTAProps = {}) => {
   const [visible, setVisible] = useState(true);
+  const scrolledPastHero = useScrolledPastHero();
 
   useEffect(() => {
     const footer = document.querySelector("footer");
