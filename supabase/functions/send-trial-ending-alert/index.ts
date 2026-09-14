@@ -89,6 +89,19 @@ function statusLabel(status: string): string {
   return STATUS_LABELS[status] || status;
 }
 
+// Mapa email -> customer_id para linkear el perfil en el CRM.
+const customerIdByEmail = new Map<string, string>();
+
+function nameHtml(lead: Lead, highlight: boolean): string {
+  const name = lead.customer_name || "Sin nombre";
+  const color = highlight ? "#1F2937" : "#374151";
+  const id = customerIdByEmail.get((lead.customer_email || "").toLowerCase().trim());
+  if (!id) {
+    return `<strong style="color:${color};font-size:16px">${name}</strong>`;
+  }
+  return `<a href="https://studiolanave.com/admin/clientes/${id}" style="color:${color};font-size:16px;font-weight:700;text-decoration:underline">${name}</a>`;
+}
+
 function leadRows(leads: Lead[], highlight = false): string {
   if (leads.length === 0) {
     return `<tr><td style="padding:12px 0;color:#9CA3AF;font-size:14px">Nada por aquí hoy.</td></tr>`;
@@ -98,7 +111,7 @@ function leadRows(leads: Lead[], highlight = false): string {
       (l) => `
     <tr>
       <td style="padding:14px 0;border-bottom:1px solid #EEF1F4;font-size:15px;color:#2A2A2A">
-        <strong style="color:${highlight ? "#1F2937" : "#374151"};font-size:16px">${l.customer_name || "Sin nombre"}</strong>
+        ${nameHtml(l, highlight)}
         <span style="color:#9CA3AF"> · </span><span style="color:#4A4A4A">${planLabel(l.plan_type)}</span><br>
         <span style="color:#4A4A4A;font-size:14px">${statusLabel(l.status)}</span><br>
         <span style="color:#4A4A4A;font-size:14px">Inicio ${formatDate(l.actual_start_date)} · Término ${formatDate(l.actual_end_date)}</span><br>
@@ -157,6 +170,21 @@ serve(async (req) => {
         (l.plan_type && l.plan_type.startsWith("trial_")) ||
         TRIAL_STATUSES.includes(l.status),
     );
+
+    // IDs de cliente (CRM) para linkear el perfil de cada persona en el correo.
+    customerIdByEmail.clear();
+    const emails = Array.from(
+      new Set(all.map((l) => (l.customer_email || "").toLowerCase().trim()).filter(Boolean)),
+    );
+    if (emails.length > 0) {
+      const { data: customers } = await supabase
+        .from("customers")
+        .select("id, email")
+        .in("email", emails);
+      for (const c of customers || []) {
+        customerIdByEmail.set(String(c.email).toLowerCase().trim(), c.id);
+      }
+    }
 
     const pending = all.filter((l) => !CONVERTED_STATUSES.includes(l.status));
 
