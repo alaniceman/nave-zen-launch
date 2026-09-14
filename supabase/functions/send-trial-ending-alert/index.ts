@@ -89,6 +89,19 @@ function statusLabel(status: string): string {
   return STATUS_LABELS[status] || status;
 }
 
+// Mapa email -> customer_id para linkear el perfil en el CRM.
+const customerIdByEmail = new Map<string, string>();
+
+function nameHtml(lead: Lead, highlight: boolean): string {
+  const name = lead.customer_name || "Sin nombre";
+  const color = highlight ? "#1F2937" : "#374151";
+  const id = customerIdByEmail.get((lead.customer_email || "").toLowerCase().trim());
+  if (!id) {
+    return `<strong style="color:${color};font-size:16px">${name}</strong>`;
+  }
+  return `<a href="https://studiolanave.com/admin/clientes/${id}" style="color:${color};font-size:16px;font-weight:700;text-decoration:underline">${name}</a>`;
+}
+
 function leadRows(leads: Lead[], highlight = false): string {
   if (leads.length === 0) {
     return `<tr><td style="padding:12px 0;color:#9CA3AF;font-size:14px">Nada por aquí hoy.</td></tr>`;
