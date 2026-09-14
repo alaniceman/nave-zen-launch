@@ -171,6 +171,21 @@ serve(async (req) => {
         TRIAL_STATUSES.includes(l.status),
     );
 
+    // IDs de cliente (CRM) para linkear el perfil de cada persona en el correo.
+    customerIdByEmail.clear();
+    const emails = Array.from(
+      new Set(all.map((l) => (l.customer_email || "").toLowerCase().trim()).filter(Boolean)),
+    );
+    if (emails.length > 0) {
+      const { data: customers } = await supabase
+        .from("customers")
+        .select("id, email")
+        .in("email", emails);
+      for (const c of customers || []) {
+        customerIdByEmail.set(String(c.email).toLowerCase().trim(), c.id);
+      }
+    }
+
     const pending = all.filter((l) => !CONVERTED_STATUSES.includes(l.status));
 
     const withEnd = pending.filter((l) => !!l.actual_end_date);
