@@ -326,7 +326,11 @@ const HeroSlideTallerWimHof = () => {
               className="w-full md:w-auto min-w-[320px] bg-white text-teal-900 hover:bg-white/90 font-bold text-lg py-6 px-10 rounded-xl shadow-xl transition-all transform hover:scale-105"
               size="xl"
             >
-              {fundamentosAgotado ? "Reservar Avanzado →" : "Reservar mi cupo en el taller →"}
+              {fundamentosAgotado && !avanzadoAgotado
+                ? "Reservar Avanzado →"
+                : avanzadoAgotado && !fundamentosAgotado
+                ? "Reservar Fundamentales →"
+                : "Reservar mi cupo en el taller →"}
             </Button>
             <p className="font-inter text-xs text-white/80">Antares 259, Las Condes · Cupos limitados</p>
           </div>
