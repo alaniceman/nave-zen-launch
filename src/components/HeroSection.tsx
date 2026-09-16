@@ -14,8 +14,9 @@ import { isPromo18Active, PROMO_18_PATH, PROMO_18_PRICE, PROMO_18_REGULAR_PRICE 
 const DIA_MADRE_END_DATE = new Date("2026-05-11T03:00:00Z");
 // Promo Invierno — activa hasta el 31 de julio 2026 (23:59 Chile)
 const PROMO_INVIERNO_END_DATE = new Date("2026-08-05T03:59:59Z");
-// Taller Wim Hof Santiago — domingo 23 de agosto 2026 (slide activo hasta esa fecha)
-const TALLER_WIM_HOF_END_DATE = new Date("2026-08-24T03:59:59Z");
+// Taller Wim Hof Santiago — sábado 3 y domingo 4 de octubre 2026
+// (slide activo hasta el final del domingo 4 de octubre, hora de Chile UTC-3)
+const TALLER_WIM_HOF_END_DATE = new Date("2026-10-05T02:59:59Z");
 
 const HeroSlideMain = () => {
   const navigate = useNavigate();
@@ -260,16 +261,18 @@ const HeroSlidePromoInvierno = () => {
 const HeroSlideTallerWimHof = () => {
   const navigate = useNavigate();
   const [fundamentosAgotado, setFundamentosAgotado] = useState(false);
+  const [avanzadoAgotado, setAvanzadoAgotado] = useState(false);
 
   useEffect(() => {
     (async () => {
       const { data } = await supabase
         .from("event_cupos")
         .select("event_id, cupos_total, cupos_vendidos")
-        .eq("event_id", "santiago_fundamentos_2026_08_23")
-        .maybeSingle();
-      if (data && data.cupos_vendidos >= data.cupos_total) {
-        setFundamentosAgotado(true);
+        .in("event_id", ["santiago_fundamentos_2026_10_03", "santiago_avanzado_2026_10_04"]);
+      for (const row of data ?? []) {
+        const agotado = row.cupos_vendidos >= row.cupos_total;
+        if (row.event_id === "santiago_fundamentos_2026_10_03") setFundamentosAgotado(agotado);
+        if (row.event_id === "santiago_avanzado_2026_10_04") setAvanzadoAgotado(agotado);
       }
     })();
   }, []);
@@ -286,38 +289,33 @@ const HeroSlideTallerWimHof = () => {
       <div className="relative z-10 container mx-auto px-6 text-center text-white">
         <div className="max-w-3xl mx-auto space-y-5 md:space-y-7">
           <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md text-white px-5 py-2.5 rounded-full text-sm md:text-base font-semibold border border-white/25">
-            🧊 Taller Método Wim Hof · Domingo 23 de agosto
+            🧊 Taller Método Wim Hof · 3 y 4 de octubre
           </div>
 
           <h2 className="font-space-grotesk font-bold text-4xl md:text-6xl lg:text-7xl leading-[1.05]">
             Taller Wim Hof en Santiago
             <span className="block text-xl md:text-3xl lg:text-4xl font-medium text-white/90 mt-3">
-              {fundamentosAgotado ? "Avanzado · cupos limitados" : "Fundamentos y Avanzado · cupos limitados"}
+              Fundamentales y Avanzado · cupos limitados
             </span>
           </h2>
 
           <p className="font-inter text-base md:text-xl text-white/95 max-w-2xl mx-auto">
-            Respiración, hielo y teoría en una experiencia guiada de principio a fin. Solo 15 cupos por nivel.
+            Respiración, hielo y teoría en una experiencia guiada de principio a fin, de 11:30 a 15:00 (3,5 horas). Solo 15 cupos por nivel.
           </p>
 
           <div className="flex items-center justify-center gap-4 pt-2 flex-wrap">
             <div className="text-left">
-              {fundamentosAgotado ? (
-                <>
-                  <span className="font-space-grotesk text-3xl md:text-5xl font-bold line-through text-white/40">$50.000</span>
-                  <p className="text-sm md:text-base text-rose-300 font-semibold">Fundamentos · Agotado</p>
-                </>
-              ) : (
-                <>
-                  <span className="font-space-grotesk text-4xl md:text-6xl font-bold">$50.000</span>
-                  <p className="text-sm md:text-base text-white/80">Fundamentos</p>
-                </>
-              )}
+              <span className={`font-space-grotesk text-4xl md:text-6xl font-bold ${fundamentosAgotado ? "line-through text-white/40" : ""}`}>$50.000</span>
+              <p className={`text-sm md:text-base ${fundamentosAgotado ? "text-rose-300 font-semibold" : "text-white/80"}`}>
+                {fundamentosAgotado ? "Fundamentales · Agotado" : "Fundamentales · sábado 3 oct"}
+              </p>
             </div>
             <span className="text-3xl md:text-4xl text-white/50">·</span>
             <div className="text-left">
-              <span className="font-space-grotesk text-4xl md:text-6xl font-bold">$60.000</span>
-              <p className="text-sm md:text-base text-white/80">Avanzado (Últimos cupos)</p>
+              <span className={`font-space-grotesk text-4xl md:text-6xl font-bold ${avanzadoAgotado ? "line-through text-white/40" : ""}`}>$60.000</span>
+              <p className={`text-sm md:text-base ${avanzadoAgotado ? "text-rose-300 font-semibold" : "text-white/80"}`}>
+                {avanzadoAgotado ? "Avanzado · Agotado" : "Avanzado · domingo 4 oct"}
+              </p>
             </div>
           </div>
 
@@ -328,7 +326,11 @@ const HeroSlideTallerWimHof = () => {
               className="w-full md:w-auto min-w-[320px] bg-white text-teal-900 hover:bg-white/90 font-bold text-lg py-6 px-10 rounded-xl shadow-xl transition-all transform hover:scale-105"
               size="xl"
             >
-              {fundamentosAgotado ? "Reservar Avanzado →" : "Reservar mi cupo en el taller →"}
+              {fundamentosAgotado && !avanzadoAgotado
+                ? "Reservar Avanzado →"
+                : avanzadoAgotado && !fundamentosAgotado
+                ? "Reservar Fundamentales →"
+                : "Reservar mi cupo en el taller →"}
             </Button>
             <p className="font-inter text-xs text-white/80">Antares 259, Las Condes · Cupos limitados</p>
           </div>

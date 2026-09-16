@@ -51,34 +51,34 @@ type TallerKey = "fundamentos" | "avanzado";
 
 const TALLERES = {
   fundamentos: {
-    nombre: "Taller Fundamentos Método Wim Hof",
-    nombreCorto: "Fundamentos",
-    fecha: "Domingo 23 de agosto",
-    fechaLarga: "Domingo 23 de agosto de 2026",
+    nombre: "Taller Fundamentales Método Wim Hof",
+    nombreCorto: "Fundamentales",
+    fecha: "Sábado 3 de octubre",
+    fechaLarga: "Sábado 3 de octubre de 2026",
     horario: "11:30 a 15:00",
-    duracion: "3 horas y media",
+    duracion: "3,5 horas",
     valor: 50000,
     valorTxt: "$50.000",
     cupos: 15,
     nivel: "Principiante / intermedio",
-    eventId: "santiago_fundamentos_2026_08_23",
-    isoStart: "2026-08-23T11:30:00-04:00",
-    isoEnd: "2026-08-23T15:00:00-04:00",
+    eventId: "santiago_fundamentos_2026_10_03",
+    isoStart: "2026-10-03T11:30:00-03:00",
+    isoEnd: "2026-10-03T15:00:00-03:00",
   },
   avanzado: {
     nombre: "Taller Avanzado Método Wim Hof",
     nombreCorto: "Avanzado",
-    fecha: "Domingo 23 de agosto",
-    fechaLarga: "Domingo 23 de agosto de 2026",
-    horario: "15:30 a 19:00",
-    duracion: "3 horas y media",
+    fecha: "Domingo 4 de octubre",
+    fechaLarga: "Domingo 4 de octubre de 2026",
+    horario: "11:30 a 15:00",
+    duracion: "3,5 horas",
     valor: 60000,
     valorTxt: "$60.000",
     cupos: 15,
     nivel: "Avanzado · requiere experiencia previa",
-    eventId: "santiago_avanzado_2026_08_23",
-    isoStart: "2026-08-23T15:30:00-04:00",
-    isoEnd: "2026-08-23T19:00:00-04:00",
+    eventId: "santiago_avanzado_2026_10_04",
+    isoStart: "2026-10-04T11:30:00-03:00",
+    isoEnd: "2026-10-04T15:00:00-03:00",
   },
 };
 
@@ -87,13 +87,13 @@ const WHATSAPP_NUMBER = "56946120426";
 const waUrl = (text: string) =>
   `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
 const WHATSAPP_URL = waUrl(
-  "Hola! Quiero información sobre los talleres del Método Wim Hof del domingo 23 de agosto en Nave Studio."
+  "Hola! Quiero información sobre los talleres del Método Wim Hof del 3 y 4 de octubre en Nave Studio."
 );
 const WHATSAPP_FUNDAMENTOS = waUrl(
-  "Hola! Quiero información sobre el Taller Fundamentos del Método Wim Hof del domingo 23 de agosto, de 11:30 a 15:00, en Nave Studio."
+  "Hola! Quiero información sobre el Taller Fundamentales del Método Wim Hof del sábado 3 de octubre, de 11:30 a 15:00, en Nave Studio."
 );
 const WHATSAPP_AVANZADO = waUrl(
-  "Hola! Quiero información sobre el Taller Avanzado del Método Wim Hof del domingo 23 de agosto, de 15:30 a 19:00, en Nave Studio. Ya tengo experiencia previa."
+  "Hola! Quiero información sobre el Taller Avanzado del Método Wim Hof del domingo 4 de octubre, de 11:30 a 15:00, en Nave Studio. Ya tengo experiencia previa."
 );
 
 
@@ -357,23 +357,31 @@ const TallerSantiago = () => {
 
   const faqs = [
     {
+      q: "¿Cuándo es cada taller?",
+      a: "Fundamentales es el sábado 3 de octubre y Avanzado el domingo 4 de octubre, ambos de 11:30 a 15:00 (3,5 horas) en Nave Studio, Antares 259, Las Condes.",
+    },
+    {
+      q: "¿Qué es The Snake del taller Avanzado?",
+      a: "The Snake es una práctica guiada que hacemos solo en el Avanzado, para quienes quieran desafiar su poder mental, sostener el foco y explorar la capacidad del cuerpo de generar calor. Se hace paso a paso, con acompañamiento y siempre puedes detenerte cuando lo necesites. No promete resultados: es una experiencia de práctica.",
+    },
+    {
       q: "¿Puedo ir al avanzado si nunca he hecho Wim Hof?",
-      a: "No. Para el avanzado necesitas haber vivido antes una experiencia Wim Hof o una práctica guiada con respiración e hielo. Si es tu primera vez, el taller correcto es Fundamentos.",
+      a: "No. Para el avanzado necesitas haber vivido antes una experiencia Wim Hof o una práctica guiada con respiración e hielo. Si es tu primera vez, el taller correcto es Fundamentales.",
     },
     {
       q: "¿Qué pasa si ya fui a Nave Studio?",
       a: "Si ya hiciste una sesión Wim Hof en Nave Studio, un retiro, Icefest o un taller anterior, puedes reservar el Avanzado.",
     },
     {
-      q: "¿En Fundamentos se explica todo desde cero?",
-      a: "Sí. En Fundamentos veremos la técnica paso a paso, desde la respiración hasta la preparación para el hielo.",
+      q: "¿En Fundamentales se explica todo desde cero?",
+      a: "Sí. En Fundamentales veremos la técnica paso a paso, desde la respiración hasta la preparación para el hielo.",
     },
     {
       q: "¿El taller avanzado es más intenso?",
       a: "Sí. La respiración será más profunda y el desafío con el frío será mayor. Por eso necesitas conocerte previamente en el hielo.",
     },
     {
-      q: "¿Necesito experiencia previa para Fundamentos?",
+      q: "¿Necesito experiencia previa para Fundamentales?",
       a: "No. Puedes venir aunque nunca hayas hecho una inmersión en hielo.",
     },
     {
@@ -392,7 +400,7 @@ const TallerSantiago = () => {
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      name: "Taller Wim Hof Fundamentos – Santiago",
+      name: "Taller Wim Hof Fundamentales – Santiago",
       startDate: TALLERES.fundamentos.isoStart,
       endDate: TALLERES.fundamentos.isoEnd,
       eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
@@ -409,7 +417,7 @@ const TallerSantiago = () => {
         },
       },
       description:
-        "Taller del Método Wim Hof nivel Fundamentos. Respiración, preparación e inmersión en hielo guiada en Nave Studio.",
+        "Taller del Método Wim Hof nivel Fundamentales (3,5 horas). Respiración, preparación e inmersión en hielo guiada en Nave Studio.",
       organizer: { "@type": "Organization", name: "Nave Studio" },
       offers: {
         "@type": "Offer",
@@ -439,7 +447,7 @@ const TallerSantiago = () => {
         },
       },
       description:
-        "Taller del Método Wim Hof nivel Avanzado. Práctica profunda de respiración y mayor desafío con el frío. Requiere experiencia previa.",
+        "Taller del Método Wim Hof nivel Avanzado (3,5 horas). Práctica profunda de respiración, mayor desafío con el frío e incluye The Snake, una práctica guiada de foco y calor interno. Requiere experiencia previa.",
       organizer: { "@type": "Organization", name: "Nave Studio" },
       offers: {
         "@type": "Offer",
@@ -454,15 +462,15 @@ const TallerSantiago = () => {
   return (
     <div className="min-h-screen bg-background font-body">
       <Helmet>
-        <title>Taller Wim Hof Santiago 23 de agosto | Nave Studio</title>
-        <meta property="og:title" content="Taller Wim Hof Santiago · 23 de agosto | Nave Studio" />
-        <meta property="og:description" content="Fundamentos 11:30-15:00 y Avanzado 15:30-19:00. Domingo 23 de agosto en Nave Studio, Las Condes. 15 cupos por taller." />
+        <title>Taller Wim Hof Santiago 3 y 4 de octubre | Nave Studio</title>
+        <meta property="og:title" content="Taller Wim Hof Santiago · 3 y 4 de octubre | Nave Studio" />
+        <meta property="og:description" content="Fundamentales sábado 3 de octubre y Avanzado domingo 4 de octubre, 11:30-15:00 (3,5 horas) en Nave Studio, Las Condes. 15 cupos por taller." />
         <meta property="og:type" content="event" />
         <meta property="og:url" content="https://studiolanave.com/taller-wim-hof-santiago-fundamentales-avanzado" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta
           name="description"
-          content="Talleres del Método Wim Hof en Santiago el domingo 23 de agosto de 2026: Fundamentos 11:30-15:00 y Avanzado 15:30-19:00 en Nave Studio, Las Condes. 15 cupos por taller."
+          content="Talleres del Método Wim Hof en Santiago: Fundamentales sábado 3 de octubre y Avanzado domingo 4 de octubre de 2026, de 11:30 a 15:00 (3,5 horas) en Nave Studio, Las Condes. 15 cupos por taller."
         />
         <link
           rel="canonical"
@@ -490,7 +498,7 @@ const TallerSantiago = () => {
               </p>
               <p className="text-sm text-muted-foreground">
                 {pagoStatus === "approved"
-                  ? "Te esperamos el domingo 23 de agosto en Antares 259, Las Condes. Guarda este mensaje y cualquier duda escríbenos por WhatsApp."
+                  ? "Te enviamos por email la fecha de tu taller, el horario y el link al grupo de WhatsApp. Te esperamos en Antares 259, Las Condes."
                   : pagoStatus === "pending"
                   ? "Cuando Mercado Pago confirme el pago, tu cupo queda reservado. Si tienes dudas, escríbenos por WhatsApp."
                   : "Tu cupo no quedó reservado. Puedes intentar de nuevo o escribirnos por WhatsApp."}
@@ -610,7 +618,7 @@ const TallerSantiago = () => {
         <div className="max-w-[1100px] mx-auto relative grid lg:grid-cols-2 gap-10 items-center">
           <div className="text-center lg:text-left animate-fade-in">
             <Badge variant="outline" className="mb-5 border-primary/30 text-primary">
-              Santiago · Domingo 23 de agosto
+              Santiago · Sábado 3 y domingo 4 de octubre
             </Badge>
             <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground mb-5 leading-[1.05]">
               Dos talleres Wim Hof.{" "}
@@ -627,7 +635,7 @@ const TallerSantiago = () => {
                 className="shadow-lg"
                 disabled={isSoldOut("fundamentos")}
               >
-                {isSoldOut("fundamentos") ? "Fundamentos agotado" : "Quiero ir al Fundamentos"}
+                {isSoldOut("fundamentos") ? "Fundamentales agotado" : "Quiero ir al Fundamentales"}
                 {!isSoldOut("fundamentos") && <ChevronRight className="w-4 h-4 ml-1" />}
               </Button>
               <Button
@@ -690,6 +698,7 @@ const TallerSantiago = () => {
                       "No se explica la técnica básica desde cero",
                       "Prácticas más profundas de respiración",
                       "Mayor desafío con el frío",
+                      "Incluye The Snake: práctica guiada de foco y calor interno",
                       "Requiere experiencia previa",
                       "Ideal si ya fuiste a Nave Studio, retiros, Icefest o talleres",
                     ];
@@ -769,12 +778,12 @@ const TallerSantiago = () => {
         </div>
       </section>
 
-      {/* Detalle Fundamentos */}
+      {/* Detalle Fundamentales */}
       <DetalleSection
         taller="fundamentos"
-        titulo="Fundamentos: aprende la técnica desde la base"
+        titulo="Fundamentales: aprende la técnica desde la base"
         texto="Este taller está diseñado para que entiendas y practiques la respiración Wim Hof de forma clara, segura y guiada. Vamos a revisar la técnica paso a paso, el rol de la respiración, la preparación mental y corporal para el frío, y cómo entrar al hielo sin pelear con la experiencia."
-        cta="Reservar mi cupo en Fundamentos"
+        cta="Reservar mi cupo en Fundamentales"
         sold={isSoldOut("fundamentos")}
         onReserve={() => openReserva("fundamentos")}
       />
@@ -783,12 +792,56 @@ const TallerSantiago = () => {
       <DetalleSection
         taller="avanzado"
         titulo="Avanzado: profundiza tu práctica"
-        texto="Este taller es para quienes ya conocen la experiencia Wim Hof y quieren ir más profundo. No partiremos desde cero: iremos directo a prácticas más avanzadas de respiración y a un desafío mayor con el frío. Para participar, debes haber vivido antes alguna experiencia Wim Hof guiada, como sesiones en Nave Studio, retiros, Icefest o talleres anteriores."
+        texto="Este taller es para quienes ya conocen la experiencia Wim Hof y quieren ir más profundo. No partiremos desde cero: iremos directo a prácticas más avanzadas de respiración y a un desafío mayor con el frío. Además haremos The Snake, una práctica guiada para trabajar el foco y el calor interno. Para participar, debes haber vivido antes alguna experiencia Wim Hof guiada, como sesiones en Nave Studio, retiros, Icefest o talleres anteriores."
         cta="Reservar mi cupo en Avanzado"
         sold={isSoldOut("avanzado")}
         onReserve={() => openReserva("avanzado")}
         dark
       />
+
+      {/* The Snake — solo en el Avanzado */}
+      <section className="py-16 px-4">
+        <div className="max-w-[900px] mx-auto">
+          <Card className="border-border/60 shadow-md rounded-3xl">
+            <CardContent className="p-6 md:p-10">
+              <Badge variant="outline" className="mb-5 border-primary/30 text-primary">
+                Solo en el Avanzado · Domingo 4 de octubre
+              </Badge>
+              <h2 className="font-heading text-3xl md:text-4xl text-foreground mb-5 leading-tight">
+                The Snake
+              </h2>
+              <div className="space-y-4 text-muted-foreground leading-relaxed">
+                <p>
+                  The Snake es una práctica guiada que hacemos solo en el taller Avanzado. Está
+                  pensada para quienes quieran desafiar su poder mental, sostener el foco cuando el
+                  cuerpo pide salir y explorar la capacidad del cuerpo de generar su propio calor.
+                </p>
+                <p>
+                  La hacemos paso a paso, con acompañamiento en todo momento. No se trata de
+                  aguantar por ego ni de llegar a un resultado: se trata de observar tu mente, tu
+                  respiración y tu relación con la incomodidad. Puedes detenerte cuando lo
+                  necesites.
+                </p>
+                <p>
+                  Por lo mismo, mantiene los requisitos del Avanzado: necesitas experiencia previa
+                  en respiración y frío guiados, y si tienes alguna condición médica relevante,
+                  consulta con tu médico y avísanos antes de reservar.
+                </p>
+              </div>
+              <div className="mt-8">
+                <Button
+                  size="lg"
+                  onClick={() => openReserva("avanzado")}
+                  disabled={isSoldOut("avanzado")}
+                >
+                  {isSoldOut("avanzado") ? "Cupos agotados" : "Reservar Avanzado con The Snake"}
+                  {!isSoldOut("avanzado") && <ChevronRight className="w-4 h-4 ml-1" />}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
 
       {/* Testimonios de talleres anteriores */}
       <section className="py-16 md:py-20 px-4 bg-neutral-light" aria-label="Testimonios del Taller Wim Hof">
@@ -985,11 +1038,11 @@ const TallerSantiago = () => {
               </h2>
             </div>
             <p className="text-muted-foreground leading-relaxed mb-6">
-              El taller <strong className="text-foreground">Fundamentos</strong> es abierto para
+              El taller <strong className="text-foreground">Fundamentales</strong> es abierto para
               personas nuevas o con poca experiencia. El taller{" "}
               <strong className="text-foreground">Avanzado</strong> requiere experiencia previa. Si
               nunca has hecho una sesión Wim Hof, una inmersión guiada o una experiencia similar,
-              elige Fundamentos.
+              elige Fundamentales.
             </p>
             <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 md:p-5 mb-6">
               <p className="text-foreground font-medium">
@@ -1111,7 +1164,7 @@ const TallerSantiago = () => {
             Elige tu taller y reserva tu cupo
           </h2>
           <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Fundamentos si quieres aprender desde cero. Avanzado si ya conoces la técnica y quieres
+            Fundamentales si quieres aprender desde cero. Avanzado si ya conoces la técnica y quieres
             ir más profundo.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -1121,7 +1174,7 @@ const TallerSantiago = () => {
               onClick={() => openReserva("fundamentos")}
               disabled={isSoldOut("fundamentos")}
             >
-              {isSoldOut("fundamentos") ? "Fundamentos agotado" : "Reservar Fundamentos"}
+              {isSoldOut("fundamentos") ? "Fundamentales agotado" : "Reservar Fundamentales"}
             </Button>
             <Button
               size="lg"
@@ -1164,7 +1217,7 @@ const DetalleSection = ({ taller, titulo, texto, cta, sold, onReserve, dark }: D
       <div className="max-w-[1100px] mx-auto grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
         <div>
           <Badge variant="outline" className="mb-5 border-primary/30 text-primary">
-            {taller === "fundamentos" ? "Nivel 1 · Fundamentos" : "Nivel 2 · Avanzado"}
+            {taller === "fundamentos" ? "Nivel 1 · Fundamentales" : "Nivel 2 · Avanzado"}
           </Badge>
           <h2 className="font-heading text-3xl md:text-4xl lg:text-[2.75rem] text-foreground mb-5 leading-[1.1]">
             {titulo}

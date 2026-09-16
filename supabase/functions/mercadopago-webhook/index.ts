@@ -5,6 +5,12 @@ import { syncOrderToMailerLite, addSubscriberToGroups } from "../_shared/mailerl
 import { upsertCustomerAndLogEvent } from "../_shared/crm.ts";
 import { sendMetaEvent } from "../_shared/metaCapi.ts";
 import { buildCodePlan, buildCodeGroups } from "../_shared/codeComposition.ts";
+import {
+  TALLERES,
+  TALLER_MAPS_URL,
+  TALLER_WHATSAPP_GROUP_URL,
+  tallerKeyFromNivel,
+} from "../_shared/talleres.ts";
 
 /**
  * Contexto de navegador capturado al crear la orden (fbp/fbc/IP/UA/url).
@@ -475,11 +481,21 @@ async function handleTallerPayment(
       // Resend rate limit: max 2 req/sec
       await new Promise((r) => setTimeout(r, 600));
 
-      const nivelTxt = insc.nivel === "avanzado" ? "Avanzado" : "Fundamentos";
-      const fechaLarga = insc.nivel === "avanzado"
-        ? "Domingo 23 de agosto de 2026"
-        : "Domingo 23 de agosto de 2026";
-      const mapsUrl = "https://maps.app.goo.gl/4BvC7kC3JpVdQVkFA";
+      const tallerCfg = TALLERES[tallerKeyFromNivel(insc.nivel)];
+      const nivelTxt = tallerCfg.nombreCorto;
+      // Fecha desde la configuración compartida; si la inscripción es de otra
+      // edición, usamos la fecha guardada en el registro.
+      const fechaLarga =
+        insc.fecha_evento && insc.fecha_evento !== tallerCfg.fechaISO
+          ? new Intl.DateTimeFormat("es-CL", {
+              timeZone: "America/Santiago",
+              weekday: "long",
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            }).format(new Date(`${insc.fecha_evento}T12:00:00Z`))
+          : tallerCfg.fechaLarga;
+      const mapsUrl = TALLER_MAPS_URL;
       const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
 <body style="margin:0;padding:24px 12px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;background:#F4F4F5;line-height:1.7">
   <div style="max-width:580px;margin:0 auto;background:#ffffff;border-radius:16px;overflow:hidden">
@@ -489,10 +505,17 @@ async function handleTallerPayment(
     </div>
     <div style="padding:28px">
       <h2 style="font-size:18px;color:#1A1A1A;margin:0 0 12px">Hola ${insc.nombre} 👋</h2>
-      <p style="color:#3F3F46;font-size:15px;margin:0 0 14px">Recibimos tu pago y tu lugar en el <strong>${insc.taller_nombre}</strong> quedó reservado. Prepárate para respirar, entrar al hielo y conectar con tu poder.</p>
+      <p style="color:#3F3F46;font-size:15px;margin:0 0 18px">Recibimos tu pago y tu lugar en el <strong>${insc.taller_nombre}</strong> quedó reservado. Prepárate para respirar, entrar al hielo y conectar con tu poder.</p>
+
+      <div style="background:#EEF6F1;border:2px solid #2E4D3A;border-radius:12px;padding:20px;margin:0 0 20px">
+        <p style="margin:0 0 6px;font-size:13px;letter-spacing:1px;text-transform:uppercase;color:#2E4D3A;font-weight:700">Paso 1 · Entra al grupo de WhatsApp</p>
+        <p style="margin:0 0 14px;font-size:15px;color:#1A1A1A">Ahí compartimos las fotos del taller y todas las actualizaciones antes y después del día. Es el canal oficial del grupo.</p>
+        <a href="${TALLER_WHATSAPP_GROUP_URL}" style="display:inline-block;background:#2E4D3A;color:#ffffff;text-decoration:none;padding:14px 26px;border-radius:10px;font-weight:600;font-size:15px">Entrar al grupo de WhatsApp</a>
+      </div>
+
       <div style="background:#F8FAFB;border-left:4px solid #2E4D3A;padding:16px 18px;border-radius:8px;margin:18px 0">
         <p style="margin:4px 0;font-size:14px;color:#1A1A1A"><strong>📅 Fecha:</strong> ${fechaLarga}</p>
-        <p style="margin:4px 0;font-size:14px;color:#1A1A1A"><strong>⏰ Horario:</strong> ${insc.horario}</p>
+        <p style="margin:4px 0;font-size:14px;color:#1A1A1A"><strong>⏰ Horario:</strong> ${insc.horario} (${tallerCfg.duracion})</p>
         <p style="margin:4px 0;font-size:14px;color:#1A1A1A"><strong>📍 Lugar:</strong> Nave Studio, Antares 259, Las Condes — <a href="${mapsUrl}" style="color:#2E4D3A">ver mapa</a></p>
         <p style="margin:4px 0;font-size:14px;color:#1A1A1A"><strong>💸 Pagado:</strong> $${Number(payment.transaction_amount).toLocaleString("es-CL")} CLP</p>
       </div>
@@ -516,7 +539,7 @@ async function handleTallerPayment(
         body: JSON.stringify({
           from: "Nave Studio <agenda@studiolanave.com>",
           to: [insc.email],
-          subject: `Cupo confirmado · Taller ${nivelTxt} Método Wim Hof · 23 de agosto`,
+          subject: `Cupo confirmado · Taller ${nivelTxt} Método Wim Hof · ${fechaLarga}`,
           html,
         }),
       });
