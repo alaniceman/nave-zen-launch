@@ -381,7 +381,7 @@ const TallerSantiago = () => {
       a: "Sí. La respiración será más profunda y el desafío con el frío será mayor. Por eso necesitas conocerte previamente en el hielo.",
     },
     {
-      q: "¿Necesito experiencia previa para Fundamentos?",
+      q: "¿Necesito experiencia previa para Fundamentales?",
       a: "No. Puedes venir aunque nunca hayas hecho una inmersión en hielo.",
     },
     {
@@ -635,7 +635,7 @@ const TallerSantiago = () => {
                 className="shadow-lg"
                 disabled={isSoldOut("fundamentos")}
               >
-                {isSoldOut("fundamentos") ? "Fundamentos agotado" : "Quiero ir al Fundamentos"}
+                {isSoldOut("fundamentos") ? "Fundamentales agotado" : "Quiero ir al Fundamentales"}
                 {!isSoldOut("fundamentos") && <ChevronRight className="w-4 h-4 ml-1" />}
               </Button>
               <Button
@@ -778,12 +778,12 @@ const TallerSantiago = () => {
         </div>
       </section>
 
-      {/* Detalle Fundamentos */}
+      {/* Detalle Fundamentales */}
       <DetalleSection
         taller="fundamentos"
-        titulo="Fundamentos: aprende la técnica desde la base"
+        titulo="Fundamentales: aprende la técnica desde la base"
         texto="Este taller está diseñado para que entiendas y practiques la respiración Wim Hof de forma clara, segura y guiada. Vamos a revisar la técnica paso a paso, el rol de la respiración, la preparación mental y corporal para el frío, y cómo entrar al hielo sin pelear con la experiencia."
-        cta="Reservar mi cupo en Fundamentos"
+        cta="Reservar mi cupo en Fundamentales"
         sold={isSoldOut("fundamentos")}
         onReserve={() => openReserva("fundamentos")}
       />
@@ -994,11 +994,11 @@ const TallerSantiago = () => {
               </h2>
             </div>
             <p className="text-muted-foreground leading-relaxed mb-6">
-              El taller <strong className="text-foreground">Fundamentos</strong> es abierto para
+              El taller <strong className="text-foreground">Fundamentales</strong> es abierto para
               personas nuevas o con poca experiencia. El taller{" "}
               <strong className="text-foreground">Avanzado</strong> requiere experiencia previa. Si
               nunca has hecho una sesión Wim Hof, una inmersión guiada o una experiencia similar,
-              elige Fundamentos.
+              elige Fundamentales.
             </p>
             <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 md:p-5 mb-6">
               <p className="text-foreground font-medium">
@@ -1120,7 +1120,7 @@ const TallerSantiago = () => {
             Elige tu taller y reserva tu cupo
           </h2>
           <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Fundamentos si quieres aprender desde cero. Avanzado si ya conoces la técnica y quieres
+            Fundamentales si quieres aprender desde cero. Avanzado si ya conoces la técnica y quieres
             ir más profundo.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -1130,7 +1130,7 @@ const TallerSantiago = () => {
               onClick={() => openReserva("fundamentos")}
               disabled={isSoldOut("fundamentos")}
             >
-              {isSoldOut("fundamentos") ? "Fundamentos agotado" : "Reservar Fundamentos"}
+              {isSoldOut("fundamentos") ? "Fundamentales agotado" : "Reservar Fundamentales"}
             </Button>
             <Button
               size="lg"
@@ -1173,7 +1173,7 @@ const DetalleSection = ({ taller, titulo, texto, cta, sold, onReserve, dark }: D
       <div className="max-w-[1100px] mx-auto grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
         <div>
           <Badge variant="outline" className="mb-5 border-primary/30 text-primary">
-            {taller === "fundamentos" ? "Nivel 1 · Fundamentos" : "Nivel 2 · Avanzado"}
+            {taller === "fundamentos" ? "Nivel 1 · Fundamentales" : "Nivel 2 · Avanzado"}
           </Badge>
           <h2 className="font-heading text-3xl md:text-4xl lg:text-[2.75rem] text-foreground mb-5 leading-[1.1]">
             {titulo}
