@@ -6,6 +6,8 @@ import Autoplay from "embla-carousel-autoplay";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import planPruebaHero from "@/assets/plan-prueba-hero.webp";
+import promo18Hero from "@/assets/promo-18-hero.jpg";
+import { isPromo18Active, PROMO_18_PATH, PROMO_18_PRICE, PROMO_18_REGULAR_PRICE } from "@/lib/promo18";
 
 
 // Día de la Madre (Chile: 10 mayo 2026) — banner activo hasta fin del 10 mayo
