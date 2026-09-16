@@ -357,16 +357,24 @@ const TallerSantiago = () => {
 
   const faqs = [
     {
+      q: "¿Cuándo es cada taller?",
+      a: "Fundamentales es el sábado 3 de octubre y Avanzado el domingo 4 de octubre, ambos de 11:30 a 15:00 (3,5 horas) en Nave Studio, Antares 259, Las Condes.",
+    },
+    {
+      q: "¿Qué es The Snake del taller Avanzado?",
+      a: "The Snake es una práctica guiada que hacemos solo en el Avanzado, para quienes quieran desafiar su poder mental, sostener el foco y explorar la capacidad del cuerpo de generar calor. Se hace paso a paso, con acompañamiento y siempre puedes detenerte cuando lo necesites. No promete resultados: es una experiencia de práctica.",
+    },
+    {
       q: "¿Puedo ir al avanzado si nunca he hecho Wim Hof?",
-      a: "No. Para el avanzado necesitas haber vivido antes una experiencia Wim Hof o una práctica guiada con respiración e hielo. Si es tu primera vez, el taller correcto es Fundamentos.",
+      a: "No. Para el avanzado necesitas haber vivido antes una experiencia Wim Hof o una práctica guiada con respiración e hielo. Si es tu primera vez, el taller correcto es Fundamentales.",
     },
     {
       q: "¿Qué pasa si ya fui a Nave Studio?",
       a: "Si ya hiciste una sesión Wim Hof en Nave Studio, un retiro, Icefest o un taller anterior, puedes reservar el Avanzado.",
     },
     {
-      q: "¿En Fundamentos se explica todo desde cero?",
-      a: "Sí. En Fundamentos veremos la técnica paso a paso, desde la respiración hasta la preparación para el hielo.",
+      q: "¿En Fundamentales se explica todo desde cero?",
+      a: "Sí. En Fundamentales veremos la técnica paso a paso, desde la respiración hasta la preparación para el hielo.",
     },
     {
       q: "¿El taller avanzado es más intenso?",
