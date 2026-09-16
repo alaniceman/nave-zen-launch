@@ -6,6 +6,8 @@ import Autoplay from "embla-carousel-autoplay";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import planPruebaHero from "@/assets/plan-prueba-hero.webp";
+import promo18Hero from "@/assets/promo-18-hero.jpg";
+import { isPromo18Active, PROMO_18_PATH, PROMO_18_PRICE, PROMO_18_REGULAR_PRICE } from "@/lib/promo18";
 
 
 // Día de la Madre (Chile: 10 mayo 2026) — banner activo hasta fin del 10 mayo
@@ -336,6 +338,59 @@ const HeroSlideTallerWimHof = () => {
   );
 };
 
+const HeroSlidePromo18 = () => {
+  const navigate = useNavigate();
+  const discount = Math.round((1 - PROMO_18_PRICE / PROMO_18_REGULAR_PRICE) * 100);
+  return (
+    <div className="relative min-h-screen flex items-start md:items-center justify-center pt-20 md:pt-0 overflow-hidden">
+      <img
+        src={promo18Hero}
+        alt="Tina de agua fría con hielo y mat de yoga al atardecer en Santiago"
+        className="absolute inset-0 w-full h-full object-cover"
+        {...({ fetchpriority: "high" } as any)}
+      />
+      <div className="absolute inset-0 bg-gradient-to-r from-primary/90 via-primary/75 to-primary/40" />
+      <div className="relative z-10 container mx-auto px-6 text-white">
+        <div className="max-w-xl space-y-4 md:space-y-6">
+          <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm text-white px-4 py-1.5 rounded-full text-xs md:text-sm font-medium border border-white/25">
+            <span>🧊</span>
+            <span>Promo Fiestas Patrias · hasta el 30 de septiembre</span>
+          </div>
+          <h2 className="font-space-grotesk text-3xl md:text-5xl lg:text-6xl font-bold leading-tight">
+            Bautizo de Hielo + Yoga
+          </h2>
+          <p className="text-white/85 text-base md:text-lg leading-relaxed">
+            2 sesiones de Método Wim Hof y 4 clases de Yoga que puedes terminar en agua fría.
+            Válidas 3 meses, compartibles con quien quieras.
+          </p>
+          <div className="flex items-baseline gap-3">
+            {discount > 0 && (
+              <span className="text-white/50 line-through text-lg">
+                ${PROMO_18_REGULAR_PRICE.toLocaleString("es-CL")}
+              </span>
+            )}
+            <span className="text-4xl md:text-5xl font-bold">
+              ${PROMO_18_PRICE.toLocaleString("es-CL")}
+            </span>
+            <span className="text-white/70 text-sm">6 sesiones · $10.000 c/u</span>
+          </div>
+          <div className="space-y-3 pt-1">
+            <Button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); navigate(PROMO_18_PATH); }}
+              className="w-full md:w-auto min-w-[320px] bg-white text-primary hover:bg-white/90 font-bold text-lg py-6 px-10 rounded-xl shadow-xl transition-all transform hover:scale-105"
+              size="xl"
+            >
+              Ver la promo →
+            </Button>
+            <p className="font-inter text-xs text-white/70">Oferta válida solo durante septiembre</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export const HeroSection = () => {
   const [showDiaMadre, setShowDiaMadre] = useState(false);
   const [showPromoInvierno, setShowPromoInvierno] = useState(false);
@@ -380,11 +435,11 @@ export const HeroSection = () => {
   }, [emblaApi, onSelect]);
 
   const slides = [
+    { id: 'main', component: <HeroSlideMain /> },
+    ...(isPromo18Active() ? [{ id: 'promo-18', component: <HeroSlidePromo18 /> }] : []),
     ...(showTaller ? [{ id: 'taller-wim-hof', component: <HeroSlideTallerWimHof /> }] : []),
     ...(showPromoInvierno ? [{ id: 'promo-invierno', component: <HeroSlidePromoInvierno /> }] : []),
-
     { id: 'plan-prueba', component: <HeroSlidePlanPrueba /> },
-    { id: 'main', component: <HeroSlideMain /> },
     ...(showDiaMadre ? [{ id: 'dia-madre', component: <HeroSlideDiaMadre /> }] : []),
   ];
 
