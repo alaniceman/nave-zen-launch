@@ -435,11 +435,11 @@ export const HeroSection = () => {
   }, [emblaApi, onSelect]);
 
   const slides = [
+    { id: 'main', component: <HeroSlideMain /> },
+    ...(isPromo18Active() ? [{ id: 'promo-18', component: <HeroSlidePromo18 /> }] : []),
     ...(showTaller ? [{ id: 'taller-wim-hof', component: <HeroSlideTallerWimHof /> }] : []),
     ...(showPromoInvierno ? [{ id: 'promo-invierno', component: <HeroSlidePromoInvierno /> }] : []),
-
     { id: 'plan-prueba', component: <HeroSlidePlanPrueba /> },
-    { id: 'main', component: <HeroSlideMain /> },
     ...(showDiaMadre ? [{ id: 'dia-madre', component: <HeroSlideDiaMadre /> }] : []),
   ];
 
