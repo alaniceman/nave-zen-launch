@@ -392,7 +392,7 @@ const TallerSantiago = () => {
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      name: "Taller Wim Hof Fundamentos – Santiago",
+      name: "Taller Wim Hof Fundamentales – Santiago",
       startDate: TALLERES.fundamentos.isoStart,
       endDate: TALLERES.fundamentos.isoEnd,
       eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
@@ -409,7 +409,7 @@ const TallerSantiago = () => {
         },
       },
       description:
-        "Taller del Método Wim Hof nivel Fundamentos. Respiración, preparación e inmersión en hielo guiada en Nave Studio.",
+        "Taller del Método Wim Hof nivel Fundamentales (3,5 horas). Respiración, preparación e inmersión en hielo guiada en Nave Studio.",
       organizer: { "@type": "Organization", name: "Nave Studio" },
       offers: {
         "@type": "Offer",
@@ -439,7 +439,7 @@ const TallerSantiago = () => {
         },
       },
       description:
-        "Taller del Método Wim Hof nivel Avanzado. Práctica profunda de respiración y mayor desafío con el frío. Requiere experiencia previa.",
+        "Taller del Método Wim Hof nivel Avanzado (3,5 horas). Práctica profunda de respiración, mayor desafío con el frío e incluye The Snake, una práctica guiada de foco y calor interno. Requiere experiencia previa.",
       organizer: { "@type": "Organization", name: "Nave Studio" },
       offers: {
         "@type": "Offer",
@@ -454,15 +454,15 @@ const TallerSantiago = () => {
   return (
     <div className="min-h-screen bg-background font-body">
       <Helmet>
-        <title>Taller Wim Hof Santiago 23 de agosto | Nave Studio</title>
-        <meta property="og:title" content="Taller Wim Hof Santiago · 23 de agosto | Nave Studio" />
-        <meta property="og:description" content="Fundamentos 11:30-15:00 y Avanzado 15:30-19:00. Domingo 23 de agosto en Nave Studio, Las Condes. 15 cupos por taller." />
+        <title>Taller Wim Hof Santiago 3 y 4 de octubre | Nave Studio</title>
+        <meta property="og:title" content="Taller Wim Hof Santiago · 3 y 4 de octubre | Nave Studio" />
+        <meta property="og:description" content="Fundamentales sábado 3 de octubre y Avanzado domingo 4 de octubre, 11:30-15:00 (3,5 horas) en Nave Studio, Las Condes. 15 cupos por taller." />
         <meta property="og:type" content="event" />
         <meta property="og:url" content="https://studiolanave.com/taller-wim-hof-santiago-fundamentales-avanzado" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta
           name="description"
-          content="Talleres del Método Wim Hof en Santiago el domingo 23 de agosto de 2026: Fundamentos 11:30-15:00 y Avanzado 15:30-19:00 en Nave Studio, Las Condes. 15 cupos por taller."
+          content="Talleres del Método Wim Hof en Santiago: Fundamentales sábado 3 de octubre y Avanzado domingo 4 de octubre de 2026, de 11:30 a 15:00 (3,5 horas) en Nave Studio, Las Condes. 15 cupos por taller."
         />
         <link
           rel="canonical"
@@ -490,7 +490,7 @@ const TallerSantiago = () => {
               </p>
               <p className="text-sm text-muted-foreground">
                 {pagoStatus === "approved"
-                  ? "Te esperamos el domingo 23 de agosto en Antares 259, Las Condes. Guarda este mensaje y cualquier duda escríbenos por WhatsApp."
+                  ? "Te enviamos por email la fecha de tu taller, el horario y el link al grupo de WhatsApp. Te esperamos en Antares 259, Las Condes."
                   : pagoStatus === "pending"
                   ? "Cuando Mercado Pago confirme el pago, tu cupo queda reservado. Si tienes dudas, escríbenos por WhatsApp."
                   : "Tu cupo no quedó reservado. Puedes intentar de nuevo o escribirnos por WhatsApp."}
@@ -610,7 +610,7 @@ const TallerSantiago = () => {
         <div className="max-w-[1100px] mx-auto relative grid lg:grid-cols-2 gap-10 items-center">
           <div className="text-center lg:text-left animate-fade-in">
             <Badge variant="outline" className="mb-5 border-primary/30 text-primary">
-              Santiago · Domingo 23 de agosto
+              Santiago · Sábado 3 y domingo 4 de octubre
             </Badge>
             <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground mb-5 leading-[1.05]">
               Dos talleres Wim Hof.{" "}
@@ -690,6 +690,7 @@ const TallerSantiago = () => {
                       "No se explica la técnica básica desde cero",
                       "Prácticas más profundas de respiración",
                       "Mayor desafío con el frío",
+                      "Incluye The Snake: práctica guiada de foco y calor interno",
                       "Requiere experiencia previa",
                       "Ideal si ya fuiste a Nave Studio, retiros, Icefest o talleres",
                     ];
