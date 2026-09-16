@@ -792,12 +792,56 @@ const TallerSantiago = () => {
       <DetalleSection
         taller="avanzado"
         titulo="Avanzado: profundiza tu práctica"
-        texto="Este taller es para quienes ya conocen la experiencia Wim Hof y quieren ir más profundo. No partiremos desde cero: iremos directo a prácticas más avanzadas de respiración y a un desafío mayor con el frío. Para participar, debes haber vivido antes alguna experiencia Wim Hof guiada, como sesiones en Nave Studio, retiros, Icefest o talleres anteriores."
+        texto="Este taller es para quienes ya conocen la experiencia Wim Hof y quieren ir más profundo. No partiremos desde cero: iremos directo a prácticas más avanzadas de respiración y a un desafío mayor con el frío. Además haremos The Snake, una práctica guiada para trabajar el foco y el calor interno. Para participar, debes haber vivido antes alguna experiencia Wim Hof guiada, como sesiones en Nave Studio, retiros, Icefest o talleres anteriores."
         cta="Reservar mi cupo en Avanzado"
         sold={isSoldOut("avanzado")}
         onReserve={() => openReserva("avanzado")}
         dark
       />
+
+      {/* The Snake — solo en el Avanzado */}
+      <section className="py-16 px-4">
+        <div className="max-w-[900px] mx-auto">
+          <Card className="border-border/60 shadow-md rounded-3xl">
+            <CardContent className="p-6 md:p-10">
+              <Badge variant="outline" className="mb-5 border-primary/30 text-primary">
+                Solo en el Avanzado · Domingo 4 de octubre
+              </Badge>
+              <h2 className="font-heading text-3xl md:text-4xl text-foreground mb-5 leading-tight">
+                The Snake
+              </h2>
+              <div className="space-y-4 text-muted-foreground leading-relaxed">
+                <p>
+                  The Snake es una práctica guiada que hacemos solo en el taller Avanzado. Está
+                  pensada para quienes quieran desafiar su poder mental, sostener el foco cuando el
+                  cuerpo pide salir y explorar la capacidad del cuerpo de generar su propio calor.
+                </p>
+                <p>
+                  La hacemos paso a paso, con acompañamiento en todo momento. No se trata de
+                  aguantar por ego ni de llegar a un resultado: se trata de observar tu mente, tu
+                  respiración y tu relación con la incomodidad. Puedes detenerte cuando lo
+                  necesites.
+                </p>
+                <p>
+                  Por lo mismo, mantiene los requisitos del Avanzado: necesitas experiencia previa
+                  en respiración y frío guiados, y si tienes alguna condición médica relevante,
+                  consulta con tu médico y avísanos antes de reservar.
+                </p>
+              </div>
+              <div className="mt-8">
+                <Button
+                  size="lg"
+                  onClick={() => openReserva("avanzado")}
+                  disabled={isSoldOut("avanzado")}
+                >
+                  {isSoldOut("avanzado") ? "Cupos agotados" : "Reservar Avanzado con The Snake"}
+                  {!isSoldOut("avanzado") && <ChevronRight className="w-4 h-4 ml-1" />}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
 
       {/* Testimonios de talleres anteriores */}
       <section className="py-16 md:py-20 px-4 bg-neutral-light" aria-label="Testimonios del Taller Wim Hof">
