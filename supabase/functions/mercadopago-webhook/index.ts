@@ -5,6 +5,12 @@ import { syncOrderToMailerLite, addSubscriberToGroups } from "../_shared/mailerl
 import { upsertCustomerAndLogEvent } from "../_shared/crm.ts";
 import { sendMetaEvent } from "../_shared/metaCapi.ts";
 import { buildCodePlan, buildCodeGroups } from "../_shared/codeComposition.ts";
+import {
+  TALLERES,
+  TALLER_MAPS_URL,
+  TALLER_WHATSAPP_GROUP_URL,
+  tallerKeyFromNivel,
+} from "../_shared/talleres.ts";
 
 /**
  * Contexto de navegador capturado al crear la orden (fbp/fbc/IP/UA/url).
