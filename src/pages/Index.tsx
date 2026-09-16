@@ -14,7 +14,7 @@ import { StickyMobileCTA } from "@/components/StickyMobileCTA"
 import { BautizoHieloPromo } from "@/components/BautizoHieloPromo"
 import { NextClassAutoWidget } from "@/components/NextClassAutoWidget"
 import { AskNaveBar } from "@/components/AskNaveBar"
-import { Promo18Section } from "@/components/Promo18Section"
+
 
 
 const Index = () => {
