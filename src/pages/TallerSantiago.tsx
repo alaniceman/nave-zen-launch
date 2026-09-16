@@ -688,20 +688,24 @@ const TallerSantiago = () => {
               const incluye =
                 k === "fundamentos"
                   ? [
-                      "Técnica explicada desde cero",
-                      "Respiración guiada paso a paso",
-                      "Preparación para el frío",
-                      "Inmersión en hielo con acompañamiento",
-                      "Ideal para principiantes o para ordenar tu práctica",
+                      "🧩\uFE0E Técnica explicada desde cero",
+                      "🌬\uFE0E Respiración guiada paso a paso",
+                      "❄\uFE0E Preparación para el frío",
+                      "🧊\uFE0E Inmersión en hielo con acompañamiento",
+                      "🌱\uFE0E Ideal para principiantes o para ordenar tu práctica",
                     ]
                   : [
-                      "No se explica la técnica básica desde cero",
-                      "Prácticas más profundas de respiración",
-                      "Mayor desafío con el frío",
-                      "Incluye The Snake: práctica guiada de foco y calor interno",
-                      "Requiere experiencia previa",
-                      "Ideal si ya fuiste a Nave Studio, retiros, Icefest o talleres",
+                      "⛓\uFE0E No se explica la técnica básica desde cero",
+                      "🌬\uFE0E Prácticas más profundas de respiración",
+                      "🧊\uFE0E Mayor desafío con el frío",
+                      "🐍\uFE0E Incluye The Snake: práctica guiada de foco y calor interno",
+                      "🧠\uFE0E Requiere experiencia previa",
+                      "⭐\uFE0E Ideal si ya fuiste a Nave Studio, retiros, Icefest o talleres",
                     ];
+              const tematica =
+                k === "fundamentos"
+                  ? "Creencias Limitantes"
+                  : "Dominio Mental";
               return (
                 <Card
                   key={k}
@@ -715,17 +719,21 @@ const TallerSantiago = () => {
                       {sold && <Badge variant="destructive">Cupos agotados</Badge>}
                     </div>
                     <h3 className="font-heading text-2xl text-foreground mb-2">{t.nombre}</h3>
-                    <p className="text-muted-foreground mb-5">
+                    <p className="text-muted-foreground mb-3">
                       {k === "fundamentos"
                         ? "Para quienes quieren aprender la técnica paso a paso, desde la respiración hasta la entrada consciente al hielo."
                         : "Para quienes ya han tenido experiencias previas y quieren profundizar en la respiración, la exposición al frío y el dominio interno."}
+                    </p>
+                    <p className="text-sm font-medium text-foreground mb-5">
+                      <span className="text-muted-foreground">Temática:</span>{" "}
+                      <span className="text-primary">{tematica}</span>
                     </p>
 
                     <ul className="space-y-2 mb-6">
                       {incluye.map((line) => (
                         <li key={line} className="flex gap-2 text-sm text-foreground/90">
-                          <Check className="w-4 h-4 text-primary mt-1 shrink-0" />
-                          <span>{line}</span>
+                          <span className="mt-0.5 shrink-0 font-mono text-base leading-none">{line.slice(0, line.indexOf(" "))}</span>
+                          <span>{line.slice(line.indexOf(" ") + 1)}</span>
                         </li>
                       ))}
                     </ul>
