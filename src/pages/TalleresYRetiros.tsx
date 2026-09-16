@@ -21,14 +21,14 @@ type Item = {
 const ITEMS: Item[] = [
   {
     tag: "Taller · Santiago",
-    title: "Taller Wim Hof · Fundamentos y Avanzado",
-    date: "Domingo 23 de agosto de 2026",
+    title: "Taller Wim Hof · Fundamentales y Avanzado",
+    date: "Sábado 3 y domingo 4 de octubre de 2026",
     location: "Nave Studio · Antares 259, Las Condes",
     description:
-      "Un domingo para integrar los tres pilares del Método Wim Hof: respiración, exposición al frío y mentalidad. Elige Fundamentos si estás partiendo, o Avanzado si ya tienes práctica previa. Puedes hacer ambos el mismo día.",
+      "Un fin de semana para integrar los tres pilares del Método Wim Hof: respiración, exposición al frío y mentalidad. Elige Fundamentales si estás partiendo, o Avanzado si ya tienes práctica previa. Son en días distintos, así que puedes tomar uno o los dos.",
     highlights: [
-      "Fundamentos · 11:30 a 15:00 · $50.000",
-      "Avanzado · 15:30 a 19:00 · $60.000",
+      "Fundamentales · sábado 3 de octubre · 11:30 a 15:00 (3,5 horas) · $50.000",
+      "Avanzado · domingo 4 de octubre · 11:30 a 15:00 (3,5 horas) · $60.000 · incluye The Snake",
       "Solo 15 cupos por taller — grupo íntimo",
     ],
     url: "/taller-wim-hof-santiago-fundamentales-avanzado",
@@ -61,7 +61,7 @@ const TalleresYRetiros = () => {
         <title>Talleres y Retiros · Nave Studio</title>
         <meta
           name="description"
-          content="Próximos talleres y retiros de Nave Studio: Taller Wim Hof en Santiago (23 de agosto 2026) y Retiro Wim Hof en Lago Atitlán, Guatemala."
+          content="Próximos talleres y retiros de Nave Studio: Taller Wim Hof en Santiago (3 y 4 de octubre 2026) y Retiro Wim Hof en Lago Atitlán, Guatemala."
         />
         <link rel="canonical" href="https://studiolanave.com/talleres-y-retiros" />
       </Helmet>
