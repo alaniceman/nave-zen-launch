@@ -1603,7 +1603,9 @@ export type Database = {
           error_message: string | null
           event_id: string
           id: string
+          idempotency_key: string | null
           inscripcion_id: string
+          resend_email_id: string | null
           sent_at: string | null
           status: string
           updated_at: string
@@ -1615,7 +1617,9 @@ export type Database = {
           error_message?: string | null
           event_id: string
           id?: string
+          idempotency_key?: string | null
           inscripcion_id: string
+          resend_email_id?: string | null
           sent_at?: string | null
           status?: string
           updated_at?: string
@@ -1627,7 +1631,9 @@ export type Database = {
           error_message?: string | null
           event_id?: string
           id?: string
+          idempotency_key?: string | null
           inscripcion_id?: string
+          resend_email_id?: string | null
           sent_at?: string | null
           status?: string
           updated_at?: string
