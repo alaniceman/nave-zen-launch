@@ -17,3 +17,10 @@ Flujo de pago igual que antes (create-taller-preference + mercadopago-webhook, c
 Agradecimiento + encuesta: `send-taller-thankyou` corre con cron `taller-thankyou-octubre-2026` (`0 13 4,5 10 *` = 10:00 Chile del 4 y 5 de octubre), protegido por header `x-cron-token` validado contra `internal_cron_tokens` (sin tokens en código; sin token responde 401). Idempotencia durable por `taller_thankyou_logs.inscripcion_id` UNIQUE; reintenta solo los `failed`. Encuesta: `https://tally.so/r/yPGbxX`.
 
 El cron antiguo `send-post-taller-lastday-2026-08-31` fue eliminado para que no llegue contenido de agosto a los participantes de octubre.
+
+Reintentos y anti-duplicados del agradecimiento (revisión final):
+- Cron `taller-thankyou-octubre-2026` = `0 13-21 4,5 10 *` (cada hora, 10:00–18:00 Chile, el 4 y 5 de octubre).
+- Cada corrida salta `sent` y `pending/in flight`; solo reintenta `failed` con transición atómica condicional (`update ... eq('status','failed').select()` y comprobación de fila devuelta). Nunca reintenta `pending` automáticamente porque Resend pudo haber aceptado el envío y fallar solo el UPDATE.
+- Cabecera `Idempotency-Key: taller-thankyou-<inscripcion_id>` (válida 24h en Resend) para que los reintentos del mismo día no dupliquen; se guarda `resend_email_id` e `idempotency_key` en `taller_thankyou_logs`.
+- `dryRun` es solo lectura: cuenta pagados, por enviar, ya enviados, en vuelo y reintentables; no reclama, no modifica ni envía.
+- Nombre del participante escapado en HTML; saludo neutro «Hola 👋» si no hay nombre. Solo POST (OPTIONS para preflight, GET → 405); errores genéricos, sin detalles sensibles.

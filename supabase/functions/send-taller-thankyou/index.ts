@@ -14,7 +14,18 @@ function chileDateString(d: Date): string {
   return new Intl.DateTimeFormat("en-CA", { timeZone: TIMEZONE }).format(d);
 }
 
-function buildHtml(nombre: string, t: (typeof TALLERES)[TallerKey]) {
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function buildHtml(nombreRaw: string, t: (typeof TALLERES)[TallerKey]) {
+  const clean = (nombreRaw || "").trim();
+  const saludo = clean ? `Hola ${escapeHtml(clean)} 👋` : "Hola 👋";
   return `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
 <body style="margin:0;padding:24px 12px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;background:#F4F4F5;line-height:1.7">
   <div style="max-width:580px;margin:0 auto;background:#ffffff;border-radius:16px;overflow:hidden">
@@ -23,7 +34,7 @@ function buildHtml(nombre: string, t: (typeof TALLERES)[TallerKey]) {
       <p style="margin:6px 0 0;font-size:14px;opacity:.85">Taller ${t.nombreCorto} · Método Wim Hof</p>
     </div>
     <div style="padding:28px">
-      <h2 style="font-size:18px;color:#1A1A1A;margin:0 0 12px">Hola ${nombre} 👋</h2>
+      <h2 style="font-size:18px;color:#1A1A1A;margin:0 0 12px">${saludo}</h2>
       <p style="color:#3F3F46;font-size:15px;margin:0 0 14px">Quiero agradecerte de verdad por haber estado ayer en el ${t.nombre}. Compartir la respiración, el hielo y ese silencio después no es algo menor, y me alegra mucho que hayas sido parte.</p>
       <p style="color:#3F3F46;font-size:15px;margin:0 0 18px">Si puedes responder la encuesta de satisfacción, te lo agradecería mucho. Las leo todas.</p>
       <p style="margin:0 0 22px"><a href="${TALLER_ENCUESTA_URL}" style="display:inline-block;background:#2E4D3A;color:#ffffff;text-decoration:none;padding:14px 28px;border-radius:10px;font-weight:600;font-size:15px">Responder la encuesta</a></p>
@@ -45,6 +56,8 @@ serve(async (req) => {
       status,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
+
+  if (req.method !== "POST") return jsonRes({ error: "method_not_allowed" }, 405);
 
   try {
     const supabase = createClient(
@@ -68,7 +81,7 @@ serve(async (req) => {
     }
 
     const resendKey = Deno.env.get("RESEND_API_KEY");
-    if (!resendKey) throw new Error("RESEND_API_KEY not configured");
+    if (!resendKey && !dryRun) throw new Error("RESEND_API_KEY not configured");
 
     // Fecha local en Chile: solo envía el día siguiente a cada taller.
     const today = typeof body?.dateOverride === "string" ? body.dateOverride : chileDateString(new Date());
@@ -93,8 +106,51 @@ serve(async (req) => {
 
       if (inscError) throw inscError;
 
+      // dryRun: solo lectura. No reclama, no modifica y no envía.
+      if (dryRun) {
+        const ids = (inscripciones ?? []).map((i) => i.id);
+        const { data: logs } = ids.length
+          ? await supabase
+              .from("taller_thankyou_logs")
+              .select("inscripcion_id, status, attempts")
+              .in("inscripcion_id", ids)
+          : { data: [] as Array<{ inscripcion_id: string; status: string; attempts: number }> };
+
+        const byId = new Map((logs ?? []).map((l) => [l.inscripcion_id, l]));
+        let pendientes = 0;
+        let yaEnviados = 0;
+        let enVuelo = 0;
+        let reintentables = 0;
+
+        for (const insc of inscripciones ?? []) {
+          const log = byId.get(insc.id);
+          if (!log) {
+            pendientes++;
+          } else if (log.status === "sent") {
+            yaEnviados++;
+          } else if (log.status === "failed") {
+            reintentables++;
+          } else {
+            enVuelo++;
+          }
+        }
+
+        results.push({
+          taller: key,
+          eventId: t.eventId,
+          pagados: (inscripciones ?? []).length,
+          porEnviar: pendientes,
+          yaEnviados,
+          enVuelo,
+          reintentables,
+        });
+        continue;
+      }
+
       for (const insc of inscripciones ?? []) {
-        // Claim idempotente: una fila por inscripción.
+        const idempotencyKey = `taller-thankyou-${insc.id}`;
+
+        // Claim durable: una fila por inscripción (inscripcion_id UNIQUE).
         const { data: claimed } = await supabase
           .from("taller_thankyou_logs")
           .insert({
@@ -103,11 +159,13 @@ serve(async (req) => {
             email: insc.email,
             status: "pending",
             attempts: 1,
+            idempotency_key: idempotencyKey,
           })
-          .select("id, status")
+          .select("id")
           .maybeSingle();
 
         let logId = claimed?.id as string | undefined;
+        let attempts = 1;
 
         if (!logId) {
           const { data: existing } = await supabase
@@ -116,22 +174,37 @@ serve(async (req) => {
             .eq("inscripcion_id", insc.id)
             .maybeSingle();
 
-          if (!existing || existing.status === "sent") {
+          if (!existing) {
+            results.push({ email: insc.email, skipped: "log_unavailable" });
+            continue;
+          }
+          if (existing.status === "sent") {
             results.push({ email: insc.email, skipped: "already_sent" });
             continue;
           }
-          // Reintento permitido solo si el envío anterior falló o quedó colgado.
-          await supabase
-            .from("taller_thankyou_logs")
-            .update({ status: "pending", attempts: (existing.attempts ?? 0) + 1 })
-            .eq("id", existing.id);
-          logId = existing.id;
-        }
+          if (existing.status !== "failed") {
+            // pending / in flight: puede haber sido aceptado por Resend aunque
+            // fallara el UPDATE. No se reintenta automáticamente.
+            results.push({ email: insc.email, skipped: "in_flight" });
+            continue;
+          }
 
-        if (dryRun) {
-          await supabase.from("taller_thankyou_logs").delete().eq("id", logId).eq("status", "pending");
-          results.push({ email: insc.email, dryRun: true });
-          continue;
+          // Transición atómica condicional: solo un proceso gana failed -> pending.
+          const nextAttempts = (existing.attempts ?? 0) + 1;
+          const { data: won } = await supabase
+            .from("taller_thankyou_logs")
+            .update({ status: "pending", attempts: nextAttempts, error_message: null })
+            .eq("id", existing.id)
+            .eq("status", "failed")
+            .select("id")
+            .maybeSingle();
+
+          if (!won?.id) {
+            results.push({ email: insc.email, skipped: "claimed_by_other" });
+            continue;
+          }
+          logId = won.id;
+          attempts = nextAttempts;
         }
 
         try {
@@ -139,12 +212,18 @@ serve(async (req) => {
           await new Promise((r) => setTimeout(r, 600));
           const r = await fetch("https://api.resend.com/emails", {
             method: "POST",
-            headers: { Authorization: `Bearer ${resendKey}`, "Content-Type": "application/json" },
+            headers: {
+              Authorization: `Bearer ${resendKey}`,
+              "Content-Type": "application/json",
+              // Válida 24h en Resend: los reintentos del mismo día no duplican
+              // el envío si se perdió la respuesta anterior.
+              "Idempotency-Key": idempotencyKey,
+            },
             body: JSON.stringify({
               from: "Nave Studio <agenda@studiolanave.com>",
               to: [insc.email],
               subject: `Gracias por el taller ${t.nombreCorto} · Nave Studio`,
-              html: buildHtml((insc.nombre || "").trim() || "Aliada", t),
+              html: buildHtml(insc.nombre ?? "", t),
             }),
           });
 
@@ -153,24 +232,30 @@ serve(async (req) => {
             console.error(`Resend error (thankyou ${insc.email}) [${r.status}]:`, errTxt);
             await supabase
               .from("taller_thankyou_logs")
-              .update({ status: "failed", error_message: errTxt.slice(0, 500) })
+              .update({ status: "failed", error_message: `[${r.status}] ${errTxt}`.slice(0, 500) })
               .eq("id", logId);
             results.push({ email: insc.email, error: r.status });
             continue;
           }
 
+          const payload = await r.json().catch(() => ({} as any));
           await supabase
             .from("taller_thankyou_logs")
-            .update({ status: "sent", sent_at: new Date().toISOString(), error_message: null })
+            .update({
+              status: "sent",
+              sent_at: new Date().toISOString(),
+              error_message: null,
+              resend_email_id: payload?.id ?? null,
+            })
             .eq("id", logId);
-          results.push({ email: insc.email, sent: true });
+          results.push({ email: insc.email, sent: true, attempts });
         } catch (err) {
           console.error("thankyou send failed:", err);
           await supabase
             .from("taller_thankyou_logs")
             .update({ status: "failed", error_message: String(err).slice(0, 500) })
             .eq("id", logId);
-          results.push({ email: insc.email, error: String(err) });
+          results.push({ email: insc.email, error: "send_failed" });
         }
       }
     }
@@ -178,6 +263,7 @@ serve(async (req) => {
     return jsonRes({
       today,
       talleres: keys,
+      dryRun,
       sent: results.filter((r) => r.sent).length,
       skipped: results.filter((r) => r.skipped).length,
       errors: results.filter((r) => r.error).length,
@@ -185,6 +271,6 @@ serve(async (req) => {
     });
   } catch (err) {
     console.error("send-taller-thankyou error:", err);
-    return jsonRes({ error: String(err) }, 500);
+    return jsonRes({ error: "internal_error" }, 500);
   }
 });
