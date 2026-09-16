@@ -714,6 +714,24 @@ export type Database = {
         }
         Relationships: []
       }
+      internal_cron_tokens: {
+        Row: {
+          created_at: string
+          name: string
+          token: string
+        }
+        Insert: {
+          created_at?: string
+          name: string
+          token?: string
+        }
+        Update: {
+          created_at?: string
+          name?: string
+          token?: string
+        }
+        Relationships: []
+      }
       membership_leads: {
         Row: {
           admin_notes: string | null
@@ -1574,6 +1592,45 @@ export type Database = {
           name?: string
           paid?: boolean
           phone?: string
+        }
+        Relationships: []
+      }
+      taller_thankyou_logs: {
+        Row: {
+          attempts: number
+          created_at: string
+          email: string
+          error_message: string | null
+          event_id: string
+          id: string
+          inscripcion_id: string
+          sent_at: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          attempts?: number
+          created_at?: string
+          email: string
+          error_message?: string | null
+          event_id: string
+          id?: string
+          inscripcion_id: string
+          sent_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          attempts?: number
+          created_at?: string
+          email?: string
+          error_message?: string | null
+          event_id?: string
+          id?: string
+          inscripcion_id?: string
+          sent_at?: string | null
+          status?: string
+          updated_at?: string
         }
         Relationships: []
       }
