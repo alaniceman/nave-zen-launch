@@ -51,34 +51,34 @@ type TallerKey = "fundamentos" | "avanzado";
 
 const TALLERES = {
   fundamentos: {
-    nombre: "Taller Fundamentos Método Wim Hof",
-    nombreCorto: "Fundamentos",
-    fecha: "Domingo 23 de agosto",
-    fechaLarga: "Domingo 23 de agosto de 2026",
+    nombre: "Taller Fundamentales Método Wim Hof",
+    nombreCorto: "Fundamentales",
+    fecha: "Sábado 3 de octubre",
+    fechaLarga: "Sábado 3 de octubre de 2026",
     horario: "11:30 a 15:00",
-    duracion: "3 horas y media",
+    duracion: "3,5 horas",
     valor: 50000,
     valorTxt: "$50.000",
     cupos: 15,
     nivel: "Principiante / intermedio",
-    eventId: "santiago_fundamentos_2026_08_23",
-    isoStart: "2026-08-23T11:30:00-04:00",
-    isoEnd: "2026-08-23T15:00:00-04:00",
+    eventId: "santiago_fundamentos_2026_10_03",
+    isoStart: "2026-10-03T11:30:00-03:00",
+    isoEnd: "2026-10-03T15:00:00-03:00",
   },
   avanzado: {
     nombre: "Taller Avanzado Método Wim Hof",
     nombreCorto: "Avanzado",
-    fecha: "Domingo 23 de agosto",
-    fechaLarga: "Domingo 23 de agosto de 2026",
-    horario: "15:30 a 19:00",
-    duracion: "3 horas y media",
+    fecha: "Domingo 4 de octubre",
+    fechaLarga: "Domingo 4 de octubre de 2026",
+    horario: "11:30 a 15:00",
+    duracion: "3,5 horas",
     valor: 60000,
     valorTxt: "$60.000",
     cupos: 15,
     nivel: "Avanzado · requiere experiencia previa",
-    eventId: "santiago_avanzado_2026_08_23",
-    isoStart: "2026-08-23T15:30:00-04:00",
-    isoEnd: "2026-08-23T19:00:00-04:00",
+    eventId: "santiago_avanzado_2026_10_04",
+    isoStart: "2026-10-04T11:30:00-03:00",
+    isoEnd: "2026-10-04T15:00:00-03:00",
   },
 };
 
@@ -87,13 +87,13 @@ const WHATSAPP_NUMBER = "56946120426";
 const waUrl = (text: string) =>
   `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
 const WHATSAPP_URL = waUrl(
-  "Hola! Quiero información sobre los talleres del Método Wim Hof del domingo 23 de agosto en Nave Studio."
+  "Hola! Quiero información sobre los talleres del Método Wim Hof del 3 y 4 de octubre en Nave Studio."
 );
 const WHATSAPP_FUNDAMENTOS = waUrl(
-  "Hola! Quiero información sobre el Taller Fundamentos del Método Wim Hof del domingo 23 de agosto, de 11:30 a 15:00, en Nave Studio."
+  "Hola! Quiero información sobre el Taller Fundamentales del Método Wim Hof del sábado 3 de octubre, de 11:30 a 15:00, en Nave Studio."
 );
 const WHATSAPP_AVANZADO = waUrl(
-  "Hola! Quiero información sobre el Taller Avanzado del Método Wim Hof del domingo 23 de agosto, de 15:30 a 19:00, en Nave Studio. Ya tengo experiencia previa."
+  "Hola! Quiero información sobre el Taller Avanzado del Método Wim Hof del domingo 4 de octubre, de 11:30 a 15:00, en Nave Studio. Ya tengo experiencia previa."
 );
 
 
