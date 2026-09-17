@@ -2,20 +2,20 @@ import { Link } from "react-router-dom";
 import { Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
 export const SessionPackagePromo = () => {
-  return <div className="mb-8 p-6 bg-gradient-to-r from-primary/10 to-accent/10 rounded-2xl border border-primary/20">
-      <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-        <div className="flex items-center gap-3 text-center md:text-left">
-          <div className="p-3 bg-primary/20 rounded-full">
-            <Package className="h-6 w-6 text-primary" />
+  return <div className="mb-6 px-4 py-3 bg-gradient-to-r from-primary/8 to-accent/8 rounded-xl border border-primary/15">
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="p-2 bg-primary/15 rounded-lg shrink-0">
+            <Package className="h-4 w-4 text-primary" />
           </div>
-          <div>
-            <h2 className="text-lg md:text-xl font-bold text-foreground">¿Vienes seguido o quieres venir con un grupo de personas? Ahorra con un Paquete de Sesiones</h2>
-            <p className="text-sm text-muted-foreground">Compra sesiones por adelantado y obtén descuentos. Las puedes compartir con quien tú quieras.</p>
+          <div className="min-w-0">
+            <h2 className="text-sm font-bold text-foreground leading-snug">¿Vienes seguido? Ahorra con un paquete</h2>
+            <p className="text-xs text-muted-foreground leading-snug">Compra sesiones por adelantado y compártelas.</p>
           </div>
         </div>
-        <Link to="/bonos">
-          <Button variant="outline" className="font-semibold whitespace-nowrap border-primary/30 hover:bg-primary/10">
-            Ver Paquetes
+        <Link to="/bonos" className="shrink-0">
+          <Button variant="outline" size="sm" className="font-semibold whitespace-nowrap border-primary/30 hover:bg-primary/10">
+            Ver
           </Button>
         </Link>
       </div>
