@@ -4,7 +4,10 @@ import { Resend } from "npm:resend@2.0.0";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { getCorsHeaders } from "../_shared/cors.ts";
 
-const bodySchema = z.object({ leadId: z.string().uuid() });
+const bodySchema = z.object({
+  leadId: z.string().uuid(),
+  bcc: z.array(z.string().email()).max(5).optional(),
+});
 
 const PLAN_LABELS: Record<string, string> = {
   trial_7d: "Plan de prueba 7 días",
