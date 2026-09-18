@@ -94,6 +94,7 @@ serve(async (req) => {
       from: "Nave Studio <no-reply@studiolanave.com>",
       reply_to: "lanave@alaniceman.com",
       to: [lead.customer_email],
+      ...(data.bcc?.length ? { bcc: data.bcc } : {}),
       subject: "Tu plan de prueba Nave Studio ya está activo",
       html: html({
         name: lead.customer_name,
