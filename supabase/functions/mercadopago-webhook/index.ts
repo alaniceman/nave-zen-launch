@@ -7,10 +7,27 @@ import { sendMetaEvent } from "../_shared/metaCapi.ts";
 import { buildCodePlan, buildCodeGroups } from "../_shared/codeComposition.ts";
 import {
   TALLERES,
+  TALLER_PACK,
   TALLER_MAPS_URL,
   TALLER_WHATSAPP_GROUP_URL,
   tallerKeyFromNivel,
 } from "../_shared/talleres.ts";
+
+/** Eventos incluidos en una inscripción (compatible con filas históricas). */
+function inscEventIds(insc: any): string[] {
+  if (Array.isArray(insc?.event_ids) && insc.event_ids.length > 0) return insc.event_ids;
+  return insc?.event_id ? [insc.event_id] : [];
+}
+
+function isPackInsc(insc: any): boolean {
+  return (insc?.product_type ?? "single") === "pack";
+}
+
+function tallerContentId(eventId: string): string {
+  if (eventId === TALLERES.avanzado.eventId) return "taller-whm-santiago-avanzado";
+  if (eventId === TALLERES.fundamentos.eventId) return "taller-whm-santiago-fundamentos";
+  return `taller-whm-${eventId}`;
+}
 
 /**
  * Contexto de navegador capturado al crear la orden (fbp/fbc/IP/UA/url).
@@ -322,9 +339,9 @@ async function sendTallerPurchaseCapi(insc: any, payment: any, orderId: string, 
         contentName: insc.taller_nombre,
         contentType: "product",
         contentCategory: "workshop",
-        // id estable del taller, no de la orden
-        contentIds: [`taller-whm-santiago-${insc.nivel}`],
-        numItems: 1,
+        // ids estables de los talleres incluidos, no de la orden
+        contentIds: inscEventIds(insc).map(tallerContentId),
+        numItems: Math.max(1, inscEventIds(insc).length),
         orderId,
       },
       supabase,
@@ -415,19 +432,76 @@ async function handleTallerPayment(
     return json("already_processed");
   }
 
-  // Reserve the cupo atomically
+  // Reserva atómica de TODOS los cupos del producto (pack = 2, single = 1).
+  // Todo o nada: nunca se descuenta un cupo parcial.
+  const eventIds = inscEventIds(insc);
+  const isPack = isPackInsc(insc);
+  const remainingByEvent: Record<string, number | null> = {};
   let remaining: number | null = null;
-  const { data: reserved, error: reserveError } = await supabase.rpc("reserve_event_cupo", {
-    _event_id: insc.event_id,
+  let reserveOk = false;
+  let reserveReason = "";
+
+  const { data: reserveRes, error: reserveError } = await supabase.rpc("reserve_event_cupos", {
+    _event_ids: eventIds,
   });
   if (reserveError) {
-    console.error("Error reserving cupo:", reserveError);
+    console.error("Error reserving cupos:", reserveError);
+    reserveReason = "rpc_error";
   } else {
-    remaining = reserved as number;
-    await supabase
-      .from("taller_inscripciones")
-      .update({ cupo_reserved: remaining >= 0 })
-      .eq("id", orderId);
+    const res = reserveRes as any;
+    reserveOk = res?.ok === true;
+    reserveReason = res?.reason ?? "";
+    if (reserveOk) {
+      for (const id of eventIds) {
+        const v = res?.remaining?.[id];
+        remainingByEvent[id] = typeof v === "number" ? v : null;
+      }
+      remaining = remainingByEvent[eventIds[0]] ?? null;
+    }
+  }
+
+  await supabase
+    .from("taller_inscripciones")
+    .update(
+      reserveOk
+        ? { cupo_reserved: true }
+        : {
+            cupo_reserved: false,
+            status: "needs_review",
+            notification_error: `Pago aprobado sin cupo reservado (${reserveReason || "desconocido"}) — revisar/reembolsar`.slice(0, 500),
+          }
+    )
+    .eq("id", orderId);
+
+  if (!reserveOk) {
+    // Carrera de stock: no reservamos parcialmente. Alerta administrativa.
+    try {
+      const resendKey = Deno.env.get("RESEND_API_KEY");
+      if (resendKey) {
+        await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: { Authorization: `Bearer ${resendKey}`, "Content-Type": "application/json" },
+          body: JSON.stringify({
+            from: "Nave Studio <agenda@studiolanave.com>",
+            to: ["lanave@alaniceman.com"],
+            subject: `⚠️ Revisar inscripción taller${isPack ? " PACK / AMBOS" : ""} — cupo no reservado`,
+            html: `<div style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;line-height:1.7">
+              <h2 style="color:#B42318;margin:0 0 12px">Pago aprobado sin cupo reservado</h2>
+              <p><strong>Producto:</strong> ${isPack ? "PACK / AMBOS talleres" : insc.taller_nombre}</p>
+              <p><strong>Participante:</strong> ${insc.nombre} ${insc.apellido} — ${insc.email} — ${insc.phone}</p>
+              <p><strong>Orden:</strong> ${orderId}</p>
+              <p><strong>Payment ID:</strong> ${paymentIdStr}</p>
+              <p><strong>Monto:</strong> $${Number(payment.transaction_amount).toLocaleString("es-CL")} CLP</p>
+              <p><strong>Motivo:</strong> ${reserveReason || "desconocido"}</p>
+              <p>No se descontó ningún cupo (sin reservas parciales). Hay que contactar y reembolsar o reubicar.</p>
+            </div>`,
+          }),
+        });
+      }
+    } catch (err) {
+      console.error("Taller stock-conflict alert failed:", err);
+    }
+    return json("taller_cupo_conflict");
   }
 
   // Admin notification — Talleres Wim Hof solo a lanave@alaniceman.com
@@ -435,19 +509,37 @@ async function handleTallerPayment(
     const resendKey = Deno.env.get("RESEND_API_KEY");
     const adminEmail = "lanave@alaniceman.com";
     if (resendKey) {
-      const nivelTxt = insc.nivel === "avanzado" ? "Avanzado" : "Fundamentos";
+      const nivelTxt = isPack
+        ? "PACK / AMBOS"
+        : insc.nivel === "avanzado"
+        ? "Avanzado"
+        : "Fundamentales";
+      const cuposRestantesHtml = eventIds
+        .map((id) => {
+          const label =
+            id === TALLERES.avanzado.eventId
+              ? "Avanzado (4 oct)"
+              : id === TALLERES.fundamentos.eventId
+              ? "Fundamentales (3 oct)"
+              : id;
+          const v = remainingByEvent[id];
+          return `<p><strong>Cupos restantes ${label}:</strong> ${v === null || v < 0 ? "revisar" : v}</p>`;
+        })
+        .join("");
       const html = `
         <div style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1A1A1A;line-height:1.7">
           <h2 style="color:#2E4D3A;margin:0 0 12px">Nueva inscripción Taller Wim Hof — ${nivelTxt}</h2>
           <p><strong>Participante:</strong> ${insc.nombre} ${insc.apellido}</p>
           <p><strong>Email:</strong> ${insc.email}</p>
           <p><strong>Teléfono:</strong> ${insc.phone}</p>
-          <p><strong>Taller:</strong> ${insc.taller_nombre}</p>
-          <p><strong>Fecha:</strong> ${insc.fecha_evento}</p>
+          <p><strong>Producto:</strong> ${insc.taller_nombre}${isPack ? " (incluye ambos talleres)" : ""}</p>
+          ${isPack
+            ? `<p><strong>Fechas:</strong> ${TALLERES.fundamentos.fechaLarga} y ${TALLERES.avanzado.fechaLarga}</p>`
+            : `<p><strong>Fecha:</strong> ${insc.fecha_evento}</p>`}
           <p><strong>Horario:</strong> ${insc.horario}</p>
           <p><strong>Valor pagado:</strong> $${Number(payment.transaction_amount).toLocaleString("es-CL")} CLP</p>
           <p><strong>Payment ID:</strong> ${paymentIdStr}</p>
-          <p><strong>Cupos restantes:</strong> ${remaining === null || remaining < 0 ? "revisar" : remaining}</p>
+          ${cuposRestantesHtml}
           <p><strong>Fecha de compra:</strong> ${new Date().toLocaleString("es-CL", { timeZone: "America/Santiago" })}</p>
         </div>`;
       const r = await fetch("https://api.resend.com/emails", {

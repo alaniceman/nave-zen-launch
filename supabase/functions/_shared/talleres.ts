@@ -27,6 +27,21 @@ export const TALLERES = {
   },
 } as const;
 
+// Producto combinado (pack) — precio y contenido resueltos SIEMPRE en el servidor.
+export const TALLER_PACK = {
+  nombre: "Pack Talleres Wim Hof — Fundamentales + Avanzado",
+  nombreCorto: "Experiencia completa",
+  precio: 92000,
+  precioNormal: 110000, // 50.000 + 60.000
+  ahorro: 18000,
+  // El ahorro equivale a 30% de descuento sobre el Avanzado ($60.000 -> $42.000)
+  avanzadoConDescuento: 42000,
+  descuentoAvanzadoPct: 30,
+  eventIds: [TALLERES.fundamentos.eventId, TALLERES.avanzado.eventId] as string[],
+  // El correo de encuesta del pack se envía una sola vez, el día después del Avanzado
+  thankYouDateISO: TALLERES.avanzado.thankYouDateISO,
+} as const;
+
 export const TALLER_MAPS_URL = "https://maps.app.goo.gl/4BvC7kC3JpVdQVkFA";
 export const TALLER_DIRECCION = "Nave Studio, Antares 259, Las Condes, Santiago";
 export const TALLER_WHATSAPP_GROUP_URL =

@@ -1,6 +1,13 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 import { getCorsHeaders } from "../_shared/cors.ts";
+import { TALLERES } from "../_shared/talleres.ts";
+
+function contentIdFor(eventId: string): string {
+  if (eventId === TALLERES.avanzado.eventId) return "taller-whm-santiago-avanzado";
+  if (eventId === TALLERES.fundamentos.eventId) return "taller-whm-santiago-fundamentos";
+  return `taller-whm-${eventId}`;
+}
 
 serve(async (req) => {
   const corsHeaders = getCorsHeaders(req);
@@ -42,7 +49,7 @@ serve(async (req) => {
     // Only non-sensitive fields (no PII) — used for client-side conversion tracking
     const { data: insc, error } = await supabase
       .from("taller_inscripciones")
-      .select("id, status, amount, nivel, taller_nombre")
+      .select("id, status, amount, nivel, taller_nombre, product_type, event_id, event_ids, cupo_reserved")
       .eq("id", orderId)
       .maybeSingle();
 
@@ -53,6 +60,13 @@ serve(async (req) => {
       });
     }
 
+    const eventIds: string[] =
+      Array.isArray(insc.event_ids) && insc.event_ids.length > 0
+        ? insc.event_ids
+        : insc.event_id
+        ? [insc.event_id]
+        : [];
+
     return new Response(
       JSON.stringify({
         orderId: insc.id,
@@ -60,6 +74,12 @@ serve(async (req) => {
         amount: insc.amount,
         nivel: insc.nivel,
         tallerNombre: insc.taller_nombre,
+        productType: insc.product_type ?? "single",
+        isPack: (insc.product_type ?? "single") === "pack",
+        eventIds,
+        contentIds: eventIds.map(contentIdFor),
+        numItems: Math.max(1, eventIds.length),
+        cupoReserved: insc.cupo_reserved ?? false,
       }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
