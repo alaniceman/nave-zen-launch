@@ -1448,6 +1448,7 @@ export type Database = {
           discount_amount: number
           email: string
           event_id: string
+          event_ids: string[]
           fecha_evento: string
           horario: string
           id: string
@@ -1461,6 +1462,7 @@ export type Database = {
           original_amount: number | null
           paid_at: string | null
           phone: string
+          product_type: string
           slug: string
           source: string
           status: string
@@ -1477,6 +1479,7 @@ export type Database = {
           discount_amount?: number
           email: string
           event_id: string
+          event_ids?: string[]
           fecha_evento: string
           horario: string
           id?: string
@@ -1490,6 +1493,7 @@ export type Database = {
           original_amount?: number | null
           paid_at?: string | null
           phone: string
+          product_type?: string
           slug?: string
           source?: string
           status?: string
@@ -1506,6 +1510,7 @@ export type Database = {
           discount_amount?: number
           email?: string
           event_id?: string
+          event_ids?: string[]
           fecha_evento?: string
           horario?: string
           id?: string
@@ -1519,6 +1524,7 @@ export type Database = {
           original_amount?: number | null
           paid_at?: string | null
           phone?: string
+          product_type?: string
           slug?: string
           source?: string
           status?: string
@@ -1872,6 +1878,7 @@ export type Database = {
         Returns: boolean
       }
       reserve_event_cupo: { Args: { _event_id: string }; Returns: number }
+      reserve_event_cupos: { Args: { _event_ids: string[] }; Returns: Json }
     }
     Enums: {
       app_role: "admin" | "user"
