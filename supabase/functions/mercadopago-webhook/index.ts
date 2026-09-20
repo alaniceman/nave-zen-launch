@@ -339,9 +339,9 @@ async function sendTallerPurchaseCapi(insc: any, payment: any, orderId: string, 
         contentName: insc.taller_nombre,
         contentType: "product",
         contentCategory: "workshop",
-        // id estable del taller, no de la orden
-        contentIds: [`taller-whm-santiago-${insc.nivel}`],
-        numItems: 1,
+        // ids estables de los talleres incluidos, no de la orden
+        contentIds: inscEventIds(insc).map(tallerContentId),
+        numItems: Math.max(1, inscEventIds(insc).length),
         orderId,
       },
       supabase,
