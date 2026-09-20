@@ -7,10 +7,27 @@ import { sendMetaEvent } from "../_shared/metaCapi.ts";
 import { buildCodePlan, buildCodeGroups } from "../_shared/codeComposition.ts";
 import {
   TALLERES,
+  TALLER_PACK,
   TALLER_MAPS_URL,
   TALLER_WHATSAPP_GROUP_URL,
   tallerKeyFromNivel,
 } from "../_shared/talleres.ts";
+
+/** Eventos incluidos en una inscripción (compatible con filas históricas). */
+function inscEventIds(insc: any): string[] {
+  if (Array.isArray(insc?.event_ids) && insc.event_ids.length > 0) return insc.event_ids;
+  return insc?.event_id ? [insc.event_id] : [];
+}
+
+function isPackInsc(insc: any): boolean {
+  return (insc?.product_type ?? "single") === "pack";
+}
+
+function tallerContentId(eventId: string): string {
+  if (eventId === TALLERES.avanzado.eventId) return "taller-whm-santiago-avanzado";
+  if (eventId === TALLERES.fundamentos.eventId) return "taller-whm-santiago-fundamentos";
+  return `taller-whm-${eventId}`;
+}
 
 /**
  * Contexto de navegador capturado al crear la orden (fbp/fbc/IP/UA/url).
