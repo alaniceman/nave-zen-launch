@@ -182,10 +182,15 @@ const TallerCheckout = () => {
   const contentIds = contentIdsFor(producto);
   const cuposComprometidos = contentIds.length * quantity;
 
-  /** InitiateCheckout al entrar al primer paso válido del checkout (una sola vez por intento). */
+  /**
+   * InitiateCheckout al entrar al primer paso válido del checkout: una sola vez por
+   * intento (rerenders, refresh y StrictMode), y sólo cuando ya conocemos el stock real
+   * y la cantidad quedó validada contra él.
+   */
   const icFired = useRef(false);
   useEffect(() => {
-    if (icFired.current || soldOut) return;
+    if (icFired.current || !cuposLoaded || cuposError || soldOut) return;
+    if (quantity > maxQuantity) return; // esperamos el clamp contra stock real
     const attemptId = getAttemptId(producto);
     const firedKey = `${IC_FIRED_PREFIX}${attemptId}`;
     try {
@@ -199,14 +204,21 @@ const TallerCheckout = () => {
     }
     icFired.current = true;
 
+    const icNumItems = contentIds.length * quantity;
+    const icContents = contentIds.map((id) => ({
+      id,
+      quantity,
+      item_price: unitPrice / contentIds.length,
+    }));
+
     trackMetaClientEvent("InitiateCheckout", {
       eventId: `initiatecheckout-taller-${attemptId}`,
       contentName: productoNombre,
       contentType: "product",
       contentCategory: "workshop",
       contentIds,
-      numItems: contentIds.length,
-      value: unitPrice,
+      numItems: icNumItems,
+      value: subtotal,
       currency: "CLP",
       funnel: "workshop",
       entityType: "taller_checkout",
@@ -215,13 +227,14 @@ const TallerCheckout = () => {
         content_name: productoNombre,
         content_category: "workshop",
         content_ids: contentIds,
-        num_items: contentIds.length,
-        value: unitPrice,
+        contents: icContents,
+        num_items: icNumItems,
+        value: subtotal,
         currency: "CLP",
-      },
+      } as unknown as Record<string, string | number | boolean | string[] | undefined>,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [producto, soldOut]);
+  }, [producto, soldOut, cuposLoaded, cuposError, quantity, maxQuantity]);
 
   const setProducto = (next: SelKey) => {
     if (next === "pack" && appliedCoupon) {
@@ -238,9 +251,12 @@ const TallerCheckout = () => {
   const changeQuantity = (next: number) => {
     const q = Math.min(Math.max(1, Math.round(next)), maxQuantity);
     setQuantity(q);
+    // La cantidad vive también en la URL: recargar o volver atrás no la pierde
+    setParams({ producto, cantidad: String(q) }, { replace: true });
     // El cupón se revalida con el nuevo subtotal
     if (appliedCoupon && !isPack) void revalidateCoupon(appliedCoupon.code, unitPrice * q);
   };
+
 
   const revalidateCoupon = async (code: string, amount: number) => {
     const { data } = await supabase.functions.invoke("validate-coupon", {
