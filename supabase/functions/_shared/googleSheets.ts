@@ -54,3 +54,60 @@ export async function appendToSheet(
   await res.text();
   console.log(`[Google Sheets] Appended ${rows.length} row(s)`);
 }
+
+/** Obtain an access token for the Sheets API using the service account. */
+export async function getSheetsAccessToken(): Promise<string> {
+  const saJson = Deno.env.get("GOOGLE_SERVICE_ACCOUNT_JSON");
+  if (!saJson) throw new Error("Missing GOOGLE_SERVICE_ACCOUNT_JSON");
+
+  const credentials = JSON.parse(saJson);
+  const auth = new GoogleAuth({
+    credentials,
+    scopes: ["https://www.googleapis.com/auth/spreadsheets"],
+  });
+  const client = await auth.getClient();
+  const tokenResponse = await client.getAccessToken();
+  const token = tokenResponse?.token;
+  if (!token) throw new Error("Failed to obtain Google access token");
+  return token;
+}
+
+/**
+ * Replace the contents of a sheet range with `rows` (full rewrite).
+ * Clears the target range first so stale rows never linger.
+ */
+export async function replaceSheetValues(
+  spreadsheetId: string,
+  sheetTitle: string,
+  rows: (string | number)[][],
+  lastColumn = "Z",
+): Promise<void> {
+  const token = await getSheetsAccessToken();
+  const base = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}`;
+  const clearRange = `'${sheetTitle}'!A1:${lastColumn}`;
+
+  const clearRes = await fetch(`${base}/values/${clearRange}:clear`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    body: "{}",
+  });
+  if (!clearRes.ok) {
+    throw new Error(`Google Sheets clear error ${clearRes.status}: ${await clearRes.text()}`);
+  }
+
+  const writeRange = `'${sheetTitle}'!A1`;
+  const writeRes = await fetch(
+    `${base}/values/${writeRange}?valueInputOption=USER_ENTERED`,
+    {
+      method: "PUT",
+      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ values: rows }),
+    },
+  );
+  if (!writeRes.ok) {
+    throw new Error(`Google Sheets update error ${writeRes.status}: ${await writeRes.text()}`);
+  }
+
+  await writeRes.text();
+  console.log(`[Google Sheets] Rewrote '${sheetTitle}' with ${rows.length} row(s)`);
+}
