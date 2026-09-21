@@ -378,39 +378,50 @@ async function handleTallerPayment(
   // Idempotency: already processed
   if (insc.status === "paid" || insc.cupo_reserved) {
     // Reconciliación CAPI únicamente; sin reservar cupo ni reenviar emails.
-    if (insc.status === "paid" && isApproved(payment)) {
+    // Purchase sólo si la orden está pagada Y con cupos reservados.
+    if (insc.status === "paid" && insc.cupo_reserved && isApproved(payment)) {
       await sendTallerPurchaseCapi(insc, payment, orderId, supabase);
     }
     return json("already_processed");
   }
 
-  if (payment.status === "pending" || payment.status === "in_process") {
-    await supabase
+  // Todos los updates de estado van condicionados: nunca degradamos una orden que
+  // otro intento concurrente ya confirmó como pagada/reservada.
+  const updateIfNotConfirmed = (patch: Record<string, unknown>) =>
+    supabase
       .from("taller_inscripciones")
-      .update({ status: "pending", mercado_pago_payment_id: paymentIdStr, mercado_pago_status: payment.status })
-      .eq("id", orderId);
+      .update(patch)
+      .eq("id", orderId)
+      .neq("status", "paid")
+      .eq("cupo_reserved", false);
+
+  if (payment.status === "pending" || payment.status === "in_process") {
+    await updateIfNotConfirmed({
+      status: "pending",
+      mercado_pago_payment_id: paymentIdStr,
+      mercado_pago_status: payment.status,
+    });
     return json("payment_pending");
   }
 
   if (payment.status !== "approved") {
-    await supabase
-      .from("taller_inscripciones")
-      .update({
-        status: payment.status === "cancelled" ? "cancelled" : "failed",
-        mercado_pago_payment_id: paymentIdStr,
-        mercado_pago_status: payment.status,
-      })
-      .eq("id", orderId);
+    await updateIfNotConfirmed({
+      status: payment.status === "cancelled" ? "cancelled" : "failed",
+      mercado_pago_payment_id: paymentIdStr,
+      mercado_pago_status: payment.status,
+    });
     return json("payment_not_approved");
   }
 
   if (Math.abs(payment.transaction_amount - insc.amount) > 1) {
-    await supabase
-      .from("taller_inscripciones")
-      .update({ status: "failed", mercado_pago_payment_id: paymentIdStr, mercado_pago_status: payment.status })
-      .eq("id", orderId);
+    await updateIfNotConfirmed({
+      status: "failed",
+      mercado_pago_payment_id: paymentIdStr,
+      mercado_pago_status: payment.status,
+    });
     return json("amount_mismatch");
   }
+
 
   // Confirmación + reserva de N cupos en CADA evento, en UNA sola transacción
   // (la RPC bloquea la orden y los stocks en orden estable). Idempotente por
