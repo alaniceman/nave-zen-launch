@@ -341,8 +341,10 @@ async function sendTallerPurchaseCapi(insc: any, payment: any, orderId: string, 
         contentCategory: "workshop",
         // ids estables de los talleres incluidos, no de la orden
         contentIds: inscEventIds(insc).map(tallerContentId),
-        numItems: Math.max(1, inscEventIds(insc).length),
+        // Cupos comprometidos: singles N, pack 2N
+        numItems: Math.max(1, inscEventIds(insc).length) * Math.max(1, Number(insc.quantity) || 1),
         orderId,
+        extra: { quantity: Math.max(1, Number(insc.quantity) || 1) },
       },
       supabase,
     });
@@ -410,71 +412,62 @@ async function handleTallerPayment(
     return json("amount_mismatch");
   }
 
-  // Atomic claim: only one webhook run can flip pending -> paid
-  const { data: claimed } = await supabase
-    .from("taller_inscripciones")
-    .update({
-      status: "paid",
-      mercado_pago_payment_id: paymentIdStr,
-      mercado_pago_status: payment.status,
-      paid_at: new Date().toISOString(),
-    })
-    .eq("id", orderId)
-    .in("status", ["pending", "failed", "cancelled"])
-    .select()
-    .maybeSingle();
-
-  if (!claimed) {
-    // Otro webhook ganó el claim: sólo reconciliamos CAPI.
-    if (isApproved(payment)) {
-      await sendTallerPurchaseCapi(insc, payment, orderId, supabase);
-    }
-    return json("already_processed");
-  }
-
-  // Reserva atómica de TODOS los cupos del producto (pack = 2, single = 1).
-  // Todo o nada: nunca se descuenta un cupo parcial.
+  // Confirmación + reserva de N cupos en CADA evento, en UNA sola transacción
+  // (la RPC bloquea la orden y los stocks en orden estable). Idempotente por
+  // orden/payment_id. Nunca marca `paid` sin haber reservado, nunca reserva parcial.
   const eventIds = inscEventIds(insc);
   const isPack = isPackInsc(insc);
+  const quantity = Math.max(1, Number(insc.quantity) || 1);
   const remainingByEvent: Record<string, number | null> = {};
-  let remaining: number | null = null;
   let reserveOk = false;
   let reserveReason = "";
+  let firstTime = false;
 
-  const { data: reserveRes, error: reserveError } = await supabase.rpc("reserve_event_cupos", {
-    _event_ids: eventIds,
+  const { data: confirmRes, error: confirmError } = await supabase.rpc("confirm_taller_payment", {
+    _order_id: orderId,
+    _payment_id: paymentIdStr,
+    _payment_status: payment.status,
+    _paid_amount: Math.round(Number(payment.transaction_amount) || insc.amount),
   });
-  if (reserveError) {
-    console.error("Error reserving cupos:", reserveError);
+
+  if (confirmError) {
+    console.error("Error confirming taller payment:", confirmError);
     reserveReason = "rpc_error";
   } else {
-    const res = reserveRes as any;
+    const res = confirmRes as any;
     reserveOk = res?.ok === true;
     reserveReason = res?.reason ?? "";
+    firstTime = res?.first_time === true;
     if (reserveOk) {
       for (const id of eventIds) {
         const v = res?.remaining?.[id];
         remainingByEvent[id] = typeof v === "number" ? v : null;
       }
-      remaining = remainingByEvent[eventIds[0]] ?? null;
     }
   }
 
-  await supabase
-    .from("taller_inscripciones")
-    .update(
-      reserveOk
-        ? { cupo_reserved: true }
-        : {
-            cupo_reserved: false,
-            status: "needs_review",
-            notification_error: `Pago aprobado sin cupo reservado (${reserveReason || "desconocido"}) — revisar/reembolsar`.slice(0, 500),
-          }
-    )
-    .eq("id", orderId);
+  if (reserveOk && !firstTime) {
+    // Otro intento ya confirmó esta orden: no duplicamos stock ni correos.
+    if (isApproved(payment)) {
+      await sendTallerPurchaseCapi({ ...insc, status: "paid" }, payment, orderId, supabase);
+    }
+    return json("already_processed");
+  }
 
   if (!reserveOk) {
-    // Carrera de stock: no reservamos parcialmente. Alerta administrativa.
+    // Conflicto de stock con pago aprobado: sin reservas parciales y sin
+    // confirmación falsa. Marcamos para revisión y avisamos a administración.
+    await supabase
+      .from("taller_inscripciones")
+      .update({
+        cupo_reserved: false,
+        status: "needs_review",
+        mercado_pago_payment_id: paymentIdStr,
+        mercado_pago_status: payment.status,
+        notification_error: `Pago aprobado sin cupo reservado (${reserveReason || "desconocido"}) — revisar/reembolsar`.slice(0, 500),
+      })
+      .eq("id", orderId);
+
     try {
       const resendKey = Deno.env.get("RESEND_API_KEY");
       if (resendKey) {
@@ -488,6 +481,7 @@ async function handleTallerPayment(
             html: `<div style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;line-height:1.7">
               <h2 style="color:#B42318;margin:0 0 12px">Pago aprobado sin cupo reservado</h2>
               <p><strong>Producto:</strong> ${isPack ? "PACK / AMBOS talleres" : insc.taller_nombre}</p>
+              <p><strong>Cantidad:</strong> ${quantity} persona(s)${isPack ? ` — ${quantity} cupo(s) en cada taller` : ""}</p>
               <p><strong>Participante:</strong> ${insc.nombre} ${insc.apellido} — ${insc.email} — ${insc.phone}</p>
               <p><strong>Orden:</strong> ${orderId}</p>
               <p><strong>Payment ID:</strong> ${paymentIdStr}</p>
@@ -533,10 +527,15 @@ async function handleTallerPayment(
           <p><strong>Email:</strong> ${insc.email}</p>
           <p><strong>Teléfono:</strong> ${insc.phone}</p>
           <p><strong>Producto:</strong> ${insc.taller_nombre}${isPack ? " (incluye ambos talleres)" : ""}</p>
+          <p><strong>Personas:</strong> ${quantity}${isPack ? ` — ${quantity} cupo(s) en Fundamentales y ${quantity} en Avanzado` : ` cupo(s)`}</p>
           ${isPack
             ? `<p><strong>Fechas:</strong> ${TALLERES.fundamentos.fechaLarga} y ${TALLERES.avanzado.fechaLarga}</p>`
             : `<p><strong>Fecha:</strong> ${insc.fecha_evento}</p>`}
           <p><strong>Horario:</strong> ${insc.horario}</p>
+          <p><strong>Valor unitario:</strong> $${Math.round((Number(insc.original_amount) || Number(insc.amount)) / quantity).toLocaleString("es-CL")} CLP</p>
+          ${Number(insc.discount_amount) > 0
+            ? `<p><strong>Descuento:</strong> −$${Number(insc.discount_amount).toLocaleString("es-CL")} CLP${insc.coupon_code ? ` (${insc.coupon_code})` : ""}</p>`
+            : ""}
           <p><strong>Valor pagado:</strong> $${Number(payment.transaction_amount).toLocaleString("es-CL")} CLP</p>
           <p><strong>Payment ID:</strong> ${paymentIdStr}</p>
           ${cuposRestantesHtml}
@@ -589,18 +588,35 @@ async function handleTallerPayment(
           : tallerCfg.fechaLarga;
       const mapsUrl = TALLER_MAPS_URL;
 
+      const cuposTxt = quantity > 1 ? ` — ${quantity} cupos` : "";
       const fechasHtml = isPack
-        ? `<p style="margin:4px 0;font-size:14px;color:#1A1A1A"><strong>📅 ${TALLERES.fundamentos.nombreCorto}:</strong> ${TALLERES.fundamentos.fechaLarga} · ${TALLERES.fundamentos.horario} (${TALLERES.fundamentos.duracion})</p>
-        <p style="margin:4px 0;font-size:14px;color:#1A1A1A"><strong>📅 ${TALLERES.avanzado.nombreCorto}:</strong> ${TALLERES.avanzado.fechaLarga} · ${TALLERES.avanzado.horario} (${TALLERES.avanzado.duracion})</p>`
+        ? `<p style="margin:4px 0;font-size:14px;color:#1A1A1A"><strong>📅 ${TALLERES.fundamentos.nombreCorto}:</strong> ${TALLERES.fundamentos.fechaLarga} · ${TALLERES.fundamentos.horario} (${TALLERES.fundamentos.duracion})${cuposTxt}</p>
+        <p style="margin:4px 0;font-size:14px;color:#1A1A1A"><strong>📅 ${TALLERES.avanzado.nombreCorto}:</strong> ${TALLERES.avanzado.fechaLarga} · ${TALLERES.avanzado.horario} (${TALLERES.avanzado.duracion})${cuposTxt}</p>`
         : `<p style="margin:4px 0;font-size:14px;color:#1A1A1A"><strong>📅 Fecha:</strong> ${fechaLarga}</p>
-        <p style="margin:4px 0;font-size:14px;color:#1A1A1A"><strong>⏰ Horario:</strong> ${insc.horario} (${tallerCfg.duracion})</p>`;
+        <p style="margin:4px 0;font-size:14px;color:#1A1A1A"><strong>⏰ Horario:</strong> ${insc.horario} (${tallerCfg.duracion})</p>
+        <p style="margin:4px 0;font-size:14px;color:#1A1A1A"><strong>👥 Personas:</strong> ${quantity} cupo(s)</p>`;
+
+      const unitario = Math.round((Number(insc.original_amount) || Number(insc.amount)) / quantity);
+      const subtotalMail = (isPack ? TALLER_PACK.precio : unitario) * quantity;
+      const descuentoMail = Number(insc.discount_amount) || 0;
+      const desgloseHtml = `<div style="background:#F8FAFB;border:1px solid #E4E4E7;border-radius:12px;padding:16px 18px;margin:0 0 18px;font-size:14px;color:#3F3F46">
+        <p style="margin:0 0 4px"><strong style="color:#1A1A1A">Detalle de tu compra</strong></p>
+        <p style="margin:0">Producto: ${insc.taller_nombre}</p>
+        <p style="margin:0">Personas: ${quantity}${isPack ? ` (${quantity} cupo(s) en Fundamentales + ${quantity} en Avanzado)` : ""}</p>
+        <p style="margin:0">Valor unitario: $${(isPack ? TALLER_PACK.precio : unitario).toLocaleString("es-CL")} CLP</p>
+        <p style="margin:0">Subtotal: $${subtotalMail.toLocaleString("es-CL")} CLP</p>
+        ${descuentoMail > 0 ? `<p style="margin:0;color:#2E4D3A">Descuento: −$${descuentoMail.toLocaleString("es-CL")} CLP${insc.coupon_code ? ` (${insc.coupon_code})` : ""}</p>` : ""}
+        <p style="margin:4px 0 0"><strong style="color:#1A1A1A">Total pagado: $${Number(payment.transaction_amount).toLocaleString("es-CL")} CLP</strong></p>
+      </div>`;
 
       const packDetalleHtml = isPack
         ? `<div style="background:#FFF8E6;border:1px solid #E7C873;border-radius:12px;padding:16px 18px;margin:0 0 18px">
-        <p style="margin:0 0 6px;font-size:14px;color:#1A1A1A"><strong>Compraste la Experiencia completa</strong> (Fundamentales + Avanzado).</p>
-        <p style="margin:0;font-size:14px;color:#3F3F46">Total $${TALLER_PACK.precio.toLocaleString("es-CL")} CLP en vez de $${TALLER_PACK.precioNormal.toLocaleString("es-CL")} · ahorras $${TALLER_PACK.ahorro.toLocaleString("es-CL")} con ${TALLER_PACK.descuentoAvanzadoPct}% de descuento aplicado al taller Avanzado.</p>
+        <p style="margin:0 0 6px;font-size:14px;color:#1A1A1A"><strong>Compraste la Experiencia completa</strong> (Fundamentales + Avanzado)${quantity > 1 ? ` para ${quantity} personas` : ""}.</p>
+        <p style="margin:0 0 6px;font-size:14px;color:#1A1A1A">Tienes <strong>${quantity} cupo(s) en el taller Fundamentales (sábado 3 de octubre)</strong> y <strong>${quantity} cupo(s) en el taller Avanzado (domingo 4 de octubre)</strong>.</p>
+        <p style="margin:0;font-size:14px;color:#3F3F46">Total $${(TALLER_PACK.precio * quantity).toLocaleString("es-CL")} CLP en vez de $${(TALLER_PACK.precioNormal * quantity).toLocaleString("es-CL")} · ahorras $${(TALLER_PACK.ahorro * quantity).toLocaleString("es-CL")} con ${TALLER_PACK.descuentoAvanzadoPct}% de descuento aplicado al taller Avanzado.</p>
       </div>`
         : "";
+
 
       const progresionHtml = isPack
         ? `<p style="color:#3F3F46;font-size:15px;margin:0 0 14px">Fundamentales te entrega la base técnica para participar en el Avanzado al día siguiente. El desafío del Avanzado no es una prueba de fuerza física: es principalmente mental y requiere foco y disposición a desafiarte. Si al terminar Fundamentales sientes que tu mente está preparada, puedes continuar con el Avanzado.</p>`
@@ -610,14 +626,22 @@ async function handleTallerPayment(
 <body style="margin:0;padding:24px 12px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;background:#F4F4F5;line-height:1.7">
   <div style="max-width:580px;margin:0 auto;background:#ffffff;border-radius:16px;overflow:hidden">
     <div style="background:#2E4D3A;padding:36px 28px;text-align:center;color:#ffffff">
-      <h1 style="margin:0;font-size:22px;font-weight:600">${isPack ? "¡Tus 2 cupos están confirmados!" : "¡Tu cupo está confirmado!"}</h1>
+      <h1 style="margin:0;font-size:22px;font-weight:600">${
+        isPack
+          ? `¡Tus ${quantity * 2} cupos están confirmados!`
+          : quantity > 1
+          ? `¡Tus ${quantity} cupos están confirmados!`
+          : "¡Tu cupo está confirmado!"
+      }</h1>
       <p style="margin:6px 0 0;font-size:14px;opacity:.85">${isPack ? "Talleres Fundamentales + Avanzado" : `Taller ${nivelTxt}`} · Método Wim Hof</p>
     </div>
     <div style="padding:28px">
       <h2 style="font-size:18px;color:#1A1A1A;margin:0 0 12px">Hola ${insc.nombre} 👋</h2>
-      <p style="color:#3F3F46;font-size:15px;margin:0 0 18px">Recibimos tu pago y tu lugar en el <strong>${insc.taller_nombre}</strong> quedó reservado. Prepárate para respirar, entrar al hielo y conectar con tu poder.</p>
+      <p style="color:#3F3F46;font-size:15px;margin:0 0 18px">Recibimos tu pago y ${quantity > 1 ? `tus <strong>${quantity} cupos</strong>` : "tu lugar"} en el <strong>${insc.taller_nombre}</strong> ${quantity > 1 ? "quedaron reservados" : "quedó reservado"}. Prepárate para respirar, entrar al hielo y conectar con tu poder.</p>
 
       ${packDetalleHtml}
+      ${desgloseHtml}
+
 
       <div style="background:#EEF6F1;border:2px solid #2E4D3A;border-radius:12px;padding:20px;margin:0 0 20px">
         <p style="margin:0 0 6px;font-size:13px;letter-spacing:1px;text-transform:uppercase;color:#2E4D3A;font-weight:700">Paso 1 · Entra al grupo de WhatsApp</p>
@@ -652,8 +676,8 @@ async function handleTallerPayment(
           from: "Nave Studio <agenda@studiolanave.com>",
           to: [insc.email],
           subject: isPack
-            ? "Tus 2 cupos están confirmados · Talleres Wim Hof 3 y 4 de octubre"
-            : `Cupo confirmado · Taller ${nivelTxt} Método Wim Hof · ${fechaLarga}`,
+            ? `Tus ${quantity * 2} cupos están confirmados · Talleres Wim Hof 3 y 4 de octubre`
+            : `${quantity > 1 ? `${quantity} cupos confirmados` : "Cupo confirmado"} · Taller ${nivelTxt} Método Wim Hof · ${fechaLarga}`,
           html,
         }),
       });

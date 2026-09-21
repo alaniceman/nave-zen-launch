@@ -1463,6 +1463,7 @@ export type Database = {
           paid_at: string | null
           phone: string
           product_type: string
+          quantity: number
           slug: string
           source: string
           status: string
@@ -1494,6 +1495,7 @@ export type Database = {
           paid_at?: string | null
           phone: string
           product_type?: string
+          quantity?: number
           slug?: string
           source?: string
           status?: string
@@ -1525,6 +1527,7 @@ export type Database = {
           paid_at?: string | null
           phone?: string
           product_type?: string
+          quantity?: number
           slug?: string
           source?: string
           status?: string
@@ -1857,6 +1860,15 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      confirm_taller_payment: {
+        Args: {
+          _order_id: string
+          _paid_amount: number
+          _payment_id: string
+          _payment_status: string
+        }
+        Returns: Json
+      }
       execute_readonly_query: { Args: { query_text: string }; Returns: Json }
       get_active_professionals: {
         Args: never

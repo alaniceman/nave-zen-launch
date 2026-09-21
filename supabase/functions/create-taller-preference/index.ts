@@ -4,8 +4,11 @@ import { getCorsHeaders } from "../_shared/cors.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { TALLERES, TALLER_PACK, type TallerKey } from "../_shared/talleres.ts";
 
+const MAX_QUANTITY = 20;
+
 const schema = z.object({
   taller: z.enum(["fundamentos", "avanzado", "pack"]),
+  quantity: z.number().int().min(1).max(MAX_QUANTITY).optional(),
   nombre: z.string().min(2).max(100),
   apellido: z.string().min(1).max(100),
   email: z.string().email().max(255),
@@ -25,7 +28,22 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const parsed = schema.safeParse(await req.json());
+    const rawBody = await req.json();
+
+    // Cantidad: sólo entero >= 1. Rechazamos fraccionales o 0 explícitamente.
+    if (rawBody?.quantity !== undefined && rawBody?.quantity !== null) {
+      const q = Number(rawBody.quantity);
+      if (!Number.isInteger(q) || q < 1 || q > MAX_QUANTITY) {
+        return new Response(
+          JSON.stringify({
+            error: `La cantidad debe ser un número entero entre 1 y ${MAX_QUANTITY}.`,
+          }),
+          { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+    }
+
+    const parsed = schema.safeParse(rawBody);
     if (!parsed.success) {
       return new Response(
         JSON.stringify({ error: "Datos inválidos", details: parsed.error.flatten().fieldErrors }),
@@ -35,10 +53,12 @@ serve(async (req) => {
     const data = parsed.data;
     const isPack = data.taller === "pack";
     const t = isPack ? null : TALLERES[data.taller as TallerKey];
+    const quantity = data.quantity ?? 1;
 
-    // Precio y talleres incluidos SIEMPRE resueltos en el servidor
+    // Precio, cantidad y talleres incluidos SIEMPRE resueltos en el servidor
     const eventIds = isPack ? [...TALLER_PACK.eventIds] : [t!.eventId];
-    const baseValor = isPack ? TALLER_PACK.precio : t!.valor;
+    const unitPrice = isPack ? TALLER_PACK.precio : t!.valor;
+    const subtotal = unitPrice * quantity;
     const productName = isPack ? TALLER_PACK.nombre : t!.nombre;
 
     const supabase = createClient(
@@ -46,7 +66,7 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
 
-    // Check availability before creating any preference (todos los eventos del producto)
+    // Disponibilidad: se necesitan `quantity` cupos en TODOS los eventos del producto
     const { data: cupos } = await supabase
       .from("event_cupos")
       .select("event_id, cupos_total, cupos_vendidos")
@@ -54,16 +74,21 @@ serve(async (req) => {
 
     for (const eventId of eventIds) {
       const row = (cupos ?? []).find((c) => c.event_id === eventId);
-      if (!row || row.cupos_vendidos >= row.cupos_total) {
+      const disponibles = row ? Math.max(0, row.cupos_total - row.cupos_vendidos) : 0;
+      if (disponibles < quantity) {
         const nivelAgotado =
           eventId === TALLERES.fundamentos.eventId ? "Fundamentales" : "Avanzado";
         return new Response(
           JSON.stringify({
-            error: isPack
-              ? `El taller ${nivelAgotado} ya no tiene cupos, así que el pack no está disponible.`
-              : "Cupos agotados",
-            soldOut: true,
+            error:
+              disponibles <= 0
+                ? isPack
+                  ? `El taller ${nivelAgotado} ya no tiene cupos, así que el pack no está disponible.`
+                  : "Cupos agotados"
+                : `Solo quedan ${disponibles} cupo(s) en ${nivelAgotado}. Ajusta la cantidad.`,
+            soldOut: disponibles <= 0,
             soldOutEventId: eventId,
+            available: disponibles,
           }),
           { status: 409, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
@@ -92,7 +117,7 @@ serve(async (req) => {
         (coupon.valid_from && new Date(coupon.valid_from) > now) ||
         (coupon.valid_until && new Date(coupon.valid_until) < now) ||
         (coupon.max_uses && (coupon.current_uses ?? 0) >= coupon.max_uses) ||
-        (coupon.min_purchase_amount && baseValor < coupon.min_purchase_amount);
+        (coupon.min_purchase_amount && subtotal < coupon.min_purchase_amount);
 
       if (invalid) {
         return new Response(
@@ -103,13 +128,17 @@ serve(async (req) => {
 
       couponId = coupon!.id;
       couponCode = coupon!.code;
+      // Porcentaje: sobre el subtotal (todas las personas).
+      // Monto fijo: se aplica UNA sola vez por orden.
       discountAmount =
         coupon!.discount_type === "percentage"
-          ? Math.round((baseValor * coupon!.discount_value) / 100)
-          : Math.min(coupon!.discount_value, baseValor);
+          ? Math.round((subtotal * coupon!.discount_value) / 100)
+          : Math.min(coupon!.discount_value, subtotal);
     }
 
-    const finalAmount = Math.max(0, baseValor - discountAmount);
+    const finalAmount = Math.max(0, subtotal - discountAmount);
+    const originalAmount = isPack ? TALLER_PACK.precioNormal * quantity : subtotal;
+    const packAhorro = isPack ? TALLER_PACK.ahorro * quantity : 0;
 
     const { data: inscripcion, error: insError } = await supabase
       .from("taller_inscripciones")
@@ -118,6 +147,7 @@ serve(async (req) => {
         event_id: eventIds[0],
         event_ids: eventIds,
         product_type: isPack ? "pack" : "single",
+        quantity,
         nivel: isPack ? "pack" : data.taller,
         taller_nombre: productName,
         nombre: data.nombre.trim(),
@@ -127,8 +157,8 @@ serve(async (req) => {
         fecha_evento: isPack ? TALLERES.fundamentos.fechaISO : t!.fechaISO,
         horario: isPack ? TALLERES.fundamentos.horario : t!.horario,
         amount: finalAmount,
-        original_amount: isPack ? TALLER_PACK.precioNormal : t!.valor,
-        discount_amount: isPack ? TALLER_PACK.ahorro : discountAmount,
+        original_amount: originalAmount,
+        discount_amount: isPack ? packAhorro : discountAmount,
         coupon_id: couponId,
         coupon_code: couponCode,
         status: "pending",
@@ -164,19 +194,35 @@ serve(async (req) => {
     const landing = `${siteUrl}/taller-wim-hof-santiago-fundamentales-avanzado`;
     const phone = sanitizePhone(data.celular);
 
-    const itemTitle = isPack
+    const personasTxt = quantity > 1 ? ` — ${quantity} personas` : "";
+    const baseTitle = isPack
       ? TALLER_PACK.nombre
-      : `${t!.nombre} — ${t!.fechaLarga}${couponCode ? ` (cupón ${couponCode})` : ""}`;
+      : `${t!.nombre} — ${t!.fechaLarga}`;
+
+    // Sin descuento: ítem con cantidad N y precio unitario exacto.
+    // Con descuento: un único ítem con el total explícito para evitar
+    // errores de redondeo en CLP al distribuir el cupón.
+    const items =
+      discountAmount > 0
+        ? [
+            {
+              title: `${baseTitle}${personasTxt} (cupón ${couponCode})`,
+              quantity: 1,
+              unit_price: finalAmount,
+              currency_id: "CLP",
+            },
+          ]
+        : [
+            {
+              title: `${baseTitle}${personasTxt}`,
+              quantity,
+              unit_price: unitPrice,
+              currency_id: "CLP",
+            },
+          ];
 
     const preferenceData = {
-      items: [
-        {
-          title: itemTitle,
-          quantity: 1,
-          unit_price: finalAmount,
-          currency_id: "CLP",
-        },
-      ],
+      items,
       payer: {
         name: data.nombre,
         surname: data.apellido,
@@ -220,9 +266,14 @@ serve(async (req) => {
         initPoint: preference.init_point,
         orderId: inscripcion.id,
         amount: finalAmount,
+        unitPrice,
+        subtotal,
+        discountAmount,
+        quantity,
         productType: isPack ? "pack" : "single",
         eventIds,
-        numItems: eventIds.length,
+        // Cupos totales comprometidos: singles N, pack 2N
+        numItems: eventIds.length * quantity,
       }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );

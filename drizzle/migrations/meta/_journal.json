@@ -29,6 +29,13 @@
       "when": 1789917652474,
       "tag": "0003_taller_pack_product",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1790008212030,
+      "tag": "0004_taller_quantity_and_atomic_confirm",
+      "breakpoints": true
     }
   ]
 }

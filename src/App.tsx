@@ -80,6 +80,7 @@ const FotosWorkshopBuda = lazy(() => import("./pages/FotosWorkshopBuda"));
 const FotosTallerWimHofSantiago = lazy(() => import("./pages/FotosTallerWimHofSantiago"));
 const ReglasNaveStudio = lazy(() => import("./pages/ReglasNaveStudio"));
 const TallerSantiago = lazy(() => import("./pages/TallerSantiago"));
+const TallerCheckout = lazy(() => import("./pages/TallerCheckout"));
 const TalleresYRetiros = lazy(() => import("./pages/TalleresYRetiros"));
 const Tienda = lazy(() => import("./pages/Tienda"));
 const TiendaSuccess = lazy(() => import("./pages/TiendaSuccess"));
@@ -283,6 +284,7 @@ const App = () => {
             {/* Redirect legacy routes */}
             <Route path="/planes" element={<Navigate to="/planes-precios" replace />} />
             <Route path="/taller-wim-hof-santiago-fundamentales-avanzado" element={<TallerSantiago />} />
+            <Route path="/checkout" element={<TallerCheckout />} />
             <Route path="/talleres-y-retiros" element={<TalleresYRetiros />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
