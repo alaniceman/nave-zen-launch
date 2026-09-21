@@ -98,6 +98,9 @@ const TallerCheckout = () => {
     fundamentos: { total: TALLERES.fundamentos.cupos, vendidos: 0 },
     avanzado: { total: TALLERES.avanzado.cupos, vendidos: 0 },
   });
+  // Nunca inventamos disponibilidad: hasta cargar (o si falla) no asumimos stock.
+  const [cuposLoaded, setCuposLoaded] = useState(false);
+  const [cuposError, setCuposError] = useState(false);
 
   // Persistimos los datos para no perderlos al cambiar de producto o volver atrás
   useEffect(() => {
@@ -110,11 +113,15 @@ const TallerCheckout = () => {
 
   useEffect(() => {
     (async () => {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("event_cupos")
         .select("event_id, cupos_total, cupos_vendidos")
         .in("event_id", [TALLERES.fundamentos.eventId, TALLERES.avanzado.eventId]);
-      if (!data) return;
+      if (error || !data || data.length === 0) {
+        console.error("No pudimos cargar los cupos del taller:", error);
+        setCuposError(true);
+        return;
+      }
       setCupos((prev) => {
         const next = { ...prev };
         for (const row of data) {
@@ -126,6 +133,8 @@ const TallerCheckout = () => {
         }
         return next;
       });
+      setCuposError(false);
+      setCuposLoaded(true);
     })();
   }, []);
 
@@ -141,16 +150,32 @@ const TallerCheckout = () => {
       ? "Avanzado"
       : null;
 
-  const maxQuantity = Math.max(
-    1,
-    Math.min(TALLER_MAX_QUANTITY, isPack ? packDisponibles : disponibles(producto as TallerKey))
-  );
-  const soldOut = isPack ? packDisponibles <= 0 : disponibles(producto as TallerKey) <= 0;
+  const maxQuantity = cuposLoaded
+    ? Math.max(
+        1,
+        Math.min(TALLER_MAX_QUANTITY, isPack ? packDisponibles : disponibles(producto as TallerKey))
+      )
+    : TALLER_MAX_QUANTITY; // sin datos reales no afirmamos un máximo de cupos
+  const soldOut = cuposLoaded
+    ? isPack
+      ? packDisponibles <= 0
+      : disponibles(producto as TallerKey) <= 0
+    : false;
 
-  // Nunca permitimos una cantidad mayor al stock real
+  // Nunca permitimos una cantidad mayor al stock real (y la URL refleja la cantidad)
   useEffect(() => {
-    setQuantity((q) => Math.min(Math.max(1, q), maxQuantity));
-  }, [maxQuantity]);
+    if (!cuposLoaded) return;
+    setQuantity((q) => {
+      const clamped = Math.min(Math.max(1, q), maxQuantity);
+      if (clamped !== q) {
+        setParams({ producto, cantidad: String(clamped) }, { replace: true });
+      }
+      return clamped;
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [maxQuantity, cuposLoaded, producto]);
+
+
 
   const unitPrice = isPack ? PACK.precio : TALLERES[producto as TallerKey].valor;
   const subtotal = unitPrice * quantity;
@@ -167,10 +192,15 @@ const TallerCheckout = () => {
   const contentIds = contentIdsFor(producto);
   const cuposComprometidos = contentIds.length * quantity;
 
-  /** InitiateCheckout al entrar al primer paso válido del checkout (una sola vez por intento). */
+  /**
+   * InitiateCheckout al entrar al primer paso válido del checkout: una sola vez por
+   * intento (rerenders, refresh y StrictMode), y sólo cuando ya conocemos el stock real
+   * y la cantidad quedó validada contra él.
+   */
   const icFired = useRef(false);
   useEffect(() => {
-    if (icFired.current || soldOut) return;
+    if (icFired.current || !cuposLoaded || cuposError || soldOut) return;
+    if (quantity > maxQuantity) return; // esperamos el clamp contra stock real
     const attemptId = getAttemptId(producto);
     const firedKey = `${IC_FIRED_PREFIX}${attemptId}`;
     try {
@@ -184,14 +214,21 @@ const TallerCheckout = () => {
     }
     icFired.current = true;
 
+    const icNumItems = contentIds.length * quantity;
+    const icContents = contentIds.map((id) => ({
+      id,
+      quantity,
+      item_price: unitPrice / contentIds.length,
+    }));
+
     trackMetaClientEvent("InitiateCheckout", {
       eventId: `initiatecheckout-taller-${attemptId}`,
       contentName: productoNombre,
       contentType: "product",
       contentCategory: "workshop",
       contentIds,
-      numItems: contentIds.length,
-      value: unitPrice,
+      numItems: icNumItems,
+      value: subtotal,
       currency: "CLP",
       funnel: "workshop",
       entityType: "taller_checkout",
@@ -200,13 +237,14 @@ const TallerCheckout = () => {
         content_name: productoNombre,
         content_category: "workshop",
         content_ids: contentIds,
-        num_items: contentIds.length,
-        value: unitPrice,
+        contents: icContents,
+        num_items: icNumItems,
+        value: subtotal,
         currency: "CLP",
-      },
+      } as unknown as Record<string, string | number | boolean | string[] | undefined>,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [producto, soldOut]);
+  }, [producto, soldOut, cuposLoaded, cuposError, quantity, maxQuantity]);
 
   const setProducto = (next: SelKey) => {
     if (next === "pack" && appliedCoupon) {
@@ -223,9 +261,12 @@ const TallerCheckout = () => {
   const changeQuantity = (next: number) => {
     const q = Math.min(Math.max(1, Math.round(next)), maxQuantity);
     setQuantity(q);
+    // La cantidad vive también en la URL: recargar o volver atrás no la pierde
+    setParams({ producto, cantidad: String(q) }, { replace: true });
     // El cupón se revalida con el nuevo subtotal
     if (appliedCoupon && !isPack) void revalidateCoupon(appliedCoupon.code, unitPrice * q);
   };
+
 
   const revalidateCoupon = async (code: string, amount: number) => {
     const { data } = await supabase.functions.invoke("validate-coupon", {
@@ -452,8 +493,11 @@ const TallerCheckout = () => {
                   <Plus className="w-4 h-4" />
                 </Button>
                 <span className="text-xs text-muted-foreground">
-                  Máximo {maxQuantity} según cupos disponibles
+                  {cuposLoaded
+                    ? `Máximo ${maxQuantity} según cupos disponibles`
+                    : "Confirmamos los cupos disponibles antes del pago"}
                 </span>
+
               </div>
               <p className="text-xs text-muted-foreground">
                 {isPack

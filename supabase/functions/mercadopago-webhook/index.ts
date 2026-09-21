@@ -378,39 +378,50 @@ async function handleTallerPayment(
   // Idempotency: already processed
   if (insc.status === "paid" || insc.cupo_reserved) {
     // Reconciliación CAPI únicamente; sin reservar cupo ni reenviar emails.
-    if (insc.status === "paid" && isApproved(payment)) {
+    // Purchase sólo si la orden está pagada Y con cupos reservados.
+    if (insc.status === "paid" && insc.cupo_reserved && isApproved(payment)) {
       await sendTallerPurchaseCapi(insc, payment, orderId, supabase);
     }
     return json("already_processed");
   }
 
-  if (payment.status === "pending" || payment.status === "in_process") {
-    await supabase
+  // Todos los updates de estado van condicionados: nunca degradamos una orden que
+  // otro intento concurrente ya confirmó como pagada/reservada.
+  const updateIfNotConfirmed = (patch: Record<string, unknown>) =>
+    supabase
       .from("taller_inscripciones")
-      .update({ status: "pending", mercado_pago_payment_id: paymentIdStr, mercado_pago_status: payment.status })
-      .eq("id", orderId);
+      .update(patch)
+      .eq("id", orderId)
+      .neq("status", "paid")
+      .eq("cupo_reserved", false);
+
+  if (payment.status === "pending" || payment.status === "in_process") {
+    await updateIfNotConfirmed({
+      status: "pending",
+      mercado_pago_payment_id: paymentIdStr,
+      mercado_pago_status: payment.status,
+    });
     return json("payment_pending");
   }
 
   if (payment.status !== "approved") {
-    await supabase
-      .from("taller_inscripciones")
-      .update({
-        status: payment.status === "cancelled" ? "cancelled" : "failed",
-        mercado_pago_payment_id: paymentIdStr,
-        mercado_pago_status: payment.status,
-      })
-      .eq("id", orderId);
+    await updateIfNotConfirmed({
+      status: payment.status === "cancelled" ? "cancelled" : "failed",
+      mercado_pago_payment_id: paymentIdStr,
+      mercado_pago_status: payment.status,
+    });
     return json("payment_not_approved");
   }
 
   if (Math.abs(payment.transaction_amount - insc.amount) > 1) {
-    await supabase
-      .from("taller_inscripciones")
-      .update({ status: "failed", mercado_pago_payment_id: paymentIdStr, mercado_pago_status: payment.status })
-      .eq("id", orderId);
+    await updateIfNotConfirmed({
+      status: "failed",
+      mercado_pago_payment_id: paymentIdStr,
+      mercado_pago_status: payment.status,
+    });
     return json("amount_mismatch");
   }
+
 
   // Confirmación + reserva de N cupos en CADA evento, en UNA sola transacción
   // (la RPC bloquea la orden y los stocks en orden estable). Idempotente por
@@ -431,9 +442,17 @@ async function handleTallerPayment(
   });
 
   if (confirmError) {
-    console.error("Error confirming taller payment:", confirmError);
-    reserveReason = "rpc_error";
-  } else {
+    // Error técnico (timeout / red): la transacción pudo haber COMMITEADO igual.
+    // No tocamos la orden ni afirmamos que no se reservaron cupos: devolvemos 500
+    // para que Mercado Pago reintente; la RPC es idempotente.
+    console.error("Error confirming taller payment (retryable):", confirmError);
+    return new Response(
+      JSON.stringify({ status: "taller_confirm_retry", error: "confirm_rpc_unavailable" }),
+      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    );
+  }
+
+  {
     const res = confirmRes as any;
     reserveOk = res?.ok === true;
     reserveReason = res?.reason ?? "";
@@ -449,24 +468,27 @@ async function handleTallerPayment(
   if (reserveOk && !firstTime) {
     // Otro intento ya confirmó esta orden: no duplicamos stock ni correos.
     if (isApproved(payment)) {
-      await sendTallerPurchaseCapi({ ...insc, status: "paid" }, payment, orderId, supabase);
+      await sendTallerPurchaseCapi({ ...insc, status: "paid", cupo_reserved: true }, payment, orderId, supabase);
     }
     return json("already_processed");
   }
 
   if (!reserveOk) {
-    // Conflicto de stock con pago aprobado: sin reservas parciales y sin
-    // confirmación falsa. Marcamos para revisión y avisamos a administración.
+    // Conflicto de stock resuelto por la RPC (su estado es autoritativo: no
+    // reservó nada ni marcó `paid`). Marcamos para revisión sólo si la orden
+    // sigue sin confirmar, para no degradar una confirmación concurrente.
     await supabase
       .from("taller_inscripciones")
       .update({
-        cupo_reserved: false,
         status: "needs_review",
         mercado_pago_payment_id: paymentIdStr,
         mercado_pago_status: payment.status,
         notification_error: `Pago aprobado sin cupo reservado (${reserveReason || "desconocido"}) — revisar/reembolsar`.slice(0, 500),
       })
-      .eq("id", orderId);
+      .eq("id", orderId)
+      .neq("status", "paid")
+      .eq("cupo_reserved", false);
+
 
     try {
       const resendKey = Deno.env.get("RESEND_API_KEY");
@@ -596,18 +618,24 @@ async function handleTallerPayment(
         <p style="margin:4px 0;font-size:14px;color:#1A1A1A"><strong>⏰ Horario:</strong> ${insc.horario} (${tallerCfg.duracion})</p>
         <p style="margin:4px 0;font-size:14px;color:#1A1A1A"><strong>👥 Personas:</strong> ${quantity} cupo(s)</p>`;
 
-      const unitario = Math.round((Number(insc.original_amount) || Number(insc.amount)) / quantity);
-      const subtotalMail = (isPack ? TALLER_PACK.precio : unitario) * quantity;
-      const descuentoMail = Number(insc.discount_amount) || 0;
+      // Pack: el precio ya trae el descuento aplicado, así que el subtotal es el
+      // precio de pack (nunca restamos el ahorro otra vez). Singles: subtotal a
+      // valor de lista y el descuento del cupón se muestra aparte.
+      const unitario = isPack
+        ? TALLER_PACK.precio
+        : Math.round((Number(insc.original_amount) || Number(insc.amount)) / quantity);
+      const subtotalMail = unitario * quantity;
+      const descuentoMail = isPack ? 0 : Number(insc.discount_amount) || 0;
       const desgloseHtml = `<div style="background:#F8FAFB;border:1px solid #E4E4E7;border-radius:12px;padding:16px 18px;margin:0 0 18px;font-size:14px;color:#3F3F46">
         <p style="margin:0 0 4px"><strong style="color:#1A1A1A">Detalle de tu compra</strong></p>
         <p style="margin:0">Producto: ${insc.taller_nombre}</p>
         <p style="margin:0">Personas: ${quantity}${isPack ? ` (${quantity} cupo(s) en Fundamentales + ${quantity} en Avanzado)` : ""}</p>
-        <p style="margin:0">Valor unitario: $${(isPack ? TALLER_PACK.precio : unitario).toLocaleString("es-CL")} CLP</p>
+        <p style="margin:0">Valor unitario: $${unitario.toLocaleString("es-CL")} CLP</p>
         <p style="margin:0">Subtotal: $${subtotalMail.toLocaleString("es-CL")} CLP</p>
         ${descuentoMail > 0 ? `<p style="margin:0;color:#2E4D3A">Descuento: −$${descuentoMail.toLocaleString("es-CL")} CLP${insc.coupon_code ? ` (${insc.coupon_code})` : ""}</p>` : ""}
         <p style="margin:4px 0 0"><strong style="color:#1A1A1A">Total pagado: $${Number(payment.transaction_amount).toLocaleString("es-CL")} CLP</strong></p>
       </div>`;
+
 
       const packDetalleHtml = isPack
         ? `<div style="background:#FFF8E6;border:1px solid #E7C873;border-radius:12px;padding:16px 18px;margin:0 0 18px">
