@@ -34,3 +34,13 @@ Producto combinado (pack) «Experiencia completa · Fundamentales + Avanzado»:
 - Un solo correo de confirmación para el pack: asunto «Tus 2 cupos están confirmados · Talleres Wim Hof 3 y 4 de octubre», con ambas fechas, total/ahorro y Paso 1 de WhatsApp.
 - Encuesta: los packs reciben una sola, el día posterior al Avanzado (5 de octubre); los individuales el día siguiente a su taller.
 - Métricas: una sola compra de $92.000 con num_items 2 y content_ids de ambos talleres (`get-taller-status` devuelve productType/isPack/contentIds/numItems).
+
+Checkout en página propia + cantidades (reemplaza el modal):
+- Ruta `/checkout?producto=fundamentos|avanzado|pack&cantidad=N` (`src/pages/TallerCheckout.tsx`); los CTA de la landing navegan ahí. Config client-side compartida en `src/lib/talleres.ts`. Solo talleres: no migrar otros productos.
+- Datos del comprador se guardan en sessionStorage (`taller_checkout_form`) para no perderlos al cambiar de producto o volver.
+- `taller_inscripciones.quantity` (NOT NULL DEFAULT 1, CHECK 1-50). Pack cantidad N = N personas = N cupos en CADA taller (92.000*N); singles 50.000/60.000*N. Máximo 20 y limitado por stock real.
+- Precio/total siempre resuelto en el servidor (`create-taller-preference`): rechaza cantidades no enteras, <1, >20 o mayores al stock; el pack ignora cupones; con cupón el ítem de MP va como total explícito.
+- Confirmación y reserva: RPC `confirm_taller_payment` (SECURITY DEFINER, solo service_role) bloquea la orden y los stocks en orden estable, descuenta N por evento en una transacción, idempotente por orden/payment_id, nunca `paid` sin reservar ni reservas parciales; conflicto con pago aprobado → `needs_review` + alerta. `reserve_event_cupo(s)` también quedaron sin acceso para anon/authenticated/PUBLIC.
+- Correos (comprador y admin) muestran personas/cupos, unitario, subtotal, descuento y total; pack N dice explícitamente N cupos en cada fecha y es un solo correo.
+- InitiateCheckout se emite al entrar a `/checkout` (Pixel + CAPI, event_id `initiatecheckout-taller-<attemptId>` con attemptId en sessionStorage, sin duplicados en rerender/refresh/StrictMode). Ya no se emite al crear la preferencia. Purchase sigue emitiéndose solo tras pago verificado, con `numItems` y `contents` autoritativos de `get-taller-status`.
+- `/admin/talleres` muestra cupos por orden (pack = N × 2) y KPIs de cupos, no cuenta una orden de N como una persona.
