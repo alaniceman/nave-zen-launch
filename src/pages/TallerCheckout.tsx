@@ -150,21 +150,31 @@ const TallerCheckout = () => {
       ? "Avanzado"
       : null;
 
-  const maxQuantity = Math.max(
-    1,
-    Math.min(TALLER_MAX_QUANTITY, isPack ? packDisponibles : disponibles(producto as TallerKey))
-  );
+  const maxQuantity = cuposLoaded
+    ? Math.max(
+        1,
+        Math.min(TALLER_MAX_QUANTITY, isPack ? packDisponibles : disponibles(producto as TallerKey))
+      )
+    : TALLER_MAX_QUANTITY; // sin datos reales no afirmamos un máximo de cupos
   const soldOut = cuposLoaded
     ? isPack
       ? packDisponibles <= 0
       : disponibles(producto as TallerKey) <= 0
     : false;
 
-  // Nunca permitimos una cantidad mayor al stock real
+  // Nunca permitimos una cantidad mayor al stock real (y la URL refleja la cantidad)
   useEffect(() => {
     if (!cuposLoaded) return;
-    setQuantity((q) => Math.min(Math.max(1, q), maxQuantity));
-  }, [maxQuantity, cuposLoaded]);
+    setQuantity((q) => {
+      const clamped = Math.min(Math.max(1, q), maxQuantity);
+      if (clamped !== q) {
+        setParams({ producto, cantidad: String(clamped) }, { replace: true });
+      }
+      return clamped;
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [maxQuantity, cuposLoaded, producto]);
+
 
 
   const unitPrice = isPack ? PACK.precio : TALLERES[producto as TallerKey].valor;
