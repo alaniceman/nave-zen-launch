@@ -626,14 +626,22 @@ async function handleTallerPayment(
 <body style="margin:0;padding:24px 12px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;background:#F4F4F5;line-height:1.7">
   <div style="max-width:580px;margin:0 auto;background:#ffffff;border-radius:16px;overflow:hidden">
     <div style="background:#2E4D3A;padding:36px 28px;text-align:center;color:#ffffff">
-      <h1 style="margin:0;font-size:22px;font-weight:600">${isPack ? "¡Tus 2 cupos están confirmados!" : "¡Tu cupo está confirmado!"}</h1>
+      <h1 style="margin:0;font-size:22px;font-weight:600">${
+        isPack
+          ? `¡Tus ${quantity * 2} cupos están confirmados!`
+          : quantity > 1
+          ? `¡Tus ${quantity} cupos están confirmados!`
+          : "¡Tu cupo está confirmado!"
+      }</h1>
       <p style="margin:6px 0 0;font-size:14px;opacity:.85">${isPack ? "Talleres Fundamentales + Avanzado" : `Taller ${nivelTxt}`} · Método Wim Hof</p>
     </div>
     <div style="padding:28px">
       <h2 style="font-size:18px;color:#1A1A1A;margin:0 0 12px">Hola ${insc.nombre} 👋</h2>
-      <p style="color:#3F3F46;font-size:15px;margin:0 0 18px">Recibimos tu pago y tu lugar en el <strong>${insc.taller_nombre}</strong> quedó reservado. Prepárate para respirar, entrar al hielo y conectar con tu poder.</p>
+      <p style="color:#3F3F46;font-size:15px;margin:0 0 18px">Recibimos tu pago y ${quantity > 1 ? `tus <strong>${quantity} cupos</strong>` : "tu lugar"} en el <strong>${insc.taller_nombre}</strong> ${quantity > 1 ? "quedaron reservados" : "quedó reservado"}. Prepárate para respirar, entrar al hielo y conectar con tu poder.</p>
 
       ${packDetalleHtml}
+      ${desgloseHtml}
+
 
       <div style="background:#EEF6F1;border:2px solid #2E4D3A;border-radius:12px;padding:20px;margin:0 0 20px">
         <p style="margin:0 0 6px;font-size:13px;letter-spacing:1px;text-transform:uppercase;color:#2E4D3A;font-weight:700">Paso 1 · Entra al grupo de WhatsApp</p>
