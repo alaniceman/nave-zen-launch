@@ -49,7 +49,7 @@ serve(async (req) => {
     // Only non-sensitive fields (no PII) — used for client-side conversion tracking
     const { data: insc, error } = await supabase
       .from("taller_inscripciones")
-      .select("id, status, amount, nivel, taller_nombre, product_type, event_id, event_ids, cupo_reserved")
+      .select("id, status, amount, nivel, taller_nombre, product_type, quantity, event_id, event_ids, cupo_reserved")
       .eq("id", orderId)
       .maybeSingle();
 
@@ -67,6 +67,8 @@ serve(async (req) => {
         ? [insc.event_id]
         : [];
 
+    const qty = Math.max(1, Number(insc.quantity) || 1);
+
     return new Response(
       JSON.stringify({
         orderId: insc.id,
@@ -77,8 +79,12 @@ serve(async (req) => {
         productType: insc.product_type ?? "single",
         isPack: (insc.product_type ?? "single") === "pack",
         eventIds,
+        quantity: qty,
         contentIds: eventIds.map(contentIdFor),
-        numItems: Math.max(1, eventIds.length),
+        // Cantidades autoritativas por taller (N cupos en cada evento)
+        contents: eventIds.map((id) => ({ id: contentIdFor(id), quantity: qty })),
+        // Cupos comprometidos: singles N, pack 2N
+        numItems: Math.max(1, eventIds.length) * qty,
         cupoReserved: insc.cupo_reserved ?? false,
       }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
