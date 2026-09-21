@@ -15,11 +15,17 @@ import {
 import { Download, Loader2, Search } from "lucide-react";
 import EventCuposManager from "@/components/admin/EventCuposManager";
 
+/** Cupos reales de una orden: pack = N personas × 2 talleres. */
+const cuposDeOrden = (r: { quantity: number | null; product_type: string | null }) =>
+  Math.max(1, r.quantity ?? 1) * (r.product_type === "pack" ? 2 : 1);
+
 type Inscripcion = {
   id: string;
   event_id: string;
   nivel: string;
   taller_nombre: string;
+  quantity: number | null;
+  product_type: string | null;
   nombre: string;
   apellido: string;
   email: string;
@@ -127,6 +133,7 @@ export default function AdminTallerInscripciones() {
       "Email",
       "Teléfono",
       "Cupón",
+      "Cupos",
       "Precio original",
       "Descuento",
       "Monto pagado",
@@ -147,6 +154,7 @@ export default function AdminTallerInscripciones() {
       `${r.nombre} ${r.apellido}`,
       r.email,
       r.phone,
+      String(Math.max(1, r.quantity ?? 1)),
       r.coupon_code || "",
       r.original_amount ?? r.amount,
       r.discount_amount,
@@ -252,13 +260,21 @@ export default function AdminTallerInscripciones() {
 
       <div className="grid gap-4 sm:grid-cols-4">
         <Card className="p-4">
-          <p className="text-xs text-muted-foreground">Inscripciones</p>
-          <p className="text-2xl font-bold">{filtered.length}</p>
+          <p className="text-xs text-muted-foreground">Órdenes / cupos</p>
+          <p className="text-2xl font-bold">
+            {filtered.length}
+            <span className="text-base font-normal text-muted-foreground">
+              {" "}
+              / {filtered.reduce((sum, r) => sum + cuposDeOrden(r), 0)}
+            </span>
+          </p>
         </Card>
         <Card className="p-4">
-          <p className="text-xs text-muted-foreground">Pagadas</p>
+          <p className="text-xs text-muted-foreground">Cupos pagados</p>
           <p className="text-2xl font-bold">
-            {filtered.filter((r) => r.status === "paid").length}
+            {filtered
+              .filter((r) => r.status === "paid")
+              .reduce((sum, r) => sum + cuposDeOrden(r), 0)}
           </p>
         </Card>
         <Card className="p-4">
@@ -284,6 +300,7 @@ export default function AdminTallerInscripciones() {
                 <th className="p-3">Fecha</th>
                 <th className="p-3">Taller</th>
                 <th className="p-3">Participante</th>
+                <th className="p-3 text-right">Cupos</th>
                 <th className="p-3">Contacto</th>
                 <th className="p-3 text-right">Monto</th>
                 <th className="p-3">Estado</th>
@@ -306,6 +323,14 @@ export default function AdminTallerInscripciones() {
                     </td>
                     <td className="p-3 font-medium">
                       {r.nombre} {r.apellido}
+                    </td>
+                    <td className="p-3 text-right whitespace-nowrap">
+                      {cuposDeOrden(r)}
+                      {r.product_type === "pack" && (
+                        <div className="text-xs text-muted-foreground">
+                          {Math.max(1, r.quantity ?? 1)} × 2 talleres
+                        </div>
+                      )}
                     </td>
                     <td className="p-3">
                       <div>{r.email}</div>
