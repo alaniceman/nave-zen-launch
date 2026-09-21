@@ -527,10 +527,15 @@ async function handleTallerPayment(
           <p><strong>Email:</strong> ${insc.email}</p>
           <p><strong>Teléfono:</strong> ${insc.phone}</p>
           <p><strong>Producto:</strong> ${insc.taller_nombre}${isPack ? " (incluye ambos talleres)" : ""}</p>
+          <p><strong>Personas:</strong> ${quantity}${isPack ? ` — ${quantity} cupo(s) en Fundamentales y ${quantity} en Avanzado` : ` cupo(s)`}</p>
           ${isPack
             ? `<p><strong>Fechas:</strong> ${TALLERES.fundamentos.fechaLarga} y ${TALLERES.avanzado.fechaLarga}</p>`
             : `<p><strong>Fecha:</strong> ${insc.fecha_evento}</p>`}
           <p><strong>Horario:</strong> ${insc.horario}</p>
+          <p><strong>Valor unitario:</strong> $${Math.round((Number(insc.original_amount) || Number(insc.amount)) / quantity).toLocaleString("es-CL")} CLP</p>
+          ${Number(insc.discount_amount) > 0
+            ? `<p><strong>Descuento:</strong> −$${Number(insc.discount_amount).toLocaleString("es-CL")} CLP${insc.coupon_code ? ` (${insc.coupon_code})` : ""}</p>`
+            : ""}
           <p><strong>Valor pagado:</strong> $${Number(payment.transaction_amount).toLocaleString("es-CL")} CLP</p>
           <p><strong>Payment ID:</strong> ${paymentIdStr}</p>
           ${cuposRestantesHtml}
