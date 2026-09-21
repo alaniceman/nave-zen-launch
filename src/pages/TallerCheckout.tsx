@@ -493,8 +493,11 @@ const TallerCheckout = () => {
                   <Plus className="w-4 h-4" />
                 </Button>
                 <span className="text-xs text-muted-foreground">
-                  Máximo {maxQuantity} según cupos disponibles
+                  {cuposLoaded
+                    ? `Máximo ${maxQuantity} según cupos disponibles`
+                    : "Confirmamos los cupos disponibles antes del pago"}
                 </span>
+
               </div>
               <p className="text-xs text-muted-foreground">
                 {isPack
