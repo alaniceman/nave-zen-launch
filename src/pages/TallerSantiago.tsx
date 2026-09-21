@@ -321,7 +321,17 @@ const TallerSantiago = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!reservaTaller) return;
-    const t = TALLERES[reservaTaller];
+    const isPack = reservaTaller === "pack";
+    const productoNombre = isPack
+      ? PACK.nombre
+      : TALLERES[reservaTaller as TallerKey].nombre;
+    const productoCorto = isPack
+      ? PACK.nombreCorto
+      : TALLERES[reservaTaller as TallerKey].nombreCorto;
+    const contentIds = isPack
+      ? ["taller-whm-santiago-fundamentos", "taller-whm-santiago-avanzado"]
+      : [`taller-whm-santiago-${reservaTaller}`];
+    const numItems = isPack ? 2 : 1;
 
     const nombre = form.nombre.trim();
     const apellido = form.apellido.trim();
@@ -338,10 +348,12 @@ const TallerSantiago = () => {
       return;
     }
 
-    if (isSoldOut(reservaTaller)) {
+    if (isPack ? packSoldOut : isSoldOut(reservaTaller as TallerKey)) {
       toast({
         title: "Cupos agotados",
-        description: "Este taller ya no tiene cupos disponibles. Escríbenos por WhatsApp para la lista de espera.",
+        description: isPack
+          ? `El taller ${packFaltante ?? ""} ya no tiene cupos, así que el pack no está disponible. Escríbenos por WhatsApp.`
+          : "Este taller ya no tiene cupos disponibles. Escríbenos por WhatsApp para la lista de espera.",
         variant: "destructive",
       });
       return;
@@ -357,7 +369,7 @@ const TallerSantiago = () => {
           apellido,
           celular,
           email,
-          couponCode: appliedCoupon?.code ?? null,
+          couponCode: isPack ? null : appliedCoupon?.code ?? null,
           fbp: ctx.fbp,
           fbc: ctx.fbc,
           eventSourceUrl: ctx.eventSourceUrl,
@@ -373,20 +385,21 @@ const TallerSantiago = () => {
         userEmail: email,
         userPhone: celular,
         userName: `${nombre} ${apellido}`.trim(),
-        contentName: t.nombre,
+        contentName: productoNombre,
         contentType: "product",
         contentCategory: "workshop",
-        contentIds: [`taller-whm-santiago-${reservaTaller}`],
-        numItems: 1,
+        contentIds,
+        numItems,
         value: typeof data.amount === "number" ? data.amount : undefined,
         currency: "CLP",
         funnel: "workshop",
         entityType: "taller_inscripcion",
         entityId: data.orderId,
         pixelParams: {
-          content_name: t.nombre,
+          content_name: productoNombre,
           content_category: "workshop",
-          content_ids: [`taller-whm-santiago-${reservaTaller}`],
+          content_ids: contentIds,
+          num_items: numItems,
           value: typeof data.amount === "number" ? data.amount : undefined,
           currency: "CLP",
         },
@@ -397,7 +410,7 @@ const TallerSantiago = () => {
       console.error("Taller checkout error:", err);
       toast({
         title: "No pudimos iniciar el pago",
-        description: `Intenta de nuevo o escríbenos por WhatsApp. (${t.nombreCorto})`,
+        description: `Intenta de nuevo o escríbenos por WhatsApp. (${productoCorto})`,
         variant: "destructive",
       });
       setSubmitting(false);
@@ -409,6 +422,14 @@ const TallerSantiago = () => {
     {
       q: "¿Cuándo es cada taller?",
       a: "Fundamentales es el sábado 3 de octubre y Avanzado el domingo 4 de octubre, ambos de 11:30 a 15:00 (3,5 horas) en Nave Studio, Antares 259, Las Condes.",
+    },
+    {
+      q: "¿Cómo funciona la Experiencia completa (Fundamentales + Avanzado)?",
+      a: "Es un solo pago de $92.000 en vez de $110.000: reservas tu cupo en los dos talleres, el sábado 3 y el domingo 4 de octubre, con un 30% de descuento en el taller Avanzado. Recibes un solo correo con ambas fechas. El precio pack ya incluye el descuento, por lo que no es acumulable con cupones, y solo está disponible mientras haya cupos en los dos talleres.",
+    },
+    {
+      q: "¿Fundamentales me prepara para el Avanzado?",
+      a: PACK_PROGRESION,
     },
     {
       q: "¿Qué es The Snake del taller Avanzado?",
