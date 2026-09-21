@@ -612,14 +612,87 @@ const TallerSantiago = () => {
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="font-heading">
-              Reservar {reservaActual ? reservaActual.nombre : ""}
+              Reservar {esPackReserva ? PACK.nombreCorto : reservaActual ? reservaActual.nombre : ""}
             </DialogTitle>
             <DialogDescription>
-              {reservaActual?.fechaLarga} · {reservaActual?.horario} · {reservaActual?.valorTxt}.
-              Al continuar te llevamos al pago seguro por Mercado Pago.
+              {esPackReserva ? (
+                <>
+                  {TALLERES.fundamentos.fechaLarga} y {TALLERES.avanzado.fechaLarga} ·{" "}
+                  {TALLERES.fundamentos.horario} · {PACK.precioTxt}. Al continuar te
+                  llevamos al pago seguro por Mercado Pago.
+                </>
+              ) : (
+                <>
+                  {reservaActual?.fechaLarga} · {reservaActual?.horario} ·{" "}
+                  {reservaActual?.valorTxt}. Al continuar te llevamos al pago seguro por
+                  Mercado Pago.
+                </>
+              )}
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-4 mt-2">
+            {/* Upsell / cambio de producto */}
+            {!esPackReserva && !packSoldOut && reservaTaller === "fundamentos" && (
+              <div className="rounded-xl border border-primary/30 bg-primary/5 p-4 space-y-2">
+                <p className="text-sm font-medium text-foreground">
+                  Completa la experiencia: agrega Avanzado por {PACK.avanzadoConDescuentoTxt} en
+                  vez de {TALLERES.avanzado.valorTxt}.
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  Ambos por {PACK.precioTxt} · ahorras {PACK.ahorroTxt}.
+                </p>
+                <Button type="button" variant="secondary" className="w-full" onClick={() => switchTo("pack")}>
+                  Agregar Avanzado
+                </Button>
+              </div>
+            )}
+            {!esPackReserva && !packSoldOut && reservaTaller === "avanzado" && (
+              <div className="rounded-xl border border-primary/30 bg-primary/5 p-4 space-y-2">
+                <p className="text-sm font-medium text-foreground">
+                  ¿Quieres hacer el recorrido completo? Cambia al pack Fundamentales + Avanzado
+                  por {PACK.precioTxt}.
+                </p>
+                <p className="text-sm text-muted-foreground">Ahorras {PACK.ahorroTxt}.</p>
+                <Button type="button" variant="secondary" className="w-full" onClick={() => switchTo("pack")}>
+                  Cambiar al pack
+                </Button>
+              </div>
+            )}
+            {esPackReserva && (
+              <div className="rounded-xl border border-primary/30 bg-primary/5 p-4 space-y-2 text-sm">
+                <p className="font-medium text-foreground">
+                  Experiencia completa · Fundamentales + Avanzado
+                </p>
+                <p className="text-muted-foreground">
+                  {TALLERES.fundamentos.fechaLarga}, {TALLERES.fundamentos.horario}
+                  <br />
+                  {TALLERES.avanzado.fechaLarga}, {TALLERES.avanzado.horario}
+                </p>
+                <div className="flex justify-between text-muted-foreground">
+                  <span>Precio normal</span>
+                  <span className="line-through">{PACK.precioNormalTxt}</span>
+                </div>
+                <div className="flex justify-between font-semibold text-foreground">
+                  <span>Total a pagar</span>
+                  <span>{PACK.precioTxt}</span>
+                </div>
+                <p className="text-primary">
+                  Ahorras {PACK.ahorroTxt} · {PACK.descuentoAvanzadoPct}% de descuento en Avanzado
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  El precio pack ya incluye el descuento y no es acumulable con cupones.
+                </p>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="w-full"
+                  onClick={() => switchTo("fundamentos")}
+                >
+                  Volver a comprar un solo taller
+                </Button>
+              </div>
+            )}
             <div className="space-y-2">
               <Label htmlFor="nombre">Nombre</Label>
               <Input id="nombre" value={form.nombre} onChange={(e) => setForm({ ...form, nombre: e.target.value })} maxLength={100} required />
@@ -636,62 +709,64 @@ const TallerSantiago = () => {
               <Label htmlFor="celular">Celular</Label>
               <Input id="celular" type="tel" value={form.celular} onChange={(e) => setForm({ ...form, celular: e.target.value })} placeholder="+56 9 4612 0426" maxLength={30} required />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="cupon">Cupón de descuento (opcional)</Label>
-              <div className="flex gap-2">
-                <Input
-                  id="cupon"
-                  value={couponInput}
-                  onChange={(e) => setCouponInput(e.target.value.replace(/\s/g, "").toUpperCase())}
-                  placeholder="EJ: CRIONAUTAS"
-                  className="font-mono uppercase"
-                  maxLength={30}
-                  disabled={!!appliedCoupon}
-                />
-                {appliedCoupon ? (
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => {
-                      setAppliedCoupon(null);
-                      setCouponInput("");
-                    }}
-                  >
-                    Quitar
-                  </Button>
-                ) : (
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={applyCoupon}
-                    disabled={couponChecking || !couponInput}
-                  >
-                    {couponChecking ? "..." : "Aplicar"}
-                  </Button>
+            {!esPackReserva && (
+              <div className="space-y-2">
+                <Label htmlFor="cupon">Cupón de descuento (opcional)</Label>
+                <div className="flex gap-2">
+                  <Input
+                    id="cupon"
+                    value={couponInput}
+                    onChange={(e) => setCouponInput(e.target.value.replace(/\s/g, "").toUpperCase())}
+                    placeholder="EJ: CRIONAUTAS"
+                    className="font-mono uppercase"
+                    maxLength={30}
+                    disabled={!!appliedCoupon}
+                  />
+                  {appliedCoupon ? (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => {
+                        setAppliedCoupon(null);
+                        setCouponInput("");
+                      }}
+                    >
+                      Quitar
+                    </Button>
+                  ) : (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={applyCoupon}
+                      disabled={couponChecking || !couponInput}
+                    >
+                      {couponChecking ? "..." : "Aplicar"}
+                    </Button>
+                  )}
+                </div>
+                {appliedCoupon && reservaActual && (
+                  <div className="rounded-lg bg-primary/5 border border-primary/20 p-3 text-sm space-y-1">
+                    <div className="flex justify-between text-muted-foreground">
+                      <span>Valor taller</span>
+                      <span className="line-through">${reservaActual.valor.toLocaleString("es-CL")}</span>
+                    </div>
+                    <div className="flex justify-between text-primary">
+                      <span>Cupón {appliedCoupon.code}</span>
+                      <span>-${appliedCoupon.discount.toLocaleString("es-CL")}</span>
+                    </div>
+                    <div className="flex justify-between font-semibold">
+                      <span>Total a pagar</span>
+                      <span>${totalReserva.toLocaleString("es-CL")}</span>
+                    </div>
+                  </div>
                 )}
               </div>
-              {appliedCoupon && reservaActual && (
-                <div className="rounded-lg bg-primary/5 border border-primary/20 p-3 text-sm space-y-1">
-                  <div className="flex justify-between text-muted-foreground">
-                    <span>Valor taller</span>
-                    <span className="line-through">${reservaActual.valor.toLocaleString("es-CL")}</span>
-                  </div>
-                  <div className="flex justify-between text-primary">
-                    <span>Cupón {appliedCoupon.code}</span>
-                    <span>-${appliedCoupon.discount.toLocaleString("es-CL")}</span>
-                  </div>
-                  <div className="flex justify-between font-semibold">
-                    <span>Total a pagar</span>
-                    <span>
-                      ${Math.max(0, reservaActual.valor - appliedCoupon.discount).toLocaleString("es-CL")}
-                    </span>
-                  </div>
-                </div>
-              )}
-            </div>
+            )}
 
             <Button type="submit" size="lg" className="w-full" disabled={submitting}>
-              {submitting ? "Procesando..." : "Continuar al pago"}
+              {submitting
+                ? "Procesando..."
+                : `Continuar al pago · $${totalReserva.toLocaleString("es-CL")}`}
               <ChevronRight className="w-4 h-4 ml-1" />
             </Button>
             <p className="text-xs text-muted-foreground text-center">
@@ -874,6 +949,76 @@ const TallerSantiago = () => {
               );
             })}
           </div>
+
+          {/* Pack: Experiencia completa */}
+          <Card className="mt-8 border-primary/40 bg-primary/5 shadow-md">
+            <CardContent className="p-6 md:p-8">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                <div className="flex-1">
+                  <div className="flex flex-wrap items-center gap-2 mb-3">
+                    <Badge className="bg-primary text-primary-foreground">
+                      {PACK.nombreCorto}
+                    </Badge>
+                    <Badge variant="secondary">
+                      {PACK.descuentoAvanzadoPct}% de descuento en Avanzado
+                    </Badge>
+                    {packSoldOut && (
+                      <Badge variant="destructive">
+                        {packFaltante
+                          ? `${packFaltante} sin cupos`
+                          : "Sin cupos"}
+                      </Badge>
+                    )}
+                  </div>
+                  <h3 className="font-heading text-2xl md:text-3xl text-foreground mb-2">
+                    Fundamentales + Avanzado
+                  </h3>
+                  <div className="grid sm:grid-cols-2 gap-2 text-sm mb-4">
+                    <div className="flex items-center gap-2">
+                      <Calendar className="w-4 h-4 text-primary shrink-0" />
+                      {TALLERES.fundamentos.fecha} · {TALLERES.fundamentos.horario}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Calendar className="w-4 h-4 text-primary shrink-0" />
+                      {TALLERES.avanzado.fecha} · {TALLERES.avanzado.horario}
+                    </div>
+                  </div>
+                  <p className="text-sm text-muted-foreground max-w-xl">{PACK_PROGRESION}</p>
+                </div>
+
+                <div className="md:w-64 shrink-0 md:text-right">
+                  <p className="text-sm text-muted-foreground line-through">
+                    {PACK.precioNormalTxt}
+                  </p>
+                  <p className="font-heading text-4xl text-primary leading-none mb-1">
+                    {PACK.precioTxt}
+                  </p>
+                  <p className="text-sm text-foreground mb-4">
+                    Ahorras {PACK.ahorroTxt}
+                  </p>
+                  <Button
+                    size="lg"
+                    className="w-full"
+                    onClick={() => openReserva("pack")}
+                    disabled={packSoldOut}
+                  >
+                    {packSoldOut
+                      ? `${packFaltante ?? "Un taller"} sin cupos`
+                      : "Reservar ambos talleres"}
+                    {!packSoldOut && <ChevronRight className="w-4 h-4 ml-1" />}
+                  </Button>
+                  {!packSoldOut && (
+                    <p className="text-xs text-muted-foreground mt-2 flex items-center gap-1 md:justify-end">
+                      <Shield className="w-3.5 h-3.5 text-primary" /> {packDisponibles} packs disponibles
+                    </p>
+                  )}
+                  <p className="text-xs text-muted-foreground mt-2">
+                    El precio pack ya incluye el descuento y no es acumulable con cupones.
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </section>
 
