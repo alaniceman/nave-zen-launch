@@ -24,3 +24,13 @@ Reintentos y anti-duplicados del agradecimiento (revisión final):
 - Cabecera `Idempotency-Key: taller-thankyou-<inscripcion_id>` (válida 24h en Resend) para que los reintentos del mismo día no dupliquen; se guarda `resend_email_id` e `idempotency_key` en `taller_thankyou_logs`.
 - `dryRun` es solo lectura: cuenta pagados, por enviar, ya enviados, en vuelo y reintentables; no reclama, no modifica ni envía.
 - Nombre del participante escapado en HTML; saludo neutro «Hola 👋» si no hay nombre. Solo POST (OPTIONS para preflight, GET → 405); errores genéricos, sin detalles sensibles.
+
+Producto combinado (pack) «Experiencia completa · Fundamentales + Avanzado»:
+- `TALLER_PACK` en `_shared/talleres.ts`: $92.000 (normal $110.000, ahorro $18.000 = 30% off sobre el Avanzado), eventIds de ambos talleres. Copia client-side `PACK` en `src/pages/TallerSantiago.tsx`.
+- Sin stock propio: disponibilidad = menor stock entre ambos; si uno se agota, el pack se deshabilita indicando cuál falta.
+- El pack NO es acumulable con cupones: `create-taller-preference` ignora `couponCode` cuando `taller === "pack"` (no basta con ocultar el campo en UI).
+- `taller_inscripciones.product_type` ('single'|'pack') y `event_ids text[]`; RPC `reserve_event_cupos(text[])` descuenta todos los cupos o ninguno (bloqueo `ORDER BY event_id FOR UPDATE`).
+- Si el pago se aprueba y no hay cupo, la orden queda en `needs_review` (sin reservas parciales) y se alerta a lanave@alaniceman.com identificando «PACK / AMBOS».
+- Un solo correo de confirmación para el pack: asunto «Tus 2 cupos están confirmados · Talleres Wim Hof 3 y 4 de octubre», con ambas fechas, total/ahorro y Paso 1 de WhatsApp.
+- Encuesta: los packs reciben una sola, el día posterior al Avanzado (5 de octubre); los individuales el día siguiente a su taller.
+- Métricas: una sola compra de $92.000 con num_items 2 y content_ids de ambos talleres (`get-taller-status` devuelve productType/isPack/contentIds/numItems).
