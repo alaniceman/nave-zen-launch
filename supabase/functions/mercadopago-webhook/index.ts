@@ -676,8 +676,8 @@ async function handleTallerPayment(
           from: "Nave Studio <agenda@studiolanave.com>",
           to: [insc.email],
           subject: isPack
-            ? "Tus 2 cupos están confirmados · Talleres Wim Hof 3 y 4 de octubre"
-            : `Cupo confirmado · Taller ${nivelTxt} Método Wim Hof · ${fechaLarga}`,
+            ? `Tus ${quantity * 2} cupos están confirmados · Talleres Wim Hof 3 y 4 de octubre`
+            : `${quantity > 1 ? `${quantity} cupos confirmados` : "Cupo confirmado"} · Taller ${nivelTxt} Método Wim Hof · ${fechaLarga}`,
           html,
         }),
       });
