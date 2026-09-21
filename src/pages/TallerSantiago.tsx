@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -10,18 +11,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
-import { trackMetaClientEvent } from "@/lib/metaTracking";
-import { deterministicEventId, getMetaBrowserContext } from "@/lib/metaPixel";
 import { toast } from "@/hooks/use-toast";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
 import { trackConversion } from "@/lib/gtagConversions";
@@ -116,9 +106,9 @@ const WHATSAPP_AVANZADO = waUrl(
 
 
 const TallerSantiago = () => {
+  const navigate = useNavigate();
   const { trackEvent } = useFacebookPixel();
   const [reservaTaller, setReservaTaller] = useState<SelKey | null>(null);
-  const [submitting, setSubmitting] = useState(false);
   const [pagoStatus, setPagoStatus] = useState<"approved" | "pending" | "rejected" | null>(() => {
     if (typeof window === "undefined") return null;
     const p = new URLSearchParams(window.location.search).get("pago");
@@ -136,13 +126,6 @@ const TallerSantiago = () => {
     ? TALLERES[pagoNivel as TallerKey].nombreCorto
     : null;
 
-  const [form, setForm] = useState({ nombre: "", apellido: "", celular: "", email: "" });
-  const [couponInput, setCouponInput] = useState("");
-  const [couponChecking, setCouponChecking] = useState(false);
-  const [appliedCoupon, setAppliedCoupon] = useState<{
-    code: string;
-    discount: number;
-  } | null>(null);
   const [cupos, setCupos] = useState<Record<TallerKey, { total: number; vendidos: number }>>({
     fundamentos: { total: 15, vendidos: 0 },
     avanzado: { total: 15, vendidos: 0 },
@@ -261,170 +244,17 @@ const TallerSantiago = () => {
     cuposDisponibles("avanzado")
   );
   const packSoldOut = packDisponibles <= 0;
+  // El checkout vive en su propia página (/checkout), no en un modal.
+  const openReserva = (k: SelKey) => {
+    navigate(`/checkout?producto=${k}&cantidad=1`);
+  };
+
   const packFaltante = isSoldOut("fundamentos")
     ? "Fundamentales"
     : isSoldOut("avanzado")
     ? "Avanzado"
     : null;
 
-  const openReserva = (k: SelKey) => {
-    setReservaTaller(k);
-    setForm({ nombre: "", apellido: "", celular: "", email: "" });
-    setCouponInput("");
-    setAppliedCoupon(null);
-  };
-
-  // Cambia de single a pack (o de vuelta) conservando los datos ya escritos.
-  const switchTo = (k: SelKey) => {
-    if (k === "pack" && appliedCoupon) {
-      setAppliedCoupon(null);
-      setCouponInput("");
-      toast({
-        title: "Quitamos tu cupón",
-        description:
-          "El precio pack ya incluye el descuento y no es acumulable con cupones.",
-      });
-    }
-    setReservaTaller(k);
-  };
-
-  const applyCoupon = async () => {
-    if (!reservaTaller || reservaTaller === "pack") return;
-    const code = couponInput.replace(/\s/g, "").toUpperCase();
-    if (!code) return;
-    const valor = TALLERES[reservaTaller].valor;
-    setCouponChecking(true);
-    try {
-      const { data, error } = await supabase.functions.invoke("validate-coupon", {
-        body: { code, context: "taller", purchaseAmount: valor },
-      });
-      if (error) throw error;
-      if (!data?.valid) {
-        setAppliedCoupon(null);
-        toast({
-          title: "Cupón no válido",
-          description: data?.error || "Revisa el código e intenta de nuevo.",
-          variant: "destructive",
-        });
-        return;
-      }
-      const c = data.coupon;
-      const discount =
-        c.discount_type === "percentage"
-          ? Math.round((valor * c.discount_value) / 100)
-          : Math.min(c.discount_value, valor);
-      setAppliedCoupon({ code: c.code, discount });
-      toast({
-        title: `Cupón ${c.code} aplicado`,
-        description: `Descuento de $${discount.toLocaleString("es-CL")}.`,
-      });
-    } catch (err) {
-      console.error("Coupon validation error:", err);
-      toast({ title: "No pudimos validar el cupón", variant: "destructive" });
-    } finally {
-      setCouponChecking(false);
-    }
-  };
-
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!reservaTaller) return;
-    const isPack = reservaTaller === "pack";
-    const productoNombre = isPack
-      ? PACK.nombre
-      : TALLERES[reservaTaller as TallerKey].nombre;
-    const productoCorto = isPack
-      ? PACK.nombreCorto
-      : TALLERES[reservaTaller as TallerKey].nombreCorto;
-    const contentIds = isPack
-      ? ["taller-whm-santiago-fundamentos", "taller-whm-santiago-avanzado"]
-      : [`taller-whm-santiago-${reservaTaller}`];
-    const numItems = isPack ? 2 : 1;
-
-    const nombre = form.nombre.trim();
-    const apellido = form.apellido.trim();
-    const celular = form.celular.trim();
-    const email = form.email.trim().toLowerCase();
-    const emailOk = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(email);
-
-    if (!nombre || !apellido || !celular || !emailOk) {
-      toast({
-        title: "Revisa tus datos",
-        description: "Necesitamos nombre, apellido, celular y un email válido.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (isPack ? packSoldOut : isSoldOut(reservaTaller as TallerKey)) {
-      toast({
-        title: "Cupos agotados",
-        description: isPack
-          ? `El taller ${packFaltante ?? ""} ya no tiene cupos, así que el pack no está disponible. Escríbenos por WhatsApp.`
-          : "Este taller ya no tiene cupos disponibles. Escríbenos por WhatsApp para la lista de espera.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setSubmitting(true);
-    try {
-      const ctx = getMetaBrowserContext();
-      const { data, error } = await supabase.functions.invoke("create-taller-preference", {
-        body: {
-          taller: reservaTaller,
-          nombre,
-          apellido,
-          celular,
-          email,
-          couponCode: isPack ? null : appliedCoupon?.code ?? null,
-          fbp: ctx.fbp,
-          fbc: ctx.fbc,
-          eventSourceUrl: ctx.eventSourceUrl,
-        },
-      });
-      if (error) throw error;
-      if (!data?.initPoint) throw new Error(data?.error || "No se pudo iniciar el pago");
-
-      // InitiateCheckout: sólo con preferencia creada, con el monto confirmado
-      // por el servidor y content_id estable del taller.
-      trackMetaClientEvent("InitiateCheckout", {
-        eventId: deterministicEventId("initiatecheckout-taller", data.orderId),
-        userEmail: email,
-        userPhone: celular,
-        userName: `${nombre} ${apellido}`.trim(),
-        contentName: productoNombre,
-        contentType: "product",
-        contentCategory: "workshop",
-        contentIds,
-        numItems,
-        value: typeof data.amount === "number" ? data.amount : undefined,
-        currency: "CLP",
-        funnel: "workshop",
-        entityType: "taller_inscripcion",
-        entityId: data.orderId,
-        pixelParams: {
-          content_name: productoNombre,
-          content_category: "workshop",
-          content_ids: contentIds,
-          num_items: numItems,
-          value: typeof data.amount === "number" ? data.amount : undefined,
-          currency: "CLP",
-        },
-      });
-
-      window.location.href = data.initPoint;
-    } catch (err: any) {
-      console.error("Taller checkout error:", err);
-      toast({
-        title: "No pudimos iniciar el pago",
-        description: `Intenta de nuevo o escríbenos por WhatsApp. (${productoCorto})`,
-        variant: "destructive",
-      });
-      setSubmitting(false);
-    }
-  };
 
 
   const faqs = [
@@ -473,15 +303,6 @@ const TallerSantiago = () => {
       a: "Si tienes una condición médica importante, problemas cardiovasculares, epilepsia, embarazo, hipertensión no controlada u otra condición relevante, consulta con tu médico antes de participar y avísanos antes de reservar.",
     },
   ];
-
-  const esPackReserva = reservaTaller === "pack";
-  const reservaActual =
-    reservaTaller && reservaTaller !== "pack" ? TALLERES[reservaTaller] : null;
-  const totalReserva = esPackReserva
-    ? PACK.precio
-    : reservaActual
-    ? Math.max(0, reservaActual.valor - (appliedCoupon?.discount ?? 0))
-    : 0;
 
   const jsonLd = [
     {
@@ -607,174 +428,6 @@ const TallerSantiago = () => {
       )}
 
 
-      {/* Reserva Dialog */}
-      <Dialog open={!!reservaTaller} onOpenChange={(open) => !open && setReservaTaller(null)}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="font-heading">
-              Reservar {esPackReserva ? PACK.nombreCorto : reservaActual ? reservaActual.nombre : ""}
-            </DialogTitle>
-            <DialogDescription>
-              {esPackReserva ? (
-                <>
-                  {TALLERES.fundamentos.fechaLarga} y {TALLERES.avanzado.fechaLarga} ·{" "}
-                  {TALLERES.fundamentos.horario} · {PACK.precioTxt}. Al continuar te
-                  llevamos al pago seguro por Mercado Pago.
-                </>
-              ) : (
-                <>
-                  {reservaActual?.fechaLarga} · {reservaActual?.horario} ·{" "}
-                  {reservaActual?.valorTxt}. Al continuar te llevamos al pago seguro por
-                  Mercado Pago.
-                </>
-              )}
-            </DialogDescription>
-          </DialogHeader>
-          <form onSubmit={handleSubmit} className="space-y-4 mt-2">
-            {/* Upsell / cambio de producto */}
-            {!esPackReserva && !packSoldOut && reservaTaller === "fundamentos" && (
-              <div className="rounded-xl border border-primary/30 bg-primary/5 p-4 space-y-2">
-                <p className="text-sm font-medium text-foreground">
-                  Completa la experiencia: agrega Avanzado por {PACK.avanzadoConDescuentoTxt} en
-                  vez de {TALLERES.avanzado.valorTxt}.
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  Ambos por {PACK.precioTxt} · ahorras {PACK.ahorroTxt}.
-                </p>
-                <Button type="button" variant="secondary" className="w-full" onClick={() => switchTo("pack")}>
-                  Agregar Avanzado
-                </Button>
-              </div>
-            )}
-            {!esPackReserva && !packSoldOut && reservaTaller === "avanzado" && (
-              <div className="rounded-xl border border-primary/30 bg-primary/5 p-4 space-y-2">
-                <p className="text-sm font-medium text-foreground">
-                  ¿Quieres hacer el recorrido completo? Cambia al pack Fundamentales + Avanzado
-                  por {PACK.precioTxt}.
-                </p>
-                <p className="text-sm text-muted-foreground">Ahorras {PACK.ahorroTxt}.</p>
-                <Button type="button" variant="secondary" className="w-full" onClick={() => switchTo("pack")}>
-                  Cambiar al pack
-                </Button>
-              </div>
-            )}
-            {esPackReserva && (
-              <div className="rounded-xl border border-primary/30 bg-primary/5 p-4 space-y-2 text-sm">
-                <p className="font-medium text-foreground">
-                  Experiencia completa · Fundamentales + Avanzado
-                </p>
-                <p className="text-muted-foreground">
-                  {TALLERES.fundamentos.fechaLarga}, {TALLERES.fundamentos.horario}
-                  <br />
-                  {TALLERES.avanzado.fechaLarga}, {TALLERES.avanzado.horario}
-                </p>
-                <div className="flex justify-between text-muted-foreground">
-                  <span>Precio normal</span>
-                  <span className="line-through">{PACK.precioNormalTxt}</span>
-                </div>
-                <div className="flex justify-between font-semibold text-foreground">
-                  <span>Total a pagar</span>
-                  <span>{PACK.precioTxt}</span>
-                </div>
-                <p className="text-primary">
-                  Ahorras {PACK.ahorroTxt} · {PACK.descuentoAvanzadoPct}% de descuento en Avanzado
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  El precio pack ya incluye el descuento y no es acumulable con cupones.
-                </p>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  className="w-full"
-                  onClick={() => switchTo("fundamentos")}
-                >
-                  Volver a comprar un solo taller
-                </Button>
-              </div>
-            )}
-            <div className="space-y-2">
-              <Label htmlFor="nombre">Nombre</Label>
-              <Input id="nombre" value={form.nombre} onChange={(e) => setForm({ ...form, nombre: e.target.value })} maxLength={100} required />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="apellido">Apellido</Label>
-              <Input id="apellido" value={form.apellido} onChange={(e) => setForm({ ...form, apellido: e.target.value })} maxLength={100} required />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} maxLength={255} required />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="celular">Celular</Label>
-              <Input id="celular" type="tel" value={form.celular} onChange={(e) => setForm({ ...form, celular: e.target.value })} placeholder="+56 9 4612 0426" maxLength={30} required />
-            </div>
-            {!esPackReserva && (
-              <div className="space-y-2">
-                <Label htmlFor="cupon">Cupón de descuento (opcional)</Label>
-                <div className="flex gap-2">
-                  <Input
-                    id="cupon"
-                    value={couponInput}
-                    onChange={(e) => setCouponInput(e.target.value.replace(/\s/g, "").toUpperCase())}
-                    placeholder="EJ: CRIONAUTAS"
-                    className="font-mono uppercase"
-                    maxLength={30}
-                    disabled={!!appliedCoupon}
-                  />
-                  {appliedCoupon ? (
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => {
-                        setAppliedCoupon(null);
-                        setCouponInput("");
-                      }}
-                    >
-                      Quitar
-                    </Button>
-                  ) : (
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={applyCoupon}
-                      disabled={couponChecking || !couponInput}
-                    >
-                      {couponChecking ? "..." : "Aplicar"}
-                    </Button>
-                  )}
-                </div>
-                {appliedCoupon && reservaActual && (
-                  <div className="rounded-lg bg-primary/5 border border-primary/20 p-3 text-sm space-y-1">
-                    <div className="flex justify-between text-muted-foreground">
-                      <span>Valor taller</span>
-                      <span className="line-through">${reservaActual.valor.toLocaleString("es-CL")}</span>
-                    </div>
-                    <div className="flex justify-between text-primary">
-                      <span>Cupón {appliedCoupon.code}</span>
-                      <span>-${appliedCoupon.discount.toLocaleString("es-CL")}</span>
-                    </div>
-                    <div className="flex justify-between font-semibold">
-                      <span>Total a pagar</span>
-                      <span>${totalReserva.toLocaleString("es-CL")}</span>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-
-            <Button type="submit" size="lg" className="w-full" disabled={submitting}>
-              {submitting
-                ? "Procesando..."
-                : `Continuar al pago · $${totalReserva.toLocaleString("es-CL")}`}
-              <ChevronRight className="w-4 h-4 ml-1" />
-            </Button>
-            <p className="text-xs text-muted-foreground text-center">
-              Serás redirigido a Mercado Pago para completar tu reserva.
-            </p>
-          </form>
-        </DialogContent>
-      </Dialog>
 
       {/* Hero */}
       <section className="pt-12 pb-12 md:pt-16 md:pb-16 px-4 relative overflow-hidden">
