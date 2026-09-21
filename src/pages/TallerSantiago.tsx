@@ -98,7 +98,7 @@ const PACK = {
 };
 
 const PACK_PROGRESION =
-  "No necesitas experiencia previa para elegir el pack. Fundamentales te entrega la base técnica para participar en Avanzado al día siguiente. El desafío avanzado no es una prueba de fuerza física: es principalmente mental y requiere foco y disposición a desafiarte. Si al terminar Fundamentales sientes que tu mente está preparada, puedes continuar con Avanzado.";
+  "No necesitas experiencia previa para elegir el pack. Fundamentales te entrega la base técnica para participar en Avanzado al día siguiente. El desafío avanzado no es una prueba de fuerza física: es principalmente mental y requiere foco y disposición a desafiarte. Al terminar Fundamentales estarás preparado para el Avanzado.";
 
 const MAPS_URL = "https://maps.app.goo.gl/4BvC7kC3JpVdQVkFA";
 const WHATSAPP_NUMBER = "56946120426";
