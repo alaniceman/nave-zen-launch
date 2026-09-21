@@ -618,18 +618,24 @@ async function handleTallerPayment(
         <p style="margin:4px 0;font-size:14px;color:#1A1A1A"><strong>⏰ Horario:</strong> ${insc.horario} (${tallerCfg.duracion})</p>
         <p style="margin:4px 0;font-size:14px;color:#1A1A1A"><strong>👥 Personas:</strong> ${quantity} cupo(s)</p>`;
 
-      const unitario = Math.round((Number(insc.original_amount) || Number(insc.amount)) / quantity);
-      const subtotalMail = (isPack ? TALLER_PACK.precio : unitario) * quantity;
-      const descuentoMail = Number(insc.discount_amount) || 0;
+      // Pack: el precio ya trae el descuento aplicado, así que el subtotal es el
+      // precio de pack (nunca restamos el ahorro otra vez). Singles: subtotal a
+      // valor de lista y el descuento del cupón se muestra aparte.
+      const unitario = isPack
+        ? TALLER_PACK.precio
+        : Math.round((Number(insc.original_amount) || Number(insc.amount)) / quantity);
+      const subtotalMail = unitario * quantity;
+      const descuentoMail = isPack ? 0 : Number(insc.discount_amount) || 0;
       const desgloseHtml = `<div style="background:#F8FAFB;border:1px solid #E4E4E7;border-radius:12px;padding:16px 18px;margin:0 0 18px;font-size:14px;color:#3F3F46">
         <p style="margin:0 0 4px"><strong style="color:#1A1A1A">Detalle de tu compra</strong></p>
         <p style="margin:0">Producto: ${insc.taller_nombre}</p>
         <p style="margin:0">Personas: ${quantity}${isPack ? ` (${quantity} cupo(s) en Fundamentales + ${quantity} en Avanzado)` : ""}</p>
-        <p style="margin:0">Valor unitario: $${(isPack ? TALLER_PACK.precio : unitario).toLocaleString("es-CL")} CLP</p>
+        <p style="margin:0">Valor unitario: $${unitario.toLocaleString("es-CL")} CLP</p>
         <p style="margin:0">Subtotal: $${subtotalMail.toLocaleString("es-CL")} CLP</p>
         ${descuentoMail > 0 ? `<p style="margin:0;color:#2E4D3A">Descuento: −$${descuentoMail.toLocaleString("es-CL")} CLP${insc.coupon_code ? ` (${insc.coupon_code})` : ""}</p>` : ""}
         <p style="margin:4px 0 0"><strong style="color:#1A1A1A">Total pagado: $${Number(payment.transaction_amount).toLocaleString("es-CL")} CLP</strong></p>
       </div>`;
+
 
       const packDetalleHtml = isPack
         ? `<div style="background:#FFF8E6;border:1px solid #E7C873;border-radius:12px;padding:16px 18px;margin:0 0 18px">
