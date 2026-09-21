@@ -588,18 +588,35 @@ async function handleTallerPayment(
           : tallerCfg.fechaLarga;
       const mapsUrl = TALLER_MAPS_URL;
 
+      const cuposTxt = quantity > 1 ? ` — ${quantity} cupos` : "";
       const fechasHtml = isPack
-        ? `<p style="margin:4px 0;font-size:14px;color:#1A1A1A"><strong>📅 ${TALLERES.fundamentos.nombreCorto}:</strong> ${TALLERES.fundamentos.fechaLarga} · ${TALLERES.fundamentos.horario} (${TALLERES.fundamentos.duracion})</p>
-        <p style="margin:4px 0;font-size:14px;color:#1A1A1A"><strong>📅 ${TALLERES.avanzado.nombreCorto}:</strong> ${TALLERES.avanzado.fechaLarga} · ${TALLERES.avanzado.horario} (${TALLERES.avanzado.duracion})</p>`
+        ? `<p style="margin:4px 0;font-size:14px;color:#1A1A1A"><strong>📅 ${TALLERES.fundamentos.nombreCorto}:</strong> ${TALLERES.fundamentos.fechaLarga} · ${TALLERES.fundamentos.horario} (${TALLERES.fundamentos.duracion})${cuposTxt}</p>
+        <p style="margin:4px 0;font-size:14px;color:#1A1A1A"><strong>📅 ${TALLERES.avanzado.nombreCorto}:</strong> ${TALLERES.avanzado.fechaLarga} · ${TALLERES.avanzado.horario} (${TALLERES.avanzado.duracion})${cuposTxt}</p>`
         : `<p style="margin:4px 0;font-size:14px;color:#1A1A1A"><strong>📅 Fecha:</strong> ${fechaLarga}</p>
-        <p style="margin:4px 0;font-size:14px;color:#1A1A1A"><strong>⏰ Horario:</strong> ${insc.horario} (${tallerCfg.duracion})</p>`;
+        <p style="margin:4px 0;font-size:14px;color:#1A1A1A"><strong>⏰ Horario:</strong> ${insc.horario} (${tallerCfg.duracion})</p>
+        <p style="margin:4px 0;font-size:14px;color:#1A1A1A"><strong>👥 Personas:</strong> ${quantity} cupo(s)</p>`;
+
+      const unitario = Math.round((Number(insc.original_amount) || Number(insc.amount)) / quantity);
+      const subtotalMail = (isPack ? TALLER_PACK.precio : unitario) * quantity;
+      const descuentoMail = Number(insc.discount_amount) || 0;
+      const desgloseHtml = `<div style="background:#F8FAFB;border:1px solid #E4E4E7;border-radius:12px;padding:16px 18px;margin:0 0 18px;font-size:14px;color:#3F3F46">
+        <p style="margin:0 0 4px"><strong style="color:#1A1A1A">Detalle de tu compra</strong></p>
+        <p style="margin:0">Producto: ${insc.taller_nombre}</p>
+        <p style="margin:0">Personas: ${quantity}${isPack ? ` (${quantity} cupo(s) en Fundamentales + ${quantity} en Avanzado)` : ""}</p>
+        <p style="margin:0">Valor unitario: $${(isPack ? TALLER_PACK.precio : unitario).toLocaleString("es-CL")} CLP</p>
+        <p style="margin:0">Subtotal: $${subtotalMail.toLocaleString("es-CL")} CLP</p>
+        ${descuentoMail > 0 ? `<p style="margin:0;color:#2E4D3A">Descuento: −$${descuentoMail.toLocaleString("es-CL")} CLP${insc.coupon_code ? ` (${insc.coupon_code})` : ""}</p>` : ""}
+        <p style="margin:4px 0 0"><strong style="color:#1A1A1A">Total pagado: $${Number(payment.transaction_amount).toLocaleString("es-CL")} CLP</strong></p>
+      </div>`;
 
       const packDetalleHtml = isPack
         ? `<div style="background:#FFF8E6;border:1px solid #E7C873;border-radius:12px;padding:16px 18px;margin:0 0 18px">
-        <p style="margin:0 0 6px;font-size:14px;color:#1A1A1A"><strong>Compraste la Experiencia completa</strong> (Fundamentales + Avanzado).</p>
-        <p style="margin:0;font-size:14px;color:#3F3F46">Total $${TALLER_PACK.precio.toLocaleString("es-CL")} CLP en vez de $${TALLER_PACK.precioNormal.toLocaleString("es-CL")} · ahorras $${TALLER_PACK.ahorro.toLocaleString("es-CL")} con ${TALLER_PACK.descuentoAvanzadoPct}% de descuento aplicado al taller Avanzado.</p>
+        <p style="margin:0 0 6px;font-size:14px;color:#1A1A1A"><strong>Compraste la Experiencia completa</strong> (Fundamentales + Avanzado)${quantity > 1 ? ` para ${quantity} personas` : ""}.</p>
+        <p style="margin:0 0 6px;font-size:14px;color:#1A1A1A">Tienes <strong>${quantity} cupo(s) en el taller Fundamentales (sábado 3 de octubre)</strong> y <strong>${quantity} cupo(s) en el taller Avanzado (domingo 4 de octubre)</strong>.</p>
+        <p style="margin:0;font-size:14px;color:#3F3F46">Total $${(TALLER_PACK.precio * quantity).toLocaleString("es-CL")} CLP en vez de $${(TALLER_PACK.precioNormal * quantity).toLocaleString("es-CL")} · ahorras $${(TALLER_PACK.ahorro * quantity).toLocaleString("es-CL")} con ${TALLER_PACK.descuentoAvanzadoPct}% de descuento aplicado al taller Avanzado.</p>
       </div>`
         : "";
+
 
       const progresionHtml = isPack
         ? `<p style="color:#3F3F46;font-size:15px;margin:0 0 14px">Fundamentales te entrega la base técnica para participar en el Avanzado al día siguiente. El desafío del Avanzado no es una prueba de fuerza física: es principalmente mental y requiere foco y disposición a desafiarte. Si al terminar Fundamentales sientes que tu mente está preparada, puedes continuar con el Avanzado.</p>`
