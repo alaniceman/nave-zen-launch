@@ -341,8 +341,10 @@ async function sendTallerPurchaseCapi(insc: any, payment: any, orderId: string, 
         contentCategory: "workshop",
         // ids estables de los talleres incluidos, no de la orden
         contentIds: inscEventIds(insc).map(tallerContentId),
-        numItems: Math.max(1, inscEventIds(insc).length),
+        // Cupos comprometidos: singles N, pack 2N
+        numItems: Math.max(1, inscEventIds(insc).length) * Math.max(1, Number(insc.quantity) || 1),
         orderId,
+        extra: { quantity: Math.max(1, Number(insc.quantity) || 1) },
       },
       supabase,
     });
