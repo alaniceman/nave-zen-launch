@@ -442,9 +442,17 @@ async function handleTallerPayment(
   });
 
   if (confirmError) {
-    console.error("Error confirming taller payment:", confirmError);
-    reserveReason = "rpc_error";
-  } else {
+    // Error técnico (timeout / red): la transacción pudo haber COMMITEADO igual.
+    // No tocamos la orden ni afirmamos que no se reservaron cupos: devolvemos 500
+    // para que Mercado Pago reintente; la RPC es idempotente.
+    console.error("Error confirming taller payment (retryable):", confirmError);
+    return new Response(
+      JSON.stringify({ status: "taller_confirm_retry", error: "confirm_rpc_unavailable" }),
+      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    );
+  }
+
+  {
     const res = confirmRes as any;
     reserveOk = res?.ok === true;
     reserveReason = res?.reason ?? "";
@@ -460,24 +468,27 @@ async function handleTallerPayment(
   if (reserveOk && !firstTime) {
     // Otro intento ya confirmó esta orden: no duplicamos stock ni correos.
     if (isApproved(payment)) {
-      await sendTallerPurchaseCapi({ ...insc, status: "paid" }, payment, orderId, supabase);
+      await sendTallerPurchaseCapi({ ...insc, status: "paid", cupo_reserved: true }, payment, orderId, supabase);
     }
     return json("already_processed");
   }
 
   if (!reserveOk) {
-    // Conflicto de stock con pago aprobado: sin reservas parciales y sin
-    // confirmación falsa. Marcamos para revisión y avisamos a administración.
+    // Conflicto de stock resuelto por la RPC (su estado es autoritativo: no
+    // reservó nada ni marcó `paid`). Marcamos para revisión sólo si la orden
+    // sigue sin confirmar, para no degradar una confirmación concurrente.
     await supabase
       .from("taller_inscripciones")
       .update({
-        cupo_reserved: false,
         status: "needs_review",
         mercado_pago_payment_id: paymentIdStr,
         mercado_pago_status: payment.status,
         notification_error: `Pago aprobado sin cupo reservado (${reserveReason || "desconocido"}) — revisar/reembolsar`.slice(0, 500),
       })
-      .eq("id", orderId);
+      .eq("id", orderId)
+      .neq("status", "paid")
+      .eq("cupo_reserved", false);
+
 
     try {
       const resendKey = Deno.env.get("RESEND_API_KEY");
