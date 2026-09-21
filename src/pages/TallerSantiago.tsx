@@ -949,6 +949,76 @@ const TallerSantiago = () => {
               );
             })}
           </div>
+
+          {/* Pack: Experiencia completa */}
+          <Card className="mt-8 border-primary/40 bg-primary/5 shadow-md">
+            <CardContent className="p-6 md:p-8">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                <div className="flex-1">
+                  <div className="flex flex-wrap items-center gap-2 mb-3">
+                    <Badge className="bg-primary text-primary-foreground">
+                      {PACK.nombreCorto}
+                    </Badge>
+                    <Badge variant="secondary">
+                      {PACK.descuentoAvanzadoPct}% de descuento en Avanzado
+                    </Badge>
+                    {packSoldOut && (
+                      <Badge variant="destructive">
+                        {packFaltante
+                          ? `${packFaltante} sin cupos`
+                          : "Sin cupos"}
+                      </Badge>
+                    )}
+                  </div>
+                  <h3 className="font-heading text-2xl md:text-3xl text-foreground mb-2">
+                    Fundamentales + Avanzado
+                  </h3>
+                  <div className="grid sm:grid-cols-2 gap-2 text-sm mb-4">
+                    <div className="flex items-center gap-2">
+                      <Calendar className="w-4 h-4 text-primary shrink-0" />
+                      {TALLERES.fundamentos.fecha} · {TALLERES.fundamentos.horario}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Calendar className="w-4 h-4 text-primary shrink-0" />
+                      {TALLERES.avanzado.fecha} · {TALLERES.avanzado.horario}
+                    </div>
+                  </div>
+                  <p className="text-sm text-muted-foreground max-w-xl">{PACK_PROGRESION}</p>
+                </div>
+
+                <div className="md:w-64 shrink-0 md:text-right">
+                  <p className="text-sm text-muted-foreground line-through">
+                    {PACK.precioNormalTxt}
+                  </p>
+                  <p className="font-heading text-4xl text-primary leading-none mb-1">
+                    {PACK.precioTxt}
+                  </p>
+                  <p className="text-sm text-foreground mb-4">
+                    Ahorras {PACK.ahorroTxt}
+                  </p>
+                  <Button
+                    size="lg"
+                    className="w-full"
+                    onClick={() => openReserva("pack")}
+                    disabled={packSoldOut}
+                  >
+                    {packSoldOut
+                      ? `${packFaltante ?? "Un taller"} sin cupos`
+                      : "Reservar ambos talleres"}
+                    {!packSoldOut && <ChevronRight className="w-4 h-4 ml-1" />}
+                  </Button>
+                  {!packSoldOut && (
+                    <p className="text-xs text-muted-foreground mt-2 flex items-center gap-1 md:justify-end">
+                      <Shield className="w-3.5 h-3.5 text-primary" /> {packDisponibles} packs disponibles
+                    </p>
+                  )}
+                  <p className="text-xs text-muted-foreground mt-2">
+                    El precio pack ya incluye el descuento y no es acumulable con cupones.
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </section>
 
