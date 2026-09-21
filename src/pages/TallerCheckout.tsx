@@ -98,6 +98,9 @@ const TallerCheckout = () => {
     fundamentos: { total: TALLERES.fundamentos.cupos, vendidos: 0 },
     avanzado: { total: TALLERES.avanzado.cupos, vendidos: 0 },
   });
+  // Nunca inventamos disponibilidad: hasta cargar (o si falla) no asumimos stock.
+  const [cuposLoaded, setCuposLoaded] = useState(false);
+  const [cuposError, setCuposError] = useState(false);
 
   // Persistimos los datos para no perderlos al cambiar de producto o volver atrás
   useEffect(() => {
@@ -110,11 +113,15 @@ const TallerCheckout = () => {
 
   useEffect(() => {
     (async () => {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("event_cupos")
         .select("event_id, cupos_total, cupos_vendidos")
         .in("event_id", [TALLERES.fundamentos.eventId, TALLERES.avanzado.eventId]);
-      if (!data) return;
+      if (error || !data || data.length === 0) {
+        console.error("No pudimos cargar los cupos del taller:", error);
+        setCuposError(true);
+        return;
+      }
       setCupos((prev) => {
         const next = { ...prev };
         for (const row of data) {
@@ -126,6 +133,8 @@ const TallerCheckout = () => {
         }
         return next;
       });
+      setCuposError(false);
+      setCuposLoaded(true);
     })();
   }, []);
 
@@ -145,12 +154,18 @@ const TallerCheckout = () => {
     1,
     Math.min(TALLER_MAX_QUANTITY, isPack ? packDisponibles : disponibles(producto as TallerKey))
   );
-  const soldOut = isPack ? packDisponibles <= 0 : disponibles(producto as TallerKey) <= 0;
+  const soldOut = cuposLoaded
+    ? isPack
+      ? packDisponibles <= 0
+      : disponibles(producto as TallerKey) <= 0
+    : false;
 
   // Nunca permitimos una cantidad mayor al stock real
   useEffect(() => {
+    if (!cuposLoaded) return;
     setQuantity((q) => Math.min(Math.max(1, q), maxQuantity));
-  }, [maxQuantity]);
+  }, [maxQuantity, cuposLoaded]);
+
 
   const unitPrice = isPack ? PACK.precio : TALLERES[producto as TallerKey].valor;
   const subtotal = unitPrice * quantity;
