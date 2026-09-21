@@ -574,11 +574,11 @@ async function handleTallerPayment(
       await new Promise((r) => setTimeout(r, 600));
 
       const tallerCfg = TALLERES[tallerKeyFromNivel(insc.nivel)];
-      const nivelTxt = tallerCfg.nombreCorto;
+      const nivelTxt = isPack ? TALLER_PACK.nombreCorto : tallerCfg.nombreCorto;
       // Fecha desde la configuración compartida; si la inscripción es de otra
       // edición, usamos la fecha guardada en el registro.
       const fechaLarga =
-        insc.fecha_evento && insc.fecha_evento !== tallerCfg.fechaISO
+        !isPack && insc.fecha_evento && insc.fecha_evento !== tallerCfg.fechaISO
           ? new Intl.DateTimeFormat("es-CL", {
               timeZone: "America/Santiago",
               weekday: "long",
@@ -588,16 +588,36 @@ async function handleTallerPayment(
             }).format(new Date(`${insc.fecha_evento}T12:00:00Z`))
           : tallerCfg.fechaLarga;
       const mapsUrl = TALLER_MAPS_URL;
+
+      const fechasHtml = isPack
+        ? `<p style="margin:4px 0;font-size:14px;color:#1A1A1A"><strong>📅 ${TALLERES.fundamentos.nombreCorto}:</strong> ${TALLERES.fundamentos.fechaLarga} · ${TALLERES.fundamentos.horario} (${TALLERES.fundamentos.duracion})</p>
+        <p style="margin:4px 0;font-size:14px;color:#1A1A1A"><strong>📅 ${TALLERES.avanzado.nombreCorto}:</strong> ${TALLERES.avanzado.fechaLarga} · ${TALLERES.avanzado.horario} (${TALLERES.avanzado.duracion})</p>`
+        : `<p style="margin:4px 0;font-size:14px;color:#1A1A1A"><strong>📅 Fecha:</strong> ${fechaLarga}</p>
+        <p style="margin:4px 0;font-size:14px;color:#1A1A1A"><strong>⏰ Horario:</strong> ${insc.horario} (${tallerCfg.duracion})</p>`;
+
+      const packDetalleHtml = isPack
+        ? `<div style="background:#FFF8E6;border:1px solid #E7C873;border-radius:12px;padding:16px 18px;margin:0 0 18px">
+        <p style="margin:0 0 6px;font-size:14px;color:#1A1A1A"><strong>Compraste la Experiencia completa</strong> (Fundamentales + Avanzado).</p>
+        <p style="margin:0;font-size:14px;color:#3F3F46">Total $${TALLER_PACK.precio.toLocaleString("es-CL")} CLP en vez de $${TALLER_PACK.precioNormal.toLocaleString("es-CL")} · ahorras $${TALLER_PACK.ahorro.toLocaleString("es-CL")} con ${TALLER_PACK.descuentoAvanzadoPct}% de descuento aplicado al taller Avanzado.</p>
+      </div>`
+        : "";
+
+      const progresionHtml = isPack
+        ? `<p style="color:#3F3F46;font-size:15px;margin:0 0 14px">Fundamentales te entrega la base técnica para participar en el Avanzado al día siguiente. El desafío del Avanzado no es una prueba de fuerza física: es principalmente mental y requiere foco y disposición a desafiarte. Si al terminar Fundamentales sientes que tu mente está preparada, puedes continuar con el Avanzado.</p>`
+        : "";
+
       const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
 <body style="margin:0;padding:24px 12px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;background:#F4F4F5;line-height:1.7">
   <div style="max-width:580px;margin:0 auto;background:#ffffff;border-radius:16px;overflow:hidden">
     <div style="background:#2E4D3A;padding:36px 28px;text-align:center;color:#ffffff">
-      <h1 style="margin:0;font-size:22px;font-weight:600">¡Tu cupo está confirmado!</h1>
-      <p style="margin:6px 0 0;font-size:14px;opacity:.85">Taller ${nivelTxt} · Método Wim Hof</p>
+      <h1 style="margin:0;font-size:22px;font-weight:600">${isPack ? "¡Tus 2 cupos están confirmados!" : "¡Tu cupo está confirmado!"}</h1>
+      <p style="margin:6px 0 0;font-size:14px;opacity:.85">${isPack ? "Talleres Fundamentales + Avanzado" : `Taller ${nivelTxt}`} · Método Wim Hof</p>
     </div>
     <div style="padding:28px">
       <h2 style="font-size:18px;color:#1A1A1A;margin:0 0 12px">Hola ${insc.nombre} 👋</h2>
       <p style="color:#3F3F46;font-size:15px;margin:0 0 18px">Recibimos tu pago y tu lugar en el <strong>${insc.taller_nombre}</strong> quedó reservado. Prepárate para respirar, entrar al hielo y conectar con tu poder.</p>
+
+      ${packDetalleHtml}
 
       <div style="background:#EEF6F1;border:2px solid #2E4D3A;border-radius:12px;padding:20px;margin:0 0 20px">
         <p style="margin:0 0 6px;font-size:13px;letter-spacing:1px;text-transform:uppercase;color:#2E4D3A;font-weight:700">Paso 1 · Entra al grupo de WhatsApp</p>
@@ -606,11 +626,11 @@ async function handleTallerPayment(
       </div>
 
       <div style="background:#F8FAFB;border-left:4px solid #2E4D3A;padding:16px 18px;border-radius:8px;margin:18px 0">
-        <p style="margin:4px 0;font-size:14px;color:#1A1A1A"><strong>📅 Fecha:</strong> ${fechaLarga}</p>
-        <p style="margin:4px 0;font-size:14px;color:#1A1A1A"><strong>⏰ Horario:</strong> ${insc.horario} (${tallerCfg.duracion})</p>
+        ${fechasHtml}
         <p style="margin:4px 0;font-size:14px;color:#1A1A1A"><strong>📍 Lugar:</strong> Nave Studio, Antares 259, Las Condes — <a href="${mapsUrl}" style="color:#2E4D3A">ver mapa</a></p>
         <p style="margin:4px 0;font-size:14px;color:#1A1A1A"><strong>💸 Pagado:</strong> $${Number(payment.transaction_amount).toLocaleString("es-CL")} CLP</p>
       </div>
+      ${progresionHtml}
       <p style="color:#3F3F46;font-size:15px;margin:0 0 8px"><strong>Qué traer:</strong></p>
       <ul style="color:#3F3F46;font-size:15px;margin:0 0 14px;padding-left:20px">
         <li>Traje de baño y toalla grande</li>
@@ -631,7 +651,9 @@ async function handleTallerPayment(
         body: JSON.stringify({
           from: "Nave Studio <agenda@studiolanave.com>",
           to: [insc.email],
-          subject: `Cupo confirmado · Taller ${nivelTxt} Método Wim Hof · ${fechaLarga}`,
+          subject: isPack
+            ? "Tus 2 cupos están confirmados · Talleres Wim Hof 3 y 4 de octubre"
+            : `Cupo confirmado · Taller ${nivelTxt} Método Wim Hof · ${fechaLarga}`,
           html,
         }),
       });
