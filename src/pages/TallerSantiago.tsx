@@ -48,6 +48,7 @@ import heroAsset from "@/assets/alan-ice-bath-smile.webp.asset.json";
 import alanWhmAsset from "@/assets/alan-wim-hof.webp.asset.json";
 
 type TallerKey = "fundamentos" | "avanzado";
+type SelKey = TallerKey | "pack";
 
 const TALLERES = {
   fundamentos: {
@@ -82,6 +83,23 @@ const TALLERES = {
   },
 };
 
+// Producto combinado. El precio real lo resuelve siempre el servidor.
+const PACK = {
+  nombre: "Pack Talleres Wim Hof — Fundamentales + Avanzado",
+  nombreCorto: "Experiencia completa",
+  precio: 92000,
+  precioTxt: "$92.000",
+  precioNormal: 110000,
+  precioNormalTxt: "$110.000",
+  ahorro: 18000,
+  ahorroTxt: "$18.000",
+  avanzadoConDescuentoTxt: "$42.000",
+  descuentoAvanzadoPct: 30,
+};
+
+const PACK_PROGRESION =
+  "No necesitas experiencia previa para elegir el pack. Fundamentales te entrega la base técnica para participar en Avanzado al día siguiente. El desafío avanzado no es una prueba de fuerza física: es principalmente mental y requiere foco y disposición a desafiarte. Si al terminar Fundamentales sientes que tu mente está preparada, puedes continuar con Avanzado.";
+
 const MAPS_URL = "https://maps.app.goo.gl/4BvC7kC3JpVdQVkFA";
 const WHATSAPP_NUMBER = "56946120426";
 const waUrl = (text: string) =>
@@ -99,18 +117,24 @@ const WHATSAPP_AVANZADO = waUrl(
 
 const TallerSantiago = () => {
   const { trackEvent } = useFacebookPixel();
-  const [reservaTaller, setReservaTaller] = useState<TallerKey | null>(null);
+  const [reservaTaller, setReservaTaller] = useState<SelKey | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [pagoStatus, setPagoStatus] = useState<"approved" | "pending" | "rejected" | null>(() => {
     if (typeof window === "undefined") return null;
     const p = new URLSearchParams(window.location.search).get("pago");
     return p === "approved" || p === "pending" || p === "rejected" ? p : null;
   });
-  const pagoTallerNombre = (() => {
+  const pagoNivel = (() => {
     if (typeof window === "undefined") return null;
     const n = new URLSearchParams(window.location.search).get("nivel");
-    return n === "fundamentos" || n === "avanzado" ? TALLERES[n].nombreCorto : null;
+    return n === "fundamentos" || n === "avanzado" || n === "pack" ? n : null;
   })();
+  const pagoEsPack = pagoNivel === "pack";
+  const pagoTallerNombre = pagoEsPack
+    ? PACK.nombreCorto
+    : pagoNivel
+    ? TALLERES[pagoNivel as TallerKey].nombreCorto
+    : null;
 
   const [form, setForm] = useState({ nombre: "", apellido: "", celular: "", email: "" });
   const [couponInput, setCouponInput] = useState("");
@@ -222,15 +246,41 @@ const TallerSantiago = () => {
   const pctOcupado = (k: TallerKey) =>
     cupos[k].total > 0 ? (cupos[k].vendidos / cupos[k].total) * 100 : 0;
 
-  const openReserva = (k: TallerKey) => {
+  // El pack no tiene stock propio: equivale al menor disponible entre ambos.
+  const packDisponibles = Math.min(
+    cuposDisponibles("fundamentos"),
+    cuposDisponibles("avanzado")
+  );
+  const packSoldOut = packDisponibles <= 0;
+  const packFaltante = isSoldOut("fundamentos")
+    ? "Fundamentales"
+    : isSoldOut("avanzado")
+    ? "Avanzado"
+    : null;
+
+  const openReserva = (k: SelKey) => {
     setReservaTaller(k);
     setForm({ nombre: "", apellido: "", celular: "", email: "" });
     setCouponInput("");
     setAppliedCoupon(null);
   };
 
+  // Cambia de single a pack (o de vuelta) conservando los datos ya escritos.
+  const switchTo = (k: SelKey) => {
+    if (k === "pack" && appliedCoupon) {
+      setAppliedCoupon(null);
+      setCouponInput("");
+      toast({
+        title: "Quitamos tu cupón",
+        description:
+          "El precio pack ya incluye el descuento y no es acumulable con cupones.",
+      });
+    }
+    setReservaTaller(k);
+  };
+
   const applyCoupon = async () => {
-    if (!reservaTaller) return;
+    if (!reservaTaller || reservaTaller === "pack") return;
     const code = couponInput.replace(/\s/g, "").toUpperCase();
     if (!code) return;
     const valor = TALLERES[reservaTaller].valor;
