@@ -48,6 +48,7 @@ import heroAsset from "@/assets/alan-ice-bath-smile.webp.asset.json";
 import alanWhmAsset from "@/assets/alan-wim-hof.webp.asset.json";
 
 type TallerKey = "fundamentos" | "avanzado";
+type SelKey = TallerKey | "pack";
 
 const TALLERES = {
   fundamentos: {
@@ -82,6 +83,23 @@ const TALLERES = {
   },
 };
 
+// Producto combinado. El precio real lo resuelve siempre el servidor.
+const PACK = {
+  nombre: "Pack Talleres Wim Hof — Fundamentales + Avanzado",
+  nombreCorto: "Experiencia completa",
+  precio: 92000,
+  precioTxt: "$92.000",
+  precioNormal: 110000,
+  precioNormalTxt: "$110.000",
+  ahorro: 18000,
+  ahorroTxt: "$18.000",
+  avanzadoConDescuentoTxt: "$42.000",
+  descuentoAvanzadoPct: 30,
+};
+
+const PACK_PROGRESION =
+  "No necesitas experiencia previa para elegir el pack. Fundamentales te entrega la base técnica para participar en Avanzado al día siguiente. El desafío avanzado no es una prueba de fuerza física: es principalmente mental y requiere foco y disposición a desafiarte. Si al terminar Fundamentales sientes que tu mente está preparada, puedes continuar con Avanzado.";
+
 const MAPS_URL = "https://maps.app.goo.gl/4BvC7kC3JpVdQVkFA";
 const WHATSAPP_NUMBER = "56946120426";
 const waUrl = (text: string) =>
@@ -99,18 +117,24 @@ const WHATSAPP_AVANZADO = waUrl(
 
 const TallerSantiago = () => {
   const { trackEvent } = useFacebookPixel();
-  const [reservaTaller, setReservaTaller] = useState<TallerKey | null>(null);
+  const [reservaTaller, setReservaTaller] = useState<SelKey | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [pagoStatus, setPagoStatus] = useState<"approved" | "pending" | "rejected" | null>(() => {
     if (typeof window === "undefined") return null;
     const p = new URLSearchParams(window.location.search).get("pago");
     return p === "approved" || p === "pending" || p === "rejected" ? p : null;
   });
-  const pagoTallerNombre = (() => {
+  const pagoNivel = (() => {
     if (typeof window === "undefined") return null;
     const n = new URLSearchParams(window.location.search).get("nivel");
-    return n === "fundamentos" || n === "avanzado" ? TALLERES[n].nombreCorto : null;
+    return n === "fundamentos" || n === "avanzado" || n === "pack" ? n : null;
   })();
+  const pagoEsPack = pagoNivel === "pack";
+  const pagoTallerNombre = pagoEsPack
+    ? PACK.nombreCorto
+    : pagoNivel
+    ? TALLERES[pagoNivel as TallerKey].nombreCorto
+    : null;
 
   const [form, setForm] = useState({ nombre: "", apellido: "", celular: "", email: "" });
   const [couponInput, setCouponInput] = useState("");
@@ -181,6 +205,15 @@ const TallerSantiago = () => {
         if (status === "paid" && amount) {
           const eventId = `purchase-taller-${orderId}`;
           const nivel = (data as any)?.nivel as string | undefined;
+          const statusContentIds = (data as any)?.contentIds as string[] | undefined;
+          const contentIds =
+            Array.isArray(statusContentIds) && statusContentIds.length > 0
+              ? statusContentIds
+              : [`taller-whm-santiago-${nivel || "general"}`];
+          const numItems =
+            typeof (data as any)?.numItems === "number" && (data as any).numItems > 0
+              ? (data as any).numItems
+              : contentIds.length;
           trackEvent(
             "Purchase",
             {
@@ -188,10 +221,10 @@ const TallerSantiago = () => {
               currency: "CLP",
               content_name: nombre || "Taller Método Wim Hof",
               content_type: "product",
-              // content_ids identifica el taller (estable), no la orden
-              content_ids: [`taller-whm-santiago-${nivel || "general"}`],
+              // content_ids identifica el/los talleres (estable), no la orden
+              content_ids: contentIds,
               content_category: "workshop",
-              num_items: 1,
+              num_items: numItems,
             },
             eventId
           );
@@ -222,15 +255,41 @@ const TallerSantiago = () => {
   const pctOcupado = (k: TallerKey) =>
     cupos[k].total > 0 ? (cupos[k].vendidos / cupos[k].total) * 100 : 0;
 
-  const openReserva = (k: TallerKey) => {
+  // El pack no tiene stock propio: equivale al menor disponible entre ambos.
+  const packDisponibles = Math.min(
+    cuposDisponibles("fundamentos"),
+    cuposDisponibles("avanzado")
+  );
+  const packSoldOut = packDisponibles <= 0;
+  const packFaltante = isSoldOut("fundamentos")
+    ? "Fundamentales"
+    : isSoldOut("avanzado")
+    ? "Avanzado"
+    : null;
+
+  const openReserva = (k: SelKey) => {
     setReservaTaller(k);
     setForm({ nombre: "", apellido: "", celular: "", email: "" });
     setCouponInput("");
     setAppliedCoupon(null);
   };
 
+  // Cambia de single a pack (o de vuelta) conservando los datos ya escritos.
+  const switchTo = (k: SelKey) => {
+    if (k === "pack" && appliedCoupon) {
+      setAppliedCoupon(null);
+      setCouponInput("");
+      toast({
+        title: "Quitamos tu cupón",
+        description:
+          "El precio pack ya incluye el descuento y no es acumulable con cupones.",
+      });
+    }
+    setReservaTaller(k);
+  };
+
   const applyCoupon = async () => {
-    if (!reservaTaller) return;
+    if (!reservaTaller || reservaTaller === "pack") return;
     const code = couponInput.replace(/\s/g, "").toUpperCase();
     if (!code) return;
     const valor = TALLERES[reservaTaller].valor;
@@ -271,7 +330,17 @@ const TallerSantiago = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!reservaTaller) return;
-    const t = TALLERES[reservaTaller];
+    const isPack = reservaTaller === "pack";
+    const productoNombre = isPack
+      ? PACK.nombre
+      : TALLERES[reservaTaller as TallerKey].nombre;
+    const productoCorto = isPack
+      ? PACK.nombreCorto
+      : TALLERES[reservaTaller as TallerKey].nombreCorto;
+    const contentIds = isPack
+      ? ["taller-whm-santiago-fundamentos", "taller-whm-santiago-avanzado"]
+      : [`taller-whm-santiago-${reservaTaller}`];
+    const numItems = isPack ? 2 : 1;
 
     const nombre = form.nombre.trim();
     const apellido = form.apellido.trim();
@@ -288,10 +357,12 @@ const TallerSantiago = () => {
       return;
     }
 
-    if (isSoldOut(reservaTaller)) {
+    if (isPack ? packSoldOut : isSoldOut(reservaTaller as TallerKey)) {
       toast({
         title: "Cupos agotados",
-        description: "Este taller ya no tiene cupos disponibles. Escríbenos por WhatsApp para la lista de espera.",
+        description: isPack
+          ? `El taller ${packFaltante ?? ""} ya no tiene cupos, así que el pack no está disponible. Escríbenos por WhatsApp.`
+          : "Este taller ya no tiene cupos disponibles. Escríbenos por WhatsApp para la lista de espera.",
         variant: "destructive",
       });
       return;
@@ -307,7 +378,7 @@ const TallerSantiago = () => {
           apellido,
           celular,
           email,
-          couponCode: appliedCoupon?.code ?? null,
+          couponCode: isPack ? null : appliedCoupon?.code ?? null,
           fbp: ctx.fbp,
           fbc: ctx.fbc,
           eventSourceUrl: ctx.eventSourceUrl,
@@ -323,20 +394,21 @@ const TallerSantiago = () => {
         userEmail: email,
         userPhone: celular,
         userName: `${nombre} ${apellido}`.trim(),
-        contentName: t.nombre,
+        contentName: productoNombre,
         contentType: "product",
         contentCategory: "workshop",
-        contentIds: [`taller-whm-santiago-${reservaTaller}`],
-        numItems: 1,
+        contentIds,
+        numItems,
         value: typeof data.amount === "number" ? data.amount : undefined,
         currency: "CLP",
         funnel: "workshop",
         entityType: "taller_inscripcion",
         entityId: data.orderId,
         pixelParams: {
-          content_name: t.nombre,
+          content_name: productoNombre,
           content_category: "workshop",
-          content_ids: [`taller-whm-santiago-${reservaTaller}`],
+          content_ids: contentIds,
+          num_items: numItems,
           value: typeof data.amount === "number" ? data.amount : undefined,
           currency: "CLP",
         },
@@ -347,7 +419,7 @@ const TallerSantiago = () => {
       console.error("Taller checkout error:", err);
       toast({
         title: "No pudimos iniciar el pago",
-        description: `Intenta de nuevo o escríbenos por WhatsApp. (${t.nombreCorto})`,
+        description: `Intenta de nuevo o escríbenos por WhatsApp. (${productoCorto})`,
         variant: "destructive",
       });
       setSubmitting(false);
@@ -359,6 +431,14 @@ const TallerSantiago = () => {
     {
       q: "¿Cuándo es cada taller?",
       a: "Fundamentales es el sábado 3 de octubre y Avanzado el domingo 4 de octubre, ambos de 11:30 a 15:00 (3,5 horas) en Nave Studio, Antares 259, Las Condes.",
+    },
+    {
+      q: "¿Cómo funciona la Experiencia completa (Fundamentales + Avanzado)?",
+      a: "Es un solo pago de $92.000 en vez de $110.000: reservas tu cupo en los dos talleres, el sábado 3 y el domingo 4 de octubre, con un 30% de descuento en el taller Avanzado. Recibes un solo correo con ambas fechas. El precio pack ya incluye el descuento, por lo que no es acumulable con cupones, y solo está disponible mientras haya cupos en los dos talleres.",
+    },
+    {
+      q: "¿Fundamentales me prepara para el Avanzado?",
+      a: PACK_PROGRESION,
     },
     {
       q: "¿Qué es The Snake del taller Avanzado?",
@@ -394,7 +474,14 @@ const TallerSantiago = () => {
     },
   ];
 
-  const reservaActual = reservaTaller ? TALLERES[reservaTaller] : null;
+  const esPackReserva = reservaTaller === "pack";
+  const reservaActual =
+    reservaTaller && reservaTaller !== "pack" ? TALLERES[reservaTaller] : null;
+  const totalReserva = esPackReserva
+    ? PACK.precio
+    : reservaActual
+    ? Math.max(0, reservaActual.valor - (appliedCoupon?.discount ?? 0))
+    : 0;
 
   const jsonLd = [
     {
@@ -491,14 +578,18 @@ const TallerSantiago = () => {
             <div className="flex-1">
               <p className="font-heading font-semibold">
                 {pagoStatus === "approved"
-                  ? `¡Reserva confirmada${pagoTallerNombre ? ` · ${pagoTallerNombre}` : ""}!`
+                  ? pagoEsPack
+                    ? "¡Tus 2 cupos están confirmados · Fundamentales + Avanzado!"
+                    : `¡Reserva confirmada${pagoTallerNombre ? ` · ${pagoTallerNombre}` : ""}!`
                   : pagoStatus === "pending"
                   ? "Tu pago está en proceso"
                   : "No pudimos confirmar tu pago"}
               </p>
               <p className="text-sm text-muted-foreground">
                 {pagoStatus === "approved"
-                  ? "Te enviamos por email la fecha de tu taller, el horario y el link al grupo de WhatsApp. Te esperamos en Antares 259, Las Condes."
+                  ? pagoEsPack
+                    ? "Quedaste inscrito en los dos talleres: sábado 3 y domingo 4 de octubre, de 11:30 a 15:00. Te enviamos un solo correo con ambas fechas y el link al grupo de WhatsApp. Te esperamos en Antares 259, Las Condes."
+                    : "Te enviamos por email la fecha de tu taller, el horario y el link al grupo de WhatsApp. Te esperamos en Antares 259, Las Condes."
                   : pagoStatus === "pending"
                   ? "Cuando Mercado Pago confirme el pago, tu cupo queda reservado. Si tienes dudas, escríbenos por WhatsApp."
                   : "Tu cupo no quedó reservado. Puedes intentar de nuevo o escribirnos por WhatsApp."}

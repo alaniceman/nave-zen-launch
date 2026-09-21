@@ -98,13 +98,23 @@ serve(async (req) => {
     for (const key of keys) {
       const t = TALLERES[key];
 
-      const { data: inscripciones, error: inscError } = await supabase
+      const { data: inscRaw, error: inscError } = await supabase
         .from("taller_inscripciones")
-        .select("id, nombre, email, event_id, status, paid_at")
-        .eq("event_id", t.eventId)
+        .select("id, nombre, email, event_id, event_ids, product_type, status, paid_at")
         .eq("status", "paid");
 
       if (inscError) throw inscError;
+
+      // Los packs reciben UNA sola encuesta, el día siguiente al Avanzado.
+      // Los individuales, el día siguiente a su propio taller.
+      const isPackInsc = (i: any) => (i.product_type ?? "single") === "pack";
+      const inscEventIds = (i: any): string[] =>
+        Array.isArray(i.event_ids) && i.event_ids.length > 0 ? i.event_ids : [i.event_id];
+
+      const inscripciones = (inscRaw ?? []).filter((i) => {
+        if (isPackInsc(i)) return key === "avanzado";
+        return inscEventIds(i).includes(t.eventId);
+      });
 
       // dryRun: solo lectura. No reclama, no modifica y no envía.
       if (dryRun) {
