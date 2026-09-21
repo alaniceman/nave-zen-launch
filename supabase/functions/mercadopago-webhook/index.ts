@@ -410,71 +410,62 @@ async function handleTallerPayment(
     return json("amount_mismatch");
   }
 
-  // Atomic claim: only one webhook run can flip pending -> paid
-  const { data: claimed } = await supabase
-    .from("taller_inscripciones")
-    .update({
-      status: "paid",
-      mercado_pago_payment_id: paymentIdStr,
-      mercado_pago_status: payment.status,
-      paid_at: new Date().toISOString(),
-    })
-    .eq("id", orderId)
-    .in("status", ["pending", "failed", "cancelled"])
-    .select()
-    .maybeSingle();
-
-  if (!claimed) {
-    // Otro webhook ganó el claim: sólo reconciliamos CAPI.
-    if (isApproved(payment)) {
-      await sendTallerPurchaseCapi(insc, payment, orderId, supabase);
-    }
-    return json("already_processed");
-  }
-
-  // Reserva atómica de TODOS los cupos del producto (pack = 2, single = 1).
-  // Todo o nada: nunca se descuenta un cupo parcial.
+  // Confirmación + reserva de N cupos en CADA evento, en UNA sola transacción
+  // (la RPC bloquea la orden y los stocks en orden estable). Idempotente por
+  // orden/payment_id. Nunca marca `paid` sin haber reservado, nunca reserva parcial.
   const eventIds = inscEventIds(insc);
   const isPack = isPackInsc(insc);
+  const quantity = Math.max(1, Number(insc.quantity) || 1);
   const remainingByEvent: Record<string, number | null> = {};
-  let remaining: number | null = null;
   let reserveOk = false;
   let reserveReason = "";
+  let firstTime = false;
 
-  const { data: reserveRes, error: reserveError } = await supabase.rpc("reserve_event_cupos", {
-    _event_ids: eventIds,
+  const { data: confirmRes, error: confirmError } = await supabase.rpc("confirm_taller_payment", {
+    _order_id: orderId,
+    _payment_id: paymentIdStr,
+    _payment_status: payment.status,
+    _paid_amount: Math.round(Number(payment.transaction_amount) || insc.amount),
   });
-  if (reserveError) {
-    console.error("Error reserving cupos:", reserveError);
+
+  if (confirmError) {
+    console.error("Error confirming taller payment:", confirmError);
     reserveReason = "rpc_error";
   } else {
-    const res = reserveRes as any;
+    const res = confirmRes as any;
     reserveOk = res?.ok === true;
     reserveReason = res?.reason ?? "";
+    firstTime = res?.first_time === true;
     if (reserveOk) {
       for (const id of eventIds) {
         const v = res?.remaining?.[id];
         remainingByEvent[id] = typeof v === "number" ? v : null;
       }
-      remaining = remainingByEvent[eventIds[0]] ?? null;
     }
   }
 
-  await supabase
-    .from("taller_inscripciones")
-    .update(
-      reserveOk
-        ? { cupo_reserved: true }
-        : {
-            cupo_reserved: false,
-            status: "needs_review",
-            notification_error: `Pago aprobado sin cupo reservado (${reserveReason || "desconocido"}) — revisar/reembolsar`.slice(0, 500),
-          }
-    )
-    .eq("id", orderId);
+  if (reserveOk && !firstTime) {
+    // Otro intento ya confirmó esta orden: no duplicamos stock ni correos.
+    if (isApproved(payment)) {
+      await sendTallerPurchaseCapi({ ...insc, status: "paid" }, payment, orderId, supabase);
+    }
+    return json("already_processed");
+  }
 
   if (!reserveOk) {
-    // Carrera de stock: no reservamos parcialmente. Alerta administrativa.
+    // Conflicto de stock con pago aprobado: sin reservas parciales y sin
+    // confirmación falsa. Marcamos para revisión y avisamos a administración.
+    await supabase
+      .from("taller_inscripciones")
+      .update({
+        cupo_reserved: false,
+        status: "needs_review",
+        mercado_pago_payment_id: paymentIdStr,
+        mercado_pago_status: payment.status,
+        notification_error: `Pago aprobado sin cupo reservado (${reserveReason || "desconocido"}) — revisar/reembolsar`.slice(0, 500),
+      })
+      .eq("id", orderId);
+
     try {
       const resendKey = Deno.env.get("RESEND_API_KEY");
       if (resendKey) {
@@ -488,6 +479,7 @@ async function handleTallerPayment(
             html: `<div style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;line-height:1.7">
               <h2 style="color:#B42318;margin:0 0 12px">Pago aprobado sin cupo reservado</h2>
               <p><strong>Producto:</strong> ${isPack ? "PACK / AMBOS talleres" : insc.taller_nombre}</p>
+              <p><strong>Cantidad:</strong> ${quantity} persona(s)${isPack ? ` — ${quantity} cupo(s) en cada taller` : ""}</p>
               <p><strong>Participante:</strong> ${insc.nombre} ${insc.apellido} — ${insc.email} — ${insc.phone}</p>
               <p><strong>Orden:</strong> ${orderId}</p>
               <p><strong>Payment ID:</strong> ${paymentIdStr}</p>
