@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { FloatingInput } from "@/components/ui/floating-input";
 import { Button } from "@/components/ui/button";
 import { Loader2, Gift, Calendar, CheckCircle2, Shield } from "lucide-react";
 import { toast } from "sonner";
@@ -393,48 +394,38 @@ export default function GiftCards() {
 
                   {selectedPackage && (
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                      <div>
-                        <Label htmlFor="buyerName">Tu nombre *</Label>
-                        <Input
-                          id="buyerName"
-                          {...register("buyerName")}
-                          placeholder="Juan Pérez"
-                          disabled={isSubmitting}
-                        />
-                        {errors.buyerName && (
-                          <p className="text-sm text-destructive mt-1">{errors.buyerName.message}</p>
-                        )}
-                      </div>
+                      <FloatingInput
+                        id="buyerName"
+                        label="Tu nombre"
+                        autoComplete="name"
+                        {...register("buyerName")}
+                        disabled={isSubmitting}
+                        error={errors.buyerName?.message}
+                      />
 
-                      <div>
-                        <Label htmlFor="buyerEmail">Tu email *</Label>
-                        <Input
-                          id="buyerEmail"
-                          type="email"
-                          {...register("buyerEmail")}
-                          placeholder="juan@ejemplo.com"
-                          disabled={isSubmitting}
-                        />
-                        {errors.buyerEmail && (
-                          <p className="text-sm text-destructive mt-1">{errors.buyerEmail.message}</p>
-                        )}
-                        <p className="text-xs text-muted-foreground mt-1">
-                          Recibirás el link para descargar la Gift Card
-                        </p>
-                      </div>
+                      <FloatingInput
+                        id="buyerEmail"
+                        label="Tu email"
+                        type="email"
+                        inputMode="email"
+                        autoComplete="email"
+                        {...register("buyerEmail")}
+                        disabled={isSubmitting}
+                        error={errors.buyerEmail?.message}
+                        hint="Recibirás el link para descargar la Gift Card"
+                      />
 
-                      <div>
-                        <Label htmlFor="buyerPhone">Tu celular *</Label>
-                        <Input
-                          id="buyerPhone"
-                          {...register("buyerPhone")}
-                          placeholder="+56912345678"
-                          disabled={isSubmitting}
-                        />
-                        {errors.buyerPhone && (
-                          <p className="text-sm text-destructive mt-1">{errors.buyerPhone.message}</p>
-                        )}
-                      </div>
+                      <FloatingInput
+                        id="buyerPhone"
+                        label="Tu celular"
+                        type="tel"
+                        inputMode="tel"
+                        autoComplete="tel"
+                        {...register("buyerPhone")}
+                        disabled={isSubmitting}
+                        error={errors.buyerPhone?.message}
+                        hint="Ej: +56 9 4612 0426"
+                      />
 
                       {/* Coupon Input */}
                       <div className="border-t pt-4">

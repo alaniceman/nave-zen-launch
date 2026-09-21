@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
+import { FloatingInput } from "@/components/ui/floating-input";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { dayNames } from "@/data/schedule";
@@ -135,13 +136,11 @@ export default function TrialBookingForm({
           <FormField
             control={form.control}
             name="name"
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
               <FormItem>
-                <FormLabel className="text-[#2E4D3A]">Nombre</FormLabel>
                 <FormControl>
-                  <Input placeholder="Tu nombre completo" {...field} />
+                  <FloatingInput label="Nombre completo" autoComplete="name" error={fieldState.error?.message} {...field} />
                 </FormControl>
-                <FormMessage />
               </FormItem>
             )}
           />
@@ -149,13 +148,11 @@ export default function TrialBookingForm({
           <FormField
             control={form.control}
             name="email"
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
               <FormItem>
-                <FormLabel className="text-[#2E4D3A]">Email</FormLabel>
                 <FormControl>
-                  <Input type="email" placeholder="tu@email.com" {...field} />
+                  <FloatingInput label="Email" type="email" inputMode="email" autoComplete="email" error={fieldState.error?.message} {...field} />
                 </FormControl>
-                <FormMessage />
               </FormItem>
             )}
           />
@@ -163,13 +160,11 @@ export default function TrialBookingForm({
           <FormField
             control={form.control}
             name="phone"
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
               <FormItem>
-                <FormLabel className="text-[#2E4D3A]">Celular</FormLabel>
                 <FormControl>
-                  <Input type="tel" placeholder="912345678" {...field} />
+                  <FloatingInput label="Celular" type="tel" inputMode="tel" autoComplete="tel" error={fieldState.error?.message} {...field} />
                 </FormControl>
-                <FormMessage />
               </FormItem>
             )}
           />

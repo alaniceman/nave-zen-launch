@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { FloatingInput } from "@/components/ui/floating-input";
 import { Button } from "@/components/ui/button";
 import { Loader2, Package, Calendar, CheckCircle2, Shield } from "lucide-react";
 import { toast } from "sonner";
@@ -353,23 +354,11 @@ export default function Bonos() {
                     </div>}
 
                   {selectedPackage && <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                      <div>
-                        <Label htmlFor="buyerName">Nombre completo *</Label>
-                        <Input id="buyerName" {...register("buyerName")} placeholder="Juan Pérez" disabled={isSubmitting} />
-                        {errors.buyerName && <p className="text-sm text-destructive mt-1">{errors.buyerName.message}</p>}
-                      </div>
+                      <FloatingInput id="buyerName" label="Nombre completo" autoComplete="name" {...register("buyerName")} disabled={isSubmitting} error={errors.buyerName?.message} />
 
-                      <div>
-                        <Label htmlFor="buyerEmail">Email *</Label>
-                        <Input id="buyerEmail" type="email" {...register("buyerEmail")} placeholder="juan@ejemplo.com" disabled={isSubmitting} />
-                        {errors.buyerEmail && <p className="text-sm text-destructive mt-1">{errors.buyerEmail.message}</p>}
-                      </div>
+                      <FloatingInput id="buyerEmail" label="Email" type="email" inputMode="email" autoComplete="email" {...register("buyerEmail")} disabled={isSubmitting} error={errors.buyerEmail?.message} />
 
-                      <div>
-                        <Label htmlFor="buyerPhone">Celular *</Label>
-                        <Input id="buyerPhone" {...register("buyerPhone")} placeholder="+56912345678" disabled={isSubmitting} />
-                        {errors.buyerPhone && <p className="text-sm text-destructive mt-1">{errors.buyerPhone.message}</p>}
-                      </div>
+                      <FloatingInput id="buyerPhone" label="Celular" type="tel" inputMode="tel" autoComplete="tel" {...register("buyerPhone")} disabled={isSubmitting} error={errors.buyerPhone?.message} hint="Ej: +56 9 4612 0426" />
 
                       {/* Coupon Input */}
                       <div className="border-t pt-4">
