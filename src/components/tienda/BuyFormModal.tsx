@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { FloatingInput } from "@/components/ui/floating-input";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Loader2 } from "lucide-react";
@@ -99,18 +100,9 @@ export const BuyFormModal = ({ product, open, onOpenChange }: Props) => {
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <Label htmlFor="buyer-name">Nombre</Label>
-            <Input id="buyer-name" value={name} onChange={(e) => setName(e.target.value)} required autoFocus />
-          </div>
-          <div>
-            <Label htmlFor="buyer-email">Email</Label>
-            <Input id="buyer-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-          </div>
-          <div>
-            <Label htmlFor="buyer-phone">Teléfono (opcional)</Label>
-            <Input id="buyer-phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+56 9 ..." />
-          </div>
+          <FloatingInput id="buyer-name" label="Nombre" autoComplete="name" value={name} onChange={(e) => setName(e.target.value)} required autoFocus />
+          <FloatingInput id="buyer-email" label="Email" type="email" inputMode="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+          <FloatingInput id="buyer-phone" label="Teléfono (opcional)" type="tel" inputMode="tel" autoComplete="tel" value={phone} onChange={(e) => setPhone(e.target.value)} hint="Ej: +56 9 4612 0426" />
 
           <Button type="submit" size="lg" className="w-full" disabled={loading}>
             {loading ? (

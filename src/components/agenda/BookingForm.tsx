@@ -8,6 +8,7 @@ import { es } from "date-fns/locale";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { FloatingInput, FloatingTextarea } from "@/components/ui/floating-input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Loader2, Calendar, Clock, User, DollarSign, Tag, Check, X } from "lucide-react";
@@ -390,59 +391,46 @@ export function BookingForm({ timeSlot, professional, service, onBack }: Booking
       </div>
 
       <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
-        <div>
-          <Label htmlFor="customerName">Nombre completo *</Label>
-          <Input
-            id="customerName"
-            {...register("customerName")}
-            placeholder="Juan Pérez"
-            disabled={isSubmitting}
-          />
-          {errors.customerName && (
-            <p className="text-sm text-destructive mt-1">{errors.customerName.message}</p>
-          )}
-        </div>
+        <FloatingInput
+          id="customerName"
+          label="Nombre completo"
+          autoComplete="name"
+          {...register("customerName")}
+          disabled={isSubmitting}
+          error={errors.customerName?.message}
+        />
 
-        <div>
-          <Label htmlFor="customerEmail">Email *</Label>
-          <Input
-            id="customerEmail"
-            type="email"
-            {...register("customerEmail")}
-            placeholder="juan@ejemplo.com"
-            disabled={isSubmitting}
-          />
-          {errors.customerEmail && (
-            <p className="text-sm text-destructive mt-1">{errors.customerEmail.message}</p>
-          )}
-        </div>
+        <FloatingInput
+          id="customerEmail"
+          label="Email"
+          type="email"
+          inputMode="email"
+          autoComplete="email"
+          {...register("customerEmail")}
+          disabled={isSubmitting}
+          error={errors.customerEmail?.message}
+        />
 
-        <div>
-          <Label htmlFor="customerPhone">Celular *</Label>
-          <Input
-            id="customerPhone"
-            {...register("customerPhone")}
-            placeholder="+56912345678"
-            disabled={isSubmitting}
-          />
-          {errors.customerPhone && (
-            <p className="text-sm text-destructive mt-1">{errors.customerPhone.message}</p>
-          )}
-        </div>
+        <FloatingInput
+          id="customerPhone"
+          label="Celular"
+          type="tel"
+          inputMode="tel"
+          autoComplete="tel"
+          {...register("customerPhone")}
+          disabled={isSubmitting}
+          error={errors.customerPhone?.message}
+          hint="Ej: +56 9 4612 0426"
+        />
 
-        <div>
-          <Label htmlFor="customerComments">Comentarios (opcional)</Label>
-          <Textarea
-            id="customerComments"
-            {...register("customerComments")}
-            placeholder="¿Algo que debamos saber?"
-            disabled={isSubmitting}
-            rows={3}
-          />
-          {errors.customerComments && (
-            <p className="text-sm text-destructive mt-1">{errors.customerComments.message}</p>
-          )}
-        </div>
+        <FloatingTextarea
+          id="customerComments"
+          label="Comentarios (opcional)"
+          {...register("customerComments")}
+          disabled={isSubmitting}
+          rows={3}
+          error={errors.customerComments?.message}
+        />
 
         <div className="flex gap-3 pt-4">
           <Button

@@ -3,6 +3,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { FloatingInput } from "@/components/ui/floating-input";
 import { Minus, Plus, Trash2, Loader2, ShoppingBag } from "lucide-react";
 import { useCart } from "./CartContext";
 import { getProductImages } from "./ProductCard";
@@ -169,24 +170,18 @@ export const CartSheet = () => {
           </>
         ) : (
           <form onSubmit={handleSubmit} className="flex-1 flex flex-col gap-4 overflow-y-auto">
-            <div>
-              <Label htmlFor="cart-name">Nombre</Label>
-              <Input id="cart-name" value={name} onChange={(e) => setName(e.target.value)} required autoFocus />
-            </div>
-            <div>
-              <Label htmlFor="cart-email">Email</Label>
-              <Input id="cart-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-            </div>
-            <div>
-              <Label htmlFor="cart-phone">Teléfono (opcional)</Label>
-              <Input
-                id="cart-phone"
-                type="tel"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="+56 9 ..."
-              />
-            </div>
+            <FloatingInput id="cart-name" label="Nombre" autoComplete="name" value={name} onChange={(e) => setName(e.target.value)} required autoFocus />
+            <FloatingInput id="cart-email" label="Email" type="email" inputMode="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            <FloatingInput
+              id="cart-phone"
+              label="Teléfono (opcional)"
+              type="tel"
+              inputMode="tel"
+              autoComplete="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              hint="Ej: +56 9 4612 0426"
+            />
 
             <div className="mt-auto space-y-3 border-t border-border pt-4">
               <div className="flex items-center justify-between font-space-grotesk">
