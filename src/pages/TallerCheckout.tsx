@@ -4,6 +4,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { FloatingInput } from "@/components/ui/floating-input";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { trackMetaClientEvent } from "@/lib/metaTracking";
@@ -511,54 +512,48 @@ const TallerCheckout = () => {
             {/* Datos del comprador */}
             <div className="space-y-4">
               <div className="grid sm:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="nombre">Nombre</Label>
-                  <Input
-                    id="nombre"
-                    autoComplete="given-name"
-                    value={form.nombre}
-                    onChange={(e) => setForm({ ...form, nombre: e.target.value })}
-                    maxLength={100}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="apellido">Apellido</Label>
-                  <Input
-                    id="apellido"
-                    autoComplete="family-name"
-                    value={form.apellido}
-                    onChange={(e) => setForm({ ...form, apellido: e.target.value })}
-                    maxLength={100}
-                    required
-                  />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  autoComplete="email"
-                  value={form.email}
-                  onChange={(e) => setForm({ ...form, email: e.target.value })}
-                  maxLength={255}
+                <FloatingInput
+                  id="nombre"
+                  label="Nombre"
+                  autoComplete="given-name"
+                  value={form.nombre}
+                  onChange={(e) => setForm({ ...form, nombre: e.target.value })}
+                  maxLength={100}
+                  required
+                />
+                <FloatingInput
+                  id="apellido"
+                  label="Apellido"
+                  autoComplete="family-name"
+                  value={form.apellido}
+                  onChange={(e) => setForm({ ...form, apellido: e.target.value })}
+                  maxLength={100}
                   required
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="celular">Celular</Label>
-                <Input
-                  id="celular"
-                  type="tel"
-                  autoComplete="tel"
-                  value={form.celular}
-                  onChange={(e) => setForm({ ...form, celular: e.target.value })}
-                  placeholder="+56 9 4612 0426"
-                  maxLength={30}
-                  required
-                />
-              </div>
+              <FloatingInput
+                id="email"
+                label="Email"
+                type="email"
+                inputMode="email"
+                autoComplete="email"
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+                maxLength={255}
+                required
+              />
+              <FloatingInput
+                id="celular"
+                label="Celular"
+                type="tel"
+                inputMode="tel"
+                autoComplete="tel"
+                value={form.celular}
+                onChange={(e) => setForm({ ...form, celular: e.target.value })}
+                hint="Ej: +56 9 4612 0426"
+                maxLength={30}
+                required
+              />
             </div>
 
             {/* Cupón (solo talleres individuales) */}

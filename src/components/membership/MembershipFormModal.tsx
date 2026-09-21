@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { FloatingInput } from "@/components/ui/floating-input";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -237,25 +238,25 @@ export function MembershipFormModal({ open, onOpenChange, group, initialCode }: 
                 onInput={handleFirstInteraction}
                 className="space-y-4"
               >
-                <FormField control={form.control} name="name" render={({ field }) => (
+                <FormField control={form.control} name="name" render={({ field, fieldState }) => (
                   <FormItem>
-                    <FormLabel>Nombre</FormLabel>
-                    <FormControl><Input placeholder="Tu nombre" {...field} /></FormControl>
-                    <FormMessage />
+                    <FormControl>
+                      <FloatingInput label="Nombre" autoComplete="name" error={fieldState.error?.message} {...field} />
+                    </FormControl>
                   </FormItem>
                 )} />
-                <FormField control={form.control} name="email" render={({ field }) => (
+                <FormField control={form.control} name="email" render={({ field, fieldState }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl><Input type="email" placeholder="tu@email.com" {...field} /></FormControl>
-                    <FormMessage />
+                    <FormControl>
+                      <FloatingInput label="Email" type="email" inputMode="email" autoComplete="email" error={fieldState.error?.message} {...field} />
+                    </FormControl>
                   </FormItem>
                 )} />
-                <FormField control={form.control} name="phone" render={({ field }) => (
+                <FormField control={form.control} name="phone" render={({ field, fieldState }) => (
                   <FormItem>
-                    <FormLabel>WhatsApp</FormLabel>
-                    <FormControl><Input type="tel" placeholder="912345678" {...field} /></FormControl>
-                    <FormMessage />
+                    <FormControl>
+                      <FloatingInput label="WhatsApp" type="tel" inputMode="tel" autoComplete="tel" error={fieldState.error?.message} {...field} />
+                    </FormControl>
                   </FormItem>
                 )} />
                 <Button
