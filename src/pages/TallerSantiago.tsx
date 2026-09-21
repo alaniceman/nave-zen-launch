@@ -205,6 +205,15 @@ const TallerSantiago = () => {
         if (status === "paid" && amount) {
           const eventId = `purchase-taller-${orderId}`;
           const nivel = (data as any)?.nivel as string | undefined;
+          const statusContentIds = (data as any)?.contentIds as string[] | undefined;
+          const contentIds =
+            Array.isArray(statusContentIds) && statusContentIds.length > 0
+              ? statusContentIds
+              : [`taller-whm-santiago-${nivel || "general"}`];
+          const numItems =
+            typeof (data as any)?.numItems === "number" && (data as any).numItems > 0
+              ? (data as any).numItems
+              : contentIds.length;
           trackEvent(
             "Purchase",
             {
@@ -212,10 +221,10 @@ const TallerSantiago = () => {
               currency: "CLP",
               content_name: nombre || "Taller Método Wim Hof",
               content_type: "product",
-              // content_ids identifica el taller (estable), no la orden
-              content_ids: [`taller-whm-santiago-${nivel || "general"}`],
+              // content_ids identifica el/los talleres (estable), no la orden
+              content_ids: contentIds,
               content_category: "workshop",
-              num_items: 1,
+              num_items: numItems,
             },
             eventId
           );
@@ -465,7 +474,14 @@ const TallerSantiago = () => {
     },
   ];
 
-  const reservaActual = reservaTaller ? TALLERES[reservaTaller] : null;
+  const esPackReserva = reservaTaller === "pack";
+  const reservaActual =
+    reservaTaller && reservaTaller !== "pack" ? TALLERES[reservaTaller] : null;
+  const totalReserva = esPackReserva
+    ? PACK.precio
+    : reservaActual
+    ? Math.max(0, reservaActual.valor - (appliedCoupon?.discount ?? 0))
+    : 0;
 
   const jsonLd = [
     {
@@ -562,14 +578,18 @@ const TallerSantiago = () => {
             <div className="flex-1">
               <p className="font-heading font-semibold">
                 {pagoStatus === "approved"
-                  ? `¡Reserva confirmada${pagoTallerNombre ? ` · ${pagoTallerNombre}` : ""}!`
+                  ? pagoEsPack
+                    ? "¡Tus 2 cupos están confirmados · Fundamentales + Avanzado!"
+                    : `¡Reserva confirmada${pagoTallerNombre ? ` · ${pagoTallerNombre}` : ""}!`
                   : pagoStatus === "pending"
                   ? "Tu pago está en proceso"
                   : "No pudimos confirmar tu pago"}
               </p>
               <p className="text-sm text-muted-foreground">
                 {pagoStatus === "approved"
-                  ? "Te enviamos por email la fecha de tu taller, el horario y el link al grupo de WhatsApp. Te esperamos en Antares 259, Las Condes."
+                  ? pagoEsPack
+                    ? "Quedaste inscrito en los dos talleres: sábado 3 y domingo 4 de octubre, de 11:30 a 15:00. Te enviamos un solo correo con ambas fechas y el link al grupo de WhatsApp. Te esperamos en Antares 259, Las Condes."
+                    : "Te enviamos por email la fecha de tu taller, el horario y el link al grupo de WhatsApp. Te esperamos en Antares 259, Las Condes."
                   : pagoStatus === "pending"
                   ? "Cuando Mercado Pago confirme el pago, tu cupo queda reservado. Si tienes dudas, escríbenos por WhatsApp."
                   : "Tu cupo no quedó reservado. Puedes intentar de nuevo o escribirnos por WhatsApp."}
