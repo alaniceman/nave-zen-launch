@@ -8,6 +8,6 @@ type: feature
 - Edge function `sync-reservas-sheet`: reescribe la pestaña completa desde `bookings` (paginado 1000), orden `created_at` desc. `?dryRun=1` solo lee.
 - Cabeceras: las 20 originales + `Sesión` (nombre de la clase) y `Categoría` justo después de `Servicio`.
 - Categoría: `color_tag` yoga → "Yoga"; wim-hof / breathwork / agua-fria / hiit → "Wim Hof"; fallback por nombre.
-- Cron `sync-reservas-sheet-1-15`: `0 12 1,15 * *` (9:00 Chile los días 1 y 15).
+- Crons `sync-reservas-sheet-1-15-utc8` (`0 8 1,15 * *`) y `sync-reservas-sheet-1-15-utc9` (`0 9 1,15 * *`). La función lleva guarda `?cron=1`: solo escribe si hora Chile == 05 y día ∈ {1,15}; los dos disparos cubren DST (UTC-3 verano → 08:00 UTC, UTC-4 invierno → 09:00 UTC) y el disparo que no coincide se salta sin escribir.
 - Requiere que `navestudio@robust-doodad-322422.iam.gserviceaccount.com` tenga permiso de **Editor** en el spreadsheet (con solo lectura la escritura falla 403).
 - Helper `replaceSheetValues` en `supabase/functions/_shared/googleSheets.ts` (clear + values.update).
