@@ -76,6 +76,30 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
+    // Guarda DST: solo ejecutar a las 05:00 hora Chile, días 1 y 15.
+    // Dos crons (08:00 y 09:00 UTC) cubren -03 (verano) y -04 (invierno);
+    // el disparo que no coincida con hora 05:00 se salta sin escribir.
+    const isCronRun = new URL(req.url).searchParams.get("cron") === "1";
+    if (isCronRun && new URL(req.url).searchParams.get("dryRun") !== "1") {
+      const now = new Date();
+      const fmt = new Intl.DateTimeFormat("en-CA", {
+        timeZone: TZ,
+        day: "2-digit",
+        hour: "2-digit",
+        hour12: false,
+      });
+      const p: Record<string, string> = {};
+      for (const part of fmt.formatToParts(now)) p[part.type] = part.value;
+      const chileHour = Number(p.hour);
+      const chileDay = Number(p.day);
+      if ((chileDay !== 1 && chileDay !== 15) || chileHour !== 5) {
+        return new Response(
+          JSON.stringify({ success: true, skipped: true, chileHour, chileDay }),
+          { headers: { ...corsHeaders, "Content-Type": "application/json" } },
+        );
+      }
+    }
+
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
