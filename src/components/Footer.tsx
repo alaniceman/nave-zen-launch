@@ -102,6 +102,12 @@ const Footer = () => {
                 Retiro de invierno Wim Hof
               </a>
               <a
+                href="https://studiolanave.com/wim-hof-todos-los-podcasts"
+                className="text-accent hover:text-warm transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
+              >
+                Podcasts de Wim Hof
+              </a>
+              <a
                 href="https://guatemala.criomedicina.com/"
                 target="_blank"
                 rel="noopener noreferrer"

@@ -82,6 +82,7 @@ const ReglasNaveStudio = lazy(() => import("./pages/ReglasNaveStudio"));
 const TallerSantiago = lazy(() => import("./pages/TallerSantiago"));
 const TallerCheckout = lazy(() => import("./pages/TallerCheckout"));
 const TalleresYRetiros = lazy(() => import("./pages/TalleresYRetiros"));
+const WimHofTodosLosPodcasts = lazy(() => import("./pages/WimHofTodosLosPodcasts"));
 const Tienda = lazy(() => import("./pages/Tienda"));
 const TiendaSuccess = lazy(() => import("./pages/TiendaSuccess"));
 const TiendaFailure = lazy(() => import("./pages/TiendaFailure"));
@@ -286,6 +287,7 @@ const App = () => {
             <Route path="/taller-wim-hof-santiago-fundamentales-avanzado" element={<TallerSantiago />} />
             <Route path="/checkout" element={<TallerCheckout />} />
             <Route path="/talleres-y-retiros" element={<TalleresYRetiros />} />
+            <Route path="/wim-hof-todos-los-podcasts" element={<WimHofTodosLosPodcasts />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
