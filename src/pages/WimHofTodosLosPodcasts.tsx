@@ -121,7 +121,16 @@ export default function WimHofTodosLosPodcasts() {
         <meta property="og:description" content="Escucha podcasts de Wim Hof con Joe Rogan, The Diary of a CEO y más. Conoce el método y agenda una sesión guiada en Nave Studio, Las Condes." />
         <meta property="og:url" content={CANONICAL} />
         <meta property="og:type" content="article" />
-        <meta name="twitter:card" content="summary" />
+        <meta property="og:locale" content="es_CL" />
+        <meta property="og:site_name" content="Nave Studio" />
+        <meta property="og:image" content={heroAsset.url} />
+        <meta property="og:image:alt" content="Sesión guiada de frío en Nave Studio, Las Condes" />
+        <meta name="robots" content="index, follow, max-image-preview:large" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Wim Hof: podcasts y método en Chile | Nave Studio" />
+        <meta name="twitter:description" content="Escucha podcasts de Wim Hof con Joe Rogan, The Diary of a CEO y más. Conoce el método y agenda una sesión guiada en Nave Studio, Las Condes." />
+        <meta name="twitter:image" content={heroAsset.url} />
+        <link rel="alternate" hrefLang="es-CL" href={CANONICAL} />
         <script type="application/ld+json">{JSON.stringify(articleJsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
       </Helmet>
