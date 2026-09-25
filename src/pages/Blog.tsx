@@ -17,9 +17,20 @@ import yinHeroAsset from "@/assets/studio-savasana.webp.asset.json";
 import vinyasaHeroAsset from "@/assets/studio-yoga-perro.webp.asset.json";
 import powerHeroAsset from "@/assets/studio-corazon.webp.asset.json";
 import integralHeroAsset from "@/assets/studio-meditacion-loto.webp.asset.json";
+import alanPodcastCoverAsset from "@/assets/alan-earle-alan-iceman-nave-studio.webp.asset.json";
 
 const Blog = () => {
   const blogPosts = [
+    {
+      title: "Alan Earle, Alan Iceman: podcasts, entrevistas y su historia",
+      slug: "/blog/alan-earle-alan-iceman-podcasts-entrevistas",
+      excerpt: "Conoce la historia de Alan Earle, fundador de Nave Studio, a través de sus entrevistas sobre emprendimiento, respiración, agua fría y transformación personal.",
+      author: "Nave Studio",
+      date: "25 de septiembre, 2026",
+      categories: ["Comunidad e historias"],
+      image: alanPodcastCoverAsset.url,
+      imageAlt: "Retrato de Alan Earle con una mano sobre el pecho"
+    },
     {
       title: "Wim Hof: podcasts, entrevistas y cómo practicar en Chile",
       slug: "/wim-hof-todos-los-podcasts",

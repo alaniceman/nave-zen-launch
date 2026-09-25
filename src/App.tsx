@@ -83,6 +83,7 @@ const TallerSantiago = lazy(() => import("./pages/TallerSantiago"));
 const TallerCheckout = lazy(() => import("./pages/TallerCheckout"));
 const TalleresYRetiros = lazy(() => import("./pages/TalleresYRetiros"));
 const WimHofTodosLosPodcasts = lazy(() => import("./pages/WimHofTodosLosPodcasts"));
+const BlogAlanEarlePodcasts = lazy(() => import("./pages/BlogAlanEarlePodcasts"));
 const Tienda = lazy(() => import("./pages/Tienda"));
 const TiendaSuccess = lazy(() => import("./pages/TiendaSuccess"));
 const TiendaFailure = lazy(() => import("./pages/TiendaFailure"));
@@ -288,6 +289,7 @@ const App = () => {
             <Route path="/checkout" element={<TallerCheckout />} />
             <Route path="/talleres-y-retiros" element={<TalleresYRetiros />} />
             <Route path="/wim-hof-todos-los-podcasts" element={<WimHofTodosLosPodcasts />} />
+            <Route path="/blog/alan-earle-alan-iceman-podcasts-entrevistas" element={<BlogAlanEarlePodcasts />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
