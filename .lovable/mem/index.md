@@ -4,3 +4,4 @@
 - [integrations/notion-clientes-plan-prueba](mem://integrations/notion-clientes-plan-prueba) — Sync de plan de prueba con la tabla Clientes de Notion (estado, forma de pago, follow-up)
 - [features/taller-wim-hof-octubre-2026](mem://features/taller-wim-hof-octubre-2026) — Taller Wim Hof 3 y 4 oct 2026: fechas, The Snake, cupos, emails y cron de agradecimiento
 - [integrations/google-sheet-reservas-wim-hof](mem://integrations/google-sheet-reservas-wim-hof) — Sync del 1 y 15 de la pestaña Reservas Wim Hof con columnas Sesión y Categoría
+- [features/pack-renovacion-landing](mem://features/pack-renovacion-landing) — Landing privada /pack-renovacion para renovar clientes 1 a 1 con pack 577d13fc

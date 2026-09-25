@@ -45,6 +45,7 @@ const MarzoReset = lazy(() => import("./pages/MarzoReset"));
 const DiaDeLaMadre = lazy(() => import("./pages/DiaDeLaMadre"));
 const PromoInvierno = lazy(() => import("./pages/PromoInvierno"));
 const PromoTalleres = lazy(() => import("./pages/PromoTalleres"));
+const PackRenovacion = lazy(() => import("./pages/PackRenovacion"));
 const Promo18Septiembre = lazy(() => import("./pages/Promo18Septiembre"));
 const Horarios = lazy(() => import("./pages/Horarios"));
 const ConoceElLugar = lazy(() => import("./pages/ConoceElLugar"));
@@ -190,6 +191,7 @@ const App = () => {
             <Route path="/diadelamadre" element={<Navigate to="/dia-de-la-madre" replace />} />
             <Route path="/promo-invierno" element={<PromoInvierno />} />
             <Route path="/promo-talleres" element={<PromoTalleres />} />
+            <Route path="/pack-renovacion" element={<PackRenovacion />} />
             <Route path="/promo-18-septiembre" element={<Promo18Septiembre />} />
             <Route path="/promo-18" element={<Navigate to="/promo-18-septiembre" replace />} />
             <Route path="/dia-del-padre" element={<Navigate to="/promo-invierno" replace />} />
