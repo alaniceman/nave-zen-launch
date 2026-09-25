@@ -21,6 +21,16 @@ import integralHeroAsset from "@/assets/studio-meditacion-loto.webp.asset.json";
 const Blog = () => {
   const blogPosts = [
     {
+      title: "Wim Hof: podcasts, entrevistas y cómo practicar en Chile",
+      slug: "/wim-hof-todos-los-podcasts",
+      excerpt: "Una selección de conversaciones de Wim Hof con Joe Rogan, The Diary of a CEO, Tim Ferriss y más. Conoce su método y cómo practicarlo guiado en Las Condes.",
+      author: "Equipo de Nave Studio",
+      date: "24 de septiembre, 2026",
+      categories: ["Wim Hof Method", "Podcasts", "Respiración", "Agua fría"],
+      image: heroImage,
+      imageAlt: "Persona en respiración guiada antes del baño de hielo en Nave Studio"
+    },
+    {
       title: "Beneficios del Ice Bath: cuerpo, mente y ciencia",
       slug: "/blog/beneficios-del-ice-bath",
       excerpt: "Recuperación muscular, más energía y foco, mejor sueño y menos estrés: qué hace el frío en tu cuerpo y cómo empezar hoy con un protocolo seguro.",
