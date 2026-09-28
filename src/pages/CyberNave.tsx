@@ -9,7 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { getMetaBrowserContext, trackMetaEventOnce } from "@/lib/metaPixel";
 import heroImg from "@/assets/studio-ice-sereno.webp.asset.json";
 
-type Status = "idle" | "loading" | "success" | "error" | "delivery_failed" | "rate_limited";
+type Status = "idle" | "loading" | "success" | "error" | "delivery_failed" | "delivery_exhausted" | "processing" | "rate_limited";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 const CyberNave = () => {
@@ -33,31 +33,36 @@ const CyberNave = () => {
     setStatus("loading");
     const ctx = getMetaBrowserContext();
     const params = new URLSearchParams(window.location.search);
-    const { data, error } = await supabase.functions.invoke("cyber-nave-subscribe", {
-      body: {
-        name: name.trim().slice(0, 80),
-        email: clean,
-        consent: true,
-        website,
-        utm_source: params.get("utm_source") ?? undefined,
-        utm_medium: params.get("utm_medium") ?? undefined,
-        utm_campaign: params.get("utm_campaign") ?? undefined,
-        fbp: ctx.fbp,
-        fbc: ctx.fbc,
-        eventSourceUrl: window.location.href,
-      },
-    });
-    let payload = data as { ok?: boolean; status?: string; error?: string; leadEventId?: string } | null;
-    if (error && "context" in error) {
-      try { payload = await (error as { context: Response }).context.json(); } catch { /* noop */ }
+    const utm = (k: string) => params.get(k)?.slice(0, 100) || undefined;
+    const body = {
+      name: name.trim().slice(0, 80), email: clean, consent: true, website,
+      utm_source: utm("utm_source"), utm_medium: utm("utm_medium"), utm_campaign: utm("utm_campaign"),
+      fbp: ctx.fbp, fbc: ctx.fbc, eventSourceUrl: window.location.href.slice(0, 500),
+    };
+    let final: Status = "error";
+    try {
+      for (let i = 0; i < 6; i++) {
+        const { data, error } = await supabase.functions.invoke("cyber-nave-subscribe", { body });
+        let p = data as { ok?: boolean; status?: string; error?: string; leadEventId?: string } | null;
+        if (error && "context" in error) {
+          try { p = await (error as { context: Response }).context.json(); } catch { p = null; }
+        }
+        if (p?.leadEventId) {
+          trackMetaEventOnce(p.leadEventId, "Lead", { content_name: "Cyber Nave · Regalo musical", content_category: "cyber" }, p.leadEventId);
+        }
+        if (p?.ok && p.status === "sent") { final = "success"; break; }
+        if (p?.status === "processing") { setStatus("processing"); final = "processing"; await new Promise((r) => setTimeout(r, 4000)); continue; }
+        if (p?.status === "delivery_failed") final = "delivery_failed";
+        else if (p?.status === "delivery_exhausted") final = "delivery_exhausted";
+        else if (p?.error === "rate_limited") final = "rate_limited";
+        else final = "error";
+        break;
+      }
+    } catch {
+      final = "error";
+    } finally {
+      setStatus(final);
     }
-    if (payload?.leadEventId) {
-      trackMetaEventOnce(payload.leadEventId, "Lead", { content_name: "Cyber Nave · Regalo musical", content_category: "cyber" }, payload.leadEventId);
-    }
-    if (payload?.ok && payload.status === "sent") setStatus("success");
-    else if (payload?.status === "delivery_failed") setStatus("delivery_failed");
-    else if (payload?.error === "rate_limited") setStatus("rate_limited");
-    else setStatus("error");
   };
 
   return (
@@ -74,7 +79,7 @@ const CyberNave = () => {
 
       <main className="min-h-screen bg-primary text-primary-foreground">
         <section className="container mx-auto px-5 py-10 md:py-20 grid gap-10 md:grid-cols-2 md:items-center max-w-6xl">
-          <div className="order-2 md:order-1">
+          <div>
             <p className="text-xs uppercase tracking-[0.25em] opacity-80 mb-4">Nave Studio · Cyber</p>
             <h1 className="font-heading text-4xl md:text-5xl leading-tight mb-5">
               Adelántate al Cyber. Tu regalo empieza ahora.
@@ -115,6 +120,16 @@ const CyberNave = () => {
                       Guardamos tu inscripción, pero no pudimos enviar el correo. Intenta de nuevo en unos minutos.
                     </p>
                   )}
+                  {status === "processing" && (
+                    <p className="text-sm text-muted-foreground" role="status" aria-live="polite">
+                      Estamos preparando tu correo… Puedes volver a intentarlo en unos segundos.
+                    </p>
+                  )}
+                  {status === "delivery_exhausted" && (
+                    <p className="text-sm text-destructive" role="alert">
+                      No pudimos enviar el correo. Escríbenos por WhatsApp al +56 9 4612 0426 y te lo mandamos.
+                    </p>
+                  )}
                   {status === "rate_limited" && (
                     <p className="text-sm text-destructive" role="alert">Demasiados intentos. Prueba más tarde.</p>
                   )}
@@ -124,7 +139,7 @@ const CyberNave = () => {
                   <Button type="submit" size="lg" className="w-full h-14 text-base"
                     disabled={!consent || !email || status === "loading"}>
                     {status === "loading" ? <Loader2 className="w-5 h-5 animate-spin" /> :
-                      status === "delivery_failed" ? "Reintentar envío" : "Quiero mi regalo"}
+                      status === "delivery_failed" || status === "processing" ? "Reintentar envío" : "Quiero mi regalo"}
                   </Button>
                 </form>
               )}
@@ -135,9 +150,9 @@ const CyberNave = () => {
               </p>
             </div>
           </div>
-          <div className="order-1 md:order-2">
+          <div>
             <img src={heroImg.url} alt="Persona en calma durante una inmersión en agua fría en Nave Studio"
-              className="w-full aspect-[4/5] md:aspect-[4/5] max-h-[60vh] md:max-h-none object-cover rounded-2xl" />
+              className="w-full aspect-[4/5] md:aspect-[4/5] max-h-[50vh] md:max-h-none object-cover rounded-2xl" />
           </div>
         </section>
       </main>

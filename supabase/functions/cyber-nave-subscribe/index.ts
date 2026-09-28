@@ -1,13 +1,12 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { corsHeaders } from "../_shared/cors.ts";
+import { classifyResend, decideClaim, idemKey } from "./logic.ts";
 import { sanitizePublicIp, sendMetaEvent } from "../_shared/metaCapi.ts";
 
 const AUDIO_URL = "https://d.pr/a/XcczAM";
 const CONSENT_VERSION = "cyber-nave-2026-09-v1";
 const IP_LIMIT_PER_HOUR = 5;
-const RESEND_COOLDOWN_MIN = 30;
-const MAX_ATTEMPTS = 4;
 
 const bodySchema = z.object({
   name: z.string().trim().max(80).optional().or(z.literal("")),
@@ -122,52 +121,66 @@ Deno.serve(async (req) => {
     }
 
     // Reclamo atómico del envío
-    const cutoff = new Date(Date.now() - RESEND_COOLDOWN_MIN * 60_000).toISOString();
-    const staleSending = new Date(Date.now() - 5 * 60_000).toISOString();
-    let claimQ = supabase.from("cyber_nave_subscribers")
-      .update({ delivery_status: "sending", delivery_attempts: sub.delivery_attempts + 1, last_attempt_at: new Date().toISOString() })
-      .eq("id", sub.id).eq("delivery_attempts", sub.delivery_attempts).lt("delivery_attempts", MAX_ATTEMPTS);
-    if (sub.delivery_status === "pending" || sub.delivery_status === "failed") {
-      claimQ = claimQ.in("delivery_status", ["pending", "failed"]);
-    } else if (sub.delivery_status === "sent") {
-      claimQ = claimQ.eq("delivery_status", "sent").lt("last_attempt_at", cutoff);
-    } else {
-      claimQ = claimQ.eq("delivery_status", "sending").lt("last_attempt_at", staleSending);
+    const d = decideClaim(sub, Date.now());
+    if (!d.claim) {
+      const code = d.reply === "sent" || d.reply === "processing" ? 200 : 502;
+      return json({ ok: d.reply === "sent", status: d.reply, leadEventId }, code);
     }
-    const { data: claimed } = await claimQ.select("id, delivery_attempts");
-
+    const { data: claimed, error: claimErr } = await supabase.from("cyber_nave_subscribers")
+      .update({ delivery_status: "sending", delivery_attempts: d.attempt, last_attempt_at: new Date().toISOString() })
+      .eq("id", sub.id).eq("delivery_status", d.fromStatus).eq("delivery_attempts", sub.delivery_attempts)
+      .select("id");
+    if (claimErr) throw new Error(`claim_failed: ${claimErr.message}`);
     if (!claimed || claimed.length === 0) {
-      // Ya enviado recientemente o en curso: respuesta neutra, sin reenviar
-      if (sub.delivery_status === "failed") return json({ ok: false, status: "delivery_failed", leadEventId }, 502);
+      // Otro request lo tomó: releer estado real
+      const { data: cur, error: curErr } = await supabase.from("cyber_nave_subscribers")
+        .select("delivery_status").eq("id", sub.id).single();
+      if (curErr || !cur) throw new Error("reread_failed");
+      if (cur.delivery_status === "sent") return json({ ok: true, status: "sent", leadEventId });
+      if (cur.delivery_status === "failed") return json({ ok: false, status: "delivery_failed", leadEventId }, 502);
+      return json({ ok: false, status: "processing", leadEventId });
+    }
+
+    // Payload estable: siempre con el nombre guardado
+    const { html, text } = buildEmail(sub.name);
+    let httpStatus: number | null = null;
+    let body: { id?: string; message?: string } = {};
+    let errMsg = "";
+    try {
+      const RESEND = Deno.env.get("RESEND_API_KEY");
+      if (!RESEND) throw new Error("resend_not_configured");
+      const ctrl = new AbortController();
+      const t = setTimeout(() => ctrl.abort(), 15_000);
+      try {
+        const res = await fetch("https://api.resend.com/emails", {
+          method: "POST", signal: ctrl.signal,
+          headers: { Authorization: `Bearer ${RESEND}`, "Content-Type": "application/json", "Idempotency-Key": idemKey(sub.id, d.attempt) },
+          body: JSON.stringify({
+            from: "Nave Studio <agenda@studiolanave.com>", to: [sub.email],
+            subject: "Tu música para volver al presente · Nave Studio", html, text,
+          }),
+        });
+        httpStatus = res.status;
+        body = await res.json().catch(() => ({}));
+      } finally { clearTimeout(t); }
+    } catch (e) {
+      errMsg = e instanceof Error ? e.message : String(e);
+    }
+    const outcome = classifyResend(httpStatus, !!body?.id);
+    if (outcome === "sent") {
+      const { error: upErr } = await supabase.from("cyber_nave_subscribers").update({
+        delivery_status: "sent", resend_email_id: body.id, delivery_error: null, sent_at: new Date().toISOString(),
+      }).eq("id", sub.id);
+      if (upErr) console.error("[cyber-nave] sent update failed", upErr.message);
       return json({ ok: true, status: "sent", leadEventId });
     }
-
-    const RESEND = Deno.env.get("RESEND_API_KEY");
-    if (!RESEND) throw new Error("resend_not_configured");
-    const { html, text } = buildEmail(name ?? sub.name);
-    const res = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${RESEND}`, "Content-Type": "application/json",
-        "Idempotency-Key": `cyber-nave-${sub.id}-${claimed[0].delivery_attempts}`,
-      },
-      body: JSON.stringify({
-        from: "Nave Studio <agenda@studiolanave.com>", to: [data.email],
-        subject: "Tu música para volver al presente · Nave Studio", html, text,
-      }),
-    });
-    const body = await res.json().catch(() => ({}));
-    if (!res.ok || !body?.id) {
-      console.error("[cyber-nave] resend", res.status, JSON.stringify(body));
-      await supabase.from("cyber_nave_subscribers").update({
-        delivery_status: "failed", delivery_error: `${res.status}: ${String(body?.message ?? "").slice(0, 300)}`,
-      }).eq("id", sub.id).eq("delivery_status", "sending");
-      return json({ ok: false, status: "delivery_failed", leadEventId }, 502);
-    }
-    await supabase.from("cyber_nave_subscribers").update({
-      delivery_status: "sent", resend_email_id: body.id, delivery_error: null, sent_at: new Date().toISOString(),
-    }).eq("id", sub.id);
-    return json({ ok: true, status: "sent", leadEventId });
+    const reason = (errMsg || `${httpStatus}: ${String(body?.message ?? "")}`).slice(0, 300);
+    console.error("[cyber-nave] delivery", outcome, reason);
+    const { error: fErr } = await supabase.from("cyber_nave_subscribers").update({
+      delivery_status: outcome, delivery_error: reason,
+    }).eq("id", sub.id).eq("delivery_status", "sending").eq("delivery_attempts", d.attempt);
+    if (fErr) console.error("[cyber-nave] failed update", fErr.message);
+    return json({ ok: false, status: "delivery_failed", leadEventId }, 502);
   } catch (e) {
     console.error("[cyber-nave] error", e);
     return json({ ok: false, error: "server_error" }, 500);

@@ -1,0 +1,20 @@
+import { assertEquals } from "https://deno.land/std@0.224.0/assert/mod.ts";
+import { classifyResend, decideClaim, idemKey } from "./logic.ts";
+const now = Date.now(); const ago = (ms: number) => new Date(now - ms).toISOString();
+Deno.test("pending -> nueva key 1", () => assertEquals(decideClaim({ delivery_status: "pending", delivery_attempts: 0, last_attempt_at: null }, now), { claim: true, fromStatus: "pending", attempt: 1, newKey: true }));
+Deno.test("sending reciente -> processing, no consume", () => assertEquals(decideClaim({ delivery_status: "sending", delivery_attempts: 1, last_attempt_at: ago(1000) }, now), { claim: false, reply: "processing" }));
+Deno.test("sending colgado -> misma key", () => assertEquals(decideClaim({ delivery_status: "sending", delivery_attempts: 4, last_attempt_at: ago(300_000) }, now), { claim: true, fromStatus: "sending", attempt: 4, newKey: false }));
+Deno.test("uncertain en intento 4 -> misma key recuperable", () => assertEquals(decideClaim({ delivery_status: "uncertain", delivery_attempts: 4, last_attempt_at: ago(10_000) }, now), { claim: true, fromStatus: "uncertain", attempt: 4, newKey: false }));
+Deno.test("failed con cooldown -> sin intento (doble click)", () => assertEquals(decideClaim({ delivery_status: "failed", delivery_attempts: 1, last_attempt_at: ago(2000) }, now), { claim: false, reply: "delivery_failed" }));
+Deno.test("failed tras cooldown -> key nueva", () => assertEquals(decideClaim({ delivery_status: "failed", delivery_attempts: 1, last_attempt_at: ago(120_000) }, now).claim, true));
+Deno.test("failed agotado", () => assertEquals(decideClaim({ delivery_status: "failed", delivery_attempts: 4, last_attempt_at: ago(999_999) }, now), { claim: false, reply: "delivery_exhausted" }));
+Deno.test("sent <30min -> sent sin reenvío", () => assertEquals(decideClaim({ delivery_status: "sent", delivery_attempts: 1, last_attempt_at: ago(60_000) }, now), { claim: false, reply: "sent" }));
+Deno.test("sent >30min -> key nueva", () => assertEquals(decideClaim({ delivery_status: "sent", delivery_attempts: 1, last_attempt_at: ago(31 * 60_000) }, now), { claim: true, fromStatus: "sent", attempt: 2, newKey: true }));
+Deno.test("clasificación Resend", () => {
+  assertEquals(classifyResend(200, true), "sent");
+  assertEquals(classifyResend(null, false), "uncertain");
+  assertEquals(classifyResend(500, false), "uncertain");
+  assertEquals(classifyResend(409, false), "uncertain");
+  assertEquals(classifyResend(422, false), "failed");
+  assertEquals(idemKey("a", 3), "cyber-nave-a-3");
+});
