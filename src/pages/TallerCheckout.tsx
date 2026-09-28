@@ -271,7 +271,7 @@ const TallerCheckout = () => {
 
   const revalidateCoupon = async (code: string, amount: number) => {
     const { data } = await supabase.functions.invoke("validate-coupon", {
-      body: { code, context: "taller", purchaseAmount: amount },
+      body: { code, context: "taller", purchaseAmount: amount, eventId: isPack ? undefined : TALLERES[producto as TallerKey].eventId },
     });
     if (!data?.valid) {
       setAppliedCoupon(null);
@@ -291,7 +291,7 @@ const TallerCheckout = () => {
     setCouponChecking(true);
     try {
       const { data, error } = await supabase.functions.invoke("validate-coupon", {
-        body: { code, context: "taller", purchaseAmount: subtotal },
+        body: { code, context: "taller", purchaseAmount: subtotal, eventId: isPack ? undefined : TALLERES[producto as TallerKey].eventId },
       });
       if (error) throw error;
       if (!data?.valid) {

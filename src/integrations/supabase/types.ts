@@ -530,6 +530,7 @@ export type Database = {
       }
       discount_coupons: {
         Row: {
+          applicable_event_ids: string[]
           applicable_package_ids: string[] | null
           applies_to_talleres: boolean
           code: string
@@ -546,6 +547,7 @@ export type Database = {
           valid_until: string | null
         }
         Insert: {
+          applicable_event_ids?: string[]
           applicable_package_ids?: string[] | null
           applies_to_talleres?: boolean
           code: string
@@ -562,6 +564,7 @@ export type Database = {
           valid_until?: string | null
         }
         Update: {
+          applicable_event_ids?: string[]
           applicable_package_ids?: string[] | null
           applies_to_talleres?: boolean
           code?: string

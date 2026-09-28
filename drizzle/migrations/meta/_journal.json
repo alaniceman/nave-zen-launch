@@ -43,6 +43,13 @@
       "when": 1790557801966,
       "tag": "0005_cyber_nave_subscribers",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1790624394344,
+      "tag": "0006_coupon_applicable_event_ids",
+      "breakpoints": true
     }
   ]
 }

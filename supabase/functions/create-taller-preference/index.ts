@@ -105,7 +105,7 @@ serve(async (req) => {
     if (rawCode) {
       const { data: coupon } = await supabase
         .from("discount_coupons")
-        .select("id, code, discount_type, discount_value, is_active, valid_from, valid_until, max_uses, current_uses, min_purchase_amount, applies_to_talleres")
+        .select("id, code, discount_type, discount_value, is_active, valid_from, valid_until, max_uses, current_uses, min_purchase_amount, applies_to_talleres, applicable_event_ids")
         .eq("code", rawCode)
         .eq("is_active", true)
         .maybeSingle();
@@ -114,6 +114,7 @@ serve(async (req) => {
       const invalid =
         !coupon ||
         !coupon.applies_to_talleres ||
+        ((coupon.applicable_event_ids ?? []).length > 0 && !eventIds.every((e) => coupon.applicable_event_ids.includes(e))) ||
         (coupon.valid_from && new Date(coupon.valid_from) > now) ||
         (coupon.valid_until && new Date(coupon.valid_until) < now) ||
         (coupon.max_uses && (coupon.current_uses ?? 0) >= coupon.max_uses) ||
