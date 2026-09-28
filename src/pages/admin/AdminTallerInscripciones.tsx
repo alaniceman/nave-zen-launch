@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/select";
 import { Download, Loader2, Search } from "lucide-react";
 import EventCuposManager from "@/components/admin/EventCuposManager";
+import TallerCouponsManager from "@/components/admin/TallerCouponsManager";
 
 /** Cupos reales de una orden: pack = N personas × 2 talleres. */
 const cuposDeOrden = (r: { quantity: number | null; product_type: string | null }) =>
@@ -195,6 +196,8 @@ export default function AdminTallerInscripciones() {
       </div>
 
       <EventCuposManager />
+
+      <TallerCouponsManager />
 
       <Card className="p-4 grid gap-4 md:grid-cols-4">
         <div>

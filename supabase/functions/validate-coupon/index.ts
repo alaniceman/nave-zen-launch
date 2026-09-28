@@ -12,7 +12,7 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { code, packageId, serviceId, purchaseAmount, context } = await req.json();
+    const { code, packageId, serviceId, purchaseAmount, context, eventId } = await req.json();
 
     if (!code || typeof code !== "string" || code.trim().length === 0) {
       return new Response(
@@ -29,7 +29,7 @@ Deno.serve(async (req) => {
 
     const { data: coupon, error } = await supabase
       .from("discount_coupons")
-      .select("id, code, discount_type, discount_value, is_active, valid_from, valid_until, max_uses, current_uses, min_purchase_amount, applicable_package_ids, applies_to_talleres")
+      .select("id, code, discount_type, discount_value, is_active, valid_from, valid_until, max_uses, current_uses, min_purchase_amount, applicable_package_ids, applies_to_talleres, applicable_event_ids")
       .eq("code", code.toUpperCase().trim())
       .eq("is_active", true)
       .maybeSingle();
@@ -68,6 +68,13 @@ Deno.serve(async (req) => {
     if (context === "taller" && !coupon.applies_to_talleres) {
       return new Response(
         JSON.stringify({ valid: false, error: "Este cupón no aplica a talleres" }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    if (context === "taller" && eventId && (coupon.applicable_event_ids ?? []).length > 0 && !coupon.applicable_event_ids.includes(eventId)) {
+      return new Response(
+        JSON.stringify({ valid: false, error: "Este cupón no aplica a este taller" }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
