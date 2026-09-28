@@ -15,6 +15,7 @@ import {
 import { Download, Loader2, Search } from "lucide-react";
 import EventCuposManager from "@/components/admin/EventCuposManager";
 import TallerCouponsManager from "@/components/admin/TallerCouponsManager";
+import ManualTallerInscripcion from "@/components/admin/ManualTallerInscripcion";
 
 /** Cupos reales de una orden: pack = N personas × 2 talleres. */
 const cuposDeOrden = (r: { quantity: number | null; product_type: string | null }) =>
@@ -72,17 +73,17 @@ export default function AdminTallerInscripciones() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [confirmFilter, setConfirmFilter] = useState("all");
 
+  const load = async () => {
+    setLoading(true);
+    const { data } = await supabase
+      .from("taller_inscripciones")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(1000);
+    setRows((data || []) as Inscripcion[]);
+    setLoading(false);
+  };
   useEffect(() => {
-    const load = async () => {
-      setLoading(true);
-      const { data } = await supabase
-        .from("taller_inscripciones")
-        .select("*")
-        .order("created_at", { ascending: false })
-        .limit(1000);
-      setRows((data || []) as Inscripcion[]);
-      setLoading(false);
-    };
     load();
   }, []);
 
@@ -196,6 +197,8 @@ export default function AdminTallerInscripciones() {
       </div>
 
       <EventCuposManager />
+
+      <ManualTallerInscripcion onAdded={load} />
 
       <TallerCouponsManager />
 
