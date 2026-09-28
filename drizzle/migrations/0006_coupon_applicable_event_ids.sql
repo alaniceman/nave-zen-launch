@@ -1,0 +1,2 @@
+ALTER TABLE public.discount_coupons ADD COLUMN IF NOT EXISTS applicable_event_ids text[] NOT NULL DEFAULT '{}'::text[];
+COMMENT ON COLUMN public.discount_coupons.applicable_event_ids IS 'Talleres (event_id) a los que aplica el cupón. Vacío = todos los talleres.';
