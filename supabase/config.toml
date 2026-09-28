@@ -88,3 +88,6 @@ verify_jwt = false
 verify_jwt = false
 
 
+
+[functions.cyber-nave-subscribe]
+verify_jwt = false
