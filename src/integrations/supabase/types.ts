@@ -462,6 +462,72 @@ export type Database = {
         }
         Relationships: []
       }
+      cyber_nave_subscribers: {
+        Row: {
+          consent: boolean
+          consent_at: string | null
+          consent_version: string | null
+          created_at: string
+          delivery_attempts: number
+          delivery_error: string | null
+          delivery_status: string
+          email: string
+          id: string
+          ip_hash: string | null
+          last_attempt_at: string | null
+          name: string | null
+          resend_email_id: string | null
+          sent_at: string | null
+          source: string
+          updated_at: string
+          utm_campaign: string | null
+          utm_medium: string | null
+          utm_source: string | null
+        }
+        Insert: {
+          consent?: boolean
+          consent_at?: string | null
+          consent_version?: string | null
+          created_at?: string
+          delivery_attempts?: number
+          delivery_error?: string | null
+          delivery_status?: string
+          email: string
+          id?: string
+          ip_hash?: string | null
+          last_attempt_at?: string | null
+          name?: string | null
+          resend_email_id?: string | null
+          sent_at?: string | null
+          source?: string
+          updated_at?: string
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Update: {
+          consent?: boolean
+          consent_at?: string | null
+          consent_version?: string | null
+          created_at?: string
+          delivery_attempts?: number
+          delivery_error?: string | null
+          delivery_status?: string
+          email?: string
+          id?: string
+          ip_hash?: string | null
+          last_attempt_at?: string | null
+          name?: string | null
+          resend_email_id?: string | null
+          sent_at?: string | null
+          source?: string
+          updated_at?: string
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Relationships: []
+      }
       discount_coupons: {
         Row: {
           applicable_package_ids: string[] | null

@@ -36,6 +36,13 @@
       "when": 1790008212030,
       "tag": "0004_taller_quantity_and_atomic_confirm",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1790557801966,
+      "tag": "0005_cyber_nave_subscribers",
+      "breakpoints": true
     }
   ]
 }
