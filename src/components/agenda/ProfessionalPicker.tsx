@@ -79,17 +79,25 @@ export function ProfessionalPicker({
           </span>
 
           {!selected && !expanded && professionals.length > 0 && (
-            <span className="ml-auto hidden items-center -space-x-2 sm:flex" aria-hidden="true">
-              {previewProfessionals.map((professional) => (
-                <Avatar key={professional.id} className="h-8 w-8 border-2 border-background">
+            <span className="ml-auto flex items-center -space-x-2" aria-hidden="true">
+              {previewProfessionals.map((professional, index) => (
+                <Avatar
+                  key={professional.id}
+                  className={cn("h-7 w-7 border-2 border-background sm:h-8 sm:w-8", index >= 3 && "hidden sm:flex")}
+                >
                   <AvatarImage src={imageFor(professional)} alt="" className="object-cover" />
                   <AvatarFallback className="text-[9px] font-semibold">
                     {initialsFor(professional.name)}
                   </AvatarFallback>
                 </Avatar>
               ))}
+              {professionals.length > 3 && (
+                <span className="relative flex h-7 w-7 items-center justify-center rounded-full border-2 border-background bg-foreground text-[9px] font-bold text-background sm:hidden">
+                  +{professionals.length - 3}
+                </span>
+              )}
               {professionals.length > previewProfessionals.length && (
-                <span className="relative flex h-8 w-8 items-center justify-center rounded-full border-2 border-background bg-foreground text-[10px] font-bold text-background">
+                <span className="relative hidden h-8 w-8 items-center justify-center rounded-full border-2 border-background bg-foreground text-[10px] font-bold text-background sm:flex">
                   +{professionals.length - previewProfessionals.length}
                 </span>
               )}
