@@ -7,6 +7,7 @@ import { format, addMonths, parseISO, startOfToday } from "date-fns";
 import { Loader2, ChevronLeft, User } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { WeeklyCalendar } from "@/components/agenda/WeeklyCalendar";
+import { ProfessionalPicker } from "@/components/agenda/ProfessionalPicker";
 import { TimeSlotsList } from "@/components/agenda/TimeSlotsList";
 import { BookingForm } from "@/components/agenda/BookingForm";
 import { toast } from "sonner";
@@ -277,20 +278,11 @@ export default function AgendaNaveStudio() {
                 )}
 
                 <Card className="flex-1 p-4">
-                  <label className="text-sm font-medium mb-2 block">Instructor</label>
-                  <Select value={selectedProfessional} onValueChange={handleProfessionalChange}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="any">Cualquiera</SelectItem>
-                      {professionals.map((prof) => (
-                        <SelectItem key={prof.id} value={prof.id}>
-                          {prof.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <ProfessionalPicker
+                    professionals={professionals}
+                    value={selectedProfessional}
+                    onValueChange={handleProfessionalChange}
+                  />
                 </Card>
               </div>
 
