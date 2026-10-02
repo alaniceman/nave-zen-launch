@@ -195,7 +195,7 @@ export const LocationGallerySection = () => {
                   <div>
                     <p className="font-inter text-sm font-medium text-neutral-dark">{ADDRESS}</p>
                     <p className="font-inter text-xs text-neutral-mid mt-0.5">
-                      A pasos del Mall Apumanque y Metro Manquehue
+                      A pasos del Metro Los Domínicos
                     </p>
                   </div>
                 </li>
