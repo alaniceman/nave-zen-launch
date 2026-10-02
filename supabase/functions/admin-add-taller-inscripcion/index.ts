@@ -85,16 +85,10 @@ Deno.serve(async (req) => {
     if (d.sendEmail) {
       const key = Deno.env.get("RESEND_API_KEY");
       if (key) {
-        const { subject, html } = buildTallerParticipantEmail({ ...insc, status: "paid" }, d.amount);
-        const r = await fetch("https://api.resend.com/emails", {
-          method: "POST",
-          headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-          body: JSON.stringify({ from: "Nave Studio <agenda@studiolanave.com>", to: [insc.email], subject, html }),
-        });
+        const r = await sendTallerEmails(key, { ...insc, status: "paid" }, d.amount);
         emailSent = r.ok;
         if (!r.ok) {
-          const txt = await r.text();
-          await supabase.from("taller_inscripciones").update({ notification_error: txt.slice(0, 500) }).eq("id", insc.id);
+          await supabase.from("taller_inscripciones").update({ notification_error: String(r.error).slice(0, 500) }).eq("id", insc.id);
         }
       }
     }

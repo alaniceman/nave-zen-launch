@@ -595,18 +595,8 @@ async function handleTallerPayment(
       // Resend rate limit: max 2 req/sec
       await new Promise((r) => setTimeout(r, 600));
 
-      const { subject, html } = buildTallerParticipantEmail(insc, Number(payment.transaction_amount));
-      const r = await fetch("https://api.resend.com/emails", {
-        method: "POST",
-        headers: { Authorization: `Bearer ${resendKey}`, "Content-Type": "application/json" },
-        body: JSON.stringify({
-          from: "Nave Studio <agenda@studiolanave.com>",
-          to: [insc.email],
-          subject,
-          html,
-        }),
-      });
-      if (!r.ok) console.error("Resend error (taller participante):", await r.text());
+      const r = await sendTallerEmails(resendKey, insc, Number(payment.transaction_amount));
+      if (!r.ok) console.error("Resend error (taller participante):", r.error);
     }
   } catch (err) {
     console.error("Taller participant email failed:", err);
