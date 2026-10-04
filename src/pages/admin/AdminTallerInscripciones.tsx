@@ -17,13 +17,24 @@ import EventCuposManager from "@/components/admin/EventCuposManager";
 import TallerCouponsManager from "@/components/admin/TallerCouponsManager";
 import ManualTallerInscripcion from "@/components/admin/ManualTallerInscripcion";
 
-/** Cupos reales de una orden: pack = N personas × 2 talleres. */
-const cuposDeOrden = (r: { quantity: number | null; product_type: string | null }) =>
-  Math.max(1, r.quantity ?? 1) * (r.product_type === "pack" ? 2 : 1);
+/**
+ * Cupos reales de una orden: pack = N personas × 2 talleres.
+ * Con un taller específico filtrado, un pack cuenta N cupos en ese taller.
+ */
+const cuposDeOrden = (
+  r: { quantity: number | null; product_type: string | null },
+  tallerFilter?: string
+) => {
+  const qty = Math.max(1, r.quantity ?? 1);
+  if (r.product_type !== "pack") return qty;
+  if (tallerFilter && tallerFilter !== "all") return qty;
+  return qty * 2;
+};
 
 type Inscripcion = {
   id: string;
   event_id: string;
+  event_ids: string[] | null;
   nivel: string;
   taller_nombre: string;
   quantity: number | null;
@@ -101,7 +112,12 @@ export default function AdminTallerInscripciones() {
 
   const filtered = useMemo(() => {
     return rows.filter((r) => {
-      if (tallerFilter !== "all" && r.event_id !== tallerFilter) return false;
+      if (tallerFilter !== "all") {
+        const matches =
+          r.event_id === tallerFilter ||
+          (Array.isArray(r.event_ids) && r.event_ids.includes(tallerFilter));
+        if (!matches) return false;
+      }
       if (statusFilter === "abandoned") {
         if (!isAbandoned(r)) return false;
       } else if (statusFilter !== "all" && r.status !== statusFilter) return false;
@@ -271,7 +287,7 @@ export default function AdminTallerInscripciones() {
             {filtered.length}
             <span className="text-base font-normal text-muted-foreground">
               {" "}
-              / {filtered.reduce((sum, r) => sum + cuposDeOrden(r), 0)}
+              / {filtered.reduce((sum, r) => sum + cuposDeOrden(r, tallerFilter), 0)}
             </span>
           </p>
         </Card>
@@ -280,7 +296,7 @@ export default function AdminTallerInscripciones() {
           <p className="text-2xl font-bold">
             {filtered
               .filter((r) => r.status === "paid")
-              .reduce((sum, r) => sum + cuposDeOrden(r), 0)}
+              .reduce((sum, r) => sum + cuposDeOrden(r, tallerFilter), 0)}
           </p>
         </Card>
         <Card className="p-4">
@@ -331,10 +347,15 @@ export default function AdminTallerInscripciones() {
                       {r.nombre} {r.apellido}
                     </td>
                     <td className="p-3 text-right whitespace-nowrap">
-                      {cuposDeOrden(r)}
-                      {r.product_type === "pack" && (
+                      {cuposDeOrden(r, tallerFilter)}
+                      {r.product_type === "pack" && tallerFilter === "all" && (
                         <div className="text-xs text-muted-foreground">
                           {Math.max(1, r.quantity ?? 1)} × 2 talleres
+                        </div>
+                      )}
+                      {r.product_type === "pack" && tallerFilter !== "all" && (
+                        <div className="text-xs text-muted-foreground">
+                          pack · {Math.max(1, r.quantity ?? 1)} en este taller
                         </div>
                       )}
                     </td>
