@@ -287,7 +287,7 @@ export default function AdminTallerInscripciones() {
             {filtered.length}
             <span className="text-base font-normal text-muted-foreground">
               {" "}
-              / {filtered.reduce((sum, r) => sum + cuposDeOrden(r), 0)}
+              / {filtered.reduce((sum, r) => sum + cuposDeOrden(r, tallerFilter), 0)}
             </span>
           </p>
         </Card>
@@ -296,7 +296,7 @@ export default function AdminTallerInscripciones() {
           <p className="text-2xl font-bold">
             {filtered
               .filter((r) => r.status === "paid")
-              .reduce((sum, r) => sum + cuposDeOrden(r), 0)}
+              .reduce((sum, r) => sum + cuposDeOrden(r, tallerFilter), 0)}
           </p>
         </Card>
         <Card className="p-4">
