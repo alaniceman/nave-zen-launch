@@ -112,7 +112,12 @@ export default function AdminTallerInscripciones() {
 
   const filtered = useMemo(() => {
     return rows.filter((r) => {
-      if (tallerFilter !== "all" && r.event_id !== tallerFilter) return false;
+      if (tallerFilter !== "all") {
+        const matches =
+          r.event_id === tallerFilter ||
+          (Array.isArray(r.event_ids) && r.event_ids.includes(tallerFilter));
+        if (!matches) return false;
+      }
       if (statusFilter === "abandoned") {
         if (!isAbandoned(r)) return false;
       } else if (statusFilter !== "all" && r.status !== statusFilter) return false;
