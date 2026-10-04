@@ -347,10 +347,15 @@ export default function AdminTallerInscripciones() {
                       {r.nombre} {r.apellido}
                     </td>
                     <td className="p-3 text-right whitespace-nowrap">
-                      {cuposDeOrden(r)}
-                      {r.product_type === "pack" && (
+                      {cuposDeOrden(r, tallerFilter)}
+                      {r.product_type === "pack" && tallerFilter === "all" && (
                         <div className="text-xs text-muted-foreground">
                           {Math.max(1, r.quantity ?? 1)} × 2 talleres
+                        </div>
+                      )}
+                      {r.product_type === "pack" && tallerFilter !== "all" && (
+                        <div className="text-xs text-muted-foreground">
+                          pack · {Math.max(1, r.quantity ?? 1)} en este taller
                         </div>
                       )}
                     </td>
