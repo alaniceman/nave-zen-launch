@@ -17,9 +17,19 @@ import EventCuposManager from "@/components/admin/EventCuposManager";
 import TallerCouponsManager from "@/components/admin/TallerCouponsManager";
 import ManualTallerInscripcion from "@/components/admin/ManualTallerInscripcion";
 
-/** Cupos reales de una orden: pack = N personas × 2 talleres. */
-const cuposDeOrden = (r: { quantity: number | null; product_type: string | null }) =>
-  Math.max(1, r.quantity ?? 1) * (r.product_type === "pack" ? 2 : 1);
+/**
+ * Cupos reales de una orden: pack = N personas × 2 talleres.
+ * Con un taller específico filtrado, un pack cuenta N cupos en ese taller.
+ */
+const cuposDeOrden = (
+  r: { quantity: number | null; product_type: string | null },
+  tallerFilter?: string
+) => {
+  const qty = Math.max(1, r.quantity ?? 1);
+  if (r.product_type !== "pack") return qty;
+  if (tallerFilter && tallerFilter !== "all") return qty;
+  return qty * 2;
+};
 
 type Inscripcion = {
   id: string;
