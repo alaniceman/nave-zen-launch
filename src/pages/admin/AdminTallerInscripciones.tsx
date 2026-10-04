@@ -34,6 +34,7 @@ const cuposDeOrden = (
 type Inscripcion = {
   id: string;
   event_id: string;
+  event_ids: string[] | null;
   nivel: string;
   taller_nombre: string;
   quantity: number | null;
