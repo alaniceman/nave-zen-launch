@@ -16,12 +16,14 @@ type Item = {
   url: string;
   icon: React.ReactNode;
   accent: string;
+  soldOut?: boolean;
 };
 
 const ITEMS: Item[] = [
   {
     tag: "Taller · Santiago",
     title: "Taller Wim Hof · Fundamentales y Avanzado",
+    soldOut: true,
     date: "Sábado 3 y domingo 4 de octubre de 2026",
     location: "Nave Studio · Antares 259, Las Condes",
     description:
@@ -29,7 +31,7 @@ const ITEMS: Item[] = [
     highlights: [
       "Fundamentales · sábado 3 de octubre · 11:30 a 15:00 (3,5 horas) · $50.000",
       "Avanzado · domingo 4 de octubre · 11:30 a 15:00 (3,5 horas) · $60.000 · incluye The Snake",
-      "Solo 15 cupos por taller — grupo íntimo",
+      "Ambas fechas agotadas",
     ],
     url: "/taller-wim-hof-santiago-fundamentales-avanzado",
     icon: <Wind className="w-5 h-5" />,
@@ -98,6 +100,7 @@ const TalleresYRetiros = () => {
                     <span className="font-body text-xs md:text-sm tracking-wider uppercase text-primary font-semibold">
                       {item.tag}
                     </span>
+                    {item.soldOut && <Badge variant="destructive">Agotado · ambas fechas</Badge>}
                   </div>
 
                   <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-4">
@@ -135,7 +138,7 @@ const TalleresYRetiros = () => {
                   >
                     {item.url.startsWith("/") ? (
                       <Link to={item.url}>
-                        Ver más e inscribirme
+                        {item.soldOut ? "Ver detalles" : "Ver más e inscribirme"}
                         <ArrowRight className="ml-2 w-4 h-4" />
                       </Link>
                     ) : (

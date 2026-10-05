@@ -14,9 +14,6 @@ import { isPromo18Active, PROMO_18_PATH, PROMO_18_PRICE, PROMO_18_REGULAR_PRICE 
 const DIA_MADRE_END_DATE = new Date("2026-05-11T03:00:00Z");
 // Promo Invierno — activa hasta el 31 de julio 2026 (23:59 Chile)
 const PROMO_INVIERNO_END_DATE = new Date("2026-08-05T03:59:59Z");
-// Taller Wim Hof Santiago — sábado 3 y domingo 4 de octubre 2026
-// (slide activo hasta el final del domingo 4 de octubre, hora de Chile UTC-3)
-const TALLER_WIM_HOF_END_DATE = new Date("2026-10-05T02:59:59Z");
 
 const HeroSlideMain = () => {
   const navigate = useNavigate();
@@ -396,14 +393,12 @@ const HeroSlidePromo18 = () => {
 export const HeroSection = () => {
   const [showDiaMadre, setShowDiaMadre] = useState(false);
   const [showPromoInvierno, setShowPromoInvierno] = useState(false);
-  const [showTaller, setShowTaller] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   useEffect(() => {
     const now = new Date();
     setShowDiaMadre(now < DIA_MADRE_END_DATE);
     setShowPromoInvierno(now < PROMO_INVIERNO_END_DATE);
-    setShowTaller(now < TALLER_WIM_HOF_END_DATE);
   }, []);
 
 
@@ -439,7 +434,6 @@ export const HeroSection = () => {
   const slides = [
     { id: 'main', component: <HeroSlideMain /> },
     ...(isPromo18Active() ? [{ id: 'promo-18', component: <HeroSlidePromo18 /> }] : []),
-    ...(showTaller ? [{ id: 'taller-wim-hof', component: <HeroSlideTallerWimHof /> }] : []),
     ...(showPromoInvierno ? [{ id: 'promo-invierno', component: <HeroSlidePromoInvierno /> }] : []),
     { id: 'plan-prueba', component: <HeroSlidePlanPrueba /> },
     ...(showDiaMadre ? [{ id: 'dia-madre', component: <HeroSlideDiaMadre /> }] : []),
