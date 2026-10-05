@@ -53,6 +53,7 @@ const TALLERES = {
     cupos: 15,
     nivel: "Principiante / intermedio",
     eventId: "santiago_fundamentos_2026_10_03",
+    soldOut: true,
     isoStart: "2026-10-03T11:30:00-03:00",
     isoEnd: "2026-10-03T15:00:00-03:00",
   },
@@ -68,6 +69,7 @@ const TALLERES = {
     cupos: 15,
     nivel: "Avanzado · requiere experiencia previa",
     eventId: "santiago_avanzado_2026_10_04",
+    soldOut: true,
     isoStart: "2026-10-04T11:30:00-03:00",
     isoEnd: "2026-10-04T15:00:00-03:00",
   },
@@ -233,10 +235,10 @@ const TallerSantiago = () => {
   }, [trackEvent]);
 
   const cuposDisponibles = (k: TallerKey) =>
-    Math.max(0, cupos[k].total - cupos[k].vendidos);
+    TALLERES[k].soldOut ? 0 : Math.max(0, cupos[k].total - cupos[k].vendidos);
   const isSoldOut = (k: TallerKey) => cuposDisponibles(k) <= 0;
   const pctOcupado = (k: TallerKey) =>
-    cupos[k].total > 0 ? (cupos[k].vendidos / cupos[k].total) * 100 : 0;
+    TALLERES[k].soldOut ? 100 : cupos[k].total > 0 ? (cupos[k].vendidos / cupos[k].total) * 100 : 0;
 
   // El pack no tiene stock propio: equivale al menor disponible entre ambos.
   const packDisponibles = Math.min(
@@ -246,6 +248,7 @@ const TallerSantiago = () => {
   const packSoldOut = packDisponibles <= 0;
   // El checkout vive en su propia página (/checkout), no en un modal.
   const openReserva = (k: SelKey) => {
+    if (k === "pack" ? packSoldOut : isSoldOut(k)) return;
     navigate(`/checkout?producto=${k}&cantidad=1`);
   };
 
@@ -332,7 +335,7 @@ const TallerSantiago = () => {
         price: "50000",
         priceCurrency: "CLP",
         url: "https://studiolanave.com/taller-wim-hof-santiago-fundamentales-avanzado",
-        availability: "https://schema.org/InStock",
+        availability: isSoldOut("fundamentos") ? "https://schema.org/SoldOut" : "https://schema.org/InStock",
       },
     },
     {
@@ -362,7 +365,7 @@ const TallerSantiago = () => {
         price: "60000",
         priceCurrency: "CLP",
         url: "https://studiolanave.com/taller-wim-hof-santiago-fundamentales-avanzado",
-        availability: "https://schema.org/InStock",
+        availability: isSoldOut("avanzado") ? "https://schema.org/SoldOut" : "https://schema.org/InStock",
       },
     },
   ];
@@ -444,7 +447,7 @@ const TallerSantiago = () => {
               <span className="text-primary">Dos niveles de profundidad.</span>
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed">
-              Elige tu camino: aprende la técnica desde cero o lleva tu práctica al siguiente nivel.
+              Ambas fechas están agotadas. Gracias por ser parte de esta experiencia.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 mb-5 justify-center lg:justify-start">
@@ -617,9 +620,7 @@ const TallerSantiago = () => {
                     </Badge>
                     {packSoldOut && (
                       <Badge variant="destructive">
-                        {packFaltante
-                          ? `${packFaltante} sin cupos`
-                          : "Sin cupos"}
+                        Cupos agotados
                       </Badge>
                     )}
                   </div>
@@ -656,7 +657,7 @@ const TallerSantiago = () => {
                     disabled={packSoldOut}
                   >
                     {packSoldOut
-                      ? `${packFaltante ?? "Un taller"} sin cupos`
+                      ? "Pack agotado"
                       : "Reservar ambos talleres"}
                     {!packSoldOut && <ChevronRight className="w-4 h-4 ml-1" />}
                   </Button>
@@ -1058,7 +1059,7 @@ const TallerSantiago = () => {
       <section className="py-20 px-4 bg-gradient-to-b from-primary/5 to-transparent">
         <div className="max-w-[900px] mx-auto text-center">
           <h2 className="font-heading text-3xl md:text-5xl text-foreground mb-4">
-            Elige tu taller y reserva tu cupo
+            Ambas fechas agotadas
           </h2>
           <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
             Fundamentales si quieres aprender desde cero. Avanzado si ya conoces la técnica y quieres
