@@ -10,3 +10,9 @@
 - [x] Corregir creación de órdenes Cyber sin modificar productos históricos.
 - [x] Mostrar X permanente y acortar el aviso del carrito a 1,8 segundos, lejos de los controles inferiores.
 - [x] Desplegar corrección de creación de órdenes; sin compras de prueba ni publicación del sitio.
+
+# Banner Cyber en el carrusel del Home
+
+- [x] Slide "Cyber Nave Studio" con contador y enlace a /cyber-nave-studio.
+- [x] Que se retire solo al vencer la oferta el 7 de octubre.
+- [x] Verificar vista previa sin publicar.

@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import planPruebaHero from "@/assets/plan-prueba-hero.webp";
 import promo18Hero from "@/assets/promo-18-hero.jpg";
 import { isPromo18Active, PROMO_18_PATH, PROMO_18_PRICE, PROMO_18_REGULAR_PRICE } from "@/lib/promo18";
+import { CYBER_ENDS_AT, CYBER_IMAGES, CYBER_ROUTES } from "@/lib/cyberNave";
 
 
 // Día de la Madre (Chile: 10 mayo 2026) — banner activo hasta fin del 10 mayo
@@ -390,15 +391,95 @@ const HeroSlidePromo18 = () => {
   );
 };
 
+const CyberHeroCountdown = () => {
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    const t = window.setInterval(() => setNow(Date.now()), 1000);
+    return () => window.clearInterval(t);
+  }, []);
+  const diff = Math.max(0, CYBER_ENDS_AT - now);
+  const parts = [
+    { v: Math.floor(diff / 86400000), l: "días" },
+    { v: Math.floor((diff / 3600000) % 24), l: "horas" },
+    { v: Math.floor((diff / 60000) % 60), l: "min" },
+    { v: Math.floor((diff / 1000) % 60), l: "seg" },
+  ];
+  return (
+    <div className="mx-auto grid w-full max-w-[340px] grid-cols-4 gap-2" aria-live="off">
+      {parts.map((p) => (
+        <div key={p.l} className="min-w-0 rounded-xl border border-white/25 bg-white/10 backdrop-blur-sm py-2 text-center">
+          <span className="block font-space-grotesk text-2xl md:text-3xl font-bold tabular-nums leading-none text-white">
+            {String(p.v).padStart(2, "0")}
+          </span>
+          <span className="block font-inter text-[11px] mt-1 text-white/70">{p.l}</span>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const HeroSlideCyber = () => {
+  const navigate = useNavigate();
+  return (
+    <div className="relative min-h-screen flex items-start md:items-center justify-center pt-20 md:pt-0 overflow-hidden">
+      <img
+        src={CYBER_IMAGES.iceSonrisa}
+        alt="Persona sonriendo en el baño de hielo de Nave Studio"
+        className="absolute inset-0 w-full h-full object-cover"
+        loading="lazy"
+      />
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-950/85 via-primary/70 to-slate-950/90" />
+
+      <div className="relative z-10 container mx-auto px-6 text-center text-white">
+        <div className="max-w-3xl mx-auto space-y-5 md:space-y-7">
+          <div className="inline-flex items-center gap-2 bg-accent/20 backdrop-blur-md text-white px-5 py-2.5 rounded-full text-sm md:text-base font-semibold border border-accent/40">
+            <span className="text-base">⚡</span>
+            Cyber Nave Studio · hasta el 7 de octubre
+          </div>
+
+          <h2 className="font-space-grotesk font-bold text-3xl md:text-6xl lg:text-7xl leading-[1.05]">
+            Activa tu poder.
+            <span className="block text-xl md:text-3xl lg:text-4xl font-medium text-white/90 mt-3">
+              Dale espacio a tu crecimiento.
+            </span>
+          </h2>
+
+          <p className="font-inter text-base md:text-xl text-white/95 max-w-2xl mx-auto">
+            Experiencias de hielo desde <strong className="font-semibold">$15.000</strong> y membresías con descuento y meses de regalo.
+          </p>
+
+          <CyberHeroCountdown />
+
+          <div className="space-y-3 pt-2">
+            <Button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); navigate(CYBER_ROUTES.home); }}
+              className="w-full md:w-auto min-w-[320px] bg-white text-primary hover:bg-white/90 font-bold text-lg py-6 px-10 rounded-xl shadow-xl transition-all transform hover:scale-105"
+              size="xl"
+            >
+              Ver el Cyber Nave Studio →
+            </Button>
+            <p className="font-inter text-xs text-white/80">
+              Packs de hielo con invitaciones de regalo · membresías con 50% para nuevos
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export const HeroSection = () => {
   const [showDiaMadre, setShowDiaMadre] = useState(false);
   const [showPromoInvierno, setShowPromoInvierno] = useState(false);
+  const [showCyber, setShowCyber] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   useEffect(() => {
     const now = new Date();
     setShowDiaMadre(now < DIA_MADRE_END_DATE);
     setShowPromoInvierno(now < PROMO_INVIERNO_END_DATE);
+    setShowCyber(Date.now() < CYBER_ENDS_AT);
   }, []);
 
 
@@ -433,6 +514,7 @@ export const HeroSection = () => {
 
   const slides = [
     { id: 'main', component: <HeroSlideMain /> },
+    ...(showCyber ? [{ id: 'cyber', component: <HeroSlideCyber /> }] : []),
     ...(isPromo18Active() ? [{ id: 'promo-18', component: <HeroSlidePromo18 /> }] : []),
     ...(showPromoInvierno ? [{ id: 'promo-invierno', component: <HeroSlidePromoInvierno /> }] : []),
     { id: 'plan-prueba', component: <HeroSlidePlanPrueba /> },
