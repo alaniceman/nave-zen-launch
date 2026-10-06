@@ -81,21 +81,21 @@ const MembresiasContent = () => {
 
       {/* A) Solo nuevos — suscripción BoxMagic */}
       <section id="nuevos" className="scroll-mt-32 container mx-auto max-w-5xl px-4 mt-14">
-        <p className="font-inter text-xs uppercase tracking-[0.2em] text-accent font-semibold">Solo nuevos</p>
+        <p className="font-inter text-xs uppercase tracking-[0.2em] text-accent font-semibold">EXCLUSIVO PARA MIEMBROS NUEVOS</p>
         <h2 className="font-space-grotesk text-2xl sm:text-3xl font-bold text-primary mt-1">50% los primeros 3 meses</h2>
         <p className="font-inter text-sm text-muted-foreground mt-2">Suscripción mensual con 3 meses de compromiso. Luego continúa a precio normal.</p>
         <div className="mt-6 grid gap-5 sm:grid-cols-2">
           {NEW_PLANS.map((p) => (
             <article key={p.key} className="rounded-3xl border border-border bg-card p-5 flex flex-col">
               <h3 className="font-space-grotesk text-2xl font-bold text-foreground">{p.name}</h3>
-              <p className="font-inter text-sm text-muted-foreground">{p.desc} · todas las experiencias</p>
+              <p className="font-inter text-sm text-muted-foreground">{p.desc} · todas las experiencias&nbsp;· miembros nuevos</p>
               <div className="mt-4">
                 <p className="font-inter text-sm text-muted-foreground line-through">{formatCLP(p.regular)}/mes</p>
                 <p className="font-space-grotesk text-4xl font-bold text-primary leading-none mt-1">
                   {formatCLP(p.cyber)}<span className="text-lg font-semibold">/mes</span>
                 </p>
                 <p className="font-inter text-sm mt-2">durante 3 meses, luego {formatCLP(p.regular)}/mes.</p>
-                <p className="font-inter text-xs text-muted-foreground mt-1">Compromiso primeros 3 meses: {formatCLP(p.cyber * 3)}</p>
+                <p className="font-inter text-xs text-muted-foreground mt-1">Compromiso 3 meses: {formatCLP(p.cyber * 3)}</p>
               </div>
               <Button asChild={!expired} size="lg" className="mt-6 h-14 rounded-full text-base w-full" disabled={expired}>
                 {expired ? <span>Oferta finalizada</span> : (
