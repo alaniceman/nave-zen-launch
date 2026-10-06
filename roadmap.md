@@ -22,3 +22,4 @@
 - [x] Banner rojo delgado arriba del header con enlace a /cyber-nave-studio.
 - [x] Se retira solo al vencer la oferta el 7 de octubre; no aparece en admin ni en las páginas Cyber.
 - [x] Header y menú móvil desplazados para que nada quede tapado; sin publicar.
+- [x] Cupos reales Cyber (paquetes 20, 7 meses 5, 14 meses 5) + admin /admin/cyber-cupos
