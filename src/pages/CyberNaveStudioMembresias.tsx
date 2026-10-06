@@ -11,6 +11,8 @@ import {
 } from "@/lib/cyberNave";
 import { trackMetaClientEvent } from "@/lib/metaTracking";
 import { cn } from "@/lib/utils";
+import { poolForDuration, stockFor, useCyberStock } from "@/hooks/useCyberStock";
+import { StockBadge } from "@/components/cyber/StockBadge";
 
 const NEW_PLANS = [
   { key: "orbita" as const, name: "Órbita", desc: "2 veces por semana", regular: 79000, cyber: 39500, url: BOXMAGIC_NEW.orbita },
@@ -31,6 +33,8 @@ const MembresiasContent = () => {
   const { toast } = useToast();
   const [dur, setDur] = useState<DurationKey>(7);
   const duration = CYBER_DURATIONS.find((d) => d.key === dur)!;
+  const { data: stockRows } = useCyberStock();
+  const durStock = stockFor(stockRows, poolForDuration(dur));
 
   const addPlan = (plan: (typeof CYBER_PLANS)[number]) => {
     const o = membershipOffer(plan, duration);
@@ -126,6 +130,7 @@ const MembresiasContent = () => {
           ))}
         </div>
         <p className="mt-4 text-center font-space-grotesk text-lg font-bold text-foreground">{duration.headline}</p>
+        {durStock && <StockBadge stock={durStock} className="mt-4 mx-auto max-w-md" />}
 
         <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {CYBER_PLANS.map((plan) => {
@@ -149,8 +154,8 @@ const MembresiasContent = () => {
                   <p className="font-inter text-sm mt-2">3 cuotas sin interés de {formatCLP(o.installment)}</p>
                   <p className="font-inter text-xs text-muted-foreground mt-1">Equivale a {formatCLP(o.perMonth)} por mes</p>
                 </div>
-                <Button size="lg" className="mt-auto w-full h-14 rounded-full text-base" style={{ marginTop: "1.25rem" }} onClick={() => addPlan(plan)} disabled={expired}>
-                  <ShoppingCart className="h-4 w-4 mr-2" /> {expired ? "Oferta finalizada" : "Agregar al carrito"}
+                <Button size="lg" className="mt-auto w-full h-14 rounded-full text-base" style={{ marginTop: "1.25rem" }} onClick={() => addPlan(plan)} disabled={expired || durStock?.left === 0}>
+                  <ShoppingCart className="h-4 w-4 mr-2" /> {expired ? "Oferta finalizada" : durStock?.left === 0 ? "Agotado" : "Agregar al carrito"}
                 </Button>
               </article>
             );
