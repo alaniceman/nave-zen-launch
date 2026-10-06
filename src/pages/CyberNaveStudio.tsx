@@ -33,7 +33,7 @@ const CyberNaveStudio = () => (
       </div>
     </section>
 
-    <section className="container mx-auto max-w-3xl px-4 -mt-2">
+    <section className="relative z-10 container mx-auto max-w-3xl px-4 mt-4">
       <CyberCountdown />
       <p className="mt-4 text-center font-inter text-sm text-muted-foreground">
         Packs y membresías trimestrales, semestrales y anuales en hasta 3 cuotas sin interés.
