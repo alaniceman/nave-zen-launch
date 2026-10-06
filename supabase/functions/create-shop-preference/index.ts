@@ -58,19 +58,41 @@ serve(async (req) => {
       );
     }
 
-    // Load products
-    const { data: products, error: productError } = await supabase
+    // Load products: tienda física + productos de campaña Cyber
+    const ids = [...new Set(requested.map((i) => i.productId))];
+    const { data: shopProducts, error: productError } = await supabase
       .from("shop_products")
       .select("*")
-      .in("id", requested.map((i) => i.productId))
+      .in("id", ids)
+      .eq("is_active", true);
+    const { data: cyberProducts, error: cyberError } = await supabase
+      .from("cyber_products")
+      .select("*")
+      .in("id", ids)
       .eq("is_active", true);
 
-    if (productError || !products || products.length !== new Set(requested.map((i) => i.productId)).size) {
+    const products: any[] = [
+      ...(shopProducts ?? []).map((p: any) => ({ ...p, _cyber: false })),
+      ...(cyberProducts ?? []).map((p: any) => ({ ...p, _cyber: true })),
+    ];
+
+    if (productError || cyberError || products.length !== ids.length) {
       return new Response(
         JSON.stringify({ error: "Producto no encontrado" }),
         { status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
+
+    // Cyber: bloquear compras vencidas (también desde carritos antiguos)
+    const nowMs = Date.now();
+    const expired = products.find((p) => p._cyber && nowMs > Date.parse(p.ends_at));
+    if (expired) {
+      return new Response(
+        JSON.stringify({ error: "La oferta Cyber finalizó. Quita los productos Cyber del carrito para continuar.", code: "cyber_expired" }),
+        { status: 410, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+    const hasCyber = products.some((p) => p._cyber);
 
     const lineItems = requested.map((i) => {
       const p = products.find((pr: any) => pr.id === i.productId)!;
@@ -100,7 +122,9 @@ serve(async (req) => {
             name: li.product.name,
             unit_price: li.product.price,
             quantity: li.quantity,
+            cyber: li.product._cyber || undefined,
           })),
+          campaign: hasCyber ? "cyber-2026-10" : undefined,
           fbp: data.fbp ?? null,
           fbc: data.fbc ?? null,
           event_source_url: data.eventSourceUrl ?? null,
@@ -120,6 +144,43 @@ serve(async (req) => {
         JSON.stringify({ error: "Error al crear la orden" }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
+    }
+
+    // Registro accionable de cada producto Cyber (precio resuelto en servidor)
+    if (hasCyber) {
+      const rows = lineItems
+        .filter((li) => li.product._cyber)
+        .map((li) => {
+          const p = li.product;
+          return {
+            shop_order_id: order.id,
+            product_id: p.id,
+            sku: p.sku,
+            kind: p.kind,
+            product_name: p.name,
+            quantity: li.quantity,
+            unit_price: p.price,
+            total_amount: p.price * li.quantity,
+            buyer_name: data.buyerName,
+            buyer_email: data.buyerEmail.toLowerCase().trim(),
+            buyer_phone: data.buyerPhone || null,
+            plan_name: p.plan_name,
+            months_paid: p.months_paid,
+            months_free: p.months_free,
+            months_total: p.months_total,
+            payment_status: "pending",
+            activation_status: p.kind === "membership" ? "pending_payment" : "not_applicable",
+          };
+        });
+      const { error: cpErr } = await supabase.from("cyber_purchases").insert(rows);
+      if (cpErr) {
+        console.error("Error creating cyber purchases:", cpErr);
+        await supabase.from("shop_orders").update({ status: "failed" }).eq("id", order.id);
+        return new Response(
+          JSON.stringify({ error: "Error al crear la orden" }),
+          { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
     }
 
     const mpToken = Deno.env.get("MERCADO_PAGO_ACCESS_TOKEN");
@@ -145,12 +206,15 @@ serve(async (req) => {
         }),
       },
       back_urls: {
-        success: `${siteUrl}/tienda/success?order=${order.id}`,
+        success: `${siteUrl}/tienda/success?order=${order.id}${hasCyber ? "&cyber=1" : ""}`,
         failure: `${siteUrl}/tienda/failure?order=${order.id}`,
         pending: `${siteUrl}/tienda/pending?order=${order.id}`,
       },
       auto_return: "approved",
       external_reference: order.id,
+      // Hasta 3 cuotas para compras Cyber (las cuotas sin interés dependen de la configuración del comercio en Mercado Pago)
+      ...(hasCyber && { payment_methods: { installments: 3 } }),
+      ...(hasCyber && { expiration_date_to: new Date(Math.min(...products.filter((p) => p._cyber).map((p) => Date.parse(p.ends_at)))).toISOString(), expires: true }),
       notification_url: `${Deno.env.get("SUPABASE_URL")}/functions/v1/mercadopago-webhook`,
     };
 
