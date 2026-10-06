@@ -39,7 +39,7 @@ const MembresiasContent = () => {
       contentName: o.name, contentCategory: "cyber", contentIds: [o.id], value: o.total, currency: "CLP",
       pixelParams: { content_name: o.name, content_category: "cyber", content_ids: [o.id], value: o.total, currency: "CLP" },
     } as any);
-    toast({ title: "Agregado al carrito", description: o.name });
+    toast({ title: "Agregado al carrito", description: o.name, duration: 1800 });
     setOpen(true);
   };
 

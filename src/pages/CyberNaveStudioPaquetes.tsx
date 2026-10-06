@@ -29,7 +29,7 @@ const PackCard = ({ pack, expired }: { pack: CyberPack; expired: boolean }) => {
       contentName: name, contentCategory: "cyber", contentIds: [pack.id], value: pack.price * qty, currency: "CLP",
       pixelParams: { content_name: name, content_category: "cyber", content_ids: [pack.id], value: pack.price * qty, currency: "CLP" },
     } as any);
-    toast({ title: "Agregado al carrito", description: `${qty} × ${pack.title}` });
+    toast({ title: "Agregado al carrito", description: `${qty} × ${pack.title}`, duration: 1800 });
     setOpen(true);
   };
   return (

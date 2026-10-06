@@ -18,7 +18,7 @@ const TiendaContent = () => {
 
   const handleAddToCart = (p: ShopProduct) => {
     add(p);
-    toast({ title: "Agregado al carrito", description: p.name });
+    toast({ title: "Agregado al carrito", description: p.name, duration: 1800 });
   };
   const [products, setProducts] = useState<ShopProduct[]>([]);
   const [loading, setLoading] = useState(true);
