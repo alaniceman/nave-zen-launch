@@ -50,6 +50,7 @@ const PackRenovacion = lazy(() => import("./pages/PackRenovacion"));
 const CyberNaveStudio = lazy(() => import("./pages/CyberNaveStudio"));
 const CyberNaveStudioPaquetes = lazy(() => import("./pages/CyberNaveStudioPaquetes"));
 const CyberNaveStudioMembresias = lazy(() => import("./pages/CyberNaveStudioMembresias"));
+const CyberNaveStudioMembresiaActivos = lazy(() => import("./pages/CyberNaveStudioMembresiaActivos"));
 const CyberNave = lazy(() => import("./pages/CyberNave"));
 const Promo18Septiembre = lazy(() => import("./pages/Promo18Septiembre"));
 const Horarios = lazy(() => import("./pages/Horarios"));
