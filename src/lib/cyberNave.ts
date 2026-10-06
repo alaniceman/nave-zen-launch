@@ -98,7 +98,7 @@ export const CYBER_DURATIONS: {
   headline: string;
 }[] = [
   { key: 3, label: "3 meses", paid: 3, free: 0, discount: 15, headline: "Pagas 3 meses con 15% de descuento" },
-  { key: 7, label: "7 meses: pagas 6", paid: 6, free: 1, discount: 20, headline: "Pagas 6 meses con 20% de descuento y disfrutas 7" },
+  { key: 7, label: "7 meses: pagas 6", paid: 6, free: 1, discount: 20, headline: "Pagas 6 meses con 20% de descuento y además te regalamos otro. Disfrutas 7" },
   { key: 14, label: "14 meses: pagas 12", paid: 12, free: 2, discount: 25, headline: "Pagas 12 meses con 25% de descuento y disfrutas 14" },
 ];
 
