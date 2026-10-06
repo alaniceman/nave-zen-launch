@@ -51,6 +51,10 @@ export default {
 					mid: 'hsl(var(--neutral-mid))',
 					light: 'hsl(var(--neutral-light))'
 				},
+				cyber: {
+					DEFAULT: 'hsl(var(--cyber))',
+					foreground: 'hsl(var(--cyber-foreground))'
+				},
 				destructive: {
 					DEFAULT: 'hsl(var(--destructive))',
 					foreground: 'hsl(var(--destructive-foreground))'
