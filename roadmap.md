@@ -16,3 +16,9 @@
 - [x] Slide "Cyber Nave Studio" con contador y enlace a /cyber-nave-studio.
 - [x] Que se retire solo al vencer la oferta el 7 de octubre.
 - [x] Verificar vista previa sin publicar.
+
+# Franja roja del Cyber sobre el header
+
+- [x] Banner rojo delgado arriba del header con enlace a /cyber-nave-studio.
+- [x] Se retira solo al vencer la oferta el 7 de octubre; no aparece en admin ni en las páginas Cyber.
+- [x] Header y menú móvil desplazados para que nada quede tapado; sin publicar.

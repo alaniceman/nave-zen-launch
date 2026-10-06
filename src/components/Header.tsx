@@ -11,6 +11,7 @@ import {
 } from "lucide-react"
 import { Promo18Banner } from "@/components/Promo18Banner"
 import { PROMO_18_BANNER_HEIGHT, usePromo18Banner } from "@/lib/promo18"
+import { CyberBanner, CYBER_BANNER_HEIGHT, useCyberBanner } from "@/components/CyberBanner"
 
 type NavLink = { label: string; href: string; icon: LucideIcon }
 type NavDropdown = { label: string; type: "dropdown"; children: NavLink[]; icon: LucideIcon }
@@ -99,6 +100,8 @@ export const Header = () => {
 
   const navigate = useNavigate()
   const showPromo18 = usePromo18Banner()
+  const showCyber = useCyberBanner()
+  const bannerTop = (showPromo18 ? PROMO_18_BANNER_HEIGHT : 0) + (showCyber ? CYBER_BANNER_HEIGHT : 0)
 
   const navigateTo = (href: string) => {
     if (href.startsWith("http")) {
@@ -121,8 +124,9 @@ export const Header = () => {
   return (
     <>
       <Promo18Banner />
+      <CyberBanner />
       <header
-        style={{ top: showPromo18 ? PROMO_18_BANNER_HEIGHT : 0 }}
+        style={{ top: bannerTop }}
         className={`
           fixed left-0 right-0 z-50 bg-background transition-all duration-300 ease-out
           ${isScrolled ? 'h-16 shadow-[0_4px_10px_rgba(0,0,0,0.08)]' : 'h-22'}
@@ -240,7 +244,7 @@ export const Header = () => {
 
       {/* Mobile Menu Drawer */}
       <div
-        style={{ top: showPromo18 ? PROMO_18_BANNER_HEIGHT : 0 }}
+        style={{ top: bannerTop }}
         className={`
           fixed left-0 right-0 bottom-0 z-[55] md:hidden transition-opacity duration-250 ease-out
           ${isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
