@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { SEOHead } from "@/components/SEOHead";
 
 const GROUP_TALLERES = "200590438897288377";
 const GROUP_RETIROS = "200590499476670420";
@@ -54,11 +53,6 @@ const TalleresRetirosCorreos = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/30 flex items-center justify-center px-4 py-16">
-      <SEOHead
-        title="Talleres y Retiros Wim Hof por correo | Nave Studio"
-        description="Entérate de los próximos Talleres y Retiros Wim Hof de Nave Studio. Recibe los anuncios en tu correo."
-        noindex
-      />
       <div className="w-full max-w-md">
         <div className="bg-card rounded-3xl shadow-xl border border-border/50 p-8 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-primary/15 to-transparent rounded-full -translate-y-16 translate-x-16" />
