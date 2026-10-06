@@ -6,7 +6,7 @@ import { z } from 'https://deno.land/x/zod@v3.22.4/mod.ts'
 // Validation schema for subscriber data
 const subscribeSchema = z.object({
   email: z.string().trim().email('Invalid email format').max(255, 'Email too long'),
-  whatsapp: z.string().trim().regex(/^\+?[0-9]{8,15}$/, 'Invalid phone number format').max(20, 'Phone number too long'),
+  whatsapp: z.string().trim().regex(/^\+?[0-9]{8,15}$/, 'Invalid phone number format').max(20, 'Phone number too long').optional().or(z.literal('')).default(''),
   tags: z.array(z.string().max(50, 'Tag too long')).max(10, 'Too many tags').optional().default([]),
   groups: z.array(z.string().max(100, 'Group name too long')).max(5, 'Too many groups').optional().default([]),
   source: z.string().max(100, 'Source identifier too long').optional().default('unknown')
