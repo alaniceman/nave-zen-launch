@@ -50,6 +50,13 @@
       "when": 1790624394344,
       "tag": "0006_coupon_applicable_event_ids",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1791249588709,
+      "tag": "0007_cyber_nave_studio_campaign",
+      "breakpoints": true
     }
   ]
 }

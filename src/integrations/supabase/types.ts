@@ -528,6 +528,168 @@ export type Database = {
         }
         Relationships: []
       }
+      cyber_products: {
+        Row: {
+          campaign: string
+          created_at: string
+          ends_at: string
+          id: string
+          invite_codes: number
+          is_active: boolean
+          kind: string
+          months_free: number | null
+          months_paid: number | null
+          months_total: number | null
+          name: string
+          own_codes: number
+          plan_name: string | null
+          price: number
+          regular_price: number
+          sku: string
+          validity_months: number
+        }
+        Insert: {
+          campaign?: string
+          created_at?: string
+          ends_at?: string
+          id: string
+          invite_codes?: number
+          is_active?: boolean
+          kind: string
+          months_free?: number | null
+          months_paid?: number | null
+          months_total?: number | null
+          name: string
+          own_codes?: number
+          plan_name?: string | null
+          price: number
+          regular_price: number
+          sku: string
+          validity_months?: number
+        }
+        Update: {
+          campaign?: string
+          created_at?: string
+          ends_at?: string
+          id?: string
+          invite_codes?: number
+          is_active?: boolean
+          kind?: string
+          months_free?: number | null
+          months_paid?: number | null
+          months_total?: number | null
+          name?: string
+          own_codes?: number
+          plan_name?: string | null
+          price?: number
+          regular_price?: number
+          sku?: string
+          validity_months?: number
+        }
+        Relationships: []
+      }
+      cyber_purchases: {
+        Row: {
+          activation_status: string
+          admin_notes: string | null
+          buyer_email: string
+          buyer_name: string
+          buyer_phone: string | null
+          codes_expire_at: string | null
+          created_at: string
+          id: string
+          invite_codes: string[]
+          kind: string
+          mercado_pago_payment_id: string | null
+          months_free: number | null
+          months_paid: number | null
+          months_total: number | null
+          own_codes: string[]
+          paid_at: string | null
+          payment_status: string
+          plan_name: string | null
+          product_id: string
+          product_name: string
+          quantity: number
+          shop_order_id: string
+          sku: string
+          total_amount: number
+          unit_price: number
+          updated_at: string
+        }
+        Insert: {
+          activation_status?: string
+          admin_notes?: string | null
+          buyer_email: string
+          buyer_name: string
+          buyer_phone?: string | null
+          codes_expire_at?: string | null
+          created_at?: string
+          id?: string
+          invite_codes?: string[]
+          kind: string
+          mercado_pago_payment_id?: string | null
+          months_free?: number | null
+          months_paid?: number | null
+          months_total?: number | null
+          own_codes?: string[]
+          paid_at?: string | null
+          payment_status?: string
+          plan_name?: string | null
+          product_id: string
+          product_name: string
+          quantity?: number
+          shop_order_id: string
+          sku: string
+          total_amount: number
+          unit_price: number
+          updated_at?: string
+        }
+        Update: {
+          activation_status?: string
+          admin_notes?: string | null
+          buyer_email?: string
+          buyer_name?: string
+          buyer_phone?: string | null
+          codes_expire_at?: string | null
+          created_at?: string
+          id?: string
+          invite_codes?: string[]
+          kind?: string
+          mercado_pago_payment_id?: string | null
+          months_free?: number | null
+          months_paid?: number | null
+          months_total?: number | null
+          own_codes?: string[]
+          paid_at?: string | null
+          payment_status?: string
+          plan_name?: string | null
+          product_id?: string
+          product_name?: string
+          quantity?: number
+          shop_order_id?: string
+          sku?: string
+          total_amount?: number
+          unit_price?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cyber_purchases_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "cyber_products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cyber_purchases_shop_order_id_fkey"
+            columns: ["shop_order_id"]
+            isOneToOne: false
+            referencedRelation: "shop_orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       discount_coupons: {
         Row: {
           applicable_event_ids: string[]
