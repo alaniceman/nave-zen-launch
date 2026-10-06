@@ -95,7 +95,8 @@ serve(async (req) => {
     const hasCyber = products.some((p) => p._cyber);
 
     const lineItems = requested.map((i) => {
-      const p = products.find((pr: any) => pr.id === i.productId)!;
+      const p = products.find((pr: any) => pr.id === i.productId);
+      if (!p) throw new Error("Producto no encontrado");
       return { product: p, quantity: i.quantity };
     });
 
@@ -109,7 +110,9 @@ serve(async (req) => {
     const { data: order, error: orderError } = await supabase
       .from("shop_orders")
       .insert({
-        product_id: lineItems.length === 1 ? lineItems[0].product.id : null,
+        // This FK belongs to shop_products only; Cyber products are linked
+        // through cyber_purchases and retained in meta_context.items.
+        product_id: lineItems.length === 1 && !lineItems[0].product._cyber ? lineItems[0].product.id : null,
         product_name: orderName,
         product_price: totalPrice,
         customer_name: data.buyerName,
