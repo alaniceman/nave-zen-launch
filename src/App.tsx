@@ -22,6 +22,7 @@ import { MailerLiteUniversal } from "@/components/MailerLiteUniversal";
 import { GtagClickTracker } from "@/components/GtagClickTracker";
 import { Loader2 } from "lucide-react";
 import { Promo18Offset } from "@/components/Promo18Banner";
+import { CyberBannerOffset } from "@/components/CyberBanner";
 
 // Lazy-loaded pages
 const Index = lazy(() => import("./pages/Index"));
@@ -171,6 +172,7 @@ const App = () => {
               <TrialDelegationHandler />
               <Header />
             <Promo18Offset />
+            <CyberBannerOffset />
             <Suspense fallback={<LoadingSpinner />}>
             <Routes>
             <Route path="/" element={<Index />} />
