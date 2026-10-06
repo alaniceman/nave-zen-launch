@@ -546,6 +546,7 @@ export type Database = {
           price: number
           regular_price: number
           sku: string
+          stock_pool: string | null
           validity_months: number
         }
         Insert: {
@@ -565,6 +566,7 @@ export type Database = {
           price: number
           regular_price: number
           sku: string
+          stock_pool?: string | null
           validity_months?: number
         }
         Update: {
@@ -584,6 +586,7 @@ export type Database = {
           price?: number
           regular_price?: number
           sku?: string
+          stock_pool?: string | null
           validity_months?: number
         }
         Relationships: []
@@ -689,6 +692,33 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      cyber_stock: {
+        Row: {
+          label: string
+          pool: string
+          sold: number
+          sort_order: number
+          total: number
+          updated_at: string
+        }
+        Insert: {
+          label: string
+          pool: string
+          sold?: number
+          sort_order?: number
+          total?: number
+          updated_at?: string
+        }
+        Update: {
+          label?: string
+          pool?: string
+          sold?: number
+          sort_order?: number
+          total?: number
+          updated_at?: string
+        }
+        Relationships: []
       }
       discount_coupons: {
         Row: {
@@ -2099,6 +2129,10 @@ export type Database = {
           _payment_status: string
         }
         Returns: Json
+      }
+      cyber_stock_add: {
+        Args: { _pool: string; _qty: number }
+        Returns: undefined
       }
       execute_readonly_query: { Args: { query_text: string }; Returns: Json }
       get_active_professionals: {

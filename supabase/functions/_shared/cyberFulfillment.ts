@@ -180,6 +180,13 @@ export async function fulfillCyberOrder(order: any, paymentId: string, supabase:
       }
       const { data: saved } = await supabase.from("cyber_purchases").update(update).eq("id", row.id).select().single();
       done.push(saved);
+      // Descontar cupo real (una sola vez por fila gracias al reclamo atómico)
+      try {
+        const { data: prodPool } = await supabase.from("cyber_products").select("stock_pool").eq("id", row.product_id).single();
+        if (prodPool?.stock_pool) await supabase.rpc("cyber_stock_add", { _pool: prodPool.stock_pool, _qty: row.quantity });
+      } catch (se) {
+        console.error("[cyber] stock update error", row.id, se);
+      }
     } catch (e) {
       console.error("[cyber] fulfillment error", row.id, e);
       await supabase

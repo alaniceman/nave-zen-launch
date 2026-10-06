@@ -100,6 +100,31 @@ serve(async (req) => {
       return { product: p, quantity: i.quantity };
     });
 
+    // Cyber: cupos reales por grupo
+    const poolQty: Record<string, number> = {};
+    for (const li of lineItems) {
+      const pool = li.product._cyber ? li.product.stock_pool : null;
+      if (pool) poolQty[pool] = (poolQty[pool] ?? 0) + li.quantity;
+    }
+    const pools = Object.keys(poolQty);
+    if (pools.length) {
+      const { data: stock } = await supabase.from("cyber_stock").select("pool,total,sold").in("pool", pools);
+      for (const s of stock ?? []) {
+        const left = Math.max(0, s.total - s.sold);
+        if (poolQty[s.pool] > left) {
+          return new Response(
+            JSON.stringify({
+              error: left === 0
+                ? "Se agotaron los cupos Cyber de uno de los productos de tu carrito."
+                : `Solo quedan ${left} cupos Cyber para uno de los productos de tu carrito.`,
+              code: "cyber_sold_out",
+            }),
+            { status: 409, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
+      }
+    }
+
     const totalPrice = lineItems.reduce((s, li) => s + li.product.price * li.quantity, 0);
     const orderName =
       lineItems.length === 1 && lineItems[0].quantity === 1

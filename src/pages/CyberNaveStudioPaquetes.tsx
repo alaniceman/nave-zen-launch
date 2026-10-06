@@ -8,6 +8,8 @@ import { useToast } from "@/hooks/use-toast";
 import { CyberCountdown, CyberFAQ, CyberLayout, CyberSeal, QuantityStepper, useCyberNow } from "@/components/cyber/CyberShared";
 import { CYBER_IMAGES, CYBER_PACKS, CYBER_ROUTES, CyberPack, formatCLP, toCartProduct } from "@/lib/cyberNave";
 import { trackMetaClientEvent } from "@/lib/metaTracking";
+import { stockFor, useCyberStock } from "@/hooks/useCyberStock";
+import { StockBadge } from "@/components/cyber/StockBadge";
 
 const FAQ = [
   { q: "¿Necesito experiencia previa?", a: "No. Cada sesión es guiada por instructores certificados: respiración Método Wim Hof, baño de hielo guiado y recuperación. Adaptamos la experiencia a tu nivel." },
@@ -72,6 +74,8 @@ const PackCard = ({ pack, expired }: { pack: CyberPack; expired: boolean }) => {
 
 const CyberNaveStudioPaquetes = () => {
   const { expired } = useCyberNow();
+  const { data: stockRows } = useCyberStock();
+  const packStock = stockFor(stockRows, "paquetes");
   return (
     <CyberLayout>
       <Helmet>
@@ -97,8 +101,11 @@ const CyberNaveStudioPaquetes = () => {
         <CyberCountdown className="mt-7" />
       </section>
 
-      <section className="container mx-auto max-w-5xl px-4 mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {CYBER_PACKS.map((p) => <PackCard key={p.id} pack={p} expired={expired} />)}
+      <section className="container mx-auto max-w-md px-4 mt-8">
+        <StockBadge stock={packStock} />
+      </section>
+      <section className="container mx-auto max-w-5xl px-4 mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {CYBER_PACKS.map((p) => <PackCard key={p.id} pack={p} expired={expired || packStock?.left === 0} />)}
       </section>
 
       <section className="container mx-auto max-w-3xl px-4 mt-14 grid gap-4 sm:grid-cols-3">

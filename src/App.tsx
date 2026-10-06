@@ -131,6 +131,7 @@ const AdminAIKnowledge = lazy(() => import("./pages/admin/AdminAIKnowledge"));
 const AdminShopProducts = lazy(() => import("./pages/admin/AdminShopProducts"));
 const AdminShopOrders = lazy(() => import("./pages/admin/AdminShopOrders"));
 const AdminTallerInscripciones = lazy(() => import("./pages/admin/AdminTallerInscripciones"));
+const AdminCyberStock = lazy(() => import("./pages/admin/AdminCyberStock"));
 
 const queryClient = new QueryClient();
 
@@ -293,6 +294,7 @@ const App = () => {
               <Route path="tienda" element={<AdminShopProducts />} />
               <Route path="tienda-ordenes" element={<AdminShopOrders />} />
               <Route path="talleres-inscripciones" element={<AdminTallerInscripciones />} />
+              <Route path="cyber-cupos" element={<AdminCyberStock />} />
             </Route>
             
             {/* Redirect legacy routes */}
