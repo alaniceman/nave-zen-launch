@@ -13,6 +13,7 @@ import {
   tallerKeyFromNivel,
 } from "../_shared/talleres.ts";
 import { buildTallerParticipantEmail } from "../_shared/tallerParticipantEmail.ts";
+import { fulfillCyberOrder } from "../_shared/cyberFulfillment.ts";
 
 /** Eventos incluidos en una inscripción (compatible con filas históricas). */
 function inscEventIds(insc: any): string[] {
@@ -218,6 +219,8 @@ async function handleShopOrderPayment(
   if (order.status === "paid") {
     // Reconciliación CAPI: sin re-ejecutar efectos de negocio.
     await sendShopPurchaseCapi(order, payment, orderId, supabase);
+    // Cyber: completa filas pendientes si un intento previo falló (idempotente por fila)
+    await fulfillCyberOrder(order, paymentIdStr, supabase).catch((e) => console.error("cyber fulfill", e));
     return new Response(JSON.stringify({ status: "already_processed" }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -294,6 +297,8 @@ async function handleShopOrderPayment(
   }
 
   console.log(`Shop order ${orderId} marked as paid`);
+
+  await fulfillCyberOrder(claimedShop, paymentIdStr, supabase).catch((e) => console.error("cyber fulfill", e));
 
   await sendShopPurchaseCapi(claimedShop, payment, orderId, supabase);
 
