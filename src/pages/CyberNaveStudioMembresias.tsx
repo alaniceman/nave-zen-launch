@@ -25,7 +25,7 @@ const FAQ = [
   { q: "¿Qué diferencia hay entre la suscripción y la compra por periodo?", a: "La oferta para nuevos es una suscripción mensual con 3 meses de compromiso: se cobra mes a mes. La compra por periodo es un pago único por 3, 7 o 14 meses." },
 ];
 
-const CyberNaveStudioMembresias = () => {
+const MembresiasContent = () => {
   const { expired } = useCyberNow();
   const { add, setOpen } = useCart();
   const { toast } = useToast();
@@ -44,7 +44,7 @@ const CyberNaveStudioMembresias = () => {
   };
 
   return (
-    <CyberLayout>
+    <>
       <Helmet>
         <title>Cyber Membresías Yoga y Wim Hof | Nave Studio Las Condes</title>
         <meta name="description" content="Membresías Cyber Nave Studio: 50% por 3 meses para nuevos en Órbita y Universo, y planes de 3, 7 y 14 meses con descuento y meses de regalo. Hasta el 7 de octubre." />
@@ -168,8 +168,14 @@ const CyberNaveStudioMembresias = () => {
           ¿Prefieres partir con el hielo? <Link to={CYBER_ROUTES.packs} className="text-primary font-semibold underline">Ver experiencias de hielo</Link>
         </p>
       </section>
-    </CyberLayout>
+    </>
   );
 };
+
+const CyberNaveStudioMembresias = () => (
+  <CyberLayout>
+    <MembresiasContent />
+  </CyberLayout>
+);
 
 export default CyberNaveStudioMembresias;

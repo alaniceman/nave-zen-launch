@@ -46,6 +46,9 @@ const DiaDeLaMadre = lazy(() => import("./pages/DiaDeLaMadre"));
 const PromoInvierno = lazy(() => import("./pages/PromoInvierno"));
 const PromoTalleres = lazy(() => import("./pages/PromoTalleres"));
 const PackRenovacion = lazy(() => import("./pages/PackRenovacion"));
+const CyberNaveStudio = lazy(() => import("./pages/CyberNaveStudio"));
+const CyberNaveStudioPaquetes = lazy(() => import("./pages/CyberNaveStudioPaquetes"));
+const CyberNaveStudioMembresias = lazy(() => import("./pages/CyberNaveStudioMembresias"));
 const CyberNave = lazy(() => import("./pages/CyberNave"));
 const Promo18Septiembre = lazy(() => import("./pages/Promo18Septiembre"));
 const Horarios = lazy(() => import("./pages/Horarios"));
@@ -194,6 +197,9 @@ const App = () => {
             <Route path="/promo-talleres" element={<PromoTalleres />} />
             <Route path="/pack-renovacion" element={<PackRenovacion />} />
             <Route path="/cyber-nave" element={<CyberNave />} />
+            <Route path="/cyber-nave-studio" element={<CyberNaveStudio />} />
+            <Route path="/cyber-nave-studio-paquetes" element={<CyberNaveStudioPaquetes />} />
+            <Route path="/cyber-nave-studio-membresias" element={<CyberNaveStudioMembresias />} />
             <Route path="/promo-18-septiembre" element={<Promo18Septiembre />} />
             <Route path="/promo-18" element={<Navigate to="/promo-18-septiembre" replace />} />
             <Route path="/dia-del-padre" element={<Navigate to="/promo-invierno" replace />} />

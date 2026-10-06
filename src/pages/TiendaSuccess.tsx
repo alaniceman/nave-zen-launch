@@ -7,6 +7,7 @@ import { trackConversion } from "@/lib/gtagConversions";
 
 const TiendaSuccess = () => {
   const [searchParams] = useSearchParams();
+  const isCyber = searchParams.get("cyber") === "1";
   const orderId =
     searchParams.get("external_reference") || searchParams.get("order") || "";
 
@@ -33,9 +34,11 @@ const TiendaSuccess = () => {
           </div>
           <h1 className="text-3xl font-space-grotesk font-bold text-primary">¡Compra confirmada!</h1>
           <p className="text-muted-foreground">
-            Recibimos tu pago. Muestra esta pantalla o tu comprobante de Mercado Pago al equipo para retirar tu producto.
+            {isCyber
+              ? "Recibimos tu pago. En unos minutos te llegará un email con el detalle de tu compra: tus códigos para agendar o los pasos para coordinar el inicio de tu membresía. Revisa también tu carpeta de spam."
+              : "Recibimos tu pago. Muestra esta pantalla o tu comprobante de Mercado Pago al equipo para retirar tu producto."}
           </p>
-          <Button asChild className="w-full"><Link to="/tienda">Volver a la tienda</Link></Button>
+          <Button asChild className="w-full"><Link to={isCyber ? "/cyber-nave-studio" : "/tienda"}>{isCyber ? "Volver al Cyber" : "Volver a la tienda"}</Link></Button>
         </div>
       </main>
     </>
