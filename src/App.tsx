@@ -204,6 +204,7 @@ const App = () => {
             <Route path="/cyber-nave-studio" element={<CyberNaveStudio />} />
             <Route path="/cyber-nave-studio-paquetes" element={<CyberNaveStudioPaquetes />} />
             <Route path="/cyber-nave-studio-membresias" element={<CyberNaveStudioMembresias />} />
+            <Route path="/cyber-nave-studio-membresia-activos" element={<CyberNaveStudioMembresiaActivos />} />
             <Route path="/promo-18-septiembre" element={<Promo18Septiembre />} />
             <Route path="/promo-18" element={<Navigate to="/promo-18-septiembre" replace />} />
             <Route path="/dia-del-padre" element={<Navigate to="/promo-invierno" replace />} />
