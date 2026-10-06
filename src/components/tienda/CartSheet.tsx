@@ -43,7 +43,11 @@ export const CartSheet = () => {
           eventSourceUrl: ctx.eventSourceUrl,
         },
       });
-      if (error) throw error;
+      if (error) {
+        let msg: string | undefined;
+        try { msg = (await (error as any).context?.json())?.error; } catch {}
+        throw new Error(msg || error.message);
+      }
       if (!data?.initPoint) throw new Error(data?.error || "No se pudo iniciar el pago");
 
       trackMetaClientEvent("InitiateCheckout", {
