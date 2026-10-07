@@ -72,12 +72,6 @@ const Footer = () => {
               FAQ
             </a>
             <a 
-              href="https://studiolanave.com/talleres-retiros-correos" 
-              className="text-accent hover:text-warm transition-colors duration-200 focus:outline-2 focus:outline-dashed focus:outline-accent"
-            >
-              Suscríbete a talleres y retiros
-            </a>
-            <a 
               href="https://cualesmi.boxmagic.app/members/" 
               target="_blank"
               rel="noopener noreferrer"
