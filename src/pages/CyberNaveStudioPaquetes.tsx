@@ -80,7 +80,7 @@ const CyberNaveStudioPaquetes = () => {
     <CyberLayout>
       <Helmet>
         <title>Cyber Paquetes de Hielo y Wim Hof | Nave Studio Las Condes</title>
-        <meta name="description" content="Bautizo de hielo a $15.000 y packs de 3 y 6 sesiones Método Wim Hof con invitaciones de regalo. Cyber Nave Studio hasta el 7 de octubre, hasta 3 cuotas sin interés." />
+        <meta name="description" content="Bautizo de hielo a $15.000 y packs de 3 y 6 sesiones Método Wim Hof con invitaciones de regalo. Cyber Nave Studio, hasta 3 cuotas sin interés." />
         <link rel="canonical" href="https://studiolanave.com/cyber-nave-studio-paquetes" />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="Cyber Nave Studio · Experiencias de hielo" />

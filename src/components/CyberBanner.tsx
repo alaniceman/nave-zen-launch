@@ -35,7 +35,7 @@ export const CyberBanner = () => {
     >
       <Zap className="h-3.5 w-3.5 flex-shrink-0" aria-hidden="true" />
       <span className="truncate text-[11px] sm:text-sm font-semibold tracking-wide">
-        CYBER NAVE STUDIO · Packs desde $15.000 y 50% para nuevos · Termina el 7 de octubre
+        CYBER NAVE STUDIO · Packs desde $15.000 y 50% para nuevos · Últimos días
       </span>
       <ArrowRight className="h-3.5 w-3.5 flex-shrink-0" aria-hidden="true" />
     </Link>
