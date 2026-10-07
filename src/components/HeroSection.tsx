@@ -434,7 +434,7 @@ const HeroSlideCyber = () => {
         <div className="max-w-3xl mx-auto space-y-5 md:space-y-7">
           <div className="inline-flex items-center gap-2 bg-accent/20 backdrop-blur-md text-white px-5 py-2.5 rounded-full text-sm md:text-base font-semibold border border-accent/40">
             <span className="text-base">⚡</span>
-            Cyber Nave Studio · hasta el 7 de octubre
+            Cyber Nave Studio · últimos días
           </div>
 
           <h2 className="font-space-grotesk font-bold text-3xl md:text-6xl lg:text-7xl leading-[1.05]">

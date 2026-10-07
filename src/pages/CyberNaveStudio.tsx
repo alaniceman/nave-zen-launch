@@ -9,11 +9,11 @@ const CyberNaveStudio = () => (
   <CyberLayout>
     <Helmet>
       <title>Cyber Nave Studio | Hielo, yoga y membresías con descuento</title>
-      <meta name="description" content="Cyber Nave Studio hasta el 7 de octubre: bautizo de hielo desde $15.000, packs con invitaciones y membresías con descuento y meses de regalo en Las Condes." />
+      <meta name="description" content="Cyber Nave Studio: bautizo de hielo desde $15.000, packs con invitaciones y membresías con descuento y meses de regalo en Las Condes." />
       <link rel="canonical" href="https://studiolanave.com/cyber-nave-studio" />
       <meta property="og:type" content="website" />
       <meta property="og:title" content="Cyber Nave Studio · Activa tu poder" />
-      <meta property="og:description" content="Experiencias desde $15.000 y beneficios para comenzar o renovar tu práctica. Hasta el 7 de octubre." />
+      <meta property="og:description" content="Experiencias desde $15.000 y beneficios para comenzar o renovar tu práctica. Últimos días." />
       <meta property="og:url" content="https://studiolanave.com/cyber-nave-studio" />
       <meta name="twitter:card" content="summary_large_image" />
     </Helmet>

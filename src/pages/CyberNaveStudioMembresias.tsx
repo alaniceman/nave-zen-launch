@@ -51,7 +51,7 @@ const MembresiasContent = () => {
     <>
       <Helmet>
         <title>Cyber Membresías Yoga y Wim Hof | Nave Studio Las Condes</title>
-        <meta name="description" content="Membresías Cyber Nave Studio: 50% por 3 meses para nuevos en Órbita y Universo, y planes de 3, 7 y 14 meses con descuento y meses de regalo. Hasta el 7 de octubre." />
+        <meta name="description" content="Membresías Cyber Nave Studio: 50% por 3 meses para nuevos en Órbita y Universo, y planes de 3, 7 y 14 meses con descuento y meses de regalo. Últimos días." />
         <link rel="canonical" href="https://studiolanave.com/cyber-nave-studio-membresias" />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="Cyber Nave Studio · Membresías" />
