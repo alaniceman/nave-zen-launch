@@ -20,15 +20,7 @@ export function useCyberNow() {
 }
 
 export const CyberCountdown = ({ className }: { className?: string }) => {
-  const { now, expired } = useCyberNow();
-  if (expired) {
-    return (
-      <div className={cn("rounded-2xl border border-border bg-muted px-4 py-4 text-center", className)}>
-        <p className="font-space-grotesk text-lg font-bold text-foreground">Oferta Cyber finalizada</p>
-        <p className="font-inter text-sm text-muted-foreground mt-1">Gracias por acompañarnos. Revisa nuestros planes vigentes.</p>
-      </div>
-    );
-  }
+  const { now } = useCyberNow();
   const diff = Math.max(0, CYBER_ENDS_AT - now);
   const parts = [
     { v: Math.floor(diff / 86400000), l: "días" },
@@ -39,7 +31,7 @@ export const CyberCountdown = ({ className }: { className?: string }) => {
   return (
     <div className={cn("w-full max-w-sm mx-auto", className)} aria-live="off">
       <p className="font-inter text-xs uppercase tracking-[0.2em] text-muted-foreground text-center mb-2">
-        Últimos días de oferta
+        Termina mañana a las 23:59
       </p>
       <div className="grid grid-cols-4 gap-2">
         {parts.map((p) => (
