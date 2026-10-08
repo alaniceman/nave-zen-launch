@@ -5,8 +5,8 @@ import respira from "@/assets/studio-respira-circulo.webp.asset.json";
 import yogaPerro from "@/assets/studio-yoga-perro.webp.asset.json";
 import meditacion from "@/assets/studio-meditacion-grupo.webp.asset.json";
 
-/** Fin de la campaña: 7 oct 2026 23:59:59 hora de Chile. El servidor valida lo mismo. */
-export const CYBER_ENDS_AT = Date.parse("2026-12-31T23:59:59-03:00");
+/** Fin de la campaña: 9 oct 2026 23:59:59 hora de Chile. El servidor valida lo mismo (cyber_products.ends_at). */
+export const CYBER_ENDS_AT = Date.parse("2026-10-09T23:59:59-03:00");
 
 export const CYBER_IMAGES = {
   iceSonrisa: iceSonrisa.url,
