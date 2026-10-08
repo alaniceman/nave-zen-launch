@@ -20,15 +20,7 @@ export function useCyberNow() {
 }
 
 export const CyberCountdown = ({ className }: { className?: string }) => {
-  const { now, expired } = useCyberNow();
-  if (expired) {
-    return (
-      <div className={cn("rounded-2xl border border-border bg-muted px-4 py-4 text-center", className)}>
-        <p className="font-space-grotesk text-lg font-bold text-foreground">Oferta Cyber finalizada</p>
-        <p className="font-inter text-sm text-muted-foreground mt-1">Gracias por acompañarnos. Revisa nuestros planes vigentes.</p>
-      </div>
-    );
-  }
+  const { now } = useCyberNow();
   const diff = Math.max(0, CYBER_ENDS_AT - now);
   const parts = [
     { v: Math.floor(diff / 86400000), l: "días" },
