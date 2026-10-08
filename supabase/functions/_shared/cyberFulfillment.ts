@@ -121,6 +121,29 @@ ${hasPack ? `<p style="margin:0 0 10px;font-size:15px"><strong>Cómo agendar:</s
   return { html, text };
 }
 
+/** Reenvía el correo de confirmación de una orden Cyber ya pagada al email guardado en la orden. */
+export async function resendCyberOrderEmail(order: any, supabase: any) {
+  const { data: rows } = await supabase
+    .from("cyber_purchases").select("*").eq("shop_order_id", order.id).eq("payment_status", "paid");
+  if (!rows?.length) return { ok: false, reason: "no_paid_rows" };
+  const resendKey = Deno.env.get("RESEND_API_KEY");
+  if (!resendKey) return { ok: false, reason: "no_key" };
+  const { html, text } = buildEmail(order, rows, []);
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${resendKey}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      from: "Nave Studio <agenda@studiolanave.com>",
+      to: [order.customer_email],
+      reply_to: "lanave@alaniceman.com",
+      subject: "Tus códigos de Nave Studio · Compra Cyber",
+      html,
+      text,
+    }),
+  });
+  return { ok: res.ok, status: res.status, body: await res.text(), to: order.customer_email };
+}
+
 export async function fulfillCyberOrder(order: any, paymentId: string, supabase: any) {
   const { data: pending } = await supabase
     .from("cyber_purchases")
