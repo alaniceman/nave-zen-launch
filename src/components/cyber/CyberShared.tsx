@@ -31,7 +31,7 @@ export const CyberCountdown = ({ className }: { className?: string }) => {
   return (
     <div className={cn("w-full max-w-sm mx-auto", className)} aria-live="off">
       <p className="font-inter text-xs uppercase tracking-[0.2em] text-muted-foreground text-center mb-2">
-        Últimos días de oferta
+        Termina mañana a las 23:59
       </p>
       <div className="grid grid-cols-4 gap-2">
         {parts.map((p) => (
