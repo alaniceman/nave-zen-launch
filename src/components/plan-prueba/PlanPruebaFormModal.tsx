@@ -248,7 +248,7 @@ export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) 
                   Entiendo que este beneficio de prueba está reservado para personas que
                   quieren conocer Nave Studio y sus instructores con intención real de
                   continuar con una membresía, no para usarlo como un paquete de sesiones
-                  con descuento.
+                  con descuento.{"\u00a0"}
                 </label>
               </label>
               <p className="text-xs text-muted-foreground pl-7">
