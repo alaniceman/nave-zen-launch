@@ -81,10 +81,13 @@ export default function PlanDePrueba() {
               </div>
             </div>
 
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-[#1F3A2A] mb-6 leading-[1.05] tracking-tight">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-[#1F3A2A] mb-4 leading-[1.05] tracking-tight">
               Vive Nave Studio<br />
               <span className="text-[#2E4D3A]">por 7 o 15 días</span>
             </h1>
+            <p className="text-sm md:text-base font-medium text-[#2E4D3A] max-w-xl mx-auto mb-4 leading-snug">
+              Reservado a quienes estén interesados en conocer el lugar y los instructores para continuar con una membresía
+            </p>
             <p className="text-lg md:text-xl text-[#4A4A4A] max-w-2xl mx-auto mb-10 leading-relaxed">
               Yoga, respiración, Criomedicina y Método Wim Hof —
               <span className="text-[#2E4D3A] font-medium"> ilimitado</span>. Tú eliges cuándo empezar.
