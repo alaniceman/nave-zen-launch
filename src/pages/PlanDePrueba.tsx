@@ -86,7 +86,22 @@ export default function PlanDePrueba() {
               <span className="text-[#2E4D3A]">por 7 o 15 días</span>
             </h1>
             <p className="text-sm md:text-base font-medium text-[#2E4D3A] max-w-xl mx-auto mb-4 leading-snug">
-              Reservado a quienes estén interesados en conocer el lugar y los instructores para continuar con una membresía
+              Reservado a quienes estén interesados en conocer el lugar y los instructores
+              para continuar con una{" "}
+              <Link
+                to="/planes-precios"
+                className="underline underline-offset-2 decoration-[#2E4D3A]/40 hover:decoration-[#2E4D3A] hover:text-[#1F3A2A]"
+              >
+                membresía
+              </Link>
+              . Si buscas una experiencia en particular, anótate con una{" "}
+              <Link
+                to="/bonos"
+                className="underline underline-offset-2 decoration-[#2E4D3A]/40 hover:decoration-[#2E4D3A] hover:text-[#1F3A2A]"
+              >
+                sesión suelta o pack de sesiones
+              </Link>
+              .
             </p>
             <p className="text-lg md:text-xl text-[#4A4A4A] max-w-2xl mx-auto mb-10 leading-relaxed">
               Yoga, respiración, Criomedicina y Método Wim Hof —
