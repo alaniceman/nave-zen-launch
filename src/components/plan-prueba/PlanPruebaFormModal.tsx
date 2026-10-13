@@ -39,12 +39,12 @@ const PLAN_PRICES: Record<PlanType, number> = {
   trial_15d: 19900,
 };
 
-const step1Schema = z.object({
+const step2Schema = z.object({
   name: z.string().trim().min(2, "Ingresa tu nombre").max(100),
   email: z.string().trim().email("Email inválido").max(255),
   phone: z.string().trim().regex(/^\+?[0-9]{8,15}$/, "Número inválido (ej: 912345678)"),
 });
-type Step1Values = z.infer<typeof step1Schema>;
+type Step2Values = z.infer<typeof step2Schema>;
 
 function getUtm() {
   const p = new URLSearchParams(window.location.search);
@@ -56,18 +56,18 @@ function getUtm() {
 }
 
 export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) {
-  const [step, setStep] = useState<1 | 2>(1);
+  const [step, setStep] = useState<1 | 2 | 3>(1);
   const [submitting, setSubmitting] = useState(false);
   const [leadId, setLeadId] = useState<string | null>(null);
   const [plan, setPlan] = useState<PlanType>(initialPlan);
   const [startDate, setStartDate] = useState<Date | undefined>(undefined);
   const [boxmagicUrl, setBoxmagicUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [userInfo, setUserInfo] = useState<Step1Values | null>(null);
+  const [userInfo, setUserInfo] = useState<Step2Values | null>(null);
   const [understood, setUnderstood] = useState(false);
 
-  const form = useForm<Step1Values>({
-    resolver: zodResolver(step1Schema),
+  const form = useForm<Step2Values>({
+    resolver: zodResolver(step2Schema),
     defaultValues: { name: "", email: "", phone: "" },
   });
 
@@ -96,7 +96,7 @@ export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) 
   const today = new Date(); today.setHours(0, 0, 0, 0);
   const max = new Date(); max.setDate(max.getDate() + 30); max.setHours(23, 59, 59, 999);
 
-  const onSubmitStep1 = async (values: Step1Values) => {
+  const onSubmitStep2 = async (values: Step2Values) => {
     setSubmitting(true);
     setError(null);
     try {
@@ -124,7 +124,7 @@ export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) 
       );
       setLeadId(data.leadId);
       setUserInfo(values);
-      setStep(2);
+      setStep(3);
     } catch (e: any) {
       setError(e.message || "Error al guardar tus datos");
     } finally {
@@ -132,7 +132,7 @@ export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) 
     }
   };
 
-  const onSubmitStep2 = async () => {
+  const onSubmitStep3 = async () => {
     if (!leadId || !startDate) {
       setError("Selecciona una fecha de inicio");
       return;
@@ -214,12 +214,14 @@ export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) 
       >
         <DialogHeader className="shrink-0 p-6 pb-4 pr-12">
           <DialogTitle className="font-bold text-xl text-[#2E4D3A]">
-            {step === 1 && "Tus datos"}
-            {step === 2 && "Plan y fecha de inicio"}
+            {step === 1 && "Antes de continuar"}
+            {step === 2 && "Tus datos"}
+            {step === 3 && "Plan y fecha de inicio"}
           </DialogTitle>
           <DialogDescription>
-            {step === 1 && "Paso 1 de 2 — completa tus datos para continuar."}
-            {step === 2 && "Paso 2 de 2 — elige tu plan y fecha de inicio."}
+            {step === 1 && "Paso 1 de 3 — confirma que entiendes para quiénes es el plan de prueba."}
+            {step === 2 && "Paso 2 de 3 — completa tus datos para continuar."}
+            {step === 3 && "Paso 3 de 3 — elige tu plan y fecha de inicio."}
           </DialogDescription>
         </DialogHeader>
 
@@ -231,9 +233,45 @@ export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) 
           )}
 
           {step === 1 && (
+            <div className="space-y-5">
+              <label className="flex items-start gap-3 cursor-pointer">
+                <Checkbox
+                  id="trial-understood"
+                  checked={understood}
+                  onCheckedChange={(checked) => setUnderstood(checked === true)}
+                  className="mt-0.5 shrink-0"
+                />
+                <label
+                  htmlFor="trial-understood"
+                  className="text-sm text-[#1A1A1A] leading-snug cursor-pointer select-none"
+                >
+                  Entiendo que este beneficio de prueba está reservado para personas que
+                  quieren conocer Nave Studio y sus instructores con intención real de
+                  continuar con una membresía, no para usarlo como un paquete de sesiones
+                  con descuento.
+                </label>
+              </label>
+              <p className="text-xs text-muted-foreground pl-7">
+                Para visitas puntuales o experiencias ocasionales, te recomendamos{" "}
+                <a href="/bonos" className="underline hover:text-[#2E4D3A]">
+                  comprar una sesión suelta o un paquete
+                </a>
+                .
+              </p>
+              <Button
+                onClick={() => setStep(2)}
+                disabled={!understood}
+                className="w-full bg-[#2E4D3A] hover:bg-[#2E4D3A]/90 text-white py-6 text-base"
+              >
+                Continuar
+              </Button>
+            </div>
+          )}
+
+          {step === 2 && (
             <Form {...form}>
               <form
-                onSubmit={form.handleSubmit(onSubmitStep1)}
+                onSubmit={form.handleSubmit(onSubmitStep2)}
                 onFocusCapture={handleFirstInteraction}
                 onInput={handleFirstInteraction}
                 className="space-y-4"
@@ -271,7 +309,7 @@ export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) 
             </Form>
           )}
 
-          {step === 2 && (
+          {step === 3 && (
             <div className="space-y-5">
             <div>
               <label className="text-sm font-medium text-[#2E4D3A] mb-2 block">Plan seleccionado</label>
@@ -319,28 +357,8 @@ export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) 
               </p>
             </div>
 
-            <div className="space-y-2">
-              <label className="flex items-start gap-3 cursor-pointer">
-                <Checkbox
-                  checked={understood}
-                  onCheckedChange={(checked) => setUnderstood(checked === true)}
-                  className="mt-0.5 shrink-0"
-                />
-                <span className="text-sm text-[#1A1A1A] leading-snug">
-                  Entiendo que este beneficio de prueba está reservado para personas que quieren conocer Nave Studio con intención real de continuar con una membresía, no para usarlo como un paquete de sesiones con descuento.
-                </span>
-              </label>
-              <p className="text-xs text-muted-foreground pl-7">
-                Para visitas puntuales o experiencias ocasionales, te recomendamos{" "}
-                <a href="/bonos" className="underline hover:text-[#2E4D3A]">
-                  comprar una sesión suelta o un paquete
-                </a>
-                .
-              </p>
-            </div>
-
             <Button
-              onClick={onSubmitStep2}
+              onClick={onSubmitStep3}
               disabled={submitting || !startDate || !understood}
               className="w-full bg-[#2E4D3A] hover:bg-[#2E4D3A]/90 text-white py-6 text-base"
             >
