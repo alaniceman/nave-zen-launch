@@ -245,14 +245,20 @@ export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) 
                   htmlFor="trial-understood"
                   className="text-sm text-[#1A1A1A] leading-snug cursor-pointer select-none"
                 >
-                  Entiendo que este beneficio de prueba está reservado para personas que
-                  quieren conocer Nave Studio y sus instructores con intención real de
-                  continuar con una membresía, no para usarlo como un paquete de sesiones
-                  con descuento.{"\u00a0"}
+                  Entiendo que este beneficio de prueba está reservado para personas que{" "}
+                  <strong className="font-semibold">
+                    conocer Nave Studio y sus instructores
+                  </strong>{" "}
+                  con intención real de continuar con una membresía,{" "}
+                  <strong className="font-semibold">
+                    no para usarlo como un paquete de sesiones con descuento.
+                  </strong>
+                  {"\u00a0"}
                 </label>
               </label>
-              <p className="text-xs text-muted-foreground pl-7">
-                Para visitas puntuales o experiencias ocasionales, te recomendamos{" "}
+              <p className="text-sm text-muted-foreground pl-7">
+                Para <strong className="font-semibold">visitas puntuales</strong> o
+                experiencias ocasionales, te recomendamos{" "}
                 <a href="/bonos" className="underline hover:text-[#2E4D3A]">
                   comprar una sesión suelta o un paquete
                 </a>
