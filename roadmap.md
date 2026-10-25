@@ -23,3 +23,9 @@
 - [x] Se retira solo al vencer la oferta el 7 de octubre; no aparece en admin ni en las páginas Cyber.
 - [x] Header y menú móvil desplazados para que nada quede tapado; sin publicar.
 - [x] Cupos reales Cyber (paquetes 20, 7 meses 5, 14 meses 5) + admin /admin/cyber-cupos
+
+# Coincidencia de Horarios y Agenda
+
+- [ ] Comparar los horarios publicados con la disponibilidad para reservas.
+- [ ] Corregir diferencias y horarios futuros sin alterar reservas existentes.
+- [ ] Verificar los datos resultantes sin publicar el sitio.
