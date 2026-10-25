@@ -26,6 +26,6 @@
 
 # Coincidencia de Horarios y Agenda
 
-- [ ] Comparar los horarios publicados con la disponibilidad para reservas.
-- [ ] Corregir diferencias y horarios futuros sin alterar reservas existentes.
-- [ ] Verificar los datos resultantes sin publicar el sitio.
+- [x] Comparar los horarios publicados con la disponibilidad para reservas.
+- [x] Corregir diferencias y horarios futuros sin alterar reservas existentes.
+- [x] Verificar los datos resultantes sin publicar el sitio.
