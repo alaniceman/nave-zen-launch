@@ -44,9 +44,9 @@ En el chat de **Icefest Ticketera**, solicitar una exportación CSV de Santiago 
 - Entradas: pedido original, código, número, token de acceso y estado/fecha de acreditación.
 - Cupones y descuentos de Santiago que deban seguir vigentes.
 
-Subir los archivos aquí para importarlos sin duplicar pedidos ni reenviar automáticamente compras antiguas. Preservar códigos y acreditaciones; generar enlaces de Nave Studio para las entradas importadas. Los enlaces del dominio anterior seguirán dependiendo de Icefest Ticketera hasta que se actualicen allí.
+Subir los archivos aquí para importar los pedidos y entradas sin reenviar automáticamente compras antiguas. Preservar códigos y acreditaciones; generar enlaces de Nave Studio para las entradas importadas. Los enlaces del dominio anterior seguirán funcionando en Icefest Ticketera. Alan acepta que durante la migración existan registros duplicados entre ambos proyectos; dentro de Nave, reimportar el mismo pedido no emitirá entradas adicionales.
 
-**Antes de abrir ventas:** conciliar cupos con la importación y cerrar la venta de Santiago en el proyecto anterior para evitar dos inventarios independientes. Mientras falte la exportación, dejar la página y administración preparadas, pero nuevas compras cerradas; no anunciar cupos inventados.
+**Venta simultánea durante la migración:** mantener abierta la venta de Santiago en Icefest Ticketera, sin modificar ese proyecto ni exigir su cierre. Preparar también la venta en Nave Studio, sin bloquearla por la importación pendiente o por registros duplicados entre proyectos. Ambos sitios tendrán inventarios independientes, sin sincronización automática: los cupos de Nave serán configurables en su admin y reflejarán sus ventas e importaciones, no un contador combinado de ambos sitios. No asumir que los 12 cupos originales siguen disponibles; confirmar el cupo inicial de Nave con la exportación o con Alan antes de activar una preventa limitada. Las compras posteriores en Icefest Ticketera podrán incorporarse mediante nuevas exportaciones.
 
 ## Detalles técnicos
 
@@ -60,4 +60,4 @@ Subir los archivos aquí para importarlos sin duplicar pedidos ni reenviar autom
 
 Comprobar permisos, precios, cantidades, inventario y emisión única con pruebas puntuales; revisar móvil y escritorio y el flujo administrativo autenticado. No realizar compras reales ni mandar correos a compradores para verificar sin autorización. Informar expresamente si la confirmación real de Mercado Pago queda sin comprobar.
 
-Entregar las rutas y administración listas en vista previa, sin publicar. La importación y apertura efectiva de ventas quedarán pendientes únicamente si todavía no se han recibido los CSV y conciliado los cupos.
+Entregar las rutas, compra y administración listas en vista previa, sin publicar ni cerrar Icefest Ticketera. La importación de ventas y configuración anteriores quedará pendiente si todavía no se han recibido los CSV; esto no bloqueará la compra de entradas configuradas en Nave Studio. Informar que los cupos no se sincronizan automáticamente entre proyectos durante la migración.

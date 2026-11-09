@@ -42,5 +42,6 @@
 - [ ] Replicar /icefest-santiago con fotos y contenido del proyecto Icefest Ticketera.
 - [ ] Integrar compra, confirmación de pago y emisión única de entradas en Nave Studio.
 - [ ] Agregar administración de entradas, precios, cupos, ventas, correos y acreditación.
-- [ ] Definir traslado de ventas existentes y obtener exportación del origen si corresponde.
+- [ ] Importar ventas existentes; pendiente recibir exportación de Icefest Ticketera.
+- [ ] Mantener la venta en Icefest Ticketera durante la migración, sin exigir su cierre ni bloquear Nave por duplicados entre proyectos.
 - [ ] Actualizar Talleres y Retiros y verificar la experiencia antes de publicar.
