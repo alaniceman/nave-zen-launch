@@ -55,7 +55,22 @@
     <script>
       (function () {
         var origin = "https://studiolanave.com";
-        var path = window.location.pathname.replace(/\/$/, "") || "/";
+        var path = window.location.pathname.replace(/\/+$/, "") || "/";
+        var aliases = {
+          "/planes": "/planes-precios",
+          "/diadelamadre": "/dia-de-la-madre",
+          "/promo-18": "/promo-18-septiembre",
+          "/dia-del-padre": "/promo-invierno",
+          "/diadelpadre": "/promo-invierno",
+          "/prueba-nave-studio": "/plan-de-prueba",
+          "/clase-de-prueba": "/plan-de-prueba",
+          "/clase-de-prueba/agendar": "/plan-de-prueba",
+          "/agendar": "/agenda-nave-studio"
+        };
+        path = aliases[path] || path;
+        var canonicalPath = /^\/agenda-nave-studio\/(?!success(?:\/|$)|failure(?:\/|$)|pending(?:\/|$))/.test(path)
+          ? "/agenda-nave-studio" : path;
+        var canonical = origin + canonicalPath;
         var instructors = {
           "/instructor/alan": {
             title: "Alan Iceman Earle — Fundador y Crioguía | Nave Studio",
@@ -215,7 +230,7 @@
         var fixed = {
           "/": {
             title: "Yoga, Baños de Hielo y Wim Hof en Las Condes | Nave Studio",
-            description: "Ice Bath, Breathwork Wim Hof, Yoga y biohacking en Las Condes. Reserva tu clase y regula tu sistema nervioso.",
+            description: "Ice Bath, Breathwork Wim Hof y Yoga en Las Condes. Reserva tu clase en Nave Studio.",
             image: origin + "/og-image.png"
           },
           "/horarios": {
@@ -236,8 +251,6 @@
         };
 
         var data = instructors[path] || blogs[path] || yogaStyles[path] || fixed[path];
-        if (!data) return;
-        var canonical = origin + (path === "/" ? "/" : path);
 
         function upsertMeta(selector, attrs) {
           var tag = document.head.querySelector(selector) || document.createElement("meta");
@@ -249,12 +262,19 @@
           var tag = document.head.querySelector('link[rel="canonical"]') || document.createElement("link");
           tag.setAttribute("rel", "canonical");
           tag.setAttribute("href", href);
+          // Helmet must own this early tag too, or it survives as a duplicate.
+          tag.setAttribute("data-rh", "true");
           if (!tag.parentNode) document.head.appendChild(tag);
         }
 
+        // All routes declare a preferred URL, even before the React page loads.
+        upsertCanonical(canonical);
+        upsertMeta('meta[property="og:url"]', { property: "og:url", content: canonical });
+        upsertMeta('meta[name="twitter:url"]', { name: "twitter:url", content: canonical });
+        if (!data) return;
+
         document.title = data.title;
         upsertMeta('meta[name="description"]', { name: "description", content: data.description });
-        upsertCanonical(canonical);
         upsertMeta('meta[property="og:title"]', { property: "og:title", content: data.title });
         upsertMeta('meta[property="og:description"]', { property: "og:description", content: data.description });
         upsertMeta('meta[property="og:url"]', { property: "og:url", content: canonical });
@@ -382,7 +402,7 @@
   <meta name="twitter:title" content="Yoga, Baños de Hielo y Wim Hof en Las Condes | Nave Studio">
   <meta property="og:description" content="Centro de Ice Bath, Breathwork Wim Hof y Yoga en Las Condes. Regula tu sistema nervioso con clases guiadas por ciencia. Reserva tu plan de prueba desde $14.900.">
   <meta name="twitter:description" content="Centro de Ice Bath, Breathwork Wim Hof y Yoga en Las Condes. Regula tu sistema nervioso con clases guiadas por ciencia. Reserva tu plan de prueba desde $14.900.">
-  <script type="module" crossorigin src="/assets/index-Cc1ZokCn.js"></script>
+  <script type="module" crossorigin src="/assets/index-DEJPlnmE.js"></script>
   <link rel="stylesheet" crossorigin href="/assets/index-DgKBkyhU.css">
 </head>
 
