@@ -71,6 +71,13 @@
       "when": 1794249986547,
       "tag": "0009_icefest_santiago_ticketing",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1794250399289,
+      "tag": "0010_icefest_order_integrity",
+      "breakpoints": true
     }
   ]
 }
