@@ -330,13 +330,35 @@ const structuredData = {
 
 export const SEOHead = () => {
   const location = useLocation();
-  const currentPath = location.pathname;
+  const currentPath = location.pathname.replace(/\/+$/, "") || "/";
   const pageData = seoData[currentPath as keyof typeof seoData];
 
-  // If this route isn't in the map, do nothing — let the page's own <Helmet>
-  // set title / description / canonical / og tags. Prevents home metadata from
-  // leaking to routes like /horarios, /instructor/:slug, /blog/:slug.
-  if (!pageData) return null;
+  // Keep a canonical for pages without their own metadata (including agenda).
+  // Do not apply homepage titles or descriptions to these pages.
+  if (!pageData) {
+    const aliases: Record<string, string> = {
+      "/planes": "/planes-precios",
+      "/diadelamadre": "/dia-de-la-madre",
+      "/promo-18": "/promo-18-septiembre",
+      "/dia-del-padre": "/promo-invierno",
+      "/diadelpadre": "/promo-invierno",
+      "/prueba-nave-studio": "/plan-de-prueba",
+      "/clase-de-prueba": "/plan-de-prueba",
+      "/clase-de-prueba/agendar": "/plan-de-prueba",
+      "/agendar": "/agenda-nave-studio",
+    };
+    const resolvedPath = aliases[currentPath] || currentPath;
+    const canonicalPath = /^\/agenda-nave-studio\/(?!success(?:\/|$)|failure(?:\/|$)|pending(?:\/|$))/.test(resolvedPath)
+      ? "/agenda-nave-studio" : resolvedPath;
+    const canonical = `https://studiolanave.com${canonicalPath}`;
+    return (
+      <Helmet>
+        <link rel="canonical" href={canonical} />
+        <meta property="og:url" content={canonical} />
+        <meta name="twitter:url" content={canonical} />
+      </Helmet>
+    );
+  }
 
   const ogTitle = pageData.ogTitle || pageData.title;
   const ogDescription = pageData.ogDescription || pageData.description;

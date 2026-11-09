@@ -29,3 +29,10 @@
 - [x] Comparar los horarios publicados con la disponibilidad para reservas.
 - [x] Corregir diferencias y horarios futuros sin alterar reservas existentes.
 - [x] Verificar los datos resultantes sin publicar el sitio.
+
+# Direcciones principales para Google
+
+- [x] Corregir declaraciones duplicadas, ausentes y con dominio incorrecto.
+- [x] Unificar variantes de enlaces antiguos y de la agenda sin cambiar reservas.
+- [x] Confirmar cambios guardados (build OK); Google confirma el dominio incorrecto en Criomedicina y la agenda indexada.
+- [ ] Publicar tras revisión de Alan y validar el aviso en Search Console; falta la lista exacta de URLs del informe.
