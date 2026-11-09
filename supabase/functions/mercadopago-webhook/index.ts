@@ -14,6 +14,7 @@ import {
 } from "../_shared/talleres.ts";
 import { buildTallerParticipantEmail } from "../_shared/tallerParticipantEmail.ts";
 import { fulfillCyberOrder } from "../_shared/cyberFulfillment.ts";
+import { handleIcefestPayment } from "../_shared/icefest.ts";
 
 /** Eventos incluidos en una inscripción (compatible con filas históricas). */
 function inscEventIds(insc: any): string[] {
@@ -1372,6 +1373,15 @@ serve(async (req) => {
     
     // First, check if it's a valid UUID
     if (isValidUUID(externalReference)) {
+      const { data: icefestOrder, error: icefestLookupError } = await supabase
+        .from("icefest_orders")
+        .select("id")
+        .eq("id", externalReference)
+        .maybeSingle();
+      if (icefestLookupError) throw icefestLookupError;
+      if (icefestOrder) {
+        return await handleIcefestPayment(payment, externalReference, supabase, corsHeaders);
+      }
       // Check shop_orders first
       const { data: shopOrder } = await supabase
         .from("shop_orders")

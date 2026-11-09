@@ -81,6 +81,9 @@ const BlogVinyasaYoga = lazy(() => import("./pages/blog/BlogVinyasaYoga"));
 const BlogPowerYoga = lazy(() => import("./pages/blog/BlogPowerYoga"));
 const BlogIntegralYoga = lazy(() => import("./pages/blog/BlogIntegralYoga"));
 const Icefest = lazy(() => import("./pages/Icefest"));
+const IcefestSantiago = lazy(() => import("./pages/IcefestSantiago"));
+const IcefestAccess = lazy(() => import("./pages/IcefestAccess"));
+const AdminIcefest = lazy(() => import("./pages/admin/AdminIcefest"));
 const BautizoHielo = lazy(() => import("./pages/BautizoHielo"));
 const InstructorProfile = lazy(() => import("./pages/InstructorProfile"));
 const Generative = lazy(() => import("./pages/Generative"));
@@ -247,6 +250,12 @@ const App = () => {
             <Route path="/blog/power-yoga-fuerza-resistencia" element={<BlogPowerYoga />} />
             <Route path="/blog/integral-yoga-equilibrio-meditacion" element={<BlogIntegralYoga />} />
             <Route path="/icefest" element={<Icefest />} />
+            <Route path="/icefest-santiago" element={<IcefestSantiago />} />
+            <Route path="/icefest-santiago/success" element={<IcefestAccess />} />
+            <Route path="/icefest-santiago/pending" element={<IcefestAccess />} />
+            <Route path="/icefest-santiago/failure" element={<IcefestAccess />} />
+            <Route path="/icefest-santiago/entrada/:code" element={<IcefestAccess />} />
+            <Route path="/icefest-santiago/recuperar" element={<IcefestAccess />} />
             <Route path="/bautizo-hielo" element={<BautizoHielo />} />
             <Route path="/instructor/:slug" element={<InstructorProfile />} />
             <Route path="/generative" element={<Generative />} />
@@ -299,6 +308,7 @@ const App = () => {
               <Route path="tienda-ordenes" element={<AdminShopOrders />} />
               <Route path="talleres-inscripciones" element={<AdminTallerInscripciones />} />
               <Route path="cyber-cupos" element={<AdminCyberStock />} />
+              <Route path="icefest" element={<AdminIcefest />} />
             </Route>
             
             {/* Redirect legacy routes */}

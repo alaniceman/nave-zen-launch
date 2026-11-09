@@ -942,6 +942,368 @@ export type Database = {
           },
         ]
       }
+      icefest_discounts: {
+        Row: {
+          code: string | null
+          combinable: boolean
+          created_at: string
+          discount_type: string
+          discount_value: number
+          event_id: string
+          id: string
+          is_active: boolean
+          max_quantity: number | null
+          max_uses: number | null
+          min_purchase_amount: number
+          min_quantity: number
+          name: string
+          ticket_type_id: string | null
+          times_used: number
+          valid_from: string | null
+          valid_until: string | null
+        }
+        Insert: {
+          code?: string | null
+          combinable?: boolean
+          created_at?: string
+          discount_type?: string
+          discount_value: number
+          event_id: string
+          id?: string
+          is_active?: boolean
+          max_quantity?: number | null
+          max_uses?: number | null
+          min_purchase_amount?: number
+          min_quantity?: number
+          name: string
+          ticket_type_id?: string | null
+          times_used?: number
+          valid_from?: string | null
+          valid_until?: string | null
+        }
+        Update: {
+          code?: string | null
+          combinable?: boolean
+          created_at?: string
+          discount_type?: string
+          discount_value?: number
+          event_id?: string
+          id?: string
+          is_active?: boolean
+          max_quantity?: number | null
+          max_uses?: number | null
+          min_purchase_amount?: number
+          min_quantity?: number
+          name?: string
+          ticket_type_id?: string | null
+          times_used?: number
+          valid_from?: string | null
+          valid_until?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "icefest_discounts_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "icefest_events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "icefest_discounts_ticket_type_id_fkey"
+            columns: ["ticket_type_id"]
+            isOneToOne: false
+            referencedRelation: "icefest_ticket_types"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      icefest_events: {
+        Row: {
+          address: string
+          created_at: string
+          date: string
+          description: string
+          google_maps_link: string
+          id: string
+          includes_cacao: boolean
+          includes_lunch: boolean
+          instructions: string
+          is_active: boolean
+          location: string
+          name: string
+          sales_open: boolean
+          schedule: string
+          slug: string
+          updated_at: string
+          whatsapp_link: string
+        }
+        Insert: {
+          address?: string
+          created_at?: string
+          date: string
+          description?: string
+          google_maps_link?: string
+          id?: string
+          includes_cacao?: boolean
+          includes_lunch?: boolean
+          instructions?: string
+          is_active?: boolean
+          location?: string
+          name: string
+          sales_open?: boolean
+          schedule?: string
+          slug: string
+          updated_at?: string
+          whatsapp_link?: string
+        }
+        Update: {
+          address?: string
+          created_at?: string
+          date?: string
+          description?: string
+          google_maps_link?: string
+          id?: string
+          includes_cacao?: boolean
+          includes_lunch?: boolean
+          instructions?: string
+          is_active?: boolean
+          location?: string
+          name?: string
+          sales_open?: boolean
+          schedule?: string
+          slug?: string
+          updated_at?: string
+          whatsapp_link?: string
+        }
+        Relationships: []
+      }
+      icefest_orders: {
+        Row: {
+          access_token: string
+          admin_notes: string
+          buyer_email: string
+          buyer_name: string
+          buyer_phone: string
+          buyer_surname: string
+          created_at: string
+          details_sent_at: string | null
+          discount_amount: number
+          discount_ids: string[]
+          email_error: string | null
+          email_lock_until: string | null
+          event_id: string
+          id: string
+          meta_context: Json
+          original_amount: number
+          paid_at: string | null
+          payment_id: string | null
+          payment_status: string | null
+          preference_id: string | null
+          quantity: number
+          receipt_sent_at: string | null
+          recovery_sent_at: string | null
+          reserved_until: string
+          source: string
+          source_order_id: string | null
+          status: string
+          ticket_type_id: string
+          total_amount: number
+          updated_at: string
+        }
+        Insert: {
+          access_token?: string
+          admin_notes?: string
+          buyer_email: string
+          buyer_name: string
+          buyer_phone?: string
+          buyer_surname?: string
+          created_at?: string
+          details_sent_at?: string | null
+          discount_amount?: number
+          discount_ids?: string[]
+          email_error?: string | null
+          email_lock_until?: string | null
+          event_id: string
+          id?: string
+          meta_context?: Json
+          original_amount: number
+          paid_at?: string | null
+          payment_id?: string | null
+          payment_status?: string | null
+          preference_id?: string | null
+          quantity: number
+          receipt_sent_at?: string | null
+          recovery_sent_at?: string | null
+          reserved_until?: string
+          source?: string
+          source_order_id?: string | null
+          status?: string
+          ticket_type_id: string
+          total_amount: number
+          updated_at?: string
+        }
+        Update: {
+          access_token?: string
+          admin_notes?: string
+          buyer_email?: string
+          buyer_name?: string
+          buyer_phone?: string
+          buyer_surname?: string
+          created_at?: string
+          details_sent_at?: string | null
+          discount_amount?: number
+          discount_ids?: string[]
+          email_error?: string | null
+          email_lock_until?: string | null
+          event_id?: string
+          id?: string
+          meta_context?: Json
+          original_amount?: number
+          paid_at?: string | null
+          payment_id?: string | null
+          payment_status?: string | null
+          preference_id?: string | null
+          quantity?: number
+          receipt_sent_at?: string | null
+          recovery_sent_at?: string | null
+          reserved_until?: string
+          source?: string
+          source_order_id?: string | null
+          status?: string
+          ticket_type_id?: string
+          total_amount?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "icefest_orders_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "icefest_events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "icefest_orders_ticket_type_id_fkey"
+            columns: ["ticket_type_id"]
+            isOneToOne: false
+            referencedRelation: "icefest_ticket_types"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      icefest_ticket_types: {
+        Row: {
+          created_at: string
+          description: string
+          display_order: number
+          event_id: string
+          id: string
+          is_active: boolean
+          max_per_order: number
+          name: string
+          price: number
+          stock: number | null
+          stock_sold: number
+          valid_from: string | null
+          valid_until: string | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          display_order?: number
+          event_id: string
+          id?: string
+          is_active?: boolean
+          max_per_order?: number
+          name: string
+          price?: number
+          stock?: number | null
+          stock_sold?: number
+          valid_from?: string | null
+          valid_until?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          display_order?: number
+          event_id?: string
+          id?: string
+          is_active?: boolean
+          max_per_order?: number
+          name?: string
+          price?: number
+          stock?: number | null
+          stock_sold?: number
+          valid_from?: string | null
+          valid_until?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "icefest_ticket_types_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "icefest_events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      icefest_tickets: {
+        Row: {
+          access_token: string
+          checked_in: boolean
+          checked_in_at: string | null
+          checked_in_by: string | null
+          created_at: string
+          event_id: string
+          id: string
+          is_valid: boolean
+          order_id: string
+          ticket_code: string
+          ticket_number: number
+        }
+        Insert: {
+          access_token?: string
+          checked_in?: boolean
+          checked_in_at?: string | null
+          checked_in_by?: string | null
+          created_at?: string
+          event_id: string
+          id?: string
+          is_valid?: boolean
+          order_id: string
+          ticket_code?: string
+          ticket_number: number
+        }
+        Update: {
+          access_token?: string
+          checked_in?: boolean
+          checked_in_at?: string | null
+          checked_in_by?: string | null
+          created_at?: string
+          event_id?: string
+          id?: string
+          is_valid?: boolean
+          order_id?: string
+          ticket_code?: string
+          ticket_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "icefest_tickets_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "icefest_events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "icefest_tickets_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "icefest_orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       integrations_mailerlite: {
         Row: {
           created_at: string
@@ -2153,6 +2515,31 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      icefest_check_in: { Args: { _ticket_id: string }; Returns: Json }
+      icefest_confirm_order: {
+        Args: {
+          _amount: number
+          _currency?: string
+          _order_id: string
+          _payment_id: string
+        }
+        Returns: Json
+      }
+      icefest_price: {
+        Args: { _coupon?: string; _quantity: number; _type_id: string }
+        Returns: Json
+      }
+      icefest_refund_order: { Args: { _order_id: string }; Returns: undefined }
+      icefest_reserve_order: {
+        Args: {
+          _buyer: Json
+          _coupon?: string
+          _meta?: Json
+          _quantity: number
+          _type_id: string
+        }
+        Returns: Json
       }
       reserve_event_cupo: { Args: { _event_id: string }; Returns: number }
       reserve_event_cupos: { Args: { _event_ids: string[] }; Returns: Json }
