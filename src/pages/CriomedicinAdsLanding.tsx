@@ -108,10 +108,10 @@ import { useScrolledPastHero } from "@/hooks/useScrolledPastHero";
      "@graph": [
        {
          "@type": "LocalBusiness",
-         "@id": "https://nave.cl/#localbusiness",
+         "@id": "https://studiolanave.com/#localbusiness",
          name: "Nave Studio",
          description: "Centro de bienestar especializado en Criomedicina y Método Wim Hof en Las Condes, Santiago",
-         url: "https://nave.cl",
+         url: "https://studiolanave.com",
          telephone: "+56946120426",
          address: {
            "@type": "PostalAddress",
@@ -184,14 +184,14 @@ import { useScrolledPastHero } from "@/hooks/useScrolledPastHero";
            name="keywords"
            content="criomedicina, método wim hof, agua fría, ice bath, breathwork, las condes, santiago, nave studio"
          />
-         <link rel="canonical" href="https://nave.cl/criomedicina-metodo-wim-hof-las-condes" />
+         <link rel="canonical" href="https://studiolanave.com/criomedicina-metodo-wim-hof-las-condes" />
          <meta property="og:title" content="Criomedicina Método Wim Hof en Las Condes | Nave Studio" />
          <meta
            property="og:description"
            content="Sesión guiada de Respiración Método Wim Hof + Inmersión en Agua Fría. Apta para principiantes. Agenda tu sesión hoy."
          />
          <meta property="og:image" content="/lovable-uploads/criomedicina-hero.webp" />
-         <meta property="og:url" content="https://nave.cl/criomedicina-metodo-wim-hof-las-condes" />
+         <meta property="og:url" content="https://studiolanave.com/criomedicina-metodo-wim-hof-las-condes" />
          <meta property="og:type" content="website" />
          <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
        </Helmet>

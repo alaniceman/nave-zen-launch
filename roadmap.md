@@ -29,3 +29,9 @@
 - [x] Comparar los horarios publicados con la disponibilidad para reservas.
 - [x] Corregir diferencias y horarios futuros sin alterar reservas existentes.
 - [x] Verificar los datos resultantes sin publicar el sitio.
+
+# Direcciones principales para Google
+
+- [ ] Corregir declaraciones duplicadas, ausentes y con dominio incorrecto.
+- [ ] Unificar variantes de enlaces antiguos y de la agenda sin cambiar reservas.
+- [ ] Confirmar cambios guardados y dejar pendiente publicación y validación de Google.
