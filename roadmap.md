@@ -54,3 +54,8 @@
 - [x] Actualizar Talleres y Retiros y verificar móvil/escritorio, cálculo de precios y guardado del admin autenticado; 9 pruebas sin compras pasan.
 - [ ] Activar preventa limitada y trasladar WhatsApp/almuerzo/configuración anterior; pendiente exportación del origen o valores confirmados por Alan. Entrada general activa a $95.000, preventa $67.000 preparada y desactivada.
 - [ ] Publicar tras revisión de Alan; pago real, correo entregado y acreditación de entrada real no verificados sin autorización para crear una compra o recibir entradas importadas.
+
+# Copy original de Icefest
+
+- [x] Igualar textos editoriales, experiencias, facilitadores y preguntas a la página original sin modificar precios, cupos ni compras.
+- [x] Mantener enlaces de compra y preparación en Nave, sin publicar.

@@ -40,7 +40,6 @@ import cacao from "@/assets/icefest/cacao-new.webp";
 import dance from "@/assets/icefest/dance-new.webp";
 import logo from "@/assets/icefest/breath-act-logo.png";
 import alan from "@/assets/icefest/alan-iceman.jpg";
-import ambar from "@/assets/icefest/ambar-doula.jpg";
 import manu from "@/assets/icefest/manu-dabanda.jpg";
 import gallery1 from "@/assets/icefest/icefest-01.webp";
 import gallery2 from "@/assets/icefest/icefest-03.webp";
@@ -48,32 +47,32 @@ import gallery3 from "@/assets/icefest/icefest-06.webp";
 import gallery4 from "@/assets/icefest/icefest-17.webp";
 const journey = [
   {
-    title: "Respiración inmersiva",
-    subtitle: "The Breath Act · Mañana",
+    title: "Respiración inmersiva The Breath Act",
+    subtitle: "Baño de hielo",
     image: breath,
     icon: Wind,
-    text: "Un viaje de respiración consciente conectada, sonido envolvente y trabajo somático. Facilitadores certificados acompañan cada momento para entrar en el cuerpo y llegar presentes.",
+    text: "Abrimos el día con un viaje de respiración consciente conectada, sonido envolvente y trabajo somático. Una experiencia inmersiva para entrar en el cuerpo, regular el sistema nervioso y llegar presentes a todo lo que viene.",
   },
   {
-    title: "Atraviesa el frío",
-    subtitle: "Baño de hielo · Mediodía",
+    title: "Ceremonia de cacao",
+    subtitle: "Ecstatic Dance",
     image: ice,
     icon: Snowflake,
-    text: "Una inmersión guiada para encontrarte con la incomodidad desde la calma. Alan Iceman te acompaña paso a paso. Tú decides hasta dónde avanzar.",
+    text: "Con el cuerpo preparado, cruzamos el umbral del frío. Una inmersión guiada para atravesar la incomodidad con calma y descubrir la fuerza que aparece cuando respiras en lugar de resistir.",
   },
   {
     title: "Integra lo vivido",
-    subtitle: "Ceremonia de cacao · Tarde",
+    subtitle: "Tarde",
     image: cacao,
     icon: Coffee,
-    text: "Un espacio de calma y presencia para compartir cacao ceremonial, descansar y prepararnos para el cierre.",
+    text: "Compartiremos cacao ceremonial en un espacio de calma y presencia para integrar lo vivido en el hielo, abrir el corazón y prepararnos para el cierre con música y danza.",
   },
   {
     title: "Celebra en movimiento",
-    subtitle: "Ecstatic Dance · Cierre",
+    subtitle: "Cierre",
     image: dance,
     icon: Music,
-    text: "Movimiento libre, música y comunidad. Sin coreografías, sin juicios, sin alcohol ni drogas: solo cuerpo, presencia y celebración.",
+    text: "Terminamos bailando. Movimiento libre, sin alcohol, sin juicios y sin coreografías: solo música, cuerpo y comunidad celebrando el viaje del día.",
   },
 ];
 export default function IcefestSantiago() {
@@ -225,7 +224,7 @@ export default function IcefestSantiago() {
               ))}
             </div>
             <p className="max-w-2xl mx-auto text-muted-foreground text-base md:text-lg">
-              Un día para entrar en tu cuerpo y descubrir de qué eres capaz.
+              Un día para entrar en tu cuerpo, regular tu sistema nervioso y descubrir de qué eres capaz.
               Respiración inmersiva The Breath Act, baño de hielo, ceremonia de
               cacao y Ecstatic Dance en la precordillera de Santiago.
             </p>
@@ -289,49 +288,56 @@ export default function IcefestSantiago() {
         </nav>
         <section id="edicion" className="bg-card py-16 md:py-24">
           <div className="max-w-3xl mx-auto px-5 text-center">
-            <p className="text-secondary text-sm mb-4">UNA EDICIÓN ESPECIAL</p>
+            <p className="text-secondary text-sm mb-4">Una edición que no se repite</p>
             <h2 className="text-3xl md:text-5xl mb-6">
               Icefest × The Breath Act
             </h2>
             <p className="text-lg text-muted-foreground">
-              Por primera vez, Icefest abre su jornada con The Breath Act.
-              Respiración consciente conectada, sonido y trabajo somático dan
-              inicio a un recorrido completo: respirar, atravesar el frío,
-              integrar y celebrar. Nos acompañan facilitadores certificados de
-              su metodología.
+              Por primera vez, Icefest abre su jornada con el método The Breath Act, la escuela líder de breathwork y neurociencia aplicada en habla hispana. Fundada por Marta Planells y Juan D’Angelo, ha llevado su método a más de 85.000 personas en más de 15 países. Nos acompañarán miembros del equipo oficial The Breath Act en Chile. Juntos diseñamos un recorrido completo: primero preparamos el sistema nervioso con respiración inmersiva, luego lo ponemos a prueba en el hielo, y en la tarde elevamos la energía para terminar celebrando.
             </p>
+            <div className="mx-auto mt-10 grid max-w-3xl grid-cols-3 gap-4">
+              {[
+                ["+85.000", "personas han respirado con The Breath Act"],
+                ["+1.500", "facilitadores certificados"],
+                ["+15", "países"],
+              ].map(([number, label]) => (
+                <div key={number}>
+                  <p className="text-2xl md:text-4xl font-bold text-primary">{number}</p>
+                  <p className="mt-1 text-xs md:text-sm text-muted-foreground">{label}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
         <section id="breath-act" className="py-16 md:py-24">
           <div className="max-w-5xl mx-auto px-5">
             <h2 className="text-3xl md:text-4xl text-center mb-5">
-              Respiración. Sonido. Presencia.
+              No es magia. Es neurociencia.
             </h2>
             <p className="text-muted-foreground text-center max-w-2xl mx-auto mb-12">
-              Una experiencia inmersiva que invita a explorar tu cuerpo con
-              atención y acompañamiento.
+              El método The Breath Act integra respiración consciente conectada, neurociencia aplicada, sonido y trabajo somático. Esto es lo que lo hace distinto:
             </p>
             <div className="grid md:grid-cols-2 gap-9">
               {[
                 {
                   icon: Wind,
-                  title: "Respiración consciente conectada",
-                  text: "Un viaje guiado de respiración, a tu propio ritmo, para conectar con el momento presente.",
+                  title: "Respiración y sistema nervioso",
+                  text: "La respiración es una de las pocas funciones automáticas que también podemos dirigir a voluntad. Al cambiar su ritmo y profundidad, influimos directamente en el sistema nervioso autónomo: el mismo que regula el estrés, la calma y la respuesta emocional.",
                 },
                 {
                   icon: Waves,
-                  title: "Sonido que acompaña",
-                  text: "Música y diseño sonoro sostienen cada fase del viaje y acompañan la atención.",
+                  title: "Sonido que modula el estado mental",
+                  text: "The Breath Act integra música y diseño sonoro para acompañar cada fase del viaje. El sonido guía la atención, sostiene la intensidad y facilita estados de presencia más profundos que una práctica en silencio.",
                 },
                 {
                   icon: Heart,
-                  title: "Trabajo somático",
-                  text: "Un espacio para escuchar el cuerpo y explorar lo que sientes, sin exigencias ni juicios.",
+                  title: "Trabajo somático y emocional",
+                  text: "El cuerpo guarda lo que la mente no alcanza a procesar. Con respiración consciente conectada y técnicas somáticas, la experiencia invita a soltar tensiones acumuladas y a reconectar con lo que sientes, desde el cuerpo.",
                 },
                 {
                   icon: ShieldCheck,
-                  title: "Acompañamiento certificado",
-                  text: "Facilitadores certificados de The Breath Act guían la práctica con cuidado y contención.",
+                  title: "Método, no magia",
+                  text: "Su lema lo resume: “No es magia. Es ciencia”. Una metodología estructurada, aplicada por más de 1.500 facilitadores certificados y vivida por más de 85.000 personas en más de 15 países.",
                 },
               ].map(({ icon: Icon, title, text }) => (
                 <article
@@ -344,6 +350,9 @@ export default function IcefestSantiago() {
                 </article>
               ))}
             </div>
+            <p className="mx-auto mt-12 max-w-3xl text-center text-muted-foreground">
+              La respiración será facilitada por <strong>facilitadores certificados de The Breath Act</strong>, formados en su metodología para guiar la experiencia con seguridad, contención y cuidado en cada momento.
+            </p>
           </div>
         </section>
         <section
@@ -351,19 +360,8 @@ export default function IcefestSantiago() {
           className="container max-w-6xl px-5 py-16 md:py-24"
         >
           <div className="max-w-3xl mb-14">
-            <p className="text-secondary font-semibold mb-3">
-              Un día para volver a ti
-            </p>
-            <h2 className="text-3xl md:text-5xl tracking-normal mb-5">
-              Cuatro experiencias.
-              <br />
-              Un mismo viaje.
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              Por primera vez, Icefest abre su jornada con The Breath Act:
-              respiración, música y trabajo con el cuerpo. Después, el hielo, el
-              cacao y la danza nos reúnen en la precordillera de Santiago.
-            </p>
+            <h2 className="text-3xl md:text-5xl mb-5">El viaje del día</h2>
+            <p className="text-lg text-muted-foreground">Cuatro experiencias en un orden pensado para que cada una prepare la siguiente.</p>
           </div>
           <div className="space-y-12">
             {journey.map((s, i) => (
@@ -381,7 +379,7 @@ export default function IcefestSantiago() {
                   <div className="flex items-center gap-3 mt-5 text-secondary">
                     <s.icon className="w-5 h-5" />
                     <span className="text-sm font-medium">
-                      0{i + 1} · {s.subtitle}
+                      {i + 1} · {s.subtitle}
                     </span>
                   </div>
                   <h3 className="text-2xl mt-3 mb-3">{s.title}</h3>
@@ -395,13 +393,8 @@ export default function IcefestSantiago() {
           <div className="container max-w-6xl px-5 grid md:grid-cols-2 gap-10">
             <div>
               <h2 className="text-3xl md:text-4xl mb-5">
-                Un día completo.
-                <br />A tu propio ritmo.
+El día
               </h2>
-              <p className="text-muted-foreground">
-                Todas las experiencias están guiadas. No necesitas experiencia
-                previa; la participación es siempre voluntaria.
-              </p>
               <p className="flex gap-3 items-start mt-6 text-primary">
                 <ShieldCheck className="w-6 h-6 shrink-0" />
                 Evento 100% sin alcohol ni drogas.
@@ -442,11 +435,9 @@ export default function IcefestSantiago() {
             ))}
           </div>
           <div>
-            <p className="text-primary mb-3">A los pies de la precordillera</p>
             <h2 className="text-3xl md:text-4xl mb-5">Parque Mahuida</h2>
             <p className="text-muted-foreground mb-5">
-              Naturaleza, comunidad y espacio para respirar, a minutos de la
-              ciudad.
+              Volvemos al mismo lugar de siempre: 170 hectáreas a los pies de la precordillera, a minutos de la ciudad y rodeados de naturaleza.
             </p>
             <p className="mb-6">
               {event?.address ||
@@ -469,10 +460,11 @@ export default function IcefestSantiago() {
         </section>
         <section id="entradas" className="bg-card py-16">
           <div className="container max-w-5xl px-5">
-            <h2 className="text-3xl md:text-4xl mb-4">Tu lugar en Icefest</h2>
+            <h2 className="text-3xl md:text-4xl mb-4">Entradas</h2>
             <p className="text-muted-foreground mb-8">
-              Respiración inmersiva, baño de hielo, cacao y Ecstatic Dance en
-              una sola entrada.
+              Preventa limitada{tiers.find((t) => t.name.toLowerCase().includes("preventa") && t.stock !== null)?.stock != null
+                ? ` a los primeros ${tiers.find((t) => t.name.toLowerCase().includes("preventa") && t.stock !== null)?.stock} cupos`
+                : ""}. Al agotarse, la entrada pasa a su valor normal.
             </p>
             {error && (
               <div role="alert" className="mb-5">
@@ -494,13 +486,13 @@ export default function IcefestSantiago() {
                   >
                     <p className="text-sm font-semibold text-primary mb-3">
                       {t.id === tier?.id
-                        ? "Disponible ahora"
+                        ? "Vigente"
                         : t.stock !== null && t.stock_sold >= t.stock
                           ? "Agotada"
                           : t.valid_until &&
                               new Date(t.valid_until).getTime() <= now
                             ? "Finalizada"
-                            : "Próxima etapa"}
+                            : "Próximamente"}
                     </p>
                     <h3 className="text-xl mb-4">{t.name}</h3>
                     <p className="text-4xl font-bold">
@@ -538,28 +530,31 @@ export default function IcefestSantiago() {
           id="facilitadores"
           className="container max-w-6xl px-5 py-16 md:py-24"
         >
-          <h2 className="text-3xl md:text-4xl mb-10">Quienes te acompañan</h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-8">
+          <h2 className="text-3xl md:text-4xl mb-10">Facilitadores</h2>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
               {
-                name: "The Breath Act",
-                role: "Facilitadores certificados · Respiración inmersiva",
+                name: "Facilitadores certificados The Breath Act",
+                role: "Respiración inmersiva",
+                bio: "La sesión de respiración será guiada por facilitadores certificados por The Breath Act, escuela referente de breathwork y neurociencia aplicada en habla hispana. Su formación integra respiración consciente, neurociencia, sonido y trabajo somático, garantizando una experiencia segura, cuidada y profundamente transformadora.",
                 image: logo,
               },
               {
                 name: "Alan Iceman",
                 role: "Instructor certificado avanzado Método Wim Hof",
+                bio: "Guiará la inmersión en hielo, acompañando cada paso con presencia, cuidado y la experiencia de cientos de baños de hielo facilitados.",
                 image: alan,
               },
-              { name: "Ámbar Doula", role: "Ceremonia de cacao", image: ambar },
               {
                 name: "Manu Da Banda",
-                role: "Música en vivo · Ecstatic Dance",
+                role: "Música en vivo • Ecstatic Dance",
+                bio: "Sostiene la respiración, las inmersiones y el cierre del día con música y selección en vivo, acompañando el movimiento con calidez y ritmo.",
                 image: manu,
               },
               {
                 name: "DJ Zalamandra",
-                role: "DJ · Ecstatic Dance",
+                role: "DJ • Ecstatic Dance",
+                bio: "Un viaje musical que crece desde la conexión interior hasta la expresión libre, para cerrar el día bailando con libertad y comunidad.",
                 image: null,
               },
             ].map((f) => (
@@ -578,39 +573,21 @@ export default function IcefestSantiago() {
                 )}
                 <h3 className="text-lg mt-4 mb-2">{f.name}</h3>
                 <p className="text-sm text-muted-foreground">{f.role}</p>
+                <p className="mt-3 text-sm text-muted-foreground">{f.bio}</p>
               </article>
             ))}
           </div>
         </section>
         <section id="faq" className="container max-w-3xl px-5 pb-20">
-          <h2 className="text-3xl mb-8">Antes de venir</h2>
+          <h2 className="text-3xl mb-8">Preguntas frecuentes</h2>
           <Accordion type="single" collapsible>
             {[
-              [
-                "¿Necesito experiencia previa?",
-                "No. Todo se guía paso a paso. Siempre puedes decidir hasta dónde avanzar.",
-              ],
-              [
-                "¿Qué debo llevar?",
-                event?.instructions ||
-                  "Traje de baño, toalla, mat o manta, ropa cómoda, muda seca, botella de agua, tazón para cacao, bloqueador y gorro.",
-              ],
-              [
-                "¿Hay consideraciones de salud?",
-                "Si tienes condiciones cardiovasculares, epilepsia, hipertensión no controlada, embarazo u otra condición médica relevante, consulta antes con un profesional de salud. No reemplaza ningún tratamiento médico. La respiración se practica fuera del agua y la inmersión guiada tiene un máximo de 2 minutos.",
-              ],
-              [
-                "¿Cómo recibo mis entradas?",
-                "Después de confirmar el pago recibirás un comprobante y luego tus códigos privados con los detalles del evento. Muestra tu código al personal al llegar.",
-              ],
-              [
-                "¿Puedo comprar varias entradas?",
-                "Sí. Selecciona la cantidad al comprar; cada persona tendrá un código único para un solo ingreso.",
-              ],
-              [
-                "¿Puedo pagar en cuotas?",
-                "Mercado Pago permite elegir hasta 3 cuotas. Las condiciones e intereses disponibles dependen de tu tarjeta y se muestran al pagar.",
-              ],
+              ["¿Qué tiene de especial esta edición?", "Es la primera edición de Icefest con The Breath Act como invitado especial. Abrimos el día con su respiración inmersiva, guiada por facilitadores certificados, antes del baño de hielo, la ceremonia de cacao y el Ecstatic Dance."],
+              ["¿Necesito experiencia previa?", "No. Todo se guía paso a paso y la experiencia es apta para principiantes. Siempre puedes decidir hasta dónde avanzar."],
+              ["¿Es un evento sin alcohol ni drogas?", "Sí. Icefest es una celebración 100% sin alcohol ni drogas. La energía viene de la respiración, el frío, la música y la comunidad."],
+              ["¿Qué debo llevar?", "Traje de baño, toalla, bolsa para ropa mojada, mat o manta para la respiración, ropa cómoda, una muda seca, botella de agua, bloqueador y gorro para el sol."],
+              ["¿Dónde es?", "En el Parque Mahuida, La Reina (Av. Alcalde Fernando Castillo Velasco 11095, La Reina, Santiago). Es el mismo lugar de ediciones anteriores; puedes coordinar auto compartido en el grupo de WhatsApp de asistentes."],
+              ["¿Hay alguna consideración de salud?", "Si tienes condiciones cardiovasculares, epilepsia, hipertensión no controlada, estás embarazada o tienes otra condición médica relevante, consulta antes con un profesional de salud. Es una práctica de bienestar y no reemplaza ningún tratamiento médico."],
             ].map(([q, a], i) => (
               <AccordionItem value={String(i)} key={q}>
                 <AccordionTrigger className="text-left">{q}</AccordionTrigger>
@@ -624,18 +601,17 @@ export default function IcefestSantiago() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Conversar por WhatsApp
+              Escribir por WhatsApp
             </a>
           </Button>
         </section>
         <section className="bg-card text-center py-16 px-5">
-          <h2 className="text-3xl md:text-4xl mb-5">
-            Tu viaje puede empezar antes.
-          </h2>
+          <h2 className="text-3xl md:text-4xl mb-5">Respira con nosotros este 13 de diciembre</h2>
           <p className="text-muted-foreground max-w-xl mx-auto mb-6">
-            Conoce las sesiones guiadas de agua fría y Método Wim Hof en Nave
-            Studio para prepararte a tu ritmo.
+            {canBuy ? `${tier?.name} vigente: ${icefestMoney(tier?.price || 0)} por persona.` : "Venta no disponible"}
           </p>
+          <Button className="festival-cta mb-6" size="lg" disabled={!canBuy} onClick={openCheckout}>Reservar mi entrada</Button>
+          <div />
           <Button variant="outline" asChild>
             <Link to="/bonos">
               Ver sesiones de preparación
