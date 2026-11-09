@@ -23,6 +23,7 @@ import { GtagClickTracker } from "@/components/GtagClickTracker";
 import { Loader2 } from "lucide-react";
 import { Promo18Offset } from "@/components/Promo18Banner";
 import { CyberBannerOffset } from "@/components/CyberBanner";
+import { IcefestLoading } from "@/components/icefest/IcefestLoading";
 
 // Lazy-loaded pages
 const Index = lazy(() => import("./pages/Index"));
@@ -146,11 +147,23 @@ const LoadingSpinner = () => (
   </div>
 );
 
+const SiteChrome = () => {
+  const { pathname } = useLocation();
+  if (pathname.startsWith('/icefest-santiago')) return null;
+  return <><Header /><Promo18Offset /><CyberBannerOffset /></>;
+};
+
+const RouteLoading = () => {
+  const { pathname } = useLocation();
+  return pathname.startsWith('/icefest-santiago') ? <IcefestLoading /> : <LoadingSpinner />;
+};
+
 const App = () => {
   const chatRef = useRef<ChatWidgetHandle>(null);
 
   const WhatsAppWidgetWrapper = () => {
     const { pathname } = useLocation();
+    if (pathname.startsWith('/icefest-santiago')) return null;
     // Hide WhatsApp FAB on mobile in /tienda so it doesn't overlap the cart bottom bar
     const hideOnMobile = pathname === "/tienda";
     return (
@@ -176,10 +189,8 @@ const App = () => {
               <GtagClickTracker />
               <MailerLiteUniversal />
               <TrialDelegationHandler />
-              <Header />
-            <Promo18Offset />
-            <CyberBannerOffset />
-            <Suspense fallback={<LoadingSpinner />}>
+              <SiteChrome />
+            <Suspense fallback={<RouteLoading />}>
             <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/planes-precios" element={<Planes />} />

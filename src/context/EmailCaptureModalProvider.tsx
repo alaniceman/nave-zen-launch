@@ -1,5 +1,6 @@
 import { createContext, useState, ReactNode, useEffect } from "react";
 import { EmailCaptureModal } from "@/components/EmailCaptureModal";
+import { useLocation } from 'react-router-dom';
 
 interface EmailCaptureModalContextType {
   openEmailCaptureModal: () => void;
@@ -13,6 +14,8 @@ interface EmailCaptureModalProviderProps {
 }
 
 export const EmailCaptureModalProvider = ({ children }: EmailCaptureModalProviderProps) => {
+  const { pathname } = useLocation();
+  const isIcefest = pathname.startsWith('/icefest-santiago');
   const [isOpen, setIsOpen] = useState(false);
   const [hasShownThisSession, setHasShownThisSession] = useState(false);
 
@@ -24,6 +27,7 @@ export const EmailCaptureModalProvider = ({ children }: EmailCaptureModalProvide
 
   // Smart trigger logic
   useEffect(() => {
+    if (isIcefest) return;
     // Don't show if already seen the modal
     if (localStorage.getItem('email-capture-seen')) {
       return;
@@ -69,12 +73,12 @@ export const EmailCaptureModalProvider = ({ children }: EmailCaptureModalProvide
       document.removeEventListener('mouseleave', handleMouseLeave);
       document.removeEventListener('scroll', handleScroll);
     };
-  }, [isOpen, hasShownThisSession]);
+  }, [isOpen, hasShownThisSession, isIcefest]);
 
   return (
     <EmailCaptureModalContext.Provider value={{ openEmailCaptureModal, closeEmailCaptureModal }}>
       {children}
-      <EmailCaptureModal isOpen={isOpen} onClose={closeEmailCaptureModal} />
+      <EmailCaptureModal isOpen={isOpen && !isIcefest} onClose={closeEmailCaptureModal} />
     </EmailCaptureModalContext.Provider>
   );
 };
