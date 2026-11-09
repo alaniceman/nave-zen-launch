@@ -36,3 +36,11 @@
 - [x] Unificar variantes de enlaces antiguos y de la agenda sin cambiar reservas.
 - [x] Confirmar cambios guardados (build OK); Google confirma el dominio incorrecto en Criomedicina y la agenda indexada.
 - [ ] Publicar tras revisión de Alan y validar el aviso en Search Console; falta la lista exacta de URLs del informe.
+
+# Icefest Santiago dentro de Nave Studio
+
+- [ ] Replicar /icefest-santiago con fotos y contenido del proyecto Icefest Ticketera.
+- [ ] Integrar compra, confirmación de pago y emisión única de entradas en Nave Studio.
+- [ ] Agregar administración de entradas, precios, cupos, ventas, correos y acreditación.
+- [ ] Definir traslado de ventas existentes y obtener exportación del origen si corresponde.
+- [ ] Actualizar Talleres y Retiros y verificar la experiencia antes de publicar.
