@@ -39,6 +39,12 @@
 
 # Icefest Santiago dentro de Nave Studio
 
+## Identidad independiente y compra cuidada
+- [ ] Replicar estilo Icefest original con navegación independiente y carrito por pasos.
+- [ ] Mejorar cargas, errores y recuperación del carrito sin alterar precios ni inventario.
+- [ ] Conservar Pixel de Nave y enlaces de preparación; compra combinada requiere oferta y precio confirmados.
+- [ ] Verificar móvil/escritorio y cotización sin crear compras; dejar en preview.
+
 - [x] Replicar /icefest-santiago con fotos y contenido del proyecto Icefest Ticketera.
 - [x] Integrar compra, confirmación de pago y emisión única de entradas en Nave Studio; funciones desplegadas, sin compra real ni envío de prueba.
 - [x] Agregar administración de entradas, precios, cupos, ventas, correos y acreditación en /admin/icefest.
