@@ -500,3 +500,49 @@ All colors MUST be HSL.
 .icefest-hero-shade {
   background: linear-gradient(90deg, hsl(var(--neutral-dark) / .85), hsl(var(--neutral-dark) / .2)), linear-gradient(0deg, hsl(var(--neutral-dark) / .7), transparent);
 }
+
+/* Festival tokens are scoped, including portalled checkout surfaces. */
+.icefest-theme {
+  --background: 220 40% 6%;
+  --foreground: 210 40% 98%;
+  --card: 220 35% 11%;
+  --card-foreground: 210 40% 98%;
+  --popover: 220 35% 11%;
+  --popover-foreground: 210 40% 98%;
+  --primary: 190 95% 60%;
+  --primary-foreground: 220 40% 6%;
+  --secondary: 25 95% 60%;
+  --secondary-foreground: 220 40% 6%;
+  --accent: 270 85% 75%;
+  --accent-foreground: 220 40% 6%;
+  --muted: 220 30% 14%;
+  --muted-foreground: 210 25% 76%;
+  --border: 200 30% 24%;
+  --input: 200 30% 30%;
+  --ring: 190 95% 60%;
+  --destructive: 0 90% 76%;
+  --radius: 8px;
+  --festival-spectrum: linear-gradient(90deg, hsl(25 95% 65%), hsl(45 90% 68%), hsl(190 95% 65%));
+  --festival-button: linear-gradient(90deg, hsl(190 85% 58%), hsl(25 90% 63%), hsl(190 85% 58%));
+  --festival-shadow: 0 8px 32px hsl(190 95% 60% / .16);
+  letter-spacing: 0;
+  color-scheme: dark;
+}
+.icefest-theme h1, .icefest-theme h2, .icefest-theme h3 { letter-spacing: 0; }
+.icefest-theme .festival-heading { font-family: 'Inter', sans-serif; }
+.icefest-theme .festival-spectrum {
+  background: var(--festival-spectrum);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+.icefest-theme .festival-cta { background: var(--festival-button); color: hsl(var(--primary-foreground)); box-shadow: var(--festival-shadow); font-weight: 700; }
+.icefest-theme .festival-hero-photo { opacity: .16; }
+.icefest-theme .festival-hero { min-height: min(820px, 92svh); }
+.icefest-theme .festival-bottom { padding-bottom: max(16px, env(safe-area-inset-bottom)); }
+@media (max-width: 640px) {
+  .icefest-theme .festival-hero { min-height: 660px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .icefest-theme *, .icefest-theme *::before, .icefest-theme *::after { animation: none !important; transition: none !important; }
+}
