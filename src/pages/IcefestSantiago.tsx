@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
-import { Calendar,Clock,MapPin,Wind,Snowflake,Coffee,Music,ArrowUpRight,Ticket,ShieldCheck,Star,Heart,Brain,Waves,ShoppingBag,MessageCircle,Loader2 } from 'lucide-react';
+import { Calendar,Clock,MapPin,Wind,Snowflake,Coffee,Music,ArrowUpRight,Ticket,ShieldCheck,Star,Heart,Waves,ShoppingBag,MessageCircle,Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Accordion,AccordionItem,AccordionTrigger,AccordionContent } from '@/components/ui/accordion';
 import { useIcefestEvent } from '@/components/icefest/useIcefestEvent';

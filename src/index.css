@@ -538,10 +538,17 @@ All colors MUST be HSL.
 }
 .icefest-theme .festival-cta { background: var(--festival-button); color: hsl(var(--primary-foreground)); box-shadow: var(--festival-shadow); font-weight: 700; }
 .icefest-theme .festival-hero-photo { opacity: .16; }
+.icefest-theme .festival-hero .space-y-3 > p { display: flex; justify-content: center; }
 .icefest-theme .festival-hero { min-height: min(820px, 92svh); }
 .icefest-theme .festival-bottom { padding-bottom: max(16px, env(safe-area-inset-bottom)); }
 @media (max-width: 640px) {
-  .icefest-theme .festival-hero { min-height: 660px; }
+  .icefest-theme .festival-hero { min-height: 570px; padding-top: 28px; padding-bottom: 28px; }
+  .icefest-theme .festival-hero .space-y-5 > :not([hidden]) ~ :not([hidden]) { margin-top: 14px; }
+  .icefest-theme .festival-hero h1 { font-size: 30px; }
+  .icefest-theme .festival-hero img.object-contain { width: 144px; height: 60px; }
+  .icefest-theme .festival-hero .festival-spectrum { font-size: 22px; }
+  .icefest-theme .festival-hero p.text-base { font-size: 14px; line-height: 1.5; }
+  .icefest-theme .festival-hero-photo { opacity: .1; }
 }
 @media (prefers-reduced-motion: reduce) {
   .icefest-theme *, .icefest-theme *::before, .icefest-theme *::after { animation: none !important; transition: none !important; }
