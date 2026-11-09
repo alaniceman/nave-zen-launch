@@ -5,6 +5,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Footer } from "@/components/Footer";
 import { Link } from "react-router-dom";
 import { Calendar, MapPin, ArrowRight, Wind, Mountain, Sun } from "lucide-react";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { activeIcefestTier, icefestDate, icefestMoney } from "@/lib/icefest";
 
 type Item = {
   tag: string;
@@ -19,51 +22,26 @@ type Item = {
   soldOut?: boolean;
 };
 
-const ITEMS: Item[] = [
-  {
-    tag: "Taller · Santiago",
-    title: "Taller Wim Hof · Fundamentales y Avanzado",
-    soldOut: true,
-    date: "Sábado 3 y domingo 4 de octubre de 2026",
-    location: "Nave Studio · Antares 259, Las Condes",
-    description:
-      "Un fin de semana para integrar los tres pilares del Método Wim Hof: respiración, exposición al frío y mentalidad. Elige Fundamentales si estás partiendo, o Avanzado si ya tienes práctica previa. Son en días distintos, así que puedes tomar uno o los dos.",
-    highlights: [
-      "Fundamentales · sábado 3 de octubre · 11:30 a 15:00 (3,5 horas) · $50.000",
-      "Avanzado · domingo 4 de octubre · 11:30 a 15:00 (3,5 horas) · $60.000 · incluye The Snake",
-      "Ambas fechas agotadas",
-    ],
-    url: "/taller-wim-hof-santiago-fundamentales-avanzado",
-    icon: <Wind className="w-5 h-5" />,
-    accent: "from-primary/10 to-primary/5",
-  },
-
-  {
-    tag: "Retiro · Guatemala",
-    title: "Retiro Wim Hof · Atitlán Reset",
-    date: "26 de octubre – 1 de noviembre de 2026",
-    location: "San Marcos La Laguna · Lago Atitlán, Guatemala",
-    description:
-      "Siete días de retiro transformacional a orillas del lago Atitlán. Respiración, inmersiones en frío, yoga, ceremonias y un entorno sagrado para resetear cuerpo y mente.",
-    highlights: [
-      "7 días en un entorno sagrado",
-      "Solo 3 cupos disponibles",
-      "Ceremonias, yoga y breathwork diario",
-    ],
-    url: "https://guatemala.criomedicina.com/",
-    icon: <Sun className="w-5 h-5" />,
-    accent: "from-warm/15 to-warm/5",
-  },
-];
-
 const TalleresYRetiros = () => {
+  const [items, setItems] = useState<Item[]>([]);
+  useEffect(() => {
+    async function load() {
+      const today = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Santiago", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
+      const { data: event } = await supabase.from("icefest_events").select("*").eq("slug", "icefest-santiago").eq("is_active", true).gte("date", today).maybeSingle();
+      if (!event) return;
+      const { data: tiers } = await supabase.from("icefest_ticket_types").select("*").eq("event_id", event.id);
+      const active = activeIcefestTier(tiers || []);
+      setItems([{ tag: "Festival · Santiago", title: event.name, date: icefestDate(event.date), location: event.location, description: event.description, highlights: [event.schedule, "Respiración inmersiva · Hielo · Cacao · Ecstatic Dance", ...(active && event.sales_open ? [`${active.name} · ${icefestMoney(active.price)}`] : ["Ver detalles del evento"])], url: "/icefest-santiago", icon: <Wind className="w-5 h-5" />, accent: "from-primary/10 to-primary/5" }]);
+    }
+    void load();
+  }, []);
   return (
     <>
       <Helmet>
         <title>Talleres y Retiros · Nave Studio</title>
         <meta
           name="description"
-          content="Próximos talleres y retiros de Nave Studio: Taller Wim Hof en Santiago (3 y 4 de octubre 2026) y Retiro Wim Hof en Lago Atitlán, Guatemala."
+          content="Próximos talleres y retiros de Nave Studio: Icefest Santiago + Breath Act en Parque Mahuida. Respiración, hielo, cacao y Ecstatic Dance."
         />
         <link rel="canonical" href="https://studiolanave.com/talleres-y-retiros" />
       </Helmet>
@@ -87,7 +65,7 @@ const TalleresYRetiros = () => {
         {/* Items */}
         <section className="py-10 md:py-16">
           <div className="container mx-auto px-4 max-w-5xl space-y-8">
-            {ITEMS.map((item) => (
+            {items.map((item) => (
               <Card
                 key={item.title}
                 className={`overflow-hidden border-border/60 bg-gradient-to-br ${item.accent}`}

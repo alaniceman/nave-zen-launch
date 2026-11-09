@@ -495,3 +495,8 @@ All colors MUST be HSL.
 .hover\:scale-103:hover {
   transform: scale(1.03);
 }
+
+/* Authentic Icefest photography, with Nave's semantic foreground. */
+.icefest-hero-shade {
+  background: linear-gradient(90deg, hsl(var(--neutral-dark) / .85), hsl(var(--neutral-dark) / .2)), linear-gradient(0deg, hsl(var(--neutral-dark) / .7), transparent);
+}

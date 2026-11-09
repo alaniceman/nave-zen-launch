@@ -46,6 +46,7 @@ const menuItems = [
   { title: 'Tienda · Compras', url: '/admin/tienda-ordenes', icon: ShoppingCart },
   { title: 'Cyber · Cupos', url: '/admin/cyber-cupos', icon: Store },
   { title: 'Talleres · Inscripciones', url: '/admin/talleres-inscripciones', icon: Ticket },
+  { title: 'Icefest Santiago', url: '/admin/icefest', icon: Ticket },
 ];
 
 export function AdminSidebar() {
