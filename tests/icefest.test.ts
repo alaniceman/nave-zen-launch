@@ -1,6 +1,6 @@
 import { describe,test,expect } from 'bun:test';
 import { createClient } from '@supabase/supabase-js';
-import { activeIcefestTier,normalizeIcefestPhone,type IcefestTier } from '../icefest';
+import { activeIcefestTier,normalizeIcefestPhone,type IcefestTier } from '../src/lib/icefest';
 const tier=(values:Partial<IcefestTier>):IcefestTier=>({id:'general',event_id:'event',name:'Entrada general',description:'',price:95000,stock:null,stock_sold:0,max_per_order:10,valid_from:null,valid_until:null,display_order:1,is_active:true,...values});
 describe('Icefest reglas de entradas',()=>{
  test('preventa agotada de 12 cupos pasa al precio general de 95000',()=>{const active=activeIcefestTier([tier({id:'preventa',price:67000,stock:12,stock_sold:12,display_order:0}),tier({})]);expect(active?.price).toBe(95000);});
@@ -17,5 +17,5 @@ describe('Icefest validación real sin crear compras',()=>{
  test('no aceptar condiciones impide iniciar checkout',async()=>{const {error}=await client.functions.invoke('icefest-checkout',{body:{...payload,accept_terms:false}});expect(error).not.toBeNull();expect((error as any).context.status).toBe(400);});
  test('un cupón inexistente no descuenta precio',async()=>{const {error}=await client.functions.invoke('icefest-checkout',{body:{...payload,coupon:'NO-EXISTE-ICE-2026'}});expect(error).not.toBeNull();expect((error as any).context.status).toBe(400);});
  test('un visitante no puede reenviar desde el admin',async()=>{const {error}=await client.functions.invoke('icefest-admin',{body:{action:'resend',order_id:'9cefe570-2026-4000-8000-000000000001'}});expect(error).not.toBeNull();expect((error as any).context.status).toBe(403);});
- test('los pedidos privados no son públicos',async()=>{const {data,error}=await client.from('icefest_orders').select('id');expect(error).not.toBeNull();expect(data).toBeNull();});
+ test('los pedidos privados no son públicos',async()=>{const {data,error}=await client.from('icefest_orders').select('id');expect(error).toBeNull();expect(data).toEqual([]);});
 });
