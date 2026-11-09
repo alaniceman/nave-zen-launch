@@ -32,6 +32,7 @@
 
 # Direcciones principales para Google
 
-- [ ] Corregir declaraciones duplicadas, ausentes y con dominio incorrecto.
-- [ ] Unificar variantes de enlaces antiguos y de la agenda sin cambiar reservas.
-- [ ] Confirmar cambios guardados y dejar pendiente publicación y validación de Google.
+- [x] Corregir declaraciones duplicadas, ausentes y con dominio incorrecto.
+- [x] Unificar variantes de enlaces antiguos y de la agenda sin cambiar reservas.
+- [x] Confirmar cambios guardados (build OK); Google confirma el dominio incorrecto en Criomedicina y la agenda indexada.
+- [ ] Publicar tras revisión de Alan y validar el aviso en Search Console; falta la lista exacta de URLs del informe.
