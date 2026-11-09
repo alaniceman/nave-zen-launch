@@ -64,6 +64,13 @@
       "when": 1791252970707,
       "tag": "0008_cyber_stock",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1794249986547,
+      "tag": "0009_icefest_santiago_ticketing",
+      "breakpoints": true
     }
   ]
 }
