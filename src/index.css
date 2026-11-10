@@ -538,6 +538,7 @@ All colors MUST be HSL.
 }
 .icefest-theme .festival-cta { background: var(--festival-button); color: hsl(var(--primary-foreground)); box-shadow: var(--festival-shadow); font-weight: 700; }
 .icefest-theme .festival-hero-photo { opacity: .16; }
+.icefest-theme .festival-hero-video { opacity: .35; }
 .icefest-theme .festival-hero .space-y-3 > p { display: flex; justify-content: center; }
 .icefest-theme .festival-hero { min-height: min(820px, 92svh); }
 .icefest-theme .festival-bottom { padding-bottom: max(16px, env(safe-area-inset-bottom)); }
@@ -549,6 +550,7 @@ All colors MUST be HSL.
   .icefest-theme .festival-hero .festival-spectrum { font-size: 22px; }
   .icefest-theme .festival-hero p.text-base { font-size: 14px; line-height: 1.5; }
   .icefest-theme .festival-hero-photo { opacity: .1; }
+  .icefest-theme .festival-hero-video { opacity: .3; }
 }
 @media (prefers-reduced-motion: reduce) {
   .icefest-theme *, .icefest-theme *::before, .icefest-theme *::after { animation: none !important; transition: none !important; }
