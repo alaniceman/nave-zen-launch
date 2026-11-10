@@ -78,6 +78,13 @@
       "when": 1794250399289,
       "tag": "0010_icefest_order_integrity",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1794307990293,
+      "tag": "0011_restrict_cyber_public_reads",
+      "breakpoints": true
     }
   ]
 }
