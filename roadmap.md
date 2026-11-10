@@ -49,7 +49,7 @@
 - [x] Replicar /icefest-santiago con fotos y contenido del proyecto Icefest Ticketera.
 - [x] Integrar compra, confirmación de pago y emisión única de entradas en Nave Studio; funciones desplegadas, sin compra real ni envío de prueba.
 - [x] Agregar administración de entradas, precios, cupos, ventas, correos y acreditación en /admin/icefest.
-- [ ] Importar ventas existentes; pendiente recibir exportación de Icefest Ticketera.
+- [ ] Importar ventas existentes sin duplicar pedidos ni reenviar correos; bloqueado hasta recibir CSV de pedidos, entradas y tipos de entrada de Icefest Ticketera, ya que este chat no puede leer su base de datos privada.
 - [x] Mantener la venta en Icefest Ticketera durante la migración, sin exigir su cierre ni bloquear Nave por duplicados entre proyectos.
 - [x] Actualizar Talleres y Retiros y verificar móvil/escritorio, cálculo de precios y guardado del admin autenticado; 9 pruebas sin compras pasan.
 - [ ] Activar preventa limitada y trasladar WhatsApp/almuerzo/configuración anterior; pendiente exportación del origen o valores confirmados por Alan. Entrada general activa a $95.000, preventa $67.000 preparada y desactivada.
