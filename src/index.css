@@ -554,4 +554,7 @@ All colors MUST be HSL.
 }
 @media (prefers-reduced-motion: reduce) {
   .icefest-theme *, .icefest-theme *::before, .icefest-theme *::after { animation: none !important; transition: none !important; }
-}
+}.icefest-theme .festival-cosmic { background: linear-gradient(180deg, hsl(var(--background)) 0%, hsl(270 50% 10%) 30%, hsl(190 60% 12%) 60%, hsl(var(--background)) 100%); }
+/* Prevent sideways drift from decorative glows on touch devices. */
+html, body { overflow-x: clip; }
+.icefest-theme { overflow-x: clip; max-width: 100vw; }

@@ -33,6 +33,7 @@ const IcefestCheckout = lazy(() =>
   preloadCheckout().then((m) => ({ default: m.IcefestCheckout })),
 );
 import { icefestDate, icefestMoney } from "@/lib/icefest";
+import IcefestStory from "@/components/icefest/IcefestStory";
 import { trackViewContentOnce } from "@/lib/metaTracking";
 import breath from "@/assets/icefest/breathwork-new.webp";
 import ice from "@/assets/icefest/ice-bath-new.webp";
@@ -298,12 +299,12 @@ export default function IcefestSantiago() {
           <div className="max-w-6xl mx-auto flex gap-6 px-5 py-4 whitespace-nowrap text-sm text-muted-foreground">
             <a href="#edicion">Edición</a>
             <a href="#breath-act">Breath Act</a>
-            <a href="#experiencia">El viaje</a>
-            <a href="#dia">El día</a>
-            <a href="#lugar">Lugar</a>
-            <a href="#entradas">Entradas</a>
+            <a href="#experiencia">Experiencia</a>
+            <a href="#dia">Cronograma</a>
             <a href="#facilitadores">Facilitadores</a>
             <a href="#faq">Preguntas</a>
+            <a href="#fotos">Fotos</a>
+            <a href="#entradas">Entradas</a>
           </div>
         </nav>
         <section id="edicion" className="bg-card py-16 md:py-24">
@@ -375,109 +376,7 @@ export default function IcefestSantiago() {
             </p>
           </div>
         </section>
-        <section
-          id="experiencia"
-          className="container max-w-6xl px-5 py-16 md:py-24"
-        >
-          <div className="max-w-3xl mb-14">
-            <h2 className="text-3xl md:text-5xl mb-5">El viaje del día</h2>
-            <p className="text-lg text-muted-foreground">Cuatro experiencias en un orden pensado para que cada una prepare la siguiente.</p>
-          </div>
-          <div className="space-y-12">
-            {journey.map((s, i) => (
-              <article
-                key={s.title}
-                className={`grid md:grid-cols-2 gap-7 md:gap-10 items-center ${i % 2 ? "md:[&>img]:order-2" : ""}`}
-              >
-                <img
-                  src={s.image}
-                  alt={s.title}
-                  loading="lazy"
-                  className="aspect-[4/3] w-full object-cover rounded-lg"
-                />
-                <div>
-                  <div className="flex items-center gap-3 mt-5 text-secondary">
-                    <s.icon className="w-5 h-5" />
-                    <span className="text-sm font-medium">
-                      {i + 1} · {s.subtitle}
-                    </span>
-                  </div>
-                  <h3 className="text-2xl mt-3 mb-3">{s.title}</h3>
-                  <p className="text-muted-foreground">{s.text}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-        <section id="dia" className="bg-card py-16">
-          <div className="container max-w-6xl px-5 grid md:grid-cols-2 gap-10">
-            <div>
-              <h2 className="text-3xl md:text-4xl mb-5">
-El día
-              </h2>
-              <p className="flex gap-3 items-start mt-6 text-primary">
-                <ShieldCheck className="w-6 h-6 shrink-0" />
-                Evento 100% sin alcohol ni drogas.
-              </p>
-            </div>
-            <ol className="divide-y divide-border">
-              {[
-                ["10:15", "Llegada y acreditación"],
-                ["Mañana", "Respiración inmersiva The Breath Act"],
-                ["Mediodía", "Baño de hielo"],
-                ["Tarde", "Ceremonia de cacao"],
-                ["Tarde", "Ecstatic Dance"],
-                ["17:30", "Cierre"],
-              ].map(([time, title]) => (
-                <li key={title} className="flex gap-5 py-4">
-                  <span className="w-24 shrink-0 text-primary font-semibold">
-                    {time}
-                  </span>
-                  <span>{title}</span>
-                </li>
-              ))}
-            </ol>
-          </div>
-        </section>
-        <section
-          id="lugar"
-          className="container max-w-6xl px-5 py-16 md:py-24 grid md:grid-cols-2 gap-10 items-center"
-        >
-          <div className="grid grid-cols-2 gap-3">
-            {[gallery1, gallery2, gallery3, gallery4].map((src, i) => (
-              <img
-                key={src}
-                src={src}
-                alt={`Icefest en Parque Mahuida ${i + 1}`}
-                loading="lazy"
-                className="aspect-square object-cover w-full rounded-lg"
-              />
-            ))}
-          </div>
-          <div>
-            <h2 className="text-3xl md:text-4xl mb-5">Parque Mahuida</h2>
-            <p className="text-muted-foreground mb-5">
-              Volvemos al mismo lugar de siempre: 170 hectáreas a los pies de la precordillera, a minutos de la ciudad y rodeados de naturaleza.
-            </p>
-            <p className="mb-6">
-              {event?.address ||
-                "Av. Alcalde Fernando Castillo Velasco 11095, La Reina, Santiago"}
-            </p>
-            <Button asChild variant="outline">
-              <a
-                href={
-                  event?.google_maps_link ||
-                  "https://maps.google.com/?q=Parque+Mahuida"
-                }
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Cómo llegar
-                <ArrowUpRight className="ml-2 h-4 w-4" />
-              </a>
-            </Button>
-          </div>
-        </section>
+        <IcefestStory />
         <section id="entradas" className="bg-card py-16">
           <div className="container max-w-5xl px-5">
             <h2 className="text-3xl md:text-4xl mb-4">Entradas</h2>
@@ -545,85 +444,6 @@ El día
               Ya compré: recuperar mis entradas
             </Link>
           </div>
-        </section>
-        <section
-          id="facilitadores"
-          className="container max-w-6xl px-5 py-16 md:py-24"
-        >
-          <h2 className="text-3xl md:text-4xl mb-10">Facilitadores</h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              {
-                name: "Facilitadores certificados The Breath Act",
-                role: "Respiración inmersiva",
-                bio: "La sesión de respiración será guiada por facilitadores certificados por The Breath Act, escuela referente de breathwork y neurociencia aplicada en habla hispana. Su formación integra respiración consciente, neurociencia, sonido y trabajo somático, garantizando una experiencia segura, cuidada y profundamente transformadora.",
-                image: logo,
-              },
-              {
-                name: "Alan Iceman",
-                role: "Instructor certificado avanzado Método Wim Hof",
-                bio: "Guiará la inmersión en hielo, acompañando cada paso con presencia, cuidado y la experiencia de cientos de baños de hielo facilitados.",
-                image: alan,
-              },
-              {
-                name: "Manu Da Banda",
-                role: "Música en vivo • Ecstatic Dance",
-                bio: "Sostiene la respiración, las inmersiones y el cierre del día con música y selección en vivo, acompañando el movimiento con calidez y ritmo.",
-                image: manu,
-              },
-              {
-                name: "DJ Zalamandra",
-                role: "DJ • Ecstatic Dance",
-                bio: "Un viaje musical que crece desde la conexión interior hasta la expresión libre, para cerrar el día bailando con libertad y comunidad.",
-                image: null,
-              },
-            ].map((f) => (
-              <article key={f.name} className="text-center">
-                {f.image ? (
-                  <img
-                    src={f.image}
-                    alt={f.name}
-                    loading="lazy"
-                    className={`w-36 h-36 mx-auto rounded-full border-2 border-primary/40 ${f.image === logo ? "object-contain bg-primary p-5" : "object-cover"}`}
-                  />
-                ) : (
-                  <div className="w-36 h-36 mx-auto bg-muted rounded-full border-2 border-accent/40 flex items-center justify-center">
-                    <Music className="w-12 h-12 text-primary" />
-                  </div>
-                )}
-                <h3 className="text-lg mt-4 mb-2">{f.name}</h3>
-                <p className="text-sm text-muted-foreground">{f.role}</p>
-                <p className="mt-3 text-sm text-muted-foreground">{f.bio}</p>
-              </article>
-            ))}
-          </div>
-        </section>
-        <section id="faq" className="container max-w-3xl px-5 pb-20">
-          <h2 className="text-3xl mb-8">Preguntas frecuentes</h2>
-          <Accordion type="single" collapsible>
-            {[
-              ["¿Qué tiene de especial esta edición?", "Es la primera edición de Icefest con The Breath Act como invitado especial. Abrimos el día con su respiración inmersiva, guiada por facilitadores certificados, antes del baño de hielo, la ceremonia de cacao y el Ecstatic Dance."],
-              ["¿Necesito experiencia previa?", "No. Todo se guía paso a paso y la experiencia es apta para principiantes. Siempre puedes decidir hasta dónde avanzar."],
-              ["¿Es un evento sin alcohol ni drogas?", "Sí. Icefest es una celebración 100% sin alcohol ni drogas. La energía viene de la respiración, el frío, la música y la comunidad."],
-              ["¿Qué debo llevar?", "Traje de baño, toalla, bolsa para ropa mojada, mat o manta para la respiración, ropa cómoda, una muda seca, botella de agua, bloqueador y gorro para el sol."],
-              ["¿Dónde es?", "En el Parque Mahuida, La Reina (Av. Alcalde Fernando Castillo Velasco 11095, La Reina, Santiago). Es el mismo lugar de ediciones anteriores; puedes coordinar auto compartido en el grupo de WhatsApp de asistentes."],
-              ["¿Hay alguna consideración de salud?", "Si tienes condiciones cardiovasculares, epilepsia, hipertensión no controlada, estás embarazada o tienes otra condición médica relevante, consulta antes con un profesional de salud. Es una práctica de bienestar y no reemplaza ningún tratamiento médico."],
-            ].map(([q, a], i) => (
-              <AccordionItem value={String(i)} key={q}>
-                <AccordionTrigger className="text-left">{q}</AccordionTrigger>
-                <AccordionContent>{a}</AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-          <Button asChild variant="outline" className="mt-8">
-            <a
-              href="https://wa.me/56946120426?text=Hola%2C%20tengo%20una%20consulta%20sobre%20Icefest%20Santiago"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Escribir por WhatsApp
-            </a>
-          </Button>
         </section>
         <section className="bg-card text-center py-16 px-5">
           <h2 className="text-3xl md:text-4xl mb-5">Respira con nosotros este 13 de diciembre</h2>
