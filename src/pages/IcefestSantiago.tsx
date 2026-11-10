@@ -47,6 +47,8 @@ import gallery3 from "@/assets/icefest/icefest-06.webp";
 import gallery4 from "@/assets/icefest/icefest-17.webp";
 import heroVideo from "@/assets/icefest/icefest_hero.mp4.asset.json";
 import heroPoster from "@/assets/icefest/icefest_hero_poster.webp.asset.json";
+import horizontalVideo from "@/assets/icefest/icefest_horizontal.mp4.asset.json";
+import horizontalPoster from "@/assets/icefest/icefest_horizontal_poster.webp.asset.json";
 const journey = [
   {
     title: "Respiración inmersiva The Breath Act",
@@ -78,6 +80,16 @@ const journey = [
   },
 ];
 export default function IcefestSantiago() {
+  const [horizontalHero, setHorizontalHero] = useState(() =>
+    window.matchMedia("(min-width: 768px)").matches,
+  );
+  useEffect(() => {
+    const screen = window.matchMedia("(min-width: 768px)");
+    const updateScreen = () => setHorizontalHero(screen.matches);
+    screen.addEventListener("change", updateScreen);
+    updateScreen();
+    return () => screen.removeEventListener("change", updateScreen);
+  }, []);
   const {
     event,
     tiers,
@@ -182,8 +194,9 @@ export default function IcefestSantiago() {
           className="festival-hero relative flex items-center justify-center overflow-hidden py-12 md:py-20"
         >
           <video
-            src={heroVideo.url}
-            poster={heroPoster.url}
+            key={horizontalHero ? "horizontal" : "mobile"}
+            src={horizontalHero ? horizontalVideo.url : heroVideo.url}
+            poster={horizontalHero ? horizontalPoster.url : heroPoster.url}
             autoPlay
             muted
             loop

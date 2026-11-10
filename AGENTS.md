@@ -7,3 +7,4 @@
 - Icefest private ticket/order access requires bearer link tokens; check-in requires the existing admin role and an atomic RPC, so a public PIN cannot authorize entry.
 - Public Icefest routes use an isolated festival shell and scoped semantic tokens (also on checkout portals); this preserves Nave styling and global Pixel tracking without competing navigation or popups.
 - Icefest event and tier reads share a cached, abortable query; checkout loads on intent and remains mounted once opened, preserving in-memory buyer data without persisting personal information.
+- Icefest hero mounts one video selected with the 768px media query; this prevents desktop and mobile video downloads from competing on initial load.
