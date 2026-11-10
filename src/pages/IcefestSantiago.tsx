@@ -198,7 +198,7 @@ export default function IcefestSantiago() {
               Edición especial
             </p>
             <h1 className="festival-heading text-4xl sm:text-5xl md:text-6xl font-bold leading-tight">
-              ICEFEST + BREATH ACT
+              ICEFEST
             </h1>
             <div className="flex flex-col items-center gap-3">
               <p className="text-xs uppercase text-muted-foreground">
