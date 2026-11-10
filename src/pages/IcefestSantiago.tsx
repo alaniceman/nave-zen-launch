@@ -45,6 +45,8 @@ import gallery1 from "@/assets/icefest/icefest-01.webp";
 import gallery2 from "@/assets/icefest/icefest-03.webp";
 import gallery3 from "@/assets/icefest/icefest-06.webp";
 import gallery4 from "@/assets/icefest/icefest-17.webp";
+import heroVideo from "@/assets/icefest/icefest_hero.mp4.asset.json";
+import heroPoster from "@/assets/icefest/icefest_hero_poster.webp.asset.json";
 const journey = [
   {
     title: "Respiración inmersiva The Breath Act",
@@ -179,11 +181,16 @@ export default function IcefestSantiago() {
           id="top"
           className="festival-hero relative flex items-center justify-center overflow-hidden py-12 md:py-20"
         >
-          <img
-            src={gallery4}
-            alt="Comunidad Icefest en Parque Mahuida"
-            fetchPriority="high"
-            className="festival-hero-photo absolute inset-0 w-full h-full object-cover"
+          <video
+            src={heroVideo.url}
+            poster={heroPoster.url}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            aria-hidden="true"
+            className="festival-hero-photo festival-hero-video absolute inset-0 w-full h-full object-cover"
           />
           <div className="relative z-10 max-w-5xl mx-auto px-5 text-center space-y-5 md:space-y-7">
             <p className="inline-flex gap-2 items-center text-secondary text-xs font-bold uppercase">
