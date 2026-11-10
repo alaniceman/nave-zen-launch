@@ -299,12 +299,12 @@ export default function IcefestSantiago() {
           <div className="max-w-6xl mx-auto flex gap-6 px-5 py-4 whitespace-nowrap text-sm text-muted-foreground">
             <a href="#edicion">Edición</a>
             <a href="#breath-act">Breath Act</a>
-            <a href="#experiencia">El viaje</a>
-            <a href="#dia">El día</a>
-            <a href="#lugar">Lugar</a>
-            <a href="#entradas">Entradas</a>
+            <a href="#experiencia">Experiencia</a>
+            <a href="#dia">Cronograma</a>
             <a href="#facilitadores">Facilitadores</a>
             <a href="#faq">Preguntas</a>
+            <a href="#fotos">Fotos</a>
+            <a href="#entradas">Entradas</a>
           </div>
         </nav>
         <section id="edicion" className="bg-card py-16 md:py-24">
