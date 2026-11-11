@@ -6,7 +6,7 @@ import breathImg from "@/assets/icefest/breathwork-dimension.webp";
 import iceImg from "@/assets/icefest/ice-bath-dimension.webp";
 import cacaoImg from "@/assets/icefest/cacao-dimension.webp";
 import danceImg from "@/assets/icefest/dance-dimension.webp";
-import logo from "@/assets/icefest/breath-act-logo.png";
+import breathPortrait from "@/assets/icefest/breathact-portrait.webp";
 import alan from "@/assets/icefest/alan-iceman.jpg";
 import ambar from "@/assets/icefest/ambar-doula.jpg";
 import manu from "@/assets/icefest/manu-dabanda.jpg";
@@ -221,7 +221,6 @@ export default function IcefestStory() {
               <article key={f.name} className="group overflow-hidden rounded-2xl border border-border bg-card">
                 <div className="relative h-64 overflow-hidden bg-muted flex items-center justify-center">
                   {f.img ? (
-                    f.logo ? <img src={f.img} alt={f.name} loading="lazy" className="h-20 w-auto" /> :
                     <img src={f.img} alt={f.name} loading="lazy" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                   ) : <Music className="w-16 h-16 text-accent" />}
                 </div>
