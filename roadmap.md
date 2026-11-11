@@ -1,5 +1,12 @@
 # Correo de entradas Icefest Santiago
 
+# Tabla de ventas y eliminación Icefest
+
+- [ ] Reemplazar tarjetas por tabla con nombre, email, códigos, estado, evento, cantidad, total, fecha y acciones.
+- [ ] Agregar eliminación confirmada exclusiva de administradores, anulando entradas y liberando cupos sin reembolsar pagos.
+- [ ] Desplegar y verificar sin eliminar ventas reales.
+
+
 - [x] Adaptar la información del correo adjunto: acreditación manual, preparación por actividad, datos de Santiago, almuerzo, mapa y WhatsApp.
 - [x] Dejar solo la advertencia de salud indicada por Alan, en HTML y texto plano.
 - [x] Desplegar los envíos actualizados sin reenviar entradas ni realizar compras de prueba.
