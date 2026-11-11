@@ -558,3 +558,33 @@ All colors MUST be HSL.
 /* Prevent sideways drift from decorative glows on touch devices. */
 html, body { overflow-x: clip; }
 .icefest-theme { overflow-x: clip; max-width: 100vw; }
+
+/* Single scrolling checkout: payment never covers the buyer's fields. */
+.icefest-checkout { scroll-padding-block: 24px; padding-bottom: env(safe-area-inset-bottom); }
+.icefest-checkout .icefest-field { position: relative; }
+.icefest-checkout .icefest-field input {
+  height: 56px;
+  padding: 22px 12px 6px;
+  font-size: 16px;
+  background: hsl(var(--background));
+  border-color: hsl(var(--input));
+  border-radius: 6px;
+}
+.icefest-checkout .icefest-field label {
+  position: absolute;
+  left: 12px;
+  top: 8px;
+  color: hsl(var(--muted-foreground));
+  font-size: 12px;
+  line-height: 16px;
+  pointer-events: none;
+  transition: top .15s ease, font-size .15s ease;
+}
+.icefest-checkout .icefest-field input:placeholder-shown:not(:focus) + label {
+  top: 19px;
+  font-size: 16px;
+}
+.icefest-checkout .icefest-field input:focus-visible {
+  border-color: hsl(var(--ring));
+  box-shadow: 0 0 0 1px hsl(var(--ring));
+}
