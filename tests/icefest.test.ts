@@ -17,5 +17,7 @@ describe('Icefest validación real sin crear compras',()=>{
  test('no aceptar condiciones impide iniciar checkout',async()=>{const {error}=await client.functions.invoke('icefest-checkout',{body:{...payload,accept_terms:false}});expect(error).not.toBeNull();expect((error as any).context.status).toBe(400);});
  test('un cupón inexistente no descuenta precio',async()=>{const {error}=await client.functions.invoke('icefest-checkout',{body:{...payload,coupon:'NO-EXISTE-ICE-2026'}});expect(error).not.toBeNull();expect((error as any).context.status).toBe(400);});
  test('un visitante no puede reenviar desde el admin',async()=>{const {error}=await client.functions.invoke('icefest-admin',{body:{action:'resend',order_id:'9cefe570-2026-4000-8000-000000000001'}});expect(error).not.toBeNull();expect((error as any).context.status).toBe(403);});
+ test('un visitante no puede eliminar registros de Icefest',async()=>{const {error}=await client.functions.invoke('icefest-admin',{body:{action:'delete',order_id:'00000000-0000-4000-8000-000000000000'}});expect(error).not.toBeNull();expect((error as any).context.status).toBe(403);});
+ test('un visitante no puede ejecutar la eliminación atómica',async()=>{const {error}=await client.rpc('icefest_delete_order',{_order_id:'00000000-0000-4000-8000-000000000000',_admin_id:'00000000-0000-4000-8000-000000000000'});expect(error).not.toBeNull();});
  test('los pedidos privados no son públicos',async()=>{const {data,error}=await client.from('icefest_orders').select('id');expect(error).toBeNull();expect(data).toEqual([]);});
 });

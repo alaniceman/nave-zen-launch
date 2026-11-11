@@ -7,7 +7,7 @@ export function AdminLayout() {
     <SidebarProvider defaultOpen={true}>
       <div className="min-h-screen flex w-full">
         <AdminSidebar />
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 min-w-0 flex flex-col">
           <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background px-4 lg:hidden">
             <SidebarTrigger className="-ml-1" />
             <h1 className="text-lg font-semibold">Nave Studio Admin</h1>

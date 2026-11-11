@@ -2526,6 +2526,10 @@ export type Database = {
         }
         Returns: Json
       }
+      icefest_delete_order: {
+        Args: { _admin_id: string; _order_id: string }
+        Returns: Json
+      }
       icefest_price: {
         Args: { _coupon?: string; _quantity: number; _type_id: string }
         Returns: Json

@@ -1,3 +1,9 @@
+# Tabla de ventas y eliminación Icefest
+
+- [x] Reemplazar tarjetas por tabla con nombre, email, códigos, estado, evento, cantidad, total, fecha y acciones.
+- [x] Agregar eliminación confirmada exclusiva de administradores, anulando entradas y liberando cupos sin reembolsar pagos.
+- [x] Desplegar y verificar tabla autenticada, confirmación/cancelación y permisos sin eliminar ventas reales; cuatro pruebas de acceso pasan. La prueba previa de precio general falla por configuración de etapas, fuera de este cambio.
+
 # Correo de entradas Icefest Santiago
 
 - [x] Adaptar la información del correo adjunto: acreditación manual, preparación por actividad, datos de Santiago, almuerzo, mapa y WhatsApp.
