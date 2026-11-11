@@ -4,7 +4,11 @@ import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import useEmblaCarousel from "embla-carousel-react";
 
 const files = import.meta.glob("@/assets/icefest/gallery/*.webp", { eager: true, import: "default" }) as Record<string, string>;
-const images = Object.keys(files).sort().map((k) => files[k]);
+const uploadedFiles = import.meta.glob("@/assets/icefest/gallery/*.webp.asset.json", { eager: true, import: "default" }) as Record<string, { url: string }>;
+const images = [
+  ...Object.keys(files).sort().map((k) => files[k]),
+  ...Object.keys(uploadedFiles).sort().map((k) => uploadedFiles[k].url),
+];
 
 export default function IcefestGallery() {
   const [open, setOpen] = useState<number | null>(null);
