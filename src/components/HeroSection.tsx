@@ -9,6 +9,8 @@ import planPruebaHero from "@/assets/plan-prueba-hero.webp";
 import promo18Hero from "@/assets/promo-18-hero.jpg";
 import { isPromo18Active, PROMO_18_PATH, PROMO_18_PRICE, PROMO_18_REGULAR_PRICE } from "@/lib/promo18";
 import { CYBER_ENDS_AT, CYBER_IMAGES, CYBER_ROUTES } from "@/lib/cyberNave";
+import icefestHomeDesktop from "@/assets/icefest/gallery/icefest-33.webp";
+import icefestHomeMobile from "@/assets/icefest/gallery/icefest-18.webp";
 
 
 // Día de la Madre (Chile: 10 mayo 2026) — banner activo hasta fin del 10 mayo
@@ -461,6 +463,89 @@ const HeroSlideCyber = () => {
             </Button>
             <p className="font-inter text-xs text-white/80">
               Packs de hielo con invitaciones de regalo · membresías con 50% para nuevos
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Icefest Santiago — se muestra en el carrusel hasta el día del evento (hora Chile)
+const ICEFEST_HOME = {
+  slug: "icefest-santiago",
+  date: "2026-12-13",
+  label: "domingo 13 de diciembre",
+  from: 67000,
+};
+
+// Fecha de hoy en America/Santiago, sin offsets fijos
+const icefestHomeActive = () => {
+  const today = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Santiago",
+  }).format(new Date());
+  return today <= ICEFEST_HOME.date;
+};
+
+const HeroSlideIcefest = () => {
+  const navigate = useNavigate();
+  return (
+    <div className="relative min-h-screen flex items-start md:items-center justify-center pt-20 md:pt-0 overflow-hidden bg-slate-950">
+      {/* Cada pantalla descarga solo su foto */}
+      <picture>
+        <source media="(min-width: 768px)" srcSet={icefestHomeDesktop} />
+        <img
+          src={icefestHomeMobile}
+          alt="Participantes de Icefest Santiago en los baños de hielo del Parque Mahuida"
+          className="absolute inset-0 w-full h-full object-cover"
+          loading="lazy"
+        />
+      </picture>
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-950/85 via-primary/70 to-slate-950/90" />
+
+      <div className="relative z-10 container mx-auto px-6 text-center text-white">
+        <div className="max-w-3xl mx-auto space-y-5 md:space-y-7">
+          <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md text-white px-5 py-2.5 rounded-full text-sm md:text-base font-semibold border border-white/25">
+            <span className="text-base">🧊</span>
+            Icefest Santiago · {ICEFEST_HOME.label}
+          </div>
+
+          <h2 className="font-space-grotesk font-bold text-3xl md:text-6xl lg:text-7xl leading-[1.05]">
+            Icefest Santiago
+            <span className="block text-xl md:text-3xl lg:text-4xl font-medium text-white/90 mt-3">
+              Hielo, respiración y comunidad
+            </span>
+          </h2>
+
+          <p className="font-inter text-base md:text-xl text-white/95 max-w-2xl mx-auto">
+            Un día completo de baños de hielo, breathwork, ceremonia de cacao y
+            dance en el Parque Mahuida. De 10:15 a 17:30 hrs, con almuerzo
+            incluido.
+          </p>
+
+          <div className="flex items-center justify-center gap-3 pt-2">
+            <span className="font-space-grotesk text-5xl md:text-7xl font-bold">
+              ${ICEFEST_HOME.from.toLocaleString("es-CL")}
+            </span>
+            <span className="text-sm md:text-base text-white/90 self-end pb-2">
+              entradas desde
+            </span>
+          </div>
+
+          <div className="space-y-3 pt-2">
+            <Button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate(`/${ICEFEST_HOME.slug}`);
+              }}
+              className="w-full md:w-auto min-w-[320px] bg-white text-primary hover:bg-white/90 font-bold text-lg py-6 px-10 rounded-xl shadow-xl transition-all transform hover:scale-105"
+              size="xl"
+            >
+              Ver entradas →
+            </Button>
+            <p className="font-inter text-xs text-white/80">
+              Parque Mahuida, La Reina · preventa con cupos limitados
             </p>
           </div>
         </div>
