@@ -37,6 +37,7 @@ const IcefestCheckout = lazy(() =>
 import { icefestDate, icefestMoney } from "@/lib/icefest";
 import IcefestStory from "@/components/icefest/IcefestStory";
 import { trackViewContentOnce } from "@/lib/metaTracking";
+import { icefestShare } from "@/lib/icefestShare";
 import breath from "@/assets/icefest/breathwork-new.webp";
 import ice from "@/assets/icefest/ice-bath-new.webp";
 import cacao from "@/assets/icefest/cacao-new.webp";
@@ -156,22 +157,33 @@ export default function IcefestSantiago() {
   return (
     <>
       <Helmet>
-        <title>Icefest Santiago + Breath Act · Nave Studio</title>
+        <title>{icefestShare.title}</title>
         <meta
           name="description"
-          content="Icefest + Breath Act en Parque Mahuida. Respiración inmersiva, baño de hielo, cacao y Ecstatic Dance el 13 de diciembre de 2026. Entradas en Nave Studio."
+          content={icefestShare.description}
         />
         <link
           rel="canonical"
           href="https://studiolanave.com/icefest-santiago"
         />
-        <meta property="og:title" content="Icefest Santiago + Breath Act" />
+        <meta property="og:title" content={icefestShare.title} />
         <meta
           property="og:description"
-          content="Respira. Atraviesa el frío. Celebra. 13 de diciembre en Parque Mahuida."
+          content={icefestShare.description}
         />
         <meta property="og:type" content="website" />
+        <meta property="og:url" content={icefestShare.url} />
+        <meta property="og:image" content={icefestShare.image} />
+        <meta property="og:image:secure_url" content={icefestShare.image} />
+        <meta property="og:image:type" content="image/jpeg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content={icefestShare.imageAlt} />
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={icefestShare.title} />
+        <meta name="twitter:description" content={icefestShare.description} />
+        <meta name="twitter:image" content={icefestShare.image} />
+        <meta name="twitter:image:alt" content={icefestShare.imageAlt} />
       </Helmet>
       <main className="icefest-theme bg-background text-foreground pb-24 sm:pb-0">
         <header className="sticky top-0 z-40 border-b border-border bg-background">
