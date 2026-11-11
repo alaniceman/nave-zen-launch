@@ -114,18 +114,18 @@ const Planes = () => {
               <span className="inline-block mt-4 text-accent group-hover:underline font-medium">Ver membresías →</span>
             </a>
             
-            {/* Paquetes Criomedicina */}
-            <a href="#paquetes-criomedicina" className="group rounded-2xl p-6 bg-white hover:bg-gradient-to-br hover:from-white hover:to-neutral-50 hover:shadow-lg transition-all duration-300 border border-neutral-200 hover:border-accent">
-              <h3 className="font-semibold text-primary font-space text-lg">Paquetes de Criomedicina</h3>
-              <p className="text-sm text-muted-foreground mt-2 font-inter">Sesiones de Método Wim Hof con descuento.</p>
-              <span className="inline-block mt-4 text-accent group-hover:underline font-medium">Ver paquetes →</span>
-            </a>
-            
             {/* Solo Yoga */}
             <a href="#solo-yoga" className="group rounded-2xl p-6 bg-white hover:bg-gradient-to-br hover:from-white hover:to-neutral-50 hover:shadow-lg transition-all duration-300 border border-neutral-200 hover:border-accent">
               <h3 className="font-semibold text-primary font-space text-lg">Planes de Yoga</h3>
               <p className="text-sm text-muted-foreground mt-2 font-inter">Busco practicar Yoga sin compromiso.</p>
               <span className="inline-block mt-4 text-accent group-hover:underline font-medium">Ver Yoga →</span>
+            </a>
+
+            {/* Paquetes Criomedicina */}
+            <a href="#paquetes-criomedicina" className="group rounded-2xl p-6 bg-white hover:bg-gradient-to-br hover:from-white hover:to-neutral-50 hover:shadow-lg transition-all duration-300 border border-neutral-200 hover:border-accent">
+              <h3 className="font-semibold text-primary font-space text-lg">Paquetes de Criomedicina</h3>
+              <p className="text-sm text-muted-foreground mt-2 font-inter">Sesiones de Método Wim Hof con descuento.</p>
+              <span className="inline-block mt-4 text-accent group-hover:underline font-medium">Ver paquetes →</span>
             </a>
           </div>
         </div>
@@ -285,6 +285,99 @@ const Planes = () => {
             </div>
           </section>
 
+          {/* SOLO YOGA - Planes de Yoga */}
+          <section id="solo-yoga" className="mb-24">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-primary font-space">Planes de Yoga</h2>
+              <p className="text-muted-foreground mt-2 font-inter text-lg">Planes exclusivos para tu práctica de Yoga.</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+              {/* Yoga Esencial */}
+              <div className="bg-card rounded-2xl p-7 border-2 border-border/50 hover:border-accent/30 hover:shadow-xl transition-all duration-300 group">
+                <h3 className="text-2xl font-bold text-primary font-space mb-1">Yoga Esencial</h3>
+                <p className="text-sm text-muted-foreground font-inter mb-5">1 clase por semana</p>
+                <div className="mb-6">
+                  <span className="text-4xl font-bold text-foreground">$49.000</span>
+                  <span className="text-muted-foreground text-sm">/mes</span>
+                </div>
+                <a href="/plan-de-prueba" className="block mb-6 bg-warm/10 text-warm border border-warm/20 rounded-lg px-3 py-2 text-xs font-semibold text-center hover:bg-warm/20 transition-colors">
+                  Prueba antes con Plan de Prueba desde $14.900
+                </a>
+                <ul className="space-y-3 mb-8">
+                  <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">
+                    <Check className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                    Yoga (Yin · Yang · Integral · Vinyasa · Power)
+                  </li>
+                  <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">
+                    <Check className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                    Ideal para mantener tu práctica semanal
+                  </li>
+                </ul>
+                <Button className="w-full rounded-full px-6 py-3.5 font-semibold font-inter bg-accent hover:bg-primary text-white" onClick={() => openMembership("yoga", "yoga_esencial")}>
+                  Suscribirme
+                </Button>
+              </div>
+
+              {/* Yoga Continuo */}
+              <div className="relative bg-card rounded-2xl p-7 border-2 border-warm shadow-lg scale-[1.02] hover:shadow-xl transition-all duration-300 group">
+                <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-warm text-white px-4 py-1 text-xs shadow-md">
+                  <Star className="w-3 h-3 mr-1" />
+                  Más popular
+                </Badge>
+                <div className="pt-2">
+                  <h3 className="text-2xl font-bold text-primary font-space mb-1">Yoga Continuo</h3>
+                  <p className="text-sm text-muted-foreground font-inter mb-5">2 clases por semana</p>
+                  <div className="mb-6">
+                    <span className="text-4xl font-bold text-foreground">$69.000</span>
+                    <span className="text-muted-foreground text-sm">/mes</span>
+                  </div>
+                  <a href="/plan-de-prueba" className="block mb-6 bg-warm/10 text-warm border border-warm/20 rounded-lg px-3 py-2 text-xs font-semibold text-center hover:bg-warm/20 transition-colors">
+                    Prueba antes con Plan de Prueba desde $14.900
+                  </a>
+                  <ul className="space-y-3 mb-8">
+                    <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">
+                      <Check className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                      Yoga (Yin · Yang · Integral · Vinyasa · Power)
+                    </li>
+                    <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">
+                      <Check className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                      Profundiza tu práctica con más frecuencia
+                    </li>
+                  </ul>
+                  <Button className="w-full rounded-full px-6 py-3.5 font-semibold font-inter bg-warm hover:bg-warm/90 text-white shadow-md" onClick={() => openMembership("yoga", "yoga_continuo")}>
+                    Suscribirme
+                  </Button>
+                </div>
+              </div>
+
+              {/* Yoga Libre */}
+              <div className="bg-card rounded-2xl p-7 border-2 border-accent/50 hover:shadow-xl transition-all duration-300 group">
+                <h3 className="text-2xl font-bold text-primary font-space mb-1">Yoga Libre</h3>
+                <p className="text-sm text-muted-foreground font-inter mb-5">Clases ilimitadas</p>
+                <div className="mb-6">
+                  <span className="text-4xl font-bold text-foreground">$85.000</span>
+                  <span className="text-muted-foreground text-sm">/mes</span>
+                </div>
+                <a href="/plan-de-prueba" className="block mb-6 bg-warm/10 text-warm border border-warm/20 rounded-lg px-3 py-2 text-xs font-semibold text-center hover:bg-warm/20 transition-colors">
+                  Prueba antes con Plan de Prueba desde $14.900
+                </a>
+                <ul className="space-y-3 mb-8">
+                  <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">
+                    <Check className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                    Yoga (Yin · Yang · Integral · Vinyasa · Power)
+                  </li>
+                  <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">
+                    <Check className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                    Sin límites, practica todos los días
+                  </li>
+                </ul>
+                <Button className="w-full rounded-full px-6 py-3.5 font-semibold font-inter bg-accent hover:bg-primary text-white" onClick={() => openMembership("yoga", "yoga_libre")}>
+                  Suscribirme
+                </Button>
+              </div>
+            </div>
+          </section>
+
           {/* PAQUETES CRIOMEDICINA */}
           <section id="paquetes-criomedicina" className="mb-24">
             <div className="text-center mb-12">
@@ -377,99 +470,6 @@ const Planes = () => {
                 Ver todos los paquetes y agendar →
               </a>
             </p>
-          </section>
-
-          {/* SOLO YOGA - Planes de Yoga */}
-          <section id="solo-yoga" className="mb-24">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-primary font-space">Planes de Yoga</h2>
-              <p className="text-muted-foreground mt-2 font-inter text-lg">Planes exclusivos para tu práctica de Yoga.</p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-              {/* Yoga Esencial */}
-              <div className="bg-card rounded-2xl p-7 border-2 border-border/50 hover:border-accent/30 hover:shadow-xl transition-all duration-300 group">
-                <h3 className="text-2xl font-bold text-primary font-space mb-1">Yoga Esencial</h3>
-                <p className="text-sm text-muted-foreground font-inter mb-5">1 clase por semana</p>
-                <div className="mb-6">
-                  <span className="text-4xl font-bold text-foreground">$49.000</span>
-                  <span className="text-muted-foreground text-sm">/mes</span>
-                </div>
-                <a href="/plan-de-prueba" className="block mb-6 bg-warm/10 text-warm border border-warm/20 rounded-lg px-3 py-2 text-xs font-semibold text-center hover:bg-warm/20 transition-colors">
-                  Prueba antes con Plan de Prueba desde $14.900
-                </a>
-                <ul className="space-y-3 mb-8">
-                  <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">
-                    <Check className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
-                    Yoga (Yin · Yang · Integral · Vinyasa · Power)
-                  </li>
-                  <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">
-                    <Check className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
-                    Ideal para mantener tu práctica semanal
-                  </li>
-                </ul>
-                <Button className="w-full rounded-full px-6 py-3.5 font-semibold font-inter bg-accent hover:bg-primary text-white" onClick={() => openMembership("yoga", "yoga_esencial")}>
-                  Suscribirme
-                </Button>
-              </div>
-
-              {/* Yoga Continuo */}
-              <div className="relative bg-card rounded-2xl p-7 border-2 border-warm shadow-lg scale-[1.02] hover:shadow-xl transition-all duration-300 group">
-                <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-warm text-white px-4 py-1 text-xs shadow-md">
-                  <Star className="w-3 h-3 mr-1" />
-                  Más popular
-                </Badge>
-                <div className="pt-2">
-                  <h3 className="text-2xl font-bold text-primary font-space mb-1">Yoga Continuo</h3>
-                  <p className="text-sm text-muted-foreground font-inter mb-5">2 clases por semana</p>
-                  <div className="mb-6">
-                    <span className="text-4xl font-bold text-foreground">$69.000</span>
-                    <span className="text-muted-foreground text-sm">/mes</span>
-                  </div>
-                  <a href="/plan-de-prueba" className="block mb-6 bg-warm/10 text-warm border border-warm/20 rounded-lg px-3 py-2 text-xs font-semibold text-center hover:bg-warm/20 transition-colors">
-                    Prueba antes con Plan de Prueba desde $14.900
-                  </a>
-                  <ul className="space-y-3 mb-8">
-                    <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">
-                      <Check className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
-                      Yoga (Yin · Yang · Integral · Vinyasa · Power)
-                    </li>
-                    <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">
-                      <Check className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
-                      Profundiza tu práctica con más frecuencia
-                    </li>
-                  </ul>
-                  <Button className="w-full rounded-full px-6 py-3.5 font-semibold font-inter bg-warm hover:bg-warm/90 text-white shadow-md" onClick={() => openMembership("yoga", "yoga_continuo")}>
-                    Suscribirme
-                  </Button>
-                </div>
-              </div>
-
-              {/* Yoga Libre */}
-              <div className="bg-card rounded-2xl p-7 border-2 border-accent/50 hover:shadow-xl transition-all duration-300 group">
-                <h3 className="text-2xl font-bold text-primary font-space mb-1">Yoga Libre</h3>
-                <p className="text-sm text-muted-foreground font-inter mb-5">Clases ilimitadas</p>
-                <div className="mb-6">
-                  <span className="text-4xl font-bold text-foreground">$85.000</span>
-                  <span className="text-muted-foreground text-sm">/mes</span>
-                </div>
-                <a href="/plan-de-prueba" className="block mb-6 bg-warm/10 text-warm border border-warm/20 rounded-lg px-3 py-2 text-xs font-semibold text-center hover:bg-warm/20 transition-colors">
-                  Prueba antes con Plan de Prueba desde $14.900
-                </a>
-                <ul className="space-y-3 mb-8">
-                  <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">
-                    <Check className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
-                    Yoga (Yin · Yang · Integral · Vinyasa · Power)
-                  </li>
-                  <li className="text-sm font-inter text-foreground/80 flex items-start gap-2.5">
-                    <Check className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
-                    Sin límites, practica todos los días
-                  </li>
-                </ul>
-                <Button className="w-full rounded-full px-6 py-3.5 font-semibold font-inter bg-accent hover:bg-primary text-white" onClick={() => openMembership("yoga", "yoga_libre")}>
-                  Suscribirme
-                </Button>
-              </div>
-            </div>
           </section>
 
           {/* Trial Yoga Section */}
