@@ -6,9 +6,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { IcefestPrepUpsell } from '@/components/icefest/IcefestPrepUpsell';
+import { trackMetaEventOnce } from '@/lib/metaPixel';
 import { icefestCall,icefestDate,icefestMoney } from '@/lib/icefest';
 export default function IcefestAccess(){
  const location=useLocation(),{code}=useParams(),[data,setData]=useState<any>(null),[error,setError]=useState(''),[loading,setLoading]=useState(true),[email,setEmail]=useState(''),[message,setMessage]=useState(''),[busy,setBusy]=useState(false);
+ useEffect(()=>{if(!code&&data?.status==='paid'&&data?.id)trackMetaEventOnce(`purchase-icefest-${data.id}`,'Purchase',{value:data.total_amount,currency:'CLP',content_name:'Icefest Santiago',content_type:'product',num_items:data.quantity},`purchase-icefest-${data.id}`);},[code,data]);
  const recover=location.pathname.endsWith('/recuperar');
  useEffect(()=>{let cancelled=false;let timer:ReturnType<typeof setTimeout>|undefined;
  async function load(){if(recover){setLoading(false);return;}const q=new URLSearchParams(location.search),token=q.get('token'),id=q.get('order')||q.get('external_reference');if(!token||(!code&&!id)){setError('Abre el enlace privado de tu compra o recupera tus entradas con tu email.');setLoading(false);return;}

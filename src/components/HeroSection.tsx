@@ -523,15 +523,6 @@ const HeroSlideIcefest = () => {
             incluido.
           </p>
 
-          <div className="flex items-center justify-center gap-3 pt-2">
-            <span className="font-space-grotesk text-5xl md:text-7xl font-bold">
-              ${ICEFEST_HOME.from.toLocaleString("es-CL")}
-            </span>
-            <span className="text-sm md:text-base text-white/90 self-end pb-2">
-              entradas desde
-            </span>
-          </div>
-
           <div className="space-y-3 pt-2">
             <Button
               type="button"
