@@ -62,7 +62,7 @@ const HeroSlideMain = () => {
 
           {/* Micro line */}
           <p className="font-inter text-base md:text-lg text-white/80 max-w-2xl mx-auto">
-            Creado por <a href="https://instagram.com/alan_iceman" target="_blank" rel="noopener noreferrer" className="font-medium text-accent hover:text-accent/80 transition-colors">Alan Iceman</a> — Instructor Wim Hof, +118k seguidores en Instagram
+            Creado por <a href="https://instagram.com/alan_iceman" target="_blank" rel="noopener noreferrer" className="font-medium text-accent hover:text-accent/80 transition-colors">Alan Iceman</a>{"\u00a0- Instructor Wim Hof, +140k seguidores en Instagram"}
           </p>
 
           {/* CTA Section */}
