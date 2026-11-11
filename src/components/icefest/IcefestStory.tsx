@@ -14,6 +14,7 @@ import sol from "@/assets/icefest/sol-evans.webp";
 import maral from "@/assets/icefest/maral-hekmat.webp";
 import rolo from "@/assets/icefest/rolo-varela.webp";
 import pia from "@/assets/icefest/pia-medel.webp";
+import zalamandra from "@/assets/icefest/dj-zalamandra-profile.webp.asset.json";
 
 const IcefestGallery = lazy(() => import("./IcefestGallery"));
 
@@ -53,7 +54,7 @@ const facilitators = [
   { name: "Facilitadores The Breath Act", role: "Invitados especiales • Respiración inmersiva", bio: "La respiración inmersiva será guiada por facilitadores certificados de The Breath Act, escuela que integra respiración, música y trabajo somático con base en la neurociencia.", img: breathPortrait },
   { name: "Ámbar Doula", role: "Ceremonia de cacao", bio: "Doula y guardiana de espacios sagrados. Conduce la ceremonia de cacao, sosteniendo el descanso del cuerpo entre la respiración y el hielo.", img: ambar },
   { name: "Manu Da Banda", role: "Música en vivo • Ecstatic Dance", bio: "Sostiene la respiración, las inmersiones y el cierre del día con música y selección en vivo.", img: manu },
-  { name: "DJ Zalamandra", role: "DJ • Ecstatic Dance", bio: "Un viaje musical que crece desde la conexión interior hasta la expresión libre, para cerrar el día bailando con libertad y comunidad.", img: null },
+  { name: "DJ Zalamandra", role: "DJ • Ecstatic Dance", bio: "Un viaje musical que crece desde la conexión interior hasta la expresión libre, para cerrar el día bailando con libertad y comunidad.", img: zalamandra.url },
 ];
 const staff = [
   { name: "Sol Evans", role: "Instructora de Ice Yoga • Reikista • Crioguía de Inmersiones y Breathwork • Terapeuta Holística – Reiki Master", quote: "Te acompaño a encontrar calma y fortaleza a través del frío, la respiración y la energía.", img: sol },
