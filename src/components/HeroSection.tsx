@@ -533,7 +533,7 @@ const HeroSlideIcefest = () => {
               className="w-full md:w-auto min-w-[320px] bg-white text-primary hover:bg-white/90 font-bold text-lg py-6 px-10 rounded-xl shadow-xl transition-all transform hover:scale-105"
               size="xl"
             >
-              Ver entradas →
+              Conocer el Evento
             </Button>
             <p className="font-inter text-xs text-white/80">
               Parque Mahuida, La Reina · preventa con cupos limitados
