@@ -232,6 +232,9 @@ export default function IcefestSantiago() {
                     {label}
                   </a>
                 ))}
+                <Link to="/icefest-santiago/blog" onClick={() => setMenuOpen(false)} className="py-3 text-base hover:text-primary">
+                  Blog
+                </Link>
               </div>
             </nav>
           )}
@@ -491,6 +494,7 @@ export default function IcefestSantiago() {
         <footer className="max-w-6xl mx-auto px-5 py-10 flex flex-col sm:flex-row gap-5 justify-between text-sm text-muted-foreground">
           <p>Icefest + Breath Act · Nave Studio</p>
           <div className="flex flex-wrap gap-5">
+            <Link to="/icefest-santiago/blog">Blog</Link>
             <Link to="/terminos">Términos</Link>
             <Link to="/privacidad">Privacidad</Link>
             <Link to="/">Nave Studio</Link>
