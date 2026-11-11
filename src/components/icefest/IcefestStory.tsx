@@ -2,11 +2,11 @@ import { lazy, Suspense } from "react";
 import { Wind, Snowflake, Coffee, Music, Heart, Brain, Quote, Zap, Sparkles, PartyPopper, Users } from "lucide-react";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { Skeleton } from "@/components/ui/skeleton";
-import breathImg from "@/assets/icefest/breathact-portrait.webp";
+import breathImg from "@/assets/icefest/breathwork-dimension.webp";
 import iceImg from "@/assets/icefest/ice-bath-dimension.webp";
 import cacaoImg from "@/assets/icefest/cacao-dimension.webp";
 import danceImg from "@/assets/icefest/dance-dimension.webp";
-import logo from "@/assets/icefest/breath-act-logo.png";
+import breathPortrait from "@/assets/icefest/breathact-portrait.webp";
 import alan from "@/assets/icefest/alan-iceman.jpg";
 import ambar from "@/assets/icefest/ambar-doula.jpg";
 import manu from "@/assets/icefest/manu-dabanda.jpg";
@@ -49,7 +49,7 @@ const schedule = [
 ] as const;
 const facilitators = [
   { name: "Alan Iceman", role: "Fundador de La Nave • Instructor certificado Método Wim Hof", bio: "Creador de Criomedicina en Chile. Coach y guía en breathwork e inmersión en agua fría; ayuda a entrenar resiliencia y a reconectar con la fuerza interior.", img: alan },
-  { name: "Facilitadores The Breath Act", role: "Invitados especiales • Respiración inmersiva", bio: "La respiración inmersiva será guiada por facilitadores certificados de The Breath Act, escuela que integra respiración, música y trabajo somático con base en la neurociencia.", img: logo, logo: true },
+  { name: "Facilitadores The Breath Act", role: "Invitados especiales • Respiración inmersiva", bio: "La respiración inmersiva será guiada por facilitadores certificados de The Breath Act, escuela que integra respiración, música y trabajo somático con base en la neurociencia.", img: breathPortrait },
   { name: "Ámbar Doula", role: "Ceremonia de cacao", bio: "Doula y guardiana de espacios sagrados. Conduce la ceremonia de cacao, sosteniendo el descanso del cuerpo entre la respiración y el hielo.", img: ambar },
   { name: "Manu Da Banda", role: "Música en vivo • Ecstatic Dance", bio: "Sostiene la respiración, las inmersiones y el cierre del día con música y selección en vivo.", img: manu },
   { name: "DJ Zalamandra", role: "DJ • Ecstatic Dance", bio: "Un viaje musical que crece desde la conexión interior hasta la expresión libre, para cerrar el día bailando con libertad y comunidad.", img: null },
@@ -221,7 +221,6 @@ export default function IcefestStory() {
               <article key={f.name} className="group overflow-hidden rounded-2xl border border-border bg-card">
                 <div className="relative h-64 overflow-hidden bg-muted flex items-center justify-center">
                   {f.img ? (
-                    f.logo ? <img src={f.img} alt={f.name} loading="lazy" className="h-20 w-auto" /> :
                     <img src={f.img} alt={f.name} loading="lazy" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                   ) : <Music className="w-16 h-16 text-accent" />}
                 </div>
