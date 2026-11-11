@@ -4,9 +4,9 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 
 const OPTIONS = [
-  { id: "16b3f640-67e7-482f-8333-74477b0e69d0", kind: "package", label: "1 sesión", sub: "Breathwork + Icebath o Yoga", price: 15000, off: "50% dcto" },
-  { id: "25f89aba-9114-47ee-96a1-9b3582994ab4", kind: "package", label: "3 sesiones", sub: "Breathwork + Icebath o Yoga", price: 30000, off: "67% dcto", best: true },
-  { id: "956cf8ea-5d66-4434-8693-ac2bee9317e0", kind: "shop", label: "1 Mes Membresía Ilimitada", sub: "Ven todo lo que quieras a Nave Studio por 1 mes: Yoga y Criomedicina", price: 40000, off: "Ilimitado" },
+  { id: "16b3f640-67e7-482f-8333-74477b0e69d0", kind: "package", label: "1 sesión", sub: "Breathwork + Icebath o Yoga (expiran en 6 meses)", price: 15000, off: "50% dcto" },
+  { id: "25f89aba-9114-47ee-96a1-9b3582994ab4", kind: "package", label: "3 sesiones", sub: "Breathwork + Icebath o Yoga (expiran en 6 meses)", price: 30000, off: "67% dcto", best: true },
+  { id: "956cf8ea-5d66-4434-8693-ac2bee9317e0", kind: "shop", label: "1 Mes Membresía Ilimitada", sub: "Ven todo lo que quieras (lun a dom) a Nave Studio por 1 mes: Breathwork + Icebath o Yoga. Puedes elegir la fecha de inicio.", price: 40000, off: "Ilimitado" },
 ];
 const clp = (n: number) => `$${n.toLocaleString("es-CL")}`;
 
