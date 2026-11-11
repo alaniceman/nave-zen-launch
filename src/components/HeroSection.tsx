@@ -558,6 +558,7 @@ export const HeroSection = () => {
   const [showDiaMadre, setShowDiaMadre] = useState(false);
   const [showPromoInvierno, setShowPromoInvierno] = useState(false);
   const [showCyber, setShowCyber] = useState(false);
+  const [showIcefest, setShowIcefest] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   useEffect(() => {
@@ -565,6 +566,7 @@ export const HeroSection = () => {
     setShowDiaMadre(now < DIA_MADRE_END_DATE);
     setShowPromoInvierno(now < PROMO_INVIERNO_END_DATE);
     setShowCyber(Date.now() < CYBER_ENDS_AT);
+    setShowIcefest(icefestHomeActive());
   }, []);
 
 
@@ -599,6 +601,7 @@ export const HeroSection = () => {
 
   const slides = [
     { id: 'main', component: <HeroSlideMain /> },
+    ...(showIcefest ? [{ id: 'icefest', component: <HeroSlideIcefest /> }] : []),
     ...(showCyber ? [{ id: 'cyber', component: <HeroSlideCyber /> }] : []),
     ...(isPromo18Active() ? [{ id: 'promo-18', component: <HeroSlidePromo18 /> }] : []),
     ...(showPromoInvierno ? [{ id: 'promo-invierno', component: <HeroSlidePromoInvierno /> }] : []),
