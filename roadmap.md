@@ -1,10 +1,11 @@
-# Cierre de promoción de talleres
-
 # Vista previa de Icefest al compartir
 
-- [ ] Preparar foto grupal real en JPG liviano y sincronizar título/descripción de Icefest.
-- [ ] Entregar encabezado estático propio de Icefest para lectores sin JavaScript, conservando la portada de Nave.
-- [ ] Dejar listo sin publicar; confirmar la respuesta del alojamiento después de publicar.
+- [x] Preparar foto grupal real en JPG liviano y sincronizar título/descripción de Icefest (1200 × 630, 229 KB; imagen pública confirmada).
+- [x] Entregar encabezado estático propio de Icefest para lectores sin JavaScript, conservando la portada de Nave; respuesta local confirmada sin navegador ni compras.
+- [x] Dejar listo sin publicar.
+- [ ] Confirmar la respuesta del alojamiento y vista previa de WhatsApp después de que Alan publique.
+
+# Cierre de promoción de talleres
 
 - [x] Retirar promoción del banner del Home.
 - [x] Mostrar ambas fechas y pack como agotados sin alterar ventas.
