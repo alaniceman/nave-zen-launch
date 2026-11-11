@@ -64,4 +64,4 @@
 
 - [x] Reunir entradas, contacto, descuento, total y pago en un formulario único.
 - [x] Quitar la barra fija del carrito y usar campos de etiqueta flotante estilo Shopify.
-- [ ] Verificar campos y desplazamiento en móvil/escritorio sin crear compras ni publicar.
+- [x] Verificar campos, total, consentimiento y datos conservados al reabrir en móvil/escritorio; sin errores, sin crear compras ni publicar. Teclado físico de iPhone no verificado.
