@@ -98,6 +98,7 @@ export const ChatWidget = forwardRef<ChatWidgetHandle>(function ChatWidget(_prop
       const decoder = new TextDecoder();
       let textBuffer = "";
       let streamDone = false;
+      let truncated = false;
 
       const upsert = (chunk: string) => {
         assistantSoFar += chunk;
@@ -130,6 +131,7 @@ export const ChatWidget = forwardRef<ChatWidgetHandle>(function ChatWidget(_prop
           }
           try {
             const parsed = JSON.parse(jsonStr);
+            if (parsed.choices?.[0]?.finish_reason === "length") truncated = true;
             const content = parsed.choices?.[0]?.delta?.content as string | undefined;
             if (content) upsert(content);
           } catch {
@@ -149,12 +151,16 @@ export const ChatWidget = forwardRef<ChatWidgetHandle>(function ChatWidget(_prop
           if (jsonStr === "[DONE]") continue;
           try {
             const p = JSON.parse(jsonStr);
+            if (p.choices?.[0]?.finish_reason === "length") truncated = true;
             const c = p.choices?.[0]?.delta?.content as string | undefined;
             if (c) upsert(c);
           } catch {
             /* ignore */
           }
         }
+      }
+      if (truncated) {
+        upsert("\n\n_La respuesta alcanzó su límite. Puedes pedirme que continúe._");
       }
     } catch (e) {
       if (e instanceof DOMException && e.name === "AbortError") return;

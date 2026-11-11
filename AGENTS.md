@@ -13,3 +13,4 @@
 - Shop products with negative sort_order are private (hidden from /tienda) and sold only via direct links/upsells; avoids a schema change for one-off offers.
 - Icefest share metadata is centralized in `icefestShare` and emitted as route-specific static HTML by the Vite plugin (also served in development); social crawlers do not execute Helmet or the early head script, and the root homepage metadata must remain unchanged.
 - Icefest gallery discovers both bundled WebP images and CDN asset pointers; new uploaded photos use optimized WebP pointers without migrating existing gallery assets.
+- Nave chat keeps request options in its server-only requestOptions module and disables internal reasoning within the existing output budget; the client surfaces length termination and stream persistence uses EdgeRuntime.waitUntil.
