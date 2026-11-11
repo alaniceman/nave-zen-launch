@@ -4,7 +4,7 @@
 
 - [x] Adaptar la información del correo adjunto: acreditación manual, preparación por actividad, datos de Santiago, almuerzo, mapa y WhatsApp.
 - [x] Dejar solo la advertencia de salud indicada por Alan, en HTML y texto plano.
-- [ ] Desplegar los envíos actualizados sin reenviar entradas ni realizar compras de prueba.
+- [x] Desplegar los envíos actualizados sin reenviar entradas ni realizar compras de prueba.
 
 
 - [x] Preparar foto grupal real en JPG liviano y sincronizar título/descripción de Icefest (1200 × 630, 229 KB; imagen pública confirmada).
