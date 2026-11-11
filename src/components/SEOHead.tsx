@@ -1,7 +1,17 @@
 import { useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import { icefestShare } from "@/lib/icefestShare";
 
 const seoData = {
+  "/icefest-santiago": {
+    title: icefestShare.title,
+    description: icefestShare.description,
+    canonical: icefestShare.url,
+    ogTitle: icefestShare.title,
+    ogDescription: icefestShare.description,
+    ogImage: icefestShare.image,
+    ogType: "website",
+  },
   "/": {
     title: "Centro de bienestar basado en ciencia | Nave Studio",
     description: "Ice Bath, Método Wim Hof, Yoga y Breathwork en Las Condes. Reserva tu clase y regula tu sistema nervioso en Nave Studio.",

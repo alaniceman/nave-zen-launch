@@ -228,6 +228,11 @@
         };
 
         var fixed = {
+          "/icefest-santiago": {
+            title: "Icefest Santiago + Breath Act · 13 de diciembre",
+            description: "Respira, atraviesa el frío y celebra. Un día completo de baños de hielo, breathwork, cacao y baile en Parque Mahuida. Almuerzo incluido.",
+            image: origin + "/__l5e/assets-v1/90ee4e09-db06-4bdf-869c-c4535f71f9e3/icefest-comunidad.jpg"
+          },
           "/": {
             title: "Yoga, Baños de Hielo y Wim Hof en Las Condes | Nave Studio",
             description: "Ice Bath, Breathwork Wim Hof y Yoga en Las Condes. Reserva tu clase en Nave Studio.",
@@ -282,6 +287,7 @@
         upsertMeta('meta[property="og:type"]', { property: "og:type", content: blogs[path] ? "article" : "website" });
         upsertMeta('meta[name="twitter:title"]', { name: "twitter:title", content: data.title });
         upsertMeta('meta[name="twitter:description"]', { name: "twitter:description", content: data.description });
+        upsertMeta('meta[name="twitter:image"]', { name: "twitter:image", content: data.image || origin + "/og-image.png" });
         upsertMeta('meta[name="twitter:url"]', { name: "twitter:url", content: canonical });
 
         var routeSchema;
