@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
 import { Minus, Plus, Loader2, Ticket, ShieldCheck, Calendar, MapPin, Tag } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -184,7 +183,7 @@ export function IcefestCheckout({ tier, event, canBuy, open, onOpenChange }: Pro
             <div className="flex items-start gap-3">
               <Checkbox id="icefest-terms" checked={accepted} disabled={Boolean(busy)} onCheckedChange={(v) => setAccepted(v === true)} className="mt-0.5 shrink-0" />
               <Label htmlFor="icefest-terms" className="text-sm leading-relaxed font-normal">
-                Acepto los <Link to="/terminos" target="_blank" rel="noopener noreferrer" className="underline">términos</Link> y la <Link to="/privacidad" target="_blank" rel="noopener noreferrer" className="underline">política de privacidad</Link>. Las prácticas son guiadas, voluntarias y no reemplazan atención médica.
+                Acepto los <a href="https://docs.google.com/document/d/18GOC_ay6NezpF3CEenaItpWsMNIehBsOLMZuexJJKl4/" target="_blank" rel="noopener noreferrer" className="text-primary underline">términos y condiciones</a> y <a href="https://drive.google.com/file/d/1_VlQ4biLOZFEpZvFrSFbDhoX734K6JBx/" target="_blank" rel="noopener noreferrer" className="text-primary underline">Certificado de Responsabilidad</a>.
               </Label>
             </div>
             {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
