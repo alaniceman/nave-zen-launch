@@ -1,11 +1,10 @@
-# Vista previa de Icefest al compartir
-
 # Correo de entradas Icefest Santiago
 
 - [x] Adaptar la información del correo adjunto: acreditación manual, preparación por actividad, datos de Santiago, almuerzo, mapa y WhatsApp.
 - [x] Dejar solo la advertencia de salud indicada por Alan, en HTML y texto plano.
 - [x] Desplegar los envíos actualizados sin reenviar entradas ni realizar compras de prueba.
 
+# Vista previa de Icefest al compartir
 
 - [x] Preparar foto grupal real en JPG liviano y sincronizar título/descripción de Icefest (1200 × 630, 229 KB; imagen pública confirmada).
 - [x] Entregar encabezado estático propio de Icefest para lectores sin JavaScript, conservando la portada de Nave; respuesta local confirmada sin navegador ni compras.
