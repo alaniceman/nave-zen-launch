@@ -2,7 +2,7 @@ import { lazy, Suspense } from "react";
 import { Wind, Snowflake, Coffee, Music, Heart, Brain, Quote, Zap, Sparkles, PartyPopper, Users } from "lucide-react";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { Skeleton } from "@/components/ui/skeleton";
-import breathImg from "@/assets/icefest/breathact-portrait.webp";
+import breathImg from "@/assets/icefest/breathwork-dimension.webp";
 import iceImg from "@/assets/icefest/ice-bath-dimension.webp";
 import cacaoImg from "@/assets/icefest/cacao-dimension.webp";
 import danceImg from "@/assets/icefest/dance-dimension.webp";

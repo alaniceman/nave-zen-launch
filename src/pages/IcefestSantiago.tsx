@@ -35,7 +35,7 @@ const IcefestCheckout = lazy(() =>
 import { icefestDate, icefestMoney } from "@/lib/icefest";
 import IcefestStory from "@/components/icefest/IcefestStory";
 import { trackViewContentOnce } from "@/lib/metaTracking";
-import breath from "@/assets/icefest/breathact-portrait.webp";
+import breath from "@/assets/icefest/breathwork-new.webp";
 import ice from "@/assets/icefest/ice-bath-new.webp";
 import cacao from "@/assets/icefest/cacao-new.webp";
 import dance from "@/assets/icefest/dance-new.webp";
