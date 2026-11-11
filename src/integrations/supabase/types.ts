@@ -2541,6 +2541,7 @@ export type Database = {
         }
         Returns: Json
       }
+      icefest_short_ticket_code: { Args: never; Returns: string }
       reserve_event_cupo: { Args: { _event_id: string }; Returns: number }
       reserve_event_cupos: { Args: { _event_ids: string[] }; Returns: Json }
     }
