@@ -31,6 +31,7 @@ const TiendaContent = () => {
         .from("shop_products")
         .select("*")
         .eq("is_active", true)
+        .gte("sort_order", 0)
         .order("sort_order", { ascending: true })
         .order("created_at", { ascending: true });
       if (!error && data) setProducts(data as ShopProduct[]);
