@@ -64,6 +64,7 @@ const faqs = [
   ["¿Necesito experiencia previa?", "No, el evento está diseñado tanto para principiantes como para personas con experiencia. Todo está guiado paso a paso por facilitadores expertos."],
   ["¿Qué debo traer?", "Ropa cómoda para movimiento, traje de baño, toalla, una muda de ropa seca, y una botella de agua."],
   ["¿Hay contraindicaciones para los baños de hielo?", "Sí, si tienes problemas cardíacos, presión alta no controlada, epilepsia o estás embarazada, consulta con tu médico antes de participar en las inmersiones en hielo."],
+  ["¿El evento incluye comida?", "Sí, el evento incluye almuerzo."],
   ["¿Puedo ir solo/a?", "¡Por supuesto! Muchas personas vienen solas y es una excelente oportunidad para conocer gente nueva y conectar con la comunidad."],
   ["¿Cómo funciona el pago en cuotas?", "Al pagar con Mercado Pago, puedes elegir hasta 3 cuotas sin interés directamente en la plataforma de pago."],
 ];
@@ -73,6 +74,7 @@ export default function IcefestStory() {
     <>
       <section id="experiencia" className="py-20 md:py-24 scroll-mt-20">
         <div className="container max-w-6xl px-5">
+          <p className="text-primary text-sm md:text-base font-semibold uppercase tracking-widest text-center mb-3">Lo que te espera en el Icefest</p>
           <h2 className="text-3xl md:text-5xl font-bold text-center mb-12 md:mb-16">Las Cuatro Dimensiones Sagradas</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {dimensions.map((d) => (
@@ -89,6 +91,7 @@ export default function IcefestStory() {
               </article>
             ))}
           </div>
+          <p className="mt-10 text-center text-lg font-semibold">El evento incluye almuerzo</p>
         </div>
       </section>
 

@@ -18,6 +18,8 @@ import {
   ShoppingBag,
   MessageCircle,
   Loader2,
+  Menu,
+  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -176,6 +178,7 @@ export default function IcefestSantiago() {
             <a href="#top" className="font-bold text-lg">
               ICEFEST<span className="text-primary"> / SANTIAGO</span>
             </a>
+            <div className="flex items-center gap-2">
             <Button
               variant="outline"
               size="sm"
@@ -188,7 +191,37 @@ export default function IcefestSantiago() {
               <ShoppingBag className="w-4 h-4 mr-2" />
               Entradas
             </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
+              aria-expanded={menuOpen}
+              onClick={() => setMenuOpen((v) => !v)}
+            >
+              {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </Button>
+            </div>
           </div>
+          {menuOpen && (
+            <nav aria-label="Secciones de Icefest" className="border-t border-border bg-background">
+              <div className="max-w-6xl mx-auto px-5 py-3 flex flex-col">
+                {[
+                  ["#edicion", "Edición"],
+                  ["#breath-act", "Breath Act"],
+                  ["#experiencia", "Experiencia"],
+                  ["#dia", "Cronograma"],
+                  ["#facilitadores", "Facilitadores"],
+                  ["#faq", "Preguntas"],
+                  ["#fotos", "Fotos"],
+                  ["#entradas", "Entradas"],
+                ].map(([href, label]) => (
+                  <a key={href} href={href} onClick={() => setMenuOpen(false)} className="py-3 text-base border-b border-border last:border-0 hover:text-primary">
+                    {label}
+                  </a>
+                ))}
+              </div>
+            </nav>
+          )}
         </header>
         <section
           id="top"
@@ -292,21 +325,6 @@ export default function IcefestSantiago() {
             </div>
           </div>
         </section>
-        <nav
-          aria-label="Secciones de Icefest"
-          className="sticky top-0 z-30 border-y border-border bg-background overflow-x-auto"
-        >
-          <div className="max-w-6xl mx-auto flex gap-6 px-5 py-4 whitespace-nowrap text-sm text-muted-foreground">
-            <a href="#edicion">Edición</a>
-            <a href="#breath-act">Breath Act</a>
-            <a href="#experiencia">Experiencia</a>
-            <a href="#dia">Cronograma</a>
-            <a href="#facilitadores">Facilitadores</a>
-            <a href="#faq">Preguntas</a>
-            <a href="#fotos">Fotos</a>
-            <a href="#entradas">Entradas</a>
-          </div>
-        </nav>
         <section id="edicion" className="bg-card py-16 md:py-24">
           <div className="max-w-3xl mx-auto px-5 text-center">
             <p className="text-secondary text-sm mb-4">Una edición que no se repite</p>
