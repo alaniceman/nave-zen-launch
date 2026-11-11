@@ -120,13 +120,13 @@ const Planes = () => {
               <p className="text-sm text-muted-foreground mt-2 font-inter">Busco practicar Yoga sin compromiso.</p>
               <span className="inline-block mt-4 text-accent group-hover:underline font-medium">Ver Yoga →</span>
             </a>
+
             {/* Paquetes Criomedicina */}
             <a href="#paquetes-criomedicina" className="group rounded-2xl p-6 bg-white hover:bg-gradient-to-br hover:from-white hover:to-neutral-50 hover:shadow-lg transition-all duration-300 border border-neutral-200 hover:border-accent">
               <h3 className="font-semibold text-primary font-space text-lg">Paquetes de Criomedicina</h3>
               <p className="text-sm text-muted-foreground mt-2 font-inter">Sesiones de Método Wim Hof con descuento.</p>
               <span className="inline-block mt-4 text-accent group-hover:underline font-medium">Ver paquetes →</span>
             </a>
-            
           </div>
         </div>
       </section>
