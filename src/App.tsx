@@ -32,6 +32,7 @@ const Experiencias = lazy(() => import("./pages/Experiencias"));
 const Coaches = lazy(() => import("./pages/Coaches"));
 const Contacto = lazy(() => import("./pages/Contacto"));
 const Blog = lazy(() => import("./pages/Blog"));
+const IcefestBlog = lazy(() => import("./pages/IcefestBlog"));
 const BlogWimHof = lazy(() => import("./pages/BlogWimHof"));
 const BlogBiohacking = lazy(() => import("./pages/BlogBiohacking"));
 const BlogYinVinyasa = lazy(() => import("./pages/BlogYinVinyasa"));
@@ -262,6 +263,8 @@ const App = () => {
             <Route path="/blog/integral-yoga-equilibrio-meditacion" element={<BlogIntegralYoga />} />
             <Route path="/icefest" element={<Icefest />} />
             <Route path="/icefest-santiago" element={<IcefestSantiago />} />
+            <Route path="/icefest-santiago/blog" element={<IcefestBlog />} />
+            <Route path="/icefest-santiago/blog/:slug" element={<IcefestBlog />} />
             <Route path="/icefest-santiago/success" element={<IcefestAccess />} />
             <Route path="/icefest-santiago/pending" element={<IcefestAccess />} />
             <Route path="/icefest-santiago/failure" element={<IcefestAccess />} />

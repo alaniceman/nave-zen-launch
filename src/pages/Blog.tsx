@@ -17,10 +17,24 @@ import yinHeroAsset from "@/assets/studio-savasana.webp.asset.json";
 import vinyasaHeroAsset from "@/assets/studio-yoga-perro.webp.asset.json";
 import powerHeroAsset from "@/assets/studio-corazon.webp.asset.json";
 import integralHeroAsset from "@/assets/studio-meditacion-loto.webp.asset.json";
+import { icefestBlogArticles } from "@/data/icefestBlog";
+import { icefestBlogImages } from "@/data/icefestBlogImages";
 import alanPodcastCoverAsset from "@/assets/alan-earle-alan-iceman-nave-studio.webp.asset.json";
 
 const Blog = () => {
+  const fmtIce = (d: string) => new Intl.DateTimeFormat("es-CL", { day: "numeric", month: "long", year: "numeric", timeZone: "America/Santiago" }).format(new Date(`${d}T12:00:00-03:00`));
+  const icefestPosts = icefestBlogArticles.map((a) => ({
+    title: a.title,
+    slug: `/icefest-santiago/blog/${a.slug}`,
+    excerpt: a.excerpt,
+    author: "Alan Iceman Earle",
+    date: fmtIce(a.date),
+    categories: ["Icefest", "Agua fría", "Comunidad"],
+    image: icefestBlogImages[a.slug],
+    imageAlt: a.title,
+  }));
   const blogPosts = [
+    ...icefestPosts,
     {
       title: "Alan Earle, Alan Iceman: podcasts, entrevistas y su historia",
       slug: "/blog/alan-earle-alan-iceman-podcasts-entrevistas",
