@@ -164,7 +164,7 @@ export function IcefestCheckout({ tier, event, canBuy, open, onOpenChange }: Pro
                 <Input id="icefest-phone" name="phone" type="tel" autoComplete="tel" required maxLength={30} placeholder=" " value={buyer.phone} onChange={(e) => setBuyer((b) => ({ ...b, phone: e.target.value }))} className="peer" />
                 <Label htmlFor="icefest-phone">WhatsApp</Label>
               </div>
-              <p className="text-xs text-muted-foreground">Incluye el código de país: +56 9 1234 5678.</p>
+              <p className="text-xs text-muted-foreground">Para verificarte en el grupo de Whatsapp del evento</p>
               <div className="flex gap-2 items-start pt-2">
                 <div className="icefest-field flex-1 min-w-0">
                   <Input id="icefest-coupon" name="coupon" maxLength={50} autoComplete="off" placeholder=" " value={coupon} onChange={(e) => setCoupon(e.target.value.replace(/\s/g, "").toUpperCase())} className="peer" />
