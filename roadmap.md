@@ -59,3 +59,9 @@
 
 - [x] Igualar textos editoriales, experiencias, facilitadores y preguntas a la página original sin modificar precios, cupos ni compras.
 - [x] Mantener enlaces de compra y preparación en Nave, sin publicar.
+
+# Carrito Icefest en un solo paso
+
+- [x] Reunir entradas, contacto, descuento, total y pago en un formulario único.
+- [x] Quitar la barra fija del carrito y usar campos de etiqueta flotante estilo Shopify.
+- [x] Verificar campos, total, consentimiento y datos conservados al reabrir en móvil/escritorio; sin errores, sin crear compras ni publicar. Teclado físico de iPhone no verificado.

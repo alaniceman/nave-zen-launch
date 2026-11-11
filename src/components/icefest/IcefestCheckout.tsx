@@ -1,90 +1,38 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  Minus,
-  Plus,
-  ArrowRight,
-  ArrowLeft,
-  Loader2,
-  Ticket,
-  ShieldCheck,
-  Calendar,
-  MapPin,
-  Check,
-} from "lucide-react";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetDescription,
-} from "@/components/ui/sheet";
+import { Minus, Plus, Loader2, Ticket, ShieldCheck, Calendar, MapPin, Tag } from "lucide-react";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  type IcefestEvent,
-  type IcefestTier,
-  icefestCall,
-  icefestDate,
-  icefestMoney,
-  normalizeIcefestPhone,
-} from "@/lib/icefest";
+import { type IcefestEvent, type IcefestTier, icefestCall, icefestDate, icefestMoney, normalizeIcefestPhone } from "@/lib/icefest";
 import { trackMetaClientEvent } from "@/lib/metaTracking";
 import { getMetaBrowserContext } from "@/lib/metaPixel";
 import ice from "@/assets/icefest/ice-bath-new.webp";
 
 type Quote = { total_amount: number; discount_amount: number };
-type Props = {
-  tier: IcefestTier | null;
-  event: IcefestEvent | null;
-  canBuy: boolean;
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-};
+type Props = { tier: IcefestTier | null; event: IcefestEvent | null; canBuy: boolean; open: boolean; onOpenChange: (open: boolean) => void };
 
-export function IcefestCheckout({
-  tier,
-  event,
-  canBuy,
-  open,
-  onOpenChange,
-}: Props) {
+export function IcefestCheckout({ tier, event, canBuy, open, onOpenChange }: Props) {
   const [quantity, setQuantity] = useState(1);
-  const [buyer, setBuyer] = useState({
-    name: "",
-    surname: "",
-    email: "",
-    phone: "",
-  });
+  const [buyer, setBuyer] = useState({ name: "", surname: "", email: "", phone: "" });
   const [coupon, setCoupon] = useState("");
   const [accepted, setAccepted] = useState(false);
-  const [step, setStep] = useState(0);
   const [busy, setBusy] = useState<"quote" | "payment" | null>(null);
   const [error, setError] = useState("");
   const [quote, setQuote] = useState<Quote | null>(null);
   const locked = useRef(false);
   const tracked = useRef(false);
-  const heading = useRef<HTMLHeadingElement>(null);
+  const form = useRef<HTMLFormElement>(null);
   const revision = useRef(0);
-  const limit = tier
-    ? Math.max(
-        0,
-        Math.min(
-          tier.max_per_order,
-          tier.stock === null
-            ? tier.max_per_order
-            : tier.stock - tier.stock_sold,
-        ),
-      )
-    : 0;
+  const limit = tier ? Math.max(0, Math.min(tier.max_per_order, tier.stock === null ? tier.max_per_order : tier.stock - tier.stock_sold)) : 0;
+  const checkoutAvailable = canBuy && limit > 0 && quantity <= limit;
 
   useEffect(() => {
     revision.current += 1;
     setQuote(null);
     setError("");
-    setStep((current) => (current === 2 ? 1 : current));
   }, [quantity, coupon, tier?.id, tier?.price]);
   useEffect(() => {
     if (limit > 0) setQuantity((current) => Math.min(current, limit));
@@ -92,87 +40,69 @@ export function IcefestCheckout({
   useEffect(() => {
     if (open && tier && !tracked.current) {
       tracked.current = true;
-      trackMetaClientEvent("InitiateCheckout", {
-        contentName: "Icefest Santiago",
-        contentIds: [tier.id],
-        value: tier.price * quantity,
-        currency: "CLP",
-        funnel: "icefest",
-      });
+      trackMetaClientEvent("InitiateCheckout", { contentName: "Icefest Santiago", contentIds: [tier.id], value: tier.price * quantity, currency: "CLP", funnel: "icefest" });
     }
   }, [open, tier, quantity]);
-  useEffect(() => {
-    if (open) heading.current?.focus();
-  }, [step, open]);
 
   const payload = {
     ticket_type_id: tier?.id,
     quantity,
-    buyer: {
-      name: buyer.name.trim(),
-      surname: buyer.surname.trim(),
-      email: buyer.email.trim().toLowerCase(),
-      phone: normalizeIcefestPhone(buyer.phone),
-    },
+    buyer: { name: buyer.name.trim(), surname: buyer.surname.trim(), email: buyer.email.trim().toLowerCase(), phone: normalizeIcefestPhone(buyer.phone) },
     coupon,
     accept_terms: accepted,
   };
-  const checkoutAvailable = canBuy && limit > 0 && quantity <= limit;
 
-  async function review(e: React.FormEvent) {
-    e.preventDefault();
-    if (locked.current || !checkoutAvailable || !accepted) return;
-    const phone = normalizeIcefestPhone(buyer.phone);
-    if (!/^\+[1-9]\d{7,14}$/.test(phone)) {
+  function validBuyer() {
+    if (!form.current?.reportValidity()) return false;
+    if (!/^\+[1-9]\d{7,14}$/.test(payload.buyer.phone)) {
       setError("Revisa tu número de WhatsApp, incluyendo el código de país.");
-      return;
+      document.getElementById("icefest-phone")?.focus();
+      return false;
     }
+    return true;
+  }
+
+  async function applyCoupon() {
+    if (locked.current || !checkoutAvailable || !coupon || !validBuyer()) return;
     locked.current = true;
     setBusy("quote");
     setError("");
     const version = revision.current;
     try {
-      const result = await icefestCall<Quote>("icefest-checkout", {
-        ...payload,
-        quote: true,
-      });
+      // A quote only reads prices; it never creates an order or accepts terms for payment.
+      const result = await icefestCall<Quote>("icefest-checkout", { ...payload, accept_terms: true, quote: true });
       if (version !== revision.current) return;
-      if (!Number.isFinite(result.total_amount) || result.total_amount < 0)
-        throw new Error("No se pudo confirmar el total. Intenta nuevamente.");
+      if (!Number.isFinite(result.total_amount) || result.total_amount < 0) throw new Error("No se pudo confirmar el total. Intenta nuevamente.");
       setQuote(result);
-      setStep(2);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "No se pudo revisar el total.");
+      setError(e instanceof Error ? e.message : "No se pudo aplicar el cupón.");
     } finally {
       locked.current = false;
       setBusy(null);
     }
   }
 
-  async function pay() {
-    if (locked.current || !checkoutAvailable || !quote || !accepted) return;
+  async function pay(e: React.FormEvent) {
+    e.preventDefault();
+    if (locked.current || !checkoutAvailable || !accepted || !validBuyer()) return;
+    if (coupon && !quote) {
+      setError("Aplica el cupón para confirmar tu descuento antes de pagar.");
+      document.getElementById("icefest-coupon")?.focus();
+      return;
+    }
     locked.current = true;
     setBusy("payment");
     setError("");
     try {
       const ctx = getMetaBrowserContext();
-      const result = await icefestCall<{
-        init_point?: string;
-        redirect_url?: string;
-      }>("icefest-checkout", {
+      const result = await icefestCall<{ init_point?: string; redirect_url?: string }>("icefest-checkout", {
         ...payload,
-        meta: {
-          fbp: ctx.fbp || undefined,
-          fbc: ctx.fbc || undefined,
-          clientUserAgent: navigator.userAgent,
-        },
+        meta: { fbp: ctx.fbp || undefined, fbc: ctx.fbc || undefined, clientUserAgent: navigator.userAgent },
       });
       const destination = result.init_point || result.redirect_url;
-      if (!destination)
-        throw new Error("No recibimos el enlace de pago. Intenta nuevamente.");
+      if (!destination) throw new Error("No recibimos el enlace de pago. Intenta nuevamente.");
       const url = new URL(destination);
-      if (url.protocol !== "https:")
-        throw new Error("No se pudo abrir un enlace de pago seguro.");
+      if (url.protocol !== "https:") throw new Error("No se pudo abrir un enlace de pago seguro.");
       window.location.assign(url.href);
     } catch (e) {
       setError(e instanceof Error ? e.message : "No se pudo iniciar el pago.");
@@ -182,375 +112,91 @@ export function IcefestCheckout({
   }
 
   return (
-    <Sheet
-      open={open}
-      onOpenChange={(value) => {
-        if (!locked.current) onOpenChange(value);
-      }}
-    >
+    <Sheet open={open} onOpenChange={(value) => { if (!locked.current) onOpenChange(value); }}>
       <SheetContent
-        className="icefest-theme text-foreground w-full sm:max-w-xl p-0 flex flex-col h-[100dvh]"
-        onEscapeKeyDown={(e) => {
-          if (locked.current) e.preventDefault();
-        }}
-        onPointerDownOutside={(e) => {
-          if (locked.current) e.preventDefault();
-        }}
+        className="icefest-theme icefest-checkout text-foreground w-full sm:max-w-xl p-0 h-[100dvh] overflow-y-auto overscroll-contain"
+        onEscapeKeyDown={(e) => { if (locked.current) e.preventDefault(); }}
+        onPointerDownOutside={(e) => { if (locked.current) e.preventDefault(); }}
       >
-        <SheetHeader className="px-6 pt-6 pb-5 border-b text-left shrink-0">
+        <SheetHeader className="px-5 sm:px-7 pt-6 pb-5 border-b text-left">
           <SheetTitle className="text-xl pr-8">Tu viaje a Icefest</SheetTitle>
           <SheetDescription>Icefest + Breath Act · Santiago</SheetDescription>
-          <ol className="flex gap-5 pt-4 text-xs" aria-label="Pasos de compra">
-            {["Entradas", "Tus datos", "Pago"].map((label, i) => (
-              <li
-                key={label}
-                aria-current={step === i ? "step" : undefined}
-                className={`flex items-center gap-2 ${step >= i ? "text-primary" : "text-muted-foreground"}`}
-              >
-                <span className="w-6 h-6 rounded-full border flex items-center justify-center">
-                  {step > i ? <Check className="w-3 h-3" /> : i + 1}
-                </span>
-                {label}
-              </li>
-            ))}
-          </ol>
         </SheetHeader>
-        <div className="overflow-y-auto flex-1 min-h-0 px-6 py-6">
-          <h2 ref={heading} tabIndex={-1} className="text-xl mb-6 outline-none">
-            {
-              [
-                "Elige tus entradas",
-                "¿A quién enviamos las entradas?",
-                "Revisa tu compra",
-              ][step]
-            }
-          </h2>
-          {!checkoutAvailable && (
-            <p role="alert" className="text-destructive mb-5">
-              La disponibilidad cambió. Cierra el carrito y revisa las entradas
-              disponibles.
-            </p>
-          )}
-          {tier && (
-            <>
-              {step === 0 && (
-                <div className="space-y-6">
-                  <div className="flex gap-4">
-                    <img
-                      src={ice}
-                      alt="Icefest"
-                      className="w-20 h-24 object-cover rounded-md shrink-0"
-                    />
-                    <div>
-                      <h3 className="text-lg mb-1">Icefest + Breath Act</h3>
-                      <p className="text-primary text-sm">{tier.name}</p>
-                      <p className="text-secondary font-bold mt-2">
-                        {icefestMoney(tier.price)}{" "}
-                        <span className="text-muted-foreground text-xs font-normal">
-                          por persona
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-                  {event && (
-                    <div className="text-sm text-muted-foreground space-y-3">
-                      <p className="flex gap-2">
-                        <Calendar className="w-4 h-4 shrink-0 mt-1" />
-                        {icefestDate(event.date)} · {event.schedule}
-                      </p>
-                      <p className="flex gap-2">
-                        <MapPin className="w-4 h-4 shrink-0 mt-1" />
-                        {event.location}
-                      </p>
-                    </div>
-                  )}
-                  <div className="border-y py-5 flex justify-between items-center">
-                    <Label>Cantidad</Label>
-                    <div className="flex items-center gap-3">
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="icon"
-                        aria-label="Quitar entrada"
-                        disabled={quantity <= 1 || Boolean(busy)}
-                        onClick={() => setQuantity((q) => q - 1)}
-                      >
-                        <Minus className="w-4 h-4" />
-                      </Button>
-                      <span
-                        aria-live="polite"
-                        className="w-7 text-center font-bold"
-                      >
-                        {quantity}
-                      </span>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="icon"
-                        aria-label="Agregar entrada"
-                        disabled={quantity >= limit || Boolean(busy)}
-                        onClick={() => setQuantity((q) => q + 1)}
-                      >
-                        <Plus className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    Respiración inmersiva, baño de hielo, ceremonia de cacao y
-                    Ecstatic Dance. Cada entrada tiene un código único.
-                  </p>
-                  <div className="space-y-2">
-                    <Label htmlFor="icefest-coupon">¿Tienes un cupón?</Label>
-                    <Input
-                      id="icefest-coupon"
-                      placeholder="Código de descuento"
-                      maxLength={50}
-                      value={coupon}
-                      onChange={(e) =>
-                        setCoupon(
-                          e.target.value.replace(/\s/g, "").toUpperCase(),
-                        )
-                      }
-                    />
-                    <p className="text-xs text-muted-foreground">
-                      Se validará al revisar tu compra.
-                    </p>
-                  </div>
+        <form ref={form} onSubmit={pay} className="px-5 sm:px-7 py-6 space-y-7 pb-10">
+          {!checkoutAvailable && <p role="alert" className="text-destructive">La disponibilidad cambió. Cierra el carrito y revisa las entradas disponibles.</p>}
+          {tier && <>
+            <fieldset disabled={Boolean(busy)} className="space-y-5 min-w-0">
+              <legend className="sr-only">Entradas</legend>
+              <div className="flex gap-4">
+                <img src={ice} alt="Icefest" className="w-16 h-20 object-cover rounded-md shrink-0" />
+                <div className="min-w-0">
+                  <h2 className="text-base font-semibold">Icefest + Breath Act</h2>
+                  <p className="text-primary text-sm mt-1">{tier.name}</p>
+                  <p className="font-semibold mt-1">{icefestMoney(tier.price)} <span className="text-muted-foreground text-xs font-normal">por persona</span></p>
                 </div>
-              )}
-              {step === 1 && (
-                <form
-                  id="icefest-details"
-                  onSubmit={review}
-                  className="space-y-5"
-                >
-                  <fieldset disabled={Boolean(busy)} className="space-y-5">
-                    <div className="grid sm:grid-cols-2 gap-4">
-                      {(
-                        [
-                          {
-                            key: "name",
-                            label: "Nombre",
-                            type: "text",
-                            autoComplete: "given-name",
-                          },
-                          {
-                            key: "surname",
-                            label: "Apellido",
-                            type: "text",
-                            autoComplete: "family-name",
-                          },
-                          {
-                            key: "email",
-                            label: "Email",
-                            type: "email",
-                            autoComplete: "email",
-                          },
-                          {
-                            key: "phone",
-                            label: "WhatsApp",
-                            type: "tel",
-                            autoComplete: "tel",
-                          },
-                        ] as const
-                      ).map((f) => (
-                        <div
-                          key={f.key}
-                          className={`space-y-2 ${f.key === "email" ? "sm:col-span-2" : ""}`}
-                        >
-                          <Label htmlFor={`icefest-${f.key}`}>{f.label}</Label>
-                          <Input
-                            id={`icefest-${f.key}`}
-                            type={f.type}
-                            autoComplete={f.autoComplete}
-                            required
-                            maxLength={f.key === "email" ? 255 : 100}
-                            value={buyer[f.key]}
-                            placeholder={
-                              f.key === "phone" ? "+56 9 1234 5678" : ""
-                            }
-                            onChange={(e) =>
-                              setBuyer((current) => ({
-                                ...current,
-                                [f.key]: e.target.value,
-                              }))
-                            }
-                          />
-                        </div>
-                      ))}
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                      Enviaremos el comprobante y los códigos a este email.
-                      Revísalo antes de continuar.
-                    </p>
-                    <div className="flex items-start gap-3">
-                      <Checkbox
-                        id="icefest-terms"
-                        checked={accepted}
-                        onCheckedChange={(v) => setAccepted(v === true)}
-                      />
-                      <Label
-                        htmlFor="icefest-terms"
-                        className="text-sm leading-relaxed"
-                      >
-                        Acepto los{" "}
-                        <Link
-                          to="/terminos"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="underline"
-                        >
-                          términos
-                        </Link>{" "}
-                        y la{" "}
-                        <Link
-                          to="/privacidad"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="underline"
-                        >
-                          política de privacidad
-                        </Link>
-                        . Las prácticas son guiadas, voluntarias y no reemplazan
-                        atención médica.
-                      </Label>
-                    </div>
-                  </fieldset>
-                </form>
-              )}
-              {step === 2 && quote && (
-                <div className="space-y-6">
-                  <div className="border-b pb-5">
-                    <p className="font-bold">
-                      {quantity} {quantity === 1 ? "entrada" : "entradas"} ·{" "}
-                      {tier.name}
-                    </p>
-                    <p className="text-sm text-muted-foreground mt-2 break-words">
-                      {buyer.name} {buyer.surname}
-                      <br />
-                      {buyer.email}
-                    </p>
-                  </div>
-                  <dl className="space-y-3 text-sm">
-                    <div className="flex justify-between">
-                      <dt>Entradas</dt>
-                      <dd>{icefestMoney(tier.price * quantity)}</dd>
-                    </div>
-                    {quote.discount_amount > 0 && (
-                      <div className="flex justify-between text-primary">
-                        <dt>Descuento aplicado</dt>
-                        <dd>−{icefestMoney(quote.discount_amount)}</dd>
-                      </div>
-                    )}
-                    <div className="border-t pt-4 flex justify-between font-bold text-lg">
-                      <dt>Total</dt>
-                      <dd>{icefestMoney(quote.total_amount)}</dd>
-                    </div>
-                  </dl>
-                  <p className="text-sm text-muted-foreground flex gap-2">
-                    <ShieldCheck className="w-5 h-5 text-primary shrink-0" />
-                    Pago seguro con Mercado Pago. Puedes elegir hasta 3 cuotas;
-                    las condiciones de tu tarjeta se muestran al pagar.
-                  </p>
+              </div>
+              {event && <div className="text-xs text-muted-foreground space-y-2">
+                <p className="flex gap-2"><Calendar className="w-4 h-4 shrink-0" />{icefestDate(event.date)} · {event.schedule}</p>
+                <p className="flex gap-2"><MapPin className="w-4 h-4 shrink-0" />{event.location}</p>
+              </div>}
+              <div className="border-b pb-5 flex justify-between items-center">
+                <span className="text-sm font-medium">Cantidad</span>
+                <div className="flex items-center gap-3">
+                  <Button type="button" variant="outline" size="icon" aria-label="Quitar entrada" disabled={quantity <= 1} onClick={() => setQuantity((q) => q - 1)}><Minus className="w-4 h-4" /></Button>
+                  <span aria-live="polite" className="w-7 text-center font-semibold">{quantity}</span>
+                  <Button type="button" variant="outline" size="icon" aria-label="Agregar entrada" disabled={quantity >= limit} onClick={() => setQuantity((q) => q + 1)}><Plus className="w-4 h-4" /></Button>
                 </div>
-              )}
-            </>
-          )}
-          {error && (
-            <div role="alert" className="mt-6 text-sm text-destructive">
-              <p>{error}</p>
-              {step === 1 && coupon && (
-                <Button
-                  variant="link"
-                  className="px-0"
-                  disabled={Boolean(busy)}
-                  onClick={() => {
-                    setCoupon("");
-                    setStep(0);
-                  }}
-                >
-                  Editar o quitar cupón
+              </div>
+            </fieldset>
+            <fieldset disabled={Boolean(busy)} className="min-w-0 space-y-4">
+              <legend className="text-base font-semibold mb-4">Contacto</legend>
+              <div className="icefest-field">
+                <Input id="icefest-email" name="email" type="email" autoComplete="email" required maxLength={255} placeholder=" " value={buyer.email} onChange={(e) => setBuyer((b) => ({ ...b, email: e.target.value }))} className="peer" />
+                <Label htmlFor="icefest-email">Email</Label>
+              </div>
+              <p className="text-xs text-muted-foreground">Tus entradas y el comprobante llegarán a este email.</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {([{ key: "name", label: "Nombre", autoComplete: "given-name" }, { key: "surname", label: "Apellido", autoComplete: "family-name" }] as const).map((f) => <div key={f.key} className="icefest-field">
+                  <Input id={`icefest-${f.key}`} name={f.key} autoComplete={f.autoComplete} required pattern=".*\S.*" maxLength={100} placeholder=" " value={buyer[f.key]} onChange={(e) => setBuyer((b) => ({ ...b, [f.key]: e.target.value }))} className="peer" />
+                  <Label htmlFor={`icefest-${f.key}`}>{f.label}</Label>
+                </div>)}
+              </div>
+              <div className="icefest-field">
+                <Input id="icefest-phone" name="phone" type="tel" autoComplete="tel" required maxLength={30} placeholder=" " value={buyer.phone} onChange={(e) => setBuyer((b) => ({ ...b, phone: e.target.value }))} className="peer" />
+                <Label htmlFor="icefest-phone">WhatsApp</Label>
+              </div>
+              <p className="text-xs text-muted-foreground">Incluye el código de país: +56 9 1234 5678.</p>
+              <div className="flex gap-2 items-start pt-2">
+                <div className="icefest-field flex-1 min-w-0">
+                  <Input id="icefest-coupon" name="coupon" maxLength={50} autoComplete="off" placeholder=" " value={coupon} onChange={(e) => setCoupon(e.target.value.replace(/\s/g, "").toUpperCase())} className="peer" />
+                  <Label htmlFor="icefest-coupon">Código de descuento</Label>
+                </div>
+                <Button type="button" variant="outline" className="h-14 px-4" disabled={!coupon || Boolean(quote)} onClick={() => void applyCoupon()}>
+                  {busy === "quote" ? <Loader2 className="w-4 h-4 animate-spin" /> : <Tag className="w-4 h-4 mr-2" />}{quote ? "Aplicado" : "Aplicar"}
                 </Button>
-              )}
+              </div>
+            </fieldset>
+            <dl className="border-y py-5 space-y-3 text-sm" aria-live="polite">
+              <div className="flex justify-between gap-4"><dt>Subtotal</dt><dd>{icefestMoney(tier.price * quantity)}</dd></div>
+              {quote && quote.discount_amount > 0 && <div className="flex justify-between gap-4 text-primary"><dt>Descuento</dt><dd>−{icefestMoney(quote.discount_amount)}</dd></div>}
+              <div className="flex justify-between gap-4 text-lg font-semibold"><dt>Total</dt><dd>{icefestMoney(quote?.total_amount ?? tier.price * quantity)}</dd></div>
+            </dl>
+            <div className="flex items-start gap-3">
+              <Checkbox id="icefest-terms" checked={accepted} disabled={Boolean(busy)} onCheckedChange={(v) => setAccepted(v === true)} className="mt-0.5 shrink-0" />
+              <Label htmlFor="icefest-terms" className="text-sm leading-relaxed font-normal">
+                Acepto los <Link to="/terminos" target="_blank" rel="noopener noreferrer" className="underline">términos</Link> y la <Link to="/privacidad" target="_blank" rel="noopener noreferrer" className="underline">política de privacidad</Link>. Las prácticas son guiadas, voluntarias y no reemplazan atención médica.
+              </Label>
             </div>
-          )}
-        </div>
-        <div className="festival-bottom border-t px-6 pt-4 shrink-0 space-y-4 bg-background">
-          <div className="flex justify-between items-center">
-            <span className="text-sm text-muted-foreground">
-              {quote ? "Total confirmado" : "Subtotal"}
-            </span>
-            <strong className="text-xl text-secondary">
-              {icefestMoney(
-                quote?.total_amount ?? (tier?.price || 0) * quantity,
-              )}
-            </strong>
-          </div>
-          <div className="flex gap-3">
-            {step > 0 && (
-              <Button
-                variant="outline"
-                size="icon"
-                className="h-12 w-12 shrink-0"
-                aria-label="Volver al paso anterior"
-                disabled={Boolean(busy)}
-                onClick={() => {
-                  setStep((s) => s - 1);
-                  setError("");
-                }}
-              >
-                <ArrowLeft className="w-5 h-5" />
+            {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
+            <div className="space-y-4">
+              <Button type="submit" className="festival-cta w-full h-14 text-base" disabled={!accepted || Boolean(busy) || !checkoutAvailable}>
+                {busy ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Ticket className="w-4 h-4 mr-2" />}
+                {busy === "payment" ? "Abriendo pago seguro…" : busy === "quote" ? "Aplicando cupón…" : quote?.total_amount === 0 ? "Confirmar entradas" : "Pagar con Mercado Pago"}
               </Button>
-            )}
-            {step === 0 ? (
-              <Button
-                className="festival-cta h-12 flex-1"
-                disabled={!checkoutAvailable}
-                onClick={() => setStep(1)}
-              >
-                Continuar
-                <ArrowRight className="ml-2 w-4 h-4" />
-              </Button>
-            ) : step === 1 ? (
-              <Button
-                form="icefest-details"
-                type="submit"
-                className="festival-cta h-12 flex-1"
-                disabled={!accepted || Boolean(busy) || !checkoutAvailable}
-              >
-                {busy ? (
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                ) : null}
-                {busy ? "Revisando total…" : "Revisar mi compra"}
-              </Button>
-            ) : (
-              <Button
-                className="festival-cta h-12 flex-1"
-                disabled={Boolean(busy) || !checkoutAvailable || !quote}
-                onClick={() => void pay()}
-              >
-                {busy ? (
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                ) : (
-                  <Ticket className="w-4 h-4 mr-2" />
-                )}
-                {busy
-                  ? "Abriendo pago seguro…"
-                  : quote?.total_amount === 0
-                    ? "Confirmar entradas"
-                    : "Ir al pago"}
-              </Button>
-            )}
-          </div>
-          <p
-            role="status"
-            className="text-xs text-center text-muted-foreground"
-          >
-            {busy === "payment"
-              ? "Espera un momento, estamos conectando con el pago."
-              : "Tus entradas llegan por email al confirmar la compra."}
-          </p>
-        </div>
+              <p className="text-xs text-muted-foreground flex gap-2 leading-relaxed"><ShieldCheck className="w-4 h-4 text-primary shrink-0" />Pago seguro con Mercado Pago. Puedes elegir hasta 3 cuotas; las condiciones de tu tarjeta se muestran al pagar.</p>
+            </div>
+          </>}
+        </form>
       </SheetContent>
     </Sheet>
   );
