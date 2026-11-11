@@ -431,7 +431,12 @@ export default function IcefestSantiago() {
               {loading &&
                 [0, 1].map((i) => <Skeleton key={i} className="h-72 w-full" />)}
               {tiers
-                .filter((t) => t.is_active)
+                .filter(
+                  (t) =>
+                    t.is_active &&
+                    !(t.stock !== null && t.stock_sold >= t.stock) &&
+                    !(t.valid_until && new Date(t.valid_until).getTime() <= now),
+                )
                 .map((t) => (
                   <article
                     key={t.id}
