@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { Wind, Snowflake, Coffee, Music, Heart, Brain, Quote, Zap, Sparkles, PartyPopper, Users } from "lucide-react";
+import { Wind, Snowflake, Coffee, Music, Heart, Brain, Quote, Zap, Sparkles, PartyPopper, Users, UtensilsCrossed } from "lucide-react";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { Skeleton } from "@/components/ui/skeleton";
 import breathImg from "@/assets/icefest/breathwork-dimension.webp";
@@ -43,6 +43,7 @@ const schedule = [
   [Users, "Bienvenida y Acreditación", "10:15 hrs · Registro y preparación para el viaje"],
   [Wind, "Respiración inmersiva The Breath Act", "Guiada por facilitadores certificados de The Breath Act"],
   [Snowflake, "Baño de Hielo", "Inmersión en hielo para activar tu poder interno"],
+  [UtensilsCrossed, "Almuerzo", "Incluido en tu entrada · Un momento para recuperar energía y compartir"],
   [Coffee, "Ceremonia de Cacao", "En la tarde, cacao ceremonial para integrar la experiencia y abrir el corazón"],
   [Music, "Ecstatic Dance", "Movimiento consciente para integrar y celebrar"],
   [Sparkles, "Cierre", "17:30 hrs · Integración y despedida"],
@@ -91,7 +92,12 @@ export default function IcefestStory() {
               </article>
             ))}
           </div>
-          <p className="mt-10 text-center text-lg font-semibold">El evento incluye almuerzo</p>
+          <div className="mt-10 flex justify-center">
+            <p className="inline-flex items-center gap-3 rounded-2xl border-2 border-primary bg-primary/10 px-6 py-4 text-lg md:text-xl font-bold text-center">
+              <span aria-hidden="true" className="text-2xl">🍽️</span>
+              El evento incluye almuerzo
+            </p>
+          </div>
         </div>
       </section>
 
