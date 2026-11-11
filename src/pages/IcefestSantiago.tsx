@@ -103,6 +103,7 @@ export default function IcefestSantiago() {
     isError,
     refetch,
   } = useIcefestEvent();
+  const [menuOpen, setMenuOpen] = useState(false);
   const [checkout, setCheckout] = useState(false),
     [checkoutLoaded, setCheckoutLoaded] = useState(false);
   const date = event
@@ -173,7 +174,7 @@ export default function IcefestSantiago() {
         <meta name="twitter:card" content="summary_large_image" />
       </Helmet>
       <main className="icefest-theme bg-background text-foreground pb-24 sm:pb-0">
-        <header className="border-b border-border bg-background">
+        <header className="sticky top-0 z-40 border-b border-border bg-background">
           <div className="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between gap-4">
             <a href="#top" className="font-bold text-lg">
               ICEFEST<span className="text-primary"> / SANTIAGO</span>
