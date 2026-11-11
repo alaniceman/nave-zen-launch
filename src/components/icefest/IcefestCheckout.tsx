@@ -96,7 +96,7 @@ export function IcefestCheckout({ tier, event, canBuy, open, onOpenChange }: Pro
       const ctx = getMetaBrowserContext();
       const result = await icefestCall<{ init_point?: string; redirect_url?: string }>("icefest-checkout", {
         ...payload,
-        meta: { fbp: ctx.fbp || undefined, fbc: ctx.fbc || undefined, clientUserAgent: navigator.userAgent },
+        meta: { fbp: ctx.fbp || undefined, fbc: ctx.fbc || undefined, clientUserAgent: navigator.userAgent, utm: { source: ctx.utm_source, medium: ctx.utm_medium, campaign: ctx.utm_campaign, content: ctx.utm_content, term: ctx.utm_term, referrer: ctx.referrer } },
       });
       const destination = result.init_point || result.redirect_url;
       if (!destination) throw new Error("No recibimos el enlace de pago. Intenta nuevamente.");

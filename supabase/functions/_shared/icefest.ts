@@ -70,7 +70,7 @@ export async function handleIcefestPayment(payment: any, id: string, db: any, he
  if(confirmError) throw confirmError;
  if(!result?.ok) return json(`icefest_${result?.reason || 'needs_review'}`);
  if(result.first_time) await upsertCustomerAndLogEvent(db,{email:order.buyer_email,name:`${order.buyer_name} ${order.buyer_surname}`.trim(),phone:order.buyer_phone,eventType:'icefest_purchase',eventTitle:'Compra de entradas Icefest Santiago',amount:order.total_amount,statusIfNew:'purchased',metadata:{order_id:id,quantity:order.quantity}});
- await sendMetaEvent({eventName:'Purchase',eventId:`purchase-icefest-${id}`,eventSourceUrl:`${icefestOrigin}/icefest-santiago/success`,funnel:'icefest',entityType:'icefest_order',entityId:id,supabase:db,user:{email:order.buyer_email,phone:order.buyer_phone,fullName:`${order.buyer_name} ${order.buyer_surname}`,...order.meta_context},custom:{value:order.total_amount,currency:'CLP',contentName:'Icefest Santiago',contentIds:[order.ticket_type_id],numItems:order.quantity,orderId:id}});
+ await sendMetaEvent({eventName:'Purchase',eventId:`purchase-icefest-${id}`,eventSourceUrl:`${icefestOrigin}/icefest-santiago/success`,funnel:'icefest',entityType:'icefest_order',entityId:id,supabase:db,user:{email:order.buyer_email,phone:order.buyer_phone,fullName:`${order.buyer_name} ${order.buyer_surname}`,...(({utm,...m}:any)=>m)(order.meta_context||{})},custom:{value:order.total_amount,currency:'CLP',contentName:'Icefest Santiago',contentIds:[order.ticket_type_id],numItems:order.quantity,orderId:id}});
  await sendIcefestEmails(db,id);
  return json('icefest_paid');
 }

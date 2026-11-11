@@ -1,7 +1,7 @@
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors';
 import { z } from 'npm:zod@3';
 import { icefestDb,icefestOrigin,sendIcefestEmails } from '../_shared/icefest.ts';
-const schema=z.object({ticket_type_id:z.string().uuid(),quantity:z.number().int().min(1).max(50),buyer:z.object({name:z.string().trim().min(1).max(100),surname:z.string().trim().min(1).max(100),email:z.string().trim().email().max(255),phone:z.string().regex(/^\+[1-9]\d{7,14}$/)}),coupon:z.string().trim().max(50).optional(),accept_terms:z.literal(true),quote:z.boolean().optional(),meta:z.object({fbp:z.string().max(500).optional(),fbc:z.string().max(500).optional(),clientUserAgent:z.string().max(1000).optional()}).optional()});
+const schema=z.object({ticket_type_id:z.string().uuid(),quantity:z.number().int().min(1).max(50),buyer:z.object({name:z.string().trim().min(1).max(100),surname:z.string().trim().min(1).max(100),email:z.string().trim().email().max(255),phone:z.string().regex(/^\+[1-9]\d{7,14}$/)}),coupon:z.string().trim().max(50).optional(),accept_terms:z.literal(true),quote:z.boolean().optional(),meta:z.object({fbp:z.string().max(500).optional(),fbc:z.string().max(500).optional(),clientUserAgent:z.string().max(1000).optional(),utm:z.object({source:z.string().max(200).optional(),medium:z.string().max(200).optional(),campaign:z.string().max(300).optional(),content:z.string().max(300).optional(),term:z.string().max(300).optional(),referrer:z.string().max(500).optional()}).optional()}).optional()});
 Deno.serve(async req=>{
  if(req.method==='OPTIONS')return new Response('ok',{headers:corsHeaders});
  const json=(body:unknown,status=200)=>new Response(JSON.stringify(body),{status,headers:{...corsHeaders,'Content-Type':'application/json'}});
