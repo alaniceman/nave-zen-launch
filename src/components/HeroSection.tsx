@@ -519,7 +519,7 @@ const HeroSlideIcefest = () => {
 
           <p className="font-inter text-base md:text-xl text-white/95 max-w-2xl mx-auto">
             Un día completo de baños de hielo, breathwork, ceremonia de cacao y
-            dance en el Parque Mahuida. De 10:15 a 17:30 hrs, con almuerzo
+            baile en el Parque Mahuida. De 10:15 a 17:30 hrs, con almuerzo
             incluido.
           </p>
 
