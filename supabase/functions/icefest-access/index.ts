@@ -8,7 +8,7 @@ Deno.serve(async req=>{
  try{
   const parsed=schema.safeParse(await req.json());if(!parsed.success)return json({error:'Solicitud inválida'},400);
   const b=parsed.data,db=icefestDb();
-  if(b.action==='recover'){
+  if(b.action==='recover'){return json({error:'Escríbenos por WhatsApp y te reenviamos tu entrada.'},410);
    const {data:orders,error}=await db.from('icefest_orders').select('id,recovery_sent_at').eq('buyer_email',b.email.toLowerCase()).eq('status','paid').order('created_at',{ascending:false}).limit(10);if(error)throw error;
    for(const o of orders||[]){
     const cutoff=new Date(Date.now()-3600000).toISOString();
