@@ -12,3 +12,4 @@
 - Icefest checkout uses one scrolling form with inline totals/payment and scoped floating-label fields; this prevents fixed controls from covering inputs when the mobile keyboard opens.
 - Shop products with negative sort_order are private (hidden from /tienda) and sold only via direct links/upsells; avoids a schema change for one-off offers.
 - Icefest share metadata is centralized in `icefestShare` and emitted as route-specific static HTML by the Vite plugin (also served in development); social crawlers do not execute Helmet or the early head script, and the root homepage metadata must remain unchanged.
+- Icefest gallery discovers both bundled WebP images and CDN asset pointers; new uploaded photos use optimized WebP pointers without migrating existing gallery assets.
