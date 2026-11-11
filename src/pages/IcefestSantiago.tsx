@@ -468,12 +468,10 @@ export default function IcefestSantiago() {
                   </article>
                 ))}
             </div>
-            <Link
-              to="/icefest-santiago/recuperar"
-              className="inline-block mt-7 text-primary underline"
-            >
-              Ya compré: recuperar mis entradas
-            </Link>
+            <p className="mt-7 text-sm text-muted-foreground">
+              ¿Ya compraste y no encuentras tu entrada?{" "}
+              <a href="https://wa.me/56946120426?text=Hola%20Nave%20Studio%2C%20necesito%20que%20me%20reenv%C3%ADen%20mi%20entrada%20del%20Icefest" target="_blank" rel="noopener noreferrer" className="text-primary underline">Escríbenos y te la reenviamos</a>
+            </p>
           </div>
         </section>
         <section className="bg-card text-center py-16 px-5">
@@ -493,7 +491,6 @@ export default function IcefestSantiago() {
         <footer className="max-w-6xl mx-auto px-5 py-10 flex flex-col sm:flex-row gap-5 justify-between text-sm text-muted-foreground">
           <p>Icefest + Breath Act · Nave Studio</p>
           <div className="flex flex-wrap gap-5">
-            <Link to="/icefest-santiago/recuperar">Mis entradas</Link>
             <Link to="/terminos">Términos</Link>
             <Link to="/privacidad">Privacidad</Link>
             <Link to="/">Nave Studio</Link>
