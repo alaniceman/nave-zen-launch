@@ -9,3 +9,4 @@
 - Icefest event and tier reads share a cached, abortable query; checkout loads on intent and remains mounted once opened, preserving in-memory buyer data without persisting personal information.
 - Icefest hero mounts one video selected with the 768px media query; this prevents desktop and mobile video downloads from competing on initial load.
 - Icefest checkout uses one scrolling form with inline totals/payment and scoped floating-label fields; this prevents fixed controls from covering inputs when the mobile keyboard opens.
+- Shop products with negative sort_order are private (hidden from /tienda) and sold only via direct links/upsells; avoids a schema change for one-off offers.

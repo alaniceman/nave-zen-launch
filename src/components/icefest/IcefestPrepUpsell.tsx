@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 
 const OPTIONS = [
-  { id: "16b3f640-67e7-482f-8333-74477b0e69d0", sessions: 1, price: 15000, off: "50% dcto" },
-  { id: "25f89aba-9114-47ee-96a1-9b3582994ab4", sessions: 3, price: 30000, off: "67% dcto", best: true },
+  { id: "16b3f640-67e7-482f-8333-74477b0e69d0", kind: "package", label: "1 sesión", sub: "Breathwork + Icebath o Yoga", price: 15000, off: "50% dcto" },
+  { id: "25f89aba-9114-47ee-96a1-9b3582994ab4", kind: "package", label: "3 sesiones", sub: "Breathwork + Icebath o Yoga", price: 30000, off: "67% dcto", best: true },
+  { id: "956cf8ea-5d66-4434-8693-ac2bee9317e0", kind: "shop", label: "1 Mes Membresía Ilimitada", sub: "Ven todo lo que quieras a Nave Studio por 1 mes: Yoga y Criomedicina", price: 40000, off: "Ilimitado" },
 ];
 const clp = (n: number) => `$${n.toLocaleString("es-CL")}`;
 
@@ -21,7 +22,12 @@ export function IcefestPrepUpsell({ buyer }: { buyer: Buyer }) {
     setBusy(true);
     setError("");
     try {
-      const { data, error } = await supabase.functions.invoke("purchase-session-package", {
+      const opt = OPTIONS.find((o) => o.id === selected)!;
+      const name = `${buyer.buyer_name ?? ""} ${buyer.buyer_surname ?? ""}`.trim() || "Participante Icefest";
+      const phone = (buyer.buyer_phone || "").replace(/\D/g, "").slice(0, 20) || "56900000000";
+      const { data, error } = opt.kind === "shop"
+        ? await supabase.functions.invoke("create-shop-preference", { body: { productId: opt.id, buyerName: name, buyerEmail: buyer.buyer_email, buyerPhone: phone, eventSourceUrl: window.location.href } })
+        : await supabase.functions.invoke("purchase-session-package", {
         body: {
           packageId: selected,
           buyerName: `${buyer.buyer_name ?? ""} ${buyer.buyer_surname ?? ""}`.trim() || "Participante Icefest",
@@ -47,7 +53,7 @@ export function IcefestPrepUpsell({ buyer }: { buyer: Buyer }) {
         <Snowflake className="h-4 w-4" /> Oferta solo para asistentes
       </p>
       <h2 id="prep-title" className="text-2xl font-bold mt-2">Prepárate para el Icefest</h2>
-      <p className="text-muted-foreground mt-1">Breathwork + Icebath (1 hr) en Nave Studio</p>
+      <p className="text-muted-foreground mt-1">Sesiones de Breathwork + Icebath (1 hr) o Yoga en Nave Studio, o un mes ilimitado</p>
       <div role="radiogroup" className="grid gap-3 mt-5">
         {OPTIONS.map((o) => {
           const active = selected === o.id;
@@ -65,7 +71,8 @@ export function IcefestPrepUpsell({ buyer }: { buyer: Buyer }) {
                   {active && <Check className="h-3 w-3" />}
                 </span>
                 <span>
-                  <span className="block font-semibold">{o.sessions} {o.sessions === 1 ? "sesión" : "sesiones"}</span>
+                  <span className="block font-semibold">{o.label}</span>
+                  <span className="block text-xs text-muted-foreground">{o.sub}</span>
                   {o.best && <span className="text-xs text-primary font-semibold">Más conveniente</span>}
                 </span>
               </span>
@@ -82,7 +89,7 @@ export function IcefestPrepUpsell({ buyer }: { buyer: Buyer }) {
         Agregar y pagar {clp(OPTIONS.find((o) => o.id === selected)!.price)}
       </Button>
       <p className="text-xs text-muted-foreground mt-3 text-center">
-        Usaremos los datos de tu compra. Recibirás un email aparte con tus códigos y el link para agendar.
+        Usaremos los datos de tu compra. Recibirás un email aparte con tus códigos y el link para agendar (o con la activación de tu membresía).
       </p>
       {error && <p role="alert" className="text-destructive text-sm mt-2">{error}</p>}
     </section>
