@@ -53,6 +53,8 @@ export function AdminSidebar() {
   const { state } = useSidebar();
   const { user, signOut } = useAuth();
   const collapsed = state === 'collapsed';
+  const { pathname } = useLocation();
+  const isPathActive = (url: string) => pathname === url || pathname.startsWith(`${url}/`);
 
   return (
     <Sidebar collapsible="icon" className="border-r bg-sidebar">
