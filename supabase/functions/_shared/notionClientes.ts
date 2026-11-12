@@ -126,22 +126,23 @@ export async function syncTrialClientToNotion(c: NotionTrialClient) {
       } catch (error) { console.error('[Notion] Origen lookup failed:', error); }
     }
 
+    const write = async () => notion(existingId ? `/pages/${existingId}` : '/pages', {
+      method: existingId ? 'PATCH' : 'POST',
+      body: JSON.stringify(existingId ? { properties } : { parent: { type: 'data_source_id', data_source_id: CLIENTES_DATA_SOURCE_ID }, properties }),
+    });
+    let page;
+    try { page = await write(); }
+    catch (error) {
+      if (!properties.Origen || !String(error).includes('Origen')) throw error;
+      console.error('[Notion] Origen rejected; syncing client without optional attribution:', error);
+      delete properties.Origen;
+      page = await write();
+    }
     if (existingId) {
-      await notion(`/pages/${existingId}`, {
-        method: "PATCH",
-        body: JSON.stringify({ properties }),
-      });
       console.log(`[Notion] cliente actualizado: ${email}`);
       return { ok: true, action: "updated", pageId: existingId };
     }
 
-    const page = await notion(`/pages`, {
-      method: "POST",
-      body: JSON.stringify({
-        parent: { type: "data_source_id", data_source_id: CLIENTES_DATA_SOURCE_ID },
-        properties,
-      }),
-    });
     console.log(`[Notion] cliente creado: ${email}`);
     return { ok: true, action: "created", pageId: page?.id ?? null };
   } catch (err) {
