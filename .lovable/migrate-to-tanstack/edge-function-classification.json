@@ -1,0 +1,376 @@
+{
+ "functions": [
+  {
+   "name": "admin-add-taller-inscripcion",
+   "classification": "internal-only",
+   "signal": "called from 1 src/ file(s); left on Supabase: Deno runtime + shared _shared/ modules with the payment webhook and Supabase-only secrets (Mercado Pago, Resend); user asked to keep payments untouched",
+   "outcome": "left"
+  },
+  {
+   "name": "admin-bookings",
+   "classification": "internal-only",
+   "signal": "called from 1 src/ file(s); left on Supabase: Deno runtime + shared _shared/ modules with the payment webhook and Supabase-only secrets (Mercado Pago, Resend); user asked to keep payments untouched",
+   "outcome": "left"
+  },
+  {
+   "name": "admin-brain",
+   "classification": "internal-only",
+   "signal": "called from 1 src/ file(s); left on Supabase: Deno runtime + shared _shared/ modules with the payment webhook and Supabase-only secrets (Mercado Pago, Resend); user asked to keep payments untouched",
+   "outcome": "left"
+  },
+  {
+   "name": "book-trial-class",
+   "classification": "internal-only",
+   "signal": "called from 1 src/ file(s); left on Supabase: Deno runtime + shared _shared/ modules with the payment webhook and Supabase-only secrets (Mercado Pago, Resend); user asked to keep payments untouched",
+   "outcome": "left"
+  },
+  {
+   "name": "chat-nave",
+   "classification": "internal-only",
+   "signal": "called from 1 src/ file(s); left on Supabase: Deno runtime + shared _shared/ modules with the payment webhook and Supabase-only secrets (Mercado Pago, Resend); user asked to keep payments untouched",
+   "outcome": "left"
+  },
+  {
+   "name": "check-admin-role",
+   "classification": "internal-only",
+   "signal": "called from 1 src/ file(s); left on Supabase: Deno runtime + shared _shared/ modules with the payment webhook and Supabase-only secrets (Mercado Pago, Resend); user asked to keep payments untouched",
+   "outcome": "left"
+  },
+  {
+   "name": "check-mp-payment",
+   "classification": "unknown",
+   "signal": "no src/ call sites; called by cron, other functions or external services",
+   "outcome": "left"
+  },
+  {
+   "name": "create-booking",
+   "classification": "internal-only",
+   "signal": "called from 1 src/ file(s); left on Supabase: Deno runtime + shared _shared/ modules with the payment webhook and Supabase-only secrets (Mercado Pago, Resend); user asked to keep payments untouched",
+   "outcome": "left"
+  },
+  {
+   "name": "create-shop-preference",
+   "classification": "internal-only",
+   "signal": "called from 3 src/ file(s); left on Supabase: Deno runtime + shared _shared/ modules with the payment webhook and Supabase-only secrets (Mercado Pago, Resend); user asked to keep payments untouched",
+   "outcome": "left"
+  },
+  {
+   "name": "create-taller-preference",
+   "classification": "internal-only",
+   "signal": "called from 1 src/ file(s); left on Supabase: Deno runtime + shared _shared/ modules with the payment webhook and Supabase-only secrets (Mercado Pago, Resend); user asked to keep payments untouched",
+   "outcome": "left"
+  },
+  {
+   "name": "cyber-nave-subscribe",
+   "classification": "internal-only",
+   "signal": "called from 1 src/ file(s); left on Supabase: Deno runtime + shared _shared/ modules with the payment webhook and Supabase-only secrets (Mercado Pago, Resend); user asked to keep payments untouched",
+   "outcome": "left"
+  },
+  {
+   "name": "facebook-conversions",
+   "classification": "internal-only",
+   "signal": "called from 1 src/ file(s); left on Supabase: Deno runtime + shared _shared/ modules with the payment webhook and Supabase-only secrets (Mercado Pago, Resend); user asked to keep payments untouched",
+   "outcome": "left"
+  },
+  {
+   "name": "generate-future-slots",
+   "classification": "internal-only",
+   "signal": "called from 1 src/ file(s); left on Supabase: Deno runtime + shared _shared/ modules with the payment webhook and Supabase-only secrets (Mercado Pago, Resend); user asked to keep payments untouched",
+   "outcome": "left"
+  },
+  {
+   "name": "generate-giftcard-pdf",
+   "classification": "internal-only",
+   "signal": "called from 1 src/ file(s); left on Supabase: Deno runtime + shared _shared/ modules with the payment webhook and Supabase-only secrets (Mercado Pago, Resend); user asked to keep payments untouched",
+   "outcome": "left"
+  },
+  {
+   "name": "generate-landing",
+   "classification": "internal-only",
+   "signal": "called from 1 src/ file(s); left on Supabase: Deno runtime + shared _shared/ modules with the payment webhook and Supabase-only secrets (Mercado Pago, Resend); user asked to keep payments untouched",
+   "outcome": "left"
+  },
+  {
+   "name": "get-availability",
+   "classification": "internal-only",
+   "signal": "called from 1 src/ file(s); left on Supabase: Deno runtime + shared _shared/ modules with the payment webhook and Supabase-only secrets (Mercado Pago, Resend); user asked to keep payments untouched",
+   "outcome": "left"
+  },
+  {
+   "name": "get-giftcard-data",
+   "classification": "internal-only",
+   "signal": "called from 1 src/ file(s); left on Supabase: Deno runtime + shared _shared/ modules with the payment webhook and Supabase-only secrets (Mercado Pago, Resend); user asked to keep payments untouched",
+   "outcome": "left"
+  },
+  {
+   "name": "get-order-status",
+   "classification": "internal-only",
+   "signal": "called from 3 src/ file(s); left on Supabase: Deno runtime + shared _shared/ modules with the payment webhook and Supabase-only secrets (Mercado Pago, Resend); user asked to keep payments untouched",
+   "outcome": "left"
+  },
+  {
+   "name": "get-taller-status",
+   "classification": "internal-only",
+   "signal": "called from 1 src/ file(s); left on Supabase: Deno runtime + shared _shared/ modules with the payment webhook and Supabase-only secrets (Mercado Pago, Resend); user asked to keep payments untouched",
+   "outcome": "left"
+  },
+  {
+   "name": "icefest-access",
+   "classification": "unknown",
+   "signal": "no src/ call sites; called by cron, other functions or external services",
+   "outcome": "left"
+  },
+  {
+   "name": "icefest-admin",
+   "classification": "unknown",
+   "signal": "no src/ call sites; called by cron, other functions or external services",
+   "outcome": "left"
+  },
+  {
+   "name": "icefest-checkout",
+   "classification": "unknown",
+   "signal": "no src/ call sites; called by cron, other functions or external services",
+   "outcome": "left"
+  },
+  {
+   "name": "mailerlite-init-shop",
+   "classification": "unknown",
+   "signal": "no src/ call sites; called by cron, other functions or external services",
+   "outcome": "left"
+  },
+  {
+   "name": "mailerlite-sync-order",
+   "classification": "unknown",
+   "signal": "no src/ call sites; called by cron, other functions or external services",
+   "outcome": "left"
+  },
+  {
+   "name": "mcp",
+   "classification": "MCP server",
+   "signal": "generated MCP JSON-RPC handler",
+   "outcome": "left"
+  },
+  {
+   "name": "mercadopago-webhook",
+   "classification": "webhook receiver",
+   "signal": "Mercado Pago notification_url target",
+   "outcome": "left"
+  },
+  {
+   "name": "process-trial-reminders",
+   "classification": "unknown",
+   "signal": "no src/ call sites; called by cron, other functions or external services",
+   "outcome": "left"
+  },
+  {
+   "name": "purchase-session-package",
+   "classification": "internal-only",
+   "signal": "called from 12 src/ file(s); left on Supabase: Deno runtime + shared _shared/ modules with the payment webhook and Supabase-only secrets (Mercado Pago, Resend); user asked to keep payments untouched",
+   "outcome": "left"
+  },
+  {
+   "name": "send-abandonment-email",
+   "classification": "internal-only",
+   "signal": "called from 1 src/ file(s); left on Supabase: Deno runtime + shared _shared/ modules with the payment webhook and Supabase-only secrets (Mercado Pago, Resend); user asked to keep payments untouched",
+   "outcome": "left"
+  },
+  {
+   "name": "send-booking-confirmation",
+   "classification": "unknown",
+   "signal": "no src/ call sites; called by cron, other functions or external services",
+   "outcome": "left"
+  },
+  {
+   "name": "send-booking-reminder",
+   "classification": "unknown",
+   "signal": "no src/ call sites; called by cron, other functions or external services",
+   "outcome": "left"
+  },
+  {
+   "name": "send-expiring-sessions-reminder",
+   "classification": "unknown",
+   "signal": "no src/ call sites; called by cron, other functions or external services",
+   "outcome": "left"
+  },
+  {
+   "name": "send-gift-code-email",
+   "classification": "unknown",
+   "signal": "no src/ call sites; called by cron, other functions or external services",
+   "outcome": "left"
+  },
+  {
+   "name": "send-icefest-promo",
+   "classification": "unknown",
+   "signal": "no src/ call sites; called by cron, other functions or external services",
+   "outcome": "left"
+  },
+  {
+   "name": "send-instructor-summary",
+   "classification": "unknown",
+   "signal": "no src/ call sites; called by cron, other functions or external services",
+   "outcome": "left"
+  },
+  {
+   "name": "send-invierno-promo-recovery",
+   "classification": "unknown",
+   "signal": "no src/ call sites; called by cron, other functions or external services",
+   "outcome": "left"
+  },
+  {
+   "name": "send-marzo-reset-promo",
+   "classification": "unknown",
+   "signal": "no src/ call sites; called by cron, other functions or external services",
+   "outcome": "left"
+  },
+  {
+   "name": "send-package-depletion-alert",
+   "classification": "unknown",
+   "signal": "no src/ call sites; called by cron, other functions or external services",
+   "outcome": "left"
+  },
+  {
+   "name": "send-plan-prueba-activo",
+   "classification": "internal-only",
+   "signal": "called from 1 src/ file(s); left on Supabase: Deno runtime + shared _shared/ modules with the payment webhook and Supabase-only secrets (Mercado Pago, Resend); user asked to keep payments untouched",
+   "outcome": "left"
+  },
+  {
+   "name": "send-plan-prueba-recovery",
+   "classification": "unknown",
+   "signal": "no src/ call sites; called by cron, other functions or external services",
+   "outcome": "left"
+  },
+  {
+   "name": "send-post-taller-lastday",
+   "classification": "cron target",
+   "signal": "referenced by pg_cron/net.http_post in SQL migrations",
+   "outcome": "left"
+  },
+  {
+   "name": "send-post-taller-promo",
+   "classification": "unknown",
+   "signal": "no src/ call sites; called by cron, other functions or external services",
+   "outcome": "left"
+  },
+  {
+   "name": "send-promo-18-septiembre",
+   "classification": "unknown",
+   "signal": "no src/ call sites; called by cron, other functions or external services",
+   "outcome": "left"
+  },
+  {
+   "name": "send-santiago-confirmation",
+   "classification": "unknown",
+   "signal": "no src/ call sites; called by cron, other functions or external services",
+   "outcome": "left"
+  },
+  {
+   "name": "send-session-codes-email",
+   "classification": "unknown",
+   "signal": "no src/ call sites; called by cron, other functions or external services",
+   "outcome": "left"
+  },
+  {
+   "name": "send-session-feedback",
+   "classification": "cron target",
+   "signal": "referenced by pg_cron/net.http_post in SQL migrations",
+   "outcome": "left"
+  },
+  {
+   "name": "send-taller-descuento-50",
+   "classification": "unknown",
+   "signal": "no src/ call sites; called by cron, other functions or external services",
+   "outcome": "left"
+  },
+  {
+   "name": "send-taller-poder",
+   "classification": "unknown",
+   "signal": "no src/ call sites; called by cron, other functions or external services",
+   "outcome": "left"
+  },
+  {
+   "name": "send-taller-thankyou",
+   "classification": "unknown",
+   "signal": "no src/ call sites; called by cron, other functions or external services",
+   "outcome": "left"
+  },
+  {
+   "name": "send-trial-daily-reminder",
+   "classification": "unknown",
+   "signal": "no src/ call sites; called by cron, other functions or external services",
+   "outcome": "left"
+  },
+  {
+   "name": "send-trial-ending-alert",
+   "classification": "unknown",
+   "signal": "no src/ call sites; called by cron, other functions or external services",
+   "outcome": "left"
+  },
+  {
+   "name": "send-trial-reminder",
+   "classification": "unknown",
+   "signal": "no src/ call sites; called by cron, other functions or external services",
+   "outcome": "left"
+  },
+  {
+   "name": "send-weekly-package-reminder",
+   "classification": "unknown",
+   "signal": "no src/ call sites; called by cron, other functions or external services",
+   "outcome": "left"
+  },
+  {
+   "name": "submit-membership-lead",
+   "classification": "internal-only",
+   "signal": "called from 1 src/ file(s); left on Supabase: Deno runtime + shared _shared/ modules with the payment webhook and Supabase-only secrets (Mercado Pago, Resend); user asked to keep payments untouched",
+   "outcome": "left"
+  },
+  {
+   "name": "submit-plan-prueba-lead",
+   "classification": "internal-only",
+   "signal": "called from 1 src/ file(s); left on Supabase: Deno runtime + shared _shared/ modules with the payment webhook and Supabase-only secrets (Mercado Pago, Resend); user asked to keep payments untouched",
+   "outcome": "left"
+  },
+  {
+   "name": "subscribe-mailerlite",
+   "classification": "internal-only",
+   "signal": "called from 2 src/ file(s); left on Supabase: Deno runtime + shared _shared/ modules with the payment webhook and Supabase-only secrets (Mercado Pago, Resend); user asked to keep payments untouched",
+   "outcome": "left"
+  },
+  {
+   "name": "sync-notion-cliente",
+   "classification": "internal-only",
+   "signal": "called from 1 src/ file(s); left on Supabase: Deno runtime + shared _shared/ modules with the payment webhook and Supabase-only secrets (Mercado Pago, Resend); user asked to keep payments untouched",
+   "outcome": "left"
+  },
+  {
+   "name": "sync-notion-trial-status",
+   "classification": "unknown",
+   "signal": "no src/ call sites; called by cron, other functions or external services",
+   "outcome": "left"
+  },
+  {
+   "name": "sync-reservas-sheet",
+   "classification": "unknown",
+   "signal": "no src/ call sites; called by cron, other functions or external services",
+   "outcome": "left"
+  },
+  {
+   "name": "validate-coupon",
+   "classification": "internal-only",
+   "signal": "called from 5 src/ file(s); left on Supabase: Deno runtime + shared _shared/ modules with the payment webhook and Supabase-only secrets (Mercado Pago, Resend); user asked to keep payments untouched",
+   "outcome": "left"
+  },
+  {
+   "name": "validate-session-code",
+   "classification": "unknown",
+   "signal": "no src/ call sites; called by cron, other functions or external services",
+   "outcome": "left"
+  },
+  {
+   "name": "weekly-reminder-optout",
+   "classification": "internal-only",
+   "signal": "called from 1 src/ file(s); left on Supabase: Deno runtime + shared _shared/ modules with the payment webhook and Supabase-only secrets (Mercado Pago, Resend); user asked to keep payments untouched",
+   "outcome": "left"
+  }
+ ]
+}
