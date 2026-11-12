@@ -84,9 +84,9 @@ const journey = [
   },
 ];
 export default function IcefestSantiago() {
-  const [horizontalHero, setHorizontalHero] = useState(() =>
-    window.matchMedia("(min-width: 768px)").matches,
-  );
+  // null until mounted: the server can't know the screen size, and only one
+  // hero video should download once it is known.
+  const [horizontalHero, setHorizontalHero] = useState<boolean | null>(null);
   useEffect(() => {
     const screen = window.matchMedia("(min-width: 768px)");
     const updateScreen = () => setHorizontalHero(screen.matches);
@@ -243,6 +243,7 @@ export default function IcefestSantiago() {
           id="top"
           className="festival-hero relative flex items-center justify-center overflow-hidden py-12 md:py-20"
         >
+          {horizontalHero !== null && (
           <video
             key={horizontalHero ? "horizontal" : "mobile"}
             src={horizontalHero ? horizontalVideo.url : heroVideo.url}
@@ -255,6 +256,7 @@ export default function IcefestSantiago() {
             aria-hidden="true"
             className="festival-hero-photo festival-hero-video absolute inset-0 w-full h-full object-cover"
           />
+          )}
           <div className="relative z-10 max-w-5xl mx-auto px-5 text-center space-y-5 md:space-y-7">
             <p className="inline-flex gap-2 items-center text-secondary text-xs font-bold uppercase">
               <Star className="w-4 h-4" />
