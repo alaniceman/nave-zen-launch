@@ -33,7 +33,9 @@ const preloadCheckout = () => import("@/components/icefest/IcefestCheckout");
 const IcefestCheckout = lazy(() =>
   preloadCheckout().then((m) => ({ default: m.IcefestCheckout })),
 );
-import { icefestDate, icefestMoney } from "@/lib/icefest";
+import { ICEFEST_DEPOSIT_TIER_ID, icefestDepositForQuantity } from "../../supabase/functions/_shared/icefestDeposit";
+import { IcefestDepositSummary } from "@/components/icefest/IcefestDepositSummary";
+import { type IcefestTier, icefestDate, icefestMoney } from "@/lib/icefest";
 import IcefestStory from "@/components/icefest/IcefestStory";
 import { IcefestWhatsAppFab } from "@/components/icefest/IcefestWhatsAppFab";
 import { trackViewContentOnce } from "@/lib/metaTracking";
@@ -104,6 +106,7 @@ export default function IcefestSantiago() {
     isError,
     refetch,
   } = useIcefestEvent();
+  const [selectedTier, setSelectedTier] = useState<IcefestTier | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [checkout, setCheckout] = useState(false),
     [checkoutLoaded, setCheckoutLoaded] = useState(false);
@@ -125,6 +128,7 @@ export default function IcefestSantiago() {
     ? "No se pudo actualizar la disponibilidad. Intenta nuevamente."
     : "";
   const openCheckout = () => {
+    setSelectedTier(tier);
     setCheckoutLoaded(true);
     setCheckout(true);
   };
@@ -456,7 +460,7 @@ export default function IcefestSantiago() {
                     className={`bg-card border rounded-lg p-7 ${t.id === tier?.id ? "border-primary/60" : ""}`}
                   >
                     <p className="text-sm font-semibold text-primary mb-3">
-                      {t.id === tier?.id
+                      {(t.id === tier?.id || t.id === ICEFEST_DEPOSIT_TIER_ID)
                         ? "Vigente"
                         : t.stock !== null && t.stock_sold >= t.stock
                           ? "Agotada"
@@ -472,6 +476,7 @@ export default function IcefestSantiago() {
                     <p className="text-sm text-muted-foreground mt-2">
                       CLP por persona
                     </p>
+                    {t.id === ICEFEST_DEPOSIT_TIER_ID && <div className="mt-5"><IcefestDepositSummary deposit={icefestDepositForQuantity(1)} quantity={1} /></div>}
                     <p className="my-5 text-sm">
                       {t.description ||
                         (t.stock !== null
@@ -481,8 +486,8 @@ export default function IcefestSantiago() {
                     <Button
                       size="lg"
                       className="festival-cta w-full"
-                      disabled={!canBuy || t.id !== tier?.id}
-                      onClick={openCheckout}
+                      disabled={!canBuy || (t.id !== tier?.id && t.id !== ICEFEST_DEPOSIT_TIER_ID) || Boolean(t.valid_from && new Date(t.valid_from).getTime() > now)}
+                      onClick={() => { setSelectedTier(t); setCheckoutLoaded(true); setCheckout(true); }}
                     >
                       Reservar mi entrada
                     </Button>
@@ -567,7 +572,7 @@ export default function IcefestSantiago() {
           }
         >
           <IcefestCheckout
-            tier={tier}
+            tier={tiers.find((t) => t.id === selectedTier?.id) ?? tier}
             event={event}
             canBuy={canBuy}
             open={checkout}

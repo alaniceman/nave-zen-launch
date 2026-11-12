@@ -8,6 +8,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { type IcefestEvent, type IcefestTier, icefestCall, icefestDate, icefestMoney, normalizeIcefestPhone } from "@/lib/icefest";
 import { trackMetaClientEvent } from "@/lib/metaTracking";
 import { getMetaBrowserContext } from "@/lib/metaPixel";
+import { ICEFEST_DEPOSIT_TIER_ID, icefestDepositForQuantity } from "../../../supabase/functions/_shared/icefestDeposit";
+import { IcefestDepositSummary } from "./IcefestDepositSummary";
 import ice from "@/assets/icefest/ice-bath-new.webp";
 
 type Quote = { total_amount: number; discount_amount: number };
@@ -25,6 +27,7 @@ export function IcefestCheckout({ tier, event, canBuy, open, onOpenChange }: Pro
   const tracked = useRef(false);
   const form = useRef<HTMLFormElement>(null);
   const revision = useRef(0);
+  const deposit = tier?.id === ICEFEST_DEPOSIT_TIER_ID ? icefestDepositForQuantity(quantity) : null;
   const limit = tier ? Math.max(0, Math.min(tier.max_per_order, tier.stock === null ? tier.max_per_order : tier.stock - tier.stock_sold)) : 0;
   const checkoutAvailable = canBuy && limit > 0 && quantity <= limit;
 
@@ -33,6 +36,7 @@ export function IcefestCheckout({ tier, event, canBuy, open, onOpenChange }: Pro
     setQuote(null);
     setError("");
   }, [quantity, coupon, tier?.id, tier?.price]);
+  useEffect(() => { setCoupon(""); setAccepted(false); }, [tier?.id]);
   useEffect(() => {
     if (limit > 0) setQuantity((current) => Math.min(current, limit));
   }, [limit]);
@@ -47,7 +51,7 @@ export function IcefestCheckout({ tier, event, canBuy, open, onOpenChange }: Pro
     ticket_type_id: tier?.id,
     quantity,
     buyer: { name: buyer.name.trim(), surname: buyer.surname.trim(), email: buyer.email.trim().toLowerCase(), phone: normalizeIcefestPhone(buyer.phone) },
-    coupon,
+    coupon: deposit ? "" : coupon,
     accept_terms: accepted,
   };
 
@@ -84,7 +88,7 @@ export function IcefestCheckout({ tier, event, canBuy, open, onOpenChange }: Pro
   async function pay(e: React.FormEvent) {
     e.preventDefault();
     if (locked.current || !checkoutAvailable || !accepted || !validBuyer()) return;
-    if (coupon && !quote) {
+    if (!deposit && coupon && !quote) {
       setError("Aplica el cupón para confirmar tu descuento antes de pagar.");
       document.getElementById("icefest-coupon")?.focus();
       return;
@@ -165,7 +169,7 @@ export function IcefestCheckout({ tier, event, canBuy, open, onOpenChange }: Pro
                 <Label htmlFor="icefest-phone">WhatsApp</Label>
               </div>
               <p className="text-xs text-muted-foreground">Para verificarte en el grupo de Whatsapp del evento</p>
-              <div className="flex gap-2 items-start pt-2">
+              {!deposit && <div className="flex gap-2 items-start pt-2">
                 <div className="icefest-field flex-1 min-w-0">
                   <Input id="icefest-coupon" name="coupon" maxLength={50} autoComplete="off" placeholder=" " value={coupon} onChange={(e) => setCoupon(e.target.value.replace(/\s/g, "").toUpperCase())} className="peer" />
                   <Label htmlFor="icefest-coupon">Código de descuento</Label>
@@ -173,24 +177,26 @@ export function IcefestCheckout({ tier, event, canBuy, open, onOpenChange }: Pro
                 <Button type="button" variant="outline" className="h-14 px-4" disabled={!coupon || Boolean(quote)} onClick={() => void applyCoupon()}>
                   {busy === "quote" ? <Loader2 className="w-4 h-4 animate-spin" /> : <Tag className="w-4 h-4 mr-2" />}{quote ? "Aplicado" : "Aplicar"}
                 </Button>
-              </div>
+              </div>}
             </fieldset>
+            {deposit && <IcefestDepositSummary deposit={deposit} quantity={quantity} />}
             <dl className="border-y py-5 space-y-3 text-sm" aria-live="polite">
               <div className="flex justify-between gap-4"><dt>Subtotal</dt><dd>{icefestMoney(tier.price * quantity)}</dd></div>
               {quote && quote.discount_amount > 0 && <div className="flex justify-between gap-4 text-primary"><dt>Descuento</dt><dd>−{icefestMoney(quote.discount_amount)}</dd></div>}
-              <div className="flex justify-between gap-4 text-lg font-semibold"><dt>Total</dt><dd>{icefestMoney(quote?.total_amount ?? tier.price * quantity)}</dd></div>
+              <div className="flex justify-between gap-4 text-lg font-semibold"><dt>{deposit ? "Abono a pagar ahora" : "Total"}</dt><dd>{icefestMoney(quote?.total_amount ?? tier.price * quantity)}</dd></div>
             </dl>
             <div className="flex items-start gap-3">
               <Checkbox id="icefest-terms" checked={accepted} disabled={Boolean(busy)} onCheckedChange={(v) => setAccepted(v === true)} className="mt-0.5 shrink-0" />
               <Label htmlFor="icefest-terms" className="text-sm leading-relaxed font-normal">
                 Acepto los <a href="https://docs.google.com/document/d/18GOC_ay6NezpF3CEenaItpWsMNIehBsOLMZuexJJKl4/" target="_blank" rel="noopener noreferrer" className="text-primary underline">términos y condiciones</a> y <a href="https://drive.google.com/file/d/1_VlQ4biLOZFEpZvFrSFbDhoX734K6JBx/" target="_blank" rel="noopener noreferrer" className="text-primary underline">Certificado de Responsabilidad</a>.
+                {deposit && <span className="block mt-2 font-medium">Entiendo que este pago es un abono y que debo cancelar {icefestMoney(deposit.balance_due)} antes de ingresar, durante la semana del evento o en la puerta.</span>}
               </Label>
             </div>
             {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
             <div className="space-y-4">
               <Button type="submit" className="festival-cta w-full h-14 text-base" disabled={!accepted || Boolean(busy) || !checkoutAvailable}>
                 {busy ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Ticket className="w-4 h-4 mr-2" />}
-                {busy === "payment" ? "Abriendo pago seguro…" : busy === "quote" ? "Aplicando cupón…" : quote?.total_amount === 0 ? "Confirmar entradas" : "Pagar con Mercado Pago"}
+                {busy === "payment" ? "Abriendo pago seguro…" : busy === "quote" ? "Aplicando cupón…" : quote?.total_amount === 0 ? "Confirmar entradas" : deposit ? "Abonar con Mercado Pago" : "Pagar con Mercado Pago"}
               </Button>
               <p className="text-xs text-muted-foreground flex gap-2 leading-relaxed"><ShieldCheck className="w-4 h-4 text-primary shrink-0" />Pago seguro con Mercado Pago. Puedes elegir hasta 3 cuotas; las condiciones de tu tarjeta se muestran al pagar.</p>
             </div>

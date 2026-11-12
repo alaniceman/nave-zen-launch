@@ -1,4 +1,5 @@
 import { supabase } from '@/integrations/supabase/client';
+import { ICEFEST_DEPOSIT_TIER_ID } from '../../supabase/functions/_shared/icefestDeposit';
 import { FunctionsHttpError } from '@supabase/supabase-js';
 export type IcefestEvent = { id:string; slug:string; name:string; date:string; schedule:string; location:string; address:string; description:string; google_maps_link:string; whatsapp_link:string; instructions:string; includes_lunch:boolean; includes_cacao:boolean; is_active:boolean; sales_open:boolean };
 export type IcefestTier = { id:string; event_id:string; name:string; description:string; price:number; stock:number|null; stock_sold:number; max_per_order:number; valid_from:string|null; valid_until:string|null; display_order:number; is_active:boolean };
@@ -6,7 +7,7 @@ export type IcefestDiscount = { id:string; event_id:string; ticket_type_id:strin
 export const icefestMoney = (n:number) => `$${n.toLocaleString('es-CL')}`;
 export const icefestDate = (date:string) => new Date(`${date}T12:00:00Z`).toLocaleDateString('es-CL',{timeZone:'America/Santiago',weekday:'long',day:'numeric',month:'long',year:'numeric'});
 export function activeIcefestTier(tiers:IcefestTier[], now=Date.now()) {
- return [...tiers].sort((a,b)=>a.display_order-b.display_order).find(t=>t.is_active && (!t.valid_from || new Date(t.valid_from).getTime()<=now) && (!t.valid_until || new Date(t.valid_until).getTime()>now) && (t.stock===null || t.stock_sold<t.stock)) || null;
+ return [...tiers].sort((a,b)=>a.display_order-b.display_order).find(t=>t.id !== ICEFEST_DEPOSIT_TIER_ID && t.is_active && (!t.valid_from || new Date(t.valid_from).getTime()<=now) && (!t.valid_until || new Date(t.valid_until).getTime()>now) && (t.stock===null || t.stock_sold<t.stock)) || null;
 }
 export async function icefestCall<T=any>(name:string,body:unknown):Promise<T> {
  const {data,error}=await supabase.functions.invoke(name,{body: body as Record<string, unknown>});

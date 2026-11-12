@@ -19,3 +19,5 @@
 - Backend services stay as Lovable Cloud functions (payments, webhooks, cron, email) rather than server functions; their URLs and shared payment logic are load-bearing.
 - Head scripts that initialise tracking are guarded by a window flag; TanStack can re-run head scripts on client navigation, which would double-count init/page views.
 - Attribution is captured by one browser helper and sanitized by a shared pure module; checkout snapshots first/last touch without changing Meta event IDs or retaining private return-link parameters.
+
+- Icefest deposit pilot uses a dedicated tier excluded from sequential stages and discounts; immutable terms are snapshotted into order meta_context by an insert trigger, with admin-only balance receipt confirmation blocking check-in until settled, preserving the existing checkout and payment webhook.
