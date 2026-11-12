@@ -107,6 +107,17 @@ export default function IcefestSantiago() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [checkout, setCheckout] = useState(false),
     [checkoutLoaded, setCheckoutLoaded] = useState(false);
+  useEffect(() => {
+    if (!canBuy) return;
+    let active = true;
+    // Prepare the closed sheet while the visitor reads, including on touch
+    // devices that never trigger hover. Opening is still the only event tracked.
+    void preloadCheckout().then(
+      () => { if (active) setCheckoutLoaded(true); },
+      () => { /* Opening can retry if the background download failed. */ },
+    );
+    return () => { active = false; };
+  }, [canBuy]);
   const date = event
     ? icefestDate(event.date)
     : "Domingo 13 de diciembre de 2026";

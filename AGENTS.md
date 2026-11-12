@@ -7,7 +7,7 @@
 - Icefest private ticket/order access requires bearer link tokens; check-in requires the existing admin role and an atomic RPC, so a public PIN cannot authorize entry.
 - Icefest order deletion uses an admin-validated edge action and service-only atomic RPC; remove tickets and restore counted inventory together without initiating a payment refund.
 - Public Icefest routes use an isolated festival shell and scoped semantic tokens (also on checkout portals) plus one direct WhatsApp floating button with no AI option; this preserves Nave styling and global Pixel tracking without competing navigation or popups.
-- Icefest event and tier reads share a cached, abortable query; checkout loads on intent and remains mounted once opened, preserving in-memory buyer data without persisting personal information.
+- Icefest event and tier reads share a cached, abortable query; preload and mount the closed checkout when sales become available, keeping it mounted thereafter; this removes the tap-time download on mobile while preserving buyer data in memory and tracking checkout only when opened.
 - Icefest hero mounts one video, chosen after mount with the 768px media query (none during SSR); this prevents desktop and mobile video downloads from competing on initial load.
 - Icefest checkout uses one scrolling form with inline totals/payment and scoped floating-label fields; this prevents fixed controls from covering inputs when the mobile keyboard opens.
 - Shop products with negative sort_order are private (hidden from /tienda) and sold only via direct links/upsells; avoids a schema change for one-off offers.
