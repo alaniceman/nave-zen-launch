@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowRight, CalendarDays, Ticket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { icefestBlogArticles, getIcefestArticleBySlug } from "@/data/icefestBlog";
 import { icefestBlogImages } from "@/data/icefestBlogImages";
+import { IcefestWhatsAppFab } from "@/components/icefest/IcefestWhatsAppFab";
 
 const ORIGIN = "https://studiolanave.com";
 const fmt = (d: string) =>
@@ -31,6 +32,7 @@ function Shell({ children }: { children: React.ReactNode }) {
           <Link to="/">Nave Studio</Link>
         </div>
       </footer>
+      <IcefestWhatsAppFab />
     </main>
   );
 }
