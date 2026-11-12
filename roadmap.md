@@ -1,5 +1,9 @@
 # Tabla de ventas y eliminación Icefest
 
+# Cuotas en checkout Icefest
+- [x] Destacar debajo del total 3 cuotas sin intereses, recalculadas por cantidad y descuento, aclarando tarjetas habilitadas y que las cuotas del abono no incluyen el saldo.
+- [ ] Verificar cálculo y presentación sin compras ni publicación.
+
 # Piloto de reservas con abono Icefest
 - [x] Agregar 20 reservas a $25.000, con precio completo congelado en $77.000 y saldo de $52.000 por persona.
 - [x] Mostrar condiciones en entradas, checkout, confirmación, entrada privada, correos y administración; saldo manual por WhatsApp en la semana del evento o antes de ingresar en puerta.
