@@ -18,13 +18,15 @@ Deno.serve(async req=>{
    return json({message:'Si hay compras con ese correo, recibirás tus entradas. Revisa también spam. Los reenvíos se limitan a uno por hora.'});
   }
   if(b.action==='ticket'){
-   const {data:t,error}=await db.from('icefest_tickets').select('ticket_code,ticket_number,checked_in,checked_in_at,is_valid,icefest_orders(status,buyer_name,buyer_surname,icefest_events(name,date,schedule,location,address))').eq('ticket_code',b.code.toUpperCase()).eq('access_token',b.token).maybeSingle();
-   if(error)throw error;if(!t)return json({error:'Entrada no encontrada o enlace inválido'},404);return json(t);
+   const {data:t,error}=await db.from('icefest_tickets').select('ticket_code,ticket_number,checked_in,checked_in_at,is_valid,icefest_orders(status,quantity,meta_context,buyer_name,buyer_surname,icefest_events(name,date,schedule,location,address))').eq('ticket_code',b.code.toUpperCase()).eq('access_token',b.token).maybeSingle();
+   if(error)throw error;if(!t)return json({error:'Entrada no encontrada o enlace inválido'},404);
+   const order = t.icefest_orders as any;
+   return json({...t,icefest_orders:order?{...order,meta_context:{deposit:order.meta_context?.deposit || null}}:null});
   }
-  const {data:o,error}=await db.from('icefest_orders').select('id,status,quantity,total_amount,buyer_name,buyer_surname,buyer_email,buyer_phone,icefest_events(name,date,schedule,location)').eq('id',b.id).eq('access_token',b.token).maybeSingle();
+  const {data:o,error}=await db.from('icefest_orders').select('id,status,quantity,total_amount,meta_context,buyer_name,buyer_surname,buyer_email,buyer_phone,icefest_events(name,date,schedule,location)').eq('id',b.id).eq('access_token',b.token).maybeSingle();
   if(error)throw error;if(!o)return json({error:'Pedido no encontrado o enlace inválido'},404);
   let tickets:unknown[]=[];
   if(o.status==='paid'){const result=await db.from('icefest_tickets').select('ticket_code,ticket_number,access_token,checked_in,is_valid').eq('order_id',o.id).order('ticket_number');if(result.error)throw result.error;tickets=result.data||[];}
-  return json({...o,tickets});
+  return json({...o,meta_context:{deposit:o.meta_context?.deposit || null},tickets});
  }catch{ return json({error:'No se pudo completar la solicitud. Intenta nuevamente.'},400); }
 });

@@ -2536,6 +2536,10 @@ export type Database = {
         Args: { _admin_id: string; _order_id: string }
         Returns: Json
       }
+      icefest_mark_balance_paid: {
+        Args: { _order_id: string }
+        Returns: undefined
+      }
       icefest_price: {
         Args: { _coupon?: string; _quantity: number; _type_id: string }
         Returns: Json

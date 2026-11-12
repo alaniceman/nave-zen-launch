@@ -1,5 +1,11 @@
 # Tabla de ventas y eliminación Icefest
 
+# Piloto de reservas con abono Icefest
+- [x] Agregar 20 reservas a $25.000, con precio completo congelado en $77.000 y saldo de $52.000 por persona.
+- [x] Mostrar condiciones en entradas, checkout, confirmación, entrada privada, correos y administración; saldo manual por WhatsApp en la semana del evento o antes de ingresar en puerta.
+- [x] Mantener checkout y emisión existentes, aislar descuentos y etapas, y exigir confirmación del saldo en acreditación.
+- [x] Verificar cotización real, rechazo de cupones, permisos, cálculo y móvil/escritorio sin compras ni correos de prueba; funciones desplegadas, sitio sin publicar. Pago real, entrega de correo y registro de saldo de una reserva pagada pendientes de validación de Alan.
+
 - [x] Reemplazar tarjetas por tabla con nombre, email, códigos, estado, evento, cantidad, total, fecha y acciones.
 - [x] Agregar eliminación confirmada exclusiva de administradores, anulando entradas y liberando cupos sin reembolsar pagos.
 - [x] Desplegar y verificar tabla autenticada, confirmación/cancelación y permisos sin eliminar ventas reales; cuatro pruebas de acceso pasan. La prueba previa de precio general falla por configuración de etapas, fuera de este cambio.
