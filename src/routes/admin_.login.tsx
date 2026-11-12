@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import AdminPlanesPrueba from "@/pages/admin/AdminPlanesPrueba";
+import AdminLogin from "@/pages/admin/Login";
 
-export const Route = createFileRoute("/admin/planes-prueba")({
+export const Route = createFileRoute("/admin_/login")({
   head: () => ({ meta: [{ title: "Admin | Nave Studio" }, { name: "robots", content: "noindex, nofollow" }] }),
-  component: AdminPlanesPrueba,
+  component: AdminLogin,
 });
