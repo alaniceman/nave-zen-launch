@@ -68,8 +68,10 @@ export function randomEventId(): string {
 /** _fbp desde cookie. */
 export function getFbp(): string | undefined {
   if (typeof document === "undefined") return undefined;
-  const m = document.cookie.match(/_fbp=([^;]+)/);
-  return m ? decodeURIComponent(m[1]) : undefined;
+  try {
+    const m = document.cookie.match(/_fbp=([^;]+)/);
+    return m ? decodeURIComponent(m[1]) : undefined;
+  } catch { return undefined; }
 }
 
 /**
@@ -103,11 +105,14 @@ function writeStore(key: string, value: string): void {
 export function getFbc(): string | undefined {
   if (typeof document === "undefined") return undefined;
 
-  const cookie = document.cookie.match(/_fbc=([^;]+)/);
+  let cookie: RegExpMatchArray | null = null;
+  try { cookie = document.cookie.match(/_fbc=([^;]+)/); } catch { /* blocked */ }
   if (cookie) {
-    const value = decodeURIComponent(cookie[1]);
-    writeStore(FBC_KEY, value);
-    return value;
+    try {
+      const value = decodeURIComponent(cookie[1]);
+      writeStore(FBC_KEY, value);
+      return value;
+    } catch { /* corrupt cookie: use persisted value */ }
   }
 
   const stored = readStore(FBC_KEY) || undefined;
