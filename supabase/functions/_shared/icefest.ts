@@ -1,6 +1,7 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
 import { sendMetaEvent } from './metaCapi.ts';
 import { upsertCustomerAndLogEvent } from './crm.ts';
+import { attributionOrigin } from './attribution.ts';
 export const icefestDb = () => createClient(Deno.env.get('SUPABASE_URL') || '', Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '');
 export const icefestOrigin = (Deno.env.get('SITE_URL') || 'https://studiolanave.com').replace(/\/$/, '');
 export const escapeHtml = (value: unknown) => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c] || c));
@@ -63,6 +64,15 @@ export async function sendIcefestEmails(db: ReturnType<typeof icefestDb>, id: st
    const saved = await db.from('icefest_orders').update({[column]:new Date().toISOString(),email_error:null}).eq('id',id);
    if (saved.error) throw saved.error;
    await new Promise(r=>setTimeout(r,1500));
+  }
+  // Idempotent admin notification, under the same paid-order email lock.
+  // Historical/manual orders do not trigger new unsolicited notices.
+  if (!order.admin_notification_sent_at && order.source === 'web' && (order.meta_context?.first_touch || order.meta_context?.last_touch)) {
+   const origin = attributionOrigin(order.meta_context);
+   const response = await fetch('https://api.resend.com/emails',{method:'POST',headers:{Authorization:`Bearer ${key}`,'Content-Type':'application/json','Idempotency-Key':`icefest-admin-sale-${id}`},body:JSON.stringify({from:'Nave Studio <agenda@studiolanave.com>',reply_to:'lanave@alaniceman.com',to:['lanave@alaniceman.com'],subject:`Nueva venta Icefest · ${order.buyer_name} ${order.buyer_surname}`,text:`Pedido: ${id}\nCliente: ${order.buyer_name} ${order.buyer_surname}\nEmail: ${order.buyer_email}\nEntradas: ${order.quantity}\nTotal: ${order.total_amount} CLP\nOrigen: ${origin}`,html:`<div style="font-family:Helvetica Neue,Arial,sans-serif;line-height:1.7"><h2>Nueva venta Icefest</h2><p>${escapeHtml(order.buyer_name)} ${escapeHtml(order.buyer_surname)} · ${escapeHtml(order.buyer_email)}</p><p>${order.quantity} entrada(s) · ${order.total_amount} CLP</p><p><strong>Origen:</strong> ${escapeHtml(origin)}</p><p>Pedido: ${escapeHtml(id)}</p></div>`})});
+   if (!response.ok) throw new Error(`Aviso de venta (${response.status}): ${await response.text()}`);
+   const saved = await db.from('icefest_orders').update({admin_notification_sent_at:new Date().toISOString()}).eq('id',id);
+   if (saved.error) throw saved.error;
   }
  } catch(error) {
   await db.from('icefest_orders').update({email_error:error instanceof Error ? error.message : 'Error de envío'}).eq('id',id);
