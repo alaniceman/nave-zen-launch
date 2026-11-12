@@ -9,7 +9,7 @@ import { Footer } from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
 import { trackMetaClientEvent } from "@/lib/metaTracking";
-import { deterministicEventId } from "@/lib/metaPixel";
+import { deterministicEventId, getMetaBrowserContext } from "@/lib/metaPixel";
 import { toast } from "sonner";
 
 const DIA_PADRE_PACKAGE_ID = "569236af-95ba-4515-8e85-f5c8c6e2a53a";
@@ -44,6 +44,7 @@ export default function DiaDelPadre() {
     try {
       const { data, error } = await supabase.functions.invoke("purchase-session-package", {
         body: {
+          ...getMetaBrowserContext(),
           packageId: DIA_PADRE_PACKAGE_ID,
           buyerName: formData.name,
           buyerEmail: formData.email,

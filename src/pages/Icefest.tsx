@@ -9,7 +9,7 @@ import { Footer } from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
 import { trackMetaClientEvent } from "@/lib/metaTracking";
-import { deterministicEventId } from "@/lib/metaPixel";
+import { deterministicEventId, getMetaBrowserContext } from "@/lib/metaPixel";
 import { toast } from "sonner";
 import { Navigate } from "@/lib/router-compat";
 
@@ -70,6 +70,7 @@ export default function Icefest() {
     try {
       const { data, error } = await supabase.functions.invoke("purchase-session-package", {
         body: {
+          ...getMetaBrowserContext(),
           packageId: PACKAGE_ID,
           buyerName: formData.name,
           buyerEmail: formData.email,
