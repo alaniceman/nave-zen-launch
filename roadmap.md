@@ -2,7 +2,7 @@
 
 # Cuotas en checkout Icefest
 - [x] Destacar debajo del total 3 cuotas sin intereses, recalculadas por cantidad y descuento, aclarando tarjetas habilitadas y que las cuotas del abono no incluyen el saldo.
-- [ ] Verificar cálculo y presentación sin compras ni publicación.
+- [x] Cálculo verificado con 2 pruebas y checkout móvil: $77.000 → $25.667 aprox.; dos entradas → $51.333 aprox., sin desbordamiento ni compras; build OK, sin publicar.
 
 # Piloto de reservas con abono Icefest
 - [x] Agregar 20 reservas a $25.000, con precio completo congelado en $77.000 y saldo de $52.000 por persona.
