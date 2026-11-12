@@ -212,7 +212,7 @@ export default function AdminCoupons() {
                       </TableCell>
                       <TableCell>
                         <div className="text-sm">
-                          <div>Desde: {format(new Date(coupon.valid_from), 'dd/MM/yyyy', { locale: es })}</div>
+                          <div>Desde: {format(new Date(coupon.valid_from ?? Date.now()), 'dd/MM/yyyy', { locale: es })}</div>
                           {coupon.valid_until && (
                             <div>Hasta: {format(new Date(coupon.valid_until), 'dd/MM/yyyy', { locale: es })}</div>
                           )}
@@ -221,7 +221,7 @@ export default function AdminCoupons() {
                       <TableCell>{getStatusBadge(coupon)}</TableCell>
                       <TableCell>
                         <Switch
-                          checked={coupon.is_active}
+                          checked={coupon.is_active ?? false}
                           onCheckedChange={(checked) =>
                             toggleActiveMutation.mutate({ id: coupon.id, isActive: checked })
                           }
