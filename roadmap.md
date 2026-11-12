@@ -90,7 +90,10 @@
 - [x] Revisar recepción reciente de CAPI y sus límites de verificación, sin compras ni conversiones simuladas. Meta aceptó eventos recientes; compra Icefest y deduplicación en Events Manager no verificadas.
 
 # Origen de ventas
-- [ ] Capturar primera y última visita durante 90 días, conservando Pixel.
-- [ ] Guardar atribución en Icefest, bonos y planes de prueba y preferencias de pago.
-- [ ] Mostrar origen en correo/admin/CSV Icefest y Notion de planes de prueba.
-- [ ] Verificar almacenamiento y payloads sin pagos ni órdenes reales; entregar enlace para Alan, sin publicar.
+- [x] Capturar primera y última visita durante 90 días, conservando Pixel; navegación y cookies verificadas.
+- [x] Guardar atribución en Icefest, bonos y planes de prueba y preferencias de pago; servicios desplegados.
+- [x] Mostrar origen en correo/admin/CSV Icefest; admin autenticado y CSV verificados sin alterar ventas.
+- [x] Preparar envío a Notion con omisión segura y logs si falta Origen o se rechaza; lectura real confirma que el campo no existe.
+- [ ] Activar atribución visible en Notion: Alan debe crear «Origen» de tipo texto en Clientes; no se modifica el esquema de Notion automáticamente.
+- [x] Verificar almacenamiento y handlers con 8 pruebas locales y navegación sin pagos, órdenes ni correos reales; sitio no publicado.
+- [ ] Alan valida compra real y entrega de correo tras publicar: https://studiolanave.com/icefest-santiago?utm_source=facebook&utm_medium=paid_social&utm_campaign=validacion_icefest&utm_content=video
