@@ -11,7 +11,7 @@
 - Icefest hero mounts one video, chosen after mount with the 768px media query (none during SSR); this prevents desktop and mobile video downloads from competing on initial load.
 - Icefest checkout uses one scrolling form with inline totals/payment and scoped floating-label fields; this prevents fixed controls from covering inputs when the mobile keyboard opens.
 - Shop products with negative sort_order are private (hidden from /tienda) and sold only via direct links/upsells; avoids a schema change for one-off offers.
-- Icefest share metadata is centralized in `icefestShare`/`routeSeo` and emitted server-side by each route's `head()`; social crawlers do not execute client JS, and the root homepage metadata must remain unchanged.
+- Share metadata is emitted server-side by each route's `head()` through `routeSeo`, with page text in `routeMetadata` and Icefest articles using their existing data; social crawlers do not execute client JS, and homepage metadata must remain unchanged.
 - Icefest gallery discovers both bundled WebP images and CDN asset pointers; new uploaded photos use optimized WebP pointers without migrating existing gallery assets.
 - Nave chat keeps request options in its server-only requestOptions module and disables internal reasoning within the existing output budget; the client surfaces length termination and stream persistence uses EdgeRuntime.waitUntil.
 - The app runs on TanStack Start file routes (`src/routes`, SSR) with pages kept in `src/pages` and routing calls going through `@/lib/router-compat`; this preserves existing react-router call sites without a typed-router rewrite.

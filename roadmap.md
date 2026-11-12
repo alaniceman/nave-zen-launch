@@ -84,3 +84,7 @@
 - [x] Reunir entradas, contacto, descuento, total y pago en un formulario único.
 - [x] Quitar la barra fija del carrito y usar campos de etiqueta flotante estilo Shopify.
 - [x] Verificar campos, total, consentimiento y datos conservados al reabrir en móvil/escritorio; sin errores, sin crear compras ni publicar. Teclado físico de iPhone no verificado.
+
+# Títulos posteriores a la migración y comprobación de CAPI
+- [x] Corregir títulos y descripciones de páginas públicas y secundarias de Icefest sin cambiar portada ni imágenes. Respuesta SSR verificada en 13 páginas; build OK.
+- [x] Revisar recepción reciente de CAPI y sus límites de verificación, sin compras ni conversiones simuladas. Meta aceptó eventos recientes; compra Icefest y deduplicación en Events Manager no verificadas.

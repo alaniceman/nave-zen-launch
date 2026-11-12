@@ -1,5 +1,7 @@
 // Server-rendered head metadata per route (ported from the early head script in the old index.html).
 // Page-level Helmet tags still refine these on the client.
+import { routeMetadata } from "./routeMetadata";
+import { getIcefestArticleBySlug } from "@/data/icefestBlog";
 const origin = "https://studiolanave.com";
 
 type SeoEntry = {
@@ -226,10 +228,28 @@ export function routeHead(pathname: string, override?: Partial<SeoEntry>) {
   let path = pathname.replace(/\/+$/, "") || "/";
   path = aliases[path] ?? path;
   const canonical = canonicalFor(path);
+  const icefestArticle = path.startsWith("/icefest-santiago/blog/")
+    ? getIcefestArticleBySlug(path.split("/").pop() ?? "")
+    : undefined;
+  const textPath = path.startsWith("/agenda-nave-studio/") && !/\/(success|failure|pending)$/.test(path)
+    ? "/agenda-nave-studio"
+    : path.startsWith("/giftcard/")
+      ? "/giftcard"
+      : path.startsWith("/icefest-santiago/entrada/")
+        ? "/icefest-santiago/entrada"
+        : path;
   const found = instructors[path] ?? blogs[path] ?? yogaStyles[path] ?? fixed[path];
-  const data: SeoEntry = { ...(found ?? { title: DEFAULT_TITLE, description: DEFAULT_DESCRIPTION }), ...override };
+  const pageText = routeMetadata[textPath];
+  const label = (path.split("/").filter(Boolean).pop() ?? "Nave Studio").replace(/-/g, " ");
+  const fallback: SeoEntry = { title: `${label.charAt(0).toUpperCase()}${label.slice(1)} | Nave Studio`, description: `Información de ${label} en Nave Studio.` };
+  const data: SeoEntry = {
+    ...(found ?? fallback),
+    ...pageText,
+    ...(icefestArticle ? { title: icefestArticle.metaTitle, description: icefestArticle.metaDescription } : {}),
+    ...override,
+  };
   const image = data.image ?? origin + "/og-image.png";
-  const isBlog = Boolean(blogs[path]);
+  const isBlog = Boolean(blogs[path] || icefestArticle);
   const meta: MetaTag[] = [
     { title: data.title },
     { name: "description", content: data.description },
@@ -240,6 +260,7 @@ export function routeHead(pathname: string, override?: Partial<SeoEntry>) {
     { property: "og:image", content: image },
     { name: "twitter:title", content: data.title },
     { name: "twitter:description", content: data.description },
+    { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:url", content: canonical },
     { name: "twitter:image", content: image },
   ];
