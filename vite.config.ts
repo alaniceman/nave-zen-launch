@@ -18,5 +18,10 @@ export default defineConfig({
   },
   vite: {
     plugins: [mcpPlugin()],
+    ssr: {
+      // react-helmet-async ships CommonJS; inlining it lets Vite's SSR runner
+      // resolve its named exports instead of failing with "Named export not found".
+      noExternal: ["react-helmet-async"],
+    },
   },
 });
