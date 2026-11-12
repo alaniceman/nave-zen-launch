@@ -36,6 +36,7 @@ const IcefestCheckout = lazy(() =>
 );
 import { icefestDate, icefestMoney } from "@/lib/icefest";
 import IcefestStory from "@/components/icefest/IcefestStory";
+import { IcefestWhatsAppFab } from "@/components/icefest/IcefestWhatsAppFab";
 import { trackViewContentOnce } from "@/lib/metaTracking";
 import { icefestShare } from "@/lib/icefestShare";
 import breath from "@/assets/icefest/breathwork-new.webp";
@@ -529,21 +530,7 @@ export default function IcefestSantiago() {
             </Button>
           </div>
         </div>
-        <Button
-          asChild
-          variant="outline"
-          size="icon"
-          className="fixed right-5 bottom-6 hidden sm:flex z-40 rounded-full h-12 w-12 bg-card"
-          aria-label="Consultar Icefest por WhatsApp"
-        >
-          <a
-            href="https://wa.me/56946120426?text=Hola%2C%20tengo%20una%20consulta%20sobre%20Icefest%20Santiago"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <MessageCircle className="w-6 h-6" />
-          </a>
-        </Button>
+        <IcefestWhatsAppFab aboveBottomBar />
       </main>
       {eventSchema && (
         <Helmet>

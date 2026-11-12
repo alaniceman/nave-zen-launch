@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { IcefestPrepUpsell } from '@/components/icefest/IcefestPrepUpsell';
+import { IcefestWhatsAppFab } from '@/components/icefest/IcefestWhatsAppFab';
 import { trackMetaEventOnce } from '@/lib/metaPixel';
 import { icefestCall,icefestDate,icefestMoney } from '@/lib/icefest';
 export default function IcefestAccess(){
@@ -23,5 +24,5 @@ export default function IcefestAccess(){
  {code?<><p className="text-sm text-muted-foreground">Entrada {data.ticket_number}</p><p className="font-mono text-xl sm:text-2xl font-bold my-4 break-all">{data.ticket_code}</p><p>{order.buyer_name} {order.buyer_surname}</p><p className="mt-5 text-primary font-semibold">{!valid?'Entrada no válida':data.checked_in?'Entrada ya acreditada':'Disponible para un ingreso'}</p>{data.checked_in_at&&<p className="mt-2 text-sm">{new Date(data.checked_in_at).toLocaleString('es-CL',{timeZone:'America/Santiago'})}</p>}</>:<><p>{order.quantity} entrada(s) · {icefestMoney(order.total_amount)} CLP</p>{order.tickets?.map((t:any)=><Button asChild variant="outline" className="w-full mt-4" key={t.ticket_code}><Link to={`/icefest-santiago/entrada/${t.ticket_code}?token=${t.access_token}`}><Ticket className="mr-2 h-4 w-4"/>Entrada {t.ticket_number} · {t.ticket_code}</Link></Button>)}</>}
  {valid&&!code&&<p className="mt-6 rounded-lg border border-primary/40 bg-primary/10 p-4 text-sm font-medium">✅ Tu entrada ya fue enviada a tu email.</p>}{valid&&<p className="mt-6 text-sm text-muted-foreground">Muestra el código al personal al llegar al evento. El equipo realizará la acreditación.</p>}{valid&&!code&&<IcefestPrepUpsell buyer={order}/>}{order?.status==='needs_review'&&<p className="mt-5">El equipo revisará tu pago antes de emitir entradas. Escríbenos si necesitas ayuda.</p>}
  </>:null}{error&&<p role="alert" className="text-destructive mt-5">{error}</p>}
- </div></div></main>;
+ </div></div><IcefestWhatsAppFab /></main>;
 }
