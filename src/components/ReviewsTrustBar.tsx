@@ -63,17 +63,19 @@ export const ReviewsTrustBar = ({
   items,
   filters,
 }: ReviewsTrustBarProps = {}) => {
+  // Shuffle only after mount so the server-rendered order matches hydration.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
   const baseReviews = useMemo(() => {
     if (items) return items;
     let list = sourceReviews;
     if (category) list = list.filter((r) => r.category === category);
     if (coachesOnly) list = list.filter((r) => /^Alumn[oa] de /i.test(r.author));
     // Destacadas primero (rotando dentro de cada grupo), luego el resto
-    return [
-      ...shuffleArray(list.filter((r) => r.featured)),
-      ...shuffleArray(list.filter((r) => !r.featured)),
-    ];
-  }, [category, coachesOnly, items]);
+    const featured = list.filter((r) => r.featured);
+    const rest = list.filter((r) => !r.featured);
+    return mounted ? [...shuffleArray(featured), ...shuffleArray(rest)] : [...featured, ...rest];
+  }, [category, coachesOnly, items, mounted]);
 
 
   const filterValues = useMemo<Array<"Todas" | Review["category"]>>(
