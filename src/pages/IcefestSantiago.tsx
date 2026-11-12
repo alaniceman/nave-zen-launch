@@ -16,7 +16,6 @@ import {
   Heart,
   Waves,
   ShoppingBag,
-  MessageCircle,
   Loader2,
   Menu,
   X,
