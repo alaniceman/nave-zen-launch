@@ -9,6 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Loader2, Sparkles, Check } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { getMetaBrowserContext } from "@/lib/metaPixel";
 
 interface SessionPackage {
   id: string;
@@ -88,6 +89,7 @@ export function UpsellModal({
     try {
       const { data, error } = await supabase.functions.invoke("purchase-session-package", {
         body: {
+          ...getMetaBrowserContext(),
           packageId: pkg.id,
           buyerName: customerData.name,
           buyerEmail: customerData.email,

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Loader2, Snowflake, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
+import { getMetaBrowserContext } from '@/lib/metaPixel';
 
 const OPTIONS = [
   { id: "16b3f640-67e7-482f-8333-74477b0e69d0", kind: "package", label: "1 sesión", sub: "Breathwork + Icebath o Yoga (expiran en 6 meses)", price: 15000, off: "50% dcto" },
@@ -22,7 +23,8 @@ export function IcefestPrepUpsell({ buyer }: { buyer: Buyer }) {
     setBusy(true);
     setError("");
     try {
-      const opt = OPTIONS.find((o) => o.id === selected)!;
+      const opt = OPTIONS.find((o) => o.id === selected);
+      if (!opt) throw new Error('Selecciona una opción');
       const name = `${buyer.buyer_name ?? ""} ${buyer.buyer_surname ?? ""}`.trim() || "Participante Icefest";
       const phone = (buyer.buyer_phone || "").replace(/\D/g, "").slice(0, 20) || "56900000000";
       const { data, error } = opt.kind === "shop"
@@ -35,6 +37,7 @@ export function IcefestPrepUpsell({ buyer }: { buyer: Buyer }) {
           buyerPhone: (buyer.buyer_phone || "").replace(/\D/g, "").slice(0, 20) || "56900000000",
           isGiftCard: false,
           eventSourceUrl: window.location.href,
+          ...getMetaBrowserContext(),
         },
       });
       if (error) throw error;
@@ -86,7 +89,7 @@ export function IcefestPrepUpsell({ buyer }: { buyer: Buyer }) {
       </div>
       <Button onClick={buy} disabled={busy} size="lg" className="w-full mt-5">
         {busy ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
-        Agregar y pagar {clp(OPTIONS.find((o) => o.id === selected)!.price)}
+        Agregar y pagar {clp(OPTIONS.find((o) => o.id === selected)?.price ?? 0)}
       </Button>
       <p className="text-xs text-muted-foreground mt-3 text-center">
         Usaremos los datos de tu compra. Recibirás un email aparte con tus códigos y el link para agendar (o con la activación de tu membresía).

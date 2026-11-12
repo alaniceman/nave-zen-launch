@@ -20,6 +20,7 @@ export interface NotionTrialClient {
   /** Si aún no pagó, el Estado queda como "Lead" */
   paid: boolean;
   paymentMethod?: NotionPaymentMethod | null;
+  origin?: string;
 }
 
 function headers() {
@@ -115,23 +116,33 @@ export async function syncTrialClientToNotion(c: NotionTrialClient) {
   try {
     const properties = buildProperties({ ...c, email });
     const existingId = await findPageIdByEmail(email);
+    // An absent/mistyped optional field must never prevent the base client sync.
+    if (c.origin) {
+      try {
+        const source = await notion(`/data_sources/${CLIENTES_DATA_SOURCE_ID}`, { method: 'GET' });
+        if (source.properties?.Origen?.type === 'rich_text') {
+          properties.Origen = { rich_text: [{ text: { content: c.origin.slice(0,2000) } }] };
+        } else console.error('[Notion] Origen is missing or is not a text field');
+      } catch (error) { console.error('[Notion] Origen lookup failed:', error); }
+    }
 
+    const write = async () => notion(existingId ? `/pages/${existingId}` : '/pages', {
+      method: existingId ? 'PATCH' : 'POST',
+      body: JSON.stringify(existingId ? { properties } : { parent: { type: 'data_source_id', data_source_id: CLIENTES_DATA_SOURCE_ID }, properties }),
+    });
+    let page;
+    try { page = await write(); }
+    catch (error) {
+      if (!properties.Origen || !String(error).includes('Origen')) throw error;
+      console.error('[Notion] Origen rejected; syncing client without optional attribution:', error);
+      delete properties.Origen;
+      page = await write();
+    }
     if (existingId) {
-      await notion(`/pages/${existingId}`, {
-        method: "PATCH",
-        body: JSON.stringify({ properties }),
-      });
       console.log(`[Notion] cliente actualizado: ${email}`);
       return { ok: true, action: "updated", pageId: existingId };
     }
 
-    const page = await notion(`/pages`, {
-      method: "POST",
-      body: JSON.stringify({
-        parent: { type: "data_source_id", data_source_id: CLIENTES_DATA_SOURCE_ID },
-        properties,
-      }),
-    });
     console.log(`[Notion] cliente creado: ${email}`);
     return { ok: true, action: "created", pageId: page?.id ?? null };
   } catch (err) {

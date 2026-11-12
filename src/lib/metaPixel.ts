@@ -8,6 +8,7 @@
  * - Nunca se loguea PII.
  */
 
+import { captureAttribution, type Attribution } from './attribution';
 type Fbq = (...args: unknown[]) => void;
 
 const getFbq = (): Fbq | undefined => {
@@ -67,8 +68,10 @@ export function randomEventId(): string {
 /** _fbp desde cookie. */
 export function getFbp(): string | undefined {
   if (typeof document === "undefined") return undefined;
-  const m = document.cookie.match(/_fbp=([^;]+)/);
-  return m ? decodeURIComponent(m[1]) : undefined;
+  try {
+    const m = document.cookie.match(/_fbp=([^;]+)/);
+    return m ? decodeURIComponent(m[1]) : undefined;
+  } catch { return undefined; }
 }
 
 /**
@@ -76,7 +79,6 @@ export function getFbp(): string | undefined {
  * Guardamos sólo identificadores de click/campaña: fbc y UTMs.
  */
 const FBC_KEY = "nave_meta_fbc";
-const UTM_KEY = "nave_meta_utm";
 
 function readStore(key: string): string | null {
   try {
@@ -103,11 +105,14 @@ function writeStore(key: string, value: string): void {
 export function getFbc(): string | undefined {
   if (typeof document === "undefined") return undefined;
 
-  const cookie = document.cookie.match(/_fbc=([^;]+)/);
+  let cookie: RegExpMatchArray | null = null;
+  try { cookie = document.cookie.match(/_fbc=([^;]+)/); } catch { /* blocked */ }
   if (cookie) {
-    const value = decodeURIComponent(cookie[1]);
-    writeStore(FBC_KEY, value);
-    return value;
+    try {
+      const value = decodeURIComponent(cookie[1]);
+      writeStore(FBC_KEY, value);
+      return value;
+    } catch { /* corrupt cookie: use persisted value */ }
   }
 
   const stored = readStore(FBC_KEY) || undefined;
@@ -145,33 +150,10 @@ const UTM_KEYS: (keyof UtmParams)[] = [
  * en la sesión, para que rutas posteriores conserven la atribución.
  */
 export function getUtmParams(): UtmParams {
-  if (typeof window === "undefined") return {};
-
-  const search = new URLSearchParams(window.location.search);
-  const fromUrl: UtmParams = {};
-  for (const key of UTM_KEYS) {
-    const value = search.get(key);
-    if (value) fromUrl[key] = value;
-  }
-
-  if (Object.keys(fromUrl).length > 0) {
-    writeStore(UTM_KEY, JSON.stringify(fromUrl));
-    return fromUrl;
-  }
-
-  const raw = readStore(UTM_KEY);
-  if (!raw) return {};
-  try {
-    const parsed = JSON.parse(raw) as UtmParams;
-    const out: UtmParams = {};
-    for (const key of UTM_KEYS) {
-      const value = parsed?.[key];
-      if (typeof value === "string" && value) out[key] = value;
-    }
-    return out;
-  } catch {
-    return {};
-  }
+  const touch = captureAttribution().last_touch;
+  const out: UtmParams = {};
+  for (const key of UTM_KEYS) if (touch?.[key]) out[key] = touch[key];
+  return out;
 }
 
 export type MetaBrowserContext = {
@@ -179,7 +161,7 @@ export type MetaBrowserContext = {
   fbc?: string;
   eventSourceUrl?: string;
   referrer?: string;
-} & UtmParams;
+} & UtmParams & Attribution;
 
 /** Contexto de navegador para enriquecer eventos server-side (sin PII). */
 export function getMetaBrowserContext(): MetaBrowserContext {
@@ -190,6 +172,7 @@ export function getMetaBrowserContext(): MetaBrowserContext {
     eventSourceUrl: window.location.href,
     referrer: document.referrer || undefined,
     ...getUtmParams(),
+    ...captureAttribution(),
   };
 }
 

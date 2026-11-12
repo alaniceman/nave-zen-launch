@@ -7,6 +7,7 @@ import { upsertCustomerAndLogEvent } from "../_shared/crm.ts";
 import { appendToSheet } from "../_shared/googleSheets.ts";
 import { sanitizePublicIp, sendMetaEvent } from "../_shared/metaCapi.ts";
 import { syncTrialClientToNotion } from "../_shared/notionClientes.ts";
+import { cleanAttribution, attributionOrigin } from '../_shared/attribution.ts';
 
 const BOXMAGIC_URLS: Record<string, string> = {
   trial_7d: "https://boxmagic.cl/market/plan/Kp0M3Z7L8x",
@@ -29,6 +30,8 @@ const leadSchema = z.object({
   fbp: z.string().max(200).optional(),
   fbc: z.string().max(300).optional(),
   eventSourceUrl: z.string().url().max(500).optional(),
+  first_touch: z.unknown().optional(),
+  last_touch: z.unknown().optional(),
 });
 
 const finalizeSchema = z.object({
@@ -112,6 +115,7 @@ serve(async (req) => {
     );
 
     if (data.step === "lead") {
+      const attribution = cleanAttribution(data);
       const phone = normalizePhone(data.phone);
       const email = data.email.toLowerCase();
       const todayCL = new Date(
@@ -131,9 +135,10 @@ serve(async (req) => {
           status: "interesado_plan_prueba",
           plan_type: null,
           source: "web-plan-prueba",
-          utm_source: data.utm_source || null,
-          utm_medium: data.utm_medium || null,
-          utm_campaign: data.utm_campaign || null,
+          utm_source: attribution.last_touch?.utm_source || data.utm_source || null,
+          utm_medium: attribution.last_touch?.utm_medium || data.utm_medium || null,
+          utm_campaign: attribution.last_touch?.utm_campaign || data.utm_campaign || null,
+          meta_context: attribution,
         })
         .select("id")
         .single();
@@ -271,7 +276,7 @@ serve(async (req) => {
     // step === "finalize"
     const { data: lead, error: leadErr } = await supabase
       .from("trial_bookings")
-      .select("id, customer_email, customer_name, customer_phone")
+      .select("id, customer_email, customer_name, customer_phone, meta_context")
       .eq("id", data.leadId)
       .single();
     if (leadErr || !lead) {
@@ -342,6 +347,7 @@ serve(async (req) => {
           startDate: data.startDate,
           endDate,
           paid: false,
+          origin: attributionOrigin(lead.meta_context, true),
         });
       } catch (e) {
         console.error("[finalize background]", e);

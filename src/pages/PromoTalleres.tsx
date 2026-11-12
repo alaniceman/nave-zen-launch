@@ -161,6 +161,8 @@ export default function PromoTalleres() {
           fbp: ctx.fbp,
           fbc: ctx.fbc,
           eventSourceUrl: ctx.eventSourceUrl,
+          first_touch: ctx.first_touch,
+          last_touch: ctx.last_touch,
         },
       });
 
