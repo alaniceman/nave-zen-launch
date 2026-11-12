@@ -17,3 +17,4 @@
 - The app runs on TanStack Start file routes (`src/routes`, SSR) with pages kept in `src/pages` and routing calls going through `@/lib/router-compat`; this preserves existing react-router call sites without a typed-router rewrite.
 - Backend services stay as Lovable Cloud functions (payments, webhooks, cron, email) rather than server functions; their URLs and shared payment logic are load-bearing.
 - Head scripts that initialise tracking are guarded by a window flag; TanStack can re-run head scripts on client navigation, which would double-count init/page views.
+- Attribution is captured by one browser helper and sanitized by a shared pure module; checkout snapshots first/last touch without changing Meta event IDs or retaining private return-link parameters.
