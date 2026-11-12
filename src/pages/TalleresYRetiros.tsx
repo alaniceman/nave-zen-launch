@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Footer } from "@/components/Footer";
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 import { Calendar, MapPin, ArrowRight, Wind, Mountain, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";

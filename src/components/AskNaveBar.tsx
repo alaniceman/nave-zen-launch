@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect, FormEvent } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation } from "@/lib/router-compat";
 import { Sparkles } from "lucide-react";
 
 /**

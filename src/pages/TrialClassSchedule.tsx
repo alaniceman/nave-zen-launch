@@ -6,7 +6,7 @@ import TrialClassDetail from "@/components/trial/TrialClassDetail";
 import TrialBookingForm from "@/components/trial/TrialBookingForm";
 import TrialAlreadyAttended from "@/components/trial/TrialAlreadyAttended";
 import { CheckCircle, Calendar, Clock, MapPin, Instagram } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/lib/router-compat";
 import { trackViewContentOnce } from "@/lib/metaTracking";
 
 type Step = "calendar" | "detail" | "form" | "blocked" | "success";

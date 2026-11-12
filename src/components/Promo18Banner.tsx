@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 import { Snowflake, ArrowRight } from "lucide-react";
 import { PROMO_18_BANNER_HEIGHT, PROMO_18_PATH, usePromo18Banner } from "@/lib/promo18";
 

@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet-async";
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 import { ArrowRight, Snowflake, Sprout } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CyberCountdown, CyberLayout, CyberSeal } from "@/components/cyber/CyberShared";

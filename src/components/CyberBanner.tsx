@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation } from "@/lib/router-compat";
 import { Zap, ArrowRight } from "lucide-react";
 import { CYBER_ENDS_AT, CYBER_ROUTES } from "@/lib/cyberNave";
 import { PROMO_18_BANNER_HEIGHT, usePromo18Banner } from "@/lib/promo18";

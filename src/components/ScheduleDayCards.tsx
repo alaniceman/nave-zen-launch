@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 import { Clock, User, Sparkles } from "lucide-react";
 import { dayNames, getTodayInSantiago, CL_TZ } from "../data/schedule";
 import { EXPERIENCE_CATALOG } from "../lib/experiences";

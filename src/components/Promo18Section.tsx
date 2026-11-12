@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 import { Snowflake, ArrowRight, Clock } from "lucide-react";
 import { isPromo18Active, PROMO_18_PATH, PROMO_18_PRICE, PROMO_18_REGULAR_PRICE } from "@/lib/promo18";
 import heroImage from "@/assets/promo-18-hero.jpg";

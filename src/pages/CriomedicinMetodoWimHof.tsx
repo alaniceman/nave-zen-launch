@@ -6,7 +6,7 @@ import { GiftCardSection } from "@/components/GiftCardSection";
 import { ReviewsTrustBar } from "@/components/ReviewsTrustBar";
 import { BautizoHieloPromo } from "@/components/BautizoHieloPromo";
 import { Promo18Section } from "@/components/Promo18Section";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link } from "@/lib/router-compat";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";

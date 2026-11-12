@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { X, Gift, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 
 interface GiftCardPromoModalProps {
   isOpen: boolean;

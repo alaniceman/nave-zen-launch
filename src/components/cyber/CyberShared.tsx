@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation } from "@/lib/router-compat";
 import { Footer } from "@/components/Footer";
 import { CartProvider } from "@/components/tienda/CartContext";
 import { CartSheet } from "@/components/tienda/CartSheet";

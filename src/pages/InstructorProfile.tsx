@@ -1,4 +1,4 @@
-import { useParams, Navigate, Link } from "react-router-dom";
+import { useParams, Navigate, Link } from "@/lib/router-compat";
 import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import { Footer } from "@/components/Footer";

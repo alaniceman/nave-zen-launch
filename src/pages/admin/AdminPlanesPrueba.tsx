@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import { format, parseISO, addDays } from "date-fns";
 import { es } from "date-fns/locale";
 import { RefreshCw, ExternalLink, MessageCircle, CheckCircle2, Download } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "@/lib/router-compat";
 
 export type Lead = {
   id: string;

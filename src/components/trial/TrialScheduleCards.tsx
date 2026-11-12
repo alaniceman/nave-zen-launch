@@ -3,7 +3,7 @@ import { Clock, XCircle } from "lucide-react";
 import { dayNames, getTodayInSantiago } from "@/data/schedule";
 import { EXPERIENCE_CATALOG } from "@/lib/experiences";
 import { useScheduleEntries, type ScheduleClassItem } from "@/hooks/useScheduleEntries";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/lib/router-compat";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const DAY_ORDER = ["lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"] as const;

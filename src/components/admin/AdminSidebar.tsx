@@ -1,5 +1,5 @@
 import { Calendar, Users, Package, Clock, User, LogOut, Ticket, Gift, Key, MapPin, ShoppingCart, AlertCircle, LayoutDashboard, Mail, Crown, Contact, MessageCircle, Brain, Sparkles, Store } from 'lucide-react';
-import { NavLink } from 'react-router-dom';
+import { NavLink } from '@/lib/router-compat';
 import { useAuth } from '@/context/AuthContext';
 import {
   Sidebar,

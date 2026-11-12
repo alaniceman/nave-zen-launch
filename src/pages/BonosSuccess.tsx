@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { CheckCircle2, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "@/lib/router-compat";
 import { Footer } from "@/components/Footer";
 import { useFacebookPixel } from "@/hooks/useFacebookPixel";
 import { trackConversion } from "@/lib/gtagConversions";

@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet-async";
-import { Link, Navigate, useParams } from "react-router-dom";
+import { Link, Navigate, useParams } from "@/lib/router-compat";
 import { ArrowLeft, ArrowRight, CalendarDays, Ticket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { icefestBlogArticles, getIcefestArticleBySlug } from "@/data/icefestBlog";

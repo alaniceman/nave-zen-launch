@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 import { ArrowDown, Check, Sparkles, Shield } from "lucide-react";
 import { Footer } from "@/components/Footer";
 import { PlanPruebaFormModal } from "@/components/plan-prueba/PlanPruebaFormModal";

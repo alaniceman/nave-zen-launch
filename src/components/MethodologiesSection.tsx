@@ -1,5 +1,5 @@
 import { Waves, Wind, Heart } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 
 export const MethodologiesSection = () => {
   const methodologies = [

@@ -11,7 +11,7 @@ import { useFacebookPixel } from "@/hooks/useFacebookPixel";
 import { trackMetaClientEvent } from "@/lib/metaTracking";
 import { deterministicEventId } from "@/lib/metaPixel";
 import { toast } from "sonner";
-import { Navigate } from "react-router-dom";
+import { Navigate } from "@/lib/router-compat";
 
 const PACKAGE_ID = "003cce17-e599-44e4-a1e6-e7873d45deaf";
 const PROMO_END = new Date("2026-04-01T23:59:59-04:00"); // 10 días desde el 22 de marzo

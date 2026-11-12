@@ -11,7 +11,7 @@ import { useFacebookPixel } from "@/hooks/useFacebookPixel";
 import { trackMetaClientEvent } from "@/lib/metaTracking";
 import { deterministicEventId } from "@/lib/metaPixel";
 import { toast } from "sonner";
-import { Navigate } from "react-router-dom";
+import { Navigate } from "@/lib/router-compat";
 import { isPromoInviernoActive } from "@/lib/promoInvierno";
 
 const PACKAGE_ID = "577d13fc-590e-4e9f-a99e-18cc1e62e414";
