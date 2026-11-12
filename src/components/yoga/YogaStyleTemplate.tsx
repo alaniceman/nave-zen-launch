@@ -182,7 +182,7 @@ export const YogaStyleTemplate = ({ style }: { style: YogaStyle }) => {
             className="absolute inset-0 w-full h-full object-cover"
             width={1600}
             height={900}
-            {...({ fetchpriority: "high" } as any)}
+            fetchPriority="high"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-primary/75 via-primary/55 to-primary/80" />
           <div className="relative z-10 text-center px-6 max-w-3xl mx-auto py-16 md:py-20">

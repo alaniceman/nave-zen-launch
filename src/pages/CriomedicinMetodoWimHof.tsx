@@ -161,7 +161,7 @@ const CriomedicinMetodoWimHof = () => {
           {/* Background Image with Overlay */}
           <img src="/lovable-uploads/criomedicina-hero.webp" alt="Criomedicina Método Wim Hof - Ice bath y breathwork en naturaleza" className="absolute inset-0 w-full h-full object-cover" style={{
           objectPosition: 'center'
-        }} {...({ fetchpriority: "high" } as any)} />
+        }} fetchPriority="high" />
           
           {/* Green Overlay */}
           <div className="absolute inset-0 bg-primary opacity-55" />
