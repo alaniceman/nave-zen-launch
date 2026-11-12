@@ -4,7 +4,7 @@ const LocationSection = () => {
       <div className="container mx-auto px-6 max-w-4xl">
         <div className="flex justify-center">
           {/* Panel de información */}
-          <div className="bg-white rounded-[10px] p-8 lg:p-10 shadow-sm animate-fade-in max-w-2xl w-full">
+          <div className="bg-white rounded-[10px] p-8 lg:p-10 shadow-xs animate-fade-in max-w-2xl w-full">
             <div className="text-primary">
               <h2 className="text-3xl font-bold mb-6 font-space-grotesk">
                 Visítanos en Nave Studio

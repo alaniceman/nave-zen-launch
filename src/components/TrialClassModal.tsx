@@ -73,14 +73,14 @@ export const TrialClassModal = ({ isOpen, onClose }: TrialClassModalProps) => {
 
   return (
     <div
-      className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 flex items-center justify-center p-4"
       onClick={handleOverlayClick}
       aria-modal="true"
       role="dialog"
     >
       <div
         ref={modalRef}
-        className="bg-white text-primary rounded-2xl shadow-xl flex flex-col w-full max-w-4xl h-[90vh] md:h-[80vh] focus:outline-none"
+        className="bg-white text-primary rounded-2xl shadow-xl flex flex-col w-full max-w-4xl h-[90vh] md:h-[80vh] focus:outline-hidden"
         tabIndex={-1}
         onKeyDown={handleFocusTrap}
         aria-labelledby="trial-modal-title"

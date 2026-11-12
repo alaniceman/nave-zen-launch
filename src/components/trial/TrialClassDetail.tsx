@@ -76,7 +76,7 @@ export default function TrialClassDetail({
       </button>
 
       {/* Class info block */}
-      <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E2E8F0] mb-6">
+      <div className="bg-white rounded-2xl p-6 shadow-xs border border-[#E2E8F0] mb-6">
         <h2 className="text-2xl font-bold text-[#2E4D3A] mb-3">{classItem.title}</h2>
         {classItem.description && (
           <p className="text-[#575757] mb-4">{classItem.description}</p>
@@ -122,7 +122,7 @@ export default function TrialClassDetail({
               onClick={() => onSelectDate(iso)}
               className={`w-full text-left rounded-xl px-5 py-4 font-medium transition-all border ${
                 isSelected
-                  ? "bg-[#2E4D3A] text-white border-[#2E4D3A] shadow-sm"
+                  ? "bg-[#2E4D3A] text-white border-[#2E4D3A] shadow-xs"
                   : "bg-white text-[#2E4D3A] border-[#E2E8F0] hover:border-[#2E4D3A]/40 hover:bg-[#F8F9FA]"
               }`}
             >

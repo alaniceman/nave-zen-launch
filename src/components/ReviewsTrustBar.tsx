@@ -199,7 +199,7 @@ export const ReviewsTrustBar = ({
                 role="tab"
                 aria-selected={isActive}
                 onClick={() => setActiveFilter(value)}
-                className={`shrink-0 px-4 py-1.5 rounded-full text-sm font-inter font-medium transition-all duration-200 border focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
+                className={`shrink-0 px-4 py-1.5 rounded-full text-sm font-inter font-medium transition-all duration-200 border focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
                   isActive
                     ? "bg-primary text-primary-foreground border-primary shadow-light"
                     : "bg-background text-neutral-dark border-primary/15 hover:border-primary/30 hover:bg-primary/5"
@@ -244,7 +244,7 @@ export const ReviewsTrustBar = ({
               <button
                 key={review.id}
                 onClick={() => setOpenIndex(idx)}
-                className="snap-start shrink-0 w-[85%] sm:w-[320px] md:w-[340px] text-left bg-background rounded-[var(--radius)] shadow-light border border-primary/10 p-6 hover:shadow-medium hover:border-primary/20 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                className="snap-start shrink-0 w-[85%] sm:w-[320px] md:w-[340px] text-left bg-background rounded-[var(--radius)] shadow-light border border-primary/10 p-6 hover:shadow-medium hover:border-primary/20 transition-all duration-300 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                 aria-label={`Leer reseña completa de ${review.author}`}
               >
                 <div className="flex items-center justify-between mb-3">

@@ -104,7 +104,7 @@ export default function ReglasNaveStudio() {
         />
 
         <div className="container mx-auto px-4 max-w-3xl text-center">
-          <div className="inline-flex items-center gap-2 bg-white/70 backdrop-blur border border-[#2E4D3A]/15 text-[#2E4D3A] px-4 py-1.5 rounded-full text-sm font-medium shadow-sm mb-6">
+          <div className="inline-flex items-center gap-2 bg-white/70 backdrop-blur-sm border border-[#2E4D3A]/15 text-[#2E4D3A] px-4 py-1.5 rounded-full text-sm font-medium shadow-xs mb-6">
             <Shield className="w-4 h-4" />
             Código de convivencia
           </div>
@@ -127,7 +127,7 @@ export default function ReglasNaveStudio() {
               return (
                 <div
                   key={index}
-                  className="flex gap-4 items-start bg-[#F8FAFB] border border-[#E8ECF0] rounded-2xl p-5 transition-all hover:border-[#2E4D3A]/30 hover:shadow-sm"
+                  className="flex gap-4 items-start bg-[#F8FAFB] border border-[#E8ECF0] rounded-2xl p-5 transition-all hover:border-[#2E4D3A]/30 hover:shadow-xs"
                 >
                   <div className="flex-shrink-0 w-10 h-10 rounded-full bg-[#2E4D3A]/10 flex items-center justify-center mt-0.5">
                     <Icon className="w-5 h-5 text-[#2E4D3A]" />

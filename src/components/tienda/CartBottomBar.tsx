@@ -17,7 +17,7 @@ export const CartBottomBar = () => {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="flex w-full items-center gap-3 px-4 py-3 md:px-5 md:py-3.5 md:rounded-2xl text-left border border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] md:shadow-lg transition-colors hover:bg-muted/50 active:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset"
+        className="flex w-full items-center gap-3 px-4 py-3 md:px-5 md:py-3.5 md:rounded-2xl text-left border border-border bg-background/95 backdrop-blur-sm supports-[backdrop-filter]:bg-background/80 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] md:shadow-lg transition-colors hover:bg-muted/50 active:bg-muted focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset"
         aria-label={`Ver carrito · ${totalItems} ${totalItems === 1 ? "producto" : "productos"} · Total ${formatCLP(totalPrice)}`}
       >
         {/* Thumbnails */}

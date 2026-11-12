@@ -63,7 +63,7 @@ const ClaseDePrueba = () => {
 
         {/* Iframe Section */}
         <section className="px-4 md:px-6 pb-10">
-          <div id="trial-embed" className="max-w-5xl mx-auto rounded-2xl overflow-hidden shadow-sm bg-white p-0">
+          <div id="trial-embed" className="max-w-5xl mx-auto rounded-2xl overflow-hidden shadow-xs bg-white p-0">
             <div className="iframe-shell">
               <iframe 
                 src="https://boxmagic.cl/sp/NaveStudio" 

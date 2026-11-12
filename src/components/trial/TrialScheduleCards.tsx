@@ -110,10 +110,10 @@ export default function TrialScheduleCards({ onSelectClass }: TrialScheduleCards
   const renderCard = (classItem: ScheduleClassItem, dayKey: string, index: number, showDayAbbr = false) => (
     <div
       key={`${dayKey}-${index}`}
-      className={`${getCardBgColor(classItem.color_tag)} text-white rounded-2xl px-5 py-5 shadow-sm relative`}
+      className={`${getCardBgColor(classItem.color_tag)} text-white rounded-2xl px-5 py-5 shadow-xs relative`}
     >
       {showDayAbbr && (
-        <div className="lg:hidden absolute top-3 right-3 text-xs font-medium text-white/80 bg-black/20 px-2 py-1 rounded backdrop-blur">
+        <div className="lg:hidden absolute top-3 right-3 text-xs font-medium text-white/80 bg-black/20 px-2 py-1 rounded-sm backdrop-blur-sm">
           {dayNames[dayKey]?.slice(0, 3).toUpperCase()}
         </div>
       )}
@@ -143,7 +143,7 @@ export default function TrialScheduleCards({ onSelectClass }: TrialScheduleCards
       {classItem.badges.length > 0 && (
         <div className="flex flex-wrap gap-1.5 mb-3">
           {classItem.badges.map((badge, i) => (
-            <span key={i} className="bg-white/15 text-white rounded-full px-3 py-0.5 text-xs backdrop-blur inline-flex">
+            <span key={i} className="bg-white/15 text-white rounded-full px-3 py-0.5 text-xs backdrop-blur-sm inline-flex">
               {badge}
             </span>
           ))}
@@ -155,18 +155,18 @@ export default function TrialScheduleCards({ onSelectClass }: TrialScheduleCards
         {classItem.is_trial_enabled ? (
           <button
             onClick={() => handleClassAction(classItem, dayKey)}
-            className="w-full sm:w-auto bg-white text-[#2E4D3A] font-semibold text-sm px-6 py-2.5 rounded-full hover:bg-white/90 transition-colors shadow-sm"
+            className="w-full sm:w-auto bg-white text-[#2E4D3A] font-semibold text-sm px-6 py-2.5 rounded-full hover:bg-white/90 transition-colors shadow-xs"
           >
             Agendar clase de prueba
           </button>
         ) : (
           <>
-            <span className="inline-flex items-center gap-1 bg-white/20 text-white/80 rounded-full px-3 py-1 text-xs backdrop-blur">
+            <span className="inline-flex items-center gap-1 bg-white/20 text-white/80 rounded-full px-3 py-1 text-xs backdrop-blur-sm">
               <XCircle className="w-3.5 h-3.5" /> No permite clase de prueba
             </span>
             <button
               onClick={() => handleClassAction(classItem, dayKey)}
-              className="w-full sm:w-auto bg-white/20 text-white font-medium text-sm px-5 py-2 rounded-full hover:bg-white/30 transition-colors backdrop-blur"
+              className="w-full sm:w-auto bg-white/20 text-white font-medium text-sm px-5 py-2 rounded-full hover:bg-white/30 transition-colors backdrop-blur-sm"
             >
               Agendar sesión
             </button>
@@ -182,13 +182,13 @@ export default function TrialScheduleCards({ onSelectClass }: TrialScheduleCards
         {/* View toggle */}
         <div className="flex items-center justify-center gap-2 mb-6 md:mb-8">
           <button
-            className={`px-5 py-2.5 rounded-full font-medium text-sm transition-all ${viewMode === "day" ? "bg-[#2E4D3A] text-white shadow-sm" : "bg-white text-[#2E4D3A] border border-[#E2E8F0] hover:border-[#2E4D3A]/40 hover:bg-[#F8F9FA]"}`}
+            className={`px-5 py-2.5 rounded-full font-medium text-sm transition-all ${viewMode === "day" ? "bg-[#2E4D3A] text-white shadow-xs" : "bg-white text-[#2E4D3A] border border-[#E2E8F0] hover:border-[#2E4D3A]/40 hover:bg-[#F8F9FA]"}`}
             onClick={() => setViewMode("day")}
           >
             📅 Por Día
           </button>
           <button
-            className={`px-5 py-2.5 rounded-full font-medium text-sm transition-all ${viewMode === "exp" ? "bg-[#2E4D3A] text-white shadow-sm" : "bg-white text-[#2E4D3A] border border-[#E2E8F0] hover:border-[#2E4D3A]/40 hover:bg-[#F8F9FA]"}`}
+            className={`px-5 py-2.5 rounded-full font-medium text-sm transition-all ${viewMode === "exp" ? "bg-[#2E4D3A] text-white shadow-xs" : "bg-white text-[#2E4D3A] border border-[#E2E8F0] hover:border-[#2E4D3A]/40 hover:bg-[#F8F9FA]"}`}
             onClick={() => setViewMode("exp")}
           >
             🎯 Por Experiencia
@@ -203,7 +203,7 @@ export default function TrialScheduleCards({ onSelectClass }: TrialScheduleCards
                 <button
                   key={exp.slug}
                   onClick={() => setExpSlug(exp.slug)}
-                  className={`shrink-0 whitespace-nowrap rounded-full px-4 py-2 border transition-all text-sm font-medium ${expSlug === exp.slug ? "bg-[#2E4D3A] text-white border-[#2E4D3A] shadow-sm" : "bg-white text-[#2E4D3A] border-[#E2E8F0] hover:border-[#2E4D3A]/40 hover:bg-[#F8F9FA]"}`}
+                  className={`shrink-0 whitespace-nowrap rounded-full px-4 py-2 border transition-all text-sm font-medium ${expSlug === exp.slug ? "bg-[#2E4D3A] text-white border-[#2E4D3A] shadow-xs" : "bg-white text-[#2E4D3A] border-[#E2E8F0] hover:border-[#2E4D3A]/40 hover:bg-[#F8F9FA]"}`}
                 >
                   {(exp as { labelShort?: string; label: string }).labelShort ?? exp.label}
                 </button>
@@ -222,7 +222,7 @@ export default function TrialScheduleCards({ onSelectClass }: TrialScheduleCards
                   role="tab"
                   aria-selected={selectedDay === tab.key}
                   onClick={() => setSelectedDay(tab.key)}
-                  className={`rounded-full px-3.5 py-2 font-medium text-sm whitespace-nowrap transition-all ${selectedDay === tab.key ? "bg-[#2E4D3A] text-white shadow-sm" : "bg-white text-[#2E4D3A] border border-[#E2E8F0] hover:bg-[#F8F9FA]"}`}
+                  className={`rounded-full px-3.5 py-2 font-medium text-sm whitespace-nowrap transition-all ${selectedDay === tab.key ? "bg-[#2E4D3A] text-white shadow-xs" : "bg-white text-[#2E4D3A] border border-[#E2E8F0] hover:bg-[#F8F9FA]"}`}
                 >
                   {tab.label}
                 </button>
@@ -265,7 +265,7 @@ export default function TrialScheduleCards({ onSelectClass }: TrialScheduleCards
         ) : (
           <div className="space-y-6">
             {experienceWeekData.map(({ day, dayName, items }) => (
-              <div key={day} className="bg-white rounded-2xl p-5 shadow-sm border border-[#E2E8F0]">
+              <div key={day} className="bg-white rounded-2xl p-5 shadow-xs border border-[#E2E8F0]">
                 <h3 className="text-lg font-bold text-[#2E4D3A] mb-3">{dayName}</h3>
                 <ul className="space-y-3">
                   {items.map((item, idx) => (

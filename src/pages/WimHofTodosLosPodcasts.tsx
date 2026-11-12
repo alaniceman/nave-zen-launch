@@ -35,7 +35,7 @@ function PodcastCard({ program, title, id }: { program: string; title: string; i
   const youtubeUrl = `https://www.youtube.com/watch?v=${id}`;
 
   return (
-    <article className="overflow-hidden rounded-lg border border-border bg-card shadow-sm">
+    <article className="overflow-hidden rounded-lg border border-border bg-card shadow-xs">
       <div className="aspect-video bg-muted">
         {playing ? (
           <iframe

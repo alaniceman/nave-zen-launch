@@ -233,7 +233,7 @@ export default function Promo18Septiembre() {
                       ].map((unit) => (
                         <div
                           key={unit.label}
-                          className="flex flex-col items-center bg-card border border-rose-200 rounded-xl px-3 py-2 min-w-[62px] shadow-sm"
+                          className="flex flex-col items-center bg-card border border-rose-200 rounded-xl px-3 py-2 min-w-[62px] shadow-xs"
                         >
                           <span className="text-2xl md:text-3xl font-bold tabular-nums text-rose-600">
                             {String(unit.value).padStart(2, "0")}

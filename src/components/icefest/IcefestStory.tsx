@@ -18,7 +18,7 @@ import zalamandra from "@/assets/icefest/dj-zalamandra-profile.webp.asset.json";
 
 const IcefestGallery = lazy(() => import("./IcefestGallery"));
 
-const card = "bg-card/60 border border-border rounded-2xl backdrop-blur-sm";
+const card = "bg-card/60 border border-border rounded-2xl backdrop-blur-xs";
 const glow = (pos: string, color: string) => (
   <div aria-hidden className={`pointer-events-none absolute ${pos} w-64 h-64 rounded-full blur-3xl opacity-20`} style={{ background: `radial-gradient(circle, hsl(var(--${color})), transparent)` }} />
 );

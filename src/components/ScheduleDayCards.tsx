@@ -106,10 +106,10 @@ export default function ScheduleDayCards() {
   const renderCard = (classItem: ScheduleClassItem, index: number, showDayAbbr = false) => (
     <div
       key={index}
-      className={`${getCardBgColor(classItem.color_tag)} text-white rounded-2xl px-4 py-4 md:px-5 md:py-5 shadow-sm relative`}
+      className={`${getCardBgColor(classItem.color_tag)} text-white rounded-2xl px-4 py-4 md:px-5 md:py-5 shadow-xs relative`}
     >
       {showDayAbbr && (
-        <div className="lg:hidden absolute top-3 right-3 text-xs font-medium text-white/80 bg-black/20 px-2 py-1 rounded backdrop-blur">
+        <div className="lg:hidden absolute top-3 right-3 text-xs font-medium text-white/80 bg-black/20 px-2 py-1 rounded-sm backdrop-blur-sm">
           {dayNames[getActiveDay()]?.slice(0, 3).toUpperCase()}
         </div>
       )}
@@ -129,7 +129,7 @@ export default function ScheduleDayCards() {
       {classItem.badges.length > 0 && (
         <div className="flex flex-wrap gap-2">
           {classItem.badges.map((badge, badgeIndex) => (
-            <span key={badgeIndex} className="bg-white/20 text-white rounded-full px-3 py-1 text-sm backdrop-blur inline-flex">
+            <span key={badgeIndex} className="bg-white/20 text-white rounded-full px-3 py-1 text-sm backdrop-blur-sm inline-flex">
               {badge}
             </span>
           ))}
@@ -137,7 +137,7 @@ export default function ScheduleDayCards() {
       )}
       <Link
         to="/plan-de-prueba"
-        className="mt-3 w-full sm:w-auto inline-flex items-center justify-center gap-1.5 bg-white text-[#2E4D3A] font-semibold text-sm rounded-xl px-4 py-2.5 shadow-sm hover:bg-white/90 transition-colors"
+        className="mt-3 w-full sm:w-auto inline-flex items-center justify-center gap-1.5 bg-white text-[#2E4D3A] font-semibold text-sm rounded-xl px-4 py-2.5 shadow-xs hover:bg-white/90 transition-colors"
       >
         <Sparkles className="w-4 h-4" />
         Empieza por $14.900
@@ -153,8 +153,8 @@ export default function ScheduleDayCards() {
       <div className="max-w-6xl mx-auto px-4 md:px-6">
         {/* View mode controls */}
         <div className="flex flex-wrap items-center gap-3 mb-6 md:mb-8">
-          <button className={`px-5 py-3 rounded-full font-medium text-sm transition-all ${viewMode === "day" ? "bg-[#2E4D3A] text-white shadow-sm" : "bg-white text-[#2E4D3A] border border-[#E2E8F0] hover:border-[#2E4D3A]/40 hover:bg-[#F8F9FA]"}`} onClick={() => setViewMode("day")} aria-pressed={viewMode === "day"}>📅 Por Día</button>
-          <button className={`px-5 py-3 rounded-full font-medium text-sm transition-all ${viewMode === "exp" ? "bg-[#2E4D3A] text-white shadow-sm" : "bg-white text-[#2E4D3A] border border-[#E2E8F0] hover:border-[#2E4D3A]/40 hover:bg-[#F8F9FA]"}`} onClick={() => setViewMode("exp")} aria-pressed={viewMode === "exp"}>🎯 Por Experiencia</button>
+          <button className={`px-5 py-3 rounded-full font-medium text-sm transition-all ${viewMode === "day" ? "bg-[#2E4D3A] text-white shadow-xs" : "bg-white text-[#2E4D3A] border border-[#E2E8F0] hover:border-[#2E4D3A]/40 hover:bg-[#F8F9FA]"}`} onClick={() => setViewMode("day")} aria-pressed={viewMode === "day"}>📅 Por Día</button>
+          <button className={`px-5 py-3 rounded-full font-medium text-sm transition-all ${viewMode === "exp" ? "bg-[#2E4D3A] text-white shadow-xs" : "bg-white text-[#2E4D3A] border border-[#E2E8F0] hover:border-[#2E4D3A]/40 hover:bg-[#F8F9FA]"}`} onClick={() => setViewMode("exp")} aria-pressed={viewMode === "exp"}>🎯 Por Experiencia</button>
         </div>
 
         {/* Experience chips */}
@@ -164,7 +164,7 @@ export default function ScheduleDayCards() {
             <div className="relative">
               <div role="radiogroup" aria-label="Seleccionar experiencia" className="flex gap-2 md:gap-3 overflow-x-auto snap-x snap-mandatory pb-2 -mx-1 px-1 pr-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] after:absolute after:right-0 after:top-0 after:bottom-2 after:w-8 after:bg-gradient-to-l after:from-white after:to-transparent after:pointer-events-none">
                 {EXPERIENCE_CATALOG.map(exp => (
-                  <button key={exp.slug} role="radio" aria-checked={expSlug === exp.slug} onClick={() => setExpSlug(exp.slug)} className={`snap-start shrink-0 whitespace-nowrap rounded-full px-4 py-2.5 border transition-all text-sm font-medium ${expSlug === exp.slug ? "bg-[#2E4D3A] text-white border-[#2E4D3A] shadow-sm" : "bg-white text-[#2E4D3A] border-[#E2E8F0] hover:border-[#2E4D3A]/40 hover:bg-[#F8F9FA]"}`}>
+                  <button key={exp.slug} role="radio" aria-checked={expSlug === exp.slug} onClick={() => setExpSlug(exp.slug)} className={`snap-start shrink-0 whitespace-nowrap rounded-full px-4 py-2.5 border transition-all text-sm font-medium ${expSlug === exp.slug ? "bg-[#2E4D3A] text-white border-[#2E4D3A] shadow-xs" : "bg-white text-[#2E4D3A] border-[#E2E8F0] hover:border-[#2E4D3A]/40 hover:bg-[#F8F9FA]"}`}>
                     {(exp as { labelShort?: string; label: string }).labelShort ?? exp.label}
                   </button>
                 ))}
@@ -179,7 +179,7 @@ export default function ScheduleDayCards() {
             <div className="lg:hidden">
               <div className="flex gap-2 overflow-x-auto px-4 pb-2 mb-4" role="tablist">
                 {dayTabs.map(tab => (
-                  <button key={tab.key} role="tab" aria-selected={selectedDay === tab.key} onClick={() => setSelectedDay(tab.key)} className={`rounded-xl px-4 py-2.5 font-medium text-sm whitespace-nowrap transition-all ${selectedDay === tab.key ? 'bg-[#2E4D3A] text-white shadow-sm' : 'bg-white text-[#2E4D3A] border border-[#E2E8F0] hover:bg-[#F8F9FA]'}`}>{tab.label}</button>
+                  <button key={tab.key} role="tab" aria-selected={selectedDay === tab.key} onClick={() => setSelectedDay(tab.key)} className={`rounded-xl px-4 py-2.5 font-medium text-sm whitespace-nowrap transition-all ${selectedDay === tab.key ? 'bg-[#2E4D3A] text-white shadow-xs' : 'bg-white text-[#2E4D3A] border border-[#E2E8F0] hover:bg-[#F8F9FA]'}`}>{tab.label}</button>
                 ))}
               </div>
               <h2 className="text-xl md:text-2xl font-bold text-[#2E4D3A] px-4 mb-4 flex items-center gap-2">
@@ -217,7 +217,7 @@ export default function ScheduleDayCards() {
         ) : (
           <div className="space-y-8">
             {experienceWeekData.map(({ day, dayName, items }) => (
-              <div key={day} className="bg-white rounded-2xl p-6 shadow-sm">
+              <div key={day} className="bg-white rounded-2xl p-6 shadow-xs">
                 <h3 className="text-xl font-bold text-[#2E4D3A] mb-4">{dayName}</h3>
                 <ul className="space-y-3">
                   {items.map((item, idx) => (

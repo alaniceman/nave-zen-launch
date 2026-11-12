@@ -68,7 +68,7 @@ export default function TrialClassSchedule() {
 
           {/* Class details card */}
           {selectedClass && (
-            <div className="bg-white rounded-2xl p-5 shadow-sm border border-[#E2E8F0] text-left my-6">
+            <div className="bg-white rounded-2xl p-5 shadow-xs border border-[#E2E8F0] text-left my-6">
               <h3 className="font-bold text-[#2E4D3A] text-lg mb-3">{selectedClass.title}</h3>
               <div className="space-y-2 text-sm text-[#575757]">
                 <div className="flex items-center gap-2">
@@ -145,7 +145,7 @@ export default function TrialClassSchedule() {
 
         {/* Ice bath policy notice */}
         <div className="max-w-xl mx-auto px-4 pt-6">
-          <div className="bg-white rounded-xl border border-[#E2E8F0] p-5 shadow-sm">
+          <div className="bg-white rounded-xl border border-[#E2E8F0] p-5 shadow-xs">
             <h3 className="text-[15px] font-bold text-[#2E4D3A] mb-2">🧊 Sobre el agua fría en clases de prueba</h3>
             <p className="text-[14px] text-[#555] leading-relaxed mb-2">
               Las clases de prueba <strong>no incluyen inmersión en hielo</strong> al final, independiente de si ya has hecho baños de hielo antes o no.

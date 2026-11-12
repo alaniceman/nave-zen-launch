@@ -392,7 +392,7 @@ const TallerSantiago = () => {
 
       {/* Estado de pago (retorno desde Mercado Pago) */}
       {pagoStatus && (
-        <div className="fixed inset-x-0 top-0 z-[60] px-4 pt-20 pb-4 bg-background/95 backdrop-blur border-b">
+        <div className="fixed inset-x-0 top-0 z-[60] px-4 pt-20 pb-4 bg-background/95 backdrop-blur-sm border-b">
           <div className="max-w-2xl mx-auto flex items-start gap-3">
             {pagoStatus === "approved" ? (
               <Check className="w-6 h-6 text-primary flex-shrink-0 mt-0.5" />
@@ -483,7 +483,7 @@ const TallerSantiago = () => {
               loading="eager"
             />
             <div className="absolute bottom-4 left-4 z-20">
-              <Badge variant="secondary" className="bg-background/90 text-foreground backdrop-blur-sm">
+              <Badge variant="secondary" className="bg-background/90 text-foreground backdrop-blur-xs">
                 Presencial · Nave Studio, Las Condes
               </Badge>
             </div>
@@ -531,7 +531,7 @@ const TallerSantiago = () => {
               return (
                 <Card
                   key={k}
-                  className="border-border/60 shadow-sm hover:shadow-md transition-shadow"
+                  className="border-border/60 shadow-xs hover:shadow-md transition-shadow"
                 >
                   <CardContent className="p-6 md:p-8 flex flex-col h-full">
                     <div className="flex items-center gap-2 mb-3">
@@ -753,7 +753,7 @@ const TallerSantiago = () => {
             ].map((r) => (
               <div
                 key={r.texto}
-                className="rounded-2xl border border-border/60 bg-card p-5 text-center shadow-sm"
+                className="rounded-2xl border border-border/60 bg-card p-5 text-center shadow-xs"
               >
                 <p className="font-heading text-2xl md:text-3xl text-primary mb-1">{r.valor}</p>
                 <p className="text-sm text-muted-foreground leading-snug">{r.texto}</p>
@@ -883,7 +883,7 @@ const TallerSantiago = () => {
                 text: "No se trata solo de resistir. Se trata de aprender a entrar, respirar, sentir y volver al equilibrio.",
               },
             ].map(({ icon: Icon, title, text }) => (
-              <Card key={title} className="border-border/60 shadow-sm">
+              <Card key={title} className="border-border/60 shadow-xs">
                 <CardContent className="p-6">
                   <div className="p-3 rounded-xl bg-primary/10 w-fit mb-4">
                     <Icon className="w-6 h-6 text-primary" />
@@ -913,7 +913,7 @@ const TallerSantiago = () => {
             ].map((line) => (
               <li
                 key={line}
-                className="flex gap-3 items-start bg-card border rounded-xl p-4 shadow-sm"
+                className="flex gap-3 items-start bg-card border rounded-xl p-4 shadow-xs"
               >
                 <Check className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                 <span className="text-foreground/90">{line}</span>
@@ -1041,7 +1041,7 @@ const TallerSantiago = () => {
               <AccordionItem
                 key={i}
                 value={`faq-${i}`}
-                className="border border-border/50 rounded-lg px-5 bg-card shadow-sm"
+                className="border border-border/50 rounded-lg px-5 bg-card shadow-xs"
               >
                 <AccordionTrigger className="text-left font-semibold text-foreground hover:text-primary py-5">
                   {f.q}
@@ -1127,7 +1127,7 @@ const DetalleSection = ({ taller, titulo, texto, cta, sold, onReserve, dark }: D
           </Button>
         </div>
 
-        <Card className="border-border/60 rounded-3xl shadow-sm bg-card">
+        <Card className="border-border/60 rounded-3xl shadow-xs bg-card">
           <CardContent className="p-6 md:p-8 space-y-6">
             {rows.map(({ icon: Icon, label, value }) => (
               <div key={label} className="flex items-start gap-4">

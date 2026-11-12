@@ -42,7 +42,7 @@ export const GiftCardPromoModal = ({ isOpen, onClose }: GiftCardPromoModalProps)
 
   return (
     <div
-      className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4"
       onClick={handleOverlayClick}
       aria-modal="true"
       role="dialog"

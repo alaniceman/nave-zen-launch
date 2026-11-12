@@ -51,7 +51,7 @@ export const ProductGallery = ({ images, alt, className }: Props) => {
             type="button"
             onClick={scrollPrev}
             aria-label="Imagen anterior"
-            className="absolute left-2 top-1/2 -translate-y-1/2 h-9 w-9 flex items-center justify-center rounded-full bg-black/30 text-white backdrop-blur-sm hover:bg-black/50 transition-colors"
+            className="absolute left-2 top-1/2 -translate-y-1/2 h-9 w-9 flex items-center justify-center rounded-full bg-black/30 text-white backdrop-blur-xs hover:bg-black/50 transition-colors"
           >
             <ChevronLeft className="h-5 w-5" />
           </button>
@@ -59,7 +59,7 @@ export const ProductGallery = ({ images, alt, className }: Props) => {
             type="button"
             onClick={scrollNext}
             aria-label="Imagen siguiente"
-            className="absolute right-2 top-1/2 -translate-y-1/2 h-9 w-9 flex items-center justify-center rounded-full bg-black/30 text-white backdrop-blur-sm hover:bg-black/50 transition-colors"
+            className="absolute right-2 top-1/2 -translate-y-1/2 h-9 w-9 flex items-center justify-center rounded-full bg-black/30 text-white backdrop-blur-xs hover:bg-black/50 transition-colors"
           >
             <ChevronRight className="h-5 w-5" />
           </button>

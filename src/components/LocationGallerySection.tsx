@@ -285,7 +285,7 @@ export const LocationGallerySection = () => {
           role="dialog"
           aria-modal="true"
           aria-label="Galería de imágenes ampliada"
-          className="fixed inset-0 z-[100] bg-black/85 backdrop-blur-sm flex items-center justify-center animate-fade-in"
+          className="fixed inset-0 z-[100] bg-black/85 backdrop-blur-xs flex items-center justify-center animate-fade-in"
           onClick={close}
           onTouchStart={onTouchStart}
           onTouchEnd={onTouchEnd}

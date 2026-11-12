@@ -99,7 +99,7 @@ const BautizoHielo = () => {
           <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_30%_20%,white,transparent_50%)]" />
 
           <div className="relative z-10 container mx-auto px-4 py-16 text-center text-primary-foreground max-w-4xl">
-            <Badge className="bg-white/20 text-white border-white/30 backdrop-blur px-4 py-1.5 mb-6">
+            <Badge className="bg-white/20 text-white border-white/30 backdrop-blur-sm px-4 py-1.5 mb-6">
               🧊 Vívelo o regálalo 🎁
             </Badge>
             <h1 className="font-space text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">

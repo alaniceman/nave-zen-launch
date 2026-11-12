@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
  * Funciona con inputs controlados y con react-hook-form (usa placeholder=" ").
  */
 const floatingFieldBase =
-  "peer w-full rounded-lg border border-input bg-background px-3.5 text-base text-foreground ring-offset-background transition-[border-color,box-shadow] placeholder:text-transparent focus-visible:outline-none focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/25 disabled:cursor-not-allowed disabled:opacity-60";
+  "peer w-full rounded-lg border border-input bg-background px-3.5 text-base text-foreground ring-offset-background transition-[border-color,box-shadow] placeholder:text-transparent focus-visible:outline-hidden focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/25 disabled:cursor-not-allowed disabled:opacity-60";
 
 const floatingLabelBase =
   "pointer-events-none absolute left-3.5 origin-left select-none text-muted-foreground transition-all duration-150 ease-out";

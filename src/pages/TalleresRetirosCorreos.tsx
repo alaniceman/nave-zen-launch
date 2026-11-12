@@ -111,7 +111,7 @@ const TalleresRetirosCorreos = () => {
                       type="checkbox"
                       checked={talleres}
                       onChange={(e) => setTalleres(e.target.checked)}
-                      className="w-5 h-5 rounded accent-primary"
+                      className="w-5 h-5 rounded-sm accent-primary"
                     />
                     <span className="text-sm text-foreground">Anuncios de Talleres</span>
                   </label>
@@ -120,7 +120,7 @@ const TalleresRetirosCorreos = () => {
                       type="checkbox"
                       checked={retiros}
                       onChange={(e) => setRetiros(e.target.checked)}
-                      className="w-5 h-5 rounded accent-primary"
+                      className="w-5 h-5 rounded-sm accent-primary"
                     />
                     <span className="text-sm text-foreground">Anuncios de Retiros</span>
                   </label>

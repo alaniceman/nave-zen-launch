@@ -56,7 +56,7 @@ const archive: MediaItem[] = [
 
 function MediaList({ items }: { items: MediaItem[] }) {
   return <div className="mt-7 grid gap-4 md:grid-cols-2">{items.map((item) => (
-    <article key={`${item.program}-${item.title}`} className="rounded-lg border border-border bg-card p-5 shadow-sm">
+    <article key={`${item.program}-${item.title}`} className="rounded-lg border border-border bg-card p-5 shadow-xs">
       <p className="text-sm font-semibold text-primary">{item.program}</p>
       <h3 className="mt-1 text-lg font-semibold leading-6 text-foreground">{item.title}</h3>
       <div className="mt-4 flex flex-wrap gap-3">{item.links.map((link) => (
@@ -142,7 +142,7 @@ export default function BlogAlanEarlePodcasts() {
             ["Canal de Alan Iceman en YouTube", "https://www.youtube.com/@alan_iceman"],
             ["Podcast La Nave por Alan Iceman en Spotify", "https://open.spotify.com/show/1oXU1ORsTRCN3nh5m5twmq"],
             ["Criomedicina con Alan Iceman a 1 °C, por Cristian Mesa Silva", "https://www.youtube.com/watch?v=QHgKoYywrPM"],
-          ].map(([label, url]) => <a key={url} href={url} target="_blank" rel="noopener noreferrer" className="flex items-start gap-3 rounded-lg border border-border bg-card p-5 font-semibold text-foreground shadow-sm hover:border-primary"><Headphones className="mt-0.5 h-5 w-5 shrink-0 text-primary" />{label}<ExternalLink className="ml-auto h-4 w-4 shrink-0 text-primary" /></a>)}
+          ].map(([label, url]) => <a key={url} href={url} target="_blank" rel="noopener noreferrer" className="flex items-start gap-3 rounded-lg border border-border bg-card p-5 font-semibold text-foreground shadow-xs hover:border-primary"><Headphones className="mt-0.5 h-5 w-5 shrink-0 text-primary" />{label}<ExternalLink className="ml-auto h-4 w-4 shrink-0 text-primary" /></a>)}
         </div></div></section>
 
         <section id="nave-studio" className={sectionClass}><div className="flex items-center gap-3"><MapPin className="h-7 w-7 text-primary" /><h2 className={headingClass}>De escuchar un podcast a conocer Nave Studio</h2></div>

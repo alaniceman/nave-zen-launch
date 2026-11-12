@@ -217,19 +217,19 @@ import { useScrolledPastHero } from "@/hooks/useScrolledPastHero";
            </p>
  
            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto mb-10">
-             <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm rounded-lg p-4">
+             <div className="flex items-center gap-3 bg-white/10 backdrop-blur-xs rounded-lg p-4">
                <Shield className="w-6 h-6 text-accent flex-shrink-0" />
                <span className="text-left font-inter">Guía paso a paso y seguridad (si vienes partiendo)</span>
              </div>
-             <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm rounded-lg p-4">
+             <div className="flex items-center gap-3 bg-white/10 backdrop-blur-xs rounded-lg p-4">
                <Target className="w-6 h-6 text-accent flex-shrink-0" />
                <span className="text-left font-inter">Técnica y control (si ya tienes experiencia)</span>
              </div>
-             <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm rounded-lg p-4">
+             <div className="flex items-center gap-3 bg-white/10 backdrop-blur-xs rounded-lg p-4">
                <Zap className="w-6 h-6 text-accent flex-shrink-0" />
                <span className="text-left font-inter">Energía, calma y claridad mental desde el cuerpo</span>
              </div>
-             <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm rounded-lg p-4">
+             <div className="flex items-center gap-3 bg-white/10 backdrop-blur-xs rounded-lg p-4">
                <Sparkles className="w-6 h-6 text-accent flex-shrink-0" />
                <span className="text-left font-inter">Experiencia completa: preparación + inmersión + recuperación</span>
              </div>
@@ -583,7 +583,7 @@ import { useScrolledPastHero } from "@/hooks/useScrolledPastHero";
                Con nuestras membresías mensuales tienes acceso ilimitado a todas las experiencias de Nave Studio: 
                 clases de yoga, breathwork, agua fría, isométrica y más.
              </p>
-             <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-muted mb-8">
+             <div className="bg-white rounded-2xl p-6 md:p-8 shadow-xs border border-muted mb-8">
                <div className="flex flex-col md:flex-row items-center justify-between gap-6">
                  <div className="text-left">
                    <h3 className="text-xl font-bold font-space text-primary mb-2">
@@ -796,7 +796,7 @@ import { useScrolledPastHero } from "@/hooks/useScrolledPastHero";
  
        {/* Sticky CTA Mobile */}
        {isMobile && scrolledPastHero && (
-         <div className="fixed bottom-0 left-0 right-0 p-4 bg-background/95 backdrop-blur-sm border-t border-muted z-50">
+         <div className="fixed bottom-0 left-0 right-0 p-4 bg-background/95 backdrop-blur-xs border-t border-muted z-50">
            <Button
              className="w-full bg-secondary hover:bg-secondary/90 text-white font-semibold py-6"
              onClick={() => navigate("/agenda-nave-studio")}

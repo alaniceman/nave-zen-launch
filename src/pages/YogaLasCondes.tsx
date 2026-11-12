@@ -391,7 +391,7 @@ const YogaLasCondes = () => {
               </a>
               <a
                 href="#horarios-yoga"
-                className="border-2 border-white/40 text-white hover:bg-white/10 rounded-full px-8 py-3.5 font-medium transition-all duration-300 font-inter inline-flex items-center justify-center backdrop-blur-sm"
+                className="border-2 border-white/40 text-white hover:bg-white/10 rounded-full px-8 py-3.5 font-medium transition-all duration-300 font-inter inline-flex items-center justify-center backdrop-blur-xs"
               >
                 Ver horarios reales
               </a>

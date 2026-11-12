@@ -281,7 +281,7 @@ export default function PromoTalleres() {
                     ].map((unit, i) => (
                       <div
                         key={i}
-                        className="flex flex-col items-center bg-card border border-rose-200 rounded-xl px-3 py-2 min-w-[64px] shadow-sm"
+                        className="flex flex-col items-center bg-card border border-rose-200 rounded-xl px-3 py-2 min-w-[64px] shadow-xs"
                       >
                         <span className="text-2xl md:text-3xl font-bold tabular-nums text-rose-600">
                           {String(unit.value).padStart(2, "0")}
@@ -505,7 +505,7 @@ export default function PromoTalleres() {
               {/* Pack 6 sesiones Wim Hof */}
               <a
                 href="/bonos"
-                className="group rounded-2xl border border-cyan-200 bg-card p-6 shadow-sm hover:shadow-lg hover:border-cyan-400 transition-all flex flex-col"
+                className="group rounded-2xl border border-cyan-200 bg-card p-6 shadow-xs hover:shadow-lg hover:border-cyan-400 transition-all flex flex-col"
               >
                 <div className="p-3 bg-gradient-to-br from-cyan-500 to-sky-500 rounded-xl text-primary-foreground w-fit mb-4">
                   <Snowflake className="w-6 h-6" />
@@ -529,7 +529,7 @@ export default function PromoTalleres() {
                 href="https://guatemala.criomedicina.com/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group rounded-2xl border border-cyan-200 bg-card p-6 shadow-sm hover:shadow-lg hover:border-cyan-400 transition-all flex flex-col"
+                className="group rounded-2xl border border-cyan-200 bg-card p-6 shadow-xs hover:shadow-lg hover:border-cyan-400 transition-all flex flex-col"
               >
                 <div className="p-3 bg-gradient-to-br from-sky-500 to-indigo-500 rounded-xl text-primary-foreground w-fit mb-4">
                   <MapPin className="w-6 h-6" />
@@ -553,7 +553,7 @@ export default function PromoTalleres() {
                 href="https://crionave.com/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group rounded-2xl border border-cyan-200 bg-card p-6 shadow-sm hover:shadow-lg hover:border-cyan-400 transition-all flex flex-col"
+                className="group rounded-2xl border border-cyan-200 bg-card p-6 shadow-xs hover:shadow-lg hover:border-cyan-400 transition-all flex flex-col"
               >
                 <div className="p-3 bg-gradient-to-br from-indigo-500 to-cyan-500 rounded-xl text-primary-foreground w-fit mb-4">
                   <ShoppingBag className="w-6 h-6" />

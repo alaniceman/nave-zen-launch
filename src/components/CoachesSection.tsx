@@ -131,7 +131,7 @@ const CoachCard = ({
           rel="noopener noreferrer"
           aria-label={`Reservar con ${coach.name} por WhatsApp`}
         >
-          <Button variant="outline" className="border-2 border-secondary text-secondary py-2 px-5 rounded-lg font-medium font-inter transition-all duration-300 hover:bg-secondary hover:text-white focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-opacity-50">
+          <Button variant="outline" className="border-2 border-secondary text-secondary py-2 px-5 rounded-lg font-medium font-inter transition-all duration-300 hover:bg-secondary hover:text-white focus:outline-hidden focus:ring-2 focus:ring-secondary focus:ring-opacity-50">
             Reservar
           </Button>
         </a>

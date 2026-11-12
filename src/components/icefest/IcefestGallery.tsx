@@ -30,7 +30,7 @@ export default function IcefestGallery() {
     <>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
         {images.map((src, i) => (
-          <button key={src} onClick={() => setOpen(i)} className="group relative aspect-[3/4] overflow-hidden rounded-xl bg-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+          <button key={src} onClick={() => setOpen(i)} className="group relative aspect-[3/4] overflow-hidden rounded-xl bg-muted focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary">
             <img src={src} alt={`Icefest edición anterior ${i + 1}`} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
           </button>
         ))}
