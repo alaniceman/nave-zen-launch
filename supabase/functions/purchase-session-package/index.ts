@@ -5,6 +5,7 @@ import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { upsertCustomerAndLogEvent } from "../_shared/crm.ts";
 import { addSubscriberToGroups } from "../_shared/mailerlite.ts";
 import { buildCodePlan, buildCodeGroups } from "../_shared/codeComposition.ts";
+import { cleanAttribution } from '../_shared/attribution.ts';
 
 const purchaseSchema = z.object({
   packageId: z.string().uuid(),
@@ -17,6 +18,8 @@ const purchaseSchema = z.object({
   fbp: z.string().max(255).optional(),
   fbc: z.string().max(500).optional(),
   eventSourceUrl: z.string().max(2000).optional(),
+  first_touch: z.unknown().optional(),
+  last_touch: z.unknown().optional(),
 });
 
 // Sanitize phone number - keep only digits
@@ -191,6 +194,7 @@ serve(async (req) => {
         status: "created",
         // Contexto de navegador para atribución server-side de Meta CAPI.
         meta_context: {
+          ...cleanAttribution(validatedData),
           fbp: validatedData.fbp ?? null,
           fbc: validatedData.fbc ?? null,
           event_source_url: validatedData.eventSourceUrl ?? null,
@@ -407,6 +411,7 @@ serve(async (req) => {
       auto_return: "approved",
       // SIMPLE external_reference - just the order UUID
       external_reference: order.id,
+      metadata: cleanAttribution(validatedData),
       notification_url: `${Deno.env.get("SUPABASE_URL")}/functions/v1/mercadopago-webhook`,
     };
 

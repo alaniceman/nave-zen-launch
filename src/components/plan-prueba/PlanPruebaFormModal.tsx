@@ -46,15 +46,6 @@ const step2Schema = z.object({
 });
 type Step2Values = z.infer<typeof step2Schema>;
 
-function getUtm() {
-  const p = new URLSearchParams(window.location.search);
-  return {
-    utm_source: p.get("utm_source") || undefined,
-    utm_medium: p.get("utm_medium") || undefined,
-    utm_campaign: p.get("utm_campaign") || undefined,
-  };
-}
-
 export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) {
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [submitting, setSubmitting] = useState(false);
@@ -106,11 +97,7 @@ export function PlanPruebaFormModal({ open, onOpenChange, initialPlan }: Props) 
           name: values.name,
           email: values.email,
           phone: values.phone,
-          ...getUtm(),
-          ...(() => {
-            const ctx = getMetaBrowserContext();
-            return { fbp: ctx.fbp, fbc: ctx.fbc, eventSourceUrl: ctx.eventSourceUrl };
-          })(),
+          ...getMetaBrowserContext(),
         },
       });
       if (error || !data?.leadId) throw new Error(data?.error || "Error al guardar");

@@ -1081,6 +1081,7 @@ export type Database = {
         Row: {
           access_token: string
           admin_notes: string
+          admin_notification_sent_at: string | null
           buyer_email: string
           buyer_name: string
           buyer_phone: string
@@ -1113,6 +1114,7 @@ export type Database = {
         Insert: {
           access_token?: string
           admin_notes?: string
+          admin_notification_sent_at?: string | null
           buyer_email: string
           buyer_name: string
           buyer_phone?: string
@@ -1145,6 +1147,7 @@ export type Database = {
         Update: {
           access_token?: string
           admin_notes?: string
+          admin_notification_sent_at?: string | null
           buyer_email?: string
           buyer_name?: string
           buyer_phone?: string
@@ -2304,6 +2307,7 @@ export type Database = {
           customer_phone: string
           id: string
           mailerlite_synced: boolean
+          meta_context: Json
           paid_at: string | null
           paid_marked_by: string | null
           plan_type: string | null
@@ -2332,6 +2336,7 @@ export type Database = {
           customer_phone: string
           id?: string
           mailerlite_synced?: boolean
+          meta_context?: Json
           paid_at?: string | null
           paid_marked_by?: string | null
           plan_type?: string | null
@@ -2360,6 +2365,7 @@ export type Database = {
           customer_phone?: string
           id?: string
           mailerlite_synced?: boolean
+          meta_context?: Json
           paid_at?: string | null
           paid_marked_by?: string | null
           plan_type?: string | null
