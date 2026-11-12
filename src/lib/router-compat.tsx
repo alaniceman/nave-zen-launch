@@ -67,7 +67,12 @@ export function useLocation() {
       search: loc.searchStr ? (loc.searchStr.startsWith("?") ? loc.searchStr : `?${loc.searchStr}`) : "",
       hash: loc.hash ?? "",
       state: (loc.state ?? null) as unknown,
-      key: loc.pathname + (loc.searchStr ?? ""),
+      // Unique per history entry (like react-router's location.key), so
+      // revisiting the same URL counts as a new navigation.
+      key:
+        (loc.state as { __TSR_key?: string; key?: string } | undefined)?.__TSR_key ??
+        (loc.state as { key?: string } | undefined)?.key ??
+        loc.pathname + (loc.searchStr ?? ""),
     }),
     [loc.pathname, loc.searchStr, loc.hash, loc.state],
   );
