@@ -1,5 +1,5 @@
 import { useParams } from "@/lib/router-compat";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -182,6 +182,13 @@ export default function AgendaNaveStudio() {
     prefetchDateStrs(visibleDateStrs, professionalId);
   }, [prefetchDateStrs, selectedProfessional, visibleDateStrs]);
 
+  const handleVisibleDatesChange = useCallback((dates: Date[]) => {
+    const next = dates.map((d) => format(d, "yyyy-MM-dd"));
+    setVisibleDateStrs((prev) =>
+      prev.length === next.length && prev.every((v, i) => v === next[i]) ? prev : next,
+    );
+  }, []);
+
   const handleProfessionalChange = (value: string) => {
     setSelectedProfessional(value);
     const prof = professionals.find((p) => p.id === value);
@@ -291,7 +298,7 @@ export default function AgendaNaveStudio() {
                 <WeeklyCalendar
                   selectedDate={selectedDate}
                   onDateSelect={handleDateSelect}
-                  onVisibleDatesChange={(dates) => setVisibleDateStrs(dates.map((d) => format(d, "yyyy-MM-dd")))}
+                  onVisibleDatesChange={handleVisibleDatesChange}
                   disabled={(date) => {
                     const today = startOfToday();
                     return date < today || date > addMonths(today, 1);
