@@ -205,7 +205,7 @@ export default function TrialScheduleCards({ onSelectClass }: TrialScheduleCards
                   onClick={() => setExpSlug(exp.slug)}
                   className={`shrink-0 whitespace-nowrap rounded-full px-4 py-2 border transition-all text-sm font-medium ${expSlug === exp.slug ? "bg-[#2E4D3A] text-white border-[#2E4D3A] shadow-sm" : "bg-white text-[#2E4D3A] border-[#E2E8F0] hover:border-[#2E4D3A]/40 hover:bg-[#F8F9FA]"}`}
                 >
-                  {exp.labelShort ?? exp.label}
+                  {(exp as { labelShort?: string; label: string }).labelShort ?? exp.label}
                 </button>
               ))}
             </div>

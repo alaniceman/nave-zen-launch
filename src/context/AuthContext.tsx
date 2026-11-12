@@ -21,7 +21,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  const checkIsAdmin = useCallback(async (providedSession: Session | null): Promise<boolean> => {
+  const checkIsAdmin = useCallback(async (providedSession?: Session | null): Promise<boolean> => {
     if (!providedSession) {
       setIsAdmin(false);
       return false;

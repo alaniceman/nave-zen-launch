@@ -107,7 +107,7 @@ export default function AgendaNaveStudio() {
 
         const sortedProfs = (profsResult.data || []).sort((a, b) => a.name.localeCompare(b.name));
         setProfessionals(sortedProfs);
-        setServices(servicesResult.data || []);
+        setServices((servicesResult.data || []) as unknown as Service[]);
 
         if (professionalSlug && profsResult.data) {
           const prof = profsResult.data.find((p) => p.slug === professionalSlug);

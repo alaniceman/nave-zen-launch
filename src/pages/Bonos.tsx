@@ -109,7 +109,7 @@ export default function Bonos() {
         .order("sort_order", { ascending: true })
         .order("sessions_quantity", { ascending: true });
       if (error) throw error;
-      setPackages(filterExpiredPromos(data || []));
+      setPackages(filterExpiredPromos((data || []) as unknown as typeof packages));
     } catch (error) {
       console.error("Error loading packages:", error);
       toast.error("Error al cargar los paquetes");

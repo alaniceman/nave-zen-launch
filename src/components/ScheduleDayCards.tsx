@@ -165,7 +165,7 @@ export default function ScheduleDayCards() {
               <div role="radiogroup" aria-label="Seleccionar experiencia" className="flex gap-2 md:gap-3 overflow-x-auto snap-x snap-mandatory pb-2 -mx-1 px-1 pr-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] after:absolute after:right-0 after:top-0 after:bottom-2 after:w-8 after:bg-gradient-to-l after:from-white after:to-transparent after:pointer-events-none">
                 {EXPERIENCE_CATALOG.map(exp => (
                   <button key={exp.slug} role="radio" aria-checked={expSlug === exp.slug} onClick={() => setExpSlug(exp.slug)} className={`snap-start shrink-0 whitespace-nowrap rounded-full px-4 py-2.5 border transition-all text-sm font-medium ${expSlug === exp.slug ? "bg-[#2E4D3A] text-white border-[#2E4D3A] shadow-sm" : "bg-white text-[#2E4D3A] border-[#E2E8F0] hover:border-[#2E4D3A]/40 hover:bg-[#F8F9FA]"}`}>
-                    {exp.labelShort ?? exp.label}
+                    {(exp as { labelShort?: string; label: string }).labelShort ?? exp.label}
                   </button>
                 ))}
               </div>

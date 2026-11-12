@@ -66,7 +66,7 @@ export default function AdminSessionPackages() {
       toast.error("Error al cargar paquetes");
       return;
     }
-    setPackages(data || []);
+    setPackages((data || []) as unknown as typeof packages);
   }, []);
 
   const movePackage = async (index: number, direction: "up" | "down") => {

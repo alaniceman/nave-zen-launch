@@ -227,7 +227,7 @@ export function routeHead(pathname: string, override?: Partial<SeoEntry>) {
   path = aliases[path] ?? path;
   const canonical = canonicalFor(path);
   const found = instructors[path] ?? blogs[path] ?? yogaStyles[path] ?? fixed[path];
-  const data: SeoEntry = { title: DEFAULT_TITLE, description: DEFAULT_DESCRIPTION, ...found, ...override };
+  const data: SeoEntry = { ...(found ?? { title: DEFAULT_TITLE, description: DEFAULT_DESCRIPTION }), ...override };
   const image = data.image ?? origin + "/og-image.png";
   const isBlog = Boolean(blogs[path]);
   const meta: MetaTag[] = [
