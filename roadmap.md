@@ -88,3 +88,9 @@
 # Títulos posteriores a la migración y comprobación de CAPI
 - [x] Corregir títulos y descripciones de páginas públicas y secundarias de Icefest sin cambiar portada ni imágenes. Respuesta SSR verificada en 13 páginas; build OK.
 - [x] Revisar recepción reciente de CAPI y sus límites de verificación, sin compras ni conversiones simuladas. Meta aceptó eventos recientes; compra Icefest y deduplicación en Events Manager no verificadas.
+
+# Origen de ventas
+- [ ] Capturar primera y última visita durante 90 días, conservando Pixel.
+- [ ] Guardar atribución en Icefest, bonos y planes de prueba y preferencias de pago.
+- [ ] Mostrar origen en correo/admin/CSV Icefest y Notion de planes de prueba.
+- [ ] Verificar almacenamiento y payloads sin pagos ni órdenes reales; entregar enlace para Alan, sin publicar.
