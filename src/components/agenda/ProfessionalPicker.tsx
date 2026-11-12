@@ -61,7 +61,7 @@ export function ProfessionalPicker({
       >
         <span className="flex min-w-0 flex-1 items-center gap-3">
           {selected ? (
-            <Avatar className="h-10 w-10 border-2 border-background shadow-sm ring-1 ring-border">
+            <Avatar className="h-10 w-10 border-2 border-background shadow-xs ring-1 ring-border">
               <AvatarImage src={imageFor(selected)} alt={selected.name} className="object-cover" />
               <AvatarFallback className="text-xs font-semibold">{initialsFor(selected.name)}</AvatarFallback>
             </Avatar>
@@ -146,7 +146,7 @@ export function ProfessionalPicker({
                   )}
                   aria-pressed={isSelected}
                 >
-                  <Avatar className="h-12 w-12 border-2 border-background shadow-sm ring-1 ring-border">
+                  <Avatar className="h-12 w-12 border-2 border-background shadow-xs ring-1 ring-border">
                     <AvatarImage src={imageFor(professional)} alt={professional.name} className="object-cover" />
                     <AvatarFallback className="text-xs font-semibold">
                       {imageFor(professional) ? initialsFor(professional.name) : <User className="h-5 w-5" />}

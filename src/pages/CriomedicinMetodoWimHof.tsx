@@ -6,7 +6,7 @@ import { GiftCardSection } from "@/components/GiftCardSection";
 import { ReviewsTrustBar } from "@/components/ReviewsTrustBar";
 import { BautizoHieloPromo } from "@/components/BautizoHieloPromo";
 import { Promo18Section } from "@/components/Promo18Section";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link } from "@/lib/router-compat";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
@@ -161,7 +161,7 @@ const CriomedicinMetodoWimHof = () => {
           {/* Background Image with Overlay */}
           <img src="/lovable-uploads/criomedicina-hero.webp" alt="Criomedicina Método Wim Hof - Ice bath y breathwork en naturaleza" className="absolute inset-0 w-full h-full object-cover" style={{
           objectPosition: 'center'
-        }} {...({ fetchpriority: "high" } as any)} />
+        }} fetchPriority="high" />
           
           {/* Green Overlay */}
           <div className="absolute inset-0 bg-primary opacity-55" />
@@ -401,7 +401,7 @@ const CriomedicinMetodoWimHof = () => {
 
         {/* How to Book Section */}
         <section className="py-8 px-4 md:px-6">
-          <div className="max-w-5xl mx-auto bg-card rounded-2xl p-5 shadow-sm border">
+          <div className="max-w-5xl mx-auto bg-card rounded-2xl p-5 shadow-xs border">
             <h3 className="text-xl font-bold text-primary">Paga, recibe créditos y agenda en la app</h3>
             <ul className="list-disc pl-5 text-foreground mt-2 space-y-1">
               <li>Al comprar una sesión, pack o membresía, se cargan <strong>créditos</strong> a tu cuenta.</li>
@@ -413,7 +413,7 @@ const CriomedicinMetodoWimHof = () => {
 
         {/* Location Section */}
         <section className="py-8 px-4 md:px-6">
-          <div className="max-w-5xl mx-auto bg-card rounded-2xl p-5 shadow-sm border">
+          <div className="max-w-5xl mx-auto bg-card rounded-2xl p-5 shadow-xs border">
             <h3 className="text-xl font-bold text-primary">Estamos en Las Condes, Santiago</h3>
             <p className="text-muted-foreground mt-1">Antares 259, Las Condes</p>
             <div className="mt-3 flex flex-wrap gap-3">

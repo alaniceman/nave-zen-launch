@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 import { ExternalLink, MapPin, MessageCircle, Play, ShieldCheck } from "lucide-react";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -35,7 +35,7 @@ function PodcastCard({ program, title, id }: { program: string; title: string; i
   const youtubeUrl = `https://www.youtube.com/watch?v=${id}`;
 
   return (
-    <article className="overflow-hidden rounded-lg border border-border bg-card shadow-sm">
+    <article className="overflow-hidden rounded-lg border border-border bg-card shadow-xs">
       <div className="aspect-video bg-muted">
         {playing ? (
           <iframe

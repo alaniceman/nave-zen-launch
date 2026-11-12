@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSearchParams, Link } from "react-router-dom";
+import { useSearchParams, Link } from "@/lib/router-compat";
 import { Helmet } from "react-helmet-async";
 import { CheckCircle2, Loader2, AlertCircle, Gift } from "lucide-react";
 import { Button } from "@/components/ui/button";

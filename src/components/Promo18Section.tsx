@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 import { Snowflake, ArrowRight, Clock } from "lucide-react";
 import { isPromo18Active, PROMO_18_PATH, PROMO_18_PRICE, PROMO_18_REGULAR_PRICE } from "@/lib/promo18";
 import heroImage from "@/assets/promo-18-hero.jpg";
@@ -23,7 +23,7 @@ export const Promo18Section = () => {
       <div className="relative container mx-auto px-6 py-10 md:py-16">
         <div className="max-w-xl">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm text-white px-3 py-1.5 rounded-full text-xs font-medium mb-4">
+          <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-xs text-white px-3 py-1.5 rounded-full text-xs font-medium mb-4">
             <Snowflake className="w-3.5 h-3.5" />
             <span>Promo Fiestas Patrias · hasta el 30 de septiembre</span>
           </div>

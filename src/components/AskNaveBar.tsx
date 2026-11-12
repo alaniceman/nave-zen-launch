@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect, FormEvent } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation } from "@/lib/router-compat";
 import { Sparkles } from "lucide-react";
 
 /**
@@ -127,7 +127,7 @@ export const AskNaveBar = ({ placeholder, overlap = true, className = "" }: AskN
               onChange={(e) => setValue(e.target.value)}
               placeholder={contextual}
               aria-label="Escribe tu pregunta"
-              className="flex-1 bg-muted/50 outline-none text-foreground placeholder:text-muted-foreground rounded-xl px-3 py-3 text-[10px] sm:text-xs md:text-sm truncate"
+              className="flex-1 bg-muted/50 outline-hidden text-foreground placeholder:text-muted-foreground rounded-xl px-3 py-3 text-[10px] sm:text-xs md:text-sm truncate"
               maxLength={300}
             />
             <button

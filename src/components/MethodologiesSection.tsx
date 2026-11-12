@@ -1,5 +1,5 @@
 import { Waves, Wind, Heart } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 
 export const MethodologiesSection = () => {
   const methodologies = [
@@ -69,7 +69,7 @@ export const MethodologiesSection = () => {
                 
                 <div className="relative z-10">
                   {/* Icon */}
-                  <div className="mx-auto w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-primary/20 to-primary/10 rounded-full flex items-center justify-center mb-4 md:mb-6 group-hover:scale-110 transition-transform duration-300 shadow-sm">
+                  <div className="mx-auto w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-primary/20 to-primary/10 rounded-full flex items-center justify-center mb-4 md:mb-6 group-hover:scale-110 transition-transform duration-300 shadow-xs">
                     <IconComponent className="w-6 h-6 md:w-7 md:h-7 text-primary" />
                   </div>
 
@@ -93,7 +93,7 @@ export const MethodologiesSection = () => {
                     <ul className="text-left space-y-2 md:space-y-3 bg-background/50 p-3 md:p-4 rounded-lg border border-primary/10">
                       {method.benefitsList.map((benefit, idx) => (
                         <li key={idx} className="font-inter text-xs text-neutral-dark flex items-start">
-                          <span className="w-1.5 h-1.5 md:w-2 md:h-2 bg-gradient-to-r from-primary to-primary/60 rounded-full mr-2 md:mr-3 flex-shrink-0 mt-1.5 shadow-sm"></span>
+                          <span className="w-1.5 h-1.5 md:w-2 md:h-2 bg-gradient-to-r from-primary to-primary/60 rounded-full mr-2 md:mr-3 flex-shrink-0 mt-1.5 shadow-xs"></span>
                           <span className="leading-relaxed">{benefit}</span>
                         </li>
                       ))}

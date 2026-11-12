@@ -1,5 +1,5 @@
 import { Calendar, Users, Package, Clock, User, LogOut, Ticket, Gift, Key, MapPin, ShoppingCart, AlertCircle, LayoutDashboard, Mail, Crown, Contact, MessageCircle, Brain, Sparkles, Store } from 'lucide-react';
-import { NavLink } from 'react-router-dom';
+import { Link, useLocation } from '@/lib/router-compat';
 import { useAuth } from '@/context/AuthContext';
 import {
   Sidebar,
@@ -53,6 +53,8 @@ export function AdminSidebar() {
   const { state } = useSidebar();
   const { user, signOut } = useAuth();
   const collapsed = state === 'collapsed';
+  const { pathname } = useLocation();
+  const isPathActive = (url: string) => pathname === url || pathname.startsWith(`${url}/`);
 
   return (
     <Sidebar collapsible="icon" className="border-r bg-sidebar">
@@ -72,22 +74,20 @@ export function AdminSidebar() {
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <NavLink
+                    <Link
                       to={item.url}
-                      className={({ isActive }) =>
+                      className={(() => { const isActive = isPathActive(item.url); return (
                         `flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${
                           isActive
                             ? 'bg-primary font-bold shadow-md scale-[1.02]'
                             : 'hover:bg-gray-100 hover:scale-[1.02] font-medium'
                         }`
-                      }
-                      style={({ isActive }) => ({
-                        color: isActive ? '#ffffff' : '#1f2937'
-                      })}
+                      ); })()}
+                      style={{ color: isPathActive(item.url) ? '#ffffff' : '#1f2937' }}
                     >
                       <item.icon className="h-5 w-5 flex-shrink-0" />
                       {!collapsed && <span className="text-sm">{item.title}</span>}
-                    </NavLink>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

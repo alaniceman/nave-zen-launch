@@ -1,4 +1,4 @@
-import { useParams, Navigate, Link } from "react-router-dom";
+import { useParams, Navigate, Link } from "@/lib/router-compat";
 import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import { Footer } from "@/components/Footer";
@@ -170,7 +170,7 @@ const InstructorProfile = () => {
               {coach.credentials.split(" · ").map((cred, i) => (
                 <div
                   key={i}
-                  className="flex items-start gap-3 bg-background rounded-lg p-4 shadow-sm"
+                  className="flex items-start gap-3 bg-background rounded-lg p-4 shadow-xs"
                 >
                   <div className="w-2 h-2 rounded-full bg-secondary mt-2 flex-shrink-0" />
                   <span className="text-neutral-dark">{cred}</span>
@@ -194,7 +194,7 @@ const InstructorProfile = () => {
                 {instructorSchedule.map((entry, i) => (
                   <div
                     key={i}
-                    className="flex items-center gap-4 bg-muted/50 rounded-lg p-4 shadow-sm"
+                    className="flex items-center gap-4 bg-muted/50 rounded-lg p-4 shadow-xs"
                   >
                     <div className="min-w-[100px]">
                       <span className="font-semibold text-primary">{entry.day}</span>

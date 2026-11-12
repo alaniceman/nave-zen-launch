@@ -294,7 +294,7 @@ export default function AdminEmailPreview() {
               <iframe
                 title="Email preview"
                 srcDoc={preview.html}
-                className="w-full rounded border bg-white"
+                className="w-full rounded-sm border bg-white"
                 style={{ height: 900 }}
                 sandbox=""
               />

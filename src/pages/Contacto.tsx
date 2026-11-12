@@ -291,7 +291,7 @@ Mensaje: ${formData.message}`
                 key={img.src}
                 type="button"
                 onClick={() => setLightboxIndex(i)}
-                className={`group relative overflow-hidden rounded-2xl bg-neutral-light focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2 ${
+                className={`group relative overflow-hidden rounded-2xl bg-neutral-light focus:outline-hidden focus:ring-2 focus:ring-secondary focus:ring-offset-2 ${
                   i === 0 ? "col-span-2 row-span-2" : ""
                 }`}
                 aria-label={`Ver foto ${i + 1}: ${img.alt}`}
@@ -317,7 +317,7 @@ Mensaje: ${formData.message}`
                 <button
                   type="button"
                   onClick={() => setLightboxIndex(null)}
-                  className="absolute -top-14 right-0 z-50 flex items-center justify-center rounded-full bg-black/60 p-2.5 text-white backdrop-blur-sm hover:bg-black/80 transition-colors"
+                  className="absolute -top-14 right-0 z-50 flex items-center justify-center rounded-full bg-black/60 p-2.5 text-white backdrop-blur-xs hover:bg-black/80 transition-colors"
                   aria-label="Cerrar"
                 >
                   <X className="h-5 w-5" />
@@ -328,7 +328,7 @@ Mensaje: ${formData.message}`
                   <button
                     type="button"
                     onClick={goPrev}
-                    className="absolute left-2 md:left-4 z-50 flex items-center justify-center rounded-full bg-black/60 p-2.5 text-white backdrop-blur-sm hover:bg-black/80 transition-colors"
+                    className="absolute left-2 md:left-4 z-50 flex items-center justify-center rounded-full bg-black/60 p-2.5 text-white backdrop-blur-xs hover:bg-black/80 transition-colors"
                     aria-label="Foto anterior"
                   >
                     <ChevronLeft className="h-6 w-6" />
@@ -344,7 +344,7 @@ Mensaje: ${formData.message}`
                   <button
                     type="button"
                     onClick={goNext}
-                    className="absolute right-2 md:right-4 z-50 flex items-center justify-center rounded-full bg-black/60 p-2.5 text-white backdrop-blur-sm hover:bg-black/80 transition-colors"
+                    className="absolute right-2 md:right-4 z-50 flex items-center justify-center rounded-full bg-black/60 p-2.5 text-white backdrop-blur-xs hover:bg-black/80 transition-colors"
                     aria-label="Foto siguiente"
                   >
                     <ChevronRight className="h-6 w-6" />
@@ -386,7 +386,7 @@ Mensaje: ${formData.message}`
                 value={formData.name}
                 onChange={handleInputChange}
                 required
-                className="w-full bg-white border border-neutral-light rounded-[10px] py-3 px-4 focus:border-secondary focus:outline-none focus:ring-2 focus:ring-secondary/20 transition-all duration-200"
+                className="w-full bg-white border border-neutral-light rounded-[10px] py-3 px-4 focus:border-secondary focus:outline-hidden focus:ring-2 focus:ring-secondary/20 transition-all duration-200"
                 aria-label="Nombre completo"
               />
             </div>
@@ -399,7 +399,7 @@ Mensaje: ${formData.message}`
                 value={formData.email}
                 onChange={handleInputChange}
                 required
-                className="w-full bg-white border border-neutral-light rounded-[10px] py-3 px-4 focus:border-secondary focus:outline-none focus:ring-2 focus:ring-secondary/20 transition-all duration-200"
+                className="w-full bg-white border border-neutral-light rounded-[10px] py-3 px-4 focus:border-secondary focus:outline-hidden focus:ring-2 focus:ring-secondary/20 transition-all duration-200"
                 aria-label="Correo electrónico"
               />
             </div>
@@ -412,7 +412,7 @@ Mensaje: ${formData.message}`
                 onChange={handleInputChange}
                 required
                 rows={5}
-                className="w-full bg-white border border-neutral-light rounded-[10px] py-3 px-4 focus:border-secondary focus:outline-none focus:ring-2 focus:ring-secondary/20 resize-none transition-all duration-200"
+                className="w-full bg-white border border-neutral-light rounded-[10px] py-3 px-4 focus:border-secondary focus:outline-hidden focus:ring-2 focus:ring-secondary/20 resize-none transition-all duration-200"
                 aria-label="Mensaje"
               />
             </div>

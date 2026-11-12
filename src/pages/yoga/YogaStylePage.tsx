@@ -1,4 +1,4 @@
-import { useParams, Navigate } from "react-router-dom";
+import { useParams, Navigate } from "@/lib/router-compat";
 import { getYogaStyle } from "@/data/yogaStyles";
 import { YogaStyleTemplate } from "@/components/yoga/YogaStyleTemplate";
 

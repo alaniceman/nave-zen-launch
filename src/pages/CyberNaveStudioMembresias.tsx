@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 import { ArrowDown, ExternalLink, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/components/tienda/CartContext";
@@ -122,7 +122,7 @@ const MembresiasContent = () => {
               onClick={() => setDur(d.key)}
               className={cn(
                 "rounded-xl px-2 py-3 font-inter text-sm font-semibold leading-tight transition-colors min-h-[56px]",
-                dur === d.key ? "bg-primary text-primary-foreground shadow" : "text-foreground hover:bg-background",
+                dur === d.key ? "bg-primary text-primary-foreground shadow-sm" : "text-foreground hover:bg-background",
               )}
             >
               {d.label}

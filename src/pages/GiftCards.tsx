@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Helmet } from "react-helmet-async";
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -115,7 +115,7 @@ export default function GiftCards() {
         .order("sessions_quantity", { ascending: true });
 
       if (error) throw error;
-      setPackages(filterExpiredPromos(data || []));
+      setPackages(filterExpiredPromos((data || []) as unknown as typeof packages));
     } catch (error) {
       console.error("Error loading packages:", error);
       toast.error("Error al cargar los paquetes");

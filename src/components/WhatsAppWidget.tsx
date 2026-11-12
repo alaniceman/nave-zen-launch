@@ -59,7 +59,7 @@ const WhatsAppWidget = ({ onOpenChat }: WhatsAppWidgetProps) => {
           isExpanded
             ? "bg-gray-700 hover:bg-gray-800"
             : "bg-[#25d366] hover:bg-[#128c7e]"
-        } text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-4 focus:ring-[#25d366]/30`}
+        } text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 focus:outline-hidden focus:ring-4 focus:ring-[#25d366]/30`}
         aria-label={isExpanded ? "Cerrar menú" : "Abrir menú de contacto"}
       >
         {isExpanded ? (

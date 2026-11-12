@@ -1,6 +1,6 @@
 import { createContext, useState, ReactNode, useEffect } from "react";
 import { EmailCaptureModal } from "@/components/EmailCaptureModal";
-import { useLocation } from 'react-router-dom';
+import { useLocation } from '@/lib/router-compat';
 
 interface EmailCaptureModalContextType {
   openEmailCaptureModal: () => void;

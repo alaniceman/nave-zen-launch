@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react"
-import { Link } from "react-router-dom"
+import { Link } from "@/lib/router-compat"
 import { Helmet } from "react-helmet-async"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -213,7 +213,7 @@ const Experiencias = () => {
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     <div className="absolute top-4 left-4">
-                      <Badge className="bg-primary/90 text-primary-foreground backdrop-blur-sm text-xs">
+                      <Badge className="bg-primary/90 text-primary-foreground backdrop-blur-xs text-xs">
                         <Icon className="w-3 h-3 mr-1" />
                         {exp.duration}
                       </Badge>

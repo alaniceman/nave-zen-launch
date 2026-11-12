@@ -1,13 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Snowflake, Wind, Users } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 
 const BautizoHieloPromo = () => {
   return (
     <section className="py-12 bg-gradient-to-b from-background to-primary/5">
       <div className="container mx-auto px-4 max-w-4xl">
-        <div className="bg-card border border-primary/30 rounded-2xl p-6 md:p-8 shadow-sm">
+        <div className="bg-card border border-primary/30 rounded-2xl p-6 md:p-8 shadow-xs">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div className="space-y-3">
               <Badge className="bg-primary text-primary-foreground px-3 py-1">

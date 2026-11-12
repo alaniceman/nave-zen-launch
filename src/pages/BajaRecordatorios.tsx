@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSearchParams, Link } from "react-router-dom";
+import { useSearchParams, Link } from "@/lib/router-compat";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, XCircle, Loader2 } from "lucide-react";
@@ -44,7 +44,7 @@ const BajaRecordatorios = () => {
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
       <main className="min-h-screen flex items-center justify-center bg-background px-6 py-24">
-        <div className="w-full max-w-md rounded-2xl border border-border bg-card p-8 text-center shadow-sm">
+        <div className="w-full max-w-md rounded-2xl border border-border bg-card p-8 text-center shadow-xs">
           {state === "loading" && (
             <>
               <Loader2 className="mx-auto mb-4 h-8 w-8 animate-spin text-muted-foreground" />

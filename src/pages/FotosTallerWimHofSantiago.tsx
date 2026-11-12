@@ -69,7 +69,7 @@ const FotosTallerWimHofSantiago = () => {
               <button
                 key={i}
                 onClick={() => setIndex(i)}
-                className="group relative aspect-[3/4] overflow-hidden rounded-2xl bg-muted focus:outline-none focus:ring-2 focus:ring-primary"
+                className="group relative aspect-[3/4] overflow-hidden rounded-2xl bg-muted focus:outline-hidden focus:ring-2 focus:ring-primary"
                 aria-label={`Abrir ${p.alt}`}
               >
                 <img

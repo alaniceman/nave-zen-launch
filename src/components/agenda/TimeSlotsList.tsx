@@ -78,7 +78,7 @@ export function TimeSlotsList({ slots, onSelectSlot }: TimeSlotsListProps) {
             type="button"
             key={`${slot.dateTimeStart}-${slot.serviceId}-${slot.professionalId}`}
             onClick={() => onSelectSlot(slot)}
-            className="group flex w-full items-stretch gap-3 rounded-xl border border-border bg-card p-3 text-left shadow-sm transition-all min-h-[64px] hover:border-primary/40 hover:shadow-md active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            className="group flex w-full items-stretch gap-3 rounded-xl border border-border bg-card p-3 text-left shadow-xs transition-all min-h-[64px] hover:border-primary/40 hover:shadow-md active:scale-[0.99] focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           >
             <div className="flex w-[64px] shrink-0 flex-col items-center justify-center rounded-lg bg-muted/60 px-2 py-2">
               <span className="font-bold text-lg leading-none tracking-tight text-foreground group-hover:text-primary transition-colors">

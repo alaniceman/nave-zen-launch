@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useLocation } from "@/lib/router-compat";
 
 // Promo 18 de Septiembre — Bautizo de Hielo + Yoga
 // Vigente hasta el 30 de septiembre 2026, 23:59 (Chile, UTC-3)

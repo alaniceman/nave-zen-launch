@@ -59,7 +59,7 @@ const BlogHabitosDisciplina = () => {
             <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/60" />
           </div>
           <div className="container mx-auto px-6 relative z-10 text-center text-white">
-            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6 text-sm">
+            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-xs px-4 py-2 rounded-full mb-6 text-sm">
               <span>Hábitos</span>
               <span>•</span>
               <span>Disciplina</span>

@@ -11,7 +11,7 @@ import { useFacebookPixel } from "@/hooks/useFacebookPixel";
 import { trackMetaClientEvent } from "@/lib/metaTracking";
 import { deterministicEventId } from "@/lib/metaPixel";
 import { toast } from "sonner";
-import { Navigate } from "react-router-dom";
+import { Navigate } from "@/lib/router-compat";
 
 const PACKAGE_ID = "003cce17-e599-44e4-a1e6-e7873d45deaf";
 const PROMO_END = new Date("2026-04-01T23:59:59-04:00"); // 10 días desde el 22 de marzo
@@ -193,15 +193,15 @@ export default function Icefest() {
 
               {/* Key benefits pills */}
               <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 mb-10">
-                <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-white px-4 py-2.5 rounded-full text-sm border border-white/10">
+                <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-xs text-white px-4 py-2.5 rounded-full text-sm border border-white/10">
                   <Users className="w-4 h-4 text-cyan-300" />
                   <span><strong>Compartibles</strong> con quien quieras</span>
                 </div>
-                <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-white px-4 py-2.5 rounded-full text-sm border border-white/10">
+                <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-xs text-white px-4 py-2.5 rounded-full text-sm border border-white/10">
                   <Calendar className="w-4 h-4 text-cyan-300" />
                   <span><strong>6 meses</strong> para usarlas</span>
                 </div>
-                <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-white px-4 py-2.5 rounded-full text-sm border border-white/10">
+                <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-xs text-white px-4 py-2.5 rounded-full text-sm border border-white/10">
                    <Snowflake className="w-4 h-4 text-cyan-300" />
                    <span>Úsalas <strong>a tu ritmo</strong></span>
                  </div>
@@ -235,7 +235,7 @@ export default function Icefest() {
         {/* Purchase Form */}
         <section className="py-12 md:py-16 bg-gradient-to-b from-slate-900 to-sky-950">
           <div className="container mx-auto px-4">
-            <Card className="border border-cyan-500/20 shadow-2xl shadow-cyan-500/10 bg-slate-800/80 backdrop-blur-sm max-w-lg mx-auto">
+            <Card className="border border-cyan-500/20 shadow-2xl shadow-cyan-500/10 bg-slate-800/80 backdrop-blur-xs max-w-lg mx-auto">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-xl text-white">
                   <Gift className="w-5 h-5 text-cyan-400" />
@@ -313,7 +313,7 @@ export default function Icefest() {
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
               {benefits.map((benefit, index) => (
-                <div key={index} className="bg-white/5 backdrop-blur-sm rounded-xl p-6 text-center border border-white/10 hover:border-cyan-400/30 transition-colors">
+                <div key={index} className="bg-white/5 backdrop-blur-xs rounded-xl p-6 text-center border border-white/10 hover:border-cyan-400/30 transition-colors">
                   <div className="inline-flex p-3 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-full text-white mb-4">
                     <benefit.icon className="w-6 h-6" />
                   </div>

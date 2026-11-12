@@ -217,7 +217,7 @@ export default function AdminWeeklyReminder() {
             <iframe
               title="Preview recordatorio semanal"
               srcDoc={preview.html}
-              className="w-full rounded border bg-white"
+              className="w-full rounded-sm border bg-white"
               style={{ height: 900 }}
               sandbox=""
             />

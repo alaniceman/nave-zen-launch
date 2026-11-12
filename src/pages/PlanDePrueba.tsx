@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 import { ArrowDown, Check, Sparkles, Shield } from "lucide-react";
 import { Footer } from "@/components/Footer";
 import { PlanPruebaFormModal } from "@/components/plan-prueba/PlanPruebaFormModal";
@@ -31,7 +31,7 @@ export default function PlanDePrueba() {
     setOpen(true);
   };
 
-  const scrollTo = (ref: React.RefObject<HTMLDivElement>) => {
+  const scrollTo = (ref: React.RefObject<HTMLDivElement | null>) => {
     ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
@@ -71,11 +71,11 @@ export default function PlanDePrueba() {
         <div className="container mx-auto px-4 max-w-5xl">
           <div className="text-center">
             <div className="flex flex-wrap items-center justify-center gap-2 mb-6">
-              <div className="inline-flex items-center gap-2 bg-white/70 backdrop-blur border border-[#2E4D3A]/15 text-[#2E4D3A] px-4 py-1.5 rounded-full text-sm font-medium shadow-sm">
+              <div className="inline-flex items-center gap-2 bg-white/70 backdrop-blur-sm border border-[#2E4D3A]/15 text-[#2E4D3A] px-4 py-1.5 rounded-full text-sm font-medium shadow-xs">
                 <Sparkles className="w-4 h-4" />
                 Acceso completo durante tu prueba
               </div>
-              <div className="inline-flex items-center gap-1.5 bg-amber-50 border border-amber-200 text-amber-800 px-3 py-1.5 rounded-full text-sm font-semibold shadow-sm">
+              <div className="inline-flex items-center gap-1.5 bg-amber-50 border border-amber-200 text-amber-800 px-3 py-1.5 rounded-full text-sm font-semibold shadow-xs">
                 <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
                 Cupos limitados
               </div>

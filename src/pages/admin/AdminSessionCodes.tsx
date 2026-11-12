@@ -61,7 +61,7 @@ export default function AdminSessionCodes() {
       setIsLoading(false);
       return;
     }
-    setCodes(data || []);
+    setCodes((data || []) as unknown as typeof codes);
     setIsLoading(false);
   };
 

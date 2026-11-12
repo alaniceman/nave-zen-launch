@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation } from "@/lib/router-compat";
 import { Footer } from "@/components/Footer";
 import { CartProvider } from "@/components/tienda/CartContext";
 import { CartSheet } from "@/components/tienda/CartSheet";
@@ -56,7 +56,7 @@ const NAV = [
 export const CyberNav = () => {
   const { pathname } = useLocation();
   return (
-    <nav aria-label="Secciones Cyber" className="sticky top-16 z-30 bg-background/95 backdrop-blur border-b border-border">
+    <nav aria-label="Secciones Cyber" className="sticky top-16 z-30 bg-background/95 backdrop-blur-sm border-b border-border">
       <div className="container mx-auto max-w-5xl px-4 py-2 grid grid-cols-3 gap-1">
         {NAV.map((n) => (
           <Link

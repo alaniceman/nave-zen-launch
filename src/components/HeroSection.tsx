@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button-variants";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/lib/router-compat";
 import { useEffect, useState, useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
@@ -33,7 +33,7 @@ const HeroSlideMain = () => {
         alt="Nave Studio wellness center hero background"
         className="absolute inset-0 w-full h-full object-cover"
         style={{ objectPosition: 'right 32% center' }}
-        {...({ fetchpriority: "high" } as any)}
+        fetchPriority="high"
       />
 
       {/* Green Overlay */}
@@ -77,7 +77,7 @@ const HeroSlideMain = () => {
               <Button
                 variant="outline"
                 size="lg"
-                className="w-full md:w-auto min-w-[280px] border-2 border-white/80 bg-white/10 text-white hover:bg-white hover:text-primary transition-colors backdrop-blur-sm"
+                className="w-full md:w-auto min-w-[280px] border-2 border-white/80 bg-white/10 text-white hover:bg-white hover:text-primary transition-colors backdrop-blur-xs"
                 onClick={() => navigate('/criomedicina-metodo-wim-hof-las-condes')}
               >
                 Agenda tu sesión de Criomedicina →
@@ -104,7 +104,7 @@ const HeroSlidePlanPrueba = () => {
         src={planPruebaHero}
         alt="Plan de Prueba — Yoga en Nave Studio"
         className="absolute inset-0 w-full h-full object-cover"
-        {...({ fetchpriority: "high" } as any)}
+        fetchPriority="high"
       />
       <div className="absolute inset-0 bg-primary/65" />
 
@@ -349,12 +349,12 @@ const HeroSlidePromo18 = () => {
         src={promo18Hero}
         alt="Tina de agua fría con hielo y mat de yoga al atardecer en Santiago"
         className="absolute inset-0 w-full h-full object-cover"
-        {...({ fetchpriority: "high" } as any)}
+        fetchPriority="high"
       />
       <div className="absolute inset-0 bg-gradient-to-r from-primary/90 via-primary/75 to-primary/40" />
       <div className="relative z-10 container mx-auto px-6 text-white">
         <div className="max-w-xl space-y-4 md:space-y-6">
-          <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm text-white px-4 py-1.5 rounded-full text-xs md:text-sm font-medium border border-white/25">
+          <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-xs text-white px-4 py-1.5 rounded-full text-xs md:text-sm font-medium border border-white/25">
             <span>🧊</span>
             <span>Promo Fiestas Patrias · hasta el 30 de septiembre</span>
           </div>
@@ -409,7 +409,7 @@ const CyberHeroCountdown = () => {
   return (
     <div className="mx-auto grid w-full max-w-[340px] grid-cols-4 gap-2" aria-live="off">
       {parts.map((p) => (
-        <div key={p.l} className="min-w-0 rounded-xl border border-white/25 bg-white/10 backdrop-blur-sm py-2 text-center">
+        <div key={p.l} className="min-w-0 rounded-xl border border-white/25 bg-white/10 backdrop-blur-xs py-2 text-center">
           <span className="block font-space-grotesk text-2xl md:text-3xl font-bold tabular-nums leading-none text-white">
             {String(p.v).padStart(2, "0")}
           </span>
@@ -632,7 +632,7 @@ export const HeroSection = () => {
       {/* Arrow indicators */}
       <button
         onClick={() => emblaApi?.scrollPrev()}
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center text-white hover:bg-white/30 transition-colors"
+        className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/20 backdrop-blur-xs border border-white/30 flex items-center justify-center text-white hover:bg-white/30 transition-colors"
         aria-label="Slide anterior"
       >
         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -642,7 +642,7 @@ export const HeroSection = () => {
 
       <button
         onClick={() => emblaApi?.scrollNext()}
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center text-white hover:bg-white/30 transition-colors"
+        className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/20 backdrop-blur-xs border border-white/30 flex items-center justify-center text-white hover:bg-white/30 transition-colors"
         aria-label="Slide siguiente"
       >
         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

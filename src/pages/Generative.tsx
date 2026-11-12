@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 import { Loader2, Sparkles, ArrowRight, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -93,7 +93,7 @@ const Generative = () => {
           </div>
 
           <div className="w-full max-w-2xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-border bg-card/50 backdrop-blur-sm text-xs uppercase tracking-wider text-muted-foreground mb-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-border bg-card/50 backdrop-blur-xs text-xs uppercase tracking-wider text-muted-foreground mb-6">
               <Sparkles className="w-3.5 h-3.5" />
               Nave Studio Generativa · IA
             </div>
@@ -114,7 +114,7 @@ const Generative = () => {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Ej: soy corredor con ansiedad, busco dormir mejor y recuperarme..."
-                  className="min-h-[120px] text-base md:text-lg p-5 rounded-2xl border-2 border-border bg-card/80 backdrop-blur focus-visible:ring-primary resize-none"
+                  className="min-h-[120px] text-base md:text-lg p-5 rounded-2xl border-2 border-border bg-card/80 backdrop-blur-sm focus-visible:ring-primary resize-none"
                   disabled={loading}
                   maxLength={500}
                 />

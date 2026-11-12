@@ -357,7 +357,7 @@ const YogaLasCondes = () => {
             className="absolute inset-0 w-full h-full object-cover"
             width={1600}
             height={900}
-            {...({ fetchpriority: "high" } as any)}
+            fetchPriority="high"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-primary/75 via-primary/55 to-primary/80" />
           <div className="relative z-10 text-center px-6 max-w-3xl mx-auto py-16 md:py-20">
@@ -391,7 +391,7 @@ const YogaLasCondes = () => {
               </a>
               <a
                 href="#horarios-yoga"
-                className="border-2 border-white/40 text-white hover:bg-white/10 rounded-full px-8 py-3.5 font-medium transition-all duration-300 font-inter inline-flex items-center justify-center backdrop-blur-sm"
+                className="border-2 border-white/40 text-white hover:bg-white/10 rounded-full px-8 py-3.5 font-medium transition-all duration-300 font-inter inline-flex items-center justify-center backdrop-blur-xs"
               >
                 Ver horarios reales
               </a>

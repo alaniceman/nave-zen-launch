@@ -9,7 +9,7 @@ export function activeIcefestTier(tiers:IcefestTier[], now=Date.now()) {
  return [...tiers].sort((a,b)=>a.display_order-b.display_order).find(t=>t.is_active && (!t.valid_from || new Date(t.valid_from).getTime()<=now) && (!t.valid_until || new Date(t.valid_until).getTime()>now) && (t.stock===null || t.stock_sold<t.stock)) || null;
 }
 export async function icefestCall<T=any>(name:string,body:unknown):Promise<T> {
- const {data,error}=await supabase.functions.invoke(name,{body});
+ const {data,error}=await supabase.functions.invoke(name,{body: body as Record<string, unknown>});
  if(error){if(error instanceof FunctionsHttpError){const text=await error.context.text();try{throw new Error(JSON.parse(text).error||text);}catch(e){if(e instanceof SyntaxError)throw new Error('No se pudo completar la solicitud');throw e;}}throw error;}
  if(data?.error)throw new Error(data.error);return data;
 }

@@ -1,0 +1,119 @@
+{
+ "customizations": [
+  {
+   "token": "@font-face Inter/Space Grotesk self-hosted",
+   "source": "src/index.css",
+   "reappliedIn": "src/styles.css"
+  },
+  {
+   "token": "Inter/Space Grotesk Fallback metrics",
+   "source": "src/index.css",
+   "reappliedIn": "src/styles.css"
+  },
+  {
+   "token": "--primary/--secondary/--warm/--cyber/--neutral-* HSL tokens",
+   "source": "src/index.css",
+   "reappliedIn": "src/styles.css"
+  },
+  {
+   "token": ".dark tokens",
+   "source": "src/index.css",
+   "reappliedIn": "src/styles.css"
+  },
+  {
+   "token": "--warm color",
+   "source": "src/index.css",
+   "reappliedIn": "src/styles.css"
+  },
+  {
+   "token": "--neutral-* colors",
+   "source": "src/index.css",
+   "reappliedIn": "src/styles.css"
+  },
+  {
+   "token": "--cyber color",
+   "source": "src/index.css",
+   "reappliedIn": "src/styles.css"
+  },
+  {
+   "token": "--shadow-light",
+   "source": "src/index.css",
+   "reappliedIn": "src/styles.css"
+  },
+  {
+   "token": "--hero-overlay",
+   "source": "src/index.css",
+   "reappliedIn": "src/styles.css"
+  },
+  {
+   "token": "font-space/font-inter",
+   "source": "src/index.css",
+   "reappliedIn": "src/styles.css"
+  },
+  {
+   "token": "tracking-heading",
+   "source": "src/index.css",
+   "reappliedIn": "src/styles.css"
+  },
+  {
+   "token": "h-22",
+   "source": "src/index.css",
+   "reappliedIn": "src/styles.css"
+  },
+  {
+   "token": "font-heading utility",
+   "source": "src/index.css",
+   "reappliedIn": "src/styles.css"
+  },
+  {
+   "token": "font-body utility",
+   "source": "src/index.css",
+   "reappliedIn": "src/styles.css"
+  },
+  {
+   "token": "fade-in keyframes/animate-fade-in",
+   "source": "src/index.css",
+   "reappliedIn": "src/styles.css"
+  },
+  {
+   "token": "scale-103",
+   "source": "src/index.css",
+   "reappliedIn": "src/styles.css"
+  },
+  {
+   "token": "container center/padding/2xl",
+   "source": "src/index.css",
+   "reappliedIn": "src/styles.css"
+  },
+  {
+   "token": "icefest-theme scoped tokens",
+   "source": "src/index.css",
+   "reappliedIn": "src/styles.css"
+  },
+  {
+   "token": "icefest-hero-shade",
+   "source": "src/index.css",
+   "reappliedIn": "src/styles.css"
+  },
+  {
+   "token": "icefest-checkout floating fields",
+   "source": "src/index.css",
+   "reappliedIn": "src/styles.css"
+  },
+  {
+   "token": "overflow-x clip",
+   "source": "src/index.css",
+   "reappliedIn": "src/styles.css"
+  },
+  {
+   "token": "scroll-padding/smooth scroll",
+   "source": "src/index.css",
+   "reappliedIn": "src/styles.css"
+  },
+  {
+   "token": "typography base rules",
+   "source": "src/index.css",
+   "reappliedIn": "src/styles.css"
+  }
+ ]
+}
