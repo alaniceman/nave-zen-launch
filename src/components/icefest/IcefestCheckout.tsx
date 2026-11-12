@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Minus, Plus, Loader2, Ticket, ShieldCheck, Calendar, MapPin, Tag } from "lucide-react";
+import { Minus, Plus, Loader2, Ticket, ShieldCheck, Calendar, MapPin, Tag, CreditCard } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,6 +10,7 @@ import { trackMetaClientEvent } from "@/lib/metaTracking";
 import { getMetaBrowserContext } from "@/lib/metaPixel";
 import { ICEFEST_DEPOSIT_TIER_ID, icefestDepositForQuantity } from "../../../supabase/functions/_shared/icefestDeposit";
 import { IcefestDepositSummary } from "./IcefestDepositSummary";
+import { icefestInstallments } from "@/lib/icefestInstallments";
 import ice from "@/assets/icefest/ice-bath-new.webp";
 
 type Quote = { total_amount: number; discount_amount: number };
@@ -30,6 +31,8 @@ export function IcefestCheckout({ tier, event, canBuy, open, onOpenChange }: Pro
   const deposit = tier?.id === ICEFEST_DEPOSIT_TIER_ID ? icefestDepositForQuantity(quantity) : null;
   const limit = tier ? Math.max(0, Math.min(tier.max_per_order, tier.stock === null ? tier.max_per_order : tier.stock - tier.stock_sold)) : 0;
   const checkoutAvailable = canBuy && limit > 0 && quantity <= limit;
+  const total = quote?.total_amount ?? (tier?.price ?? 0) * quantity;
+  const installments = icefestInstallments(total);
 
   useEffect(() => {
     revision.current += 1;
@@ -183,8 +186,16 @@ export function IcefestCheckout({ tier, event, canBuy, open, onOpenChange }: Pro
             <dl className="border-y py-5 space-y-3 text-sm" aria-live="polite">
               <div className="flex justify-between gap-4"><dt>Subtotal</dt><dd>{icefestMoney(tier.price * quantity)}</dd></div>
               {quote && quote.discount_amount > 0 && <div className="flex justify-between gap-4 text-primary"><dt>Descuento</dt><dd>−{icefestMoney(quote.discount_amount)}</dd></div>}
-              <div className="flex justify-between gap-4 text-lg font-semibold"><dt>{deposit ? "Abono a pagar ahora" : "Total"}</dt><dd>{icefestMoney(quote?.total_amount ?? tier.price * quantity)}</dd></div>
+              <div className="flex justify-between gap-4 text-lg font-semibold"><dt>{deposit ? "Abono a pagar ahora" : "Total"}</dt><dd>{icefestMoney(total)}</dd></div>
             </dl>
+            {installments && <div className="flex items-start gap-3 border-l-4 border-primary bg-primary/10 px-4 py-4" aria-live="polite">
+              <CreditCard className="w-6 h-6 shrink-0 text-primary mt-0.5" aria-hidden="true" />
+              <div className="min-w-0 space-y-1">
+                <p className="text-base font-semibold text-primary leading-relaxed">Paga en 3 cuotas sin intereses de {icefestMoney(installments.amount)}{installments.approximate ? " aprox." : ""}</p>
+                <p className="text-xs text-muted-foreground leading-relaxed">Con tarjetas habilitadas en Mercado Pago. Selecciona 3 cuotas al pagar{installments.approximate ? "; el valor final de cada cuota se confirma allí." : "."}</p>
+                {deposit && <p className="text-xs text-muted-foreground leading-relaxed">Las cuotas corresponden solo al abono de {icefestMoney(total)}; el saldo de {icefestMoney(deposit.balance_due)} se paga por separado antes de ingresar.</p>}
+              </div>
+            </div>}
             <div className="flex items-start gap-3">
               <Checkbox id="icefest-terms" checked={accepted} disabled={Boolean(busy)} onCheckedChange={(v) => setAccepted(v === true)} className="mt-0.5 shrink-0" />
               <Label htmlFor="icefest-terms" className="text-sm leading-relaxed font-normal">
@@ -198,7 +209,7 @@ export function IcefestCheckout({ tier, event, canBuy, open, onOpenChange }: Pro
                 {busy ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Ticket className="w-4 h-4 mr-2" />}
                 {busy === "payment" ? "Abriendo pago seguro…" : busy === "quote" ? "Aplicando cupón…" : quote?.total_amount === 0 ? "Confirmar entradas" : deposit ? "Abonar con Mercado Pago" : "Pagar con Mercado Pago"}
               </Button>
-              <p className="text-xs text-muted-foreground flex gap-2 leading-relaxed"><ShieldCheck className="w-4 h-4 text-primary shrink-0" />Pago seguro con Mercado Pago. Puedes elegir hasta 3 cuotas; las condiciones de tu tarjeta se muestran al pagar.</p>
+              <p className="text-xs text-muted-foreground flex gap-2 leading-relaxed"><ShieldCheck className="w-4 h-4 text-primary shrink-0" />Pago seguro con Mercado Pago.</p>
             </div>
           </>}
         </form>
