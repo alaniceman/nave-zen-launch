@@ -8,9 +8,12 @@
 - Icefest order deletion uses an admin-validated edge action and service-only atomic RPC; remove tickets and restore counted inventory together without initiating a payment refund.
 - Public Icefest routes use an isolated festival shell and scoped semantic tokens (also on checkout portals); this preserves Nave styling and global Pixel tracking without competing navigation or popups.
 - Icefest event and tier reads share a cached, abortable query; checkout loads on intent and remains mounted once opened, preserving in-memory buyer data without persisting personal information.
-- Icefest hero mounts one video selected with the 768px media query; this prevents desktop and mobile video downloads from competing on initial load.
+- Icefest hero mounts one video, chosen after mount with the 768px media query (none during SSR); this prevents desktop and mobile video downloads from competing on initial load.
 - Icefest checkout uses one scrolling form with inline totals/payment and scoped floating-label fields; this prevents fixed controls from covering inputs when the mobile keyboard opens.
 - Shop products with negative sort_order are private (hidden from /tienda) and sold only via direct links/upsells; avoids a schema change for one-off offers.
-- Icefest share metadata is centralized in `icefestShare` and emitted as route-specific static HTML by the Vite plugin (also served in development); social crawlers do not execute Helmet or the early head script, and the root homepage metadata must remain unchanged.
+- Icefest share metadata is centralized in `icefestShare`/`routeSeo` and emitted server-side by each route's `head()`; social crawlers do not execute client JS, and the root homepage metadata must remain unchanged.
 - Icefest gallery discovers both bundled WebP images and CDN asset pointers; new uploaded photos use optimized WebP pointers without migrating existing gallery assets.
 - Nave chat keeps request options in its server-only requestOptions module and disables internal reasoning within the existing output budget; the client surfaces length termination and stream persistence uses EdgeRuntime.waitUntil.
+- The app runs on TanStack Start file routes (`src/routes`, SSR) with pages kept in `src/pages` and routing calls going through `@/lib/router-compat`; this preserves existing react-router call sites without a typed-router rewrite.
+- Backend services stay as Lovable Cloud functions (payments, webhooks, cron, email) rather than server functions; their URLs and shared payment logic are load-bearing.
+- Head scripts that initialise tracking are guarded by a window flag; TanStack can re-run head scripts on client navigation, which would double-count init/page views.
