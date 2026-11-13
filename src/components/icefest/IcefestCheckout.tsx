@@ -120,7 +120,7 @@ export function IcefestCheckout({ tier, tiers, activeTier, now, onTierChange, ev
   return (
     <Sheet open={open} onOpenChange={(value) => { if (!locked.current) onOpenChange(value); }}>
       <SheetContent
-        className="icefest-theme icefest-checkout text-foreground w-full sm:max-w-xl p-0 h-[100dvh] overflow-y-auto overscroll-contain"
+        className="icefest-theme icefest-checkout text-foreground w-full sm:max-w-xl lg:max-w-[460px] p-0 h-[100dvh] lg:h-auto overflow-y-auto overscroll-contain"
         onEscapeKeyDown={(e) => { if (locked.current) e.preventDefault(); }}
         onPointerDownOutside={(e) => { if (locked.current) e.preventDefault(); }}
       >
