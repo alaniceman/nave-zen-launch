@@ -113,3 +113,8 @@
 - [ ] Activar atribución visible en Notion: Alan debe crear «Origen» de tipo texto en Clientes; no se modifica el esquema de Notion automáticamente.
 - [x] Verificar almacenamiento y handlers con 8 pruebas locales y navegación sin pagos, órdenes ni correos reales; sitio no publicado.
 - [ ] Alan valida compra real y entrega de correo tras publicar: https://studiolanave.com/icefest-santiago?utm_source=facebook&utm_medium=paid_social&utm_campaign=validacion_icefest&utm_content=video
+
+# Conversión automática Icefest
+- [x] Agregar visitas anónimas del sitio publicado, deduplicadas por sesión, y cálculo compras online pagadas / visitas.
+- [x] Mostrar visitas, compras y tasa con períodos 7 días, 30 días y desde el inicio, acceso solo administrador.
+- [x] Verificar cálculo y sesión de 30 minutos (3 pruebas), indicador autenticado y bloqueo de resultados/filas para visitantes; sin publicar, visitas de producción pendientes de publicación.

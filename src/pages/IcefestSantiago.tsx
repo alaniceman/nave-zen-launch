@@ -27,6 +27,7 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from "@/components/ui/accordion";
+import { useIcefestVisit } from "@/components/icefest/useIcefestVisit";
 import { useIcefestEvent } from "@/components/icefest/useIcefestEvent";
 import { Skeleton } from "@/components/ui/skeleton";
 const preloadCheckout = () => import("@/components/icefest/IcefestCheckout");
@@ -106,6 +107,7 @@ export default function IcefestSantiago() {
     isError,
     refetch,
   } = useIcefestEvent();
+  useIcefestVisit(event?.id);
   const [selectedTier, setSelectedTier] = useState<IcefestTier | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [checkout, setCheckout] = useState(false),

@@ -113,6 +113,13 @@
       "when": 1794522324003,
       "tag": "0015_icefest_deposit_pilot",
       "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1794581814668,
+      "tag": "0016_icefest_visit_conversion",
+      "breakpoints": true
     }
   ]
 }
