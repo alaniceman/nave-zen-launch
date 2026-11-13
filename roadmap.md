@@ -1,5 +1,10 @@
 # Tabla de ventas y eliminación Icefest
 
+# Rediseño aprobado del carrito Icefest
+- [x] Compactar foto, fecha y lugar; mostrar abono, pago completo y precio normal con cupos reales. La subida se anuncia al agotar preventa; no hay fecha de inicio configurada para entrada general.
+- [x] Reubicar cantidad debajo del descuento y simplificar contacto/resumen sin cambiar pagos.
+- [x] Selección y cantidades comprobadas: dos abonos $50.000 hoy / $104.000 saldo; pago completo $154.000, datos conservados, precio normal bloqueado y móvil sin desbordamiento. Cinco pruebas existentes pasan; sin compras ni publicar.
+
 # Cuotas en checkout Icefest
 - [x] Destacar debajo del total 3 cuotas sin intereses, recalculadas por cantidad y descuento, aclarando tarjetas habilitadas y que las cuotas del abono no incluyen el saldo.
 - [x] Cálculo verificado con 2 pruebas y checkout móvil: $77.000 → $25.667 aprox.; dos entradas → $51.333 aprox., sin desbordamiento ni compras; build OK, sin publicar.

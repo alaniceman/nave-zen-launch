@@ -574,6 +574,10 @@ export default function IcefestSantiago() {
         >
           <IcefestCheckout
             tier={tiers.find((t) => t.id === selectedTier?.id) ?? tier}
+            tiers={tiers}
+            activeTier={tier}
+            now={now}
+            onTierChange={setSelectedTier}
             event={event}
             canBuy={canBuy}
             open={checkout}
