@@ -1,5 +1,8 @@
 # Tabla de ventas y eliminación Icefest
 
+# Mini galería Icefest
+- [x] Añadir una tira deslizable debajo de la portada con cinco fotos reales del evento anterior, controles y ampliación compartida con la galería completa; sin cambiar pagos ni publicar.
+
 # Rediseño aprobado del carrito Icefest
 - [x] Compactar foto, fecha y lugar; mostrar abono, pago completo y precio normal con cupos reales. La subida se anuncia al agotar preventa; no hay fecha de inicio configurada para entrada general.
 - [x] Reubicar cantidad debajo del descuento y simplificar contacto/resumen sin cambiar pagos.
