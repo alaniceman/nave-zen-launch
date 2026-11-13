@@ -1,0 +1,12 @@
+CREATE TABLE public.icefest_visits (event_id uuid NOT NULL REFERENCES public.icefest_events(id), session_id uuid NOT NULL, visited_at timestamptz NOT NULL DEFAULT now(), PRIMARY KEY(event_id,session_id));
+GRANT SELECT ON public.icefest_visits TO authenticated;
+GRANT ALL ON public.icefest_visits TO service_role;
+ALTER TABLE public.icefest_visits ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Admins read Icefest visits" ON public.icefest_visits FOR SELECT TO authenticated USING (public.has_role(auth.uid(),'admin'));
+CREATE INDEX icefest_visits_time_idx ON public.icefest_visits(event_id,visited_at);
+CREATE FUNCTION public.icefest_record_visit(_event_id uuid,_session_id uuid) RETURNS void LANGUAGE plpgsql SECURITY DEFINER SET search_path=public AS $$ BEGIN IF NOT EXISTS(SELECT 1 FROM public.icefest_events WHERE id=_event_id AND is_active) THEN RETURN; END IF; INSERT INTO public.icefest_visits(event_id,session_id) VALUES(_event_id,_session_id) ON CONFLICT DO NOTHING; END $$;
+REVOKE ALL ON FUNCTION public.icefest_record_visit(uuid,uuid) FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION public.icefest_record_visit(uuid,uuid) TO anon,authenticated,service_role;
+CREATE FUNCTION public.icefest_conversion_stats(_event_id uuid,_days integer DEFAULT 7) RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=public AS $$ DECLARE started timestamptz; period_start timestamptz; visit_count bigint; sale_count bigint; BEGIN IF NOT public.has_role(auth.uid(),'admin') THEN RAISE EXCEPTION 'Forbidden'; END IF; IF _days NOT IN (0,7,30) THEN RAISE EXCEPTION 'Invalid period'; END IF; SELECT min(visited_at) INTO started FROM public.icefest_visits WHERE event_id=_event_id; IF started IS NULL THEN RETURN jsonb_build_object('started_at',null,'period_start',null,'visits',0,'sales',0); END IF; period_start:=CASE WHEN _days=0 THEN started ELSE greatest(started,now()-make_interval(days=>_days)) END; SELECT count(*) INTO visit_count FROM public.icefest_visits WHERE event_id=_event_id AND visited_at>=period_start; SELECT count(*) INTO sale_count FROM public.icefest_orders WHERE event_id=_event_id AND status='paid' AND source='web' AND created_at>=period_start AND paid_at IS NOT NULL; RETURN jsonb_build_object('started_at',started,'period_start',period_start,'visits',visit_count,'sales',sale_count); END $$;
+REVOKE ALL ON FUNCTION public.icefest_conversion_stats(uuid,integer) FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION public.icefest_conversion_stats(uuid,integer) TO authenticated;

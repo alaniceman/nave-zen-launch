@@ -1307,6 +1307,32 @@ export type Database = {
           },
         ]
       }
+      icefest_visits: {
+        Row: {
+          event_id: string
+          session_id: string
+          visited_at: string
+        }
+        Insert: {
+          event_id: string
+          session_id: string
+          visited_at?: string
+        }
+        Update: {
+          event_id?: string
+          session_id?: string
+          visited_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "icefest_visits_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "icefest_events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       integrations_mailerlite: {
         Row: {
           created_at: string
@@ -2532,6 +2558,10 @@ export type Database = {
         }
         Returns: Json
       }
+      icefest_conversion_stats: {
+        Args: { _days?: number; _event_id: string }
+        Returns: Json
+      }
       icefest_delete_order: {
         Args: { _admin_id: string; _order_id: string }
         Returns: Json
@@ -2543,6 +2573,10 @@ export type Database = {
       icefest_price: {
         Args: { _coupon?: string; _quantity: number; _type_id: string }
         Returns: Json
+      }
+      icefest_record_visit: {
+        Args: { _event_id: string; _session_id: string }
+        Returns: undefined
       }
       icefest_refund_order: { Args: { _order_id: string }; Returns: undefined }
       icefest_reserve_order: {
