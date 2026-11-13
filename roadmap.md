@@ -99,6 +99,7 @@
 - [x] Reunir entradas, contacto, descuento, total y pago en un formulario único.
 - [x] Quitar la barra fija del carrito y usar campos de etiqueta flotante estilo Shopify.
 - [x] Verificar campos, total, consentimiento y datos conservados al reabrir en móvil/escritorio; sin errores, sin crear compras ni publicar. Teclado físico de iPhone no verificado.
+- [x] En escritorio el carrito es una tarjeta flotante de 460px centrada en alto, no ocupa la pantalla; móvil sigue a pantalla completa. Medido en 1280x1800 y 393x852; build OK.
 
 # Títulos posteriores a la migración y comprobación de CAPI
 - [x] Corregir títulos y descripciones de páginas públicas y secundarias de Icefest sin cambiar portada ni imágenes. Respuesta SSR verificada en 13 páginas; build OK.
