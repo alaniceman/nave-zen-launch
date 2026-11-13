@@ -38,6 +38,7 @@ import { ICEFEST_DEPOSIT_TIER_ID, icefestDepositForQuantity } from "../../supaba
 import { IcefestDepositSummary } from "@/components/icefest/IcefestDepositSummary";
 import { type IcefestTier, icefestDate, icefestMoney } from "@/lib/icefest";
 import IcefestStory from "@/components/icefest/IcefestStory";
+import IcefestGallery from "@/components/icefest/IcefestGallery";
 import { IcefestWhatsAppFab } from "@/components/icefest/IcefestWhatsAppFab";
 import { trackViewContentOnce } from "@/lib/metaTracking";
 import { icefestShare } from "@/lib/icefestShare";
@@ -350,6 +351,7 @@ export default function IcefestSantiago() {
             </div>
           </div>
         </section>
+        <IcefestGallery variant="filmstrip" />
         <section id="edicion" className="bg-card py-16 md:py-24">
           <div className="max-w-3xl mx-auto px-5 text-center">
             <p className="text-secondary text-sm mb-4">Una edición que no se repite</p>

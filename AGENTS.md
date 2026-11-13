@@ -16,6 +16,7 @@
 - Shop products with negative sort_order are private (hidden from /tienda) and sold only via direct links/upsells; avoids a schema change for one-off offers.
 - Share metadata is emitted server-side by each route's `head()` through `routeSeo`, with page text in `routeMetadata` and Icefest articles using their existing data; social crawlers do not execute client JS, and homepage metadata must remain unchanged.
 - Icefest gallery discovers both bundled WebP images and CDN asset pointers; new uploaded photos use optimized WebP pointers without migrating existing gallery assets.
+- Icefest's compact post-hero filmstrip and full gallery share `IcefestGallery` and its lightbox; this keeps photo discovery and enlargement consistent without duplicating assets.
 - Nave chat keeps request options in its server-only requestOptions module and disables internal reasoning within the existing output budget; the client surfaces length termination and stream persistence uses EdgeRuntime.waitUntil.
 - The app runs on TanStack Start file routes (`src/routes`, SSR) with pages kept in `src/pages` and routing calls going through `@/lib/router-compat`; this preserves existing react-router call sites without a typed-router rewrite.
 - `react-helmet-async` is listed in `ssr.noExternal` in `vite.config.ts`; it ships CommonJS and Vite's SSR runner cannot resolve its named exports otherwise, which would 500 every server-rendered page.
