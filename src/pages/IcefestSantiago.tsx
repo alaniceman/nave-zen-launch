@@ -316,17 +316,6 @@ export default function IcefestSantiago() {
               cacao y Ecstatic Dance en la precordillera de Santiago.
             </p>
             <div className="space-y-3">
-              <div className="min-h-7 flex justify-center">
-                {loading ? (
-                  <Skeleton className="h-6 w-56" />
-                ) : (
-                  <p className="text-secondary font-bold">
-                    {canBuy
-                      ? `${tier?.name}: ${icefestMoney(tier?.price || 0)}`
-                      : "Venta no disponible"}
-                  </p>
-                )}
-              </div>
               <Button
                 size="lg"
                 onMouseEnter={() => void preloadCheckout()}
