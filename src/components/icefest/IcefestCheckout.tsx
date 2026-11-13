@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { type IcefestEvent, type IcefestTier, icefestCall, icefestDate, icefestMoney, normalizeIcefestPhone } from "@/lib/icefest";
+import { type IcefestEvent, type IcefestTier, icefestCall, icefestMoney, normalizeIcefestPhone } from "@/lib/icefest";
 import { trackMetaClientEvent } from "@/lib/metaTracking";
 import { getMetaBrowserContext } from "@/lib/metaPixel";
 import { ICEFEST_DEPOSIT_TIER_ID, icefestDepositForQuantity } from "../../../supabase/functions/_shared/icefestDeposit";
