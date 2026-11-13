@@ -24,3 +24,5 @@
 - Attribution is captured by one browser helper and sanitized by a shared pure module; checkout snapshots first/last touch without changing Meta event IDs or retaining private return-link parameters.
 
 - Icefest deposit pilot uses a dedicated tier excluded from sequential stages and discounts; immutable terms are snapshotted into order meta_context by an insert trigger, with admin-only balance receipt confirmation blocking check-in until settled, preserving the existing checkout and payment webhook.
+
+- Icefest conversion uses a deduplicated anonymous production-only session counter and an admin-only aggregate RPC, counting paid web orders created within the measured period; this avoids mixing historic/manual sales with new visits.
