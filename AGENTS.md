@@ -10,6 +10,7 @@
 - Icefest event and tier reads share a cached, abortable query; preload and mount the closed checkout when sales become available, keeping it mounted thereafter; this removes the tap-time download on mobile while preserving buyer data in memory and tracking checkout only when opened.
 - Icefest hero mounts one video, chosen after mount with the 768px media query (none during SSR); this prevents desktop and mobile video downloads from competing on initial load.
 - Icefest checkout uses one scrolling form with inline totals/payment and scoped floating-label fields; this prevents fixed controls from covering inputs when the mobile keyboard opens.
+- Icefest checkout displays payment modes in `IcefestTicketOptions` using existing tiers and parent-owned selection; stock, stage availability and deposit terms remain shared with existing payment processing rather than duplicated offers.
 - Icefest installment display uses a pure payable-total calculation with whole-peso rounding and an approximation flag; quantities, discounts and deposits stay consistent without changing payment processing.
 - Shop products with negative sort_order are private (hidden from /tienda) and sold only via direct links/upsells; avoids a schema change for one-off offers.
 - Share metadata is emitted server-side by each route's `head()` through `routeSeo`, with page text in `routeMetadata` and Icefest articles using their existing data; social crawlers do not execute client JS, and homepage metadata must remain unchanged.
