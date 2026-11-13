@@ -117,4 +117,4 @@
 # Conversión automática Icefest
 - [x] Agregar visitas anónimas del sitio publicado, deduplicadas por sesión, y cálculo compras online pagadas / visitas.
 - [x] Mostrar visitas, compras y tasa con períodos 7 días, 30 días y desde el inicio, acceso solo administrador.
-- [ ] Verificar cálculo, permisos y vista del administrador sin publicar ni crear compras.
+- [x] Verificar cálculo y sesión de 30 minutos (3 pruebas), indicador autenticado y bloqueo de resultados/filas para visitantes; sin publicar, visitas de producción pendientes de publicación.
