@@ -191,8 +191,7 @@ export function IcefestCheckout({ tier, event, canBuy, open, onOpenChange }: Pro
             {installments && <div className="flex items-start gap-3 border-l-4 border-primary bg-primary/10 px-4 py-4" aria-live="polite">
               <CreditCard className="w-6 h-6 shrink-0 text-primary mt-0.5" aria-hidden="true" />
               <div className="min-w-0 space-y-1">
-                <p className="text-base font-semibold text-primary leading-relaxed">Paga en 3 cuotas sin intereses de {icefestMoney(installments.amount)}{installments.approximate ? " aprox." : ""}</p>
-                <p className="text-xs text-muted-foreground leading-relaxed">Con tarjetas habilitadas en Mercado Pago. Selecciona 3 cuotas al pagar{installments.approximate ? "; el valor final de cada cuota se confirma allí." : "."}</p>
+                <p className="text-base font-semibold text-primary leading-relaxed">Paga en 3 cuotas sin intereses de {icefestMoney(installments.amount)}.</p>
                 {deposit && <p className="text-xs text-muted-foreground leading-relaxed">Las cuotas corresponden solo al abono de {icefestMoney(total)}; el saldo de {icefestMoney(deposit.balance_due)} se paga por separado antes de ingresar.</p>}
               </div>
             </div>}

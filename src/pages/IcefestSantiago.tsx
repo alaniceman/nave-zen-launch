@@ -338,6 +338,7 @@ export default function IcefestSantiago() {
                 <Ticket className="w-5 h-5 mr-2" />
                 {loading ? "Cargando entradas…" : "Reservar mi entrada"}
               </Button>
+              <p className="text-sm font-semibold text-primary">Paga en 3 cuotas sin intereses</p>
               {remaining !== null && (
                 <p className="text-sm text-secondary">
                   Quedan {remaining} de {tier?.stock} cupos
